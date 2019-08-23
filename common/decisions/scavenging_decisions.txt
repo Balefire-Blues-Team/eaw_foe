@@ -1,0 +1,1740 @@
+########################
+# Scavenging Decisions #
+#     By HappyNTH      #
+########################
+scavenge_resources = {
+	begin_scavenging_program = {
+		available = {
+			has_scavenge_equipment = yes
+		}
+		visible = {
+			NOT = { has_country_flag = enabled_scavenging } # Helps testing
+		}
+		fire_only_once = yes
+		cost = 20
+		days_remove = 100
+		ai_will_do = {
+			factor = 15
+		}
+
+		complete_effect = {
+			scavenge_equip_start = yes
+		}
+
+		remove_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] begin_scavenging_program (decision) remove entered"
+			}
+			set_country_flag = enabled_scavenging
+			add_manpower = 50
+			add_equipment_to_stockpile = {
+				type = melee_equipment_1
+				amount = 100
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_equipment_1
+				amount = 100
+			}
+			clr_country_flag = is_scavenging
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] begin_scavenging_program (decision) exited entered"
+			}
+		}
+
+		complete_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] begin_scavenging_program (decision) complete entered"
+			}
+			set_variable = { var = scavenge_efficiency value = 40 }
+			custom_effect_tooltip = scavenging_set_to_40
+			if = {
+				limit = {
+					is_brotherhood_nation = yes
+				}
+				add_to_variable = { var = scavenge_efficiency value = 20 tooltip = scavenging_bos_efficiency }
+			}
+			if = {
+				limit = {
+					OR = {
+						is_settler_nation = yes
+						tag = CES
+						tag = NCR
+					}
+				}
+				add_to_variable = { var = scavenge_efficiency value = 10 tooltip = scavenging_settler_efficiency }
+			}
+			# Raiders and mutants have no effect
+			if = {
+				limit = {
+					is_tribal_nation = yes
+				}
+				subtract_from_variable = { var = scavenge_efficiency value = 10 tooltip = scavenging_tribal_efficiency }
+			}
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] begin_scavenging_program (decision) complete exited"
+			}
+		}
+	}
+	## Main Scavenging Sets ##
+
+	# Scavenge for Equipment (Weapons, Support Equipment, PA) #
+	scavenge_equip = {
+		allowed = {
+			always = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = not_scavenging
+				NOT = { has_country_flag = is_scavenging }
+			}
+			has_scavenge_equipment = yes
+		}
+		visible = {
+			has_country_flag = enabled_scavenging
+			NOT = { has_country_flag = scavenge_sm_hidden }
+		}
+
+		cost = 20
+		days_remove = 100
+		days_re_enable = 120
+		ai_will_do = {
+			factor = 1
+			modifier = { # will prioritise advisors first
+				factor = 0
+				has_political_power < 151
+			}
+			modifier = { # won't be used if losing a war and needs to avoid the defence penalty
+				factor = 0
+				has_war = yes
+				surrender_progress > 0.1
+			}
+		}
+
+		complete_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_equip (decision) complete entered"
+			}
+			scavenge_equip_start = yes
+			set_country_flag = equip_scav
+			scavenge_randomiser = yes
+			set_country_flag = scavenge_normal
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_equip (decision) complete exited"
+			}
+		}
+
+		modifier = {
+			planning_speed = -0.1
+			max_planning = -0.1
+			defence = -0.05
+		}
+
+		remove_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_equip (decision) remove entered"
+			}
+			effect_tooltip = {
+				random_list = {
+					25 = { # Scavengers Killed
+						country_event = { id = scavenge.1 }
+					}
+					75 = { # A successful mission
+						country_event = { id = scavenge.2 }
+					}
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { rng_value = random }
+				if = {
+					limit = { check_variable = { rng_value > 0.75 } }
+					country_event = { id = scavenge.1 }
+				}
+				else = {
+					country_event = { id = scavenge.2 }
+				}
+			}
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_equip (decision) remove exited"
+			}
+		}
+	}
+	scavenge_equip_pa = {
+		allowed = {
+			always = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = not_scavenging
+				NOT = { has_country_flag = is_scavenging }
+			}
+			has_scavenge_equipment = yes
+			has_scavenge_pa = yes
+		}
+		visible = {
+			has_country_flag = enabled_scavenging
+			has_country_flag = SE_pa_upgrade
+			NOT = { has_country_flag = scavenge_pa_hidden }
+		}
+
+		cost = 20
+		days_remove = 120
+		days_re_enable = 120
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				has_political_power < 151 # will prioritise advisors first
+			}
+			modifier = {
+				factor = 0
+				has_war = yes
+				surrender_progress > 0.1
+			}
+		}
+
+		complete_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_equip_pa (decision) complete entered"
+			}
+			scavenge_equip_start = yes
+			scavenge_pa_start = yes
+			set_country_flag = equip_scav
+			scavenge_randomiser = yes
+			set_country_flag = scavenge_pa
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_equip_pa (decision) complete exited"
+			}
+		}
+
+		modifier = {
+			planning_speed = -0.1
+			max_planning = -0.1
+			defence = -0.05
+		}
+
+		remove_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_equip_pa (decision) remove entered"
+			}
+			effect_tooltip = {
+				random_list = {
+					15 = { # Scavengers Killed
+						country_event = { id = scavenge.1 }
+					}
+					85 = { # A successful mission
+						country_event = { id = scavenge.2 }
+					}
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { rng_value = random }
+				if = {
+					limit = { check_variable = { rng_value > 0.85 } }
+					country_event = { id = scavenge.1 }
+				}
+				else = {
+					country_event = { id = scavenge.2 }
+				}
+			}
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_equip_pa (decision) remove exited"
+			}
+		}
+	}
+	scavenge_equip_motor = {
+		allowed = {
+			always = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = not_scavenging
+				NOT = { has_country_flag = is_scavenging }
+			}
+			has_scavenge_equipment = yes
+			has_scavenge_vehicle = yes
+		}
+		visible = {
+			has_country_flag = enabled_scavenging
+			has_country_flag = SE_mot_upgrade
+			NOT = { has_country_flag = scavenge_mot_hidden }
+		}
+
+		cost = 20
+		days_remove = 60
+		days_re_enable = 120
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				has_political_power < 151 # will prioritise advisors first
+			}
+			modifier = {
+				factor = 0
+				has_war = yes
+				surrender_progress > 0.1
+			}
+		}
+
+		complete_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_equip_motor (decision) complete entered"
+			}
+			scavenge_equip_start = yes
+			scavenge_vehicle_start = yes
+			set_country_flag = equip_scav
+			scavenge_randomiser = yes
+			set_country_flag = scavenge_vroom_vroom
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_equip_motor (decision) complete entered"
+			}
+		}
+
+		modifier = {
+			planning_speed = -0.1
+			max_planning = -0.1
+			defence = -0.05
+		}
+
+		remove_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_equip_motor (decision) remove entered"
+			}
+			effect_tooltip = {
+				random_list = {
+					25 = { # Scavengers Killed
+						country_event = { id = scavenge.1 }
+					}
+					75 = { # A successful mission
+						country_event = { id = scavenge.2 }
+					}
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { rng_value = random }
+				if = {
+					limit = { check_variable = { rng_value > 0.75 } }
+					country_event = { id = scavenge.1 }
+				}
+				else = {
+					country_event = { id = scavenge.2 }
+				}
+			}
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_equip_motor (decision) remove exited"
+			}
+		}
+	}
+	scavenge_equip_fly = {
+		allowed = {
+			always = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = not_scavenging
+				NOT = { has_country_flag = is_scavenging }
+			}
+			has_scavenge_equipment = yes
+			has_scavenge_fly = yes
+		}
+		visible = {
+			has_country_flag = enabled_scavenging
+			has_country_flag = SE_fly_upgrade
+			NOT = { has_country_flag = scavenge_fly_hidden }
+		}
+
+		cost = 20
+		days_remove = 20
+		days_re_enable = 120
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				has_political_power < 151 # will prioritise advisors first
+			}
+			modifier = {
+				factor = 0
+				has_war = yes
+				surrender_progress > 0.1
+			}
+		}
+
+		complete_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_equip_fly (decision) complete entered"
+			}
+			scavenge_equip_start = yes
+			scavenge_fly_start = yes
+			set_country_flag = equip_scav
+			scavenge_randomiser = yes
+			set_country_flag = scavenge_fly
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_equip_fly (decision) complete exited"
+			}
+		}
+
+		modifier = {
+			planning_speed = -0.1
+			max_planning = -0.1
+			defence = -0.05
+		}
+
+		remove_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_equip_fly (decision) remove entered"
+			}
+			effect_tooltip = {
+				random_list = {
+					25 = { # Scavengers Killed
+						country_event = { id = scavenge.1 }
+					}
+					75 = { # A successful mission
+						country_event = { id = scavenge.2 }
+					}
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { rng_value = random }
+				if = {
+					limit = { check_variable = { rng_value > 0.75 } }
+					country_event = { id = scavenge.1 }
+				}
+				else = {
+					country_event = { id = scavenge.2 }
+				}
+			}
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_equip_fly (decision) remove exited"
+			}
+
+		}
+	}
+
+	# Scavenge for Robots #
+	scavenge_robots = {
+		allowed = {
+			always = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = not_scavenging
+				NOT = { has_country_flag = is_scavenging }
+			}
+			has_scavenge_equipment = yes
+		}
+		visible = {
+			has_country_flag = enabled_scavenging
+			NOT = { has_country_flag = scavenge_sm_hidden }
+			OR = {
+				has_tech = settled_civilization
+				has_tech = scientific_civilization
+			}
+		}
+
+		cost = 20
+		days_remove = 100
+		days_re_enable = 120
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				has_political_power < 151 # will prioritise advisors first
+			}
+			modifier = {
+				factor = 0
+				has_war = yes
+				surrender_progress > 0.1
+			}
+		}
+
+		complete_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_robots (decision) complete entered"
+			}
+			scavenge_equip_start = yes
+			set_country_flag = robot_scav
+			scavenge_randomiser = yes
+			set_country_flag = scavenge_normal
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_robots (decision) complete exited"
+			}
+		}
+
+		modifier = {
+			planning_speed = -0.1
+			max_planning = -0.1
+			defence = -0.05
+		}
+
+		remove_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_robots (decision) remove entered"
+			}
+			effect_tooltip = {
+				random_list = {
+					25 = { # Scavengers Killed
+						country_event = { id = scavenge.1 }
+					}
+					75 = { # A successful mission
+						country_event = { id = scavenge.3 }
+					}
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { rng_value = random }
+				if = {
+					limit = { check_variable = { rng_value > 0.75 } }
+					country_event = { id = scavenge.1 }
+				}
+				else = {
+					country_event = { id = scavenge.3 }
+				}
+			}
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_robots (decision) remove exited"
+			}
+		}
+	}
+	scavenge_robots_pa = {
+		allowed = {
+			always = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = not_scavenging
+				NOT = { has_country_flag = is_scavenging }
+			}
+			has_scavenge_equipment = yes
+			has_scavenge_pa = yes
+		}
+		visible = {
+			has_country_flag = enabled_scavenging
+			has_country_flag = SE_pa_upgrade
+			NOT = { has_country_flag = scavenge_pa_hidden }
+			OR = {
+				has_tech = settled_civilization
+				has_tech = scientific_civilization
+			}
+		}
+
+		cost = 20
+		days_remove = 120
+		days_re_enable = 120
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				has_political_power < 151 # will prioritise advisors first
+			}
+			modifier = {
+				factor = 0
+				has_war = yes
+				surrender_progress > 0.1
+			}
+		}
+
+		complete_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_robots_pa (decision) complete entered"
+			}
+			scavenge_equip_start = yes
+			scavenge_pa_start = yes
+			set_country_flag = robot_scav
+			scavenge_randomiser = yes
+			set_country_flag = scavenge_pa
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_robots_pa (decision) complete exited"
+			}
+		}
+
+		modifier = {
+			planning_speed = -0.1
+			max_planning = -0.1
+			defence = -0.05
+		}
+
+		remove_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_robots_pa (decision) remove entered"
+			}
+			effect_tooltip = {
+				random_list = {
+					15 = { # Scavengers Killed
+						country_event = { id = scavenge.1 }
+					}
+					85 = { # A successful mission
+						country_event = { id = scavenge.3 }
+					}
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { rng_value = random }
+				if = {
+					limit = { check_variable = { rng_value > 0.85 } }
+					country_event = { id = scavenge.1 }
+				}
+				else = {
+					country_event = { id = scavenge.3 }
+				}
+			}
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_robots_pa (decision) remove exited"
+			}
+		}
+	}
+	scavenge_robots_motor = {
+		allowed = {
+			always = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = not_scavenging
+				NOT = { has_country_flag = is_scavenging }
+			}
+			has_scavenge_equipment = yes
+			has_scavenge_vehicle = yes
+		}
+		visible = {
+			has_country_flag = enabled_scavenging
+			has_country_flag = SE_mot_upgrade
+			NOT = { has_country_flag = scavenge_mot_hidden }
+			OR = {
+				has_tech = settled_civilization
+				has_tech = scientific_civilization
+			}
+		}
+
+		cost = 20
+		days_remove = 60
+		days_re_enable = 120
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				has_political_power < 151 # will prioritise advisors first
+			}
+			modifier = {
+				factor = 0
+				has_war = yes
+				surrender_progress > 0.1
+			}
+		}
+
+		complete_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_robots_motor (decision) complete entered"
+			}
+			scavenge_equip_start = yes
+			scavenge_vehicle_start = yes
+			set_country_flag = robot_scav
+			scavenge_randomiser = yes
+			set_country_flag = scavenge_vroom_vroom
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_robots_motor (decision) complete exited"
+			}
+		}
+
+		modifier = {
+			planning_speed = -0.1
+			max_planning = -0.1
+			defence = -0.05
+		}
+
+		remove_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_robots_motor (decision) remove entered"
+			}
+			effect_tooltip = {
+				random_list = {
+					25 = { # Scavengers Killed
+						country_event = { id = scavenge.1 }
+					}
+					75 = { # A successful mission
+						country_event = { id = scavenge.3 }
+					}
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { rng_value = random }
+				if = {
+					limit = { check_variable = { rng_value > 0.75 } }
+					country_event = { id = scavenge.1 }
+				}
+				else = {
+					country_event = { id = scavenge.3 }
+				}
+			}
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_robots_motor (decision) remove exited"
+			}
+		}
+	}
+	scavenge_robots_fly = {
+		allowed = {
+			always = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = not_scavenging
+				NOT = { has_country_flag = is_scavenging }
+			}
+			has_scavenge_equipment = yes
+			has_scavenge_fly = yes
+		}
+		visible = {
+			has_country_flag = enabled_scavenging
+			has_country_flag = SE_fly_upgrade
+			NOT = { has_country_flag = scavenge_fly_hidden }
+			OR = {
+				has_tech = settled_civilization
+				has_tech = scientific_civilization
+			}
+		}
+
+		cost = 20
+		days_remove = 20
+		days_re_enable = 60
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				has_political_power < 151 # will prioritise advisors first
+			}
+			modifier = {
+				factor = 0
+				has_war = yes
+				surrender_progress > 0.1
+			}
+		}
+
+		complete_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_robots_fly (decision) complete entered"
+			}
+			scavenge_equip_start = yes
+			scavenge_fly_start = yes
+			set_country_flag = robot_scav
+			scavenge_randomiser = yes
+			set_country_flag = scavenge_fly
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_robots_fly (decision) complete exited"
+			}
+		}
+
+		modifier = {
+			planning_speed = -0.1
+			max_planning = -0.1
+			defence = -0.05
+		}
+
+		remove_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_robots_fly (decision) remove entered"
+			}
+			effect_tooltip = {
+				random_list = {
+					25 = { # Scavengers Killed
+						country_event = { id = scavenge.1 }
+					}
+					75 = { # A successful mission
+						country_event = { id = scavenge.3 }
+					}
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { rng_value = random }
+				if = {
+					limit = { check_variable = { rng_value > 0.75 } }
+					country_event = { id = scavenge.1 }
+				}
+				else = {
+					country_event = { id = scavenge.3 }
+				}
+			}
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_robots_fly (decision) remove exited"
+			}
+		}
+	}
+
+	# Scavenge for Vehicles #
+	scavenge_vehicles = {
+		allowed = {
+			always = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = not_scavenging
+				NOT = { has_country_flag = is_scavenging }
+			}
+			has_scavenge_equipment = yes
+		}
+		visible = {
+			has_country_flag = enabled_scavenging
+			NOT = { has_country_flag = scavenge_sm_hidden }
+			OR = {
+				has_tech = settled_civilization
+				has_tech = scientific_civilization
+			}
+		}
+
+		cost = 20
+		days_remove = 100
+		days_re_enable = 120
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				has_political_power < 151 # will prioritise advisors first
+			}
+			modifier = {
+				factor = 0
+				has_war = yes
+				surrender_progress > 0.1
+			}
+		}
+
+		complete_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_vehicles (decision) complete entered"
+			}
+			scavenge_equip_start = yes
+			set_country_flag = vehicle_scav
+			scavenge_randomiser = yes
+			set_country_flag = scavenge_normal
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_vehicles (decision) complete exited"
+			}
+		}
+
+		modifier = {
+			planning_speed = -0.1
+			max_planning = -0.1
+			defence = -0.05
+		}
+
+		remove_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_vehicles (decision) remove entered"
+			}
+			effect_tooltip = {
+				random_list = {
+					25 = { # Scavengers Killed
+						country_event = { id = scavenge.1 }
+					}
+					75 = { # A successful mission
+						country_event = { id = scavenge.4 }
+					}
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { rng_value = random }
+				if = {
+					limit = { check_variable = { rng_value > 0.75 } }
+					country_event = { id = scavenge.1 }
+				}
+				else = {
+					country_event = { id = scavenge.4 }
+				}
+			}
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_vehicles (decision) remove exited"
+			}
+		}
+	}
+	scavenge_vehicles_pa = {
+		allowed = {
+			always = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = not_scavenging
+				NOT = { has_country_flag = is_scavenging }
+			}
+			has_scavenge_equipment = yes
+			has_scavenge_pa = yes
+		}
+		visible = {
+			has_country_flag = enabled_scavenging
+			has_country_flag = SE_pa_upgrade
+			NOT = { has_country_flag = scavenge_pa_hidden }
+			OR = {
+				has_tech = settled_civilization
+				has_tech = scientific_civilization
+			}
+		}
+
+		cost = 20
+		days_remove = 120
+		days_re_enable = 120
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				has_political_power < 151 # will prioritise advisors first
+			}
+			modifier = {
+				factor = 0
+				has_war = yes
+				surrender_progress > 0.1
+			}
+		}
+
+		complete_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_vehicles_pa (decision) complete entered"
+			}
+			scavenge_equip_start = yes
+			scavenge_pa_start = yes
+			set_country_flag = vehicle_scav
+			scavenge_randomiser = yes
+			set_country_flag = scavenge_pa
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_vehicles_pa (decision) complete exited"
+			}
+		}
+
+		modifier = {
+			planning_speed = -0.1
+			max_planning = -0.1
+			defence = -0.05
+		}
+
+		remove_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_vehicles_pa (decision) remove entered"
+			}
+			effect_tooltip = {
+				random_list = {
+					15 = { # Scavengers Killed
+						country_event = { id = scavenge.1 }
+					}
+					85 = { # A successful mission
+						country_event = { id = scavenge.4 }
+					}
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { rng_value = random }
+				if = {
+					limit = { check_variable = { rng_value > 0.85 } }
+					country_event = { id = scavenge.1 }
+				}
+				else = {
+					country_event = { id = scavenge.4 }
+				}
+			}
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_vehicles_pa (decision) remove exited"
+			}
+		}
+	}
+	scavenge_vehicles_motor = {
+		allowed = {
+			always = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = not_scavenging
+				NOT = { has_country_flag = is_scavenging }
+			}
+			has_scavenge_equipment = yes
+			has_scavenge_vehicle = yes
+		}
+		visible = {
+			has_country_flag = enabled_scavenging
+			has_country_flag = SE_mot_upgrade
+			NOT = { has_country_flag = scavenge_mot_hidden }
+			OR = {
+				has_tech = settled_civilization
+				has_tech = scientific_civilization
+			}
+		}
+
+		cost = 20
+		days_remove = 60
+		days_re_enable = 120
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				has_political_power < 151 # will prioritise advisors first
+			}
+			modifier = {
+				factor = 0
+				has_war = yes
+				surrender_progress > 0.1
+			}
+		}
+
+		complete_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_vehicles_motor (decision) complete entered"
+			}
+			scavenge_equip_start = yes
+			scavenge_vehicle_start = yes
+			set_country_flag = vehicle_scav
+			scavenge_randomiser = yes
+			set_country_flag = scavenge_vroom_vroom
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_vehicles_motor (decision) complete exited"
+			}
+		}
+
+		modifier = {
+			planning_speed = -0.1
+			max_planning = -0.1
+			defence = -0.05
+		}
+
+		remove_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_vehicles_motor (decision) remove entered"
+			}
+			effect_tooltip = {
+				random_list = {
+					25 = { # Scavengers Killed
+						country_event = { id = scavenge.1 }
+					}
+					75 = { # A successful mission
+						country_event = { id = scavenge.4 }
+					}
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { rng_value = random }
+				if = {
+					limit = { check_variable = { rng_value > 0.75 } }
+					country_event = { id = scavenge.1 }
+				}
+				else = {
+					country_event = { id = scavenge.4 }
+				}
+			}
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_vehicles_motor (decision) remove exited"
+			}
+		}
+	}
+	scavenge_vehicles_fly = {
+		allowed = {
+			always = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = not_scavenging
+				NOT = { has_country_flag = is_scavenging }
+			}
+			has_scavenge_equipment = yes
+			has_scavenge_fly = yes
+		}
+		visible = {
+			has_country_flag = enabled_scavenging
+			has_country_flag = SE_fly_upgrade
+			NOT = { has_country_flag = scavenge_fly_hidden }
+			OR = {
+				has_tech = settled_civilization
+				has_tech = scientific_civilization
+			}
+		}
+
+		cost = 20
+		days_remove = 20
+		days_re_enable = 60
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 0
+				has_political_power < 151 # will prioritise advisors first
+			}
+			modifier = {
+				factor = 0
+				has_war = yes
+				surrender_progress > 0.1
+			}
+		}
+
+		complete_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_vehicles_fly (decision) complete entered"
+			}
+			scavenge_equip_start = yes
+			scavenge_fly_start = yes
+			set_country_flag = vehicle_scav
+			scavenge_randomiser = yes
+			set_country_flag = scavenge_fly
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_vehicles_fly (decision) complete exited"
+			}
+		}
+
+		modifier = {
+			planning_speed = -0.1
+			max_planning = -0.1
+			defence = -0.05
+		}
+
+		remove_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_vehicles_fly (decision) remove entered"
+			}
+			effect_tooltip = {
+				random_list = {
+					25 = { # Scavengers Killed
+						country_event = { id = scavenge.1 }
+					}
+					75 = { # A successful mission
+						country_event = { id = scavenge.4 }
+					}
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { rng_value = random }
+				if = {
+					limit = { check_variable = { rng_value > 0.75 } }
+					country_event = { id = scavenge.1 }
+				}
+				else = {
+					country_event = { id = scavenge.4 }
+				}
+			}
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_vehicles_fly (decision) remove exited"
+			}
+		}
+	}
+
+	# Scavenge for Old World Tech #
+	scavenge_owt = {
+		allowed = {
+			always = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = not_scavenging
+				NOT = { has_country_flag = is_scavenging }
+			}
+			has_scavenge_equipment = yes
+		}
+		visible = {
+			has_country_flag = enabled_scavenging
+			NOT = { has_country_flag = scavenge_sm_hidden }
+			OR = {
+				has_tech = scientific_civilization
+				is_brotherhood_nation = yes
+			}
+		}
+
+		cost = 40
+		days_remove = 120
+		days_re_enable = 120
+		ai_will_do = {
+			factor = 2
+			modifier = {
+				factor = 0
+				has_political_power < 151
+			}
+			modifier = {
+				factor = 0
+				has_war = yes
+				surrender_progress > 0.1
+			}
+		}
+
+		complete_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_owt (decision) complete entered"
+			}
+			scavenge_equip_start = yes
+			set_country_flag = scavenge_normal
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_owt (decision) complete exited"
+			}
+		}
+
+		modifier = {
+			planning_speed = -0.1
+			max_planning = -0.1
+			defence = -0.05
+		}
+
+		remove_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_owt (decision) remove entered"
+			}
+			effect_tooltip = {
+				random_list = {
+					30 = { # Scavengers Killed
+						country_event = { id = scavenge.1 }
+					}
+					70 = { # A successful mission
+						country_event = { id = scavenge.5 }
+					}
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { rng_value = random }
+				if = {
+					limit = { check_variable = { rng_value > 0.7 } }
+					country_event = { id = scavenge.1 }
+				}
+				else = {
+					country_event = { id = scavenge.5 }
+				}
+			}
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_owt (decision) remove exited"
+			}
+		}
+	}
+	scavenge_owt_pa = {
+		allowed = {
+			always = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = not_scavenging
+				NOT = { has_country_flag = is_scavenging }
+			}
+			has_scavenge_equipment = yes
+			has_scavenge_pa = yes
+		}
+		visible = {
+			has_country_flag = enabled_scavenging
+			has_country_flag = SE_pa_upgrade
+			NOT = { has_country_flag = scavenge_pa_hidden }
+			OR = {
+				has_tech = scientific_civilization
+				is_brotherhood_nation = yes
+			}
+		}
+
+		cost = 40
+		days_remove = 150
+		days_re_enable = 120
+		ai_will_do = {
+			factor = 3
+			modifier = {
+				factor = 0
+				has_political_power < 151
+			}
+			modifier = {
+				factor = 0
+				has_war = yes
+				surrender_progress > 0.1
+			}
+		}
+
+		complete_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_owt_pa (decision) complete entered"
+			}
+			scavenge_equip_start = yes
+			scavenge_pa_start = yes
+			set_country_flag = scavenge_pa
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_owt_pa (decision) complete exited"
+			}
+		}
+
+		modifier = {
+			planning_speed = -0.1
+			max_planning = -0.1
+			defence = -0.05
+		}
+
+		remove_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_owt_pa (decision) remove entered"
+			}
+			effect_tooltip = {
+				random_list = {
+					20 = { # Scavengers Killed
+						country_event = { id = scavenge.1 }
+					}
+					80 = { # A successful mission
+						country_event = { id = scavenge.5 }
+					}
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { rng_value = random }
+				if = {
+					limit = { check_variable = { rng_value > 0.8 } }
+					country_event = { id = scavenge.1 }
+				}
+				else = {
+					country_event = { id = scavenge.5 }
+				}
+			}
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_owt_pa (decision) remove exited"
+			}
+		}
+	}
+	scavenge_owt_motor = {
+		allowed = {
+			always = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = not_scavenging
+				NOT = { has_country_flag = is_scavenging }
+			}
+			has_scavenge_equipment = yes
+			has_scavenge_vehicle = yes
+		}
+		visible = {
+			has_country_flag = enabled_scavenging
+			has_country_flag = SE_mot_upgrade
+			NOT = { has_country_flag = scavenge_mot_hidden }
+			OR = {
+				has_tech = scientific_civilization
+				is_brotherhood_nation = yes
+			}
+		}
+
+		cost = 40
+		days_remove = 80
+		days_re_enable = 120
+		ai_will_do = {
+			factor = 2
+			modifier = {
+				factor = 0
+				has_political_power < 151
+			}
+			modifier = {
+				factor = 0
+				has_war = yes
+				surrender_progress > 0.1
+			}
+		}
+
+		modifier = {
+			planning_speed = -0.1
+			max_planning = -0.1
+			defence = -0.05
+		}
+
+		complete_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_owt_motor (decision) complete entered"
+			}
+			scavenge_equip_start = yes
+			scavenge_vehicle_start = yes
+			set_country_flag = scavenge_vroom_vroom
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_owt_motor (decision) complete exited"
+			}
+		}
+
+		remove_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_owt_motor (decision) remove entered"
+			}
+			effect_tooltip = {
+				random_list = {
+					30 = { # Scavengers Killed
+						country_event = { id = scavenge.1 }
+					}
+					70 = { # A successful mission
+						country_event = { id = scavenge.5 }
+					}
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { rng_value = random }
+				if = {
+					limit = { check_variable = { rng_value > 0.7 } }
+					country_event = { id = scavenge.1 }
+				}
+				else = {
+					country_event = { id = scavenge.5 }
+				}
+			}
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_owt_motor (decision) remove exited"
+			}
+		}
+	}
+	scavenge_owt_fly = {
+		allowed = {
+			always = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = not_scavenging
+				NOT = { has_country_flag = is_scavenging }
+			}
+			has_scavenge_equipment = yes
+			has_scavenge_fly = yes
+		}
+		visible = {
+			has_country_flag = enabled_scavenging
+			has_country_flag = SE_fly_upgrade
+			NOT = { has_country_flag = scavenge_fly_hidden }
+			OR = {
+				has_tech = scientific_civilization
+				is_brotherhood_nation = yes
+			}
+		}
+
+		cost = 40
+		days_remove = 30
+		days_re_enable = 120
+		ai_will_do = {
+			factor = 3
+			modifier = {
+				factor = 0
+				has_political_power < 151
+			}
+			modifier = {
+				factor = 0
+				has_war = yes
+				surrender_progress > 0.1
+			}
+		}
+
+		complete_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_owt_fly (decision) complete entered"
+			}
+			scavenge_equip_start = yes
+			scavenge_fly_start = yes
+			set_country_flag = scavenge_fly
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_owt_fly (decision) complete exited"
+			}
+		}
+
+		modifier = {
+			planning_speed = -0.1
+			max_planning = -0.1
+			defence = -0.05
+		}
+
+		remove_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_owt_fly (decision) remove entered"
+			}
+			effect_tooltip = {
+				random_list = {
+					30 = { # Scavengers Killed
+						country_event = { id = scavenge.1 }
+					}
+					70 = { # A successful mission
+						country_event = { id = scavenge.5 }
+					}
+				}
+			}
+			hidden_effect = {
+				set_temp_variable = { rng_value = random }
+				if = {
+					limit = { check_variable = { rng_value > 0.7 } }
+					country_event = { id = scavenge.1 }
+				}
+				else = {
+					country_event = { id = scavenge.5 }
+				}
+			}
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_owt_fly (decision) remove exited"
+			}
+		}
+	}
+
+	## Scavenging Upgrades / Options ##
+
+	# Roll out techs to scavengers - required to update the variable #
+	roll_out_tech = {
+		allowed = {
+			always = yes
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = SE_roll_out_tech
+				OR = {
+					AND = {
+						has_tech = binoculars
+						NOT = { has_country_flag = SE_binoculars_upgrade }
+					}
+					AND = {
+						has_tech = flare_guns
+						NOT = { has_country_flag = SE_flare_upgrade }
+					}
+					AND = {
+						has_tech = portable_radio
+						NOT = { has_country_flag = SE_radio_upgrade }
+					}
+					AND = {
+						has_tech = radio_detection
+						NOT = { has_country_flag = SE_radar_upgrade }
+					}
+					AND = {
+						OR = {
+							has_tech = power_armour
+							has_tech = power_armour_t45d
+							has_tech = power_armour_t51b
+							has_tech = power_armour_enclave1
+							has_tech = power_armour_enclave2
+							has_tech = power_armour_bos
+							has_tech = power_armour_legion
+							has_tech = power_armour_raider
+						}
+						NOT = { has_country_flag = SE_pa_upgrade }
+					}
+					AND = {
+						OR = {
+							has_tech = vertiberd_transport1
+						}
+						NOT = { has_country_flag = SE_fly_upgrade }
+					}
+					AND = {
+						has_tech = bike_tech_1
+						NOT = { has_country_flag = SE_mot_upgrade }
+					}
+				}
+			}
+		}
+		visible = {
+			OR = {
+				AND = {
+					has_tech = binoculars
+					NOT = { has_country_flag = SE_binoculars_upgrade }
+				}
+				AND = {
+					has_tech = portable_radio
+					NOT = { has_country_flag = SE_radio_upgrade }
+				}
+				AND = {
+					has_tech = radio_detection
+					NOT = { has_country_flag = SE_radar_upgrade }
+				}
+				AND = {
+					has_tech = flare_guns
+					NOT = { has_country_flag = SE_flare_upgrade }
+				}
+				AND = {
+					OR = {
+						has_tech = power_armour
+						has_tech = power_armour_t45d
+						has_tech = power_armour_t51b
+						has_tech = power_armour_enclave1
+						has_tech = power_armour_enclave2
+						has_tech = power_armour_bos
+						has_tech = power_armour_legion
+						has_tech = power_armour_raider
+					}
+					NOT = { has_country_flag = SE_pa_upgrade }
+				}
+				AND = {
+					OR = {
+						has_tech = vertiberd_transport1
+					}
+					NOT = { has_country_flag = SE_fly_upgrade }
+				}
+				AND = {
+					has_tech = bike_tech_1
+					NOT = { has_country_flag = SE_mot_upgrade }
+				}
+			}
+			has_country_flag = enabled_scavenging
+		}
+
+		cost = 20
+		days_remove = 50
+		days_re_enable = 25
+		ai_will_do = {
+			factor = 25
+		}
+
+		modifier = {
+			research_speed_factor =0.05
+		}
+
+		remove_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] roll_out_tech (decision) remove entered"
+			}
+			if = {
+				limit = {
+					AND = {
+						has_tech = binoculars
+						NOT = { has_country_flag = SE_binoculars_upgrade }
+					}
+				}
+				add_to_variable = { var = scavenge_efficiency value = 10 tooltip = binoculars_upgrade }
+				set_country_flag = SE_binoculars_upgrade
+			}
+			if = {
+				limit = {
+					AND = {
+						has_tech = flare_guns
+						NOT = { has_country_flag = SE_flare_upgrade }
+					}
+				}
+				add_to_variable = { var = scavenge_efficiency value = 10 tooltip = flare_upgrade }
+				set_country_flag = SE_flare_upgrade
+			}
+			if = {
+				limit = {
+					AND = {
+						has_tech = portable_radio
+						NOT = { has_country_flag = SE_radio_upgrade }
+					}
+				}
+				add_to_variable = { var = scavenge_efficiency value = 10 tooltip = radio_upgrade }
+				set_country_flag = SE_radio_upgrade
+			}
+			if = {
+				limit = {
+					AND = {
+						has_tech = radio_detection
+						NOT = { has_country_flag = SE_radar_upgrade }
+					}
+				}
+				add_to_variable = { var = scavenge_efficiency value = 10 tooltip = radar_upgrade }
+				set_country_flag = SE_radar_upgrade
+			}
+			if = {
+				limit = {
+					AND = {
+						OR = {
+							has_tech = power_armour
+							has_tech = power_armour_t45d
+							has_tech = power_armour_t51b
+							has_tech = power_armour_enclave1
+							has_tech = power_armour_enclave2
+							has_tech = power_armour_bos
+							has_tech = power_armour_legion
+							has_tech = power_armour_raider
+						}
+						NOT = { has_country_flag = SE_pa_upgrade }
+					}
+				}
+				custom_effect_tooltip = SE_pa_upgrade
+				set_country_flag = SE_pa_upgrade
+			}
+			if = {
+				limit = {
+					AND = {
+						OR = {
+							has_tech = vertiberd_transport1
+						}
+						NOT = { has_country_flag = SE_fly_upgrade }
+					}
+				}
+				custom_effect_tooltip = SE_fly_upgrade
+				set_country_flag = SE_fly_upgrade
+			}
+			if = {
+				limit = {
+					AND = {
+						OR = {
+							has_tech = bike_tech_1
+						}
+						NOT = { has_country_flag = SE_fly_upgrade }
+					}
+				}
+				custom_effect_tooltip = SE_mot_upgrade
+				set_country_flag = SE_mot_upgrade
+			}
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] roll_out_tech (decision) remove exited"
+			}
+		}
+	}
+	# Show / hide options #
+	scavenge_options = {
+		allowed = {
+			always = yes
+		}
+		available = {
+			always = yes
+		}
+		visible = {
+			has_country_flag = enabled_scavenging
+		}
+
+		complete_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_options (decision) complete entered"
+			}
+			country_event = { id = scavenge.6 }
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] scavenge_options (decision) complete exited"
+			}
+		}
+	}
+}

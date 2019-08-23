@@ -1,0 +1,101 @@
+add_namespace = genericraider
+
+country_event = {
+ 	id = genericraider.1
+ 	title = genericraider.1.title
+ 	desc = genericraider.1.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+ 	
+ 	#
+	option = {
+		name = genericraider.1.a
+		ai_chance = { factor = 50}
+		
+		 
+	random_owned_controlled_state = {
+    	limit = { is_capital = yes }
+    	add_resource = {
+        	type = electronics
+        	amount = 8
+    		}
+		}
+	}
+	#
+	option = {
+		name = genericraider.1.b #Ruined Military Factories#
+
+		add_manpower = 50
+
+		random_owned_controlled_state = {
+			limit = {
+				free_building_slots = {
+					building = industrial_complex
+					size > 0
+					include_locked = yes
+				}
+				OR = {
+					is_in_home_area = yes
+					NOT = {
+						owner = {
+							any_owned_state = {
+								free_building_slots = {
+									building = industrial_complex
+									size > 0
+									include_locked = yes
+								}
+								is_in_home_area = yes
+							}
+						}
+					}
+				}
+			}
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = industrial_complex
+				level = 2
+				instant_build = yes
+			}
+		}
+	}
+
+	option = {
+		name = genericraider.1.c #Ruined Civilian Factories#
+
+		add_manpower = -50
+
+		random_owned_controlled_state = {
+			limit = {
+				free_building_slots = {
+					building = arms_factory
+					size > 0
+					include_locked = yes
+				}
+				OR = {
+					is_in_home_area = yes
+					NOT = {
+						owner = {
+						any_owned_state = {
+								free_building_slots = {
+									building = arms_factory
+									size > 0
+									include_locked = yes
+								}
+								is_in_home_area = yes
+							}
+						}
+					}
+				}
+			}
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = arms_factory
+				level = 2
+				instant_build = yes
+			}
+		}
+	}
+}
+

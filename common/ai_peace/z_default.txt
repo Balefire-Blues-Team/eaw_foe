@@ -1,0 +1,339 @@
+# Default Logic behaviour that the AI will fallback on if no other fits the bill
+# Should just be "good enough" to make sure the AI acts smart in the war
+# Written by Henrik "Groogy" Hansson
+
+#Adjustments
+#Default AI (ie neutral AI) will act like a mix between democratic and fascist, but in general way more conservative and mostly interested in obtaining cores and the status quo. If they have enough warscore, they will puppet/liberate neighbors as well.
+#Neutral AI in general do not directly annex other nations.
+#The plan is to eventually make individualized AI for every country in the game.
+
+default_peace = {
+	enable = {
+		NOT = {
+			OR = {
+				AND = {
+					original_tag = VLT
+					is_puppet = no
+					is_subject = no
+				}
+			}
+		}
+	}
+
+	annex_randomness = 0
+	liberate_randomness = 0
+	puppet_randomness = 0
+	take_states_randomness = 0
+	force_government_randomness = 0
+
+	# ROOT = Taker, FROM = Giver
+	annex = {
+		base = 50
+		modifier = {
+			factor = 1
+			always = yes
+		}
+	}
+
+	# ROOT = Taker, FROM = Liberated
+	liberate = {
+		base = 0
+		modifier = {
+			factor = 0
+			NOT = {
+				ROOT = {
+					OR = {
+						has_government = people
+					}
+				}
+			}
+		}
+
+		modifier = {
+			factor = 2.5
+			any_state = {
+				OR = {
+					owner = { tag = ROOT }
+					has_claimed_state_in_peace_conference = ROOT
+				}
+				any_neighbor_state = {
+					is_core_of = FROM
+				}
+			}
+		}
+	}
+
+	# ROOT = Taker, FROM = Giver
+	puppet = {
+		base = 0
+		modifier = {
+			factor = 0
+			has_annex_war_goal = ROOT
+		}
+	}
+
+	# ROOT = Taker, FROM = State
+	take_states = {
+		base = 50
+
+		modifier = {
+			factor = 0
+			NOT = {
+				FROM = {
+					OR = {
+						is_claimed_by = ROOT
+						is_core_of		= ROOT
+						FROM = {
+							owner = {
+								ROOT = { has_annex_war_goal = PREV }
+							}
+						}
+						any_neighbor_state = {
+							OR = {
+								owner = { tag = ROOT }
+								has_claimed_state_in_peace_conference = ROOT
+							}
+							NOT = { has_state_flag = is_impassable }
+						}
+						AND = {
+							ROOT = {
+								capital_scope = {
+									FROM = {
+										are_on_same_landmass = no
+									}
+								}
+							}
+							is_coastal = yes
+							ROOT = {
+								any_owned_state = {
+									is_coastal = yes
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		#modifier = {
+		#  factor = 0
+		#  any_country = {
+		#		 exists = yes
+		#		 NOT = { has_capitulated = yes }
+		#		 is_in_peace_conference = yes
+		#		 FROM = { is_core_of = THIS }
+		#  }
+		#}
+
+		modifier = {
+			factor = 0.1
+			any_allied_country = {
+				FROM = {
+					any_neighbor_state = {
+						OR = {
+							owner = { tag = PREV }
+							has_claimed_state_in_peace_conference = PREV
+						}
+					}
+				}
+			}
+		}
+
+		modifier = {
+			factor = 20
+			FROM = {
+				OR = {
+					is_claimed_by = ROOT
+					is_core_of = ROOT
+				}
+			}
+		}
+
+		modifier = {
+			factor = 1.25
+			capital_scope = {
+				distance_to = {
+					target = FROM
+					value < 200
+				}
+			}
+		}
+
+		modifier = {
+			factor = 1.25
+			capital_scope = {
+				distance_to = {
+					target = FROM
+					value < 400
+				}
+			}
+		}
+
+		modifier = {
+			factor = 1.25
+			capital_scope = {
+				distance_to = {
+					target = FROM
+					value < 600
+				}
+			}
+		}
+
+		modifier = {
+			factor = 1.25
+			capital_scope = {
+				distance_to = {
+					target = FROM
+					value < 800
+				}
+			}
+		}
+
+		modifier = {
+			factor = 1.25
+			capital_scope = {
+				distance_to = {
+					target = FROM
+					value < 1000
+				}
+			}
+		}
+
+		modifier = {
+			factor = 1.25
+			capital_scope = {
+				distance_to = {
+					target = FROM
+					value < 1200
+				}
+			}
+		}
+
+		modifier = {
+			factor = 1.25
+			capital_scope = {
+				distance_to = {
+					target = FROM
+					value < 1400
+				}
+			}
+		}
+
+		modifier = {
+			factor = 1.25
+			capital_scope = {
+				distance_to = {
+					target = FROM
+					value < 1600
+				}
+			}
+		}
+
+		modifier = {
+			factor = 1.25
+			capital_scope = {
+				distance_to = {
+					target = FROM
+					value < 2000
+				}
+			}
+		}
+
+		modifier = {
+			factor = 1.5
+			FROM = {
+				OR = {
+					num_owned_neighbour_states = {
+						count > 1
+						owner = ROOT
+					}
+					num_claimed_peace_conference_neighbour_states = {
+						count > 1
+						owner = ROOT
+					}
+				}
+			}
+		}
+
+		modifier = {
+			factor = 1.5
+			FROM = {
+				OR = {
+					num_owned_neighbour_states = {
+						count > 2
+						owner = ROOT
+					}
+					num_claimed_peace_conference_neighbour_states = {
+						count > 2
+						owner = ROOT
+					}
+				}
+			}
+		}
+
+		modifier = {
+			factor = 1.5
+			FROM = {
+				OR = {
+					num_owned_neighbour_states = {
+						count > 3
+						owner = ROOT
+					}
+					num_claimed_peace_conference_neighbour_states = {
+						count > 3
+						owner = ROOT
+					}
+				}
+			}
+		}
+
+		modifier = {
+			factor = 1.5
+			FROM = {
+				OR = {
+					num_owned_neighbour_states = {
+						count > 4
+						owner = ROOT
+					}
+					num_claimed_peace_conference_neighbour_states = {
+						count > 4
+						owner = ROOT
+					}
+				}
+			}
+		}
+
+		modifier = {
+			factor = 1.5
+			FROM = {
+				OR = {
+					num_owned_neighbour_states = {
+						count > 5
+						owner = ROOT
+					}
+					num_claimed_peace_conference_neighbour_states = {
+						count > 5
+						owner = ROOT
+					}
+				}
+			}
+		}
+
+		modifier = {
+			factor = 1.5
+			FROM = {
+				OR = {
+					num_owned_neighbour_states = {
+						count > 6
+						owner = ROOT
+					}
+					num_claimed_peace_conference_neighbour_states = {
+						count > 6
+						owner = ROOT
+					}
+				}
+			}
+		}
+	}
+}
+# vim: set ft=pdx ts=2 sw=2 tw=79 :
