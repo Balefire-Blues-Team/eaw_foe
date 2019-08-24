@@ -13,7 +13,7 @@ focus_tree = {
 	default = no
 	reset_on_civilwar = no
 
-
+	#Basecamp
 	focus = { 
 		id = GR_basecamp
 		icon = GFX_goal_unknown
@@ -23,7 +23,7 @@ focus_tree = {
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
-			factor = 300
+			factor = 100
 		} 
 
 		completion_reward = {
@@ -32,7 +32,7 @@ focus_tree = {
 
 	}
 }
-#
+#Slaves
 focus = { 
 		id = GR_slaves
 		icon = GFX_goal_unknown
@@ -44,7 +44,7 @@ focus = {
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_basecamp } 
 		ai_will_do = { 
-			factor = 300
+			factor = 100
 		} 
 
 		completion_reward = {
@@ -54,7 +54,7 @@ focus = {
 
 	}
 }
-#
+#Trade Routes
 focus = { 
 		id = GR_traderoutes
 		icon = GFX_goal_unknown
@@ -66,7 +66,7 @@ focus = {
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_slaves } 
 		ai_will_do = { 
-			factor = 300
+			factor = 100
 		} 
 
 		completion_reward = {
@@ -76,3 +76,139 @@ focus = {
 
 	}
 }
+
+#
+focus = { 
+		id = GR_take_control
+		icon = GFX_goal_unknown
+		x = 1
+		y = 3
+		cost = 1
+
+		available_if_capitulated = yes 
+		#prerequisite = { focus = GR_traderoutes } 
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GR_generic"
+			country_event = { id = GR.4}
+
+	}
+}
+
+#
+focus = { 
+		id = GR_factorytown
+		icon = GFX_goal_unknown
+		relative_position_id = GR_take_control
+		x = -1
+		y = 1
+		cost = 1
+
+		available_if_capitulated = yes 
+		prerequisite = { focus = GR_take_control } 
+
+		mutually_exclusive = { 
+        focus = GR_raidertown
+        }
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GR_generic"
+			
+			random_owned_controlled_state = {
+			limit = {
+				free_building_slots = {
+					building = arms_factory
+					size > 0
+					include_locked = yes
+				}
+				OR = {
+					is_in_home_area = yes
+					NOT = {
+						owner = {
+							any_owned_state = {
+								free_building_slots = {
+									building = arms_factory
+									size > 0
+									include_locked = yes
+								}
+								is_in_home_area = yes
+							}
+						}
+					}
+				}
+			}
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+			}
+		}
+
+	}
+}
+
+#
+focus = { 
+		id = GR_raidertown
+		icon = GFX_goal_unknown
+		relative_position_id = GR_take_control
+		x = 1
+		y = 1
+		cost = 1
+
+		available_if_capitulated = yes 
+		prerequisite = { focus = GR_take_control } 
+
+		mutually_exclusive = { 
+        focus = GR_factorytown
+        }
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GR_generic"
+			
+			random_owned_controlled_state = {
+			limit = {
+				free_building_slots = {
+					building = industrial_complex
+					size > 0
+					include_locked = yes
+				}
+				OR = {
+					is_in_home_area = yes
+					NOT = {
+						owner = {
+							any_owned_state = {
+								free_building_slots = {
+									building = industrial_complex
+									size > 0
+									include_locked = yes
+								}
+								is_in_home_area = yes
+							}
+						}
+					}
+				}
+			}
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+		}
+
+	}
+}
+
