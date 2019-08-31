@@ -212,11 +212,11 @@ focus = {
 	}
 }
 
-#
+#Escaped Slaves
 focus = { 
-		id = GR_generic
+		id = GR_escaped_slaves
 		icon = GFX_goal_unknown
-		x = 18
+		x = 14
 		y = 3
 		cost = 1
 
@@ -228,57 +228,155 @@ focus = {
 		} 
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_generic"
+		log = "[GetDateText]: [Root.GetName]: Focus GR_escaped_slaves"
+			country_event = { id = GR.5}
+			add_ideas =  GR_escaped_slaves
 		}
 }
 
-#Escaped Slaves
+#Search Party
 focus = { 
-		id = GR_escaped_slaves
+		id = GR_search_party
 		icon = GFX_goal_unknown
-		relative_position_id = GR_generic
-		x = -1
+		relative_position_id = GR_escaped_slaves
+		x = -2
 		y = 1
 		cost = 1
 
 		available_if_capitulated = yes 
-		prerequisite = { focus = GR_generic } 
+		prerequisite = { focus = GR_escaped_slaves } 
 
 		mutually_exclusive = { 
-        focus = GR_generic2
+        focus = GR_slave_hideouts
         }
+        available = {
+			has_country_flag = GR_search_party
+		}
 
 		ai_will_do = { 
 			factor = 100
 		} 
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_escaped_slaves"
-			country_event = { id = GR.5}
+			log = "[GetDateText]: [Root.GetName]: Focus GR_search_party"
+			hidden_effect = { country_event = { id = GR.6 days = 10 }
 		}
 }
+}
+
+#Slave Hideouts
+focus = { 
+		id = GR_slave_hideouts
+		icon = GFX_goal_unknown
+		relative_position_id = GR_escaped_slaves
+		x = 2
+		y = 1
+		cost = 1
+
+		available_if_capitulated = yes 
+		prerequisite = { focus = GR_escaped_slaves } 
+
+		mutually_exclusive = { 
+        focus = GR_search_party
+        }
+        available = {
+			has_country_flag = GR_slave_hideout
+		}
+
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GR_slave_hideouts"
+			}
+}	
 
 #
 focus = { 
-		id = GR_generic2
+		id = GR_generic
 		icon = GFX_goal_unknown
-		relative_position_id = GR_generic
+		relative_position_id = GR_slave_hideouts
+		x = 0
+		y = 1
+		cost = 1
+
+		available_if_capitulated = yes 
+		prerequisite = { focus = GR_slave_hideouts } 
+
+		
+        available = {
+			people > 0.1
+		}
+
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GR_generic"
+		}
+}	
+
+#
+focus = { 
+		id = GR_roadtotown
+		icon = GFX_goal_generic_construct_infrastructure
+		relative_position_id = GR_factorytown
 		x = 1
 		y = 1
 		cost = 1
 
 		available_if_capitulated = yes 
-		prerequisite = { focus = GR_generic } 
+		prerequisite = {
+		focus = GR_factorytown
+		focus = GR_raidertown
+	}
+		     
+		ai_will_do = { 
+			factor = 100
+		} 
 
-		mutually_exclusive = { 
-        focus = GR_escaped_slaves
-        }
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GR_roadtotown"
+
+			random_owned_controlled_state = {
+			if = {
+        limit = { }
+        add_building_construction = {
+            type = infrastructure
+            level = 1
+            instant_build = yes
+        		}
+    		}
+		}
+	}
+}	
+
+#
+focus = { 
+		id = GR_sent_a_message
+		icon = GFX_goal_unknown
+		relative_position_id = GR_search_party
+		x = 0
+		y = 1
+		cost = 1
+
+		available_if_capitulated = yes 
+		prerequisite = { focus = GR_search_party }    
+
+		available = {
+			has_country_flag = GR_party_returns
+		}
+	
 
 		ai_will_do = { 
 			factor = 100
 		} 
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_generic2"
+			log = "[GetDateText]: [Root.GetName]: Focus GR_sent_a_message"
 		}
-}		
+	}
