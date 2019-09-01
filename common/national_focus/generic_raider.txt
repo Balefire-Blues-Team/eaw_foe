@@ -231,6 +231,7 @@ focus = {
 		log = "[GetDateText]: [Root.GetName]: Focus GR_escaped_slaves"
 			country_event = { id = GR.5}
 			add_ideas =  GR_escaped_slaves
+			add_political_power = -60
 		}
 }
 
@@ -259,7 +260,9 @@ focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_search_party"
+			add_political_power = 60
 			hidden_effect = { country_event = { id = GR.6 days = 10 }
+
 		}
 }
 }
@@ -290,12 +293,13 @@ focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_slave_hideouts"
+			add_popularity = { ideology = communism popularity = 0.05}
 			}
 }	
 
 #
 focus = { 
-		id = GR_generic
+		id = GR_slave_raids
 		icon = GFX_goal_unknown
 		relative_position_id = GR_slave_hideouts
 		x = 0
@@ -307,7 +311,7 @@ focus = {
 
 		
         available = {
-			people > 0.1
+			communism > 0.1
 		}
 
 
@@ -316,7 +320,8 @@ focus = {
 		} 
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_generic"
+			log = "[GetDateText]: [Root.GetName]: Focus GR_slave_raids"
+			add_ideas = GR_slave_raids
 		}
 }	
 
@@ -378,5 +383,107 @@ focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_sent_a_message"
-		}
+			country_event = { id = GR.7}
+			}
 	}
+
+focus = { 
+		id = GR_armory_raid
+		icon = GFX_goal_unknown
+		relative_position_id = GR_slave_hideouts
+		x = 2
+		y = 1
+		cost = 1
+
+		available_if_capitulated = yes 
+		prerequisite = { focus = GR_slave_hideouts } 
+
+		
+        available = {
+			communism > 0.1
+		}
+
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GR_slave_raids"
+			add_equipment_to_stockpile = { type = infantry_equipment_1 amount = -100 producer = ROOT }
+		}
+}	
+
+#
+focus = { 
+		id = GR_revolt
+		icon = GFX_goal_unknown
+		relative_position_id = GR_slave_raids
+		x = 0
+		y = 1
+		cost = 1
+
+		available_if_capitulated = yes 
+		prerequisite = { 
+		focus = GR_armory_raid }
+
+		prerequisite = {
+		focus = GR_slave_raids }
+
+		mutually_exclusive = { 
+        focus = GR_assault_basecamp
+        }
+
+        available = {
+			communism > 0.5
+		}
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+ 		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GR_revolt"
+			start_civil_war = {
+			ideology = communism
+			size = 0.5
+			}
+		}
+}
+
+#
+focus = { 
+		id = GR_assault_basecamp
+		icon = GFX_goal_unknown
+		relative_position_id = GR_slave_raids
+		x = 2
+		y = 1
+		cost = 1
+
+		available_if_capitulated = yes 
+		prerequisite = { 
+		focus = GR_armory_raid }
+		
+		prerequisite = {
+		focus = GR_slave_raids }
+
+		mutually_exclusive = { 
+        focus = GR_revolt
+        }
+
+        available = {
+			communism > 0.8
+		}
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+ 		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GR_assault_basecamp"
+			set_politics = {
+			ruling_party = communism
+			elections_allowed = no
+			}
+		}
+}
