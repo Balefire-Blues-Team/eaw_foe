@@ -1,0 +1,94 @@
+scripted_gui = {
+	open_puppet_ledger = {
+		context_type = player_context
+
+		window_name = "open_puppet_ledger"
+		parent_window_token = politics_tab
+
+		visible = {
+			is_ai = no
+			num_subjects > 0
+		}
+
+		effects = {
+			open_button_click = {
+				set_temp_variable = { show = 1 }
+				subtract_from_temp_variable = { show = show_puppet_ledger }
+				set_variable = { show_puppet_ledger = show }
+				if = {
+					limit = {
+						check_variable = { show_puppet_ledger < 1 }
+					}
+					clear_variable = show_puppet_ledger
+				}
+			}
+		}
+	}
+
+	puppet_ledger = {
+		context_type = player_context
+
+		window_name = "puppet_ledger"
+
+		visible = {
+			is_ai = no
+			check_variable = { show_puppet_ledger > 0 }
+		}
+
+		effects = {
+			close_button_click = {
+				clear_variable = show_puppet_ledger
+			}
+			entry_flag_click = {
+				capital_scope = {
+					ROOT = {
+						goto_state = PREV
+					}
+				}
+			}
+		}
+
+		triggers = {
+			manpower_visible = {
+				ROOT = {
+					is_ai = no
+				}
+				set_temp_variable = { used_manpower = max_available_manpower_k }
+				subtract_from_temp_variable = { used_manpower = manpower_k }
+				set_temp_variable = { manpower_in_training = amount_manpower_in_deployment_queue }
+				divide_temp_variable = { manpower_in_training = 1000 }
+				subtract_from_temp_variable = { used_manpower = manpower_in_training }
+				set_temp_variable = { conscription_factor_temp = modifier@conscription_factor }
+				add_to_temp_variable = { conscription_factor_temp = 1 }
+			}
+			industrial_capacity_visible = {
+				ROOT = {
+					is_ai = no
+				}
+				set_temp_variable = { civilian_factories_in_use = num_of_civilian_factories }
+				subtract_from_temp_variable = { civilian_factories_in_use = num_of_available_civilian_factories }
+				set_temp_variable = { naval_factories_in_use = num_of_naval_factories }
+				subtract_from_temp_variable = { naval_factories_in_use = num_of_available_naval_factories }
+				set_temp_variable = { military_factories_in_use = num_of_military_factories }
+				subtract_from_temp_variable = { military_factories_in_use = num_of_available_military_factories }
+			}
+		}
+
+		dynamic_lists = {
+			puppet_ledger_gridbox = {
+				array = subjects
+				entry_container = puppet_ledger_entry
+				change_scope = yes
+			}
+		}
+
+		properties = {
+			entry_flag = {
+				image = "[This.GetFlag]"
+			}
+			conscription_law_icon = {
+				image = "[This.GetConscriptionLawIcon]"
+			}
+		}
+	}
+}
