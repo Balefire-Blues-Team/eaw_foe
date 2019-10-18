@@ -2,7 +2,7 @@
 shared_focus = {
 		id = FSR_thegreatwar
 		icon = gfx_goal_unknown
-		x = 24
+		x = 20
 		y = 0
 		cost = 1
 		
@@ -22,7 +22,7 @@ shared_focus = {
 shared_focus = {
 		id = FSR_stabletechq
 		icon = gfx_goal_unknown
-		x = 24
+		x = 20
 		y = 1
 		cost = 1
 		
@@ -42,7 +42,7 @@ shared_focus = {
 shared_focus = {
 		id = FSR_theelder
 		icon = gfx_goal_unknown
-		x = 24
+		x = 20
 		y = 2
 		cost = 1
 		
@@ -62,7 +62,7 @@ shared_focus = {
 shared_focus = {
 		id = FSR_thescribes
 		icon = gfx_goal_unknown
-		x = 21
+		x = 17
 		y = 3
 		cost = 2
 		
@@ -82,7 +82,7 @@ shared_focus = {
 shared_focus = {
 		id = FSR_theknights
 		icon = gfx_goal_unknown
-		x = 23
+		x = 19
 		y = 3
 		cost = 2
 		
@@ -102,7 +102,7 @@ shared_focus = {
 shared_focus = {
 		id = FSR_poldivisions
 		icon = gfx_goal_unknown
-		x = 22
+		x = 18
 		y = 4
 		cost = 3
 		
@@ -123,7 +123,7 @@ shared_focus = {
 shared_focus = {
 		id = FSR_stablemainframe
 		icon = gfx_goal_unknown
-		x = 25
+		x = 21
 		y = 3
 		cost = 2
 		
@@ -143,7 +143,7 @@ shared_focus = {
 shared_focus = {
 		id = FSR_industriallegacy
 		icon = gfx_goal_unknown
-		x = 27
+		x = 23
 		y = 3
 		cost = 2
 		
@@ -163,7 +163,7 @@ shared_focus = {
 shared_focus = {
 		id = FSR_industyfocus
 		icon = gfx_goal_unknown
-		x = 26
+		x = 22
 		y = 4
 		cost = 3
 		
@@ -180,26 +180,154 @@ shared_focus = {
 		}
 }
 
-#A New Elder?
+#Blueberry Prevails
 shared_focus = {
-		id = FSR_newelder
+		id = FSR_blueberry
 		icon = gfx_goal_unknown
-		x = 24
+		x = 20
 		y = 5
-		cost = 3
+		cost = 1
 		
 		available_if_capitulated = yes 
+		available = {
+        neutrality > 0.5
+        has_civil_war = no
+		}
+		
 		prerequisite = { focus = FSR_poldivisions } 
 		prerequisite = { focus = FSR_industyfocus} 
+		mutually_exclusive = { focus = FSR_strawberry = FSR_badpony }	
 		ai_will_do = { 
 		factor = 300
 		} 
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus FSR_newelder"
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_blueberry"
 			country_event = { id = fillysr.10 }
 		}
 }
+
+#Straberry Lemonade becomes Elder
+shared_focus = {
+		id = FSR_strawberry
+		icon = gfx_goal_unknown
+		x = 18
+		y = 5
+		cost = 1
+		
+		available_if_capitulated = yes 
+		available = {
+        democratic > 0.5
+        has_civil_war = no
+		}
+		
+		prerequisite = { focus = FSR_poldivisions } 
+		prerequisite = { focus = FSR_industyfocus} 
+		mutually_exclusive = { focus = FSR_badpony = FSR_blueberry }	
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_strawberry"
+			country_event = { id = fillysr.11 }
+		}
+}
+
+#Bad Pony takes over
+shared_focus = {
+		id = FSR_badpony
+		icon = gfx_goal_unknown
+		x = 22
+		y = 5
+		cost = 1
+		
+		available_if_capitulated = yes 
+		available = {
+        fascism > 0.5
+        has_civil_war = no
+		}
+		
+		prerequisite = { focus = FSR_poldivisions } 
+		prerequisite = { focus = FSR_industyfocus}
+		mutually_exclusive = { focus = FSR_strawberry = FSR_blueberry }		
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_badpony"
+			country_event = { id = fillysr.12 }
+		}
+}
+
+
+################
+##Continuation##
+################
+
+#Buisness as usual
+shared_focus = {
+		id = FSR_buisnessusual
+		icon = gfx_goal_unknown
+		x = 5
+		y = 14
+		cost = 1
+		
+		available_if_capitulated = yes 
+		available = {
+			has_completed_focus = FSR_blueberry
+		}
+		
+		
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_buisnessusual"
+			add_political_power = 100
+			add_stability = 0.1
+		}
+}
+
+#South End Bases
+shared_focus = {
+	id = FSR_southbases
+		icon = gfx_goal_unknown
+		x = 4
+		y = 15
+		cost = 7
+		
+		prerequisite = { focus = FSR_buisnessusual }
+		available_if_capitulated = yes 
+		
+		ai_will_do = { 
+		factor = 300
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_buisnessusual"
+			536 = {
+			add_extra_state_shared_building_slots = 3
+				add_building_construction = {
+					type = infrastructure
+					level = 2
+					instant_build = yes
+				}
+				add_building_construction = {
+					type = industrial_complex
+					level = 2
+					instant_build = yes
+				}
+			}
+		}
+
+}
+
+
+
+
 ################
 ##Army-Focuses##
 ################
@@ -213,7 +341,13 @@ shared_focus = {
 		cost = 1
 		
 		available_if_capitulated = yes 
-		prerequisite = { focus = FSR_newelder } 
+		available = {
+			OR = {
+						has_completed_focus = FSR_blueberry
+						has_completed_focus = FSR_strawberry
+						has_completed_focus = FSR_badpony
+					}
+		} 
 		ai_will_do = { 
 		factor = 30
 		} 
@@ -233,7 +367,11 @@ shared_focus = {
 		cost = 1
 		
 		available_if_capitulated = yes 
-		prerequisite = { focus = FSR_srarmy } 
+		available = {
+			has_government = democratic
+		}
+		prerequisite = { focus = FSR_srarmy }
+		mutually_exclusive = { focus = FSR_priviarmy focus = FSR_raiderarmy }
 		ai_will_do = { 
 		factor = 30
 		} 
@@ -352,7 +490,7 @@ shared_focus = {
 		}
 }
 
-#Robotic Helpers
+#Robotic Soldiers
 shared_focus = {
 		id = FSR_roboarmy
 		icon = gfx_goal_unknown
@@ -403,7 +541,11 @@ shared_focus = {
 		cost = 1
 		
 		available_if_capitulated = yes 
-		prerequisite = { focus = FSR_srarmy } 
+		available = {
+			has_government = neutrality
+		}
+		prerequisite = { focus = FSR_srarmy }
+		mutually_exclusive = { focus = FSR_ajarmy focus = FSR_raiderarmy }		
 		ai_will_do = { 
 		factor = 30
 		} 
@@ -551,8 +693,12 @@ shared_focus = {
 		y = 7
 		cost = 1
 		
-		available_if_capitulated = yes 
-		prerequisite = { focus = FSR_srarmy } 
+		available_if_capitulated = yes
+		available = {
+			has_government = fascism
+		}
+		prerequisite = { focus = FSR_srarmy }
+		mutually_exclusive = { focus = FSR_priviarmy focus = FSR_ajarmy }		
 		ai_will_do = { 
 		factor = 30
 		} 
@@ -748,7 +894,14 @@ shared_focus = {
 		cost = 1
 		
 		available_if_capitulated = yes 
-		prerequisite = { focus = FSR_newelder } 
+		available = {
+			OR = {
+						has_completed_focus = FSR_blueberry
+						has_completed_focus = FSR_strawberry
+						has_completed_focus = FSR_badpony
+					}
+		}
+		
 		ai_will_do = { 
 		factor = 30
 		} 
