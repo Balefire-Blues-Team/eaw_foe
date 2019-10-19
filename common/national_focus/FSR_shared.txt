@@ -1,7 +1,9 @@
+
+
 #The Great War
 shared_focus = {
 		id = FSR_thegreatwar
-		icon = gfx_goal_unknown
+		icon = gfx_focus_wonderweapons
 		x = 20
 		y = 0
 		cost = 1
@@ -272,7 +274,7 @@ shared_focus = {
 		icon = gfx_goal_unknown
 		x = 5
 		y = 14
-		cost = 1
+		cost = 7
 		
 		available_if_capitulated = yes 
 		available = {
@@ -322,8 +324,112 @@ shared_focus = {
 				}
 			}
 		}
-
 }
+
+#Enemy at our Doorstep
+shared_focus = {
+	id = FSR_enemydoor
+		icon = gfx_goal_unknown
+		x = 1
+		y = 16
+		cost = 7
+		
+		prerequisite = { focus = FSR_southbases }
+		available = {
+			NOT = { country_exists = SSC }
+		}
+		available_if_capitulated = yes 
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_enemydoor"
+			add_ideas = FSR_borderfights
+			country_event = { id = fillysr_bs.1 }
+		}
+}
+
+#Aggressive Stance
+shared_focus = {
+	id = FSR_aggressivestance
+		icon = gfx_goal_unknown
+		x = 0
+		y = 17
+		cost = 7
+		
+		prerequisite = { focus = FSR_enemydoor }
+		available = {
+			always = no
+		}
+		available_if_capitulated = yes 
+		
+		ai_will_do = { 
+		factor = 10
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_aggressivestance"
+		}
+}
+
+#Fight For Madagascar
+shared_focus = {
+	id = FSR_fightmadagascar
+		icon = gfx_goal_unknown
+		x = 0
+		y = 18
+		cost = 7
+		
+		prerequisite = { focus = FSR_aggressivestance }
+		available = {
+		}
+		available_if_capitulated = yes 
+		
+		ai_will_do = { 
+		factor = 30
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_fightmadagascar"
+			#border-war
+		}
+}
+
+
+#Defensive Stance
+shared_focus = {
+	id = FSR_defensivestance
+		icon = gfx_goal_unknown
+		x = 2
+		y = 17
+		cost = 7
+		
+		prerequisite = { focus = FSR_enemydoor }
+		available = {
+			always = no
+		}
+		available_if_capitulated = yes 
+		
+		ai_will_do = { 
+		factor = 10
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_defensivestance"
+		}
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -378,7 +484,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_ajarmy"
-			#Spirit "Wasteland Militia"
+			swap_ideas = { remove_idea = selective_recruitment add_idea = FSR_wastemilitia }
+			country_event = { id = fillysr_aj.1 }
 			
 		}
 }
@@ -399,8 +506,12 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_healthyarmy"
-			#2x50% buff for medicine research
-			#Spirit "Resilliant army"
+			add_tech_bonus = {
+			name = infantry_bonus
+			bonus = 0.5
+			uses = 2
+			category = support_tech
+			}
 			
 		}
 }
@@ -421,7 +532,20 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_saddlearmy"
-			#1x100% buff for AT, and same for Arty
+			
+			add_tech_bonus = {
+			name = infantry_weapons_bonus
+			bonus = 0.5
+			uses = 1
+			category = artillery
+			}
+			
+			add_tech_bonus = {
+			name = race_tech_bonus
+			bonus = 0.5
+			uses = 1
+			category = race_tech
+			}
 			
 		}
 }
@@ -442,7 +566,13 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_futurearmy"
-			#2x50% buff for energy weapons research
+			
+			add_tech_bonus = {
+			name = infantry_weapons_bonus
+			bonus = 1.0
+			uses = 1
+			category = energy_equipment
+			}
 			
 		}
 }
@@ -929,7 +1059,18 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_airsuperiority"
-			#2x50% bonus to fighter models
+			 add_tech_bonus = {
+				name = fighter_bonus
+				bonus = 0.5
+				uses = 1
+				technology = fighter1
+				technology = fighter2
+				technology = fighter3
+			}
+			add_equipment_to_stockpile = {
+				type = fighter_equipment
+				amount = 50
+			}
 		}
 }
 
@@ -950,10 +1091,56 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_groundsupport"
-			2x50% bonus to CAS models
+			if = {
+			limit = {
+			    has_tech = CAS1
+		    }
+		    add_tech_bonus = {
+				name = bomber_effort
+				bonus = 0.5
+				uses = 1
+				technology = CAS1
+				technology = CAS2
+				technology = CAS3
+			}
+		}
+		else = {
+			set_technology = {
+				CAS1 = 1
+			}
+		}
 		}
 }
 
+
+##Industrial Stuff##
+
+
+#Our Industrial Focus
+shared_focus = {
+		id = FSR_newindustry
+		icon = gfx_goal_unknown
+		x = 30
+		y = 1
+		cost = 3
+		
+		available_if_capitulated = yes 
+		available = {
+			OR = {
+						has_completed_focus = FSR_blueberry
+						has_completed_focus = FSR_strawberry
+						has_completed_focus = FSR_badpony
+					}
+		}
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_newindustry"
+			#smth
+		}
+}
 
 
 
