@@ -157,3 +157,76 @@ FSR_stabletec_construction = {
 	
 
 }
+
+FSR_bs_borderwar = {
+
+	FSR_take_madagaskar = {
+		icon = border_war
+
+		available = {
+			has_full_control_of_state = 542
+			divisions_in_state = {
+				state = 542
+				size > 0
+			}
+
+			FROM = {
+				owns_state = 543
+				NOT = {
+					is_in_faction_with = ROOT
+					is_subject_of = ROOT
+				}
+			}
+		}
+		target_root_trigger = {
+			has_war = no
+			NOT = {
+				owns_state = 543
+			}
+		}
+		visible = {
+			has_war = no
+			NOT = {
+				owns_state = 543
+			}
+		}
+
+		cost = 50
+		days_re_enable = 100
+
+		ai_will_do = {
+			factor = 100
+		}
+
+		fire_only_once = no
+
+		highlight_states = {
+			state = 543
+		}
+		target_array = neighbors
+		target_trigger = {
+			FROM = {
+				owns_state = 59
+			}
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision FSR_take_madagaskar target: [From.GetName]"
+			start_border_war = {
+				change_state_after_war = no
+				attacker = {
+					state = 542
+					num_provinces = 5
+					on_win = fillysr_bs.6
+					on_lose = fillysr_bs.8
+					on_cancel = fillysr_bs.7
+				}
+
+				defender = {
+					state = 543
+					num_provinces = 5
+				}
+			}
+		}
+	}
+}
