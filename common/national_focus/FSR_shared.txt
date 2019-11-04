@@ -1154,7 +1154,7 @@ shared_focus = {
 			name = infantry_weapons_bonus
 			bonus = 0.5
 			uses = 1
-			category = artillery
+			category = anti_personnel_tech
 			}
 			
 			add_tech_bonus = {
@@ -1188,7 +1188,7 @@ shared_focus = {
 			name = infantry_weapons_bonus
 			bonus = 1.0
 			uses = 1
-			category = energy_equipment
+			category = energy_weaponry_tech
 			}
 			
 		}
@@ -1210,7 +1210,13 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_armorarmy"
-			#1x100% buff for PA research
+			add_tech_bonus = {
+			name = power_armor_tech_bonus
+			bonus = 1.0
+			uses = 1
+			ahead_reduction = 2
+			category = power_armor_tech
+			}
 			
 		}
 }
@@ -1253,7 +1259,12 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_roboarmy"
-			#2x50% buff for robot research
+			add_tech_bonus = {
+			name = robotics_tech_bonus
+			bonus = 0.5
+			uses = 2
+			category = robotics_tech
+			}
 			
 		}
 }
@@ -1344,6 +1355,7 @@ shared_focus = {
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_superiorarmor"
 			#Spirit "Power armor production methods"
+			add_ideas = FSR_superior_armor
 			
 		}
 }
@@ -1365,7 +1377,7 @@ shared_focus = {
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_assaultweapons"
 			add_tech_bonus = {
-				name = explosive_equipment_bonus
+				name = explosive_bonus
 				bonus = 0.5
 				uses = 2
 				category = explosive_tech
@@ -1441,7 +1453,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_rangerarmy"
-			#Spirit "Ranger Army"
+			add_ideas = FSR_ranger_army_idea
 			
 		}
 }
@@ -1489,7 +1501,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_fortresscity"
-			custom_effect_tooltip = FSR_fortresscity_tt
+			custom_effect_tooltip = FSR_fortresscity_dec_tt
 			
 		}
 }
@@ -1531,7 +1543,12 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_newdoctrine"
-			#3x60% bonus to Regular warfare Doctrine
+			add_tech_bonus = {
+				name = recon_bonus
+				bonus = 0.6
+				uses = 3
+				category = cat_grand_army
+			}
 			
 		}
 }
@@ -1552,7 +1569,12 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_biggerguns"
-			#2x50% bonus to Arty
+			add_tech_bonus = {
+				name = anti_personnel_bonus
+				bonus = 0.5
+				uses = 2
+				category = anti_personnel_tech
+			}
 			
 		}
 }
@@ -1573,7 +1595,12 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_biggestgun"
-			#2x50% bonus to AT
+			add_tech_bonus = {
+				name = anti_tank_bonus
+				bonus = 0.5
+				uses = 2
+				category = anti_tank_tech
+			}
 			
 		}
 }
@@ -1594,7 +1621,36 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_raiderworkshops"
-			#Spirit "Raider workshops"
+			random_owned_controlled_state = {
+			limit = {
+			free_building_slots = {
+				building = arms_factory
+				size > 0
+				include_locked = yes
+			}
+			OR = {
+				is_in_home_area = yes
+				NOT = {
+					owner = {
+						any_owned_state = {
+							free_building_slots = {
+								building = arms_factory
+								size > 0
+								include_locked = yes
+							}
+							is_in_home_area = yes
+						}
+					}
+				}
+			}
+		}
+		add_extra_state_shared_building_slots = 2
+		add_building_construction = {
+			type = arms_factory
+			level = 2
+			instant_build = yes
+		}
+		}
 			
 		}
 }
@@ -1615,7 +1671,12 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_raiderdrugs"
-			#2x50% bonus to Medicine research
+			add_tech_bonus = {
+				name = chem_bonus
+				bonus = 0.5
+				uses = 2
+				category = chem_tech
+			}
 			
 		}
 }
@@ -1692,14 +1753,12 @@ shared_focus = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_airsuperiority"
 			 add_tech_bonus = {
 				name = fighter_bonus
-				bonus = 0.5
+				bonus = 1.0
 				uses = 1
-				technology = fighter1
-				technology = fighter2
-				technology = fighter3
+				category = light_fighter
 			}
 			add_equipment_to_stockpile = {
-				type = fighter_equipment
+				type = fighter_equipment_1
 				amount = 50
 			}
 		}
@@ -1722,24 +1781,19 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_groundsupport"
-			if = {
-			limit = {
-			    has_tech = CAS1
-		    }
+			
 		    add_tech_bonus = {
-				name = bomber_effort
-				bonus = 0.5
+				name = cas_bonus
+				bonus = 1.0
 				uses = 1
-				technology = CAS1
-				technology = CAS2
-				technology = CAS3
+				category = cas_bomber
 			}
-		}
-		else = {
-			set_technology = {
-				CAS1 = 1
+			add_equipment_to_stockpile = {
+				type = cas_equipment_1
+				amount = 50
 			}
-		}
+		
+		
 		}
 }
 
@@ -1769,7 +1823,12 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_newindustry"
-			#smth
+			 add_tech_bonus = {
+				name = industry_bonus
+				bonus = 0.75
+				uses = 1
+				category = industry
+			}
 		}
 }
 
