@@ -987,7 +987,7 @@ shared_focus = {
 #Demeter Greenhouses
 shared_focus = {
 	id = FSR_demeter
-		icon = gfx_goal_unknown
+		icon = GFX_focus_AUS_agriculture
 		x = 10
 		y = 17
 		cost = 10
@@ -1442,7 +1442,479 @@ shared_focus = {
 
 
 
+##############
+##Reformists##
+##############
 
+#A new Outlook
+shared_focus = {
+		id = FSR_outlook
+		icon = GFX_goal_solar_phoenix_defence
+		x = 31
+		y = 14
+		cost = 6
+		
+		available_if_capitulated = yes 
+		available = {
+			has_completed_focus = FSR_strawberry
+		}
+		
+		
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_outlook"
+			country_event = { id = fillysr_sl.2 }
+		}
+}
+
+#Foreign Politics
+shared_focus = {
+		id = FSR_for_politics
+		icon = GFX_goal_improve_relations_pony_griffon
+		x = -1
+		y = 1
+		relative_position_id = FSR_outlook
+		cost = 3
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = FSR_outlook }
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_for_politics"
+			add_political_power = 50
+			
+			
+		}
+}
+
+#Denounce RedEye
+shared_focus = {
+		id = FSR_denounce_red
+		icon = GFX_goal_redeye
+		x = -3
+		y = 2
+		relative_position_id = FSR_outlook
+		cost = 6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = FSR_for_politics }
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_denounce_red"
+			country_event = { id = fillysr_sl.3 }
+			
+		}
+}
+
+#Asylum for Slaves
+shared_focus = {
+		id = FSR_save_slaves
+		icon = GFX_goal_support_democracy
+		x = -3
+		y = 3
+		relative_position_id = FSR_outlook
+		cost = 6
+		
+		available_if_capitulated = yes 
+		available = {
+			NOT = { country_exists = SSC }
+		}
+		prerequisite = { focus = FSR_denounce_red }
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_save_slaves"
+			country_event = { id = fillysr_sl.4 }
+			
+		}
+}
+
+#Spread propaganda
+shared_focus = {
+		id = FSR_propaganda_slaves
+		icon = GFX_goal_generic_propaganda
+		x = -3
+		y = 4
+		relative_position_id = FSR_outlook
+		cost = 6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = FSR_save_slaves }
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_propaganda_slaves"
+			add_stability = 0.1
+			add_war_support = 0.05
+			add_manpower = 70
+			
+		}
+}
+
+#Meeting with Partisans
+shared_focus = {
+		id = FSR_partisan_meeting
+		icon = GFX_focus_generic_concessions
+		x = -1
+		y = 2
+		relative_position_id = FSR_outlook
+		cost = 6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = FSR_for_politics }
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_partisan_meeting"
+			country_event = { id = fillysr_sl.5 }
+			
+		}
+}
+
+#Partisans to Knights
+shared_focus = {
+		id = FSR_partisan_knights
+		icon = GFX_goal_revolution_pony
+		x = -1
+		y = 3
+		relative_position_id = FSR_outlook
+		cost = 6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = FSR_partisan_meeting }
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_partisan_knights"
+			country_event = { id = fillysr_sl.6 }
+			
+		}
+}
+
+#Wasteland Expertise
+shared_focus = {
+		id = FSR_partisan_experts
+		icon = GFX_goal_generic_special_forces
+		x = -1
+		y = 4
+		relative_position_id = FSR_outlook
+		cost = 6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = FSR_partisan_knights }
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_partisan_experts"
+			if = {
+				limit = { has_idea = FSR_partisan_integration }
+					army_experience = 50
+					
+				else = {
+					army_experience = 30
+				}
+			}
+			
+		}
+}
+
+#Prepare for War
+shared_focus = {
+		id = FSR_war_prep
+		icon = GFX_goal_generic_construct_mil_factory
+		x = -2
+		y = 5
+		relative_position_id = FSR_outlook
+		cost = 6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = FSR_partisan_experts }
+		prerequisite = { focus = FSR_propaganda_slaves }
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_war_prep"
+			add_war_support = 0.05
+			random_owned_controlled_state = {
+			limit = {
+			free_building_slots = {
+				building = arms_factory
+				size > 0
+				include_locked = yes
+			}
+			OR = {
+				is_in_home_area = yes
+				NOT = {
+					owner = {
+						any_owned_state = {
+							free_building_slots = {
+								building = arms_factory
+								size > 0
+								include_locked = yes
+							}
+							is_in_home_area = yes
+						}
+					}
+				}
+			}
+			}
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+			type = arms_factory
+			level = 2
+			instant_build = yes
+			}
+		}
+			
+		}
+}
+
+#Domestic politics
+shared_focus = {
+		id = FSR_dom_politics
+		icon = GFX_goal_news
+		x = 1
+		y = 1
+		relative_position_id = FSR_outlook
+		cost = 3
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = FSR_outlook }
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_dom_politics"
+			add_stability = 0.1
+			add_war_support = -0.05
+			
+		}
+}
+
+#Open up Scribes
+shared_focus = {
+		id = FSR_reform_scribes
+		icon = GFX_goal_technological_supremacy
+		x = 1
+		y = 2
+		relative_position_id = FSR_outlook
+		cost = 6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = FSR_dom_politics }
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_reform_scribes"
+			add_stability = -0.05
+			swap_ideas = { remove_idea = FSR_scribe_integration add_idea = FSR_scribe_integration2 }
+			if = {
+				limit = { has_idea = FSR_scribe_integration }
+					swap_ideas = { remove_idea = FSR_scribe_integration add_idea = FSR_scribe_integration2 }
+					
+				else = {
+					swap_ideas = { remove_idea = ranger_scribes add_idea = FSR_scribe_integration2 }
+				}
+			}
+		}
+}
+
+#Citizenship for Wastelanders
+shared_focus = {
+		id = FSR_reform_citizens
+		icon = GFX_goal_document
+		x = 1
+		y = 3
+		relative_position_id = FSR_outlook
+		cost = 6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = FSR_reform_scribes }
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_reform_citizens"
+			country_event = { id = fillysr_sl.7 }
+			
+		}
+}
+
+#Break resentment
+shared_focus = {
+		id = FSR_resentment
+		icon = GFX_focus_generic_diplomatic_treaty_pony
+		x = 1
+		y = 4
+		relative_position_id = FSR_outlook
+		cost = 6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = FSR_reform_citizens }
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_resentment"
+			
+			
+		}
+}
+
+#Internal Opposition
+shared_focus = {
+		id = FSR_opposition
+		icon = GFX_focus_renounce_the_treaty_of_trianon
+		x = 3
+		y = 2
+		relative_position_id = FSR_outlook
+		cost = 6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = FSR_dom_politics }
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_opposition"
+			
+			
+		}
+}
+
+#The Nova Rage Problem
+shared_focus = {
+		id = FSR_deal_nova
+		icon = GFX_goal_guillotine
+		x = 3
+		y = 3
+		relative_position_id = FSR_outlook
+		cost = 6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = FSR_opposition }
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_deal_nova"
+			
+			
+		}
+}
+
+#Crossroads Proposition
+shared_focus = {
+		id = FSR_deal_crossroads
+		icon = GFX_goal_generic_neutrality_focus
+		x = 3
+		y = 4
+		relative_position_id = FSR_outlook
+		cost = 6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = FSR_deal_nova }
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_deal_crossroads"
+			
+			
+		}
+}
+
+#Prepare Reforms
+shared_focus = {
+		id = FSR_prep_reform
+		icon = GFX_goal_constitutional_guarantees
+		x = 2
+		y = 5
+		relative_position_id = FSR_outlook
+		cost = 6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = FSR_deal_crossroads }
+		prerequisite = { focus = FSR_resentment }
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_prep_reform"
+			
+			
+		}
+}
+
+#Down with RedEye
+shared_focus = {
+		id = FSR_kill_red
+		icon = GFX_goal_redeye
+		x = 0
+		y = 6
+		relative_position_id = FSR_outlook
+		cost = 6
+		
+		available_if_capitulated = no
+		prerequisite = { focus = FSR_war_prep }
+		prerequisite = { focus = FSR_prep_reform }
+		
+		ai_will_do = { 
+		factor = 500
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_kill_red"
+			
+			
+		}
+}
 
 
 
@@ -1508,7 +1980,7 @@ shared_focus = {
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_ajarmy"
 			swap_ideas = { remove_idea = selective_recruitment add_idea = FSR_wastemilitia }
-			country_event = { id = fillysr_aj.1 }
+			country_event = { id = fillysr_sl.1 }
 			
 		}
 }
@@ -2108,6 +2580,8 @@ shared_focus = {
 			
 		}
 }
+
+
 
 ############
 ##Airforce##
