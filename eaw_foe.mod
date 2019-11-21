@@ -1,4 +1,4 @@
-﻿name="Equestria At War - Fallout"
+name="Equestria At War - Fallout"
 path="mod/eaw_foe"
 dependencies = {  
 	"Old World Blues" 
@@ -42,4 +42,4 @@ tags={
 }
 
 picture="blank_map_template_5632x2048.jpg"
-supported_version="1.7.*"
+supported_version="1.8.*"
