@@ -67,8 +67,8 @@ shared_focus = {
 shared_focus = { 
 	id = RED_fire_industry
 	icon = GFX_focus_generic_industry_3
-	x = 31
-	y = 6
+	x = 32
+	y = 0
 	cost = 5
 
 	available = {
@@ -788,7 +788,7 @@ shared_focus = {
 		has_idea = raider_partisans
 	}
 	ai_will_do = { 
-		factor = 20
+		factor = 55
 	} 
 
 	completion_reward = {
@@ -942,7 +942,7 @@ shared_focus = {
 	prerequisite = { focus = RED_stamp_out_fire }
 	prerequisite = { focus = RED_crush_gangs}
 	ai_will_do = { 
-		factor = 15
+		factor = 40
 	} 
 
 	completion_reward = {
@@ -976,8 +976,8 @@ shared_focus = {
 shared_focus = { 
 	id = RED_wasteland_army
 	icon = GFX_goal_generic_land_doctrines_focus
-	x = 31
-	y = 0
+	x = 26
+	y = 6
 	cost = 10
 
 	available = {
@@ -1136,6 +1136,11 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_slave_loyalty"
 		add_ideas = slave_loyal
+
+		swap_ideas = {
+    		remove_idea = slave_labor
+    		add_idea = slave_loyal
+		}
 	}
 
 }
@@ -1411,6 +1416,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_redeye_political"
+		country_event = { id = redeye.8 }
 	}
 
 }
@@ -1472,6 +1478,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_redeye_radio"
+
+		add_ideas = redeye_radio
 	}
 
 }
@@ -1534,6 +1542,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_bigger_radio"
+
+		swap_ideas = {
+    		remove_idea = redeye_radio
+    		add_idea = big_redeye_radio
+		}
 	}
 
 }
@@ -1554,6 +1567,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_spritebot_eyes"
+
+		swap_ideas = {
+    		remove_idea = redeye_radio
+    		add_idea = spy_redeye_radio
+		}
 	}
 
 }
@@ -1561,7 +1579,7 @@ shared_focus = {
 #Accept The Goddess
 shared_focus = { 
 	id = RED_expand_influence
-	icon = GFX_goal_unknown
+	icon = GFX_goal_redeye_octopus
 	relative_position_id = RED_accept_goddess
 	x = -3
 	y = 1
@@ -1631,6 +1649,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_old_appleloosa"
+
+		give_guarantee = OAP
+		OAP = {
+			add_ideas = redeye_support
+		}
 	}
 
 }
@@ -1650,6 +1673,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_foaltopia_gems"
+
+		FTP = {
+			country_event = {
+    			id = foaltopia.1
+    			days = 1
+    			random = 2
+			}
+		}
 	}
 
 }
@@ -1669,6 +1700,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_alicorn_overseer"
+		OAP = {
+			country_event = {
+    			id = oldappleloosa.1
+    			days = 1
+    			random = 2
+			}
+		}
 	}
 
 }
@@ -1688,6 +1726,18 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_papa_redeye"
+
+		410 = {
+			add_manpower = -200
+			add_resource = {
+    			type = crystals
+    			amount = 10
+			}
+		}
+		593 = {
+			add_manpower = 200
+		}
+
 	}
 
 }
@@ -2079,6 +2129,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_break_the_mob"
+		create_wargoal = { type = annex_everything target = GUN }
 	}
 
 } 
@@ -2101,6 +2152,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_dappleshore"
+		create_wargoal = { type = annex_everything target = RWK }
 	}
 
 } 
@@ -2141,6 +2193,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_rally_support"
+
+		add_manpower = 2000
+		add_war_support = 0.1
 	}
 
 }
@@ -2154,12 +2209,20 @@ shared_focus = {
 	cost = 10
 
 	prerequisite = { focus = RED_decline_goddess } 
+	bypass = {
+        NOT = { country_exists = FSR }
+    }
 	ai_will_do = { 
 		factor = 40
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_steel_rangers2"
+
+		declare_war_on = {
+    		target = FSR
+    		type = annex_everything
+		}
 	}
 
 }
@@ -2198,8 +2261,33 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_canterlot"
-	}
 
+		custom_effect_tooltip = RED_canterlot_annex_tt
+		hidden_effect = { # ugly tooltip
+			every_other_country = {
+				limit = {
+					has_full_control_of_state = 180 # South Canterlot
+				}
+				RED = {
+					create_wargoal = { 
+						type = annex_everything 
+						target = PREV 
+					}
+				}
+			}
+			every_other_country = {
+				limit = {
+					has_full_control_of_state = 234 # South Canterlot
+				}
+				RED = {
+					create_wargoal = { 
+						type = annex_everything 
+						target = PREV 
+					}
+				}
+			}
+		}
+	}
 }
 
 shared_focus = { 
@@ -2236,6 +2324,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_restore_canterlot"
+		custom_effect_tooltip = RED_restore_canterlot_tt
+
+		hidden_effect = {
+			set_variable = {var = RED_canter_talon_dead value = 0}
+			set_variable = {var = RED_canter_firework_clue value = 0}
+		}
 	}
 
 }
@@ -2255,6 +2349,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_subjugate_tribals"
+		create_wargoal = { type = annex_everything target = HIT }
+		create_wargoal = { type = annex_everything target = GRV }
+		create_wargoal = { type = annex_everything target = FTR }
+
 	}
 
 } 
@@ -2288,12 +2386,17 @@ shared_focus = {
 	cost = 10
 
 	prerequisite = { focus = RED_steel_rangers2 } 
+	bypass = {
+        NOT = { country_exists = FSR }
+    }
 	ai_will_do = { 
 		factor = 40
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_ranger_turncoats"
+
+		country_event = { id = redeye.9 }
 	}
 
 }
@@ -2313,6 +2416,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_ranger_secrets"
+
+		set_technology = {
+    		power_armour_t45d = 1
+		}
 	}
 
 }
@@ -2351,6 +2458,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_inspire_masses"
+
+		add_ideas = dreams_equestria
 	}
 
 }
@@ -2389,6 +2498,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus id = RED_one_goal"
+
+		swap_ideas = {
+    		remove_idea = dreams_equestria
+    		add_idea = one_goal_idea
+		}
 	}
 
 }
@@ -2409,6 +2523,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus id = RED_rebuild"
+		custom_effect_tooltip = RED_rebuild_tt
 	}
 
 }
@@ -2496,8 +2611,8 @@ shared_focus = {
 shared_focus = { 
 	id = RED_stern_political
 	icon = GFX_goal_unknown
-	x = 5
-	y = 6
+	x = 14
+	y = 3
 	cost = 10
 
 	available = {

@@ -1,4 +1,4 @@
-name="Equestria At War - Fallout"
+name="EaW/OWB - Fallout: Equestria"
 path="mod/eaw_foe"
 dependencies = {  
 	"Old World Blues" 
