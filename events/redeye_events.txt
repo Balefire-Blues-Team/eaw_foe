@@ -2645,6 +2645,7 @@ country_event = {
 
 		hidden_effect = {
 			load_focus_tree = redeye_stern
+			RED = { set_cosmetic_tag = RED_stern }
 		}
 
 	}
@@ -2675,48 +2676,30 @@ country_event = {
 		}
 
 		hidden_effect = { 
-			load_focus_tree = redeye_stern
-			start_civil_war = {
-				ruling_party = destruction
-				ideology = survivalism
-				size = 0.6
-				capital = 45
-				states = { 45 48 532 525 498 512 50 }
+			RED = { set_cosmetic_tag = RED_stern }
+			set_global_flag = RED_civil_war_flag
+			every_state = {
+				limit = { is_core_of = RED }
+				add_core_of = FFD
 			}
-			random_other_country = {
-				limit = {
-					original_tag = RED
-					has_government = survivalism
+			FFD = {
+				delete_unit_template_and_units = {
+					division_template = "Talon Company"
 				}
-				#load_oob = "SPR_Civil_War"
-				set_equipment_fraction = 0.4
-				set_stability = 0.9
-				set_war_support = 0.8
-				add_popularity = {
-					ideology = continuation
-					popularity = 0.35
+				transfer_state = 45
+				transfer_state = 48
+				transfer_state = 532
+				transfer_state = 525
+				
+				#load_focus_tree = longsword_focus_commie_civil_war
+				transfer_technology = yes
+			}
+			FFD = {
+				declare_war_on = {
+					target = RED
+					type = annex_everything
 				}
 			}
-			#news_event = { hours = 6 id = news.63 }
-			set_global_flag = redeye_civil_war
-			
-			#load_oob = "SPA_Civil_War"
-			set_equipment_fraction = 0.5
-			set_stability = 0.6
-			set_war_support = 0.8
-			set_cosmetic_tag = RED_stern
-
-			add_popularity = {
-				ideology = destruction
-				popularity = 1
-			}
-			#random_other_country = {
-			#	limit = {
-			#		original_tag = SPR
-			#		has_government = communism
-			#	}
-			#	set_cosmetic_tag = SPR_civil_war
-			#}
 		}
 
 	}
@@ -2725,10 +2708,42 @@ country_event = {
 		name = redeye_stablize.8.b
 		ai_chance = { factor = 10 }
 
-		#remove_ideas = fractured_comm
+		kill_country_leader = yes
 
-		hidden_effect = {
-			#set_country_flag = no_mercy_gangs
+		create_country_leader = {
+			name = "Stern"
+		
+			#picture = "Unholy_Antichrist.tga"
+			expire = "1965.1.1"
+			ideology = destruction
+		}
+
+		hidden_effect = { 
+			RED = { set_cosmetic_tag = RED_stern }
+			set_global_flag = RED_civil_war_flag
+			FFD = { change_tag_from = ROOT }
+			every_state = {
+				limit = { is_core_of = RED }
+				add_core_of = FFD
+			}
+			FFD = {
+				delete_unit_template_and_units = {
+					division_template = "Talon Company"
+				}
+				transfer_state = 45
+				transfer_state = 48
+				transfer_state = 532
+				transfer_state = 525
+				
+				#load_focus_tree = longsword_focus_commie_civil_war
+				transfer_technology = yes
+			}
+			FFD = {
+				declare_war_on = {
+					target = RED
+					type = annex_everything
+				}
+			}
 		}
 
 	}
