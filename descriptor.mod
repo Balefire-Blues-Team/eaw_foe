@@ -1,10 +1,4 @@
-﻿name="Equestria At War - Fallout"
-path="mod/eaw_foe"
-dependencies = {  
-	"Old World Blues" 
-	"Equestria at War"
-}
-
+version="Beta"
 replace_path="common/ai_focuses"
 replace_path="common/ai_peace"
 replace_path="common/ai_strategy"
@@ -34,12 +28,14 @@ replace_path="history/units"
 replace_path="map/strategicregions"
 replace_path="map/supplyareas"
 replace_path="gfx/loadingscreens"
-
 tags={
-	"Map"
 	"Alternative History"
 	"National Focuses"
+	"Map"
 }
-
-picture="blank_map_template_5632x2048.jpg"
-supported_version="1.8.*"
+name="EaW/OWB - Fallout: Equestria"
+dependencies = {  
+	"Old World Blues" 
+	"Equestria at War"
+}
+supported_version="1.8.1"
