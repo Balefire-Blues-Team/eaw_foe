@@ -2640,16 +2640,41 @@ shared_focus = {
 		}
 }
 
+#Build up Bases
+shared_focus = {
+		id = FSR_first_base
+		icon = gfx_goal_unknown
+		x = 0
+		y = 1
+		relative_position_id = FSR_srairforce
+		cost = 5
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = FSR_srairforce } 
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_first_base"
+			
+		   
+		
+		
+		}
+}
+
 #Rival the Enclave
 shared_focus = {
 		id = FSR_airsuperiority
 		icon = GFX_goal_generic_air_fighter2
-		x = 12
-		y = 7
+		x = -1
+		y = 2
+		relative_position_id = FSR_srairforce
 		cost = 8
 		
 		available_if_capitulated = yes 
-		prerequisite = { focus = FSR_srairforce } 
+		prerequisite = { focus = FSR_first_base } 
 		mutually_exclusive = { focus = FSR_groundsupport }
 		ai_will_do = { 
 		factor = 30
@@ -2670,16 +2695,94 @@ shared_focus = {
 		}
 }
 
+#Concentrated bases
+shared_focus = {
+		id = FSR_base_con
+		icon = gfx_goal_unknown
+		x = -1
+		y = 3
+		relative_position_id = FSR_srairforce
+		cost = 8
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = FSR_airsuperiority } 
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_base_con"
+			
+		   
+		
+		
+		}
+}
+
+#Supremacy Doctrine
+shared_focus = {
+		id = FSR_dir_doctrine
+		icon = gfx_goal_unknown
+		x = -1
+		y = 4
+		relative_position_id = FSR_srairforce
+		cost = 8
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = FSR_base_con } 
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_dir_doctrine"
+			add_tech_bonus = {
+				name = recon_bonus
+				bonus = 0.8
+				uses = 3
+				category = air_doctrine
+			}
+		   
+		
+		
+		}
+}
+
+#Anti-Cloudships
+shared_focus = {
+		id = FSR_anti_cloud
+		icon = gfx_goal_unknown
+		x = -1
+		y = 5
+		relative_position_id = FSR_srairforce
+		cost = 8
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = FSR_dir_doctrine } 
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_anti_cloud"
+			
+		   
+		
+		
+		}
+}
+
 #Support our Groundtroops
 shared_focus = {
 		id = FSR_groundsupport
 		icon = GFX_focus_YUG_rogozarski
-		x = 14
-		y = 7
+		x = 1
+		y = 2
+		relative_position_id = FSR_srairforce
 		cost = 8
 		
 		available_if_capitulated = yes 
-		prerequisite = { focus = FSR_srairforce } 
+		prerequisite = { focus = FSR_first_base } 
 		mutually_exclusive = { focus = FSR_airsuperiority }
 		ai_will_do = { 
 		factor = 30
@@ -2698,6 +2801,89 @@ shared_focus = {
 				type = cas_equipment_1
 				amount = 50
 			}
+		
+		
+		}
+}
+
+#Defend our Assets
+shared_focus = {
+		id = FSR_asset_def
+		icon = gfx_goal_unknown
+		x = 1
+		y = 3
+		relative_position_id = FSR_srairforce
+		cost = 8
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = FSR_groundsupport } 
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_asset_def"
+			
+		   
+		
+		
+		}
+}
+
+#Wide Range bases
+shared_focus = {
+		id = FSR_range_bases
+		icon = gfx_goal_unknown
+		x = 1
+		y = 4
+		relative_position_id = FSR_srairforce
+		cost = 8
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = FSR_asset_def } 
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_range_bases"
+			
+		   
+		
+		
+		}
+}
+
+#Support doctrine
+shared_focus = {
+		id = FSR_sup_doctrine
+		icon = gfx_goal_unknown
+		x = 1
+		y = 5
+		relative_position_id = FSR_srairforce
+		cost = 8
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = FSR_range_bases } 
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_sup_doctrine"
+			 add_tech_bonus = {
+				name = recon_bonus
+				bonus = 1.0
+				uses = 1
+				category = air_doctrine
+			}
+			 add_tech_bonus = {
+				name = recon_bonus
+				bonus = 1.0
+				uses = 1
+				category = land_doctrine
+			}
+		   
 		
 		
 		}
@@ -3060,6 +3246,10 @@ shared_focus = {
 		available_if_capitulated = yes 
 
 		prerequisite = { focus = FSR_unlock_trinity }
+		available = {
+			NOT = { has_idea = FSR_trinity_0 }
+		}
+		
 		ai_will_do = { 
 		factor = 50
 		} 
@@ -3082,6 +3272,10 @@ shared_focus = {
 		available_if_capitulated = yes 
 
 		prerequisite = { focus = FSR_talk_to_trinity }
+		available = {
+			NOT = { has_idea = FSR_trinity_0 }
+		}
+		
 		ai_will_do = { 
 		factor = 50
 		} 
@@ -3104,6 +3298,10 @@ shared_focus = {
 		available_if_capitulated = yes 
 
 		prerequisite = { focus = FSR_talk_two_trinity }
+		available = {
+			NOT = { has_idea = FSR_trinity_0 }
+		}
+		
 		ai_will_do = { 
 		factor = 50
 		} 
@@ -3220,6 +3418,10 @@ shared_focus = {
 
 		prerequisite = { focus = FSR_talk_three_trinity }
 		prerequisite = { focus = FSR_thousand_gears}
+		available = {
+			NOT = { has_idea = FSR_trinity_0 }
+		}
+		
 		ai_will_do = { 
 		factor = 1000
 		} 
@@ -3536,7 +3738,7 @@ shared_focus = {
 		icon = GFX_goal_redeye
 		x = 20
 		y = 3
-		cost = 3
+		cost = 1
 		
 		available_if_capitulated = yes 
 		prerequisite = {
@@ -3552,7 +3754,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_sl_victory"
-			
+			add_political_power = 100
 		}
 		
 }
@@ -3576,7 +3778,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_sl_filly_united"
-			
+			add_stability = 0.1
+			add_political_power = 70
 		}
 		
 }
@@ -3600,7 +3803,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_sl_fanatics"
-			
+			country_event = { id = fillysr_sl.17 }
 		}
 		
 }
@@ -3624,7 +3827,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_sl_cathedral"
-			
+			country_event = { id = fillysr_sl.18 }
 		}
 		
 }
@@ -3648,7 +3851,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_sl_euthanize"
-			
+			country_event = { id = fillysr_sl.22 }
 		}
 		
 }
@@ -3672,7 +3875,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_sl_redemption"
-			
+			country_event = { id = fillysr_sl.23 }
 		}
 		
 }
@@ -3696,7 +3899,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_sl_slaves"
-			
+			add_political_power = -50
+			swap_ideas = { remove_idea = FSR_angry_slaves  add_idea = FSR_angry_slaves_2 }
 		}
 		
 }
@@ -3710,6 +3914,10 @@ shared_focus = {
 		cost = 5
 		
 		available_if_capitulated = yes 
+		available = {
+			has_completed_focus = FSR_sl_fanatics
+			has_completed_focus = FSR_sl_slavers
+		}
 		prerequisite = {
 			focus = FSR_sl_slaves
 		} 
@@ -3720,7 +3928,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_sl_cry_for_freedom"
-			
+			country_event = { id = fillysr_sl.24 }
 		}
 		
 }
@@ -3877,6 +4085,10 @@ shared_focus = {
 		cost = 5
 		
 		available_if_capitulated = yes 
+		available = {
+			has_completed_focus = FSR_sl_police
+			has_completed_focus = FSR_sl_schools
+		}
 		prerequisite = {
 			focus = FSR_sl_slave_resettlement
 		} 
@@ -3901,6 +4113,10 @@ shared_focus = {
 		cost = 5
 		
 		available_if_capitulated = yes 
+		available = {
+			has_completed_focus = FSR_sl_police
+			has_completed_focus = FSR_sl_schools
+		}
 		prerequisite = {
 			focus = FSR_sl_slave_resettlement
 		} 
