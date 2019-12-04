@@ -1,0 +1,787 @@
+FSR_stabletec_construction = {
+		
+	FSR_search_documents = {
+		icon = GFX_decision_unknown
+		cost = 100
+		ai_will_do = {
+			base = 10
+			modifier = {
+			}
+		}
+		fire_only_once = yes
+		is_good = yes
+		available = {
+			
+				has_political_power > 100
+		}
+		visible = {
+		}
+		modifier = {
+		}
+		 complete_effect = {
+			add_ideas = FSR_decryption_effort
+		 }
+               
+		days_remove = 100
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_search_documents"
+			set_country_flag = stable_decryption_true
+
+			remove_ideas = FSR_decryption_effort
+		}
+	}
+	
+	FSR_auto_refinery = {
+		icon = GFX_decision_unknown
+		cost = 100
+		ai_will_do = {
+			base = 10
+			modifier = {
+			}
+		}
+		fire_only_once = yes
+		is_good = yes
+		available = {
+			
+				has_political_power > 100
+				num_of_civilian_factories > 4
+		}
+		visible = {
+		has_country_flag = stable_decryption_true
+		}
+		modifier = {
+		}
+               
+		days_remove = 100
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_auto_refinery"
+			538 = {
+				add_resource = {
+					type = fuel
+					amount = 16
+				}
+			}
+
+		}
+	}
+	
+	FSR_stc_factory = {
+		icon = GFX_decision_unknown
+		cost = 100
+		ai_will_do = {
+			base = 10
+			modifier = {
+			}
+		}
+		fire_only_once = no
+		is_good = yes
+		available = {
+			
+				has_political_power > 100
+				num_of_civilian_factories > 9
+		}
+		visible = {
+		has_country_flag = stable_decryption_true
+		}
+		modifier = {
+		}
+               
+		days_remove = 100
+		days_re_enable = 365
+		remove_effect = {
+		random_owned_controlled_state = {
+			limit = {
+			free_building_slots = {
+				building = industrial_complex
+				size > 0
+				include_locked = yes
+			}
+			OR = {
+				is_in_home_area = yes
+				NOT = {
+					owner = {
+						any_owned_state = {
+							free_building_slots = {
+								building = industrial_complex
+								size > 0
+								include_locked = yes
+							}
+							is_in_home_area = yes
+						}
+					}
+				}
+			}
+			}
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+			type = industrial_complex
+			level = 1
+			instant_build = yes
+			}
+		}
+
+		}
+	}
+	
+	FSR_stabletec_arms = {
+		icon = GFX_decision_unknown
+		cost = 100
+		ai_will_do = {
+			base = 10
+			modifier = {
+			}
+		}
+		fire_only_once = yes
+		is_good = yes
+		available = {
+			
+				has_political_power > 100
+				num_of_civilian_factories > 14
+		}
+		visible = {
+		has_country_flag = stable_decryption_true
+		}
+		modifier = {
+		}
+               
+		days_remove = 100
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_stabletec_arms"
+			add_ideas = FSR_stabletec_arms_idea
+
+		}
+	}
+	
+
+}
+
+FSR_bs_borderwar = {
+
+	FSR_take_madagaskar = {
+		icon = border_war
+		cost = 50
+		
+		ai_will_do = {
+			factor = 100
+		}
+		fire_only_once = no
+		is_good = yes
+		
+		available = {
+			has_war = no
+			has_full_control_of_state = 542
+
+		}
+		
+		visible = {
+			NOT = {
+				owns_state = 543
+			}
+			owns_state = 542
+		}
+
+		days_re_enable = 100
+
+
+		highlight_states = {
+			state = 543
+		}
+		target_array = neighbors
+		target_trigger = {
+			FROM = {
+				owns_state = 543
+			}
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision FSR_take_madagaskar target: [From.GetName]"
+			start_border_war = {
+				change_state_after_war = no
+				attacker = {
+					state = 542
+					num_provinces = 5
+					on_win = fillysr_bs.6
+					on_lose = fillysr_bs.8
+					on_cancel = fillysr_bs.7
+				}
+
+				defender = {
+					state = 543
+					num_provinces = 5
+				}
+			}
+		}
+	}
+}
+
+FSR_fortress_city = {
+
+	FSR_new_armories = {
+		icon = GFX_decision_unknown
+		cost = 100
+		ai_will_do = {
+			base = 100
+			modifier = {
+			}
+		}
+		fire_only_once = yes
+		is_good = yes
+		available = {
+			
+				has_political_power > 100
+				num_of_civilian_factories_available_for_projects > 2
+		}
+		visible = {
+		}
+		modifier = {
+			civilian_factory_use = 2
+		}
+               
+		days_remove = 50
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_stabletec_arms"
+			536 = {
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+			type = arms_factory
+			level = 1
+			instant_build = yes
+			}
+			}
+		}
+	}
+	
+	FSR_improvised_generators = {
+		icon = GFX_decision_unknown
+		cost = 100
+		ai_will_do = {
+			base = 100
+			modifier = {
+			}
+		}
+		fire_only_once = yes
+		is_good = yes
+		available = {
+			
+				has_political_power > 100
+				num_of_civilian_factories_available_for_projects > 2
+		}
+		visible = {
+		}
+		modifier = {
+			civilian_factory_use = 2
+		}
+               
+		days_remove = 50
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_stabletec_arms"
+			536 = {
+			add_resource = {
+					type = electricity
+					amount = 8
+				}
+			}
+			538 = {
+			add_resource = {
+					type = electricity
+					amount = 8
+				}
+			}
+		}
+	}
+	
+	FSR_fortress_guard = {
+		icon = GFX_decision_unknown
+		cost = 100
+		ai_will_do = {
+			base = 100
+			modifier = {
+			}
+		}
+		fire_only_once = yes
+		is_good = yes
+		available = {
+			
+				has_political_power > 100
+				
+		}
+		visible = {
+		}
+		modifier = {
+			political_power_gain = -0.5
+		}
+               
+		days_remove = 50
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_stabletec_arms"
+			custom_effect_tooltip = FSR_fortess_guard_tt
+			hidden_effect = {
+				load_oob = "FSR_fortress_guard"
+			}
+			
+		}
+	}
+	
+}
+
+FSR_hq_build = {
+
+	FSR_level_1 = {
+		icon = GFX_decision_unknown
+		cost = 70
+		ai_will_do = {
+			base = 100
+			modifier = {
+			}
+		}
+		fire_only_once = yes
+		is_good = yes
+		available = {
+			
+				has_political_power > 70
+				num_of_civilian_factories_available_for_projects > 2
+		}
+		visible = {
+		}
+		modifier = {
+			civilian_factory_use = 2
+		}
+               
+		days_remove = 50
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_level_1"
+			set_country_flag = FSR_lv_one
+			538 = {
+			add_resource = {
+					type = electricity
+					amount = 16
+				}
+			}
+		}
+	}
+	
+	FSR_level_2 = {
+		icon = GFX_decision_unknown
+		cost = 70
+		ai_will_do = {
+			base = 70
+			modifier = {
+			}
+		}
+		fire_only_once = yes
+		is_good = yes
+		available = {
+				has_political_power > 70
+				num_of_civilian_factories_available_for_projects > 3
+		}
+		visible = {
+			has_country_flag = FSR_lv_one
+		}
+		modifier = {
+			civilian_factory_use = 3
+		}
+               
+		days_remove = 50
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_level_2"
+			remove_country_flag = FSR_lv_one
+			set_country_flag = FSR_lv_two
+			add_political_power = 50
+			add_stability = 0.05
+		}
+	}
+
+	FSR_level_3to6 = {
+		icon = GFX_decision_unknown
+		cost = 100
+		ai_will_do = {
+			base = 70
+			modifier = {
+			}
+		}
+		fire_only_once = yes
+		is_good = yes
+		available = {
+				has_political_power > 100
+				num_of_civilian_factories_available_for_projects > 6
+		}
+		visible = {
+			has_country_flag = FSR_lv_two
+		}
+		modifier = {
+			civilian_factory_use = 6
+		}
+               
+		days_remove = 100
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_level_3to6"
+			remove_country_flag = FSR_lv_two
+			set_country_flag = FSR_lv_three
+			add_offsite_building = { type = industrial_complex level = 3 }
+		}
+	}
+	
+	FSR_level_7to11 = {
+		icon = GFX_decision_unknown
+		cost = 120
+		ai_will_do = {
+			base = 70
+			modifier = {
+			}
+		}
+		fire_only_once = yes
+		is_good = yes
+		available = {
+				has_political_power > 120
+				num_of_civilian_factories_available_for_projects > 6
+		}
+		visible = {
+			has_country_flag = FSR_lv_three
+		}
+		modifier = {
+			civilian_factory_use = 6
+		}
+               
+		days_remove = 120
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_level_7to11"
+			remove_country_flag = FSR_lv_three
+			set_country_flag = FSR_lv_four
+			add_offsite_building = { type = arms_factory level = 4 }
+		}
+	}
+	
+	FSR_level_12to30 = {
+		icon = GFX_decision_unknown
+		cost = 220
+		ai_will_do = {
+			base = 70
+			modifier = {
+			}
+		}
+		fire_only_once = yes
+		is_good = yes
+		available = {
+				has_political_power > 220
+				num_of_civilian_factories_available_for_projects > 6
+		}
+		visible = {
+			has_country_flag = FSR_lv_four
+		}
+		modifier = {
+			civilian_factory_use = 6
+		}
+               
+		days_remove = 220
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_level_12to30"
+			remove_country_flag = FSR_lv_four
+			set_country_flag = FSR_lv_five
+			add_ideas = FSR_hq_offices
+		}
+	}
+	
+	FSR_level_31to42 = {
+		icon = GFX_decision_unknown
+		cost = 300
+		ai_will_do = {
+			base = 70
+			modifier = {
+			}
+		}
+		fire_only_once = yes
+		is_good = yes
+		available = {
+				has_political_power > 300
+				num_of_civilian_factories_available_for_projects > 8
+		}
+		visible = {
+			has_country_flag = FSR_lv_five
+		}
+		modifier = {
+			civilian_factory_use = 8
+		}
+               
+		days_remove = 300
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_level_31to42"
+			remove_country_flag = FSR_lv_five
+			set_country_flag = FSR_lv_six
+			swap_ideas = { remove_idea = FSR_hq_offices add_idea = FSR_hq_labs }
+		}
+	}
+	
+	FSR_level_43to49 = {
+		icon = GFX_decision_unknown
+		cost = 300
+		ai_will_do = {
+			base = 70
+			modifier = {
+			}
+		}
+		fire_only_once = yes
+		is_good = yes
+		available = {
+				has_political_power > 300
+				num_of_civilian_factories_available_for_projects > 10
+		}
+		visible = {
+			has_country_flag = FSR_lv_six
+		}
+			
+		modifier = {
+			civilian_factory_use = 10
+		}
+               
+		days_remove = 260
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_level_43to49"
+			remove_country_flag = FSR_lv_six
+			set_country_flag = FSR_lv_seven
+			swap_ideas = { remove_idea = FSR_hq_labs add_idea = FSR_hq_command }
+		}
+	}
+	
+	FSR_level_50 = {
+		icon = GFX_decision_unknown
+		cost = 100
+		ai_will_do = {
+			base = 70
+			modifier = {
+			}
+		}
+		fire_only_once = yes
+		is_good = yes
+		available = {
+				has_political_power > 100
+				num_of_civilian_factories_available_for_projects > 10
+		}
+		visible = {
+			has_country_flag = FSR_lv_seven
+		}
+			
+		modifier = {
+			civilian_factory_use = 10
+		}
+               
+		days_remove = 70
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_level_50"
+			remove_country_flag = FSR_lv_seven
+			swap_ideas = { remove_idea = FSR_hq_command add_idea = FSR_hq_complete }
+			
+		}
+	}
+}
+
+
+FSR_wasteland_training = {
+
+	FSR_train_green = {
+		icon = rifles
+		ai_will_do = {
+			base = 100
+			modifier = {
+			}
+		}
+		custom_cost_trigger = {
+			has_army_experience > 20
+		}
+		custom_cost_text = decision_cost_army_xp_20
+		fire_only_once = yes
+		is_good = yes
+		available = {	
+			hidden_trigger = { has_army_experience > 20 }
+			has_idea = FSR_wastemilitia
+		}
+		visible = {
+		}
+		modifier = {
+			political_power_gain = -0.05
+		}
+		 complete_effect = {
+			army_experience = -20
+		 }
+               
+		days_remove = 100
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_train_green"
+			swap_ideas = { remove_idea = FSR_wastemilitia add_idea = FSR_militia_green }
+
+		}
+	}
+	
+	FSR_train_regular = {
+		icon = rifles
+		ai_will_do = {
+			base = 100
+			modifier = {
+			}
+		}
+		custom_cost_trigger = {
+			has_army_experience > 50
+		}
+		custom_cost_text = decision_cost_army_xp_50
+		fire_only_once = yes
+		is_good = yes
+		available = {	
+			hidden_trigger = { has_army_experience > 50 }
+			has_idea = FSR_militia_green
+		}
+		visible = {
+		}
+		modifier = {
+			political_power_gain = -0.1
+			experience_gain_army_factor = 0.1
+			
+		}
+		 complete_effect = {
+			army_experience = -50
+		 }
+               
+		days_remove = 100
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_train_regular"
+			swap_ideas = { remove_idea = FSR_militia_green add_idea = FSR_militia_regular }
+
+		}
+	}
+	
+	FSR_train_professional = {
+		icon = rifles
+		ai_will_do = {
+			base = 100
+			modifier = {
+			}
+		}
+		custom_cost_trigger = {
+			has_army_experience > 100
+		}
+		custom_cost_text = decision_cost_army_xp_100
+		fire_only_once = yes
+		is_good = yes
+		available = {	
+			hidden_trigger = { has_army_experience > 100 }
+			has_idea = FSR_militia_regular
+		}
+		visible = {
+		}
+		modifier = {
+			political_power_gain = -0.1
+			experience_gain_army_factor = 0.1
+			
+		}
+		 complete_effect = {
+			army_experience = -100
+		 }
+               
+		days_remove = 100
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_train_professional"
+			swap_ideas = { remove_idea = FSR_militia_regular add_idea = FSR_militia_prof }
+
+		}
+	}
+
+
+
+
+
+}
+
+FSR_police_force = {
+
+	FSR_restore_order = {
+		icon = GFX_decision_unknown
+		cost = 50
+		ai_will_do = {
+			base = 70
+			modifier = {
+			}
+		}
+		fire_only_once = no
+		is_good = yes
+		available = {
+				has_political_power > 50
+				has_stability < 0.5
+		}
+		
+			
+		modifier = {
+			consumer_goods_factor = 0.05
+		}
+               
+		days_remove = 70
+		days_re_enable = 100
+		remove_effect = {
+			add_stability = 0.075
+			
+		}
+	}
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
