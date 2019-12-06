@@ -479,8 +479,8 @@ RED_canterlot = {
 		}
 	}
 
-	RED_expedition_canterlot = {
-		icon = GFX_decision_rifles_canterlot_ai
+	RED_expedition_canterlot_ai = {
+		icon = GFX_decision_rifles_canterlot
 		cost = 100
 		ai_will_do = {
 			base = 0
@@ -506,26 +506,14 @@ RED_canterlot = {
 	}
 }
 
+RED_rebuilding_eqs = {
+
+}
+
 RED_slaving = {
-	RED_slave_counter = {
-		icon = steel
-		
-
-		available = {
-			always = no
-		}
-
-		complete_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_counter"
-		}
-
-		ai_will_do = {
-			factor = 0
-		}
-	}
 
 	RED_slave_UNI_trade = {
-		icon = generic_industry
+		icon = generic_magic
 		cost = 25
 
 		available = {
@@ -538,6 +526,9 @@ RED_slaving = {
 			has_completed_focus = RED_begin_trade
 			NOT = {
 				has_country_flag = RED_slavery_abolished
+			}
+			NOT = {
+				has_completed_focus = RED_end_trade
 			}
 		}
 
@@ -665,6 +656,41 @@ RED_slaving = {
 		days_remove = 60
 		days_re_enable = 30
 		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_counter"
+
+			random_owned_controlled_state = {
+				add_manpower = 2000
+			}
+
+			custom_effect_tooltip = RED_2_lose_slave_tt
+			subtract_from_variable = {
+				var = RED_slaves_var
+				value = 2
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+
+	RED_slave_OAP_buy = {
+		icon = steel
+		cost = 35
+
+		available = {
+			OAP = {
+				has_government = destruction
+			}
+		}
+
+		visible = {
+			NOT = {
+				has_country_flag = RED_slavery_abolished
+			}
+		}
+
+		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_counter"
 
 			random_owned_controlled_state = {
