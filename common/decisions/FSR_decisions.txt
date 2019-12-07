@@ -836,6 +836,99 @@ FSR_banking = {
 		}
 	}
 	
+	FSR_liquid_assets = {
+		icon = generic_construction
+		cost = 75
+		ai_will_do = {
+			factor = 40
+			
+		}
+		available = {
+			has_political_power > 74
+			
+		}
+		
+		visible = {
+
+		}
+		days_re_enable = 180
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision FSR_liquid_assets"
+			custom_effect_tooltip = FSR_50_GAIN_BANK
+			
+			add_to_variable = {
+				var = bank
+				value = 50
+			}
+			random_owned_controlled_state = {
+			limit = {
+				building = industrial_complex
+				size > 0
+				include_locked = yes
+			
+			}
+			
+			remove_building = {
+				type = industrial_complex
+				level = 1
+			}
+			}
+			
+		}
+	}
+	
+	FSR_anti_enclave = {
+		icon = generic_construction
+		cost = 50
+		ai_will_do = {
+			factor = 10
+			
+		}
+		available = {
+			has_political_power > 49
+			custom_trigger_tooltip = {
+                tooltip = FSR_50_LOSE_BANK
+                    check_variable = {
+                        bank > 49
+                    }
+            }
+		}
+		
+		visible = {
+
+		}
+		days_re_enable = 60
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision FSR_anti_enclave"
+			custom_effect_tooltip = FSR_50_LOSE_BANK
+			
+			subtract_from_variable = {
+				var = bank
+				value = 50
+			}
+			random_owned_controlled_state = {
+			limit = {
+				building = anti_air_building
+				size < 3
+				include_locked = yes
+			}
+				add_building_construction = {
+					type = air_base
+					level = 2
+					instant_build = yes
+				}
+				add_building_construction = {
+					type = anti_air_building
+					level = 3
+					instant_build = yes
+				}
+			
+			
+			}
+			
+		}
+	}
+	
 	
 	
 	
@@ -887,6 +980,18 @@ FSR_titan_union = {
 
 		available = {
 			has_political_power > 49
+			custom_trigger_tooltip = {
+				tooltip = FSR_5_LOSE_UNION
+                    check_variable = {
+                        union > 9
+                    }
+            }
+			custom_trigger_tooltip = {
+                tooltip = FSR_10_GAIN_TITAN
+                    check_variable = {
+                        titan < 59
+                    }
+            }
 		}
 
 		days_re_enable = 180
@@ -918,6 +1023,18 @@ FSR_titan_union = {
 
 		available = {
 			has_political_power > 49
+			custom_trigger_tooltip = {
+			tooltip = FSR_10_GAIN_UNION
+                    check_variable = {
+                        union < 59
+                    }
+			}		
+			custom_trigger_tooltip = {
+			tooltip = FSR_5_LOSE_TITAN
+                    check_variable = {
+                        titan > 9
+                    }
+			}
 		}
 
 		days_re_enable = 180
@@ -941,6 +1058,91 @@ FSR_titan_union = {
 			factor = 0
 		}
 	}
+	
+	FSR_union_slaves = {
+		icon = infiltrate_state
+		cost = 30
+
+		available = {
+			has_political_power > 29
+			tooltip = FSR_5_LOSE_UNION
+                    check_variable = {
+                        union > 19
+                    }
+			 tooltip = FSR_50_LOSE_BANK
+                    check_variable = {
+                        bank > 49
+                    }
+		}
+
+		days_re_enable = 100
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision FSR_union_slaves"
+			custom_effect_tooltip = FSR_5_LOSE_UNION
+			
+			subtract_from_variable = {
+				var = union
+				value = 5
+			}
+			custom_effect_tooltip = FSR_50_LOSE_BANK
+			
+			subtract_from_variable = {
+				var = bank
+				value = 50
+			}
+			
+			if = {
+			limit = {
+				180 = {
+			    owner = {
+				        tag = ROOT 
+				    }
+			    }
+				}   
+				180 = { add_manpower = 1500}
+				
+			}
+			else = {
+				538 = { add_manpower = 1500}
+			}
+		}
+			
+		
+	}
+	
+	FSR_titan_tax = {
+		icon = steel
+		cost = 75
+
+		available = {
+			has_political_power > 49	
+			custom_trigger_tooltip = {
+			tooltip = FSR_5_LOSE_TITAN
+                    check_variable = {
+                        titan > 14
+                    }
+			}
+		}
+
+		days_re_enable = 180
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision FSR_titan_tax"
+			custom_effect_tooltip = FSR_5_LOSE_TITAN
+			subtract_from_variable = {
+				var = titan
+				value = 5
+			}
+			custom_effect_tooltip = FSR_50_GAIN_BANK
+			
+			add_to_variable = {
+				var = bank
+				value = 50
+			}
+		
+		}
+
+	}
+	
 
 
 
