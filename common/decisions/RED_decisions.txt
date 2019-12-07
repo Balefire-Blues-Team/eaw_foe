@@ -479,8 +479,8 @@ RED_canterlot = {
 		}
 	}
 
-	RED_expedition_canterlot = {
-		icon = GFX_decision_rifles_canterlot_ai
+	RED_expedition_canterlot_ai = {
+		icon = GFX_decision_rifles_canterlot
 		cost = 100
 		ai_will_do = {
 			base = 0
@@ -502,6 +502,225 @@ RED_canterlot = {
 			log = "[GetDateText]: [Root.GetName]: Decision remove RED_expedition_canterlot"
 
 			set_country_flag = RED_canterlot_ex_ai_skip
+		}
+	}
+}
+
+RED_rebuilding_eqs = {
+
+}
+
+RED_slaving = {
+
+	RED_slave_UNI_trade = {
+		icon = generic_magic
+		cost = 25
+
+		available = {
+			check_variable = {
+                RED_slaves_var > 2
+            }
+		}
+
+		visible = {
+			has_completed_focus = RED_begin_trade
+			NOT = {
+				has_country_flag = RED_slavery_abolished
+			}
+			NOT = {
+				has_completed_focus = RED_end_trade
+			}
+		}
+
+		days_remove = 30
+		days_re_enable = 15
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_counter"
+
+			UNI = {
+				add_manpower = 100
+			}
+
+			custom_effect_tooltip = RED_1_lose_slave_tt
+			subtract_from_variable = {
+				var = RED_slaves_var
+				value = 1
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+
+	RED_slave_mil_factory = {
+		icon = generic_industry
+		cost = 75
+		custom_cost_text = decision_cost_bank_3_pp_50
+
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = RED_3_cost_slave_tt
+                    check_variable = {
+                        RED_slaves_var > 2
+                    }
+            }
+		}
+
+		visible = {
+			NOT = {
+				has_country_flag = RED_slavery_abolished
+			}
+		}
+
+		days_remove = 60
+		days_re_enable = 30
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_counter"
+
+			random_owned_controlled_state = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = arms_factory
+					level = 1
+					instant_build = yes
+				}
+			}
+
+			custom_effect_tooltip = RED_3_lose_slave_tt
+			subtract_from_variable = {
+				var = RED_slaves_var
+				value = 3
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+
+	RED_slave_civ_factory = {
+		icon = generic_construction
+		cost = 75
+
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = RED_3_cost_slave_tt
+                    check_variable = {
+                        RED_slaves_var > 2
+                    }
+            }
+		}
+
+		visible = {
+			NOT = {
+				has_country_flag = RED_slavery_abolished
+			}
+		}
+
+		days_remove = 60
+		days_re_enable = 30
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_counter"
+
+			random_owned_controlled_state = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+
+			custom_effect_tooltip = RED_3_lose_slave_tt
+			subtract_from_variable = {
+				var = RED_slaves_var
+				value = 3
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+
+	RED_slave_settlers = {
+		icon = infiltrate_state
+		cost = 35
+
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = RED_2_cost_slave_tt
+                    check_variable = {
+                        RED_slaves_var > 1
+                    }
+            }
+		}
+
+		visible = {
+			NOT = {
+				has_country_flag = RED_slavery_abolished
+			}
+		}
+
+		days_remove = 60
+		days_re_enable = 30
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_counter"
+
+			random_owned_controlled_state = {
+				add_manpower = 2000
+			}
+
+			custom_effect_tooltip = RED_2_lose_slave_tt
+			subtract_from_variable = {
+				var = RED_slaves_var
+				value = 2
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+
+	RED_slave_OAP_buy = {
+		icon = slavery
+		cost = 35
+
+		available = {
+			OAP = {
+				has_government = destruction
+				check_variable = {
+                	OAP_slaves_var > 0
+            	}
+			}
+		}
+
+		visible = {
+			NOT = {
+				has_country_flag = RED_slavery_abolished
+			}
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_counter"
+
+			custom_effect_tooltip = RED_1_gain_slave_tt
+			add_to_variable = {
+				var = RED_slaves_var
+				value = 1
+			}
+			OAP = {
+				subtract_from_variable = {
+					var = OAP_slaves_var
+					value = 1
+				}	
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
 		}
 	}
 }
