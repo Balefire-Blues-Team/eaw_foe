@@ -62,7 +62,7 @@ focus = {
 #
 focus = { 
 		id = GR_grow_our_base
-		icon = GFX_goal_unknown
+		icon = GFX_goal_generic_cities_focus
 		relative_position_id = GR_traderoutes
 		x = 0
 		y = 1
@@ -86,7 +86,7 @@ focus = {
 #
 focus = { 
 		id = GR_building_shacks
-		icon = GFX_goal_unknown
+		icon = GFX_goal_generic_slums_focus
 		relative_position_id = GR_grow_our_base
 		x = 3
 		y = 1
@@ -136,7 +136,7 @@ focus = {
 #
 focus = { 
 		id = GR_terrorize_villages
-		icon = GFX_goal_unknown
+		icon = GFX_goal_purge_opposition
 		relative_position_id = GR_grow_our_base
 		x = 7
 		y = 1
@@ -158,7 +158,7 @@ focus = {
 #
 focus = { 
 		id = GR_Take_control
-		icon = GFX_goal_unknown
+		icon = GFX_goal_generic_demand_territory
 		relative_position_id = GR_terrorize_villages
 		x = 0
 		y = 1
@@ -322,11 +322,11 @@ focus = {
 #
 focus = { 
 		id = GR_steal_generators
-		icon = GFX_goal_unknown
+		icon = GFX_goal_generic_electricity_focus
 		relative_position_id = GR_Take_control
 		x = -2
 		y = 1
-		cost = 1
+		cost = 10
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_Take_control } 
@@ -337,13 +337,19 @@ focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_steal_generators"
-			#add electricity resources
-	}
+		
+		random_owned_controlled_state = {
+			add_resource = {
+					type = electricity
+					amount = 6
+				}
+			}
+		}	
 }
 
 #
 focus = { 
-		id = GR_Drugged_raiders
+		id = GR_drugged_raiders
 		icon = GFX_goal_unknown
 		relative_position_id = GR_build_drugs_factory
 		x = 1
@@ -359,6 +365,7 @@ focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_Drugged_raiders"
+			add_ideas = GR_drugged_raiders
 	}
 }
 
@@ -437,7 +444,7 @@ focus = {
 #
 focus = { 
 		id = GR_copy_military_weapons
-		icon = GFX_goal_unknown
+		icon = GFX_goal_generic_regular_firearms_focus
 		relative_position_id = GR_weapons_factory
 		x = -1
 		y = 1
@@ -453,22 +460,22 @@ focus = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_copy_military_weapons"
 
 		add_tech_bonus = {
-			name = ballistic_bonus
-			bonus = 0.5
-			uses = 2
-			category = ballistic_weaponry_tech_category
-		}
+				name = ballistic_bonus
+				bonus = 0.5
+				uses = 2
+				category = ballistic_weaponry_tech
+			}
 	}
 }
 
 #
 focus = { 
 		id = GR_design_our_own_bikes
-		icon = GFX_goal_unknown
+		icon = GFX_goal_generic_army_motorized
 		relative_position_id = GR_copy_military_weapons
 		x = 0
 		y = 1
-		cost = 5
+		cost = 10
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_copy_military_weapons } 
@@ -478,11 +485,13 @@ focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_design_our_own_bikes"
+
 			add_tech_bonus = {
-				name = vehicle_tech_bonus
-				bonus = 0.5
+				name = industry_bonus
+				bonus = 1.00
 				uses = 2
-				category = vehicle_tech_category
+				#category = vehicle_tech
+				category = bike_tech
 			}
 		}
 	}
@@ -691,7 +700,7 @@ focus = {
         }
 
         mutually_exclusive = { 
-        focus = GR_slave_sale
+        focus = GR_slave_auction
         }
         available = {
 			has_country_flag = GR_slave_labor
@@ -723,7 +732,7 @@ focus = {
         }
 
         mutually_exclusive = { 
-        focus = GR_slave_sale
+        focus = GR_slave_auction
         }
         available = {
 			has_country_flag = GR_raider_decoration
@@ -737,7 +746,7 @@ focus = {
 
 #
 focus = { 
-		id = GR_slave_sale
+		id = GR_slave_auction
 		icon = GFX_goal_DOM_The_Trial
 		relative_position_id = GR_slaves
 		x = 2
@@ -762,7 +771,7 @@ focus = {
 		}
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_slave_sale"
+			log = "[GetDateText]: [Root.GetName]: Focus GR_slave_auction"
 			country_event = { id = GR.7 }
 	}
 }
@@ -770,7 +779,7 @@ focus = {
 #
 focus = { 
 		id = GR_war_paint
-		icon = GFX_goal_unknown
+		icon = GFX_goal_red_war_paint
 		relative_position_id = GR_slave_decorations
 		x = 0
 		y = 1
@@ -792,13 +801,13 @@ focus = {
 focus = { 
 		id = GR_train_to_fillydelphia
 		icon = GFX_goal_rct_fancy_train
-		relative_position_id = GR_slave_sale
+		relative_position_id = GR_slave_auction
 		x = 0
 		y = 1
 		cost = 10
 
 		available_if_capitulated = yes 
-		prerequisite = { focus = GR_slave_sale } 
+		prerequisite = { focus = GR_slave_auction } 
 		ai_will_do = { 
 			factor = 50
 		} 
@@ -812,7 +821,7 @@ focus = {
 #
 focus = { 
 		id = GR_increased_workhours
-		icon = GFX_goal_unknown
+		icon = GFX_goal_industrial_pony
 		relative_position_id = GR_slave_workforce
 		x = 0
 		y = 1
@@ -874,7 +883,7 @@ focus = {
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_resisting_vilages"
 			add_political_power = -50
-			country_event = { id = GR.10 }
+			country_event = { id = GR.11 }
 	}
 }
 
