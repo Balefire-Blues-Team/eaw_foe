@@ -162,10 +162,10 @@ focus = {
 		relative_position_id = GR_terrorize_villages
 		x = 0
 		y = 1
-		cost = 5
+		cost = 1 #was 5
 
 		available_if_capitulated = yes 
-		prerequisite = { focus = GR_terrorize_villages } 
+		#prerequisite = { focus = GR_terrorize_villages } 
 		ai_will_do = { 
 			factor = 40
 		} 
@@ -173,8 +173,10 @@ focus = {
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_Take_control"
 			country_event = { id = GR.8 }
+			hidden_effect = { country_event = { id = GR.12 days = 30 }
+			}
+		}
 	}
-}
 
 #
 focus = { 
@@ -195,6 +197,14 @@ focus = {
 		ai_will_do = { 
 			factor = 40
 		} 
+
+		available = {
+			hidden_trigger = {
+				NOT = {
+    				has_country_flag = GR_dead_boss
+				}
+			}
+		}
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_Forced recruitment"
@@ -242,6 +252,14 @@ focus = {
 		ai_will_do = { 
 			factor = 20
 		} 
+
+		available = {
+			hidden_trigger = {
+				NOT = {
+    				has_country_flag = GR_dead_boss
+				}
+			}
+		}
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_burn_village"
@@ -334,6 +352,14 @@ focus = {
 		ai_will_do = { 
 			factor = 0
 		} 
+
+		available = {
+			hidden_trigger = {
+				NOT = {
+    				has_country_flag = GR_dead_boss
+				}
+			}
+		}
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_steal_generators"
@@ -715,7 +741,7 @@ focus = {
 #
 focus = { 
 		id = GR_slave_decorations
-		icon = GFX_goal_unknown
+		icon = GFX_goal_slave_decorations
 		relative_position_id = GR_slaves
 		x = 0
 		y = 1
@@ -855,13 +881,11 @@ focus = {
 		} 
 
 		available = {
-			has_country_flag = GR_always_false
+			#has_country_flag = GR_dead_boss
 		}
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_dead_boss"
-			add_political_power = -200
-			country_event = { id = GR.9 }
 	}
 }
 
@@ -882,8 +906,8 @@ focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_resisting_vilages"
-			add_political_power = -50
-			country_event = { id = GR.11 }
+			add_political_power = -200
+			country_event = { id = GR.13 }
 	}
 }
 
@@ -903,7 +927,7 @@ focus = {
 		}
 
 		mutually_exclusive = { 
-        focus = GR_new_boss
+        focus = GR_our_new_boss
         }
 
 		completion_reward = {
@@ -933,10 +957,10 @@ focus = {
 
 #
 focus = { 
-		id = GR_new_boss							# destruction, raider
+		id = GR_our_new_boss							# destruction, raider
 		icon = GFX_goal_unknown
 		relative_position_id = GR_resisting_vilages
-		x = 3
+		x = 2
 		y = 1
 		cost = 1
 
@@ -951,7 +975,9 @@ focus = {
         }
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_new_boss"
+			log = "[GetDateText]: [Root.GetName]: Focus GR_our_new_boss"
+			country_event = { id = GR.14 }
+
 	}
 }
 
@@ -959,19 +985,20 @@ focus = {
 focus = { 
 		id = GR_reaffirm_control							
 		icon = GFX_goal_unknown
-		relative_position_id = GR_new_boss
+		relative_position_id = GR_our_new_boss
 		x = 0
 		y = 1
 		cost = 1
 
 		available_if_capitulated = yes 
-		prerequisite = { focus = GR_new_boss } 
+		prerequisite = { focus = GR_our_new_boss } 
 		ai_will_do = { 
 			factor = 100
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_reaffirm_control"
+			country_event = { id = GR.15 }
 	}
 }
 
@@ -992,7 +1019,8 @@ focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_reward_loyal_raiders"
-	}
+			country_event = { id = GR.18 }
+		}
 }
 
 #
@@ -1012,6 +1040,7 @@ focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_crackdown_villages"
+			country_event = { id = GR.16 }
 	}
 }
 
@@ -1020,18 +1049,20 @@ focus = {
 		id = GR_punish_village_leaders							
 		icon = GFX_goal_unknown
 		relative_position_id = GR_crackdown_villages
-		x = 0
+		x = -1
 		y = 1
 		cost = 1
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_crackdown_villages } 
+		prerequisite = { focus = GR_reward_loyal_raiders }
 		ai_will_do = { 
 			factor = 100
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_punish_village_leaders"
+			country_event = { id = GR.17 }
 	}
 }
 
