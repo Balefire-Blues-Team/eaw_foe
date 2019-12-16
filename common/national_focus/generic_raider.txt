@@ -26,7 +26,7 @@ focus_tree = {
 
 		available_if_capitulated = yes  
 		ai_will_do = { 
-			factor = 100
+			factor = 1000
 		} 
 
 		completion_reward = {
@@ -48,7 +48,7 @@ focus = {
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_basecamp } 
 		ai_will_do = { 
-			factor = 100
+			factor = 1000
 		} 
 
 		completion_reward = {
@@ -62,16 +62,16 @@ focus = {
 #
 focus = { 
 		id = GR_grow_our_base
-		icon = GFX_goal_unknown
+		icon = GFX_goal_generic_cities_focus
 		relative_position_id = GR_traderoutes
 		x = 0
 		y = 1
 		cost = 1
 
 		available_if_capitulated = yes 
-		#prerequisite = { focus = GR_traderoutes } 
+		prerequisite = { focus = GR_traderoutes } 
 		ai_will_do = { 
-			factor = 100
+			factor = 1000
 		} 
 
 		completion_reward = {
@@ -86,16 +86,16 @@ focus = {
 #
 focus = { 
 		id = GR_building_shacks
-		icon = GFX_goal_unknown
+		icon = GFX_goal_generic_slums_focus
 		relative_position_id = GR_grow_our_base
 		x = 3
 		y = 1
-		cost = 1
+		cost = 10
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_grow_our_base } 
 		ai_will_do = { 
-			factor = 100
+			factor = 80
 		} 
 
 		completion_reward = {
@@ -136,16 +136,16 @@ focus = {
 #
 focus = { 
 		id = GR_terrorize_villages
-		icon = GFX_goal_unknown
+		icon = GFX_goal_purge_opposition
 		relative_position_id = GR_grow_our_base
 		x = 7
 		y = 1
-		cost = 1
+		cost = 5
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_grow_our_base } 
 		ai_will_do = { 
-			factor = 100
+			factor = 80
 		} 
 
 		completion_reward = {
@@ -158,23 +158,25 @@ focus = {
 #
 focus = { 
 		id = GR_Take_control
-		icon = GFX_goal_unknown
+		icon = GFX_goal_generic_demand_territory
 		relative_position_id = GR_terrorize_villages
 		x = 0
 		y = 1
-		cost = 1
+		cost = 1 #was 5
 
 		available_if_capitulated = yes 
-		prerequisite = { focus = GR_terrorize_villages } 
+		#prerequisite = { focus = GR_terrorize_villages } 
 		ai_will_do = { 
-			factor = 100
+			factor = 40
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_Take_control"
 			country_event = { id = GR.8 }
+			hidden_effect = { country_event = { id = GR.12 days = 30 }
+			}
+		}
 	}
-}
 
 #
 focus = { 
@@ -183,7 +185,7 @@ focus = {
 		relative_position_id = GR_Take_control
 		x = 2
 		y = 1
-		cost = 1
+		cost = 10
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_Take_control } 
@@ -193,8 +195,16 @@ focus = {
         }
 
 		ai_will_do = { 
-			factor = 100
+			factor = 40
 		} 
+
+		available = {
+			hidden_trigger = {
+				NOT = {
+    				has_country_flag = GR_dead_boss
+				}
+			}
+		}
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_Forced recruitment"
@@ -219,7 +229,7 @@ focus = {
         }
 
 		ai_will_do = { 
-			factor = 100
+			factor = 40
 		} 
 
 		completion_reward = {
@@ -234,14 +244,22 @@ focus = {
 		relative_position_id = GR_Take_control
 		x = 0
 		y = 1
-		cost = 1
+		cost = 10
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_Take_control } 
 
 		ai_will_do = { 
-			factor = 100
+			factor = 20
 		} 
+
+		available = {
+			hidden_trigger = {
+				NOT = {
+    				has_country_flag = GR_dead_boss
+				}
+			}
+		}
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_burn_village"
@@ -258,13 +276,13 @@ focus = {
 		relative_position_id = GR_burn_village
 		x = 1
 		y = 1
-		cost = 1
+		cost = 10
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_burn_village } 
 
 		ai_will_do = { 
-			factor = 100
+			factor = 20
 		} 
 
 		completion_reward = {
@@ -280,13 +298,13 @@ focus = {
 		relative_position_id = GR_burn_village
 		x = -1
 		y = 1
-		cost = 1
+		cost = 10
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_burn_village } 
 
 		ai_will_do = { 
-			factor = 100
+			factor = 20
 		} 
 
 		completion_reward = {
@@ -302,14 +320,14 @@ focus = {
 		relative_position_id = GR_village_tax
 		x = 1
 		y = 1
-		cost = 1
+		cost = 10
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_village_tax }
 		prerequisite = { focus = GR_villager_workforce }  
 
 		ai_will_do = { 
-			factor = 100
+			factor = 50
 		} 
 
 		completion_reward = {
@@ -322,28 +340,42 @@ focus = {
 #
 focus = { 
 		id = GR_steal_generators
-		icon = GFX_goal_unknown
+		icon = GFX_goal_generic_electricity_focus
 		relative_position_id = GR_Take_control
 		x = -2
 		y = 1
-		cost = 1
+		cost = 10
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_Take_control } 
 
 		ai_will_do = { 
-			factor = 100
+			factor = 0
 		} 
+
+		available = {
+			hidden_trigger = {
+				NOT = {
+    				has_country_flag = GR_dead_boss
+				}
+			}
+		}
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_steal_generators"
-			#add electricity resources
-	}
+		
+		random_owned_controlled_state = {
+			add_resource = {
+					type = electricity
+					amount = 6
+				}
+			}
+		}	
 }
 
 #
 focus = { 
-		id = GR_Drugged_raiders
+		id = GR_drugged_raiders
 		icon = GFX_goal_unknown
 		relative_position_id = GR_build_drugs_factory
 		x = 1
@@ -354,11 +386,12 @@ focus = {
 		prerequisite = { focus = GR_build_drugs_factory } 
 
 		ai_will_do = { 
-			factor = 100
+			factor = 0
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_Drugged_raiders"
+			add_ideas = GR_drugged_raiders
 	}
 }
 
@@ -369,12 +402,12 @@ focus = {
 		relative_position_id = GR_grow_our_base
 		x = -1
 		y = 1
-		cost = 1
+		cost = 5
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_grow_our_base } 
 		ai_will_do = { 
-			factor = 100
+			factor = 80
 		} 
 
 		completion_reward = {
@@ -390,12 +423,12 @@ focus = {
 		relative_position_id = GR_raid_armory
 		x = 0
 		y = 1
-		cost = 1
+		cost = 10
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_raid_armory } 
 		ai_will_do = { 
-			factor = 100
+			factor = 60
 		} 
 
 		completion_reward = {
@@ -437,52 +470,54 @@ focus = {
 #
 focus = { 
 		id = GR_copy_military_weapons
-		icon = GFX_goal_unknown
+		icon = GFX_goal_generic_regular_firearms_focus
 		relative_position_id = GR_weapons_factory
 		x = -1
 		y = 1
-		cost = 1
+		cost = 10
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_weapons_factory } 
 		ai_will_do = { 
-			factor = 100
+			factor = 50
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_copy_military_weapons"
 
 		add_tech_bonus = {
-			name = ballistic_bonus
-			bonus = 0.5
-			uses = 2
-			category = ballistic_weaponry_tech_category
-		}
+				name = ballistic_bonus
+				bonus = 0.5
+				uses = 2
+				category = ballistic_weaponry_tech
+			}
 	}
 }
 
 #
 focus = { 
 		id = GR_design_our_own_bikes
-		icon = GFX_goal_unknown
+		icon = GFX_goal_generic_army_motorized
 		relative_position_id = GR_copy_military_weapons
 		x = 0
 		y = 1
-		cost = 1
+		cost = 10
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_copy_military_weapons } 
 		ai_will_do = { 
-			factor = 100
+			factor = 50
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_design_our_own_bikes"
+
 			add_tech_bonus = {
-				name = vehicle_tech_bonus
-				bonus = 0.5
+				name = industry_bonus
+				bonus = 1.00
 				uses = 2
-				category = vehicle_tech_category
+				#category = vehicle_tech
+				category = bike_tech
 			}
 		}
 	}
@@ -495,12 +530,12 @@ focus = {
 		relative_position_id = GR_weapons_factory
 		x = 1
 		y = 1
-		cost = 1
+		cost = 10
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_weapons_factory } 
 		ai_will_do = { 
-			factor = 100
+			factor = 50
 		} 
 
 		completion_reward = {
@@ -546,12 +581,12 @@ focus = {
 		relative_position_id = GR_building_shacks
 		x = 0
 		y = 1
-		cost = 1
+		cost = 10
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_building_shacks } 
 		ai_will_do = { 
-			factor = 100
+			factor = 60
 		} 
 
 		completion_reward = {
@@ -575,12 +610,12 @@ focus = {
 		relative_position_id = GR_repair_roads
 		x = 0
 		y = 1
-		cost = 1
+		cost = 10
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_repair_roads } 
 		ai_will_do = { 
-			factor = 100
+			factor = 50
 		} 
 
 		completion_reward = {
@@ -604,12 +639,12 @@ focus = {
 		relative_position_id = GR_build_drugs_factory
 		x = -1
 		y = 1
-		cost = 1
+		cost = 10
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_build_drugs_factory } 
 		ai_will_do = { 
-			factor = 100
+			factor = 50
 		} 
 
 		completion_reward = {
@@ -633,12 +668,12 @@ focus = {
 		relative_position_id = GR_extend_weapons_factory
 		x = 0
 		y = 1
-		cost = 1
+		cost = 10
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_extend_weapons_factory } 
 		ai_will_do = { 
-			factor = 100
+			factor = 20
 		} 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_extend_weapons_factory"
@@ -656,12 +691,12 @@ focus = {
 		relative_position_id = GR_grow_our_base
 		x = -6
 		y = 1
-		cost = 1
+		cost = 5
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_grow_our_base } 
 		ai_will_do = { 
-			factor = 100
+			factor = 80
 		} 
 
 		completion_reward = {
@@ -679,7 +714,7 @@ focus = {
 		relative_position_id = GR_slaves
 		x = -2
 		y = 1
-		cost = 1
+		cost = 5
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_slaves } 
@@ -691,7 +726,7 @@ focus = {
         }
 
         mutually_exclusive = { 
-        focus = GR_slave_sale
+        focus = GR_slave_auction
         }
         available = {
 			has_country_flag = GR_slave_labor
@@ -706,11 +741,11 @@ focus = {
 #
 focus = { 
 		id = GR_slave_decorations
-		icon = GFX_goal_unknown
+		icon = GFX_goal_slave_decorations
 		relative_position_id = GR_slaves
 		x = 0
 		y = 1
-		cost = 1
+		cost = 5
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_slaves } 
@@ -723,7 +758,7 @@ focus = {
         }
 
         mutually_exclusive = { 
-        focus = GR_slave_sale
+        focus = GR_slave_auction
         }
         available = {
 			has_country_flag = GR_raider_decoration
@@ -737,12 +772,12 @@ focus = {
 
 #
 focus = { 
-		id = GR_slave_sale
+		id = GR_slave_auction
 		icon = GFX_goal_DOM_The_Trial
 		relative_position_id = GR_slaves
 		x = 2
 		y = 1
-		cost = 1
+		cost = 5
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_slaves } 
@@ -762,7 +797,7 @@ focus = {
 		}
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_slave_sale"
+			log = "[GetDateText]: [Root.GetName]: Focus GR_slave_auction"
 			country_event = { id = GR.7 }
 	}
 }
@@ -770,16 +805,16 @@ focus = {
 #
 focus = { 
 		id = GR_war_paint
-		icon = GFX_goal_unknown
+		icon = GFX_goal_red_war_paint
 		relative_position_id = GR_slave_decorations
 		x = 0
 		y = 1
-		cost = 1
+		cost = 10
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_slave_decorations } 
 		ai_will_do = { 
-			factor = 100
+			factor = 50
 		} 
 
 		completion_reward = {
@@ -792,15 +827,15 @@ focus = {
 focus = { 
 		id = GR_train_to_fillydelphia
 		icon = GFX_goal_rct_fancy_train
-		relative_position_id = GR_slave_sale
+		relative_position_id = GR_slave_auction
 		x = 0
 		y = 1
-		cost = 1
+		cost = 10
 
 		available_if_capitulated = yes 
-		prerequisite = { focus = GR_slave_sale } 
+		prerequisite = { focus = GR_slave_auction } 
 		ai_will_do = { 
-			factor = 100
+			factor = 50
 		} 
 
 		completion_reward = {
@@ -812,16 +847,16 @@ focus = {
 #
 focus = { 
 		id = GR_increased_workhours
-		icon = GFX_goal_unknown
+		icon = GFX_goal_industrial_pony
 		relative_position_id = GR_slave_workforce
 		x = 0
 		y = 1
-		cost = 1
+		cost = 10
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_slave_workforce } 
 		ai_will_do = { 
-			factor = 100
+			factor = 50
 		} 
 
 		completion_reward = {
@@ -845,10 +880,12 @@ focus = {
 			factor = 100
 		} 
 
+		available = {
+			#has_country_flag = GR_dead_boss
+		}
+
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_dead_boss"
-			add_political_power = -200
-			country_event = { id = GR.9 }
 	}
 }
 
@@ -869,8 +906,8 @@ focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_resisting_vilages"
-			add_political_power = -50
-			country_event = { id = GR.10 }
+			add_political_power = -200
+			country_event = { id = GR.13 }
 	}
 }
 
@@ -890,11 +927,13 @@ focus = {
 		}
 
 		mutually_exclusive = { 
-        focus = GR_new_boss
+        focus = GR_our_new_boss
         }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_losing_grip"
+			country_event = { id = GR.19 }
+
 	}
 }
 
@@ -915,15 +954,16 @@ focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_basecamp_raid"
+			country_event = { id = GR.20 }
 	}
 }
 
 #
 focus = { 
-		id = GR_new_boss							# destruction, raider
+		id = GR_our_new_boss							# destruction, raider
 		icon = GFX_goal_unknown
 		relative_position_id = GR_resisting_vilages
-		x = 3
+		x = 2
 		y = 1
 		cost = 1
 
@@ -938,7 +978,9 @@ focus = {
         }
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_new_boss"
+			log = "[GetDateText]: [Root.GetName]: Focus GR_our_new_boss"
+			country_event = { id = GR.14 }
+
 	}
 }
 
@@ -946,19 +988,20 @@ focus = {
 focus = { 
 		id = GR_reaffirm_control							
 		icon = GFX_goal_unknown
-		relative_position_id = GR_new_boss
+		relative_position_id = GR_our_new_boss
 		x = 0
 		y = 1
 		cost = 1
 
 		available_if_capitulated = yes 
-		prerequisite = { focus = GR_new_boss } 
+		prerequisite = { focus = GR_our_new_boss } 
 		ai_will_do = { 
 			factor = 100
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_reaffirm_control"
+			country_event = { id = GR.15 }
 	}
 }
 
@@ -979,7 +1022,8 @@ focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_reward_loyal_raiders"
-	}
+			country_event = { id = GR.18 }
+		}
 }
 
 #
@@ -999,6 +1043,7 @@ focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_crackdown_villages"
+			country_event = { id = GR.16 }
 	}
 }
 
@@ -1007,18 +1052,20 @@ focus = {
 		id = GR_punish_village_leaders							
 		icon = GFX_goal_unknown
 		relative_position_id = GR_crackdown_villages
-		x = 0
+		x = -1
 		y = 1
 		cost = 1
 
 		available_if_capitulated = yes 
 		prerequisite = { focus = GR_crackdown_villages } 
+		prerequisite = { focus = GR_reward_loyal_raiders }
 		ai_will_do = { 
 			factor = 100
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_punish_village_leaders"
+			country_event = { id = GR.17 }
 	}
 }
 
@@ -1040,6 +1087,10 @@ focus = {
 		mutually_exclusive = { 
         focus = GR_never_again
         }
+
+        available = {
+			has_country_flag = GR_never_forget
+		}
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_never_forget"
@@ -1063,6 +1114,10 @@ focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_elections"
+			set_politics = {
+			ruling_party = survivalism
+			elections_allowed = no
+			}
 	}
 }
 
@@ -1079,6 +1134,10 @@ focus = {
 		prerequisite = { focus = GR_basecamp_raid } 
 		ai_will_do = { 
 			factor = 100
+		}
+
+		available = {
+			has_country_flag = GR_never_again
 		}
 
 		mutually_exclusive = { 
@@ -1107,5 +1166,150 @@ focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus GR_wasteland_rangers"
+			set_politics = {
+			ruling_party = visionary
+			elections_allowed = no
+			}
+
+
+<<<<<<< Updated upstream
+=======
+	}
+}
+
+
+###Airforce###
+
+#
+focus = { 
+		id = GR_aviation_focus
+		icon = GFX_goal_generic_build_airforce 
+		x = 25
+		y = 3
+		cost = 1
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus GR_aviation_focus"
+			air_experience = 20
+	}
+}
+
+#
+focus = { 
+		id = GR_air_superiority
+		icon = GFX_goal_generic_air_fighter
+		relative_position_id = GR_aviation_focus	 
+		x = -1
+		y = 1
+		cost = 1
+
+		available_if_capitulated = yes 
+		prerequisite = { focus = GR_aviation_focus } 
+
+		mutually_exclusive = { 
+        focus = GR_bombs_away
+        }
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus "
+			add_tech_bonus = {
+				name = fighter_bonus
+				bonus = 1.0
+				uses = 1
+				category = light_fighter
+			}
+	}
+}
+
+#
+focus = { 
+		id = GR_bombs_away
+		icon = GFX_goal_generic_air_bomber
+		relative_position_id = GR_aviation_focus	 
+		x = 1
+		y = 1
+		cost = 1
+
+		available_if_capitulated = yes 
+		prerequisite = { focus = GR_aviation_focus }
+
+		mutually_exclusive = { 
+        focus = GR_air_superiority
+        }
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus "
+			add_tech_bonus = {
+				name = cas_bonus
+				bonus = 1.0
+				uses = 1
+				category = cas_bomber
+			}
+	}
+}
+
+
+#
+focus = { 
+		id = GR_build_airfield
+		icon = GFX_goal_unknown
+		relative_position_id = GR_air_superiority	 
+		x = 1
+		y = 1
+		cost = 1
+
+		available_if_capitulated = yes 
+		prerequisite = { focus = GR_air_superiority focus = GR_bombs_away}
+		
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus "
+			random_owned_controlled_state = {
+			limit = {
+				free_building_slots = {
+					building = air_base
+					size > 0
+					include_locked = yes
+				}
+				OR = {
+					is_in_home_area = yes
+					NOT = {
+						owner = {
+							any_owned_state = {
+								free_building_slots = {
+									building = air_base
+									size > 0
+									include_locked = yes
+								}
+								is_in_home_area = yes
+							}
+						}
+					}
+				}
+			}
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = air_base
+				level = 1
+				instant_build = yes
+			}
+		}
+>>>>>>> Stashed changes
 	}
 }
