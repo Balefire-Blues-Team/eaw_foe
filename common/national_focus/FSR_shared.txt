@@ -1098,7 +1098,7 @@ shared_focus = {
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_loyal_scribes"
 			if = {
-				has_idea = FSR_bad_scribes
+				has_ideas = FSR_bad_scribes
 				remove_ideas = FSR_bad_scribes
 			}
 			add_political_power = -50
@@ -1528,7 +1528,7 @@ shared_focus = {
 		}
 }
 
-#Puppet focus 1
+#Under RedEyes Yoke
 shared_focus = {
 		id = FSR_cr_puppet1
 		icon = gfx_goal_unknown
@@ -1551,13 +1551,179 @@ shared_focus = {
 		} 
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus FSR_cr_ill"
-			
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_cr_puppet1"
+			add_ideas = FSR_red_puppet
 			
 		}
 }
 
-#Free focus 1
+#Implement Extensive Slave trade
+shared_focus = {
+		id = FSR_cr_puppet2
+		icon = gfx_goal_unknown
+		x = -1
+		y = 2
+		relative_position_id = FSR_cr_ill
+		cost = 8.64
+		
+		available_if_capitulated = yes 
+		
+		available = {
+		}
+		prerequisite = { focus = FSR_cr_puppet1 }
+		
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_cr_puppet2"
+			swap_ideas = { remove_idea = FSR_red_puppet add_idea = FSR_red_puppet2 }
+		}
+}
+
+#Economic Integration
+shared_focus = {
+		id = FSR_cr_puppet3
+		icon = gfx_goal_unknown
+		x = -1
+		y = 3
+		relative_position_id = FSR_cr_ill
+		cost = 8.64
+		
+		available_if_capitulated = yes 
+		
+		available = {
+		}
+		prerequisite = { focus = FSR_cr_puppet2 }
+		
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_cr_puppet3"
+		random_owned_controlled_state = {
+			limit = {
+			free_building_slots = {
+				building = industrial_complex
+				size > 0
+				include_locked = yes
+			}
+			OR = {
+				is_in_home_area = yes
+				NOT = {
+					owner = {
+						any_owned_state = {
+							free_building_slots = {
+								building = industrial_complex
+								size > 0
+								include_locked = yes
+							}
+							is_in_home_area = yes
+						}
+					}
+				}
+			}
+			}
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+			type = industrial_complex
+			level = 2
+			instant_build = yes
+			}
+		}
+			
+		}
+}
+
+#Paladins as Slavers
+shared_focus = {
+		id = FSR_cr_puppet4
+		icon = gfx_goal_unknown
+		x = 1
+		y = 2
+		relative_position_id = FSR_cr_ill
+		cost = 8.64
+		
+		available_if_capitulated = yes 
+		
+		available = {
+		}
+		prerequisite = { focus = FSR_cr_puppet1 }
+		
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_cr_puppet4"
+			add_stability = -0.2
+			add_manpower = 200
+			
+		}
+}
+
+#Settle slaves in the South
+shared_focus = {
+		id = FSR_cr_puppet5
+		icon = gfx_goal_unknown
+		x = 1
+		y = 3
+		relative_position_id = FSR_cr_ill
+		cost = 8.64
+		
+		available_if_capitulated = yes 
+		
+		available = {
+		}
+		prerequisite = { focus = FSR_cr_puppet4 }
+		
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_cr_puppet5"
+			every_owned_state = {
+			limit = { is_core_of = ROOT }
+			add_extra_state_shared_building_slots = 1
+				add_manpower = 1000
+			}
+			
+		}
+}
+
+#Propose full integration
+shared_focus = {
+		id = FSR_cr_puppet6
+		icon = gfx_goal_unknown
+		x = 0
+		y = 4
+		relative_position_id = FSR_cr_ill
+		cost = 8.64
+		
+		available_if_capitulated = yes 
+		
+		available = {
+		}
+		prerequisite = { focus = FSR_cr_puppet5 }
+		prerequisite = { focus = FSR_cr_puppet3 }
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_cr_puppet6"
+			RED = {
+				country_event = { id = fillysr_cr.20 }
+			}
+			
+		}
+}
+
+#Back in action
 shared_focus = {
 		id = FSR_cr_free1
 		icon = gfx_goal_unknown
@@ -1580,8 +1746,289 @@ shared_focus = {
 		} 
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus FSR_cr_ill"
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_cr_free1"
+			add_stability = 0.1
+			add_war_support = 0.1
 			
+		}
+}
+
+#Economic Boom
+shared_focus = {
+		id = FSR_cr_free2
+		icon = gfx_goal_unknown
+		x = 0
+		y = 2
+		relative_position_id = FSR_cr_ill
+		cost = 8.64
+		allow_branch = {
+		has_country_flag = FSR_cr_is_free
+		}
+		
+		available_if_capitulated = yes 
+		
+		available = {
+		}
+		prerequisite = { focus = FSR_cr_free1 }
+		
+		ai_will_do = { 
+		factor = 500
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_cr_free2"
+			random_owned_controlled_state = {
+			limit = {
+			free_building_slots = {
+				building = arms_factory
+				size > 0
+				include_locked = yes
+			}
+			OR = {
+				is_in_home_area = yes
+				NOT = {
+					owner = {
+						any_owned_state = {
+							free_building_slots = {
+								building = arms_factory
+								size > 0
+								include_locked = yes
+							}
+							is_in_home_area = yes
+						}
+					}
+				}
+			}
+		}
+		add_extra_state_shared_building_slots = 2
+		add_building_construction = {
+			type = arms_factory
+			level = 2
+			instant_build = yes
+		}
+		}
+		random_owned_controlled_state = {
+			limit = {
+			free_building_slots = {
+				building = industrial_complex
+				size > 0
+				include_locked = yes
+			}
+			OR = {
+				is_in_home_area = yes
+				NOT = {
+					owner = {
+						any_owned_state = {
+							free_building_slots = {
+								building = industrial_complex
+								size > 0
+								include_locked = yes
+							}
+							is_in_home_area = yes
+						}
+					}
+				}
+			}
+		}
+		add_extra_state_shared_building_slots = 2
+		add_building_construction = {
+			type = industrial_complex
+			level = 2
+			instant_build = yes
+		}
+		}
+			
+		}
+}
+
+#Open emergency armories
+shared_focus = {
+		id = FSR_cr_free3
+		icon = gfx_goal_unknown
+		x = -1
+		y = 3
+		relative_position_id = FSR_cr_ill
+		cost = 8.64
+		allow_branch = {
+		has_country_flag = FSR_cr_is_free
+		}
+		
+		available_if_capitulated = yes 
+		
+		available = {
+		}
+		prerequisite = { focus = FSR_cr_free2 }
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_cr_free3"
+			add_equipment_to_stockpile = {
+    			type = energy_equipment_2
+    			amount = 2000
+    			producer = ROOT
+			}
+			
+		}
+}
+
+#Expand the military
+shared_focus = {
+		id = FSR_cr_free4
+		icon = gfx_goal_unknown
+		x = 1
+		y = 3
+		relative_position_id = FSR_cr_ill
+		cost = 8.64
+		allow_branch = {
+		has_country_flag = FSR_cr_is_free
+		}
+		
+		available_if_capitulated = yes 
+		
+		available = {
+		}
+		prerequisite = { focus = FSR_cr_free2 }
+		
+		ai_will_do = { 
+		factor = 500
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_cr_free4"
+			add_manpower = 1000
+			
+		}
+}
+
+#Propose political marriage
+shared_focus = {
+		id = FSR_cr_free5
+		icon = gfx_goal_unknown
+		x = 0
+		y = 4
+		relative_position_id = FSR_cr_ill
+		cost = 8.64
+		allow_branch = {
+		has_country_flag = FSR_cr_is_free
+		}
+		
+		available_if_capitulated = yes 
+		
+		available = {
+		}
+		prerequisite = { focus = FSR_cr_free4 }
+		prerequisite = { focus = FSR_cr_free3 }
+		
+		bypass = {
+		OR = {
+			NOT = { is_in_faction_with = RED }
+			RED = { exists = no }
+		}
+		}
+		
+		ai_will_do = { 
+		factor = 500
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_cr_free5"
+			country_event = { id = fillysr_cr.21 days = 1 }
+			
+		}
+}
+
+#The Grand Armeé
+shared_focus = {
+		id = FSR_cr_free6
+		icon = gfx_goal_unknown
+		x = -1
+		y = 5
+		relative_position_id = FSR_cr_ill
+		cost = 8.64
+		allow_branch = {
+		has_country_flag = FSR_cr_is_free
+		}
+		
+		available_if_capitulated = yes 
+		
+		available = {
+		}
+		prerequisite = { focus = FSR_cr_free5 }
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_cr_free6"
+			add_ideas = FSR_grand_arme
+			
+		}
+}
+
+#Fire and Steel
+shared_focus = {
+		id = FSR_cr_free7
+		icon = gfx_goal_unknown
+		x = 1
+		y = 5
+		relative_position_id = FSR_cr_ill
+		cost = 8.64
+		allow_branch = {
+		has_country_flag = FSR_cr_is_free
+		}
+		
+		available_if_capitulated = yes 
+		
+		available = {
+		}
+		prerequisite = { focus = FSR_cr_free5 }
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_cr_free7"
+			add_ideas = FSR_fire_steel
+			
+		}
+}
+
+#Equestria in more than name Only
+shared_focus = {
+		id = FSR_cr_free8
+		icon = gfx_goal_unknown
+		x = 0
+		y = 6
+		relative_position_id = FSR_cr_ill
+		cost = 8.64
+		allow_branch = {
+		has_country_flag = FSR_cr_is_free
+		}
+		
+		available_if_capitulated = yes 
+		
+		available = {
+		}
+		prerequisite = { focus = FSR_cr_free6 }
+		prerequisite = { focus = FSR_cr_free7 }
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_cr_free8"
+			FSR = { set_cosmetic_tag = EQS_reformed }
+			create_wargoal = { type = annex_everything target = HIT }
+			create_wargoal = { type = annex_everything target = GRV }
+			create_wargoal = { type = annex_everything target = FTR }
+			create_wargoal = { type = annex_everything target = NEV }
+			create_wargoal = { type = annex_everything target = UNI }
 			
 		}
 }
@@ -1818,7 +2265,7 @@ shared_focus = {
 		prerequisite = { focus = FSR_propaganda_slaves }
 		
 		ai_will_do = { 
-		factor = 50
+		factor = 500
 		} 
 
 		completion_reward = {
@@ -2074,7 +2521,7 @@ shared_focus = {
 		prerequisite = { focus = FSR_prep_reform }
 		
 		ai_will_do = { 
-		factor = 500
+		factor = 50
 		} 
 		
 		will_lead_to_war_with = RED
@@ -2123,7 +2570,7 @@ shared_focus = {
 					}
 		} 
 		ai_will_do = { 
-		factor = 30
+		factor = 300
 		} 
 
 		completion_reward = {
@@ -2147,7 +2594,7 @@ shared_focus = {
 		prerequisite = { focus = FSR_srarmy }
 		mutually_exclusive = { focus = FSR_priviarmy focus = FSR_raiderarmy }
 		ai_will_do = { 
-		factor = 30
+		factor = 300
 		} 
 
 		completion_reward = {
@@ -2787,7 +3234,7 @@ shared_focus = {
 		}
 		
 		ai_will_do = { 
-		factor = 30
+		factor = 50
 		} 
 
 		completion_reward = {
@@ -3067,7 +3514,7 @@ shared_focus = {
 					}
 		}
 		ai_will_do = { 
-		factor = 30
+		factor = 50
 		} 
 
 		completion_reward = {
@@ -3150,7 +3597,7 @@ shared_focus = {
 		}
 		prerequisite = { focus = FSR_newindustry }
 		ai_will_do = { 
-		factor = 30
+		factor = 50
 		} 
 
 		completion_reward = {
@@ -3185,7 +3632,7 @@ shared_focus = {
 		}
 		prerequisite = { focus = FSR_newindustry }
 		ai_will_do = { 
-		factor = 30
+		factor = 50
 		} 
 
 		completion_reward = {
@@ -3319,7 +3766,7 @@ shared_focus = {
 		prerequisite = { focus = FSR_hq_touchup }
 		prerequisite = { focus = FSR_down_rennovation }
 		ai_will_do = { 
-		factor = 30
+		factor = 50
 		} 
 
 		completion_reward = {
@@ -3353,7 +3800,7 @@ shared_focus = {
 
 		prerequisite = { focus = FSR_hq_touchup }
 		ai_will_do = { 
-		factor = 50
+		factor = 70
 		} 
 
 		completion_reward = {
@@ -3375,7 +3822,7 @@ shared_focus = {
 
 		prerequisite = { focus = FSR_bunker_armor focus = FSR_unlock_trinity }
 		ai_will_do = { 
-		factor = 30
+		factor = 50
 		} 
 
 		completion_reward = {
@@ -3408,7 +3855,7 @@ shared_focus = {
 		}
 		
 		ai_will_do = { 
-		factor = 50
+		factor = 70
 		} 
 
 		completion_reward = {
@@ -3434,7 +3881,7 @@ shared_focus = {
 		}
 		
 		ai_will_do = { 
-		factor = 50
+		factor = 90
 		} 
 
 		completion_reward = {
@@ -3460,7 +3907,7 @@ shared_focus = {
 		}
 		
 		ai_will_do = { 
-		factor = 50
+		factor = 90
 		} 
 
 		completion_reward = {
@@ -3483,7 +3930,7 @@ shared_focus = {
 		prerequisite = { focus = FSR_talk_two_trinity }
 		prerequisite = { focus = FSR_room_progress }
 		ai_will_do = { 
-		factor = 30
+		factor = 50
 		} 
 
 		completion_reward = {
@@ -3534,7 +3981,7 @@ shared_focus = {
 
 		prerequisite = { focus = FSR_art_factory }
 		ai_will_do = { 
-		factor = 50
+		factor = 90
 		} 
 
 		completion_reward = {
@@ -4505,7 +4952,7 @@ shared_focus = {
 		} 
 
 		ai_will_do = { 
-		factor = 70
+		factor = 50
 		} 
 
 		completion_reward = {
@@ -4529,7 +4976,7 @@ shared_focus = {
 		} 
 
 		ai_will_do = { 
-		factor = 70
+		factor = 50
 		} 
 
 		completion_reward = {

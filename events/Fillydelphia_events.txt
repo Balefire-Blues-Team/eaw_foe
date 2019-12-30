@@ -18,8 +18,8 @@ country_event = {
 		name = fillysr.1.a
 		ai_chance = { factor = 50}
 		
-		#add_equipment_to_stockpile = { type = energy_equipment_1 amount = 500}
-		#add_equipment_to_stockpile = { type = support_equipment amount = 100}
+		#add_equipment_to_stockpile = { type = energy_equipment_2 amount = 500 producer = ROOT}
+		#add_equipment_to_stockpile = { type = support_equipment amount = 100 producer = ROOT}
 		
 	}
 	option = {
@@ -32,7 +32,7 @@ country_event = {
 		}
 
 		save_current_manpower = yes
-		538 = { add_manpower = 2000 }
+		538 = { add_manpower = 4000 }
 		restore_previous_manpower = yes
 
 		
@@ -1602,6 +1602,7 @@ country_event = {
 	
 	option ={
 	name = fillysr_cr.10.b
+	trigger { is_in_faction_with = RED}
 	ai_chance = { factor = 30}
 		RED = {
 			country_event = { id = fillysr_cr.11 days = 2 }
@@ -1849,6 +1850,7 @@ country_event = {
 	
 	option ={
 	name = fillysr_cr.18.b
+	trigger { is_in_faction_with = RED}
 	ai_chance = { factor = 30}
 		RED = {
 			country_event = { id = fillysr_cr.14 days = 2 }	
@@ -1876,6 +1878,130 @@ country_event = {
 		hidden_effect = { set_country_flag = FSR_cr_is_free  load_focus_tree = fillysr_cr_free_focus }
 	}
 	
+	
+}
+
+#FSR proposes annexation
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event fillysr_cr.20"}
+	id = fillysr_cr.20
+	title = fillysr_cr.20.t
+	desc = fillysr_cr.20.d
+
+	picture = GFX_event_griffon_back
+	
+	is_triggered_only = yes
+
+	
+	option ={
+	name = fillysr_cr.20.a
+	ai_chance = { factor = 70}
+		RED = { annex_country = { target = FSR transfer_troops = yes }}
+	}
+	
+	option ={
+	name = fillysr_cr.20.b
+	ai_chance = { factor = 30}
+		FSR = { add_stability = 0.3}
+	}
+	
+}
+
+#Political marriage
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event fillysr_cr.21"}
+	id = fillysr_cr.21
+	title = fillysr_cr.21.t
+	desc = fillysr_cr.21.d
+
+	picture = GFX_event_griffon_back
+	
+	is_triggered_only = yes
+
+	#under RED
+	option ={
+	name = fillysr_cr.21.a
+	ai_chance = { factor = 70}
+		RED = {
+		country_event = { id = fillysr_cr.22 days = 1 }}
+	}
+	#under us
+	option ={
+	name = fillysr_cr.21.b
+	ai_chance = { factor = 30}
+	RED = {
+		country_event = { id = fillysr_cr.23 days = 1 }}
+	}
+	
+}
+
+#Political marriage
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event fillysr_cr.22"}
+	id = fillysr_cr.22
+	title = fillysr_cr.22.t
+	desc = fillysr_cr.22.d
+
+	picture = GFX_event_griffon_back
+	
+	is_triggered_only = yes
+
+	#yes!
+	option ={
+	name = fillysr_cr.22.a
+	ai_chance = { factor = 70}
+		RED = { annex_country = { target = FSR transfer_troops = yes }
+				add_ideas = FSR_marriage_red
+		}
+		every_state = {
+				limit = { 
+				    is_core_of = FSR 
+				}
+				add_core_of = RED
+			}
+	}
+	#no
+	option ={
+	name = fillysr_cr.22.b
+	ai_chance = { factor = 0}
+		add_political_power = 100
+	}
+	
+}
+
+#Political marriage2
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event fillysr_cr.23"}
+	id = fillysr_cr.23
+	title = fillysr_cr.23.t
+	desc = fillysr_cr.23.d
+
+	picture = GFX_event_griffon_back
+	
+	is_triggered_only = yes
+
+	#yes!
+	option ={
+	name = fillysr_cr.23.a
+	ai_chance = { factor = 70}
+		FSR = { annex_country = { target = RED transfer_troops = yes }}
+		every_state = {
+				limit = { 
+				    is_core_of = RED 
+				}
+				add_core_of = FSR
+			}
+		IF = { limit = {RED = { has_idea = iron_hoof}} FSR = { add_ideas = iron_hoof}}
+		IF = { limit = {RED = { has_idea = guiding_hoof}} FSR = { add_ideas = guiding_hoof}}
+		IF = { limit = {RED = { has_idea = long_game}} FSR = { add_ideas = long_game}}
+		IF = { limit = {RED = { has_idea = short_game}} FSR = { add_ideas = short_game}}
+	}
+	#no
+	option ={
+	name = fillysr_cr.23.b
+	ai_chance = { factor = 0}
+		add_political_power = 100
+	}
 	
 }
 
