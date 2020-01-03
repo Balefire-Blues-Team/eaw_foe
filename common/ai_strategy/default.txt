@@ -1,0 +1,407 @@
+# Scripted by Mechano
+
+# befriend
+# conquer
+# antagonize
+# build_ship
+# build_army
+# unit_ratio
+# build_building
+# research_tech
+# garrison
+# protect
+# influence
+# contain
+# area_priority
+
+# infantry     default 50
+# motorized    default 0
+# mechanized   default 0
+# armor        default 5
+# support_robot  default 0
+# combat_robot  default 0
+# power_armour default 0
+# mountaineers default 0
+# marines      default 0
+
+ai_army_building_minimum_puppet = { #Minimum Army Size Enforced
+	enable = {
+		has_army_size = { size < 10 }
+		has_war = no
+		is_subject = yes
+	}
+	abort = {
+		OR = {
+			NOT = {has_army_size = { size < 10 } }
+			has_war = yes
+		}
+	}
+	ai_strategy = {
+		type = build_army
+		id = infantry
+		value = 100
+	}
+}
+
+default_unit_production = {
+	enable = {
+		always = yes
+		NOT = { original_tag = CAF }
+		NOT = { original_tag = EHT }
+		NOT = { original_tag = VEG }
+    is_chiconet_ai = no
+	}
+
+	ai_strategy = {
+		type = role_ratio
+		id = infantry
+		value = 50
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = motorized
+		value = 0
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = mechanized
+		value = 0
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = armor
+		value = 5
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = power_armour
+		value = 0
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = mountaineers
+		value = 0
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = marines
+		value = 0
+	}
+	ai_strategy = {
+		type = equipment_production_factor
+		id = infantry
+		value = 25
+	}
+}
+
+# stop making divisions
+stop_building_too_many_units = { # Please Stop Building Units
+	enable = {
+		AND = {
+			NOT = { ai_wants_divisions < 300}
+			has_army_size = { size > 300 }
+			num_of_factories > 99
+		}
+	}
+	abort = {
+		OR = {
+			ai_wants_divisions < 300
+			has_army_size = { size < 300 }
+			num_of_factories < 99
+		}
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = infantry
+		value = -500
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = motorized
+		value = -500
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = mechanized
+		value = -500
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = armor
+		value = -500
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = combat_robot
+		value = -500
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = support_robot
+		value = -500
+	}
+}
+
+stop_building_units_reserve_manpower_500 = { # Please Stop Building Units
+	enable = {
+		AND = {
+			has_manpower < 500
+			num_divisions > 8
+			ai_wants_divisions > 8
+		}
+	}
+	abort = {
+		OR = {
+			has_manpower > 500
+			num_divisions < 9
+			ai_wants_divisions < 9
+		}
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = infantry
+		value = -500
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = motorized
+		value = -500
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = mechanized
+		value = -500
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = armor
+		value = -500
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = support_robot
+		value = -500
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = combat_robot
+		value = -500
+	}
+}
+
+stop_building_units_reserve_manpower_1000 = { # Please Stop Building Units
+	enable = {
+		AND = {
+			has_manpower < 1000
+			num_divisions > 16
+			ai_wants_divisions > 16
+		}
+	}
+	abort = {
+		OR = {
+			has_manpower > 1000
+			num_divisions < 17
+			ai_wants_divisions < 17
+		}
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = infantry
+		value = -500
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = motorized
+		value = -500
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = mechanized
+		value = -500
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = armor
+		value = -500
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = support_robot
+		value = -500
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = combat_robot
+		value = -500
+	}
+}
+
+stop_building_units_reserve_manpower_2000 = { # Please Stop Building Units
+	enable = {
+		AND = {
+			has_manpower < 2000
+			num_divisions > 32
+			ai_wants_divisions > 32
+		}
+	}
+	abort = {
+		OR = {
+			has_manpower > 2000
+			num_divisions < 33
+			ai_wants_divisions < 33
+		}
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = infantry
+		value = -500
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = motorized
+		value = -500
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = mechanized
+		value = -500
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = armor
+		value = -500
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = support_robot
+		value = -500
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = combat_robot
+		value = -500
+	}
+}
+
+# Robots
+generic_boost_light_for_light_armor = {
+	enable = {
+		has_tech = robot_protectron_tech_1
+		NOT = { has_template_ai_majority_unit = support_robot }
+	}
+
+	abort = {
+		has_template_ai_majority_unit = support_robot
+	}
+
+	# lets do changes more often during this period too
+	ai_strategy = {
+		type = template_xp_reserve
+		value = -125
+	}
+
+	# this is gateway
+	ai_strategy = {
+		type = template_prio
+		id = support_robot
+		value = 200
+	}
+}
+
+generic_boost_build_armor = {
+	enable = {
+		has_tech = robot_protectron_tech_1
+	}
+
+	abort = {
+	}
+
+	#
+	ai_strategy = {
+		type = role_ratio
+		id = armor
+		value = 30
+	}
+
+	# this is gateway
+	ai_strategy = {
+		type = role_ratio
+		id = infantry
+		value = -30
+	}
+}
+
+# lacking basic tech, get it
+research_basic_tech_melee = {
+	enable = {
+		NOT = {
+			has_tech = melee_weaponry_tech_1
+		}
+	}
+	ai_strategy = {
+		type = research_tech
+		id = melee_weaponry_tech_1
+		value = 50
+	}
+}
+
+research_basic_tech_firearms = {
+	enable = {
+		NOT = {
+			has_tech = standard_weaponry_tech
+		}
+	}
+	ai_strategy = {
+		type = research_tech
+		id = standard_weaponry_tech
+		value = 50
+	}
+}
+
+save_admiral_pp_for_later = {
+	enable = {
+		has_war = no
+		threat < 0.3
+		has_political_power < 200
+	}
+	abort = {
+		OR = {
+			has_war = yes
+			threat > 0.3
+			has_political_power > 200
+		}
+	}
+
+	ai_strategy = { # dont burn PP on admirals (can still get free ones)
+		type = pp_spend_priority
+		id = admiral
+		value = -100
+	}
+}
+
+# Do not waste PP stuff
+do_not_waste_pp_if_saving_for_manpower_laws = {
+
+	enable = {
+		manpower_per_military_factory < 20
+		has_war = yes
+	}
+	abort = {
+		OR = {
+			manpower_per_military_factory > 20
+			has_war = no
+		}
+	}
+
+	ai_strategy = {
+		type = pp_spend_priority
+		id = relation
+		value = -9999
+	}
+
+	ai_strategy = {
+		type = pp_spend_priority
+		id = guarantee
+		value = -9999
+	}
+}
