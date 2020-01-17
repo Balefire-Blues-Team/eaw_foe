@@ -4,6 +4,7 @@ add_namespace = cloudsdale
 add_namespace = cloudsdale_emp
 add_namespace = cloudsdale_sta
 add_namespace = cloudsdale_sun
+add_namespace = cloudsdale_purge
 
 ##The Conspiracy
 country_event = {
@@ -19,19 +20,1233 @@ country_event = {
 	option = {
 		name = cloudsdale.1.a
 		ai_chance = { factor = 50}
-		
+		add_war_support = 0.15
 		
 	}
 	option = {
 		name = cloudsdale.1.b
+		ai_chance = { factor = 30
+		modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}
+		}
+		add_stability = 0.15
+
+		
+	}
+}
+
+##The Fateful Day
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.2"}
+ 	id = cloudsdale.2
+ 	title = cloudsdale.2.t
+ 	desc = cloudsdale.2.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.2.a
+		ai_chance = { factor = 50}
+		696 = { add_manpower = 1500 }
+		
+	}
+	option = {
+		name = cloudsdale.2.b
+		ai_chance = { factor = 30
+		modifier = {
+				factor = 9
+				is_historical_focus_on = yes
+			}
+		}
+		add_equipment_to_stockpile = { type = energy_equipment_2 amount = 200 producer = NEV }
+		add_equipment_to_stockpile = { type = power_armor_equipment_2 amount = 100 producer = NEV }
+		add_equipment_to_stockpile = { type = raptor_equipment amount = 20 producer = NEV }
+
+		
+	}
+}
+
+##The City of New Cloudsdale
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.3"}
+ 	id = cloudsdale.3
+ 	title = cloudsdale.3.t
+ 	desc = cloudsdale.3.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.3.a
+		ai_chance = { factor = 50}
+		add_offsite_building = { type = arms_factory level = 2 }
+		
+	}
+	option = {
+		name = cloudsdale.3.b
 		ai_chance = { factor = 70
 		modifier = {
 				factor = 0
 				is_historical_focus_on = yes
 			}
 		}
-
-
+		696 = { remove_building = { type = arms_factory level = 3 } }
+		add_offsite_building = { type = industrial_complex level = 4 }
 		
+	}
+}
+
+##The Featherfall affair
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.4"}
+ 	id = cloudsdale.4
+ 	title = cloudsdale.4.t
+ 	desc = cloudsdale.4.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.4.a
+		ai_chance = { factor = 50}
+		add_stability = -0.1
+		add_popularity = {
+				ideology = continuation
+				popularity = -0.05
+			}
+		add_popularity = {
+				ideology = destruction
+				popularity = 0.03
+			}
+
+		if = {
+			limit = {
+				has_idea = NEV_council_defunct
+			}
+			add_political_power = -100
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_weak
+			}
+			swap_ideas = { remove_idea = NEV_council_weak add_idea = NEV_council_defunct}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_functional
+			}
+			swap_ideas = { remove_idea = NEV_council_functional add_idea = NEV_council_weak}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_strong
+			}
+			swap_ideas = { remove_idea = NEV_council_strong add_idea = NEV_council_functional}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_dominant
+			}
+			swap_ideas = { remove_idea = NEV_council_dominant add_idea = NEV_council_strong}
+		}
+		
+	}
+	
+}
+
+##Investigate the Council
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.5"}
+ 	id = cloudsdale.5
+ 	title = cloudsdale.5.t
+ 	desc = cloudsdale.5.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.5.a
+		ai_chance = { factor = 50 
+			modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}
+		}
+		if = {
+			limit = {
+				has_idea = NEV_council_defunct
+			}
+			add_political_power = -100
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_weak
+			}
+			swap_ideas = { remove_idea = NEV_council_weak add_idea = NEV_council_defunct}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_functional
+			}
+			swap_ideas = { remove_idea = NEV_council_functional add_idea = NEV_council_weak}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_strong
+			}
+			swap_ideas = { remove_idea = NEV_council_strong add_idea = NEV_council_functional}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_dominant
+			}
+			swap_ideas = { remove_idea = NEV_council_dominant add_idea = NEV_council_strong}
+		}
+		
+		if = {
+			limit = {
+				has_idea = NEV_senate_defunct
+			}
+			swap_ideas = { remove_idea = NEV_senate_defunct add_idea = NEV_senate_weak}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_weak
+			}
+			swap_ideas = { remove_idea = NEV_senate_weak add_idea = NEV_senate_functional}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_functional
+			}
+			swap_ideas = { remove_idea = NEV_senate_functional add_idea = NEV_senate_strong}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_strong
+			}
+			swap_ideas = { remove_idea = NEV_senate_strong add_idea = NEV_senate_dominant}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_dominant
+			}
+			add_political_power = 100
+		}
+		
+		
+	}
+	option = {
+		name = cloudsdale.5.b
+		ai_chance = { factor = 50 }
+		
+		add_popularity = {
+				ideology = visionary
+				popularity = -0.1
+			}
+		
+	}
+}
+
+##The Case against Featherfall
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.6"}
+ 	id = cloudsdale.6
+ 	title = cloudsdale.6.t
+ 	desc = cloudsdale.6.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.6.a
+		ai_chance = { factor = 50}
+		
+		if = {
+			limit = {
+				has_idea = NEV_senate_defunct
+			}
+			swap_ideas = { remove_idea = NEV_senate_defunct add_idea = NEV_senate_weak}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_weak
+			}
+			swap_ideas = { remove_idea = NEV_senate_weak add_idea = NEV_senate_functional}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_functional
+			}
+			swap_ideas = { remove_idea = NEV_senate_functional add_idea = NEV_senate_strong}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_strong
+			}
+			swap_ideas = { remove_idea = NEV_senate_strong add_idea = NEV_senate_dominant}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_dominant
+			}
+			add_political_power = 100
+		}
+		
+	}
+	option = {
+		name = cloudsdale.6.b
+		ai_chance = { factor = 50
+			modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}
+		}
+		
+		if = {
+			limit = {
+				has_idea = NEV_council_defunct
+			}
+			add_political_power = -100
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_weak
+			}
+			swap_ideas = { remove_idea = NEV_council_weak add_idea = NEV_council_defunct}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_functional
+			}
+			swap_ideas = { remove_idea = NEV_council_functional add_idea = NEV_council_weak}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_strong
+			}
+			swap_ideas = { remove_idea = NEV_council_strong add_idea = NEV_council_functional}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_dominant
+			}
+			swap_ideas = { remove_idea = NEV_council_dominant add_idea = NEV_council_strong}
+		}
+		
+	}
+}
+
+##Meeting with Autumn Leaf
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.7"}
+ 	id = cloudsdale.7
+ 	title = cloudsdale.7.t
+ 	desc = cloudsdale.7.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.7.a
+		ai_chance = { factor = 50}
+		add_popularity = {
+				ideology = destruction
+				popularity = 0.1
+		}
+		if = {
+			limit = {
+				has_idea = NEV_council_defunct
+			}
+			swap_ideas = { remove_idea = NEV_council_defunct add_idea = NEV_council_weak}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_weak
+			}
+			swap_ideas = { remove_idea = NEV_council_weak add_idea = NEV_council_functional}
+		}
+		
+		
+	}
+	option = {
+		name = cloudsdale.7.b
+		ai_chance = { factor = 50
+			modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}
+		}
+		add_popularity = {
+				ideology = destruction
+				popularity = -0.1
+			}
+		
+	}
+}
+
+##Fate of the General
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.8"}
+ 	id = cloudsdale.8
+ 	title = cloudsdale.8.t
+ 	desc = cloudsdale.8.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	trigger = {
+		destruction > 0.3	
+	}
+		name = cloudsdale.8.a
+		ai_chance = { factor = 30}
+		add_popularity = {
+				ideology = continuation
+				popularity = -0.15
+			}
+		add_popularity = {
+				ideology = destruction
+				popularity = 0.1
+			}
+		retire_country_leader = yes
+		create_country_leader = {
+			name = "Autumn Leaf"
+			picture = "Regency.tga"
+			expire = "1965.1.1"
+			ideology = enclave_cont
+			traits = { provisional }
+		}
+		
+		
+	}
+	option = {
+	trigger = {
+		destruction < 0.5
+		has_completed_focus = NEV_seafire_accusation
+	}
+		name = cloudsdale.8.b
+		ai_chance = { factor = 50
+			modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}
+		}
+		add_popularity = {
+				ideology = continuation
+				popularity = -0.15
+			}
+		add_popularity = {
+				ideology = visionary
+				popularity = 0.1
+			}
+		retire_country_leader = yes
+		create_country_leader = {
+			name = "Emergency Council"
+			picture = "Regency.tga"
+			expire = "1965.1.1"
+			ideology = enclave_cont
+			traits = { provisional }
+		}
+	}
+	
+	option = {
+	trigger = {
+		destruction < 0.5
+		has_completed_focus = NEV_tornado_deal
+	}
+		name = cloudsdale.8.c
+		ai_chance = { factor = 50
+			modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}
+		}
+		add_popularity = {
+				ideology = continuation
+				popularity = 0.05
+			}
+		add_popularity = {
+				ideology = visionary
+				popularity = 0.05
+			}
+		retire_country_leader = yes
+		create_country_leader = {
+			name = "Tornado"
+			picture = "Tornado.tga"
+			expire = "1965.1.1"
+			ideology = enclave_cont
+			traits = {  }
+		}
+	}
+	
+	option = {
+	trigger = {
+		has_completed_focus = NEV_tornado_deal
+	}
+		name = cloudsdale.8.e
+		ai_chance = { factor = 20
+			modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}
+		}
+		add_popularity = {
+				ideology = continuation
+				popularity = 0.15
+			}
+		
+	}
+}
+
+##Voting debate
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.9"}
+ 	id = cloudsdale.9
+ 	title = cloudsdale.9.t
+ 	desc = cloudsdale.9.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.9.a
+		ai_chance = { factor = 50}
+		add_popularity = {
+				ideology = destruction
+				popularity = 0.03
+		}
+		add_popularity = {
+				ideology = continuation
+				popularity = 0.03
+		}
+		add_manpower = 100
+		
+		
+		
+	}
+	option = {
+		name = cloudsdale.9.b
+		ai_chance = { factor = 50
+			modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}
+		}
+		add_popularity = {
+				ideology = visionary
+				popularity = 0.05
+		}
+		add_stability = -0.05
+		
+	}
+}
+
+##Population Crisis
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.10"}
+ 	id = cloudsdale.10
+ 	title = cloudsdale.10.t
+ 	desc = cloudsdale.10.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.10.a
+		ai_chance = { factor = 50}
+		add_popularity = {
+				ideology = destruction
+				popularity = 0.02
+		}
+		add_popularity = {
+				ideology = continuation
+				popularity = 0.05
+		}
+		
+		
+		
+		
+	}
+	option = {
+		name = cloudsdale.10.b
+		ai_chance = { factor = 50
+			modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}
+		}
+		add_popularity = {
+				ideology = continuation
+				popularity = -0.075
+		}
+		add_political_power = 10
+		
+	}
+}
+
+##Resource Scarcity
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.11"}
+ 	id = cloudsdale.11
+ 	title = cloudsdale.11.t
+ 	desc = cloudsdale.11.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.11.a
+		ai_chance = { factor = 50
+		modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}
+		}
+		
+		add_popularity = {
+				ideology = continuation
+				popularity = 0.03
+		}
+		add_stability = 0.03
+		
+		
+		
+		
+	}
+	option = {
+		name = cloudsdale.11.b
+		ai_chance = { factor = 50 }
+		add_popularity = {
+				ideology = continuation
+				popularity = -0.05
+		}
+		add_political_power = -50
+		696 = { add_resource = { type = metal amount = 3 } }
+	}
+}
+
+##Wastelander question
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.12"}
+ 	id = cloudsdale.12
+ 	title = cloudsdale.12.t
+ 	desc = cloudsdale.12.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.12.a
+		ai_chance = { factor = 50
+		modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}
+		}
+		add_popularity = {
+				ideology = destruction
+				popularity = 0.05
+		}
+		add_popularity = {
+				ideology = continuation
+				popularity = 0.02
+		}
+		add_stability = 0.05
+		
+		
+		
+		
+	}
+	option = {
+		name = cloudsdale.12.b
+		ai_chance = { factor = 50 }
+		add_popularity = {
+				ideology = visionary
+				popularity = 0.05
+		}
+		add_political_power = -50
+		add_stability = -0.075
+	}
+}
+
+##Cumulus Needs aid
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.13"}
+ 	id = cloudsdale.13
+ 	title = cloudsdale.13.t
+ 	desc = cloudsdale.13.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.13.a
+		ai_chance = { factor = 50 }
+		add_popularity = {
+				ideology = destruction
+				popularity = 0.05
+		}
+		
+		
+		
+		
+	}
+	option = {
+		name = cloudsdale.13.b
+		ai_chance = { factor = 50 modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}
+		}
+		add_popularity = {
+				ideology = destruction
+				popularity = -0.05
+		}
+		add_timed_idea = { idea = NEV_cumulus_aid days = 150 }
+		
+		#Cumulus gets timed idea for help received
+		#also gets opinion boost: helped us in time of need
+	}
+}
+
+##Skyfreeze problem
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.14"}
+ 	id = cloudsdale.14
+ 	title = cloudsdale.14.t
+ 	desc = cloudsdale.14.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.14.a
+		ai_chance = { factor = 50
+		}
+		add_popularity = {
+				ideology = destruction
+				popularity = 0.02
+		}
+		add_popularity = {
+				ideology = visionary
+				popularity = -0.05
+		}
+		
+		
+		
+		
+	}
+	option = {
+		name = cloudsdale.14.b
+		ai_chance = { factor = 50 modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}}
+		add_popularity = {
+				ideology = continuation
+				popularity = -0.05
+		}
+		
+	}
+}
+
+##Volunteer problem
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.15"}
+ 	id = cloudsdale.15
+ 	title = cloudsdale.15.t
+ 	desc = cloudsdale.15.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.15.a
+		ai_chance = { factor = 50
+		}
+		add_popularity = {
+				ideology = destruction
+				popularity = 0.05
+		}
+		add_ideas = NEV_volunteer_influx
+	
+	}
+	option = {
+		name = cloudsdale.15.b
+		ai_chance = { factor = 50 
+		modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}}
+		add_popularity = {
+				ideology = continuation
+				popularity = 0.05
+		}
+		add_manpower = 200
+		
+	}
+}
+
+##Neighvarro outpost
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.16"}
+ 	id = cloudsdale.16
+ 	title = cloudsdale.16.t
+ 	desc = cloudsdale.16.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.16.a
+		ai_chance = { factor = 50
+		}
+		add_popularity = {
+				ideology = destruction
+				popularity = 0.05
+		}
+		add_offsite_building = { type = arms_factory level = 1 }
+		696 = { add_manpower = 1000 }
+		
+	
+	}
+	option = {
+		name = cloudsdale.16.b
+		ai_chance = { factor = 50 
+		modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}}
+		add_popularity = {
+				ideology = continuation
+				popularity = 0.02
+		}
+		add_popularity = {
+				ideology = visionary
+				popularity = 0.02
+		}
+		add_offsite_building = { type = industrial_complex level = 1 }
+		
+	}
+}
+
+##Refurbishment of the Thunderous
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.17"}
+ 	id = cloudsdale.17
+ 	title = cloudsdale.17.t
+ 	desc = cloudsdale.17.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.17.a
+		ai_chance = { factor = 50
+		}
+		add_popularity = {
+				ideology = destruction
+				popularity = 0.05
+		}
+		696 = { add_resource = { type = metal amount = 9 } 
+				add_resource = { type = composites amount = 7 }
+				add_resource = { type = circuitry amount = 5 }
+				add_resource = { type = advanced amount = 4 }
+				add_resource = { type = crystals amount = 3 }
+		}
+		
+	
+	}
+	option = {
+		name = cloudsdale.17.b
+		ai_chance = { factor = 50 
+		modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}}
+		add_popularity = {
+				ideology = continuation
+				popularity = 0.05
+		}
+		add_ideas = NEV_thunderous_training
+		
+	}
+}
+
+##Internal Conflict
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.18"}
+ 	id = cloudsdale.18
+ 	title = cloudsdale.18.t
+ 	desc = cloudsdale.18.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.18.a
+		ai_chance = { factor = 50
+		}
+		add_popularity = {
+				ideology = destruction
+				popularity = 0.1
+		}
+		add_political_power = -100
+		add_stability = -0.05
+		
+	
+	}
+	option = {
+		name = cloudsdale.18.b
+		ai_chance = { factor = 50 
+		modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}}
+		add_popularity = {
+				ideology = continuation
+				popularity = 0.075
+		}
+		add_political_power = 50
+		
+	}
+}
+
+##Senate Interference
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.19"}
+ 	id = cloudsdale.19
+ 	title = cloudsdale.19.t
+ 	desc = cloudsdale.19.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.19.a
+		ai_chance = { factor = 50
+		}
+		add_popularity = {
+				ideology = destruction
+				popularity = 0.05
+		}
+		add_stability = -0.05
+		if = {
+			limit = {
+				has_idea = NEV_senate_defunct
+			}
+			add_political_power = -100
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_weak
+			}
+			swap_ideas = { remove_idea = NEV_senate_weak add_idea = NEV_senate_defunct}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_functional
+			}
+			swap_ideas = { remove_idea = NEV_senate_functional add_idea = NEV_senate_weak}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_strong
+			}
+			swap_ideas = { remove_idea = NEV_senate_strong add_idea = NEV_senate_functional}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_dominant
+			}
+			swap_ideas = { remove_idea = NEV_senate_dominant add_idea = NEV_senate_strong}
+		}
+	
+	}
+	option = {
+		name = cloudsdale.19.b
+		ai_chance = { factor = 50 
+		modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}}
+		add_popularity = {
+				ideology = visionary
+				popularity = 0.05
+		}
+		add_stability = 0.05
+		
+	}
+}
+
+##How to deal with RedEye
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.20"}
+ 	id = cloudsdale.20
+ 	title = cloudsdale.20.t
+ 	desc = cloudsdale.20.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.20.a
+		ai_chance = { factor = 50
+		}
+		add_popularity = {
+				ideology = destruction
+				popularity = 0.05
+		}
+		add_stability = -0.075
+		add_war_support = 0.05
+		custom_effect_tooltip = NEV_des_RED_plan_tt
+		set_country_flag = NEV_des_RED_plan
+	
+	}
+	option = {
+		name = cloudsdale.20.b
+		ai_chance = { factor = 50 
+		modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}}
+		add_popularity = {
+				ideology = continuation
+				popularity = 0.05
+		}
+		custom_effect_tooltip = NEV_con_RED_plan_tt
+		set_country_flag = NEV_con_RED_plan
+		
+	}
+}
+
+##The new Government Featherfall to Tornado
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.21"}
+ 	id = cloudsdale.21
+ 	title = cloudsdale.21.t
+ 	desc = cloudsdale.21.d
+	picture = GFX_tornado_triumph
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.21.a
+		ai_chance = { factor = 50
+		}
+		set_party_name = { ideology = continuation long_name = Tornado_united_enclave name = Tornado_united_enclave }
+		set_popularities = {
+			continuation = 100
+		}
+		retire_country_leader = yes
+		create_country_leader = {
+			name = "Tornado"
+			picture = "Tornado.tga"
+			expire = "1965.1.1"
+			ideology = enclave_cont
+			traits = { NEV_tornado_trait }
+		}
+	}
+	
+}
+
+##The new Government Seafire
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.22"}
+ 	id = cloudsdale.22
+ 	title = cloudsdale.22.t
+ 	desc = cloudsdale.22.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.22.a
+		ai_chance = { factor = 50
+		}
+		set_politics = { ruling_party = visionary elections_allowed = no }
+		add_popularity = { ideology = visionary popularity = 0.30 }
+	
+	}
+	
+}
+
+##The new Government Autmun Leaf
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.23"}
+ 	id = cloudsdale.23
+ 	title = cloudsdale.23.t
+ 	desc = cloudsdale.23.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.23.a
+		ai_chance = { factor = 50
+		}
+		set_politics = { ruling_party = destruction elections_allowed = no }
+		add_popularity = { ideology = destruction popularity = 0.30 }
+		set_party_name = { ideology = destruction long_name = Autumn_united_enclave name = Autumn_united_enclave }
+		if = {
+			limit = {
+				has_idea = NEV_senate_defunct
+			}
+			add_political_power = -100
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_weak
+			}
+			swap_ideas = { remove_idea = NEV_senate_weak add_idea = NEV_senate_defunct}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_functional
+			}
+			swap_ideas = { remove_idea = NEV_senate_functional add_idea = NEV_senate_weak}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_strong
+			}
+			swap_ideas = { remove_idea = NEV_senate_strong add_idea = NEV_senate_functional}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_dominant
+			}
+			swap_ideas = { remove_idea = NEV_senate_dominant add_idea = NEV_senate_strong}
+		}
+		if = {
+			limit = {
+				has_idea = NEV_council_defunct
+			}
+			swap_ideas = { remove_idea = NEV_council_defunct add_idea = NEV_council_weak}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_weak
+			}
+			swap_ideas = { remove_idea = NEV_council_weak add_idea = NEV_council_functional}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_functional
+			}
+			swap_ideas = { remove_idea = NEV_council_functional add_idea = NEV_council_strong}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_strong
+			}
+			swap_ideas = { remove_idea = NEV_council_strong add_idea = NEV_council_dominant}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_dominant
+			}
+			add_political_power = 100
+		}
+	}
+	
+}
+
+##The new Government Tornado
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.24"}
+ 	id = cloudsdale.24
+ 	title = cloudsdale.24.t
+ 	desc = cloudsdale.24.d
+	picture = GFX_tornado_triumph
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.24.a
+		ai_chance = { factor = 50
+		}
+		set_party_name = { ideology = continuation long_name = Tornado_united_enclave name = Tornado_united_enclave }
+		set_popularities = {
+			continuation = 100
+		}
+		add_country_leader_trait = NEV_tornado_trait
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Deploying the army groups
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_purge.1"}
+	id = cloudsdale_purge.1
+	title = cloudsdale_purge.1.t
+	desc = cloudsdale_purge.1.d
+
+	picture = GFX_event_griffon_back
+	
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	
+	option ={
+	name = cloudsdale_purge.1.a
+	ai_chance = { factor = 90} 
+		NEC = {
+				
+				transfer_state = 5
+			}
+		puppet = NEC
+		NEN = {
+				
+				transfer_state = 57
+			}
+		puppet = NEN
 	}
 }

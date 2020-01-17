@@ -20,3 +20,793 @@ shared_focus = {
 			
 		}
 }
+
+#The Fateful Day
+shared_focus = {
+		id = NEV_day_fate
+		icon = gfx_goal_unknown
+		x = 14
+		y = 1
+		cost = 1
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_conspiracy }
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_day_fate"
+			country_event = { id = cloudsdale.2 }
+			
+		}
+}
+
+#The City of New Cloudsdale
+shared_focus = {
+		id = NEV_new_cloudsdale
+		icon = gfx_goal_unknown
+		x = 14
+		y = 2
+		cost = 1
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_day_fate }
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_new_cloudsdale"
+			country_event = { id = cloudsdale.3 }
+			
+		}
+}
+
+#The Featherfall Affair
+shared_focus = {
+		id = NEV_featherfall_affair
+		icon = gfx_goal_unknown
+		x = 0
+		y = 1
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_new_cloudsdale }
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_featherfall_affair"
+			country_event = { id = cloudsdale.4 }
+			
+		}
+}
+
+#Tornados Deal
+shared_focus = {
+		id = NEV_tornado_deal
+		icon = gfx_goal_unknown
+		x = -2
+		y = 2
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_featherfall_affair }
+		mutually_exclusive = { focus = NEV_seafire_accusation }
+		ai_will_do = { 
+		factor = 50
+			modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_tornado_deal"
+			add_stability = 0.075
+			
+			
+		}
+}
+
+#Calm hotter minds
+shared_focus = {
+		id = NEV_calm_minds
+		icon = gfx_goal_unknown
+		x = -2
+		y = 3
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_tornado_deal }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_calm_minds"
+			add_popularity = {
+				ideology = continuation
+				popularity = 0.05
+			}
+			add_political_power = 50
+			
+		}
+}
+
+#Amnesty for Loyalty
+shared_focus = {
+		id = NEV_amnesty_loyalty
+		icon = gfx_goal_unknown
+		x = -2
+		y = 4
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_calm_minds }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_amnesty_loyalty"
+			add_stability = 0.025
+		if = {
+			limit = {
+				has_idea = NEV_senate_defunct
+			}
+			swap_ideas = { remove_idea = NEV_senate_defunct add_idea = NEV_senate_weak}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_weak
+			}
+			swap_ideas = { remove_idea = NEV_senate_weak add_idea = NEV_senate_functional}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_functional
+			}
+			swap_ideas = { remove_idea = NEV_senate_functional add_idea = NEV_senate_strong}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_strong
+			}
+			swap_ideas = { remove_idea = NEV_senate_strong add_idea = NEV_senate_dominant}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_dominant
+			}
+			add_political_power = 100
+		}
+			
+		}
+}
+
+#Seafires Accusation
+shared_focus = {
+		id = NEV_seafire_accusation
+		icon = gfx_goal_unknown
+		x = 2
+		y = 2
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_featherfall_affair }
+		mutually_exclusive = { focus = NEV_tornado_deal }
+		ai_will_do = { 
+		factor = 50
+
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_seafire_accusation"
+			add_stability = -0.15
+			add_popularity = {
+				ideology = continuation
+				popularity = -0.1
+			}
+			
+		}
+}
+
+#Investigate the Commitee
+shared_focus = {
+		id = NEV_investigate_commitee
+		icon = gfx_goal_unknown
+		x = 2
+		y = 3
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_seafire_accusation }
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_investigate_commitee"
+			country_event = { id = cloudsdale.5 }
+			
+		}
+}
+
+#The Case against Featherfall
+shared_focus = {
+		id = NEV_case_against_featherfall
+		icon = gfx_goal_unknown
+		x = 2
+		y = 4
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_investigate_commitee }
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_case_against_featherfall"
+			country_event = { id = cloudsdale.6 }
+			
+		}
+}
+
+#Meeting with Autumn Leaf
+shared_focus = {
+		id = NEV_meet_autumn
+		icon = gfx_goal_unknown
+		x = 0
+		y = 4
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_investigate_commitee focus = NEV_calm_minds }
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_meet_autumn"
+			country_event = { id = cloudsdale.7 }
+			
+		}
+}
+
+#Fate of the General
+shared_focus = {
+		id = NEV_fate_general
+		icon = gfx_goal_unknown
+		x = 0
+		y = 5
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_case_against_featherfall focus = NEV_amnesty_loyalty }
+		prerequisite = { focus = NEV_meet_autumn }
+		ai_will_do = { 
+		factor = 10
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_fate_general"
+			country_event = { id = cloudsdale.8 }
+			
+		}
+}
+
+#Election campaign
+shared_focus = {
+		id = NEV_election_campaign
+		icon = gfx_goal_unknown
+		x = -6
+		y = 1
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_new_cloudsdale}
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_election_campaign"
+			add_political_power = -200
+			add_stability = -0.05
+			
+		}
+}
+
+#Voting debate
+shared_focus = {
+		id = NEV_voting_debate
+		icon = gfx_goal_unknown
+		x = -7
+		y = 2
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_election_campaign}
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_voting_debate"
+			country_event = { id = cloudsdale.9 }
+			
+		}
+}
+
+#Population Crisis
+shared_focus = {
+		id = NEV_pop_crisis
+		icon = gfx_goal_unknown
+		x = -5
+		y = 2
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_election_campaign}
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_pop_crisis"
+			country_event = { id = cloudsdale.10 }
+			
+		}
+}
+
+#Ressource scarcity
+shared_focus = {
+		id = NEV_scarce_resources
+		icon = gfx_goal_unknown
+		x = -5
+		y = 3
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_pop_crisis focus = NEV_voting_debate}
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_scarce_resources"
+			country_event = { id = cloudsdale.11 }
+			
+		}
+}
+
+#Wastelander question
+shared_focus = {
+		id = NEV_wastelander_question
+		icon = gfx_goal_unknown
+		x = -7
+		y = 3
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_pop_crisis focus = NEV_voting_debate}
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_wastelander_question"
+			country_event = { id = cloudsdale.12 }
+			
+		}
+}
+
+#Cumulus requests aid
+shared_focus = {
+		id = NEV_cumulus_aid
+		icon = gfx_goal_unknown
+		x = -7
+		y = 4
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_wastelander_question focus = NEV_scarce_resources}
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_cumulus_aid"
+			country_event = { id = cloudsdale.13 }
+			
+		}
+}
+
+#The problematic City
+shared_focus = {
+		id = NEV_skyfreeze_problem
+		icon = gfx_goal_unknown
+		x = -5
+		y = 4
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_wastelander_question focus = NEV_scarce_resources}
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_skyfreeze_problem"
+			country_event = { id = cloudsdale.14 }
+			
+		}
+}
+
+#The Senate speech
+shared_focus = {
+		id = NEV_senate_speech
+		icon = gfx_goal_unknown
+		x = -6
+		y = 5
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_skyfreeze_problem }
+		prerequisite = { focus = NEV_cumulus_aid }
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_senate_speech"
+			add_stability = 0.05
+			if = {
+			limit = {
+				has_idea = NEV_senate_defunct
+			}
+			swap_ideas = { remove_idea = NEV_senate_defunct add_idea = NEV_senate_weak}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_weak
+			}
+			swap_ideas = { remove_idea = NEV_senate_weak add_idea = NEV_senate_functional}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_functional
+			}
+			swap_ideas = { remove_idea = NEV_senate_functional add_idea = NEV_senate_strong}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_strong
+			}
+			swap_ideas = { remove_idea = NEV_senate_strong add_idea = NEV_senate_dominant}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_dominant
+			}
+			add_political_power = 100
+		}
+			
+		}
+}
+
+#Military matters
+shared_focus = {
+		id = NEV_military_matters
+		icon = gfx_goal_unknown
+		x = 6
+		y = 1
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_new_cloudsdale }
+		ai_will_do = { 
+		factor = 200
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_military_matters"
+			add_stability = -0.05
+			add_war_support = -0.05
+			
+		}
+}
+
+#Volunteer problem
+shared_focus = {
+		id = NEV_volunteer_problem
+		icon = gfx_goal_unknown
+		x = 5
+		y = 2
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_military_matters }
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_volunteer_problem"
+			country_event = { id = cloudsdale.15 }
+			
+		}
+}
+
+#Neighvarro Outpost
+shared_focus = {
+		id = NEV_neighvarro_outpost
+		icon = gfx_goal_unknown
+		x = 7
+		y = 2
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_military_matters }
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_neighvarro_outpost"
+			country_event = { id = cloudsdale.16 }
+			
+		}
+}
+
+#Thunderhead Refurbishment
+shared_focus = {
+		id = NEV_thunderhead_repair
+		icon = gfx_goal_unknown
+		x = 7
+		y = 3
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_volunteer_problem focus = NEV_neighvarro_outpost }
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_thunderhead_repair"
+			country_event = { id = cloudsdale.17 }
+			
+		}
+}
+
+#Adress internal Conflict
+shared_focus = {
+		id = NEV_internal_conflict
+		icon = gfx_goal_unknown
+		x = 5
+		y = 3
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_volunteer_problem focus = NEV_neighvarro_outpost }
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_internal_conflict"
+			country_event = { id = cloudsdale.18 }
+			
+		}
+}
+
+#The Senate's interference
+shared_focus = {
+		id = NEV_senate_interferes
+		icon = gfx_goal_unknown
+		x = 5
+		y = 4
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_thunderhead_repair focus = NEV_internal_conflict }
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_senate_interferes"
+			country_event = { id = cloudsdale.19 }
+			
+		}
+}
+
+#How to Deal with RedEye
+shared_focus = {
+		id = NEV_how_to_redeye
+		icon = gfx_goal_unknown
+		x = 7
+		y = 4
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_thunderhead_repair focus = NEV_internal_conflict }
+		ai_will_do = { 
+		factor = 30
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_how_to_redeye"
+			country_event = { id = cloudsdale.20 }
+			
+		}
+}
+
+#A secure system
+shared_focus = {
+		id = NEV_secure_system
+		icon = gfx_goal_unknown
+		x = 6
+		y = 5
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_how_to_redeye }
+		prerequisite = { focus = NEV_senate_interferes }
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_secure_system"
+			add_war_support = 0.05
+			
+		if = {
+			limit = {
+				has_idea = NEV_council_defunct
+			}
+			swap_ideas = { remove_idea = NEV_council_defunct add_idea = NEV_council_weak}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_weak
+			}
+			swap_ideas = { remove_idea = NEV_council_weak add_idea = NEV_council_functional}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_functional
+			}
+			swap_ideas = { remove_idea = NEV_council_functional add_idea = NEV_council_strong}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_strong
+			}
+			swap_ideas = { remove_idea = NEV_council_strong add_idea = NEV_council_dominant}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_dominant
+			}
+			add_political_power = 100
+		}
+		}
+}
+
+#The New Government
+shared_focus = {
+		id = NEV_new_government
+		icon = gfx_goal_unknown
+		x = 0
+		y = 6
+		relative_position_id = NEV_new_cloudsdale
+		cost = 2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_senate_speech }
+		prerequisite = { focus = NEV_fate_general }
+		prerequisite = { focus = NEV_secure_system }
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_new_government"
+			if = {
+				limit = {
+				has_country_leader = { ruling_only = yes name = "General Featherfall" }
+				}
+				country_event = { id = cloudsdale.21 }
+			}
+			else_if = {
+				limit = {
+				has_country_leader = { ruling_only = yes name = "Emergency Council" }
+				}
+				country_event = { id = cloudsdale.22 }
+			}
+			else_if = {
+				limit = {
+				has_country_leader = { ruling_only = yes name = "Autumn Leaf" }
+				}
+				country_event = { id = cloudsdale.23 }
+			}
+			else_if = {
+				limit = {
+				has_country_leader = { ruling_only = yes name = "Tornado" }
+				}
+				country_event = { id = cloudsdale.24 }
+			}
+			
+		}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
