@@ -553,6 +553,95 @@ RED_slaving = {
 		}
 	}
 
+	RED_IMP_experiment = {
+		icon = generic_magic
+		cost = 25
+
+		available = {
+			check_variable = {
+                RED_slaves_var > 2
+            }
+            check_variable = {
+				IMP_research_var < 5
+			}
+		}
+
+		visible = {
+			has_completed_focus = RED_end_trade
+			has_completed_focus = RED_imp_experiments
+		}
+
+		days_remove = 30
+		days_re_enable = 60
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RED_IMP_experiment"
+
+			custom_effect_tooltip = RED_1_lose_slave_tt
+			subtract_from_variable = {
+				var = RED_slaves_var
+				value = 1
+			}
+			add_to_variable = {
+				var = IMP_research_var
+				value = 1
+			}
+
+			if = {
+				limit = {
+					check_variable = {
+						IMP_research_var = 4
+					}
+				}
+
+				set_technology = {
+    				dragons_light = 1
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+
+	RED_alicorn_creation = {
+		icon = generic_magic
+		cost = 25
+
+		available = {
+			controls_state = 593
+		}
+
+		visible = {
+			check_variable = {
+				IMP_research_var = 5
+			}
+			has_completed_focus = RED_new_unity
+		}
+
+		days_remove = 30
+		days_re_enable = 60
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RED_IMP_experiment"
+
+			custom_effect_tooltip = RED_1_lose_slave_tt
+			custom_effect_tooltip = RED_alicorn_spawn_tt
+			subtract_from_variable = {
+				var = RED_slaves_var
+				value = 1
+			}
+			hidden_effect = { 
+				load_oob = "RED_new_alicorns"
+			}
+
+
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+
 	RED_slave_mil_factory = {
 		icon = generic_industry
 		cost = 75
