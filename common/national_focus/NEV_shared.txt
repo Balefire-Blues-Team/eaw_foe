@@ -819,7 +819,12 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_industry_reform"
-			
+			add_tech_bonus = {
+				name = industry_bonus
+				bonus = 0.75
+				uses = 2
+				category = industry
+			}
 		}
 }
 
@@ -840,7 +845,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_divert_production"
-			
+			add_offsite_building = { type = arms_factory level = 2 }
 		}
 }
 
@@ -861,7 +866,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_requisitioning"
-			
+			add_ideas = NEV_des_requisitioning1
 		}
 }
 
@@ -883,7 +888,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_tartarus"
-			
+			add_research_slot = 1
 		}
 }
 
@@ -904,7 +909,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_pioneers"
-			
+			add_ideas = NEV_surface_pioneers
 		}
 }
 
@@ -925,7 +930,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_re_tool_factory"
-			
+			swap_ideas = { remove_idea = NEV_des_requisitioning1  add_idea = NEV_des_requisitioning2 }
 		}
 }
 
@@ -946,7 +951,23 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_eco_mobilisation"
-			
+			if = {
+				limit = { has_idea = isolation }
+				add_ideas = partial_economic_mobilisation
+			}
+			else_if = {
+				limit = { has_idea = low_economic_mobilisation }
+				add_ideas = partial_economic_mobilisation
+			}
+			else_if = {
+				limit = { has_idea = civilian_economy }
+				add_ideas = partial_economic_mobilisation
+			}
+			else_if = {
+				limit = { has_idea = partial_economic_mobilisation }
+				add_ideas = war_economy
+			}
+			add_offsite_building = { type = arms_factory level = 2 }
 		}
 }
 
@@ -967,7 +988,12 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_military_reform"
-			
+			add_tech_bonus = {
+				name = recon_bonus
+				bonus = 1.0
+				uses = 2
+				category = cat_elite_army
+			}
 		}
 }
 
@@ -988,7 +1014,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_get_guns"
-			
+			add_equipment_to_stockpile = { type = energy_equipment_2 amount = 600 producer = NEV }
+			add_equipment_to_stockpile = { type = support_equipment amount = 160 producer = NEV }
 		}
 }
 
@@ -1009,7 +1036,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_warrior_culture"
-			
+			add_ideas = NEV_warrior_culture
 		}
 }
 
@@ -1030,7 +1057,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_get_old_tech"
-			
+			add_equipment_to_stockpile = { type = power_armor_equipment_x01 amount = 120 producer = NEV }
+			add_equipment_to_stockpile = { type = raptor_equipment amount = 11 producer = NEV }
 		}
 }
 
@@ -1052,7 +1080,10 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_pacify_squad"
-			
+			custom_effect_tooltip = NEV_pacify_squad_tt
+			hidden_effect = {
+				load_oob = "NEV_pacify_squad"
+			}
 		}
 }
 
@@ -1069,12 +1100,18 @@ shared_focus = {
 		prerequisite = { focus = NEV_des_warrior_culture }
 		prerequisite = { focus = NEV_des_get_old_tech }
 		ai_will_do = { 
-		factor = 50
+		factor = 500
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_fist_wave"
-			
+			custom_effect_tooltip = NEV_add_2_monthly_deploy_tt
+			hidden_effect = {
+				add_to_variable = {
+				var = deploy_points_monthly
+				value = 2
+				}
+			}
 		}
 }
 
@@ -1090,12 +1127,18 @@ shared_focus = {
 		available_if_capitulated = yes 
 		prerequisite = { focus = NEV_des_fist_wave }
 		ai_will_do = { 
-		factor = 50
+		factor = 500
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_second_wave"
-			
+			custom_effect_tooltip = NEV_add_2_monthly_deploy_tt
+			hidden_effect = {
+				add_to_variable = {
+				var = deploy_points_monthly
+				value = 2
+				}
+			}
 		}
 }
 
@@ -1111,12 +1154,25 @@ shared_focus = {
 		available_if_capitulated = yes 
 		prerequisite = { focus = NEV_des_pacify_squad }
 		ai_will_do = { 
-		factor = 50
+		factor = 5
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_sabotage_enemies"
+			FSR = {
+				country_event = { id = cloudsdale.30 }
+			}
+			RED = {
+				country_event = { id = cloudsdale.30 }
+			}
 			
+			SHA = {
+				country_event = { id = cloudsdale.30 }
+			}
+			
+			MSR = {
+				country_event = { id = cloudsdale.30 }
+			}
 		}
 }
 
@@ -1137,7 +1193,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_pure_warriors"
-			
+			swap_ideas = { remove_idea = NEV_warrior_culture  add_idea = NEV_warrior_culture_evil }
 		}
 }
 
@@ -1155,10 +1211,18 @@ shared_focus = {
 		ai_will_do = { 
 		factor = 300
 		} 
-
+		will_lead_to_war_with = HSW
+		will_lead_to_war_with = HSC
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_clean_swamp"
-			
+			create_wargoal = {
+				type = annex_everything
+				target = HSW
+			}
+			create_wargoal = {
+				type = annex_everything
+				target = HSC
+			}
 		}
 }
 
@@ -1179,7 +1243,13 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_plan_cauterize"
-			
+			custom_effect_tooltip = NEV_add_20_deploy_tt
+			hidden_effect = {
+				add_to_variable = {
+				var = deploy_points
+				value = 20
+				}
+			}
 		}
 }
 
@@ -1200,7 +1270,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_army_north"
-			
+			custom_effect_tooltip = NEV_army_north_tt
 		}
 }
 
@@ -1221,7 +1291,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_army_centre"
-			
+			custom_effect_tooltip = NEV_army_centre_tt
 		}
 }
 
