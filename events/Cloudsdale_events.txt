@@ -1349,6 +1349,132 @@ country_event = {
 	}
 }
 
+##Wasteland Survey
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.31"}
+ 	id = cloudsdale.31
+ 	title = cloudsdale.31.t
+ 	desc = cloudsdale.31.d
+	
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.31.a
+		ai_chance = { factor = 50}
+		add_war_support = 0.05
+		add_political_power = 50
+	}
+}
+
+#What to do about the Goddess
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.32"}
+ 	id = cloudsdale.32
+ 	title = cloudsdale.32.t
+ 	desc = cloudsdale.32.d
+	
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.32.a
+		ai_chance = { factor = 50}
+		add_stability = 0.05
+		add_political_power = 20
+	}
+	option = {
+		name = cloudsdale.32.b
+		ai_chance = { factor = 10}
+		UNI = { country_event = { id = cloudsdale.33 } }
+	}
+}
+
+#GPA offers Alliance
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.33"}
+ 	id = cloudsdale.33
+ 	title = cloudsdale.33.t
+ 	desc = cloudsdale.33.d
+	
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.33.a
+		ai_chance = { factor = 50}
+		custom_effect_tooltip = UNI_NEV_ally_tt
+		NEV = { country_event = { id = cloudsdale.34 } }
+		hidden_effect = { set_country_flag = cauterize_participant}
+	}
+	option = {
+		name = cloudsdale.33.b
+		ai_chance = { factor = 10}
+		NEV = { country_event = { id = cloudsdale.35 } }
+	}
+}
+
+##UNI accepts alliance
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.34"}
+ 	id = cloudsdale.34
+ 	title = cloudsdale.34.t
+ 	desc = cloudsdale.34.d
+	
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.34.a
+		ai_chance = { factor = 50}
+		add_war_support = 0.05
+		add_political_power = 50
+	}
+}
+
+##UNI rejects alliance
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.35"}
+ 	id = cloudsdale.35
+ 	title = cloudsdale.35.t
+ 	desc = cloudsdale.35.d
+	
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.35.a
+		ai_chance = { factor = 50}
+		add_political_power = -20
+	}
+}
+
+##EVR Dog get buffed
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.36"}
+ 	id = cloudsdale.36
+ 	title = cloudsdale.36.t
+ 	desc = cloudsdale.36.d
+	
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.36.a
+		ai_chance = { factor = 50}
+		add_manpower = 2000
+		add_equipment_to_stockpile = { type = infantry_equipment_1 amount = 800 producer = NEV }
+	}
+}
+
+
+
 
 
 
@@ -1377,7 +1503,15 @@ country_event = {
 	picture = GFX_event_griffon_back
 	
 	
-	is_triggered_only = yes
+	trigger = {
+		tag = NEV
+		NEV = {
+			focus_progress = {
+				focus = NEV_des_launch_cauterize
+				progress > 0.2
+			}
+		}
+	}
 	fire_only_once = yes
 
 	
@@ -1404,6 +1538,175 @@ country_event = {
 				set_country_flag = NEN_deployment_mode_pa
 			}
 		puppet = NEN
+	}
+}
+
+#Precision Strikes Canterlot
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_purge.2"}
+	id = cloudsdale_purge.2
+	title = cloudsdale_purge.2.t
+	desc = cloudsdale_purge.2.d
+
+	picture = GFX_event_griffon_back
+	
+	
+	fire_only_once = yes
+	trigger = {
+		has_full_control_of_state = 234
+		NEV = {
+			has_completed_focus = NEV_des_launch_cauterize
+		}	
+	}
+	
+	option ={
+	name = cloudsdale_purge.2.a
+	ai_chance = { factor = 90} 
+		
+		234 = { damage_building = { type = infrastructure damage = 3}  add_manpower = -2000 }
+	}
+}
+
+#Precision Strikes Friendship City
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_purge.3"}
+	id = cloudsdale_purge.3
+	title = cloudsdale_purge.3.t
+	desc = cloudsdale_purge.3.d
+
+	picture = GFX_event_griffon_back
+	
+	
+	fire_only_once = yes
+	trigger = {
+		has_full_control_of_state = 39
+		NEV = {
+			has_completed_focus = NEV_des_launch_cauterize
+		}	
+	}
+	
+	option ={
+	name = cloudsdale_purge.3.a
+	ai_chance = { factor = 90} 
+		
+		39 = { damage_building = { type = infrastructure damage = 3} damage_building = { type = industrial_complex damage = 2}  add_manpower = -342 }
+	}
+}
+
+#Precision Strikes New Appleloosa
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_purge.4"}
+	id = cloudsdale_purge.4
+	title = cloudsdale_purge.4.t
+	desc = cloudsdale_purge.4.d
+
+	picture = GFX_event_griffon_back
+	
+	
+	fire_only_once = yes
+	trigger = {
+		has_full_control_of_state = 563
+		NEV = {
+			has_completed_focus = NEV_des_launch_cauterize
+		}	
+	}
+	
+	option ={
+	name = cloudsdale_purge.4.a
+	ai_chance = { factor = 90} 
+		
+		563 = { remove_building = { type = infrastructure level = 1} damage_building = { type = industrial_complex damage = 2}  add_manpower = -219 }
+	}
+}
+
+#UNI joins Cauterize
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_purge.5"}
+	id = cloudsdale_purge.5
+	title = cloudsdale_purge.5.t
+	desc = cloudsdale_purge.5.d
+
+	picture = GFX_event_griffon_back
+	
+	
+	fire_only_once = yes
+	trigger = {
+		tag = UNI
+		has_country_flag = cauterize_participant
+		NEV = {
+			has_completed_focus = NEV_des_launch_cauterize
+		}	
+	}
+	
+	option ={
+	name = cloudsdale_purge.5.a
+	ai_chance = { factor = 90} 
+		
+		
+	}
+}
+
+#EVR joins Cauterize
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_purge.6"}
+	id = cloudsdale_purge.6
+	title = cloudsdale_purge.6.t
+	desc = cloudsdale_purge.6.d
+
+	picture = GFX_event_griffon_back
+	
+	
+	fire_only_once = yes
+	trigger = {
+		tag = EVR
+		has_country_flag = cauterize_participant
+		NEV = {
+			has_completed_focus = NEV_des_launch_cauterize
+		}	
+	}
+	
+	option ={
+	name = cloudsdale_purge.6.a
+	ai_chance = { factor = 90} 
+		declare_war_on = { 
+		    type = annex_everything 
+			target = RED
+			}
+		
+	}
+}
+
+#Army Groups join Cauterize
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_purge.7"}
+	id = cloudsdale_purge.7
+	title = cloudsdale_purge.7.t
+	desc = cloudsdale_purge.7.d
+
+	picture = GFX_event_griffon_back
+	
+	
+	fire_only_once = no
+	is_triggered_only = yes
+	
+	option ={
+	name = cloudsdale_purge.7.a
+	ai_chance = { factor = 90} 
+		every_neighbor_country = {
+			limit = {
+				NOT = { has_war_with = ROOT }
+			}
+			ROOT = {
+				hidden_effect = {
+					create_wargoal = { 
+						type = annex_everything 
+						target = PREV
+					}
+				}
+				declare_war_on = { target = PREV type = annex_everything }
+			}
+		}
+		
 	}
 }
 
