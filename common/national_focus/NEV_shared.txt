@@ -4,7 +4,7 @@
 #The Conspiracy
 shared_focus = {
 		id = NEV_conspiracy
-		icon = gfx_goal_unknown
+		icon = GFX_goal_NEV_the_conspiracy
 		x = 14
 		y = 0
 		cost = 1
@@ -17,6 +17,7 @@ shared_focus = {
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_conspiracy"
 			country_event = { id = cloudsdale.1 }
+			set_country_flag = NEV_deploy_points_unlock
 			
 		}
 }
@@ -24,7 +25,7 @@ shared_focus = {
 #The Fateful Day
 shared_focus = {
 		id = NEV_day_fate
-		icon = gfx_goal_unknown
+		icon = GFX_goal_NEV_fateful_day
 		x = 14
 		y = 1
 		cost = 1
@@ -45,7 +46,7 @@ shared_focus = {
 #The City of New Cloudsdale
 shared_focus = {
 		id = NEV_new_cloudsdale
-		icon = gfx_goal_unknown
+		icon = GFX_goal_NEV_cloudsdale
 		x = 14
 		y = 2
 		cost = 1
@@ -770,6 +771,1198 @@ shared_focus = {
 			
 		}
 }
+
+###############
+##Destruction##
+###############
+
+#Institute emergency Powers
+shared_focus = {
+		id = NEV_des_emergency_powers
+		icon = gfx_goal_unknown
+		x = 0
+		y = 2
+		relative_position_id = NEV_new_government
+		cost = 4.38
+		allow_branch = {
+		has_country_flag = NEV_cauterize
+		}
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_new_government }
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_emergency_powers"
+			custom_effect_tooltip = NEV_des_deploy_point_tt
+			hidden_effect = {
+				set_country_flag = NEV_deploy_points_unlock
+			}
+		}
+}
+
+#Industrial reforms
+shared_focus = {
+		id = NEV_des_industry_reform
+		icon = gfx_goal_unknown
+		x = 8
+		y = 2
+		relative_position_id = NEV_des_emergency_powers
+		cost = 4.38
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_emergency_powers }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_industry_reform"
+			add_tech_bonus = {
+				name = industry_bonus
+				bonus = 0.75
+				uses = 2
+				category = industry
+			}
+		}
+}
+
+# Divert to Army Production
+shared_focus = {
+		id = NEV_des_divert_production
+		icon = gfx_goal_unknown
+		x = -1
+		y = 1
+		relative_position_id = NEV_des_industry_reform
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_industry_reform }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_divert_production"
+			add_offsite_building = { type = arms_factory level = 2 }
+		}
+}
+
+# Enforce Requisitioning
+shared_focus = {
+		id = NEV_des_requisitioning
+		icon = gfx_goal_unknown
+		x = 1
+		y = 1
+		relative_position_id = NEV_des_industry_reform
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_industry_reform }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_requisitioning"
+			add_ideas = NEV_des_requisitioning1
+		}
+}
+
+#Research Group Tartarus
+shared_focus = {
+		id = NEV_des_tartarus
+		icon = gfx_goal_unknown
+		x = 0
+		y = 2
+		relative_position_id = NEV_des_industry_reform
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_divert_production }
+		prerequisite = { focus = NEV_des_requisitioning }
+		ai_will_do = { 
+		factor = 500
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_tartarus"
+			add_research_slot = 1
+		}
+}
+
+#Surface Pioneer Corps
+shared_focus = {
+		id = NEV_des_pioneers
+		icon = gfx_goal_unknown
+		x = -1
+		y = 3
+		relative_position_id = NEV_des_industry_reform
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_tartarus }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_pioneers"
+			add_ideas = NEV_surface_pioneers
+		}
+}
+
+#Re-tool Consumer Factories
+shared_focus = {
+		id = NEV_des_re_tool_factory
+		icon = gfx_goal_unknown
+		x = 1
+		y = 3
+		relative_position_id = NEV_des_industry_reform
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_tartarus }
+		ai_will_do = { 
+		factor = 500
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_re_tool_factory"
+			swap_ideas = { remove_idea = NEV_des_requisitioning1  add_idea = NEV_des_requisitioning2 }
+		}
+}
+
+#Prepare Economic Mobilisation
+shared_focus = {
+		id = NEV_des_eco_mobilisation
+		icon = gfx_goal_unknown
+		x = 0
+		y = 4
+		relative_position_id = NEV_des_industry_reform
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_pioneers focus = NEV_des_re_tool_factory }
+		ai_will_do = { 
+		factor = 500
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_eco_mobilisation"
+			if = {
+				limit = { has_idea = isolation }
+				add_ideas = partial_economic_mobilisation
+			}
+			else_if = {
+				limit = { has_idea = low_economic_mobilisation }
+				add_ideas = partial_economic_mobilisation
+			}
+			else_if = {
+				limit = { has_idea = civilian_economy }
+				add_ideas = partial_economic_mobilisation
+			}
+			else_if = {
+				limit = { has_idea = partial_economic_mobilisation }
+				add_ideas = war_economy
+			}
+			add_offsite_building = { type = arms_factory level = 2 }
+		}
+}
+
+#Military reforms
+shared_focus = {
+		id = NEV_des_military_reform
+		icon = gfx_goal_unknown
+		x = -8
+		y = 3
+		relative_position_id = NEV_des_emergency_powers
+		cost = 4.38
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_emergency_powers }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_military_reform"
+			add_tech_bonus = {
+				name = recon_bonus
+				bonus = 1.0
+				uses = 2
+				category = cat_elite_army
+			}
+		}
+}
+
+#Requisition Arms
+shared_focus = {
+		id = NEV_des_get_guns
+		icon = gfx_goal_unknown
+		x = -2
+		y = 1
+		relative_position_id = NEV_des_military_reform
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_military_reform }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_get_guns"
+			add_equipment_to_stockpile = { type = energy_equipment_2 amount = 600 producer = NEV }
+			add_equipment_to_stockpile = { type = support_equipment amount = 160 producer = NEV }
+		}
+}
+
+#Revive Warrior Culture
+shared_focus = {
+		id = NEV_des_warrior_culture
+		icon = gfx_goal_unknown
+		x = 0
+		y = 1
+		relative_position_id = NEV_des_military_reform
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_military_reform }
+		ai_will_do = { 
+		factor = 500
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_warrior_culture"
+			add_ideas = NEV_warrior_culture
+		}
+}
+
+#Requisition Old World tech
+shared_focus = {
+		id = NEV_des_get_old_tech
+		icon = gfx_goal_unknown
+		x = 2
+		y = 1
+		relative_position_id = NEV_des_military_reform
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_military_reform }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_get_old_tech"
+			add_equipment_to_stockpile = { type = power_armor_equipment_x01 amount = 120 producer = NEV }
+			add_equipment_to_stockpile = { type = raptor_equipment amount = 11 producer = NEV }
+		}
+}
+
+#train Pacification Squads
+shared_focus = {
+		id = NEV_des_pacify_squad
+		icon = gfx_goal_unknown
+		x = -1
+		y = 2
+		relative_position_id = NEV_des_military_reform
+		cost = 4.38
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_get_guns }
+		prerequisite = { focus = NEV_des_warrior_culture }
+		ai_will_do = { 
+		factor = 500
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_pacify_squad"
+			custom_effect_tooltip = NEV_pacify_squad_tt
+			hidden_effect = {
+				load_oob = "NEV_pacify_squad"
+			}
+		}
+}
+
+#First Wave Volunteers
+shared_focus = {
+		id = NEV_des_fist_wave
+		icon = gfx_goal_unknown
+		x = 1
+		y = 2
+		relative_position_id = NEV_des_military_reform
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_warrior_culture }
+		prerequisite = { focus = NEV_des_get_old_tech }
+		ai_will_do = { 
+		factor = 500
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_fist_wave"
+			custom_effect_tooltip = NEV_add_2_monthly_deploy_tt
+			hidden_effect = {
+				add_to_variable = {
+				var = deploy_points_monthly
+				value = 2
+				}
+			}
+		}
+}
+
+#Second Wave Volunteers
+shared_focus = {
+		id = NEV_des_second_wave
+		icon = gfx_goal_unknown
+		x = 1
+		y = 3
+		relative_position_id = NEV_des_military_reform
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_fist_wave }
+		ai_will_do = { 
+		factor = 500
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_second_wave"
+			custom_effect_tooltip = NEV_add_2_monthly_deploy_tt
+			hidden_effect = {
+				add_to_variable = {
+				var = deploy_points_monthly
+				value = 2
+				}
+			}
+		}
+}
+
+#Sabotage Dangerous Enemies
+shared_focus = {
+		id = NEV_des_sabotage_enemies
+		icon = gfx_goal_unknown
+		x = -1
+		y = 3
+		relative_position_id = NEV_des_military_reform
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_pacify_squad }
+		ai_will_do = { 
+		factor = 5
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_sabotage_enemies"
+			FSR = {
+				country_event = { id = cloudsdale.30 }
+			}
+			RED = {
+				country_event = { id = cloudsdale.30 }
+			}
+			
+			SHA = {
+				country_event = { id = cloudsdale.30 }
+			}
+			
+			MSR = {
+				country_event = { id = cloudsdale.30 }
+			}
+		}
+}
+
+#Pure Warriors for an Impure World
+shared_focus = {
+		id = NEV_des_pure_warriors
+		icon = gfx_goal_unknown
+		x = 0
+		y = 4
+		relative_position_id = NEV_des_military_reform
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_sabotage_enemies focus = NEV_des_second_wave }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_pure_warriors"
+			swap_ideas = { remove_idea = NEV_warrior_culture  add_idea = NEV_warrior_culture_evil }
+		}
+}
+
+#Cleaning the Swamp
+shared_focus = {
+		id = NEV_des_clean_swamp
+		icon = gfx_goal_unknown
+		x = 0
+		y = 1
+		relative_position_id = NEV_des_emergency_powers
+		cost = 4.38
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_emergency_powers }
+		ai_will_do = { 
+		factor = 300
+		} 
+		will_lead_to_war_with = HSW
+		will_lead_to_war_with = HSC
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_clean_swamp"
+			create_wargoal = {
+				type = annex_everything
+				target = HSW
+			}
+			create_wargoal = {
+				type = annex_everything
+				target = HSC
+			}
+		}
+}
+
+#Start Planning Cauterize
+shared_focus = {
+		id = NEV_des_plan_cauterize
+		icon = gfx_goal_unknown
+		x = 0
+		y = 2
+		relative_position_id = NEV_des_emergency_powers
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_clean_swamp }
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_plan_cauterize"
+			custom_effect_tooltip = NEV_add_20_deploy_tt
+			hidden_effect = {
+				add_to_variable = {
+				var = deploy_points
+				value = 20
+				}
+			}
+		}
+}
+
+#Army group North
+shared_focus = {
+		id = NEV_des_army_north
+		icon = gfx_goal_unknown
+		x = -1
+		y = 3
+		relative_position_id = NEV_des_emergency_powers
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_plan_cauterize }
+		ai_will_do = { 
+		factor = 500
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_army_north"
+			custom_effect_tooltip = NEV_army_north_tt
+		}
+}
+
+#Army group Centre
+shared_focus = {
+		id = NEV_des_army_centre
+		icon = gfx_goal_unknown
+		x = 1
+		y = 3
+		relative_position_id = NEV_des_emergency_powers
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_plan_cauterize }
+		ai_will_do = { 
+		factor = 500
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_army_centre"
+			custom_effect_tooltip = NEV_army_centre_tt
+		}
+}
+
+#Wasteland Survey
+shared_focus = {
+		id = NEV_des_scout_waste
+		icon = gfx_goal_unknown
+		x = -2
+		y = 4
+		relative_position_id = NEV_des_emergency_powers
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_army_north }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_scout_waste"
+			country_event = { id = cloudsdale.31 }
+		}
+}
+
+#Surgical Strikes
+shared_focus = {
+		id = NEV_des_surgical_strike
+		icon = gfx_goal_unknown
+		x = -4
+		y = 5
+		relative_position_id = NEV_des_emergency_powers
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_scout_waste }
+		prerequisite = { focus = NEV_des_get_old_tech }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_surgical_strike"
+			custom_effect_tooltip = NEV_surgical_stikett
+		}
+}
+
+#How to deal with the Goddess
+shared_focus = {
+		id = NEV_des_goddess
+		icon = gfx_goal_unknown
+		x = -4
+		y = 6
+		relative_position_id = NEV_des_emergency_powers
+		cost = 4.38
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_surgical_strike }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_goddess"
+			country_event = { id = cloudsdale.32 }
+		}
+}
+
+#Military Research Initiatives
+shared_focus = {
+		id = NEV_des_military_research
+		icon = gfx_goal_unknown
+		x = 2
+		y = 4
+		relative_position_id = NEV_des_emergency_powers
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_army_centre }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_military_research"
+			add_research_slot = 1
+		}
+}
+
+#Hellhound Studies
+shared_focus = {
+		id = NEV_des_hellhound_studies
+		icon = gfx_goal_unknown
+		x = 4
+		y = 5
+		relative_position_id = NEV_des_emergency_powers
+		cost = 4.38
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_military_research }
+		prerequisite = { focus = NEV_des_tartarus }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_hellhound_studies"
+			add_tech_bonus = {
+				name = race_bonus
+				bonus = 0.75
+				uses = 2
+				category = race_tech
+			}
+			hidden_effect = {
+				EVR = {
+					country_event = { id = cloudsdale.36 }
+				}
+			}
+		}
+}
+
+#High Frequency Contol
+shared_focus = {
+		id = NEV_des_hellhound_control
+		icon = gfx_goal_unknown
+		x = 4
+		y = 6
+		relative_position_id = NEV_des_emergency_powers
+		cost = 4.38
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_hellhound_studies }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_hellhound_control"
+			custom_effect_tooltip = NEV_dogs_will_attacktt
+			hidden_effect = {
+				EVR = {
+					set_country_flag = cauterize_participant
+				}
+			}
+		}
+}
+
+#Divert Troops to the Army Groups
+shared_focus = {
+		id = NEV_des_army_groups
+		icon = gfx_goal_unknown
+		x = 0
+		y = 4
+		relative_position_id = NEV_des_emergency_powers
+		cost = 4.38
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_army_centre }
+		prerequisite = { focus = NEV_des_army_north }
+		ai_will_do = { 
+		factor = 500
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_army_groups"
+			if = {
+			limit = {
+				is_ai = no
+			}
+				custom_effect_tooltip = NEV_divert_army_groups_tt
+				hidden_effect = {add_to_variable = {var = common_units_n value = 3} NEN = { add_to_variable = {var = common_units value = 3}} add_to_variable = {var = common_units_c value = 3} NEC = { add_to_variable = {var = common_units value = 3}}}
+			}
+			else_if = {
+			limit = {
+				is_ai = yes
+			}
+				add_to_variable = {var = common_units_n value = 12} NEN = { add_to_variable = {var = common_units value = 12}}
+				add_to_variable = {var = common_units_c value = 12} NEC = { add_to_variable = {var = common_units value = 12}}
+			}
+		}
+}
+
+#Build up strategic Reserve
+shared_focus = {
+		id = NEV_des_strategic_reserve
+		icon = gfx_goal_unknown
+		x = 0
+		y = 5
+		relative_position_id = NEV_des_emergency_powers
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_army_groups }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_strategic_reserve"
+			add_equipment_to_stockpile = { type = energy_equipment_2 amount = 600 producer = NEV }
+		}
+}
+
+#Lightning Warfare
+shared_focus = {
+		id = NEV_des_lightning_warfare
+		icon = gfx_goal_unknown
+		x = -2
+		y = 6
+		relative_position_id = NEV_des_emergency_powers
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_strategic_reserve }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_lightning_warfare"
+			add_tech_bonus = {
+				name = recon_bonus
+				bonus = 0.6
+				uses = 3
+				category = air_doctrine
+			}
+		}
+}
+
+#He who strikes first...
+shared_focus = {
+		id = NEV_des_strike_first
+		icon = gfx_goal_unknown
+		x = -2
+		y = 7
+		relative_position_id = NEV_des_emergency_powers
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_goddess }
+		prerequisite = { focus = NEV_des_lightning_warfare }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_strike_first"
+			add_tech_bonus = {
+				name = recon_bonus
+				bonus = 1.6
+				uses = 1
+				category = energy_weaponry_tech
+			}
+		}
+}
+
+#Overcloud Logistics
+shared_focus = {
+		id = NEV_des_cloud_logistics
+		icon = gfx_goal_unknown
+		x = 2
+		y = 6
+		relative_position_id = NEV_des_emergency_powers
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_strategic_reserve }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_cloud_logistics"
+			add_ideas = NEV_cloud_logistics
+		}
+}
+
+#...shall win swiftly
+shared_focus = {
+		id = NEV_des_and_swiftly
+		icon = gfx_goal_unknown
+		x = 2
+		y = 7
+		relative_position_id = NEV_des_emergency_powers
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_cloud_logistics }
+		prerequisite = { focus = NEV_des_hellhound_control }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_and_swiftly"
+			add_tech_bonus = {
+				name = recon_bonus
+				bonus = 1.6
+				uses = 1
+				category = electronics
+			}
+		}
+}
+
+#Final Preperations
+shared_focus = {
+		id = NEV_des_final_prep
+		icon = gfx_goal_unknown
+		x = 0
+		y = 8
+		relative_position_id = NEV_des_emergency_powers
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_strike_first }
+		prerequisite = { focus = NEV_des_and_swiftly }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_final_prep"
+			add_manpower = 600
+			add_political_power = 100
+		}
+}
+
+#Launch Operation Cauterize
+shared_focus = {
+		id = NEV_des_launch_cauterize
+		icon = gfx_goal_unknown
+		x = 0
+		y = 9
+		relative_position_id = NEV_des_emergency_powers
+		cost = 8.6
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_final_prep }
+		ai_will_do = { 
+		factor = 500
+		} 
+		
+		will_lead_to_war_with = FSR
+		will_lead_to_war_with = RED
+		will_lead_to_war_with = SHA
+		will_lead_to_war_with = MAN
+		will_lead_to_war_with = LRA
+		will_lead_to_war_with = NAP
+		will_lead_to_war_with = UNI
+		will_lead_to_war_with = EVR
+		will_lead_to_war_with = NCG
+		will_lead_to_war_with = MWY
+		will_lead_to_war_with = REP
+		will_lead_to_war_with = LGH
+		will_lead_to_war_with = GUN
+		will_lead_to_war_with = APR
+		will_lead_to_war_with = FRT
+		will_lead_to_war_with = RWK
+		will_lead_to_war_with = MUD
+		will_lead_to_war_with = STT
+		will_lead_to_war_with = FER
+		will_lead_to_war_with = RTA
+		will_lead_to_war_with = RAR
+		will_lead_to_war_with = EMP
+		will_lead_to_war_with = MRA
+		will_lead_to_war_with = ABT
+		will_lead_to_war_with = MSR
+		will_lead_to_war_with = ARB
+		will_lead_to_war_with = MAR
+		will_lead_to_war_with = TEN
+		will_lead_to_war_with = GUT
+		will_lead_to_war_with = FRI
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_launch_cauterize"
+			custom_effect_tooltip = NEV_cauterize_start_tt
+			NEN = {country_event = { id = cloudsdale_purge.7 }}
+			NEC = {country_event = { id = cloudsdale_purge.7 }}
+			hidden_effect = {
+				every_neighbor_country = {
+					limit = {
+						NOT = { has_war_with = ROOT }
+					}
+					ROOT = {
+						declare_war_on = { target = PREV type = annex_everything }
+					}
+				}
+				NEV = {
+					declare_war_on = { 
+						type = annex_everything 
+						target = SHA 
+					}
+				}
+				NEV = {
+					declare_war_on = { 
+						type = annex_everything 
+						target = TEN 
+					}
+				}
+				NEV = {
+					declare_war_on = { 
+						type = annex_everything 
+						target = FSR 
+					}
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = MAN
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = LRA
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = NAP
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = EVR
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = NCG
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = REP
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = LGH
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = GUN
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = APR
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = FRT
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = RWK
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = MUD
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = STT
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = FER
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = RTA
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = MRA
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = RAR
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = ABT
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = MAR
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = GUT
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = FRI
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = FTP
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = CCD
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = GLY
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = PRA
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = STA
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = CAL
+				}
+				create_wargoal = {
+				type = annex_everything
+				target = SCI
+				}
+				declare_war_on = { 
+					type = annex_everything 
+					target = HIT
+				}
+				declare_war_on = { 
+					type = annex_everything 
+					target = GRV
+				}
+				declare_war_on = { 
+					type = annex_everything 
+					target = FTR 
+				}
+				declare_war_on = { 
+					type = annex_everything 
+					target = ERA
+				}
+				declare_war_on = { 
+					type = annex_everything 
+					target = SSC
+				}
+				declare_war_on = { 
+					type = annex_everything 
+					target = SSR
+				}
+				declare_war_on = { 
+					type = annex_everything 
+					target = SSS
+				}
+				declare_war_on = { 
+					type = annex_everything 
+					target = CAT
+				}
+				declare_war_on = { 
+					type = annex_everything 
+					target = FLT
+				}
+				
+			}
+		}
+}
+
+#The Wartime Draft
+shared_focus = {
+		id = NEV_des_war_draft
+		icon = gfx_goal_unknown
+		x = 0
+		y = 1
+		relative_position_id = NEV_des_launch_cauterize
+		cost = 17.2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_launch_cauterize }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_war_draft"
+			add_manpower = 6000
+			
+		}
+}
+
+#Build up the Swamps
+shared_focus = {
+		id = NEV_des_war_build_swamps
+		icon = gfx_goal_unknown
+		x = 2
+		y = 1
+		relative_position_id = NEV_des_launch_cauterize
+		cost = 17.2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_launch_cauterize }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_war_build_swamps"
+			796 = {add_extra_state_shared_building_slots = 3 add_building_construction = {type = industrial_complex level = 1 instant_build = yes }}
+			792 = {add_extra_state_shared_building_slots = 3 add_building_construction = {type = industrial_complex level = 1 instant_build = yes }}
+			592 = {add_extra_state_shared_building_slots = 3 add_building_construction = {type = industrial_complex level = 1 instant_build = yes }}
+			793 = {add_extra_state_shared_building_slots = 3 add_building_construction = {type = industrial_complex level = 1 instant_build = yes }}
+			574 = {add_extra_state_shared_building_slots = 3 add_building_construction = {type = industrial_complex level = 1 instant_build = yes }}
+			568 = {add_extra_state_shared_building_slots = 3 add_building_construction = {type = industrial_complex level = 1 instant_build = yes }}
+		}
+}
+
+#The Great Push
+shared_focus = {
+		id = NEV_des_war_great_push
+		icon = gfx_goal_unknown
+		x = 4
+		y = 1
+		relative_position_id = NEV_des_launch_cauterize
+		cost = 17.2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_launch_cauterize }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_war_great_push"
+			add_timed_idea = {idea = NEV_great_push days = 120}
+			
+		}
+}
+
+#Recruit local collaborators
+shared_focus = {
+		id = NEV_des_war_collaborators
+		icon = gfx_goal_unknown
+		x = -2
+		y = 1
+		relative_position_id = NEV_des_launch_cauterize
+		cost = 17.2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_launch_cauterize }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_war_great_push"
+			add_ideas = NEV_des_colaborators
+			
+		}
+}
+
+#Salvage destroyed PA
+shared_focus = {
+		id = NEV_des_war_salvage_pa
+		icon = gfx_goal_unknown
+		x = -4
+		y = 1
+		relative_position_id = NEV_des_launch_cauterize
+		cost = 17.2
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = NEV_des_launch_cauterize }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus NEV_des_war_salvaga_pa"
+			add_equipment_to_stockpile = { type = power_armor_equipment_2 amount = 600 producer = NEV }
+			
+		}
+}
+
+
 
 
 
