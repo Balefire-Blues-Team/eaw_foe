@@ -1,0 +1,684 @@
+NEV_deployment_points = {
+	
+	NEV_deploy_points_income = {
+		icon = GFX_decision_unknown
+		### Never "complete" success
+		activation  = {
+			#has_country_flag = NEV_deploy_points_unlock
+			has_completed_focus = NEV_des_emergency_powers
+		}
+		available = {
+			NOT = {
+				country_exists = RED
+				country_exists = SHA
+				country_exists = FSR
+				country_exists = TEN
+			}
+		}
+		allowed = {
+			tag = NEV
+		}
+		is_good = yes
+		days_mission_timeout = 30
+		fire_only_once = no
+		###Add points to actual number
+		timeout_effect = {
+			custom_effect_tooltip = NEV_deploy_points_gaintt
+				
+				###Add points of monthly net
+				
+				add_to_variable = {
+				var = deploy_points
+				value = deploy_points_monthly
+				}
+		}
+		days_re_enable = 0
+		days_remove = 1
+	}
+	
+	NEV_deploy_guns = {
+		icon = generic_construction
+		ai_will_do = {
+			factor = 20
+			
+		}
+		is_good = yes
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = NEV_loose_5_deploy
+                    check_variable = {
+                        deploy_points > 4
+                    }
+            }
+		}
+		
+		visible = {
+			
+		}
+		days_re_enable = 20
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEV_deploy_guns"
+			custom_effect_tooltip = NEV_loose_5_deploy
+			
+			subtract_from_variable = {
+				var = deploy_points
+				value = 5
+			}
+			add_equipment_to_stockpile = { type = energy_equipment_2 amount = 200 producer = NEV }
+		}
+	}
+	
+	NEV_deploy_soldiers = {
+		icon = generic_construction
+		ai_will_do = {
+			factor = 20
+			modifier = {
+					#Prio if low on manpower
+					factor = 20
+					manpower_per_military_factory <  100
+				}
+		}
+		is_good = yes
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = NEV_loose_6_deploy
+                    check_variable = {
+                        deploy_points > 5
+                    }
+            }
+		}
+		
+		visible = {
+			
+		}
+		days_re_enable = 20
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEV_deploy_soldiers"
+			custom_effect_tooltip = NEV_loose_6_deploy
+			
+			subtract_from_variable = {
+				var = deploy_points
+				value = 6
+			}
+			add_manpower = 300
+		}
+	}
+	
+	NEV_deploy_arms_factory = {
+		icon = generic_construction
+		ai_will_do = {
+			factor = 200
+			
+		}
+		is_good = yes
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = NEV_loose_10_deploy
+                    check_variable = {
+                        deploy_points > 9
+                    }
+            }
+		}
+		
+		visible = {
+			
+		}
+		days_re_enable = 40
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEV_deploy_arms_factory"
+			custom_effect_tooltip = NEV_loose_10_deploy
+			
+			subtract_from_variable = {
+				var = deploy_points
+				value = 10
+			}
+			add_offsite_building = { type = arms_factory level = 1 }
+		}
+	}
+	
+	NEV_deploy_industrial_complex = {
+		icon = generic_construction
+		ai_will_do = {
+			factor = 0
+			
+		}
+		is_good = yes
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = NEV_loose_14_deploy
+                    check_variable = {
+                        deploy_points > 13
+                    }
+            }
+		}
+		
+		visible = {
+			
+		}
+		days_re_enable = 40
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEV_deploy_industrial_complex"
+			custom_effect_tooltip = NEV_loose_14_deploy
+			
+			subtract_from_variable = {
+				var = deploy_points
+				value = 14
+			}
+			add_offsite_building = { type = industrial_complex level = 1 }
+		}
+	}	
+}
+
+NEV_deployment_centre = {
+
+	NEC_deploy_inf = {
+		icon = GFX_decision_unknown
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = NEV_loose_4_deploy
+                    check_variable = {
+                        deploy_points > 3
+                    }
+            }
+		}
+
+		is_good = yes
+		days_re_enable = 1
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEC_deploy_inf"
+			custom_effect_tooltip = NEV_loose_4_deploy
+			custom_effect_tooltip = NEV_add_inf_centrett
+			
+			subtract_from_variable = {
+				var = deploy_points
+				value = 4
+			}
+			add_to_variable = {
+				var = common_units_c
+				value = 1
+			}
+			NEC = {
+				add_to_variable = {
+				var = common_units
+				value = 1
+				}
+			}
+			
+		}
+	}
+	
+	NEC_deploy_eli = {
+		icon = GFX_decision_unknown
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = NEV_loose_7_deploy
+                    check_variable = {
+                        deploy_points > 6
+                    }
+            }
+		}
+
+		is_good = yes
+		days_re_enable = 10
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEC_deploy_eli"
+			custom_effect_tooltip = NEV_loose_7_deploy
+			custom_effect_tooltip = NEV_add_eli_centrett
+			
+			subtract_from_variable = {
+				var = deploy_points
+				value = 7
+			}
+			add_to_variable = {
+				var = elite_units_c
+				value = 1
+			}
+			NEC = {
+				add_to_variable = {
+				var = elite_units
+				value = 1
+				}
+			}
+			
+		}
+	}
+	
+	NEC_deploy_guns = {
+		icon = generic_construction
+		ai_will_do = {
+			factor = 20
+			
+		}
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = NEV_loose_4_deploy
+                    check_variable = {
+                        deploy_points > 3
+                    }
+            }
+		}
+		
+		visible = {
+			
+		}
+		days_re_enable = 10
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEC_deploy_guns"
+			custom_effect_tooltip = NEV_loose_4_deploy
+			
+			subtract_from_variable = {
+				var = deploy_points
+				value = 4
+			}
+			NEC = {
+			add_equipment_to_stockpile = { type = energy_equipment_2 amount = 200 producer = NEV }
+			}
+			add_to_variable = {
+				var = armory_inf_c
+				value = 200
+			}
+		}
+	}
+	
+	NEC_deploy_pa = {
+		icon = generic_construction
+		ai_will_do = {
+			factor = 20
+			
+		}
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = NEV_loose_4_deploy
+                    check_variable = {
+                        deploy_points > 3
+                    }
+            }
+		}
+		
+		visible = {
+			
+		}
+		days_re_enable = 10
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEC_deploy_pa"
+			custom_effect_tooltip = NEV_loose_4_deploy
+			
+			subtract_from_variable = {
+				var = deploy_points
+				value = 4
+			}
+			NEC = {
+			add_equipment_to_stockpile = { type = power_armor_equipment_x01 amount = 50 producer = NEV }
+			}
+			add_to_variable = {
+				var = armory_pa_c
+				value = 50
+			}
+		}
+	}
+
+
+
+
+
+}
+
+NEV_deployment_north = {
+
+	NEN_deploy_inf = {
+		icon = GFX_decision_unknown
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = NEV_loose_4_deploy
+                    check_variable = {
+                        deploy_points > 3
+                    }
+            }
+		}
+
+		is_good = yes
+		days_re_enable = 1
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEN_deploy_inf"
+			custom_effect_tooltip = NEV_loose_4_deploy
+			custom_effect_tooltip = NEV_add_inf_northtt
+			
+			subtract_from_variable = {
+				var = deploy_points
+				value = 4
+			}
+			add_to_variable = {
+				var = common_units_n
+				value = 1
+			}
+			NEN = {
+				add_to_variable = {
+				var = common_units
+				value = 1
+				}
+			}
+			
+		}
+	}
+	
+	NEN_deploy_eli = {
+		icon = GFX_decision_unknown
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = NEV_loose_7_deploy
+                    check_variable = {
+                        deploy_points > 6
+                    }
+            }
+		}
+
+		is_good = yes
+		days_re_enable = 10
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEN_deploy_eli"
+			custom_effect_tooltip = NEV_loose_7_deploy
+			custom_effect_tooltip = NEV_add_eli_northtt
+			
+			subtract_from_variable = {
+				var = deploy_points
+				value = 7
+			}
+			add_to_variable = {
+				var = elite_units_n
+				value = 1
+			}
+			NEN = {
+				add_to_variable = {
+				var = elite_units
+				value = 1
+				}
+			}
+			
+		}
+	}
+	
+	NEN_deploy_guns = {
+		icon = generic_construction
+		ai_will_do = {
+			factor = 20
+			
+		}
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = NEV_loose_4_deploy
+                    check_variable = {
+                        deploy_points > 3
+                    }
+            }
+		}
+		
+		visible = {
+			
+		}
+		days_re_enable = 10
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEN_deploy_guns"
+			custom_effect_tooltip = NEV_loose_4_deploy
+			
+			subtract_from_variable = {
+				var = deploy_points
+				value = 4
+			}
+			NEN = {
+			add_equipment_to_stockpile = { type = energy_equipment_2 amount = 200 producer = NEV }
+			}
+			add_to_variable = {
+				var = armory_inf_n
+				value = 200
+			}
+		}
+	}
+	
+	NEN_deploy_pa = {
+		icon = generic_construction
+		ai_will_do = {
+			factor = 20
+			
+		}
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = NEV_loose_4_deploy
+                    check_variable = {
+                        deploy_points > 3
+                    }
+            }
+		}
+		
+		visible = {
+			
+		}
+		days_re_enable = 10
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEN_deploy_pa"
+			custom_effect_tooltip = NEV_loose_4_deploy
+			
+			subtract_from_variable = {
+				var = deploy_points
+				value = 4
+			}
+			NEN = {
+			add_equipment_to_stockpile = { type = power_armor_equipment_x01 amount = 50 producer = NEV }
+			}
+			add_to_variable = {
+				var = armory_pa_n
+				value = 50
+			}
+		}
+	}
+}
+
+NEV_kommiserrats = {
+
+	NEV_link_up_centre = {
+		icon = generic_construction
+		ai_will_do = {
+			factor = 2000
+			modifier = { factor = 0 or = { MSR = { exists = yes} ARB = { exists = yes }}}
+		}
+		fire_only_once = yes
+		is_good = yes
+		available = {
+			any_neighbor_country = {
+				original_tag = NEC
+			}
+		}
+		visible = {
+			
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEV_link_up_centre"
+			NEV = { annex_country = { target = NEC transfer_troops = yes }}
+			if = { limit = { is_ai = yes } add_manpower = 1000 }
+			
+			
+		}
+	}
+	
+	NEV_link_up_north = {
+		icon = generic_construction
+		ai_will_do = {
+			factor = 2000
+			modifier = { factor = 0 or = { RED = { exists = yes }}}
+		}
+		fire_only_once = yes
+		is_good = yes
+		available = {
+			any_neighbor_country = {
+				original_tag = NEN
+			}
+		}
+		visible = {
+			
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEV_link_up_north"
+			NEV = { annex_country = { target = NEN transfer_troops = yes }}
+			if = { limit = { is_ai = yes } add_manpower = 1000 }
+			
+			
+			
+		}
+	}
+	
+	NEV_protectorate_tenpony = {
+		icon = generic_construction
+		ai_will_do = {
+			factor = 2000
+		}
+		fire_only_once = yes
+		is_good = yes
+		available = {
+			owns_state = 21
+			owns_state = 478
+			owns_state = 39
+			owns_state = 18
+			owns_state = 469
+			owns_state = 55
+		}
+		visible = {
+			TEN = { exists = no}
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEV_protectorate_tenpony"
+			TEN = {
+				transfer_state = 21
+				21 = {  add_core_of = TEN}
+				transfer_state = 478
+				478 = {  add_core_of = TEN}
+				transfer_state = 39
+				39 = {  add_core_of = TEN}
+				transfer_state = 18
+				18 = {  add_core_of = TEN}
+				transfer_state = 469
+				469 = {  add_core_of = TEN}
+				transfer_state = 55
+				55 = {  add_core_of = TEN}
+			}
+			puppet = TEN
+			
+			TEN = {set_cosmetic_tag = TEN_enclave}
+	
+		}
+	}
+	
+	NEV_protectorate_sha = {
+		icon = generic_construction
+		ai_will_do = {
+			factor = 2000
+		}
+		fire_only_once = yes
+		is_good = yes
+		available = {
+			owns_state = 261
+			owns_state = 311
+			owns_state = 578
+			owns_state = 334
+			owns_state = 610
+			owns_state = 562
+			owns_state = 500
+			owns_state = 572
+			owns_state = 588
+		}
+		visible = {
+			SHA = { exists = no}
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEV_protectorate_sha"
+			SHA = {
+				transfer_state = 261
+				transfer_state = 311
+				transfer_state = 578
+				transfer_state = 334
+				transfer_state = 610
+				transfer_state = 562
+				transfer_state = 500
+				transfer_state = 572
+				transfer_state = 588
+			}
+			puppet = SHA
+			
+			SHA = {set_cosmetic_tag = SHA_enclave}
+	
+		}
+	}
+	
+	NEV_protectorate_filly = {
+		icon = generic_construction
+		ai_will_do = {
+			factor = 2000
+		}
+		fire_only_once = yes
+		is_good = yes
+		available = {
+			owns_state = 45
+			owns_state = 48
+			owns_state = 532
+			owns_state = 525
+			owns_state = 538
+			owns_state = 536
+			owns_state = 545
+			owns_state = 542
+		}
+		visible = {
+			FSR = { exists = no}
+			RED = { exists = no}
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEV_protectorate_filly"
+			FSR = {
+				transfer_state = 45
+				45 = {  add_core_of = FSR}
+				transfer_state = 48
+				48 = {  add_core_of = FSR}
+				transfer_state = 532
+				532 = {  add_core_of = FSR}
+				transfer_state = 525
+				525 = {  add_core_of = FSR}
+				transfer_state = 538
+				538 = {  add_core_of = FSR}
+				transfer_state = 536
+				536 = {  add_core_of = FSR}
+				transfer_state = 545
+				545 = {  add_core_of = FSR}
+				transfer_state = 542
+				542 = {  add_core_of = FSR}
+			}
+			puppet = FSR
+			FSR = {set_cosmetic_tag = FSR_enclave}
+	
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
