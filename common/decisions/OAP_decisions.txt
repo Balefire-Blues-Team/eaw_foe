@@ -120,6 +120,7 @@
 			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_counter"
 
 			random_owned_controlled_state = {
+				limit = { is_core_of = OAP state_population > 2000}
 				add_manpower = 2000
 			}
 
@@ -156,7 +157,124 @@
 		}
 
 		ai_will_do = {
-			factor = 0
+			factor = 500
+		}
+	}
+	
+	OAP_begin_slave_raid = {
+
+		icon = generic_independence
+		cost = 25
+		fire_only_once = no
+		ai_will_do = {
+			factor = 65
+			modifier = {
+				factor = 0
+				ai_has_no_other_wars_or_wargoals = no
+			}
+		}
+		available = {
+		}
+		visible = {
+		}
+		days_re_enable = 50
+		complete_effect = {
+			random_owned_state = {
+				limit = {
+					has_border_war = no
+					is_fully_controlled_by = ROOT
+					any_neighbor_state = {
+						has_border_war = no
+						NOT = { is_owned_by = ROOT }
+						NOT = { check_variable = { impassable_to@PREV = 1 } }
+						owner = {
+							NOT = { has_war_with = ROOT }
+							PREV = {
+								is_fully_controlled_by = PREV
+							}
+						}
+					}
+						ROOT = {
+							OR = {
+								divisions_in_state = {
+									size > 0
+									state = PREV
+								}
+								NOT = {
+									any_owned_state = {
+										has_border_war = no
+										is_fully_controlled_by = ROOT
+										any_neighbor_state = {
+											has_border_war = no
+											NOT = { is_owned_by = ROOT }
+											NOT = { check_variable = { impassable_to@PREV = 1 } }
+											owner = {
+												NOT = { has_war_with = ROOT }
+												PREV = {
+													is_fully_controlled_by = PREV
+												}
+											}
+										}
+										ROOT = {
+											divisions_in_state = {
+												size > 0
+												state = PREV
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					ROOT = {
+						set_variable = { selected_own_state_for_border_war = PREV.id }
+					}
+					random_neighbor_state = {
+						limit = {
+							NOT = { is_owned_by = ROOT }
+							NOT = { check_variable = { impassable_to@PREV = 1 } }
+							owner = {
+								NOT = { has_war_with = ROOT }
+								PREV = {
+									is_fully_controlled_by = PREV
+								}
+							}
+						}
+						ROOT = {
+							set_variable = { selected_enemy_state_for_border_war = PREV.id }
+						}
+					}
+				}
+				meta_effect = {
+					text = {
+						start_border_war = {
+							attacker = {
+								state = selected_own_state_for_border_war
+								num_provinces = 4
+								on_win = add_to_variable = {var = OAP_slaves_var value = 2}
+								on_lose = [ATTACKER_LOSE_EVENT]
+								on_cancel = [ATTACKER_CANCEL_EVENT]
+								leader_score = {
+									base = 1
+								}
+							}
+							defender = {
+								state = selected_enemy_state_for_border_war
+								num_provinces = 4
+								on_win = [DEFENDER_WIN_EVENT]
+								on_lose = selected_enemy_state_for_border_war = { add_manpower = -1000}
+								on_cancel = [DEFENDER_CANCEL_EVENT]
+							}
+						}
+					}
+					ATTACKER_WIN_EVENT = "[This.GetBorderWarMenuAttackerWinEvent]"
+					ATTACKER_LOSE_EVENT = "[This.GetBorderWarMenuAttackerLoseEvent]"
+					ATTACKER_CANCEL_EVENT = "[This.GetBorderWarMenuAttackerCancelEvent]"
+					DEFENDER_WIN_EVENT = "[This.GetBorderWarMenuDefenderWinEvent]"
+					DEFENDER_LOSE_EVENT = "[This.GetBorderWarMenuDefenderLoseEvent]"
+					DEFENDER_CANCEL_EVENT = "[This.GetBorderWarMenuDefenderCancelEvent]"
+				}
+			
 		}
 	}
 }
