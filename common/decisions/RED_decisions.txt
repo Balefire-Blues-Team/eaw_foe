@@ -668,6 +668,7 @@ RED_slaving = {
 			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_counter"
 
 			random_owned_controlled_state = {
+				limit = { is_core_of = RED state_population > 2000}
 				add_manpower = 2000
 			}
 
@@ -685,15 +686,16 @@ RED_slaving = {
 
 	RED_slave_OAP_buy = {
 		icon = slavery
-		cost = 35
+		cost = 10
 
 		available = {
 			OAP = {
 				has_government = destruction
 				check_variable = {
-                	OAP_slaves_var > 0
+                	OAP_slaves_var > 1
             	}
 			}
+			has_equipment = = {infantry_equipment > 25}
 		}
 
 		visible = {
@@ -710,11 +712,56 @@ RED_slaving = {
 				var = RED_slaves_var
 				value = 1
 			}
+			send_equipment = {
+				equipment = infantry_equipment
+				amount = 25
+				target = OAP
+			}
 			OAP = {
 				subtract_from_variable = {
 					var = OAP_slaves_var
 					value = 1
-				}	
+				}
+				add_political_power = 10
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+	
+	RED_slave_enslave_non_core = {
+		icon = infiltrate_state
+		cost = 10
+
+		available = {
+			any_owned_state = {
+				 not = {is_core_of = RED}
+				 state_population > 5000
+			}
+		}
+
+		visible = {
+			NOT = {
+				has_country_flag = RED_slavery_abolished
+			}
+		}
+
+		days_remove = 50
+		days_re_enable = 1
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_enslave_non_core"
+
+			random_owned_controlled_state = {
+				limit = { NOT = {is_core_of = RED} state_population > 5000}
+				add_manpower = -2000
+			}
+
+			custom_effect_tooltip = RED_2_gain_slave_tt
+			add_to_variable = {
+				var = RED_slaves_var
+				value = 2
 			}
 		}
 
