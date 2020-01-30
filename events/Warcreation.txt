@@ -1,0 +1,112 @@
+﻿#######################
+# War Creation Events #
+#######################
+# Scripted by Mechano
+# Modified by Argeddion
+# These events exist for AI reasons, AI with claims will actually justify war and create conflict.
+add_namespace = war_creation
+country_event = {
+	id = war_creation.1
+	title = war_creation.1.t
+	desc = war_creation.1.d
+	picture = GFX_event_generic_raider_1
+	trigger = {
+		date > "1235.1.6"
+		eligible_wargoal_sender = yes
+	}
+	option = {
+		name = war_creation.1.a
+		random_neighbor_country = {
+			limit = {
+				eligible_wargoal_receiver = yes
+				any_owned_state = {
+					NOT = { has_state_flag = is_impassable }
+					any_neighbor_state = {
+						is_owned_by = ROOT
+						NOT = { has_state_flag = is_impassable }
+					}
+				}
+			}
+			country_event = { days = 1 id = war_creation.2 }
+		}
+	}
+	mean_time_to_happen = {
+		days = 10000
+		modifier = {
+			factor = 0.6
+			threat > 0.5
+		}
+		modifier = {
+			factor = 0.5
+			has_government = visionary
+		}
+		modifier = {
+			factor = 0.8
+			has_government = survivalism
+		}
+		modifier = {
+			factor = 0.4
+			has_government = destruction
+		}
+		modifier = {
+			factor = 0.1
+			has_country_flag = hyper_aggressive_ai
+		}
+	}
+}
+
+country_event = {
+	id = war_creation.2
+	title = war_creation.2.t
+	desc = war_creation.2.d
+	picture = GFX_event_generic_raider_1
+	is_triggered_only = yes
+	option = {
+		name = war_creation.2.a
+		custom_effect_tooltip = war_creation.2.a_tt
+		FROM = { country_event = { days = 2 id = war_creation.3 } }
+	}
+}
+
+country_event = {
+	id = war_creation.3
+	title = war_creation.3.t
+	desc = war_creation.3.d
+	picture = GFX_event_generic_raider_1
+	is_triggered_only = yes
+	option = {
+		name = war_creation.3.a
+		#FROM = { country_event = { days = 2 id = war_creation.4 } }
+		FROM = {
+			random_owned_state = {
+				limit = {
+					any_neighbor_state = {
+						is_owned_by = ROOT
+						AND = {
+							OR = {
+								free_building_slots = { building = industrial_complex size > 0 include_locked = no }
+								dockyard > 0
+								industrial_complex > 0
+								arms_factory > 0
+
+							}
+						}
+					}
+				}
+				add_claim_by = ROOT
+			}
+		}
+	}
+}
+
+country_event = {
+	id = war_creation.4
+	title = war_creation.4.t
+	desc = war_creation.4.d
+	picture = GFX_event_generic_raider_1
+	is_triggered_only = yes
+	option = {
+		name = war_creation.4.a
+		#FROM = { create_wargoal = { type = take_claimed_state target = FROM } }
+	}
+}
