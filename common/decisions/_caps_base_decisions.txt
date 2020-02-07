@@ -1,0 +1,1424 @@
+### Minimum balance before using marketplace
+@AI_THRESHHOLD = 500
+caps_base_category = {
+	caps_quarterly_income = {
+		icon = GFX_decision_single_cap
+		### Never "complete" success
+		available = {
+			hidden_trigger = {
+				always = no
+			}
+		}
+		allowed = {
+			always = yes
+		}
+		is_good = yes
+		days_mission_timeout = 92
+		###Activated only via mission
+		activation = {
+			always = no
+		}
+		###Add caps to actual number
+		timeout_effect = {
+			ROOT = {
+				#caps_update_industry = yes
+				###Get military costs at current moment
+				caps_update_military = yes
+				###Add caps of daily net
+				add_to_temp_variable = { caps_to_add = caps_daily_modified }
+				add_caps = yes
+				###Print CSV of economic report
+				if = {
+					limit = {
+						OR = {
+							has_global_flag = caps_balance_report
+							has_game_rule = {
+								rule = caps_debug_toggle
+								option = ENABLED
+							}
+						}
+					}
+					log = "[This.GetTag],[GetYear],[?caps_daily_modified],[?base_caps],[?caps_expense],[?caps_expense_modifier],[?num_battalions]"
+				}
+				### Increase quarterly gain by 4
+				hidden_effect = {
+					set_temp_variable = { caps_daily_diff_before = base_caps }
+					add_to_variable = { base_caps = 4 }
+					clamp_variable = {
+						var = base_caps
+						min = 0
+						max = 400
+					}
+					set_temp_variable = { caps_daily_diff_after = base_caps }
+					update_caps_income = yes
+					### Fire next mission
+					country_event = tutorial_caps.5
+				}
+			}
+		}
+		days_re_enable = 0
+		days_remove = 1
+	}
+}
+
+@JET_COST = 100
+@BUFFOUT_COST = 80
+@PSYCHO_COST = 120
+###Market Decisions
+black_market_category = {
+	chem_jet = {
+		icon = GFX_decision_jet
+		cost = 0
+		fixed_random_seed = no
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 10
+				is_raider_nation = yes
+			}
+			modifier = {
+				factor = 2
+				check_variable = { caps_number_display > @AI_THRESHHOLD }
+			}
+			modifier = {
+				factor = -20
+				has_war = no
+			}
+			modifier = {
+				add = -30
+				has_variable = chem_withdrawl_variable
+			}
+		}
+		###Check for GUI open
+		visible = {
+			has_idea = chems_legalised
+			if = {
+				limit = {
+					is_ai = no
+				}
+				check_variable = { market_var = 2 }
+			}
+			else = {
+				always = yes
+			}
+		}
+		###Check for GUI open
+		available = {
+			hidden_trigger = {
+				has_idea = chems_legalised
+			}
+			set_temp_variable = { caps_diff = @JET_COST }
+			multiply_temp_variable = {
+				caps_diff = -1
+			}
+			caps_cost_trigger = yes
+			set_temp_variable = {
+				minimum_stock_temp = 99
+			}
+			custom_trigger_tooltip = {
+				check_variable = { global.chem_runner_inventory > minimum_stock_temp }
+				tooltip = market_amount_trigger_tt
+			}
+		}
+		modifier = {
+			###Buffs
+			army_attack_factor = 0.15
+			army_speed_factor = 0.10
+			army_org_factor = -0.025
+			experience_loss_factor = 0.15
+			#experience_gain_army_factor = -0.5
+			command_power_gain_mult = -0.1
+		}
+		complete_effect = {
+			set_country_flag = made_a_purchase_with_caps
+			set_temp_variable = { caps_to_add = @PSYCHO_COST }
+			set_temp_variable = { opinion_var_temp = chem_runner_opinion }
+			get_caps_discount = yes
+			multiply_temp_variable = { caps_to_add = temp_discount }
+			multiply_temp_variable = { caps_to_add = -1 }
+			add_caps = yes
+			subtract_from_variable = { global.chem_runner_inventory = 100 }
+			add_to_variable = { chem_runner_opinion = 5 }
+			clamp_variable = {
+				var = chem_runner_opinion
+				min = -100
+				max = chem_runner_opinion_max
+			}
+			hidden_effect = {
+				scoped_sound_effect = "use_psycho"
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				chem_iterate_withdrawl = yes
+				random_list = {
+					15 = {
+						modifier = {
+							factor = chem_withdrawl_variable
+						}
+						modifier = {
+							factor = 2
+							has_decision = chem_psycho
+							has_decision = chem_jet
+						}
+						random_list = {
+							30 = { country_event = chem_event.1 }
+
+							30 = { country_event = chem_event.2 }
+
+							30 = { country_event = chem_event.3 }
+						}
+					}
+					100 = {
+
+					}
+				}
+			}
+			custom_effect_tooltip = "[GetChemDecisionWithdrawl]"
+		}
+		days_re_enable = 20
+		days_remove = 60
+	}
+	###Same as above
+	chem_buffout = {
+		icon = GFX_decision_buffout
+		cost = 0
+		fixed_random_seed = no
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 10
+				is_raider_nation = yes
+			}
+			modifier = {
+				factor = 2
+				check_variable = { caps_number_display > @AI_THRESHHOLD }
+			}
+			modifier = {
+				factor = -20
+				has_war = no
+			}
+			modifier = {
+				add = -30
+				has_variable = chem_withdrawl_variable
+			}
+		}
+		visible = {
+			has_idea = chems_legalised
+			if = {
+				limit = {
+					is_ai = no
+				}
+				check_variable = { market_var = 2 }
+			}
+			else = {
+				always = yes
+			}
+		}
+		available = {
+			hidden_trigger = {
+				has_idea = chems_legalised
+			}
+			set_temp_variable = { caps_diff = @BUFFOUT_COST }
+			multiply_temp_variable = {
+				caps_diff = -1
+			}
+			caps_cost_trigger = yes
+			set_temp_variable = {
+				minimum_stock_temp = 99
+			}
+			custom_trigger_tooltip = {
+				check_variable = { global.chem_runner_inventory > minimum_stock_temp }
+				tooltip = market_amount_trigger_tt
+			}
+		}
+		modifier = {
+			dig_in_speed_factor = 0.85
+			max_dig_in = 1.1
+			defence = 0.35
+			army_org_factor = -0.05
+			experience_loss_factor = 0.20
+			planning_speed = -0.35
+			max_planning = -0.15
+		}
+		complete_effect = {
+			set_country_flag = made_a_purchase_with_caps
+			set_temp_variable = { caps_to_add = @PSYCHO_COST }
+			set_temp_variable = { opinion_var_temp = chem_runner_opinion }
+			get_caps_discount = yes
+			multiply_temp_variable = { caps_to_add = temp_discount }
+			multiply_temp_variable = { caps_to_add = -1 }
+			add_caps = yes
+			subtract_from_variable = { global.chem_runner_inventory = 100 }
+			add_to_variable = { chem_runner_opinion = 5 }
+			clamp_variable = {
+				var = chem_runner_opinion
+				min = -100
+				max = chem_runner_opinion_max
+			}
+			hidden_effect = {
+				scoped_sound_effect = "use_psycho"
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				chem_iterate_withdrawl = yes
+				random_list = {
+					15 = {
+						modifier = {
+							factor = chem_withdrawl_variable
+						}
+						modifier = {
+							factor = 2
+							has_decision = chem_psycho
+							has_decision = chem_jet
+						}
+						random_list = {
+							30 = { country_event = chem_event.1 }
+
+							30 = { country_event = chem_event.2 }
+
+							30 = { country_event = chem_event.3 }
+						}
+					}
+					100 = {
+
+					}
+				}
+			}
+			custom_effect_tooltip = "[GetChemDecisionWithdrawl]"
+		}
+		days_re_enable = 20
+		days_remove = 60
+	}
+	###Same as above
+	chem_psycho = {
+		icon = GFX_decision_psycho
+		cost = 0
+		fixed_random_seed = no
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 10
+				is_raider_nation = yes
+			}
+			modifier = {
+				factor = 2
+				check_variable = { caps_number_display > @AI_THRESHHOLD }
+			}
+			modifier = {
+				factor = -20
+				has_war = no
+			}
+			modifier = {
+				add = -30
+				has_variable = chem_withdrawl_variable
+			}
+		}
+		visible = {
+			has_idea = chems_legalised
+			if = {
+				limit = {
+					is_ai = no
+				}
+				check_variable = { market_var = 2 }
+			}
+			else = {
+				always = yes
+			}
+		}
+		available = {
+			hidden_trigger = {
+				has_idea = chems_legalised
+			}
+			set_temp_variable = { caps_diff = @PSYCHO_COST }
+			multiply_temp_variable = {
+				caps_diff = -1
+			}
+			caps_cost_trigger = yes
+			set_temp_variable = {
+				minimum_stock_temp = 99
+			}
+			custom_trigger_tooltip = {
+				check_variable = { global.chem_runner_inventory > minimum_stock_temp }
+				tooltip = market_amount_trigger_tt
+			}
+		}
+		modifier = {
+			offence = 0.25
+			attrition = 0.25
+			army_org_factor = -0.25
+			army_speed_factor = 0.05
+			army_org = 5
+			#experience_loss_factor = 0.25
+		#	experience_gain_army_factor = -0.5
+		}
+		complete_effect = {
+			set_country_flag = made_a_purchase_with_caps
+			set_temp_variable = { caps_to_add = @PSYCHO_COST }
+			set_temp_variable = { opinion_var_temp = chem_runner_opinion }
+			get_caps_discount = yes
+			multiply_temp_variable = { caps_to_add = temp_discount }
+			multiply_temp_variable = { caps_to_add = -1 }
+			add_caps = yes
+			subtract_from_variable = { global.chem_runner_inventory = 100 }
+			add_to_variable = { chem_runner_opinion = 5 }
+			clamp_variable = {
+				var = chem_runner_opinion
+				min = -100
+				max = chem_runner_opinion_max
+			}
+			hidden_effect = {
+				scoped_sound_effect = "use_psycho"
+			}
+		}
+		remove_effect = {
+			hidden_effect = {
+				chem_iterate_withdrawl = yes
+				random_list = {
+					15 = {
+						modifier = {
+							factor = chem_withdrawl_variable
+						}
+						modifier = {
+							factor = 2
+							has_decision = chem_buffout
+							has_decision = chem_jet
+						}
+						random_list = {
+							30 = { country_event = chem_event.1 }
+
+							30 = { country_event = chem_event.2 }
+
+							30 = { country_event = chem_event.3 }
+						}
+					}
+					100 = {
+
+					}
+				}
+			}
+			custom_effect_tooltip = "[GetChemDecisionWithdrawl]"
+		}
+		days_re_enable = 10
+		days_remove = 50
+	}
+	###SLAVE RUNNERS
+	@SLAVE_COST = 150
+
+	slave_purchase = {
+		icon = GFX_decision_sell_slaves
+		cost = 0
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 6
+				is_raider_nation = yes
+				original_tag  = CES
+			}
+			modifier = {
+				factor = 2
+				check_variable = { caps_number_display > @AI_THRESHHOLD }
+			}
+			modifier = {
+				factor = -12
+				check_variable = { slave_number_display > 700 }
+			}
+			modifier = {
+				factor = 3
+				check_variable = { slave_number_display < 200 }
+			}
+		}
+		###Check GUI Open
+		visible = {
+			always = yes
+			if = {
+				limit = {
+					is_ai = no
+				}
+				check_variable = { market_var = 3 }
+			}
+			else = {
+				always = yes
+			}
+			NOT = { has_idea = slavery_outlawed }
+		}
+		available = {
+			hidden_trigger ={
+				NOT = { has_idea = slavery_outlawed }
+			}
+			set_temp_variable = { caps_diff = @SLAVE_COST }
+			multiply_temp_variable = {
+				caps_diff = -1
+			}
+			###Get available trigger and text
+			caps_cost_trigger = yes
+			set_temp_variable = {
+				minimum_stock_temp = 49
+			}
+			custom_trigger_tooltip = {
+				check_variable = { global.slave_runner_inventory > minimum_stock_temp }
+				tooltip = market_amount_trigger_tt
+			}
+		}
+		complete_effect = {
+			set_country_flag = made_a_purchase_with_caps
+			###Remove caps
+			set_temp_variable = { caps_to_add = @SLAVE_COST }
+			###Get Discount
+			set_temp_variable = { opinion_var_temp = slave_runner_opinion }
+			get_caps_discount = yes
+			multiply_temp_variable = { caps_to_add = temp_discount }
+			multiply_temp_variable = { caps_to_add = -1 }
+			add_caps = yes
+		}
+		remove_effect = {
+			###Remove from inventory
+			subtract_from_variable = { global.slave_runner_inventory = 50 }
+			###Add Slaves
+			add_to_variable = {
+				slave_number_display = 50
+			}
+			add_to_variable = { slave_runner_opinion = 5 }
+			###Clamp opinion
+			clamp_variable = {
+				var = slave_runner_opinion
+				min = -100
+				max = slave_runner_opinion_max
+			}
+			custom_effect_tooltip = slave_decision_tt
+		}
+		days_re_enable = 20
+		days_remove = 60
+	}
+
+	###GUN RUNNERS
+	@EQUIP1 = 110
+	@EQUIP2 = 155
+	@EQUIP3 = 185
+	@EQUIP4 = 250
+	@EQUIP5 = 255
+	@EQUIP6 = 345
+	buy_infantry_equipment = {
+		icon = GFX_decision_buy_guns
+		cost = 0
+		ai_will_do = {
+			base = 1
+			modifier = {
+				add = -3
+				is_tribal_nation = yes
+			}
+			modifier = {
+				add = 2
+				check_variable = { caps_number_display > @AI_THRESHHOLD }
+			}
+			modifier = {
+				factor = 2
+				stockpile_ratio = {
+					archetype = infantry_equipment
+					ratio < 0.3
+				}
+			}
+			modifier = {
+				add = -9
+				stockpile_ratio = {
+					archetype = infantry_equipment
+					ratio > 0.6
+				}
+			}
+			modifier = {
+				add = -7
+				check_variable = {
+					global.gun_runner_inventory < 1400
+				}
+			}
+		}
+		visible = {
+			if = {
+				limit = {
+					is_ai = no
+				}
+				check_variable = { market_var = 1 }
+			}
+			else = {
+				always = yes
+			}
+		}
+		available = {
+			set_temp_variable = { caps_diff = @EQUIP1 }
+			multiply_temp_variable = {
+				caps_diff = -1
+			}
+			###Get trigger text
+			caps_cost_trigger = yes
+			set_temp_variable = {
+				minimum_stock_temp = 499
+			}
+			custom_trigger_tooltip = {
+				check_variable = { global.gun_runner_inventory > minimum_stock_temp }
+				tooltip = market_amount_trigger_tt
+			}
+		}
+		complete_effect = {
+			set_country_flag = made_a_purchase_with_caps
+			###Immediate remove inventory
+			subtract_from_variable = { global.gun_runner_inventory = 500 }
+			###Get cost based on tech assignment
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 1 }
+				}
+				set_temp_variable = { caps_to_add = @EQUIP1  }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 2 }
+				}
+				set_temp_variable = { caps_to_add = @EQUIP2  }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 3 }
+				}
+				set_temp_variable = { caps_to_add = @EQUIP3  }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 4 }
+				}
+				set_temp_variable = { caps_to_add = @EQUIP4  }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 5 }
+				}
+				set_temp_variable = { caps_to_add = @EQUIP5 }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 6 }
+				}
+				set_temp_variable = { caps_to_add = @EQUIP6  }
+			}
+			###Get discount and add caps
+		set_temp_variable = { opinion_var_temp = gun_runner_opinion }
+		get_caps_discount = yes
+		multiply_temp_variable = { caps_to_add = temp_discount }
+		multiply_temp_variable = { caps_to_add = -1 }
+		add_caps = yes
+		}
+		remove_effect = {
+			####Add Equipment to nation on finish
+				if = {
+					limit = {
+						check_variable = { gun_runner_tech = 1 }
+					}
+					add_equipment_to_stockpile = {
+						type = melee_equipment_1
+						amount = 500
+					}
+					set_temp_variable = { caps_to_add = @EQUIP1  }
+				}
+				if = {
+					limit = {
+						check_variable = { gun_runner_tech = 2 }
+					}
+					add_equipment_to_stockpile = {
+						type = infantry_equipment_1
+						amount = 500
+					}
+					set_temp_variable = { caps_to_add = @EQUIP2  }
+				}
+				if = {
+					limit = {
+						check_variable = { gun_runner_tech = 3 }
+					}
+					add_equipment_to_stockpile = {
+						type = melee_equipment_2
+						amount = 500
+					}
+					set_temp_variable = { caps_to_add = @EQUIP3  }
+				}
+				if = {
+					limit = {
+						check_variable = { gun_runner_tech = 4 }
+					}
+					add_equipment_to_stockpile = {
+						type = ballistic_equipment_1
+						amount = 500
+					}
+					set_temp_variable = { caps_to_add = @EQUIP4  }
+				}
+				if = {
+					limit = {
+						check_variable = { gun_runner_tech = 5 }
+					}
+					add_equipment_to_stockpile = {
+						type = melee_equipment_3
+						amount = 500
+					}
+					set_temp_variable = { caps_to_add = @EQUIP5 }
+				}
+				if = {
+					limit = {
+						check_variable = { gun_runner_tech = 6 }
+					}
+					add_equipment_to_stockpile = {
+						type = ballistic_equipment_2
+						amount = 500
+					}
+					set_temp_variable = { caps_to_add = @EQUIP6  }
+				}
+			add_to_variable = { gun_runner_opinion = 5 }
+			###Add opinion
+			clamp_variable = {
+				var = gun_runner_opinion
+				min = -100
+				max = gun_runner_opinion_max
+			}
+			###Update tech levels
+			calculate_gun_runner_inventory = yes
+		}
+		days_re_enable = 20
+		days_remove = 60
+	}
+	buy_support_equipment = {
+		icon = GFX_decision_buy_guns
+		cost = 0
+		ai_will_do = {
+			base = 1
+			modifier = {
+				add = -3
+				is_tribal_nation = yes
+			}
+			modifier = {
+				add = 2
+				check_variable = { caps_number_display > @AI_THRESHHOLD }
+			}
+			modifier = {
+				factor = 2
+				stockpile_ratio = {
+					archetype = support_equipment
+					ratio < 0.3
+				}
+			}
+			modifier = {
+				add = -9
+				stockpile_ratio = {
+					archetype = support_equipment
+					ratio > 0.6
+				}
+			}
+			modifier = {
+				add = -7
+				check_variable = {
+					global.gun_runner_inventory < 1400
+				}
+			}
+		}
+		visible = {
+			check_variable = {
+				gun_runner_opinion > 0
+			}
+			if = {
+				limit = {
+					is_ai = no
+				}
+				check_variable = { market_var = 1 }
+			}
+			else = {
+				always = yes
+			}
+		}
+		available = {
+			set_temp_variable = { caps_diff = -280 }
+			custom_trigger_tooltip = {
+				check_variable = { gun_runner_opinion > 35 }
+				tooltip = gun_runner_line_tt
+			}
+			caps_cost_trigger = yes
+			has_tech = support_weaponry
+			set_temp_variable = {
+				minimum_stock_temp = 499
+			}
+			custom_trigger_tooltip = {
+				check_variable = { global.gun_runner_inventory > minimum_stock_temp }
+				tooltip = market_amount_trigger_tt
+			}
+		}
+		complete_effect = {
+			subtract_from_variable = { global.gun_runner_inventory = 500 }
+			set_temp_variable = { caps_to_add = -280 }
+			set_temp_variable = { opinion_var_temp = gun_runner_opinion }
+			get_caps_discount = yes
+			multiply_temp_variable = { caps_to_add = temp_discount }
+			add_caps = yes
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					has_tech = support_weaponry
+				}
+				add_equipment_to_stockpile = {
+					type = support_equipment_1
+					amount = 500
+				}
+			}
+			add_to_variable = { gun_runner_opinion = 5 }
+			clamp_variable = {
+				var = gun_runner_opinion
+				min = -100
+				max = gun_runner_opinion_max
+			}
+			calculate_gun_runner_inventory = yes
+		}
+		days_re_enable = 20
+		days_remove = 60
+	}
+	buy_fireteam_equipment = {
+		icon = GFX_decision_buy_guns
+		cost = 0
+		ai_will_do = {
+			base = 1
+			modifier = {
+				add = -3
+				is_tribal_nation = yes
+			}
+			modifier = {
+				add = 2
+				check_variable = { caps_number_display > @AI_THRESHHOLD }
+			}
+			modifier = {
+				factor = 2
+				stockpile_ratio = {
+					archetype = fireteam_equipment
+					ratio < 0.2
+				}
+			}
+			modifier = {
+				add = -9
+				stockpile_ratio = {
+					archetype = fireteam_equipment
+					ratio > 0.4
+				}
+			}
+			modifier = {
+				add = -7
+				check_variable = {
+					global.gun_runner_inventory < 1400
+				}
+			}
+		}
+		visible = {
+			check_variable = {
+				gun_runner_opinion > 20
+			}
+			if = {
+				limit = {
+					is_ai = no
+				}
+				check_variable = { market_var = 1 }
+			}
+			else = {
+				always = yes
+			}
+			check_variable = { global.gun_runner_inventory > 499 }
+		}
+		available = {
+			set_temp_variable = { caps_diff = -195 }
+			custom_trigger_tooltip = {
+				check_variable = { gun_runner_opinion > 40 }
+				tooltip = gun_runner_line_tt
+			}
+			caps_cost_trigger = yes
+			has_tech = fireteam_weaponry_tech
+			set_temp_variable = {
+				minimum_stock_temp = 499
+			}
+			custom_trigger_tooltip = {
+				check_variable = { global.gun_runner_inventory > minimum_stock_temp }
+				tooltip = market_amount_trigger_tt
+			}
+		}
+		complete_effect = {
+			subtract_from_variable = { global.gun_runner_inventory = 500 }
+			set_temp_variable = { caps_to_add = -195 }
+			set_temp_variable = { opinion_var_temp = gun_runner_opinion }
+			get_caps_discount = yes
+			multiply_temp_variable = { caps_to_add = temp_discount }
+			add_caps = yes
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					has_tech = fireteam_weaponry_tech
+				}
+				add_equipment_to_stockpile = {
+					type = fireteam_equipment_1
+					amount = 500
+				}
+			}
+			add_to_variable = { gun_runner_opinion = 5 }
+			clamp_variable = {
+				var = gun_runner_opinion
+				min = -100
+				max = gun_runner_opinion_max
+			}
+			calculate_gun_runner_inventory = yes
+		}
+		days_re_enable = 20
+		days_remove = 60
+	}
+	buy_infantry_equipment_2 = {
+		icon = GFX_decision_buy_guns
+		cost = 0
+		ai_will_do = {
+			base = 1
+			modifier = {
+				add = -3
+				is_tribal_nation = yes
+			}
+			modifier = {
+				add = 2
+				check_variable = { caps_number_display > @AI_THRESHHOLD }
+			}
+			modifier = {
+				factor = 2
+				stockpile_ratio = {
+					archetype = infantry_equipment
+					ratio < 0.2
+				}
+			}
+			modifier = {
+				add = -9
+				stockpile_ratio = {
+					archetype = infantry_equipment
+					ratio > 0.4
+				}
+			}
+			modifier = {
+				add = -7
+				check_variable = {
+					global.gun_runner_inventory < 1400
+				}
+			}
+		}
+		visible = {
+			check_variable = { gun_runner_opinion > 0 }
+			if = {
+				limit = {
+					is_ai = no
+				}
+				check_variable = { market_var = 1 }
+			}
+			else = {
+				always = yes
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				check_variable = { gun_runner_opinion > 25 }
+				tooltip = gun_runner_line_tt
+			}
+			set_temp_variable = { caps_diff = @EQUIP1 }
+			multiply_temp_variable = {
+				caps_diff = -1
+			}
+			caps_cost_trigger = yes
+			set_temp_variable = {
+				minimum_stock_temp = 499
+			}
+			custom_trigger_tooltip = {
+				check_variable = { global.gun_runner_inventory > minimum_stock_temp }
+				tooltip = market_amount_trigger_tt
+			}
+		}
+		complete_effect = {
+			subtract_from_variable = { global.gun_runner_inventory = 500 }
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 1 }
+				}
+				set_temp_variable = { caps_to_add = @EQUIP1  }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 2 }
+				}
+				set_temp_variable = { caps_to_add = @EQUIP2  }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 3 }
+				}
+				set_temp_variable = { caps_to_add = @EQUIP3  }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 4 }
+				}
+				set_temp_variable = { caps_to_add = @EQUIP4  }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 5 }
+				}
+				set_temp_variable = { caps_to_add = @EQUIP5 }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 6 }
+				}
+				set_temp_variable = { caps_to_add = @EQUIP6  }
+			}
+		set_temp_variable = { opinion_var_temp = gun_runner_opinion }
+		get_caps_discount = yes
+		multiply_temp_variable = { caps_to_add = temp_discount }
+		multiply_temp_variable = { caps_to_add = -1 }
+		add_caps = yes
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 1 }
+				}
+				add_equipment_to_stockpile = {
+					type = melee_equipment_1
+					amount = 500
+				}
+				set_temp_variable = { caps_to_add = @EQUIP1  }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 2 }
+				}
+				add_equipment_to_stockpile = {
+					type = infantry_equipment_1
+					amount = 500
+				}
+				set_temp_variable = { caps_to_add = @EQUIP2  }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 3 }
+				}
+				add_equipment_to_stockpile = {
+					type = melee_equipment_2
+					amount = 500
+				}
+				set_temp_variable = { caps_to_add = @EQUIP3  }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 4 }
+				}
+				add_equipment_to_stockpile = {
+					type = ballistic_equipment_1
+					amount = 500
+				}
+				set_temp_variable = { caps_to_add = @EQUIP4  }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 5 }
+				}
+				add_equipment_to_stockpile = {
+					type = melee_equipment_3
+					amount = 500
+				}
+				set_temp_variable = { caps_to_add = @EQUIP5 }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 6 }
+				}
+				add_equipment_to_stockpile = {
+					type = ballistic_equipment_2
+					amount = 500
+				}
+				set_temp_variable = { caps_to_add = @EQUIP6  }
+			}
+			set_temp_variable = { opinion_var_temp = gun_runner_opinion }
+			get_caps_discount = yes
+			multiply_temp_variable = { caps_to_add = temp_discount }
+			multiply_temp_variable = { caps_to_add = -1 }
+			add_caps = yes
+			add_to_variable = { gun_runner_opinion = 5 }
+			clamp_variable = {
+				var = gun_runner_opinion
+				min = -100
+				max = gun_runner_opinion_max
+			}
+			calculate_gun_runner_inventory = yes
+		}
+		days_re_enable = 20
+		days_remove = 60
+	}
+	buy_infantry_equipment_3 = {
+		icon = GFX_decision_buy_guns
+		cost = 0
+		ai_will_do = {
+			base = 1
+			modifier = {
+				add = -3
+				is_tribal_nation = yes
+			}
+			modifier = {
+				add = 2
+				check_variable = { caps_number_display > @AI_THRESHHOLD }
+			}
+			modifier = {
+				factor = 2
+				stockpile_ratio = {
+					archetype = infantry_equipment
+					ratio < 0.1
+				}
+			}
+			modifier = {
+				add = -9
+				stockpile_ratio = {
+					archetype = infantry_equipment
+					ratio > 0.3
+				}
+			}
+			modifier = {
+				add = -7
+				check_variable = {
+					global.gun_runner_inventory < 1400
+				}
+			}
+		}
+		visible = {
+			check_variable = { gun_runner_opinion > 25 }
+			if = {
+				limit = {
+					is_ai = no
+				}
+				check_variable = { market_var = 1 }
+			}
+			else = {
+				always = yes
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				check_variable = { gun_runner_opinion > 60 }
+				tooltip = gun_runner_line_tt
+			}
+			set_temp_variable = { caps_diff = @EQUIP1 }
+			multiply_temp_variable = {
+				caps_diff = -1
+			}
+			caps_cost_trigger = yes
+			set_temp_variable = {
+				minimum_stock_temp = 499
+			}
+			custom_trigger_tooltip = {
+				check_variable = { global.gun_runner_inventory > minimum_stock_temp }
+				tooltip = market_amount_trigger_tt
+			}
+		}
+		complete_effect = {
+			subtract_from_variable = { global.gun_runner_inventory = 500 }
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 1 }
+				}
+				set_temp_variable = { caps_to_add = @EQUIP1  }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 2 }
+				}
+				set_temp_variable = { caps_to_add = @EQUIP2  }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 3 }
+				}
+				set_temp_variable = { caps_to_add = @EQUIP3  }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 4 }
+				}
+				set_temp_variable = { caps_to_add = @EQUIP4  }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 5 }
+				}
+				set_temp_variable = { caps_to_add = @EQUIP5 }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 6 }
+				}
+				set_temp_variable = { caps_to_add = @EQUIP6  }
+			}
+		set_temp_variable = { opinion_var_temp = gun_runner_opinion }
+		get_caps_discount = yes
+		multiply_temp_variable = { caps_to_add = temp_discount }
+		multiply_temp_variable = { caps_to_add = -1 }
+		add_caps = yes
+		}
+		remove_effect = {
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 1 }
+				}
+				add_equipment_to_stockpile = {
+					type = melee_equipment_1
+					amount = 500
+				}
+				set_temp_variable = { caps_to_add = @EQUIP1  }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 2 }
+				}
+				add_equipment_to_stockpile = {
+					type = infantry_equipment_1
+					amount = 500
+				}
+				set_temp_variable = { caps_to_add = @EQUIP2  }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 3 }
+				}
+				add_equipment_to_stockpile = {
+					type = melee_equipment_2
+					amount = 500
+				}
+				set_temp_variable = { caps_to_add = @EQUIP3  }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 4 }
+				}
+				add_equipment_to_stockpile = {
+					type = ballistic_equipment_1
+					amount = 500
+				}
+				set_temp_variable = { caps_to_add = @EQUIP4  }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 5 }
+				}
+				add_equipment_to_stockpile = {
+					type = melee_equipment_3
+					amount = 500
+				}
+				set_temp_variable = { caps_to_add = @EQUIP5 }
+			}
+			if = {
+				limit = {
+					check_variable = { gun_runner_tech = 6 }
+				}
+				add_equipment_to_stockpile = {
+					type = ballistic_equipment_2
+					amount = 500
+				}
+				set_temp_variable = { caps_to_add = @EQUIP6  }
+			}
+			set_temp_variable = { opinion_var_temp = gun_runner_opinion }
+			get_caps_discount = yes
+			multiply_temp_variable = { caps_to_add = temp_discount }
+			multiply_temp_variable = { caps_to_add = -1 }
+			add_caps = yes
+			add_to_variable = { gun_runner_opinion = 5 }
+			clamp_variable = {
+				var = gun_runner_opinion
+				min = -100
+				max = gun_runner_opinion_max
+			}
+			calculate_gun_runner_inventory = yes
+		}
+		days_re_enable = 20
+		days_remove = 60
+	}
+
+	sell_outdated_equipment = {
+		icon = GFX_decision_buy_guns
+		cost = 0
+		ai_will_do = {
+			base = 1
+			modifier = {
+				add = -3
+				is_tribal_nation = yes
+			}
+			modifier = {
+				add = 2
+				check_variable = { caps_number_display < 300 }
+			}
+			modifier = {
+				add = 2
+				check_variable = { caps_number_display < 800 }
+			}
+			modifier = {
+				add = 2
+				stockpile_ratio = {
+					archetype = infantry_equipment
+					ratio > 1.3
+				}
+			}
+			modifier = {
+				check_variable = {
+					global.gun_runner_inventory > 3500
+				}
+				add = -5
+
+			}
+		}
+		visible = {
+			if = {
+				limit = {
+					is_ai = no
+				}
+				check_variable = {
+					market_var = 1
+				}
+			}
+		}
+		available = {
+			OR = {
+				has_equipment = {
+					melee_equipment_1 > 499
+				}
+				has_equipment = {
+					melee_equipment_2 > 499
+				}
+				has_equipment = {
+					melee_equipment_3 > 499
+				}
+				has_equipment = {
+					ballistic_equipment_2 > 499
+				}
+				has_equipment = {
+					ballistic_equipment_1 > 499
+				}
+			}
+			check_variable = {
+				gun_runner_opinion > -30
+			}
+		}
+		complete_effect = {
+			if = {
+				limit = {
+					has_equipment = {
+						melee_equipment_1 > 499
+					}
+				}
+				add_equipment_to_stockpile = {
+					type = melee_equipment_1
+					amount = -500
+				}
+				set_temp_variable = { caps_to_add = @EQUIP1  }
+			}
+			else_if = {
+				limit = {
+					has_equipment = {
+						infantry_equipment_1 > 499
+					}
+				}
+				add_equipment_to_stockpile = {
+					type = infantry_equipment_1
+					amount = -500
+				}
+				set_temp_variable = { caps_to_add = @EQUIP2  }
+			}
+			else_if = {
+				limit = {
+					has_equipment = {
+						melee_equipment_2 > 499
+					}
+				}
+				add_equipment_to_stockpile = {
+					type = melee_equipment_2
+					amount = -500
+				}
+				set_temp_variable = { caps_to_add = @EQUIP3  }
+			}
+			else_if = {
+				limit = {
+					has_equipment = {
+						ballistic_equipment_1 > 499
+					}
+				}
+				add_equipment_to_stockpile = {
+					type = ballistic_equipment_1
+					amount = -500
+				}
+				set_temp_variable = { caps_to_add = @EQUIP4  }
+			}
+			else_if = {
+				limit = {
+					has_equipment = {
+						melee_equipment_3 > 499
+					}
+				}
+				add_equipment_to_stockpile = {
+					type = melee_equipment_3
+					amount = -500
+				}
+				set_temp_variable = { caps_to_add = @EQUIP5 }
+			}
+			else_if = {
+				limit = {
+					has_equipment = {
+						ballistic_equipment_2 > 499
+					}
+				}
+				add_equipment_to_stockpile = {
+					type = ballistic_equipment_2
+					amount = -500
+				}
+				set_temp_variable = { caps_to_add = @EQUIP6  }
+			}
+			multiply_temp_variable = {
+				caps_to_add = 0.6
+			}
+			set_temp_variable = {
+				temp_inventory = global.gun_runner_inventory
+			}
+			divide_temp_variable = {
+				temp_inventory = -7000
+			}
+			set_temp_variable = {
+				temp_multiplier = 1
+			}
+			subtract_from_temp_variable = {
+				temp_multiplier = temp_inventory
+			}
+			clamp_temp_variable = {
+				var = temp_multiplier
+				min = 0.1
+				max = 1
+			}
+			multiply_temp_variable = {
+				caps_to_add = temp_multiplier
+			}
+			set_temp_variable = { opinion_var_temp = gun_runner_opinion }
+			get_caps_discount = yes
+			add_to_variable = {
+				temp_discount = 1
+			}
+			multiply_temp_variable = { caps_to_add = temp_discount }
+			add_to_variable = { gun_runner_opinion = 5 }
+			clamp_variable = {
+				var = gun_runner_opinion
+				max = gun_runner_opinion_max
+			}
+			add_caps = yes
+			add_to_variable = {
+				global.gun_runner_inventory = 500
+			}
+			custom_effect_tooltip = market_sell_equipment_tt
+		}
+		days_remove = 40
+		days_re_enable = 60
+
+	}
+}
