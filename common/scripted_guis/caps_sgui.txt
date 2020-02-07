@@ -1,0 +1,222 @@
+scripted_gui = {
+
+	caps_number_display = {
+		context_type = player_context
+
+		window_name = "caps_container"
+
+		visible = {
+			always = yes
+			has_game_rule = {
+				rule = caps_system_toggle
+				option = ENABLED
+			}
+		}
+
+		properties = {
+			caps_icon = {
+				image = "[GetCapDisplay]"
+			}
+		}
+	}
+	caps_division_designer = {
+		context_type = player_context
+		window_name = "caps_div_container"
+		parent_window_name = "countrydivisiondesignerview"
+		visible = {
+			has_game_rule = {
+				rule = caps_system_toggle
+				option = ENABLED
+			}
+			always = no
+		}
+		properties = {
+			caps_icon = {
+				image = "[GetCapDisplay]"
+			}
+		}
+	}
+
+	caps_recruit_screen = {
+		context_type = player_context
+		window_name = "caps_recruit_screen"
+		parent_window_name = "countrydeploymentview"
+		visible = {
+			has_game_rule = {
+				rule = caps_system_toggle
+				option = ENABLED
+			}
+		}
+		properties = {
+			caps_icon = {
+				image = "[GetCapDisplay]"
+			}
+		}
+	}
+
+	caps_decision_gui = {
+		context_type = decision_category
+		window_name = "caps_decision_gui"
+		visible = {
+			always = yes
+			has_game_rule = {
+				rule = caps_system_toggle
+				option = ENABLED
+			}
+		}
+		properties = {
+			caps_icon = {
+				image = "[GetCapDisplay]"
+			}
+		}
+	}
+	caps_market_window = {
+		context_type = player_context
+		window_name = "caps_market_window"
+		parent_window_name = "countrydecisionview"
+		visible = {
+			always = yes
+			has_game_rule = {
+				rule = caps_system_toggle
+				option = ENABLED
+			}
+		}
+		effects = {
+		}
+		triggers = {
+		}
+
+	}
+	market_org_window = {
+		window_name = "market_org_window"
+		parent_window_name = "caps_market_window_instance"
+		context_type = player_context
+
+		visible = {
+			check_variable = { market_var > 0 }
+		}
+		properties = {
+			market_icon = {
+				image = "[GetMarketIcon]"
+			}
+		}
+	}
+	caps_market_side_bar = {
+		window_name = "caps_market_side_bar"
+		parent_window_name = "market_org_window_instance"
+		context_type = player_context
+		visible = {
+			always = yes
+			has_game_rule = {
+				rule = caps_system_toggle
+				option = ENABLED
+			}
+		}
+		effects = {
+			gun_runner_open_click = {
+				set_variable = { market_var = 1 }
+				set_variable = { gui_displace_var = 100 }
+				calculate_gun_runner_inventory = yes
+			}
+			slave_runner_open_click = {
+				set_variable = { market_var = 3 }
+				set_variable = { gui_displace_var = 58 }
+			}
+			chem_runner_open_click = {
+				set_variable = { market_var = 2 }
+				set_variable = { gui_displace_var = 20 }
+			}
+			gun_runner_open_active_click = {
+				set_variable = { market_var = 0 }
+			}
+			slave_runner_open_active_click = {
+				set_variable = { market_var = 0 }
+			}
+			chem_runner_open_active_click = {
+				set_variable = { market_var = 0 }
+			}
+		}
+		triggers = {
+			gun_runner_open_visible = {
+				NOT = { check_variable = { market_var = 1 } }
+			}
+			gun_runner_open_active_visible = {
+				check_variable = { market_var = 1 }
+			}
+			chem_runner_open_visible = {
+				NOT = { check_variable = { market_var = 2 } }
+				NOT = { has_idea = chems_banned }
+			}
+			chem_runner_open_active_visible = {
+				check_variable = { market_var = 2 }
+				NOT = { has_idea = chems_banned }
+			}
+			slave_runner_open_visible = {
+				NOT = { check_variable = { market_var = 3 } }
+				NOT = { has_idea = slavery_outlawed }
+			}
+			slave_runner_open_active_visible = {
+				check_variable = { market_var = 3 }
+				NOT = { has_idea = slavery_outlawed }
+			}
+		}
+		properties = {
+			glow_select_effect = {
+				y = gui_displace_var
+			}
+		}
+	}
+	caps_market_side_bar_initial = {
+		window_name = "caps_market_side_bar_initial"
+		parent_window_name = "caps_market_window_instance"
+		context_type = player_context
+		visible = {
+			check_variable = { market_var = 0 }
+		}
+		effects = {
+			gun_runner_open_click = {
+				set_variable = { market_var = 1 }
+				set_variable = { gui_displace_var = 100 }
+				calculate_gun_runner_inventory = yes
+			}
+			slave_runner_open_click = {
+				set_variable = { market_var = 3 }
+				set_variable = { gui_displace_var = 58 }
+			}
+			chem_runner_open_click = {
+				set_variable = { market_var = 2 }
+				set_variable = { gui_displace_var = 20 }
+			}
+		}
+		triggers = {
+			slave_runner_open_visible = {
+				NOT = { has_idea = slavery_outlawed }
+			}
+			chem_runner_open_visible = {
+				NOT = { has_idea = chems_banned }
+			}
+		}
+	}
+	top_bar_sgui = {
+		context_type = player_context
+
+		window_name = "top_bar"
+		visible = {
+			always = no
+			has_game_rule = {
+				rule = caps_system_toggle
+				option = ENABLED
+			}
+		}
+
+		effects = {}
+
+		triggers = {}
+
+		properties = {
+			caps_icon = {
+				image = "[GetCapDisplay]"
+			}
+		}
+	}
+}
