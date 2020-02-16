@@ -1,0 +1,45 @@
+ai_has_no_other_wars_or_wargoals = {
+	hidden_trigger = {
+		if = {
+			limit = { is_ai = yes }
+			has_war = no
+			NOT = {
+				any_country = {
+					ROOT = { has_wargoal_against = PREV }
+				}
+			}
+		}
+	}
+}
+
+all_core_land_owned_by_prev_sphere = {
+	custom_trigger_tooltip = {
+		tooltip = all_core_land_owned_by_prev_sphere_tt
+		PREV = {
+			sphere_owns_all_core_land_of_prev = yes
+		}
+	}
+}
+
+sphere_owns_all_core_land_of_prev = {
+	custom_trigger_tooltip = {
+		tooltip = sphere_owns_all_core_land_of_prev_tt
+		set_temp_variable = { sphere_country = THIS }
+		set_temp_variable = { target_country = PREV }
+		NOT = {
+			any_state = {
+				is_core_of = target_country
+				OWNER = {
+					NOT = {
+						OR = {
+							tag = sphere_country
+							is_subject_of = sphere_country
+							is_in_faction_with = sphere_country
+						}
+					}
+				}
+			}
+		}
+	}
+}
+# vim: set ft=pdx ts=2 sw=2 tw=79 :
