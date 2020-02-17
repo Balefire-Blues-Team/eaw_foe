@@ -234,7 +234,7 @@ shared_focus = {
 #Investigate the Commitee
 shared_focus = {
 		id = NEV_investigate_commitee
-		icon = gfx_goal_unknown
+		icon = GFX_goal_NEV_investigate_military
 		x = 2
 		y = 3
 		relative_position_id = NEV_new_cloudsdale
@@ -300,7 +300,7 @@ shared_focus = {
 #Fate of the General
 shared_focus = {
 		id = NEV_fate_general
-		icon = GFX_goal_NEV_featherfall
+		icon = GFX_goal_NEV_fate_of_featherfall
 		x = 0
 		y = 5
 		relative_position_id = NEV_new_cloudsdale
@@ -554,7 +554,7 @@ shared_focus = {
 #Volunteer problem
 shared_focus = {
 		id = NEV_volunteer_problem
-		icon = gfx_goal_unknown
+		icon = GFX_goal_NEV_volunteer_problem
 		x = 5
 		y = 2
 		relative_position_id = NEV_new_cloudsdale
@@ -739,7 +739,7 @@ shared_focus = {
 #The New Government
 shared_focus = {
 		id = NEV_new_government
-		icon = gfx_goal_unknown
+		icon = GFX_goal_NEV_the_new_government
 		x = 0
 		y = 6
 		relative_position_id = NEV_new_cloudsdale
@@ -2004,7 +2004,7 @@ shared_focus = {
 			create_field_marshal = {
 				name = "Tornado"
 				picture = "Tornado.tga"
-				traits = { cloudsdale_commander }
+				traits = { cloudsdale_commander charismatic_trait perceptive_trait intelligent_trait}
 				skill = 5
 				attack_skill = 4
 				defense_skill = 3
@@ -2039,6 +2039,7 @@ shared_focus = {
 			limit = { has_unit_leader = 9786 }
 			remove_unit_leader = 9786
 			}
+			hidden_effect = {country_event = { id = cloudsdale.48 days = 400}}
 		}
 }
 
@@ -2601,7 +2602,7 @@ shared_focus = {
 			create_corps_commander = {
 				name = "Sergeant Dornmare"
 				picture = "Sergeant_Dorn_Mare.tga"
-				traits = { old_guard cloudsdale_commander}
+				traits = { old_guard cloudsdale_commander enduring_trait lucky_trait}
 				skill = 6
 				attack_skill = 2
 				defense_skill = 7
@@ -2613,7 +2614,7 @@ shared_focus = {
 			create_corps_commander = {
 				name = "Skywing"
 				picture = "generic_enclave_5.tga"
-				traits = { old_guard cloudsdale_commander}
+				traits = { old_guard cloudsdale_commander intelligent_trait}
 				skill = 4
 				attack_skill = 3
 				defense_skill = 3
@@ -2998,7 +2999,7 @@ shared_focus = {
 #Invite Pegasi settlers
 shared_focus = {
 		id = NEV_con_invite_settlers
-		icon = gfx_goal_unknown
+		icon = GFX_goal_NEV_pegasi_settlement
 		x = 0
 		y = 3
 		relative_position_id = NEV_con_civilize_savages
@@ -4057,7 +4058,7 @@ shared_focus = {
 #Offer to buy out the Guilds
 shared_focus = {
 		id = NEV_con_buy_guild
-		icon = gfx_goal_unknown
+		icon = GFX_goal_NEV_guilds_buyout
 		x = 4
 		y = 1
 		relative_position_id = NEV_con_expand_north
@@ -4169,7 +4170,7 @@ shared_focus = {
 #Enclave sanctioned Guilds
 shared_focus = {
 		id = NEV_con_sanction_guild
-		icon = gfx_goal_unknown
+		icon = GFX_goal_NEV_guilds_control
 		x = 4
 		y = 4
 		relative_position_id = NEV_con_expand_north
@@ -4619,7 +4620,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_take_command"
-			
+			add_political_power = 50
+			add_popularity = { ideology = visionary popularity = 0.10 }
 		}
 }
 
@@ -4639,7 +4641,36 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_curtail_military"
-			
+		if = {
+			limit = {
+				has_idea = NEV_council_defunct
+			}
+			add_political_power = -100
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_weak
+			}
+			swap_ideas = { remove_idea = NEV_council_weak add_idea = NEV_council_defunct}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_functional
+			}
+			swap_ideas = { remove_idea = NEV_council_functional add_idea = NEV_council_weak}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_strong
+			}
+			swap_ideas = { remove_idea = NEV_council_strong add_idea = NEV_council_functional}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_dominant
+			}
+			swap_ideas = { remove_idea = NEV_council_dominant add_idea = NEV_council_strong}
+		}
 		}
 }
 
@@ -4659,7 +4690,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_coop_tornado"
-			
+			add_popularity = { ideology = continuation popularity = 0.08 }
+			add_political_power = 20
 		}
 }
 
@@ -4679,7 +4711,15 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_brand_autumn"
-			
+			add_popularity = {
+				ideology = destruction
+				popularity = -0.1
+			}
+			if = {
+			limit = { has_unit_leader = 9786 }
+			remove_unit_leader = 9786
+			}
+			hidden_effect = {country_event = { id = cloudsdale.48 days = 400}}
 		}
 }
 
@@ -4694,13 +4734,25 @@ shared_focus = {
 		available_if_capitulated = yes 
 		mutually_exclusive = { focus = NEV_vis_oversight_council}
 		prerequisite = { focus = NEV_vis_coop_tornado }
+		prerequisite = { focus = NEV_vis_brand_autumn }
 		ai_will_do = { 
 		factor = 100
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_tornado_council"
-			
+			add_popularity = { ideology = continuation popularity = 0.08 }
+			create_field_marshal = {
+				name = "Tornado"
+				picture = "Tornado.tga"
+				traits = { cloudsdale_commander charismatic_trait perceptive_trait intelligent_trait}
+				skill = 5
+				attack_skill = 4
+				defense_skill = 3
+				planning_skill = 4
+				logistics_skill = 2
+				id = 9791
+			}
 		}
 }
 
@@ -4720,7 +4772,18 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_seperate_but_equal"
-			
+		if = {
+			limit = {
+				has_idea = NEV_council_defunct
+			}
+			swap_ideas = { remove_idea = NEV_council_defunct add_idea = NEV_council_functional}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_weak
+			}
+			swap_ideas = { remove_idea = NEV_council_weak add_idea = NEV_council_functional}
+		}
 		}
 }
 
@@ -4735,20 +4798,50 @@ shared_focus = {
 		available_if_capitulated = yes 
 		mutually_exclusive = { focus = NEV_vis_tornado_council}
 		prerequisite = { focus = NEV_vis_coop_tornado }
+		prerequisite = { focus = NEV_vis_brand_autumn }
 		ai_will_do = { 
 		factor = 100
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_oversight_council"
-			
+		if = {
+			limit = {
+				has_idea = NEV_council_defunct
+			}
+			add_political_power = -100
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_weak
+			}
+			swap_ideas = { remove_idea = NEV_council_weak add_idea = NEV_council_defunct}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_functional
+			}
+			swap_ideas = { remove_idea = NEV_council_functional add_idea = NEV_council_weak}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_strong
+			}
+			swap_ideas = { remove_idea = NEV_council_strong add_idea = NEV_council_functional}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_dominant
+			}
+			swap_ideas = { remove_idea = NEV_council_dominant add_idea = NEV_council_strong}
+		}
 		}
 }
 
 #Merge Council and Senate Authority
 shared_focus = {
 		id = NEV_vis_merge_institutions
-		icon = gfx_goal_unknown
+		icon = GFX_goal_NEV_council_senate_merge
 		x = 3
 		y = 4
 		relative_position_id = NEV_vis_take_command
@@ -4761,7 +4854,56 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_merge_institutions"
-			
+		if = {
+			limit = {
+				has_idea = NEV_council_defunct
+			}
+			remove_ideas = NEV_council_defunct
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_weak
+			}
+			remove_ideas = NEV_council_weak 
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_council_functional
+			}
+			remove_ideas = NEV_council_functional
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_defunct
+			}
+			remove_ideas = NEV_senate_defunct
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_weak
+			}
+			remove_ideas = NEV_senate_weak
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_functional
+			}
+			remove_ideas = NEV_senate_functional
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_strong
+			}
+			remove_ideas = NEV_senate_strong
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_senate_dominant
+			}
+			remove_ideas = NEV_senate_dominant
+		}
+		add_ideas = NEV_senate_council_merge
+
 		}
 }
 
@@ -4781,7 +4923,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_consolidate_power"
-			
+			add_popularity = { ideology = visionary popularity = 0.08 }
+			add_political_power = 50
 		}
 }
 
@@ -4801,7 +4944,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_lesser_senate"
-			
+			country_event = { id = cloudsdale_vis.1 }
 		}
 }
 
@@ -4821,7 +4964,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_begin_reforms"
-			
+			country_event = { id = cloudsdale_vis.2 }
 		}
 }
 
@@ -4841,7 +4984,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_reform_press1"
-			
+			add_ideas = NEV_press_reform1
 		}
 }
 
@@ -4861,14 +5004,14 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_reform_press2"
-			
+			swap_ideas = { remove_idea = political_effort_state_press add_idea = political_effort_press}
 		}
 }
 
 #De-classify info about the Surface
 shared_focus = {
 		id = NEV_vis_reform_press3
-		icon = gfx_goal_unknown
+		icon = GFX_goal_NEV_wasteland_truth
 		x = -7
 		y = 2
 		relative_position_id = NEV_vis_begin_reforms
@@ -4881,7 +5024,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_reform_press3"
-			
+			country_event = { id = cloudsdale_vis.3 }
 		}
 }
 
@@ -4902,7 +5045,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_reform_press4"
-			
+			swap_ideas = { remove_idea = NEV_press_reform1 add_idea = NEV_press_reform2}
 		}
 }
 
@@ -4922,7 +5065,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_reform_industry1"
-			
+			add_ideas = NEV_reform_indus1
 		}
 }
 
@@ -4942,7 +5085,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_reform_industry2"
-			
+			country_event = { id = cloudsdale_vis.4 }
 		}
 }
 
@@ -4962,11 +5105,11 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_reform_industry3"
-			
+			country_event = { id = cloudsdale_vis.5 }
 		}
 }
 
-#Create a national trust-fund
+#Abolish Economic planning commitee
 shared_focus = {
 		id = NEV_vis_reform_industry4
 		icon = gfx_goal_unknown
@@ -4983,7 +5126,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_reform_industry4"
-			
+			swap_ideas = { remove_idea = NEV_reform_indus1 add_idea = NEV_reform_indus2}
 		}
 }
 
@@ -5003,7 +5146,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_reform_culture1"
-			
+			add_ideas = NEV_cultural_upheaval
 		}
 }
 
@@ -5023,7 +5166,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_reform_culture2"
-			
+			country_event = { id = cloudsdale_vis.7 }
 		}
 }
 
@@ -5043,7 +5186,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_reform_culture3"
-			
+			country_event = { id = cloudsdale_vis.8 }
 		}
 }
 
@@ -5064,7 +5207,11 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_reform_culture4"
-			
+			swap_ideas = { remove_idea = NEV_cultural_upheaval add_idea = NEV_cultural_renaissance}
+			every_other_country = { limit = { NOT = {is_in_faction_with = ROOT }} 	
+				remove_opinion_modifier = { target = ROOT modifier = stupid_enclave }
+				reverse_remove_opinion_modifier = { target = ROOT modifier = dirty_wastelander }
+			}
 		}
 }
 
@@ -5084,7 +5231,11 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_reform_military1"
-			
+			add_political_power = -50
+			add_popularity = {
+				ideology = destruction
+				popularity = -0.2
+			}
 		}
 }
 
@@ -5104,7 +5255,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_reform_military2"
-			
+			add_war_support = -0.1
+			army_experience = 20
 		}
 }
 
@@ -5124,7 +5276,12 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_reform_military3"
-			
+			add_tech_bonus = {
+				name = chem_bonus
+				bonus = 0.8
+				uses = 2
+				category = chem_tech
+			}
 		}
 }
 
@@ -5145,7 +5302,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_reform_military4"
-			
+			add_ideas = NEV_peaceful_society
 		}
 }
 
@@ -5165,7 +5322,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_reform_academia1"
-			
+			add_ideas = NEV_reform_academia
 		}
 }
 
@@ -5185,7 +5342,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_reform_academia2"
-			
+			add_research_slot = 1
 		}
 }
 
@@ -5205,7 +5362,11 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_reform_academia3"
-			
+			add_stability = 0.07
+			add_popularity = {
+				ideology = continuation
+				popularity = -0.1
+			}
 		}
 }
 
@@ -5226,7 +5387,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_reform_academia4"
-			
+			swap_ideas = { remove_idea = NEV_reform_academia add_idea = NEV_reformed_academia}
 		}
 }
 
