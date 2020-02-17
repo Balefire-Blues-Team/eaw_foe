@@ -1679,6 +1679,8 @@ shared_focus = {
 			}
 			add_manpower = -100
 		}
+
+		custom_effect_tooltip = RED_bloody_army_tt
 	}
 
 }
@@ -1712,7 +1714,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_new_appleloosa
-	icon = GFX_goal_unknown
+	icon = GFX_goal_rct_train
 	relative_position_id = RED_expand_influence
 	x = 0
 	y = 1
@@ -1826,6 +1828,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_cybernetic"
+
+		add_ideas = redeye_cyber_idea
 	}
 
 }
@@ -2108,7 +2112,10 @@ shared_focus = {
 	cost = 10
 
 	bypass = {
-        NOT = { country_exists = FSR }
+		OR = {
+        	NOT = { country_exists = FSR }
+        	is_in_faction_with = FSR
+        }
     }
 
 	prerequisite = { focus = RED_rally_support } 
@@ -2119,7 +2126,7 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_filly_rangers"
 
-
+		custom_effect_tooltip = RED_sr_decisions_tt
 	}
 
 }
@@ -2153,6 +2160,10 @@ shared_focus = {
 	y = 1
 	cost = 5
 
+	available = {
+		controls_state = 542
+		controls_state = 545
+	}
 	bypass = {
 		OR = {
         	NOT = { country_exists = FSR }
@@ -2245,7 +2256,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_too_much_monster
-	icon = GFX_goal_unknown
+	icon = GFX_goal_redeye
 	relative_position_id = RED_redeye_political
 	x = -3
 	y = 5
@@ -2271,7 +2282,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_the_spp
-	icon = GFX_goal_unknown
+	icon = GFX_goal_NEV_cloudsdale
 	relative_position_id = RED_redeye_political
 	x = 0
 	y = 5
@@ -2352,13 +2363,36 @@ shared_focus = {
 	relative_position_id = RED_the_spp
 	x = 0
 	y = 1
-	cost = 35
+	cost = 5
 
 	prerequisite = { focus = RED_phoenix_rising } 
 	prerequisite = { focus = RED_pegasus_option } 
 	prerequisite = { focus = RED_stable_dweller }
 	prerequisite = { focus = RED_the_spp } 
 	prerequisite = { focus = RED_too_much_monster } 
+
+	available = {
+		has_country_leader = {
+    		name = "Red Eye"
+    		is_ruling_only = yes
+		}
+		OR = {
+			AND = {
+				has_war_with = NEV
+				NEV = {
+					has_country_leader = {
+    					name = "Autumn Leaf"
+    					is_ruling_only = yes
+					}
+				}
+			}
+			has_country_flag = RED_flag_found_pegasus
+		}
+		OR = {
+			has_global_flag = lightbringer_new_unity_flag
+			has_global_flag = lightbringer_dead_flag
+		}
+	}
 
 	ai_will_do = { 
 		factor = 55
