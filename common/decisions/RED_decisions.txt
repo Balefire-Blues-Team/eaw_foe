@@ -16,7 +16,7 @@ RED_fund_bloody_army = {
 		is_good = yes
 		visible = {
 			OR = {
-				has_completed_focus = RED_bloody_army
+				has_completed_focus = RED_expand_influence
 				has_completed_focus = RED_bloody_army_stern
 			}
 		}
@@ -53,7 +53,7 @@ RED_fund_bloody_army = {
 		is_good = yes
 		visible = {
 			OR = {
-				has_completed_focus = RED_bloody_army
+				has_completed_focus = RED_expand_influence
 				has_completed_focus = RED_bloody_army_stern
 			}
 		}
@@ -168,7 +168,7 @@ RED_fund_bloody_army = {
 		is_good = yes
 		visible = {
 			OR = {
-				has_completed_focus = RED_bloody_army
+				has_completed_focus = RED_expand_influence
 				has_completed_focus = RED_bloody_army_stern
 			}
 		}
@@ -400,7 +400,7 @@ RED_steel_rangers = {
 		}
 
 		visible = {
-			has_completed_focus = RED_steel_rangers
+			has_completed_focus = RED_filly_rangers
 			has_war = no
 			NOT = {
 				owns_state = 542
@@ -416,7 +416,7 @@ RED_steel_rangers = {
 		}
 
 		cost = 100
-		days_re_enable = 90
+		days_re_enable = 60
 
 		ai_will_do = {
 			factor = 10
@@ -442,6 +442,68 @@ RED_steel_rangers = {
 					on_win = redeye.103
 					on_lose = redeye.104
 					on_cancel = redeye.105
+				}
+			}
+		}
+	}
+
+	RED_attack_southend = {
+		icon = border_war
+
+		available = {
+			has_full_control_of_state = 542
+			divisions_in_state = {
+				state = 542
+				size > 0
+			}
+			NOT = {
+				has_country_flag = RED_defeat_in_border_war
+			}
+		}
+
+		visible = {
+			has_completed_focus = RED_filly_rangers
+			has_war = no
+			NOT = {
+				owns_state = 536
+			}
+			owns_state = 542
+		}
+
+		highlight_states = {
+			OR = {
+				state = 536
+				state = 542
+			}
+		}
+
+		cost = 100
+		days_re_enable = 60
+
+		ai_will_do = {
+			factor = 10
+		}
+
+		fire_only_once = no
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RED_attack_southend"
+			start_border_war = {
+				change_state_after_war = no
+				attacker = {
+					state = 542
+					num_provinces = 4
+					on_win = redeye.106
+					on_lose = redeye.107
+					on_cancel = redeye.108
+				}
+
+				defender = {
+					state = 536
+					num_provinces = 4
+					on_win = redeye.109
+					on_lose = redeye.110
+					on_cancel = redeye.111
 				}
 			}
 		}
@@ -553,9 +615,99 @@ RED_slaving = {
 		}
 	}
 
+	RED_IMP_experiment = {
+		icon = generic_magic
+		cost = 25
+
+		available = {
+			check_variable = {
+                RED_slaves_var > 2
+            }
+            check_variable = {
+				IMP_research_var < 5
+			}
+		}
+
+		visible = {
+			has_completed_focus = RED_end_trade
+			has_completed_focus = RED_imp_experiments
+		}
+
+		days_remove = 30
+		days_re_enable = 60
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RED_IMP_experiment"
+
+			custom_effect_tooltip = RED_1_lose_slave_tt
+			subtract_from_variable = {
+				var = RED_slaves_var
+				value = 1
+			}
+			add_to_variable = {
+				var = IMP_research_var
+				value = 1
+			}
+
+			if = {
+				limit = {
+					check_variable = {
+						IMP_research_var = 4
+					}
+				}
+
+				set_technology = {
+    				dragons_light = 1
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+
+	RED_alicorn_creation = {
+		icon = generic_magic
+		cost = 25
+
+		available = {
+			controls_state = 593
+		}
+
+		visible = {
+			check_variable = {
+				IMP_research_var = 5
+			}
+			has_completed_focus = RED_new_unity
+		}
+
+		days_remove = 30
+		days_re_enable = 60
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RED_IMP_experiment"
+
+			custom_effect_tooltip = RED_1_lose_slave_tt
+			custom_effect_tooltip = RED_alicorn_spawn_tt
+			subtract_from_variable = {
+				var = RED_slaves_var
+				value = 1
+			}
+			hidden_effect = { 
+				load_oob = "RED_new_alicorns"
+			}
+
+
+		}
+
+		ai_will_do = {
+			factor = 0
+		}
+	}
+
 	RED_slave_mil_factory = {
 		icon = generic_industry
 		cost = 75
+		custom_cost_text = decision_cost_bank_3_pp_50
 
 		available = {
 			custom_trigger_tooltip = {
