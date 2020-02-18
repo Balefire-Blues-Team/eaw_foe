@@ -2125,7 +2125,7 @@ country_event = {
 	
 }
 
-##Snowstorm returns
+##Memory twins return
 country_event = {
 	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_vis.10"}
  	id = cloudsdale_vis.10
@@ -2144,6 +2144,194 @@ country_event = {
 	}
 	
 }
+
+##NEV is sending an aid-mission
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_vis.11"}
+ 	id = cloudsdale_vis.11
+ 	title = cloudsdale_vis.11.t
+ 	desc = cloudsdale_vis.11.d
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		ai_chance = { factor = 70 }
+		name = cloudsdale_vis.11.a
+		NEV = { puppet = ROOT }
+	}
+	
+	option = {
+		ai_chance = { factor = 0 }
+		name = cloudsdale_vis.11.b
+		
+	}
+	
+}
+
+##The Festival of Plenty
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_vis.12"}
+ 	id = cloudsdale_vis.12
+ 	title = cloudsdale_vis.12.t
+ 	desc = cloudsdale_vis.12.d
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		ai_chance = { factor = 70 }
+		name = cloudsdale_vis.12.a
+		NEV = { annex_country = { target = HSC transfer_troops = no } }
+		NEV = { annex_country = { target = HSW transfer_troops = no } }
+		if = {
+			limit = {
+				has_idea = NEV_food_famine
+			}
+			swap_ideas = { remove_idea = NEV_food_famine add_idea =  NEV_food_rationed}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_food_rationed
+			}
+			swap_ideas = { remove_idea = NEV_food_rationed add_idea = NEV_food_stable}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_food_stable
+			}
+			swap_ideas = { remove_idea = NEV_food_stable add_idea = NEV_food_plenty}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_food_plenty
+			}
+			swap_ideas = { remove_idea = NEV_food_plenty add_idea = NEV_food_abundant}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_food_abundant
+			}
+			add_manpower = 2000
+		}
+		hidden_effect = { country_event = { id = cloudsdale_vis.13 days = 200}}
+	}
+	
+}
+
+##Surface Settlement Begins
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_vis.13"}
+ 	id = cloudsdale_vis.13
+ 	title = cloudsdale_vis.13.t
+ 	desc = cloudsdale_vis.13.d
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		ai_chance = { factor = 70 }
+		name = cloudsdale_vis.13.a
+		add_ideas = NEV_surface_settlements
+		every_owned_state = {limit = {NOT = {is_core_of = NEV}} add_manpower = 500}
+		hidden_effect = { country_event = { id = cloudsdale_vis.14 days = 200}}
+	}
+}
+
+##Full integration of Swamp-communities
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_vis.14"}
+ 	id = cloudsdale_vis.14
+ 	title = cloudsdale_vis.14.t
+ 	desc = cloudsdale_vis.14.d
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		ai_chance = { factor = 70 }
+		name = cloudsdale_vis.14.a
+		every_owned_state = {limit = {OR = {is_core_of = HSW is_core_of = HSC}} add_manpower = 200 add_core_of = NEV}
+		if = {
+			limit = {
+				has_idea = NEV_food_famine
+			}
+			swap_ideas = { remove_idea = NEV_food_famine add_idea =  NEV_food_rationed}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_food_rationed
+			}
+			swap_ideas = { remove_idea = NEV_food_rationed add_idea = NEV_food_stable}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_food_stable
+			}
+			swap_ideas = { remove_idea = NEV_food_stable add_idea = NEV_food_plenty}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_food_plenty
+			}
+			swap_ideas = { remove_idea = NEV_food_plenty add_idea = NEV_food_abundant}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_food_abundant
+			}
+			add_manpower = 2000
+		}
+		set_province_name = { id = 2541 name = "Blitzen"}
+		set_province_name = { id = 5251 name = "Sanctuary"}
+		set_province_name = { id = 145 name = "Hayseed Farms"}
+		hidden_effect = { country_event = { id = cloudsdale_vis.15 days = 400}}
+	}
+}
+
+##Farms at maximum Capacity
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_vis.15"}
+ 	id = cloudsdale_vis.15
+ 	title = cloudsdale_vis.15.t
+ 	desc = cloudsdale_vis.15.d
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		ai_chance = { factor = 70 }
+		name = cloudsdale_vis.15.a
+		every_owned_state = {limit = {OR = {is_core_of = HSW is_core_of = HSC}} add_extra_state_shared_building_slots = 1}
+		if = {
+			limit = {
+				has_idea = NEV_food_famine
+			}
+			swap_ideas = { remove_idea = NEV_food_famine add_idea =  NEV_food_rationed}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_food_rationed
+			}
+			swap_ideas = { remove_idea = NEV_food_rationed add_idea = NEV_food_stable}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_food_stable
+			}
+			swap_ideas = { remove_idea = NEV_food_stable add_idea = NEV_food_plenty}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_food_plenty
+			}
+			swap_ideas = { remove_idea = NEV_food_plenty add_idea = NEV_food_abundant}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_food_abundant
+			}
+			add_manpower = 2000
+		}
+		
+	}
+}
+
 
 
 
