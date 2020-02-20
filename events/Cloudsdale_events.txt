@@ -2332,6 +2332,104 @@ country_event = {
 	}
 }
 
+##Formation of the New Cloudsdale Republic
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_vis.16"}
+ 	id = cloudsdale_vis.16
+ 	title = cloudsdale_vis.16.t
+ 	desc = cloudsdale_vis.16.d
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		ai_chance = { factor = 70 }
+		name = cloudsdale_vis.16.a
+		set_cosmetic_tag = NEV_new_cloudsdale_republic
+		add_stability = 0.2
+		add_war_support = 0.15
+		remove_opinion_modifier = { target = every_other_country modifier = dirty_wastelander }
+		#add 1 (one) point towards enclave unification
+	}
+}
+
+##New Cloudsdale wants to trade with us
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_vis.17"}
+ 	id = cloudsdale_vis.17
+ 	title = cloudsdale_vis.17.t
+ 	desc = cloudsdale_vis.17.d
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#yes
+	option = {
+		ai_chance = { factor = 70 }
+		name = cloudsdale_vis.17.a
+		add_ideas = NEV_sunshine_trade_recipient
+		add_opinion_modifier = { target = NEV modifier = sunshine_trade }
+		reverse_add_opinion_modifier = { target = NEV modifier = sunshine_trade }
+		NEV = {country_event = {id = cloudsdale_vis.18}}
+	}
+	
+	#no
+	option = {
+		ai_chance = { factor = 10 }
+		name = cloudsdale_vis.17.b
+		NEV = {create_wargoal = { 
+						type = puppet
+						target = ROOT
+					}
+		}
+	}
+}
+
+##Country has Accepted Trade with us
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_vis.18"}
+ 	id = cloudsdale_vis.18
+ 	title = cloudsdale_vis.18.t
+ 	desc = cloudsdale_vis.18.d
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		ai_chance = { factor = 70 }
+		name = cloudsdale_vis.18.a
+		if = {
+			limit = {
+				has_idea = NEV_sunshine_trade1
+			}
+			swap_ideas = { remove_idea = NEV_sunshine_trade1 add_idea = NEV_sunshine_trade2}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_sunshine_trade2
+			}
+			swap_ideas = { remove_idea = NEV_sunshine_trade2 add_idea = NEV_sunshine_trade3}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_sunshine_trade3
+			}
+			swap_ideas = { remove_idea = NEV_sunshine_trade3 add_idea = NEV_sunshine_trade4}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_sunshine_trade4
+			}
+			swap_ideas = { remove_idea = NEV_sunshine_trade4 add_idea = NEV_sunshine_trade5}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_sunshine_trade5
+			}
+			add_offsite_building = { type = industrial_complex level = 4 }
+		}
+	}
+}
+
+
+
 
 
 
