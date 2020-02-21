@@ -3088,9 +3088,16 @@ shared_focus = {
 		will_lead_to_war_with = LRA
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_con_clear_leslie"
-			create_wargoal = {
-				type = annex_everything
-				target = LRA
+			every_other_country = {
+				limit = {
+					has_full_control_of_state = 575 # Leslie
+				}
+				NEV = {
+					declare_war_on = { 
+						type = annex_everything 
+						target = PREV 
+					}
+				}
 			}
 		}
 }
@@ -3247,9 +3254,16 @@ shared_focus = {
 		will_lead_to_war_with = MAN
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_con_march_mango"
-			create_wargoal = {
-				type = annex_everything
-				target = MAN
+			every_other_country = {
+				limit = {
+					has_full_control_of_state = 795 # New Mango
+				}
+				NEV = {
+					declare_war_on = { 
+						type = annex_everything 
+						target = PREV 
+					}
+				}
 			}
 		}
 }
@@ -3436,9 +3450,16 @@ shared_focus = {
 		will_lead_to_war_with = SHA
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_con_march_sha"
-			create_wargoal = {
-				type = annex_everything
-				target = SHA
+			every_other_country = {
+				limit = {
+					has_full_control_of_state = 610 # Shattered Hoof
+				}
+				NEV = {
+					declare_war_on = { 
+						type = annex_everything 
+						target = PREV 
+					}
+				}
 			}
 		}
 }
@@ -3895,9 +3916,16 @@ shared_focus = {
 		will_lead_to_war_with = MWY
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_con_topple_mrw"
-			create_wargoal = {
-				type = annex_everything
-				target = MWY
+			every_other_country = {
+				limit = {
+					has_full_control_of_state = 549 # New Mareway
+				}
+				NEV = {
+					declare_war_on = { 
+						type = annex_everything 
+						target = PREV 
+					}
+				}
 			}
 		}
 }
@@ -4226,9 +4254,27 @@ shared_focus = {
 		will_lead_to_war_with = RED
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_con_kill_red"
-			create_wargoal = {
-				type = annex_everything
-				target = RED
+			every_other_country = {
+				limit = {
+					has_full_control_of_state = 593 # Cathedral
+				}
+				NEV = {
+					declare_war_on = { 
+						type = annex_everything 
+						target = PREV 
+					}
+				}
+			}
+			every_other_country = {
+				limit = {
+					has_full_control_of_state = 532 # RedEyes factories
+				}
+				NEV = {
+					declare_war_on = { 
+						type = annex_everything 
+						target = PREV 
+					}
+				}
 			}
 		}
 }
@@ -4872,7 +4918,7 @@ shared_focus = {
 			}
 			remove_ideas = NEV_council_functional
 		}
-		else_if = {
+		if = {
 			limit = {
 				has_idea = NEV_senate_defunct
 			}
@@ -5210,7 +5256,6 @@ shared_focus = {
 			swap_ideas = { remove_idea = NEV_cultural_upheaval add_idea = NEV_cultural_renaissance}
 			every_other_country = { limit = { NOT = {is_in_faction_with = ROOT }} 	
 				remove_opinion_modifier = { target = ROOT modifier = stupid_enclave }
-				reverse_remove_opinion_modifier = { target = ROOT modifier = dirty_wastelander }
 			}
 		}
 }
@@ -5828,7 +5873,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_cloudsdale_republic"
-			
+			country_event = { id = cloudsdale_vis.16 }
 		}
 }
 
@@ -5848,7 +5893,14 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_sunshine_trade"
-			
+			custom_effect_tooltip = NEV_vis_sunshine_trade_tt
+			swap_ideas = { remove_idea = NEV_surface_mission add_idea = NEV_sunshine_trade}
+			if = {
+			limit = {
+				has_idea = isolation
+			}
+			swap_ideas = { remove_idea = isolation add_idea = civilian_economy}
+		}
 		}
 }
 
@@ -5868,7 +5920,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_sunshine_nyocastle1"
-			
+			NCG = {country_event = {id = cloudsdale_vis.17}}
 		}
 }
 
@@ -5881,6 +5933,7 @@ shared_focus = {
 		relative_position_id = NEV_vis_sunshine_trade
 		cost = 6.43
 		available_if_capitulated = yes 
+		available = { OR = { NCG = { has_idea = NEV_sunshine_trade_recipient} NCG = {is_subject_of = NEV}}}
 		prerequisite = { focus = NEV_vis_sunshine_nyocastle1 }
 		ai_will_do = { 
 		factor = 50
@@ -5888,7 +5941,9 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_sunshine_nyocastle2"
-			
+			custom_effect_tooltip = help_NCG_kill_bog_tt
+			NCG = {create_wargoal = { type = annex_everything target = BOG }}
+			hidden_effect = { NCG = { load_oob = "NEV_NCG_volunteers"}}
 		}
 }
 
@@ -5901,6 +5956,7 @@ shared_focus = {
 		relative_position_id = NEV_vis_sunshine_trade
 		cost = 6.43
 		available_if_capitulated = yes 
+		available = { OR = { NCG = { has_idea = NEV_sunshine_trade_recipient} NCG = {is_subject_of = NEV}}}
 		prerequisite = { focus = NEV_vis_sunshine_nyocastle1 }
 		ai_will_do = { 
 		factor = 50
@@ -5908,7 +5964,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_sunshine_nyocastle3"
-			
+			747 = { add_extra_state_shared_building_slots = 4 add_building_construction = {type = industrial_complex level = 2 instant_build = yes } add_resource = { type = circuitry amount = 7}}
 		}
 }
 
@@ -5921,6 +5977,7 @@ shared_focus = {
 		relative_position_id = NEV_vis_sunshine_trade
 		cost = 6.43
 		available_if_capitulated = yes 
+		available = { OR = { NCG = { has_idea = NEV_sunshine_trade_recipient} NCG = {is_subject_of = NEV}}}
 		prerequisite = { focus = NEV_vis_sunshine_nyocastle2 }
 		prerequisite = { focus = NEV_vis_sunshine_nyocastle3 }
 		ai_will_do = { 
@@ -5929,7 +5986,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_sunshine_nyocastle4"
-			
+			add_political_power = -100
+			NEV = { puppet = NCG }
 		}
 }
 
@@ -5949,7 +6007,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_sunshine_mango1"
-			
+			MAN = {country_event = {id = cloudsdale_vis.17}}
 		}
 }
 
@@ -5962,6 +6020,7 @@ shared_focus = {
 		relative_position_id = NEV_vis_sunshine_trade
 		cost = 6.43
 		available_if_capitulated = yes 
+		available = { OR = { NCG = { has_idea = NEV_sunshine_trade_recipient} NCG = {is_subject_of = NEV}}}
 		prerequisite = { focus = NEV_vis_sunshine_mango1 }
 		ai_will_do = { 
 		factor = 500
@@ -5969,7 +6028,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_sunshine_mango2"
-			
+			594 = { add_extra_state_shared_building_slots = 2 add_resource = { type = composites amount = 12} add_resource = { type = energy amount = 8}}
 		}
 }
 
@@ -5982,6 +6041,7 @@ shared_focus = {
 		relative_position_id = NEV_vis_sunshine_trade
 		cost = 6.43
 		available_if_capitulated = yes 
+		available = { OR = { NCG = { has_idea = NEV_sunshine_trade_recipient} NCG = {is_subject_of = NEV}}}
 		prerequisite = { focus = NEV_vis_sunshine_mango1 }
 		ai_will_do = { 
 		factor = 500
@@ -5989,7 +6049,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_sunshine_mango3"
-			
+			795 = { add_extra_state_shared_building_slots = 2 add_building_construction = {type = industrial_complex level = 2 instant_build = yes }add_resource = { type = metal amount = 9}}
 		}
 }
 
@@ -6002,6 +6062,7 @@ shared_focus = {
 		relative_position_id = NEV_vis_sunshine_trade
 		cost = 6.43
 		available_if_capitulated = yes 
+		available = { OR = { NCG = { has_idea = NEV_sunshine_trade_recipient} NCG = {is_subject_of = NEV}}}
 		prerequisite = { focus = NEV_vis_sunshine_mango2 }
 		prerequisite = { focus = NEV_vis_sunshine_mango3 }
 		ai_will_do = { 
@@ -6010,7 +6071,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_sunshine_mango4"
-			
+			add_political_power = -100
+			NEV = { puppet = NCG }
 		}
 }
 
@@ -6172,7 +6234,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_sunshine_mwy4"
-			
+			add_political_power = -100
+			NEV = { puppet = NCG }
 		}
 }
 
@@ -6253,7 +6316,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_vis_sunshine_rep4"
-			
+			add_political_power = -100
+			NEV = { puppet = NCG }
 		}
 }
 
