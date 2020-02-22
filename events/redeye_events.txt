@@ -1504,6 +1504,90 @@ country_event = { #Freedom through Unity
 	}
 }
 
+#Shattered Hoof Gamble
+country_event = {
+ 	id = redeye.58
+ 	title = redeye.58.title
+ 	desc = redeye.58.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Let Them Fight
+		name = redeye.58.a
+
+		hidden_effect = { 
+			RSH = {
+				inherit_technology = RED
+			}
+		}
+
+	}
+
+	option = { #Fight as RSH
+		name = redeye.58.b
+		ai_chance = { factor = 10 }
+		trigger = { is_ai = no }
+
+		custom_effect_tooltip = RED_play_RSH_tt
+
+		hidden_effect = { 
+			RSH = { change_tag_from = ROOT }
+			RSH = {
+				inherit_technology = RED
+			}
+			any_unit_leader = {
+				limit = { has_id = id = 59302 }
+				promote_leader = yes
+				set_nationality = RSH
+			}
+		}
+	}
+}
+
+#SHA - Invasion!
+country_event = {
+ 	id = redeye.59
+ 	title = redeye.59.title
+ 	desc = redeye.59.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Fuck!
+		name = redeye.59.a
+		trigger = { is_ai = no }
+
+		RED = {
+			country_event = {
+				id = redeye.58
+			}
+		}
+
+		#hidden_effect = { 
+			set_global_flag = SHA_RED_invasion_flag
+			every_state = {
+				limit = { is_core_of = SHA }
+				add_core_of = RSH
+			}
+			RSH = {
+				add_manpower = 800
+				transfer_state = 562
+				transfer_state = 578
+				
+				load_oob = RSH_starting_troops
+				inherit_technology = RED
+				declare_war_on = {
+					target = SHA
+					type = annex_everything
+				}
+			}
+		#}
+	}
+}
+
 ############################
 ### Canterlot Expedition ###
 ############################
@@ -1737,6 +1821,8 @@ country_event = { #Canterlot Expedition: Wastelander Canterlot
 		}
 	}
 }
+
+
 
 ################################
 ### Steel Rangers Border War ###
@@ -2259,7 +2345,7 @@ country_event = {
 			ruling_party = destruction
 		}
 
-		hidden_effect = { 
+		#hidden_effect = { 
 			RED = { set_cosmetic_tag = RED_stern }
 			load_focus_tree = redeye_stern
 			set_global_flag = redeye_is_dead
@@ -2269,6 +2355,7 @@ country_event = {
 				add_core_of = FFD
 			}
 			FFD = {
+				#change_tag_from = RED 
 				delete_unit_template_and_units = {
 					division_template = "Talon Company"
 				}
@@ -2279,15 +2366,13 @@ country_event = {
 				transfer_state = 525
 				
 				load_oob = FFD_1235
-				transfer_technology = yes
-			}
-			FFD = {
+				inherit_technology = RED
 				declare_war_on = {
 					target = RED
 					type = annex_everything
 				}
 			}
-		}
+		#}
 
 	}
 
@@ -2310,18 +2395,18 @@ country_event = {
 				add_core_of = FFD
 			}
 			FFD = {
+				change_tag_from = RED 
 				delete_unit_template_and_units = {
 					division_template = "Talon Company"
 				}
+				add_manpower = 600
 				transfer_state = 45
 				transfer_state = 48
 				transfer_state = 532
 				transfer_state = 525
 				
 				load_oob = FFD_1235
-				transfer_technology = yes
-			}
-			FFD = {
+				inherit_technology = RED
 				declare_war_on = {
 					target = RED
 					type = annex_everything
@@ -2402,7 +2487,7 @@ country_event = {
 		ai_chance = { factor = 20}
 
 		add_resource = {
-    		type = electronics
+    		type = energy
     		amount = 12
     		state = 538
 		}
