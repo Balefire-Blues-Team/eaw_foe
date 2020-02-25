@@ -788,7 +788,7 @@ shared_focus = {
 		has_idea = raider_partisans
 	}
 	ai_will_do = { 
-		factor = 55
+		factor = 50
 	} 
 
 	completion_reward = {
@@ -804,20 +804,32 @@ shared_focus = {
 	icon = GFX_goal_generic_neutrality_focus
 	x = 21
 	y = 0
-	cost = 10
+	cost = 1
 
 	available = {
-		has_completed_focus = RED_futureofamonster
-		NOT = { country_exists = SSC }
+		always = no
 	}
 	ai_will_do = { 
-		factor = 45
+		factor = 120
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_begin_consolidate_power"
 
 		add_timed_idea = { idea = begin_stablizing days = 100 }
+
+		45 = {
+			set_demilitarized_zone = yes
+		}
+		532 = {
+			set_demilitarized_zone = yes
+		}
+		48 = {
+			set_demilitarized_zone = yes
+		}
+		525 = {
+			set_demilitarized_zone = yes
+		}
 
 		hidden_effect = {
 			set_variable = {var = RED_stabilizing value = 0}
@@ -832,11 +844,11 @@ shared_focus = {
 	relative_position_id = RED_begin_consolidate_power
 	x = -4
 	y = 1
-	cost = 10
+	cost = 2
 
 	prerequisite = { focus = RED_begin_consolidate_power }
 	ai_will_do = { 
-		factor = 35
+		factor = 110
 	} 
 
 	completion_reward = {
@@ -852,11 +864,11 @@ shared_focus = {
 	relative_position_id = RED_begin_consolidate_power
 	x = -2
 	y = 1
-	cost = 10
+	cost = 2
 
 	prerequisite = { focus = RED_begin_consolidate_power }
 	ai_will_do = { 
-		factor = 35
+		factor = 120
 	} 
 
 	completion_reward = {
@@ -872,11 +884,11 @@ shared_focus = {
 	relative_position_id = RED_begin_consolidate_power
 	x = 0
 	y = 1
-	cost = 10
+	cost = 2
 
 	prerequisite = { focus = RED_begin_consolidate_power }
 	ai_will_do = { 
-		factor = 25
+		factor = 120
 	} 
 
 	completion_reward = {
@@ -894,11 +906,11 @@ shared_focus = {
 	relative_position_id = RED_begin_consolidate_power
 	x = 2
 	y = 1
-	cost = 10
+	cost = 2
 
 	prerequisite = { focus = RED_begin_consolidate_power }
 	ai_will_do = { 
-		factor = 30
+		factor = 120
 	} 
 
 	completion_reward = {
@@ -914,11 +926,11 @@ shared_focus = {
 	relative_position_id = RED_begin_consolidate_power
 	x = 4
 	y = 1
-	cost = 10
+	cost = 2
 
 	prerequisite = { focus = RED_begin_consolidate_power }
 	ai_will_do = { 
-		factor = 30
+		factor = 120
 	} 
 
 	completion_reward = {
@@ -934,7 +946,7 @@ shared_focus = {
 	relative_position_id = RED_griffon_mail
 	x = 0
 	y = 1
-	cost = 15
+	cost = 3
 
 	prerequisite = { focus = RED_city_of_slaves }
 	prerequisite = { focus = RED_bargain_with_unions }
@@ -1402,7 +1414,7 @@ shared_focus = {
 shared_focus = { 
 	id = RED_redeye_political
 	icon = GFX_goal_redeye
-	x = 10
+	x = 9
 	y = 3
 	cost = 10
 
@@ -1422,23 +1434,54 @@ shared_focus = {
 }
 
 shared_focus = { 
-	id = RED_accept_goddess
-	icon = GFX_goal_unknown
+	id = RED_slave_question
+	icon = GFX_goal_city_slaves
 	relative_position_id = RED_redeye_political
-	x = 6
+	x = -6
 	y = 1
-	cost = 5
+	cost = 7
 
-	prerequisite = { focus = RED_redeye_political }
-	available = {
-		always = no
-	}
+	prerequisite = { focus = RED_redeye_political } 
 	ai_will_do = { 
-		factor = 45
+		factor = 50
 	} 
 
 	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_accept_goddess"
+		log = "[GetDateText]: [Root.GetName]: Focus RED_rally_support"
+
+		country_event = {
+			id = redeye.23
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = RED_repopulate_wasteland
+	icon = GFX_KHA_focus_farm_agriculture
+	relative_position_id = RED_redeye_political
+	x = 6
+	y = 1
+	cost = 7
+
+	prerequisite = { focus = RED_redeye_political } 
+	ai_will_do = { 
+		factor = 50
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_rally_support"
+
+		custom_effect_tooltip = RED_wasteland_settle_tt
+		504 = {
+			add_manpower = 1500
+		}
+		502 = {
+			add_manpower = 1500
+		}
+		529 = {
+			add_manpower = 1500
+		}
 	}
 
 }
@@ -1505,28 +1548,6 @@ shared_focus = {
 
 }
 
-shared_focus = { 
-	id = RED_decline_goddess
-	icon = GFX_goal_unknown
-	relative_position_id = RED_redeye_political
-	x = -6
-	y = 1
-	cost = 5
-
-	prerequisite = { focus = RED_redeye_political }
-	available = {
-		always = no
-	} 
-	ai_will_do = { 
-		factor = 5
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_decline_goddess"
-	}
-
-}
-
 #Radio
 shared_focus = { 
 	id = RED_bigger_radio
@@ -1580,39 +1601,31 @@ shared_focus = {
 
 #Accept The Goddess
 shared_focus = { 
-	id = RED_expand_influence
-	icon = GFX_goal_redeye_octopus
-	relative_position_id = RED_accept_goddess
-	x = -3
+	id = RED_old_appleloosa
+	icon = GFX_goal_appleloosa
+	relative_position_id = RED_redeye_political
+	x = -4
 	y = 1
 	cost = 10
 
-	prerequisite = { focus = RED_accept_goddess } 
+	prerequisite = { focus = RED_redeye_political } 
 	ai_will_do = { 
 		factor = 30
 	} 
 
 	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_expand_influence"
-	}
+		log = "[GetDateText]: [Root.GetName]: Focus RED_old_appleloosa"
 
-}
-
-shared_focus = { 
-	id = RED_steel_rangers
-	icon = GFX_goal_legion_bos_war
-	relative_position_id = RED_accept_goddess
-	x = 0
-	y = 2
-	cost = 10
-
-	prerequisite = { focus = RED_accept_goddess } 
-	ai_will_do = { 
-		factor = 40
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_steel_rangers"
+		give_guarantee = OAP
+		OAP = {
+			add_ideas = redeye_support
+			
+			country_event = {
+    			id = oldappleloosa.1
+    			days = 1
+    			random = 2
+			}
+		}
 	}
 
 }
@@ -1620,12 +1633,12 @@ shared_focus = {
 shared_focus = { 
 	id = RED_begin_trade
 	icon = GFX_goal_unicorn_trade
-	relative_position_id = RED_accept_goddess
-	x = 3
+	relative_position_id = RED_redeye_political
+	x = 4
 	y = 1
 	cost = 10
 
-	prerequisite = { focus = RED_accept_goddess} 
+	prerequisite = { focus = RED_redeye_political} 
 	ai_will_do = { 
 		factor = 30
 	} 
@@ -1638,25 +1651,36 @@ shared_focus = {
 }
 
 shared_focus = { 
-	id = RED_old_appleloosa
-	icon = GFX_goal_appleloosa
-	relative_position_id = RED_expand_influence
+	id = RED_expand_influence
+	icon = GFX_goal_redeye_octopus
+	relative_position_id = RED_old_appleloosa
 	x = -1
 	y = 1
 	cost = 10
 
-	prerequisite = { focus = RED_expand_influence } 
+	prerequisite = { focus = RED_old_appleloosa } 
 	ai_will_do = { 
 		factor = 20
 	} 
 
 	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_old_appleloosa"
+		log = "[GetDateText]: [Root.GetName]: Focus RED_expand_influence"
 
-		give_guarantee = OAP
-		OAP = {
-			add_ideas = redeye_support
+		custom_effect_tooltip = RED_5_gain_slave_tt
+		add_to_variable = {
+			var = RED_slaves_var
+			value = 5
 		}
+
+		every_neighbor_country = {
+			add_timed_idea = {
+    			idea = redeye_influence
+    			days = 365
+			}
+			add_manpower = -100
+		}
+
+		custom_effect_tooltip = RED_bloody_army_tt
 	}
 
 }
@@ -1664,12 +1688,12 @@ shared_focus = {
 shared_focus = { 
 	id = RED_foaltopia_gems
 	icon = GFX_goal_crystals_cry
-	relative_position_id = RED_expand_influence
+	relative_position_id = RED_old_appleloosa
 	x = 1
 	y = 1
 	cost = 10
 
-	prerequisite = { focus = RED_expand_influence } 
+	prerequisite = { focus =RED_old_appleloosa } 
 	ai_will_do = { 
 		factor = 25
 	} 
@@ -1689,26 +1713,23 @@ shared_focus = {
 }
 
 shared_focus = { 
-	id = RED_alicorn_overseer
-	icon = GFX_goal_unknown
-	relative_position_id = RED_old_appleloosa
+	id = RED_new_appleloosa
+	icon = GFX_goal_rct_train
+	relative_position_id = RED_expand_influence
 	x = 0
 	y = 1
 	cost = 5
 
-	prerequisite = { focus = RED_old_appleloosa } 
+	prerequisite = { focus = RED_expand_influence } 
 	ai_will_do = { 
 		factor = 25
 	} 
 
 	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_alicorn_overseer"
-		OAP = {
-			country_event = {
-    			id = oldappleloosa.1
-    			days = 1
-    			random = 2
-			}
+		log = "[GetDateText]: [Root.GetName]: Focus RED_new_appleloosa"
+		
+		NAP = {
+			add_ideas = redeye_support
 		}
 	}
 
@@ -1754,51 +1775,15 @@ shared_focus = {
 	cost = 10
 
 	prerequisite = { focus = RED_papa_redeye } 
-	prerequisite = { focus = RED_alicorn_overseer } 
+	prerequisite = { focus = RED_new_appleloosa } 
 	ai_will_do = { 
 		factor = 35
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_slaver_infrastructure"
-	}
 
-}
-
-shared_focus = { 
-	id = RED_future_of_rangers
-	icon = GFX_goal_bos_generic
-	relative_position_id = RED_steel_rangers
-	x = 0
-	y = 1
-	cost = 10
-
-	prerequisite = { focus = RED_steel_rangers } 
-	ai_will_do = { 
-		factor = 40
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_future_of_rangers"
-	}
-
-}
-
-shared_focus = { 
-	id = RED_lord_fillydelphia
-	icon = GFX_goal_unknown
-	relative_position_id = RED_future_of_rangers
-	x = 0
-	y = 1
-	cost = 10
-
-	prerequisite = { focus = RED_future_of_rangers } 
-	ai_will_do = { 
-		factor = 40
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_lord_fillydelphia"
+		add_ideas = slavery_network_idea
 	}
 
 }
@@ -1818,12 +1803,18 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_request_alicorns"
+
+		UNI = {
+			country_event = {
+    			id = redeye.27
+			}
+		}
 	}
 
 }
 
 shared_focus = { 
-	id = RED_harmony_theory
+	id = RED_cybernetic
 	icon = GFX_goal_improve_relations_pony_pony
 	relative_position_id = RED_begin_trade
 	x = 1
@@ -1836,7 +1827,9 @@ shared_focus = {
 	} 
 
 	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_harmony_theory"
+		log = "[GetDateText]: [Root.GetName]: Focus RED_cybernetic"
+
+		add_ideas = redeye_cyber_idea
 	}
 
 }
@@ -1856,6 +1849,17 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_end_trade"
+		if = {
+			limit = { has_completed_focus = RED_imp_experiments }
+			custom_effect_tooltip = RED_imp_testing_2_tt
+			set_variable = {
+				var = IMP_reseach_var
+				value = 0
+			}
+		}
+		else = {
+			custom_effect_tooltip = RED_imp_testing_1_tt
+		}
 	}
 
 }
@@ -1863,24 +1867,35 @@ shared_focus = {
 shared_focus = { 
 	id = RED_imp_experiments 
 	icon = GFX_goal_hazard_barrel
-	relative_position_id = RED_harmony_theory
+	relative_position_id = RED_cybernetic
 	x = 0
 	y = 1
 	cost = 5
 
-	prerequisite = { focus = RED_harmony_theory } 
+	prerequisite = { focus = RED_cybernetic } 
 	ai_will_do = { 
 		factor = 35
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_imp_experiments"
+		if = {
+			limit = { has_completed_focus = RED_end_trade }
+			custom_effect_tooltip = RED_imp_testing_2_tt
+			set_variable = {
+				var = IMP_reseach_var
+				value = 0
+			}
+		}
+		else = {
+			custom_effect_tooltip = RED_imp_testing_1_tt
+		}
 	}
 
 }
 
 shared_focus = { 
-	id = RED_recreate_maripony
+	id = RED_burn_everfree
 	icon = GFX_goal_unknown
 	relative_position_id = RED_imp_experiments 
 	x = -1
@@ -1894,438 +1909,10 @@ shared_focus = {
 	} 
 
 	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_recreate_maripony"
-	}
-
-}
-
-shared_focus = { 
-	id = RED_the_spp
-	icon = GFX_goal_unknown
-	relative_position_id = RED_lord_fillydelphia
-	x = 0
-	y = 1
-	cost = 10
-
-	prerequisite = { focus = RED_lord_fillydelphia } 
-	prerequisite = { focus = RED_recreate_maripony } 
-	prerequisite = { focus = RED_slaver_infrastructure } 
-	ai_will_do = { 
-		factor = 40
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_the_spp"
-	}
-
-}
-
-shared_focus = { 
-	id = RED_stable_dweller
-	icon = GFX_goal_littlepip_night
-	relative_position_id = RED_the_spp
-	x = -1
-	y = 1
-	cost = 10
-
-	prerequisite = { focus = RED_the_spp } 
-	ai_will_do = { 
-		factor = 55
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_new_unity"
-	}
-
-}
-
-shared_focus = { 
-	id = RED_pegasus_option
-	icon = GFX_goal_nim_wing
-	relative_position_id = RED_the_spp
-	x = 1
-	y = 1
-	cost = 10
-
-	prerequisite = { focus = RED_the_spp } 
-	ai_will_do = { 
-		factor = 55
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_pegasus_option"
-	}
-
-}
-
-shared_focus = { 
-	id = RED_new_unity
-	icon = GFX_goal_unknown
-	relative_position_id = RED_the_spp
-	x = 0
-	y = 2
-	cost = 35
-
-	prerequisite = { focus = RED_pegasus_option } 
-	prerequisite = { focus = RED_stable_dweller } 
-	ai_will_do = { 
-		factor = 55
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_new_unity"
-	}
-
-}
-
-
-#Annex Tree
-shared_focus = { 
-	id = RED_reuniting_equestria
-	icon = GFX_goal_end_of_eqs_civil_war
-	relative_position_id = RED_redeye_political
-	x = 0
-	y = 6
-	cost = 2
-
-	prerequisite = { 
-		focus = RED_slaver_infrastructure
-		focus = RED_birth_nation
-	} 
-	bypass = {
-    	has_idea = short_game
-    }
-	ai_will_do = { 
-		factor = 55
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_reuniting_equestria"
-	}
-
-}
-
-shared_focus = { 
-	id = RED_marching_south
-	icon = GFX_goal_unknown
-	relative_position_id = RED_reuniting_equestria
-	x = -2
-	y = 1
-	cost = 5
-
-	prerequisite = { focus = RED_reuniting_equestria }
-	ai_will_do = { 
-		factor = 37
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: RED_marching_south"
-	}
-
-} 
-
-shared_focus = { 
-	id = RED_bloody_army
-	icon = GFX_goal_unknown
-	relative_position_id = RED_marching_south
-	x = 1
-	y = 1
-	cost = 5
-
-	prerequisite = { focus = RED_marching_south }
-	bypass = {
-        NOT = { country_exists = ERA }
-    }
-	ai_will_do = { 
-		factor = 45
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_bloody_army"
-		custom_effect_tooltip = RED_bloody_army_tt
-	}
-
-} 
-
-shared_focus = { 
-	id = RED_nyocastle
-	icon = GFX_goal_unknown
-	relative_position_id = RED_marching_south
-	x = -1
-	y = 1
-	cost = 5
-
-	prerequisite = { focus = RED_marching_south }
-	bypass = {
-		controls_state = 747
-    }
-	ai_will_do = { 
-		factor = 40
-	} 
-
-	will_lead_to_war_with = NCG
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_nyocastle"
-		create_wargoal = { type = annex_everything target = NCG }
-	}
-
-} 
-
-shared_focus = { 
-	id = RED_western_reaches
-	icon = GFX_goal_unknown
-	relative_position_id = RED_marching_south
-	x = 0
-	y = 2
-	cost = 10
-
-	prerequisite = { focus = RED_bloody_army }
-	prerequisite = { focus = RED_nyocastle }
-
-	available = {
-		owns_state = 549
-	}
-	ai_will_do = { 
-		factor = 55
-	} 
-
-	will_lead_to_war_with = EVR
-	will_lead_to_war_with = BOG
-	will_lead_to_war_with = RAF
-	will_lead_to_war_with = REP
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_shattered_hoof_gamble"
-		declare_war_on = {
-    		target = EVR
-    		type = annex_everything
-		}
-		declare_war_on = {
-    		target = BOG
-    		type = annex_everything
-		}
-		declare_war_on = {
-    		target = RAF
-    		type = annex_everything
-		}
-		declare_war_on = {
-    		target = REP
-    		type = annex_everything
-		}
-	}
-
-} 
-
-shared_focus = { 
-	id = RED_shattered_hoof_gamble
-	icon = GFX_focus_gambling
-	relative_position_id = RED_redeye_radio
-	x = 0
-	y = 3
-	cost = 10
-
-	available = {
-		date > 1235.04.01
-	}
-	available = {
-		NOT = {
-			has_global_flag = SHA_lightbringer
-		}
-	}
-
-	ai_will_do = { 
-		factor = 350
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_shattered_hoof_gamble"
-	}
-
-} 
-
-shared_focus = { 
-	id = RED_marching_east
-	icon = GFX_goal_unknown
-	relative_position_id = RED_reuniting_equestria
-	x = 2
-	y = 1
-	cost = 5
-
-	prerequisite = { focus = RED_reuniting_equestria }
-	ai_will_do = { 
-		factor = 37
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: RED_marching_east"
-	}
-
-} 
-
-
-shared_focus = { 
-	id = RED_break_the_mob
-	icon = GFX_goal_unknown
-	relative_position_id = RED_marching_east
-	x = 1
-	y = 1
-	cost = 5
-
-	prerequisite = { focus = RED_marching_east }
-	ai_will_do = { 
-		factor = 37
-	} 
-
-	will_lead_to_war_with = GUN
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_break_the_mob"
-		create_wargoal = { type = annex_everything target = GUN }
-	}
-
-} 
-
-shared_focus = { 
-	id = RED_dappleshore
-	icon = GFX_goal_attack_poninsula
-	relative_position_id = RED_marching_east
-	x = -1
-	y = 1
-	cost = 5
-
-	will_lead_to_war_with = RWK
-	prerequisite = { focus = RED_marching_east }
-	available = {
-		is_neighbor_of = RWK
-	}
-	ai_will_do = { 
-		factor = 37
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_dappleshore"
-		create_wargoal = { type = annex_everything target = RWK }
-	}
-
-} 
-
-shared_focus = { 
-	id = RED_redeye_takes_manehattan
-	icon = GFX_goal_cry_manehattan
-	relative_position_id = RED_marching_east
-	x = 0
-	y = 2
-	cost = 10
-
-	prerequisite = { focus = RED_dappleshore }
-	prerequisite = { focus = RED_break_the_mob }
-	ai_will_do = { 
-		factor = 45
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: RED_redeye_takes_manehattan"
-	}
-
-} 
-
-#Decline The Goddess
-shared_focus = { 
-	id = RED_rally_support
-	icon = GFX_focus_generic_support_the_left_right_claw
-	relative_position_id = RED_decline_goddess
-	x = -3
-	y = 1
-	cost = 10
-
-	prerequisite = { focus = RED_decline_goddess } 
-	ai_will_do = { 
-		factor = 40
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_rally_support"
-
-		add_manpower = 2000
-		add_war_support = 0.1
-	}
-
-}
-
-shared_focus = { 
-	id = RED_repopulate_wasteland
-	icon = GFX_KHA_focus_farm_agriculture
-	relative_position_id = RED_decline_goddess
-	x = -1
-	y = 1
-	cost = 7
-
-	prerequisite = { focus = RED_decline_goddess } 
-	ai_will_do = { 
-		factor = 50
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_rally_support"
-
-		custom_effect_tooltip = RED_wasteland_settle_tt
-		504 = {
-			add_manpower = 1500
-		}
-		502 = {
-			add_manpower = 1500
-		}
-		529 = {
-			add_manpower = 1500
-		}
-	}
-
-}
-
-shared_focus = { 
-	id = RED_steel_rangers2
-	icon = GFX_goal_CES_bos_war
-	relative_position_id = RED_decline_goddess
-	x = 0
-	y = 2
-	cost = 10
-
-	prerequisite = { focus = RED_decline_goddess } 
-	bypass = {
-        NOT = { country_exists = FSR }
-    }
-	ai_will_do = { 
-		factor = 40
-	} 
-
-	will_lead_to_war_with = FSR
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_steel_rangers2"
-
-		declare_war_on = {
-    		target = FSR
-    		type = annex_everything
-		}
-	}
-
-}
-
-shared_focus = { 
-	id = RED_slave_question
-	icon = GFX_goal_city_slaves
-	relative_position_id = RED_decline_goddess
-	x = 1
-	y = 1
-	cost = 7
-
-	prerequisite = { focus = RED_decline_goddess } 
-	ai_will_do = { 
-		factor = 50
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_rally_support"
+		log = "[GetDateText]: [Root.GetName]: Focus RED_burn_everfree"
 
 		country_event = {
-			id = redeye.23
+    		id = redeye.25
 		}
 	}
 
@@ -2334,12 +1921,12 @@ shared_focus = {
 shared_focus = { 
 	id = RED_old_fashioned_way
 	icon = GFX_goal_generic_major_war
-	relative_position_id = RED_decline_goddess
-	x = 3
+	relative_position_id = RED_redeye_political
+	x = 8
 	y = 1
 	cost = 10
 
-	prerequisite = { focus = RED_decline_goddess } 
+	prerequisite = { focus = RED_redeye_political } 
 	ai_will_do = { 
 		factor = 40
 	} 
@@ -2448,27 +2035,26 @@ shared_focus = {
 }
 
 shared_focus = { 
-	id = RED_subjugate_tribals
+	id = RED_break_the_mob
 	icon = GFX_goal_unknown
 	relative_position_id = RED_drums_of_war
 	x = 0
 	y = 1
-	cost = 5
+	cost = 10
 
-	prerequisite = { focus = RED_drums_of_war } 
+	bypass = {
+        NOT = { country_exists = GUN }
+    }
+
+	prerequisite = { focus = RED_drums_of_war }
 	ai_will_do = { 
-		factor = 30
+		factor = 37
 	} 
 
-	will_lead_to_war_with = HIT
-	will_lead_to_war_with = GRV
-	will_lead_to_war_with = FTR
+	will_lead_to_war_with = GUN
 	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_subjugate_tribals"
-		create_wargoal = { type = annex_everything target = HIT }
-		create_wargoal = { type = annex_everything target = GRV }
-		create_wargoal = { type = annex_everything target = FTR }
-
+		log = "[GetDateText]: [Root.GetName]: Focus RED_break_the_mob"
+		create_wargoal = { type = annex_everything target = GUN }
 	}
 
 } 
@@ -2476,12 +2062,12 @@ shared_focus = {
 shared_focus = { 
 	id = RED_birth_nation
 	icon = GFX_goal_unknown
-	relative_position_id = RED_subjugate_tribals
+	relative_position_id = RED_break_the_mob
 	x = -1
 	y = 1
 	cost = 10
 
-	prerequisite = { focus = RED_subjugate_tribals } 
+	prerequisite = { focus = RED_break_the_mob } 
 	prerequisite = { focus = RED_restore_canterlot } 
 	ai_will_do = { 
 		factor = 45
@@ -2496,59 +2082,41 @@ shared_focus = {
 } 
 
 shared_focus = { 
-	id = RED_ranger_turncoats
-	icon = GFX_goal_bos_common_ground_with_savages
-	relative_position_id = RED_steel_rangers2
-	x = 0
+	id = RED_rally_support
+	icon = GFX_focus_generic_support_the_left_right_claw
+	relative_position_id = RED_redeye_political
+	x = -8
 	y = 1
-	cost = 5
+	cost = 10
 
-	prerequisite = { focus = RED_steel_rangers2 } 
-	bypass = {
-        NOT = { country_exists = FSR }
-    }
+	prerequisite = { focus = RED_redeye_political } 
 	ai_will_do = { 
 		factor = 40
 	} 
 
 	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_ranger_turncoats"
+		log = "[GetDateText]: [Root.GetName]: Focus RED_rally_support"
 
-		country_event = { id = redeye.9 }
+		add_manpower = 2000
+		add_war_support = 0.1
 	}
 
 }
 
 shared_focus = { 
-	id = RED_ranger_secrets
-	icon = GFX_goal_bos_generic_research
-	relative_position_id = RED_ranger_turncoats
-	x = 0
-	y = 1
-	cost = 5
-
-	prerequisite = { focus = RED_ranger_turncoats } 
-	ai_will_do = { 
-		factor = 35
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_ranger_secrets"
-
-		set_technology = {
-    		power_armour_t45d = 1
-		}
-	}
-
-}
-
-shared_focus = { 
-	id = RED_new_appleloosa
-	icon = GFX_goal_rct_fancy_train
+	id = RED_filly_rangers
+	icon = GFX_goal_steel_rangers
 	relative_position_id = RED_rally_support
 	x = -1
 	y = 1
 	cost = 10
+
+	bypass = {
+		OR = {
+        	NOT = { country_exists = FSR }
+        	is_in_faction_with = FSR
+        }
+    }
 
 	prerequisite = { focus = RED_rally_support } 
 	ai_will_do = { 
@@ -2556,11 +2124,9 @@ shared_focus = {
 	} 
 
 	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_new_appleloosa"
+		log = "[GetDateText]: [Root.GetName]: Focus RED_filly_rangers"
 
-		NAP = {
-			add_ideas = redeye_support
-		}
+		custom_effect_tooltip = RED_sr_decisions_tt
 	}
 
 }
@@ -2587,32 +2153,34 @@ shared_focus = {
 }
 
 shared_focus = { 
-	id = RED_two_appleloosas
-	icon = GFX_goal_appleloosa
-	relative_position_id = RED_new_appleloosa
+	id = RED_ranger_turncoats
+	icon = GFX_goal_FSR_nova_rage
+	relative_position_id = RED_filly_rangers
 	x = 0
 	y = 1
 	cost = 5
 
-	prerequisite = { focus = RED_new_appleloosa } 
+	available = {
+		controls_state = 542
+		controls_state = 545
+	}
+	bypass = {
+		OR = {
+        	NOT = { country_exists = FSR }
+        	FSR = { has_government = destruction }
+        }
+    }
+
+	prerequisite = { focus = RED_filly_rangers } 
 	ai_will_do = { 
 		factor = 25
 	} 
 
 	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_two_appleloosas"
-		NAP = {
-			country_event = {
-				id = redeye.13
-			}
-		}
-		OAP = {
-			country_event = {
-				id = redeye.18
-			}
-		}
-	}
+		log = "[GetDateText]: [Root.GetName]: Focus RED_ranger_turncoats"
 
+		country_event = { id = redeye.9 }
+	}
 }
 
 shared_focus = { 
@@ -2648,7 +2216,7 @@ shared_focus = {
 	cost = 5
 
 	prerequisite = { focus = RED_one_goal } 
-	prerequisite = { focus = RED_two_appleloosas } 
+	prerequisite = { focus = RED_ranger_turncoats } 
 	ai_will_do = { 
 		factor = 35
 	} 
@@ -2661,16 +2229,120 @@ shared_focus = {
 }
 
 shared_focus = { 
-	id = RED_phoenix_rising
-	icon = GFX_goal_DOM_The_Phoenix
-	relative_position_id = RED_ranger_secrets
-	x = 0
-	y = 1
+	id = RED_stable_dweller
+	icon = GFX_goal_littlepip_night
+	relative_position_id = RED_redeye_political
+	x = -6
+	y = 5
 	cost = 10
-
-	prerequisite = { focus = RED_ranger_secrets } 
 	prerequisite = { focus = RED_rebuild } 
 	prerequisite = { focus = RED_birth_nation } 
+	prerequisite = { focus = RED_burn_everfree } 
+	prerequisite = { focus = RED_slaver_infrastructure }
+
+	ai_will_do = { 
+		factor = 55
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_new_unity"
+
+		country_event = {
+			id = redeye.31
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = RED_too_much_monster
+	icon = GFX_goal_redeye
+	relative_position_id = RED_redeye_political
+	x = -3
+	y = 5
+	cost = 10
+	prerequisite = { focus = RED_rebuild } 
+	prerequisite = { focus = RED_birth_nation } 
+	prerequisite = { focus = RED_burn_everfree } 
+	prerequisite = { focus = RED_slaver_infrastructure }
+
+	ai_will_do = { 
+		factor = 40
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_too_much_monster"
+
+		country_event = {
+			id = redeye.32
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = RED_the_spp
+	icon = GFX_goal_NEV_cloudsdale
+	relative_position_id = RED_redeye_political
+	x = 0
+	y = 5
+	cost = 10
+	prerequisite = { focus = RED_rebuild } 
+	prerequisite = { focus = RED_birth_nation } 
+	prerequisite = { focus = RED_burn_everfree } 
+	prerequisite = { focus = RED_slaver_infrastructure } 
+	ai_will_do = { 
+		factor = 40
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_the_spp"
+
+		country_event = {
+			id = redeye.33
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = RED_pegasus_option
+	icon = GFX_goal_nim_wing
+	relative_position_id = RED_redeye_political
+	x = 3
+	y = 5
+	cost = 10
+	prerequisite = { focus = RED_rebuild } 
+	prerequisite = { focus = RED_birth_nation } 
+	prerequisite = { focus = RED_burn_everfree } 
+	prerequisite = { focus = RED_slaver_infrastructure }
+
+	ai_will_do = { 
+		factor = 55
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_pegasus_option"
+
+		country_event = {
+			id = redeye.34
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = RED_phoenix_rising
+	icon = GFX_goal_DOM_The_Phoenix
+	relative_position_id = RED_redeye_political
+	x = 6
+	y = 5
+	cost = 10
+	prerequisite = { focus = RED_rebuild } 
+	prerequisite = { focus = RED_birth_nation } 
+	prerequisite = { focus = RED_burn_everfree } 
+	prerequisite = { focus = RED_slaver_infrastructure }
+
 	ai_will_do = { 
 		factor = 40
 	} 
@@ -2678,82 +2350,87 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_phoenix_rising"
 
-		add_ideas = rising_phoenix_idea
-
 		country_event = {
-    		id = redeye.26
+			id = redeye.35
 		}
 	}
 
 }
 
 shared_focus = { 
-	id = RED_lost_tribe
-	icon = GFX_goal_nim_cloud
-	relative_position_id = RED_phoenix_rising
-	x = -1
+	id = RED_new_unity
+	icon = GFX_goal_unknown
+	relative_position_id = RED_the_spp
+	x = 0
 	y = 1
-	cost = 10
+	cost = 5
 
 	prerequisite = { focus = RED_phoenix_rising } 
+	prerequisite = { focus = RED_pegasus_option } 
+	prerequisite = { focus = RED_stable_dweller }
+	prerequisite = { focus = RED_the_spp } 
+	prerequisite = { focus = RED_too_much_monster } 
+
+	available = {
+		has_country_leader = {
+    		name = "Red Eye"
+    		is_ruling_only = yes
+		}
+		OR = {
+			AND = {
+				has_war_with = NEV
+				NEV = {
+					has_country_leader = {
+    					name = "Autumn Leaf"
+    					is_ruling_only = yes
+					}
+				}
+			}
+			has_country_flag = RED_flag_found_pegasus
+		}
+		OR = {
+			has_global_flag = lightbringer_new_unity_flag
+			has_global_flag = lightbringer_dead_flag
+		}
+	}
+
 	ai_will_do = { 
-		factor = 5
+		factor = 55
 	} 
 
-	will_lead_to_war_with = NEV
 	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_lost_tribe"
-
-		create_wargoal = { type = annex_everything target = NEV }
+		log = "[GetDateText]: [Root.GetName]: Focus RED_new_unity"
 	}
 
 }
 
 shared_focus = { 
-	id = RED_destroy_goddess
-	icon = GFX_goal_attack_maripony
-	relative_position_id = RED_phoenix_rising
-	x = 1
-	y = 1
-	cost = 10
-
-	prerequisite = { focus = RED_phoenix_rising } 
-	ai_will_do = { 
-		factor = 5
-	} 
-
-	will_lead_to_war_with = UNI
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_destroy_goddess"
-
-		create_wargoal = { type = annex_everything target = UNI }
-	}
-
-}
-
-shared_focus = { 
-	id = RED_crown_redeye
-	icon = GFX_goal_generic_equestria
-	relative_position_id = RED_phoenix_rising
+	id = RED_shattered_hoof_gamble
+	icon = GFX_focus_gambling
+	relative_position_id = RED_redeye_radio
 	x = 0
 	y = 2
 	cost = 10
 
-	prerequisite = { focus = RED_destroy_goddess } 
-	prerequisite = { focus = RED_lost_tribe } 
-	ai_will_do = { 
-		factor = 5
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_crown_redeye"
-
-		country_event = {
-    		id = redeye.19
+	available = {
+		date > 1235.04.01
+	}
+	available = {
+		NOT = {
+			has_global_flag = SHA_lightbringer
 		}
 	}
 
-}
+	ai_will_do = { 
+		factor = 350
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_shattered_hoof_gamble"
+	}
+
+} 
+
 
 #Stern Political Tree
 shared_focus = { 

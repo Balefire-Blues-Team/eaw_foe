@@ -15,6 +15,7 @@ news_event = {
 	option = {
 		name = lightbringer.1.a
 		ai_chance = { factor = 50}
+		set_global_flag = lightbringer_dead_flag
 	}
 }
 
@@ -426,13 +427,61 @@ country_event = {
 		name = lightbringer.9.a
 		ai_chance = { factor = 50}
 
+		hidden_effect = {
+			country_event = {
+    			id = lpoffshoot.4
+			}
+		}
+	}
+}
+
+country_event = { #Pinkie Belle's Farm
+ 	id = lpoffshoot.3
+ 	title = lpoffshoot.3.title
+	desc = lpoffshoot.3.desc
+ 	picture = GFX_event_test
+
+ 	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {#Be Good
+		name = lpoffshoot.3.a
+		ai_chance = { factor = 50 }
+
+		hidden_effect = {
+			add_to_variable = {
+    			var = lp_apathy
+    			value = 1
+			}
+
+			country_event = {
+    			id = lpoffshoot.4
+			}
+		}
+
+	}
+}
+
+country_event = { #Pinkie Belle's Farm 2
+ 	id = lpoffshoot.4
+ 	title = lpoffshoot.4.title
+	desc = lpoffshoot.4.desc
+ 	picture = GFX_event_test
+
+ 	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {#O fuk that's a superweapon
+		name = lpoffshoot.4.a
+		ai_chance = { factor = 50 }
+
 		if = {
-			limit = { has_global_flag = player_lightbringer}
+			limit = { has_global_flag = player_lightbringer }
 
 			hidden_effect = {
 				country_event = {
     				id = lightbringer.10
-    				days = 20
+    				days = 30
 				}
 			}
 		}
@@ -442,8 +491,8 @@ country_event = {
 				SHA = {
 					country_event = {
     					id = lightbringer.10
-    					days = 20
-    				}
+    					days = 30
+					}
 				}
 			}
 		}
@@ -498,7 +547,7 @@ country_event = {
  	is_triggered_only = yes
  	fire_only_once = yes
 
-	option = {
+	option = { #Gawd
 		name = lightbringer.11.a
 		ai_chance = { factor = 50}
 
@@ -511,6 +560,7 @@ country_event = {
     				days = 5
 				}
 				set_global_flag = SHA_lightbringer
+				set_global_flag = SHA_lightbringer_good
 			}
 		}
 
@@ -523,6 +573,67 @@ country_event = {
     				}
 				}
 				set_global_flag = SHA_lightbringer
+				set_global_flag = SHA_lightbringer_good
+			}
+		}
+	}
+
+	option = { #Mr. Topaz
+		name = lightbringer.11.b
+		ai_chance = { factor = 30}
+
+		trigger = {
+			check_variable = {
+    			lp_apathy = 2
+			}
+		}
+
+		if = {
+			limit = { has_global_flag = player_lightbringer}
+
+			hidden_effect = {
+				country_event = {
+    				id = lightbringer.12
+    				days = 5
+				}
+				set_global_flag = SHA_lightbringer
+				set_global_flag = SHA_lightbringer_evil
+
+				add_to_variable = {
+    				var = lp_apathy
+    				value = 1
+				}
+			}
+		}
+
+		else = {
+			hidden_effect = {
+				SHA = {
+					country_event = {
+    					id = lightbringer.12
+    					days = 5
+    				}
+				}
+				set_global_flag = SHA_lightbringer
+				set_global_flag = SHA_lightbringer_evil
+
+				add_to_variable = {
+    				var = lp_apathy
+    				value = 1
+				}
+			}
+		}
+	}
+
+	option = { #Death
+		name = lightbringer.11.c
+		ai_chance = { factor = 0}
+
+		every_country = { 
+			limit = { is_ai = no }
+
+			country_event = {
+				id = lpspecial.1
 			}
 		}
 	}
@@ -846,6 +957,12 @@ country_event = {
 		name = lightbringer.20.a
 		ai_chance = { factor = 50}
 
+		trigger = {
+			NOT = {
+				has_global_flag = lp_no_watcher
+			}
+		}
+
 		if = {
 			limit = { has_global_flag = player_lightbringer}
 
@@ -865,6 +982,57 @@ country_event = {
     					days = 140
     				}
 				}
+			}
+		}
+	}
+
+	option = { #No Watcher
+		name = lightbringer.20.b
+		ai_chance = { factor = 50}
+
+		trigger = {
+			has_global_flag = lp_no_watcher
+		}
+
+		if = {
+			limit = { has_global_flag = player_lightbringer}
+
+			hidden_effect = {
+				country_event = {
+    				id = lightbringer.22
+    				days = 240
+				}
+
+				set_global_flag = lp_no_gardens
+			}
+		}
+
+		else_if = {
+			limit = {
+				SSC = { exists = yes }
+			}
+			hidden_effect = {
+				SSC = {
+					country_event = {
+    					id = lightbringer.22
+    					days = 240
+    				}
+				}
+
+				set_global_flag = lp_no_gardens
+			}
+		}
+
+		else = {
+			hidden_effect = {
+				RED = {
+					country_event = {
+    					id = lightbringer.22
+    					days = 240
+    				}
+				}
+
+				set_global_flag = lp_no_gardens
 			}
 		}
 	}
@@ -1747,6 +1915,12 @@ country_event = {
 		name = lightbringer.43.a
 		ai_chance = { factor = 50}
 
+		RED = {
+			country_event = {
+				id = redeye.39
+			}
+		}
+
 		if = {
 			limit = { has_global_flag = player_lightbringer}
 
@@ -1769,6 +1943,21 @@ country_event = {
 			}
 		}
 	}
+
+	option = { #The New Unity.
+		name = lightbringer.43.b
+		ai_chance = { factor = 50}
+
+		trigger = {
+			has_global_flag = lp_no_gardens
+			#check_variable = {
+    		#	lp_apathy = 2
+			#}
+		}
+
+		set_global_flag = lightbringer_new_unity_flag
+
+	}
 }
 
 ##Galvanize
@@ -1784,6 +1973,12 @@ country_event = {
 	option = {
 		name = lightbringer.44.a
 		ai_chance = { factor = 50}
+
+		RED = {
+			country_event = {
+				id = redeye.40
+			}
+		}
 
 		if = {
 			limit = { has_global_flag = player_lightbringer}
