@@ -1,0 +1,78 @@
+# Scripted by Mechano for use in determining valid targets for sporradic conflicts in events/Warcreation
+
+# Protected nations that will not get involved in random conflicts, makes sure that nations or even regions are considerably more stable.
+is_protected_lore_faction = {
+	OR = {
+		original_tag = RED
+		original_tag = NEV
+		original_tag = SHA
+		original_tag = MSR
+		original_tag = UNI
+		original_tag = TEN
+		has_country_flag = random_war_protected
+	}
+}
+
+eligible_wargoal_sender = {
+	has_war = no
+	is_ai = yes
+	is_protected_lore_faction = no
+	OR = {
+		is_in_faction = no
+		AND = {
+			is_faction_leader = yes
+			threat > 60
+			all_allied_country = {
+				has_war = no
+			}
+		}
+	}
+	has_capitulated = no
+	exists = yes
+	NOT = {
+		any_neighbor_country = {
+			OR = {
+				is_justifying_wargoal_against = PREV
+				has_wargoal_against = PREV
+				PREV = {
+					is_justifying_wargoal_against = PREV
+				}
+			}
+		}
+	}
+}
+eligible_wargoal_receiver = {
+	OR = {
+		has_war = no
+		AND = {
+				is_ai = no # is meaner to players, so if they are fighting an offensive war and and winning they can still get a claim put on them
+				has_defensive_war = no
+				NOT = {
+					surrender_progress > 0.1
+				}
+		}
+	}
+	OR = {
+		NOT = { # survivalism ideology will not start wars with each other unless they strongly hate them
+			AND = {
+				has_government = survivalism
+				ROOT = { has_government = survivalism }
+			}
+		}
+		ROOT = { has_opinion = { target = PREV value < -120 } }
+	}
+	# considers strength ratios, invading someone who has more troops is generally a bad idea
+	OR = {
+		ROOT = { strength_ratio = { tag = PREV ratio > 1.15 } }
+		AND = {
+			has_war = yes
+			any_enemy_country = {
+				strength_ratio = { tag = PREV ratio > 0.8 }
+			}
+		}
+	}
+	is_protected_lore_faction = no
+	exists = yes
+	has_capitulated = no
+	ROOT = { has_opinion = { target = PREV value < 30 } } # will not start wars with countries they like
+}

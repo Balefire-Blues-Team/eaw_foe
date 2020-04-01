@@ -165,7 +165,7 @@ FSR_bs_borderwar = {
 		cost = 50
 		
 		ai_will_do = {
-			factor = 100
+			factor = 1000
 		}
 		fire_only_once = no
 		is_good = yes
@@ -392,7 +392,7 @@ FSR_hq_build = {
 		
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_level_2"
-			remove_country_flag = FSR_lv_one
+			clr_country_flag = FSR_lv_one
 			set_country_flag = FSR_lv_two
 			add_political_power = 50
 			add_stability = 0.05
@@ -424,7 +424,7 @@ FSR_hq_build = {
 		
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_level_3to6"
-			remove_country_flag = FSR_lv_two
+			clr_country_flag = FSR_lv_two
 			set_country_flag = FSR_lv_three
 			add_offsite_building = { type = industrial_complex level = 3 }
 		}
@@ -455,7 +455,7 @@ FSR_hq_build = {
 		
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_level_7to11"
-			remove_country_flag = FSR_lv_three
+			clr_country_flag = FSR_lv_three
 			set_country_flag = FSR_lv_four
 			add_offsite_building = { type = arms_factory level = 4 }
 		}
@@ -486,7 +486,7 @@ FSR_hq_build = {
 		
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_level_12to30"
-			remove_country_flag = FSR_lv_four
+			clr_country_flag = FSR_lv_four
 			set_country_flag = FSR_lv_five
 			add_ideas = FSR_hq_offices
 		}
@@ -517,7 +517,7 @@ FSR_hq_build = {
 		
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_level_31to42"
-			remove_country_flag = FSR_lv_five
+			clr_country_flag = FSR_lv_five
 			set_country_flag = FSR_lv_six
 			swap_ideas = { remove_idea = FSR_hq_offices add_idea = FSR_hq_labs }
 		}
@@ -549,7 +549,7 @@ FSR_hq_build = {
 		
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_level_43to49"
-			remove_country_flag = FSR_lv_six
+			clr_country_flag = FSR_lv_six
 			set_country_flag = FSR_lv_seven
 			swap_ideas = { remove_idea = FSR_hq_labs add_idea = FSR_hq_command }
 		}
@@ -581,7 +581,7 @@ FSR_hq_build = {
 		
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_level_50"
-			remove_country_flag = FSR_lv_seven
+			clr_country_flag = FSR_lv_seven
 			swap_ideas = { remove_idea = FSR_hq_command add_idea = FSR_hq_complete }
 			
 		}
@@ -622,7 +622,7 @@ FSR_wasteland_training = {
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_train_green"
 			swap_ideas = { remove_idea = FSR_wastemilitia add_idea = FSR_militia_green }
-
+			if = { limit = { is_ai = yes} army_experience = 200}
 		}
 	}
 	
@@ -659,7 +659,7 @@ FSR_wasteland_training = {
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_train_regular"
 			swap_ideas = { remove_idea = FSR_militia_green add_idea = FSR_militia_regular }
-
+			if = { limit = { is_ai = yes} army_experience = 300}
 		}
 	}
 	
@@ -696,7 +696,7 @@ FSR_wasteland_training = {
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_train_professional"
 			swap_ideas = { remove_idea = FSR_militia_regular add_idea = FSR_militia_prof }
-
+			if = { limit = { is_ai = yes} army_experience = 500}
 		}
 	}
 
@@ -712,7 +712,7 @@ FSR_police_force = {
 		icon = GFX_decision_unknown
 		cost = 50
 		ai_will_do = {
-			base = 70
+			base = 700
 			modifier = {
 			}
 		}
@@ -750,7 +750,9 @@ FSR_banking = {
 		
 
 		available = {
+			hidden_trigger = {
 			always = no
+			}
 		}
 
 		complete_effect = {
@@ -862,9 +864,7 @@ FSR_banking = {
 			}
 			random_owned_controlled_state = {
 			limit = {
-				building = industrial_complex
-				size > 0
-				include_locked = yes
+				industrial_complex > 0
 			
 			}
 			
@@ -908,9 +908,7 @@ FSR_banking = {
 			}
 			random_owned_controlled_state = {
 			limit = {
-				building = anti_air_building
-				size < 3
-				include_locked = yes
+				anti_air_building < 3
 			}
 				add_building_construction = {
 					type = air_base
@@ -1065,11 +1063,11 @@ FSR_titan_union = {
 
 		available = {
 			has_political_power > 29
-			tooltip = FSR_5_LOSE_UNION
+			custom_trigger_tooltip = FSR_5_LOSE_UNION
                     check_variable = {
                         union > 19
                     }
-			 tooltip = FSR_50_LOSE_BANK
+			custom_trigger_tooltip = FSR_50_LOSE_BANK
                     check_variable = {
                         bank > 49
                     }
@@ -1178,10 +1176,10 @@ FSR_rebuild = {
 	FSR_rebuild_north_canterlot = {
 		icon = generic_construction
 		cost = 100
-
+		is_good = yes
 		available = {
 			has_political_power > 99
-			num_of_available_civilian_factories > 9
+			num_of_civilian_factories > 9
 			has_full_control_of_state = 234
 		
 		}
@@ -1190,7 +1188,7 @@ FSR_rebuild = {
 			civilian_factory_use = 10
 		}
 		ai_will_do = {
-			factor = 100
+			factor = 1000
 		}
                
 		days_remove = 100
@@ -1220,10 +1218,10 @@ FSR_rebuild = {
 	FSR_rebuild_canterlot_outskirts = {
 		icon = generic_construction
 		cost = 100
-
+		is_good = yes
 		available = {
 			has_political_power > 99
-			num_of_available_civilian_factories > 5
+			num_of_civilian_factories > 5
 			has_full_control_of_state = 415
 			has_full_control_of_state = 477
 		
@@ -1233,7 +1231,7 @@ FSR_rebuild = {
 			civilian_factory_use = 6
 		}
 		ai_will_do = {
-			factor = 100
+			factor = 1000
 		}
                
 		days_remove = 100
@@ -1256,10 +1254,10 @@ FSR_rebuild = {
 	FSR_rebuild_ponyville = {
 		icon = generic_construction
 		cost = 100
-
+		is_good = yes
 		available = {
 			has_political_power > 99
-			num_of_available_civilian_factories > 5
+			num_of_civilian_factories > 5
 			has_full_control_of_state = 476
 			has_full_control_of_state = 65
 		
@@ -1269,7 +1267,7 @@ FSR_rebuild = {
 			civilian_factory_use = 6
 		}
 		ai_will_do = {
-			factor = 100
+			factor = 1000
 		}
                
 		days_remove = 100
@@ -1296,10 +1294,10 @@ FSR_rebuild = {
 	FSR_rebuild_stable_2 = {
 		icon = generic_construction
 		cost = 100
-
+		is_good = yes
 		available = {
 			has_political_power > 99
-			num_of_available_civilian_factories > 9
+			num_of_civilian_factories > 9
 			has_full_control_of_state = 735
 		
 		}
@@ -1308,7 +1306,7 @@ FSR_rebuild = {
 			civilian_factory_use = 10
 		}
 		ai_will_do = {
-			factor = 100
+			factor = 1000
 		}
                
 		days_remove = 100
@@ -1334,10 +1332,10 @@ FSR_rebuild = {
 	FSR_rebuild_maredia = {
 		icon = generic_construction
 		cost = 100
-
+		is_good = yes
 		available = {
 			has_political_power > 99
-			num_of_available_civilian_factories > 9
+			num_of_civilian_factories > 9
 			has_full_control_of_state = 69
 		
 		}
@@ -1346,7 +1344,7 @@ FSR_rebuild = {
 			civilian_factory_use = 10
 		}
 		ai_will_do = {
-			factor = 100
+			factor = 1000
 		}
                
 		days_remove = 100
@@ -1368,6 +1366,75 @@ FSR_rebuild = {
 
 		}
 	}
+
+
+
+
+}
+
+FSR_liberate_filly = {
+
+	FSR_activate_spies = {
+		icon = generic_construction
+		cost = 20
+		is_good = yes
+		available = {
+			has_political_power > 19
+		}
+		visible = { has_country_flag = FSR_spies_in_RED}
+		
+		
+		ai_will_do = {
+			factor = 1000
+		}
+               
+		fire_only_once = yes
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_activate_spies"
+			RED = {
+				add_timed_idea = { idea = FSR_RED_saboteurs days = 150 }
+			}
+
+		}
+	}
+	
+	FSR_hoofsburg_revolt_descision = {
+		icon = generic_construction
+		cost = 100
+		is_good = yes
+		available = {
+			has_political_power > 99
+		}
+		visible = { 5 = {is_core_of = FSR is_owned_and_controlled_by = RED}}
+		
+		
+		ai_will_do = {
+			factor = 1000
+		}
+        days_remove = 60       
+		fire_only_once = yes
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove FSR_hoofsburg_revolt_descision"
+			custom_effect_tooltip = FSR_hoofsburg_revolt_tt
+			RED = { country_event = { id = fillysr.23}}
+			hidden_effect = {
+				load_oob = "FSR_hoofsburg_revolt"
+			}
+
+		}
+	}
+
+
+
+
+
+
+
+
+
+
 
 
 

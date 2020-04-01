@@ -1,0 +1,269 @@
+on_actions = {
+	on_startup = {
+		effect = {
+			if = {
+				#### Check Flag
+				limit = {
+					has_game_rule = {
+						rule = caps_system_toggle
+						option = ENABLED
+					}
+				}
+				#Country set up
+				if = {
+					limit = { has_global_flag = debug_logs }
+					log = "Starting up caps system Country setup"
+				}
+				every_country = {
+					###Setting standard starting conditions
+					if = {
+						limit = { 
+						    tag = MAN 
+						}
+						set_variable = { 
+						    caps_number_display = 600 
+						}
+					}
+					if = {
+						limit = { 
+						    is_alicorn_nation = yes 
+						}
+						set_variable = { 
+						    caps_number_display = 0 
+						}
+						add_to_variable = { 
+						    caps_expense_modifier = -0.8
+						}
+					}
+					if = {
+						limit = { 
+						    is_raider_nation = yes 
+						}
+						set_variable = { 
+						    caps_number_display = 300 
+						}
+						add_ideas = chems_legalised
+					}
+					if = {
+						limit = { 
+						    is_tribal_nation = yes ž
+						}
+						set_variable = { 
+						    caps_number_display = 450 
+						}
+						add_to_variable = { 
+						    caps_expense_modifier = -0.5 
+						}
+					}
+					if = {
+						limit = { 
+						    is_settler_nation = yes 
+							NOT = {
+							    tag = MAN
+							}
+						}
+						set_variable = { 
+						    caps_number_display = 400 
+						}
+					}
+					#else = {
+						###Slave start
+						#set_variable = { slave_number_display = 0 }
+						#set_variable = { slave_capture_rate = 3 }
+						#set_variable = { caps_number_display = 400 }
+					#}
+					###IDK what this does?
+					country_event = nf_caps_slaves.100
+					###Caps Initialize
+					add_to_variable = { caps_expense_modifier = 1 }
+					add_to_variable = { caps_income_modifier = 1 }
+					add_to_variable = { base_caps = 25 }
+					set_variable = { starting_caps = base_caps }
+					set_temp_variable = { caps_daily_diff = base_caps }
+					update_caps_income = yes
+					caps_update_military = yes
+					###Market Initalize
+					if = {
+						limit = {
+							###Same method as monthly tick commands
+							owns_state = 1
+						}
+						set_variable = { global.gun_runner_inventory = 1700 }
+						set_variable = { global.chem_runner_inventory = 600 }
+					}
+					calculate_gun_runner_inventory = yes
+					activate_mission = caps_quarterly_income
+					set_variable = { gun_runner_opinion_max = 100 }
+					set_variable = { chem_runner_opinion_max = 100 }
+					set_variable = { slave_runner_opinion_max = 100 }
+					###Tutorial fire
+					if = {
+						limit = {
+							is_ai = no
+						}
+						country_event = {
+							id = tutorial_caps.1
+							days = 3
+						}
+					}
+				}
+			}
+		}
+	}
+
+	#Grant the victor half of the caps in a nations stockpile when they are annexed
+	on_annex = {
+		effect = {
+			if = {
+				limit = {
+					has_game_rule = {
+						rule = caps_system_toggle
+						option = ENABLED
+					}
+				}
+				Root = {
+					scoped_sound_effect = "ui_items_bottlecaps_up_01"
+				}
+
+				set_temp_variable = { annexation_caps = FROM.caps_number_display }
+				divide_temp_variable = { annexation_caps = 2 }
+				clamp_temp_variable = { var = annexation_caps min = 0 max = 1000 }
+				round_variable = annexation_caps
+				if = {
+					limit = {
+						has_global_flag = caps_debug_logs
+					}
+					log = "Annexing [FROM.GetName] caps for [?annexation_caps]"
+				}
+				set_temp_variable = { caps_daily_diff = annexation_caps }
+				add_caps = yes
+
+				if = {
+					limit = { has_global_flag = caps_debug_logs }
+					log = "[GetDateText]: [Root.GetName] Annexed [FROM.GetName] taking [?annexation_caps] caps"
+				}
+				###CHANGE TO UPDATE DAILY = 0
+				FROM = {
+					clear_variable = caps_base
+					clear_variable = caps_daily
+					clear_variable = caps_number_display
+					clear_variable = slave_number_display
+					clear_variable = slave_capture_rate
+					clear_variable = slave_monthly
+				}
+			}
+		}
+	}
+
+	#Give x number of slaves once a state is captured when at war.
+	on_state_control_changed = {
+		effect = {
+			if = {
+				limit = {
+					has_game_rule = {
+						rule = caps_system_toggle
+						option = ENABLED
+					}
+				}
+				if = {
+					limit = { has_global_flag = debug_logs }
+					log = "Changing slaves bro"
+				}
+				if = {
+					limit = {
+						AND = {
+							has_war = yes
+							NOT = { FROM.FROM = { is_core_of = ROOT } }
+						}
+					}
+					ROOT = {
+						set_variable = { slaves_war_captured = random }
+						multiply_variable = { slaves_war_captured = 5 }
+						round_variable = slaves_war_captured
+						add_to_variable = { slave_number_display = slaves_war_captured }
+					}
+				}
+				else = {}
+			}
+		}
+	}
+
+	#Set required variables for new countries that do not have them set.
+	on_state_control_changed = {
+		effect = {
+			if = {
+				limit = {
+					has_game_rule = {
+						rule = caps_system_toggle
+						option = ENABLED
+					}
+				}
+				if = {
+					limit = { has_global_flag = debug_logs }
+					log = "Changing caps from state ownership stuff"
+				}
+				ROOT = {
+					if = {
+						limit = { NOT = { has_variable = caps_number_display } }
+						set_variable = { caps_number_display = 10 }
+						random_country = {
+							set_variable = { PREV.base_caps = base_caps }
+						}
+						add_to_variable = {
+							caps_income_modifier = 1
+						}
+						add_to_variable = {
+							caps_expense_modifier = 1
+						}
+						set_temp_variable = { caps_daily_diff = base_caps }
+						update_caps_income = yes
+						caps_update_military = yes
+						country_event = { id = tutorial_caps.5 days = 10 }
+					}
+				}
+			}
+		}
+	}
+
+	#Income Calculations
+	on_daily = {
+		effect = {
+			if = {
+				limit = {
+					has_game_rule = {
+						rule = caps_system_toggle
+						option = ENABLED
+					}
+				}
+				###MONTHLY
+				if = {
+					limit = {
+						check_variable = { global.monthly_tick = 30 }
+						owns_state = 1
+					}
+					add_to_variable = { global.gun_runner_inventory = 900 }
+					add_to_variable = { global.chem_runner_inventory = 300 }
+					add_to_variable = { global.slave_runner_inventory = 130 }
+					clamp_variable = {
+						var = global.gun_runner_inventory
+						max = 25000
+						min = 0
+					}
+					clamp_variable = {
+						var = global.chem_runner_inventory
+						max = 25000
+						min = 0
+					}
+					clamp_variable = {
+						var = global.slave_runner_inventory
+						max = 25000
+						min = 0
+					}
+				}
+				###update display
+				#add_to_variable = { caps_number_display = caps_daily_modified }
+				#clamp_variable = { var = caps_number_display min = 0 max = 25000 }
+			}
+		}
+	}
+}
