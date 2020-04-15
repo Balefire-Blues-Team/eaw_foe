@@ -1092,6 +1092,46 @@ country_event = {
 
 	option = {
 		name = cloudsdale.20.a
+		ai_chance = { factor = 50}
+		country_event = { id = cloudsdale.49 }
+	
+	}
+	
+}
+
+##How to deal with RedEye
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.49"}
+ 	id = cloudsdale.49
+ 	title = cloudsdale.49.t
+ 	desc = cloudsdale.49.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.49.a
+		ai_chance = { factor = 50}
+		country_event = { id = cloudsdale.50 }
+	
+	}
+	
+}
+
+##How to deal with RedEye
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale.50"}
+ 	id = cloudsdale.50
+ 	title = cloudsdale.50.t
+ 	desc = cloudsdale.50.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = cloudsdale.50.a
 		ai_chance = { factor = 50
 		modifier = {
 				factor = 0
@@ -1113,7 +1153,7 @@ country_event = {
 	
 	}
 	option = {
-		name = cloudsdale.20.b
+		name = cloudsdale.50.b
 		ai_chance = { factor = 50 
 		modifier = {
 				factor = 0
@@ -1827,9 +1867,9 @@ country_event = {
  	title = cloudsdale.43.t
  	desc = cloudsdale.43.d
 	
-	mean_time_to_happen = { days = 200 }
+	mean_time_to_happen = { days = 1000 }
 	trigger = {
-	
+		tag = NEV
 	
 	}
  	fire_only_once = yes
@@ -2369,6 +2409,7 @@ country_event = {
 		add_opinion_modifier = { target = NEV modifier = sunshine_trade }
 		reverse_add_opinion_modifier = { target = NEV modifier = sunshine_trade }
 		NEV = {country_event = {id = cloudsdale_vis.18}}
+		NEV = {diplomatic_relation = { country = ROOT relation = guarantee }}
 	}
 	
 	#no
@@ -2425,6 +2466,387 @@ country_event = {
 			}
 			add_offsite_building = { type = industrial_complex level = 4 }
 		}
+	}
+}
+
+##New Cloudsdale proposes closer ties
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_vis.19"}
+ 	id = cloudsdale_vis.19
+ 	title = cloudsdale_vis.19.t
+ 	desc = cloudsdale_vis.19.d
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#yes
+	option = {
+		ai_chance = { factor = 70 }
+		name = cloudsdale_vis.19.a
+		NEV = { puppet = ROOT }
+		add_to_tech_sharing_group = seafire_research
+		NEV = { add_to_tech_sharing_group = seafire_research }
+		add_offsite_building = { type = industrial_complex level = 2 }
+		hidden_effect = { ROOT = { add_ai_strategy = { type = alliance id = "NEV" value = 200} } }
+		hidden_effect = { NEV = { add_ai_strategy = { type = alliance id = "ROOT" value = 200} } }
+	}
+	
+	#no
+	option = {
+		ai_chance = { factor = 10 }
+		name = cloudsdale_vis.19.b
+		NEV = {create_wargoal = { 
+						type = puppet
+						target = ROOT
+					}
+		}
+	}
+}
+
+##A proper buffer-state
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_vis.20"}
+ 	id = cloudsdale_vis.20
+ 	title = cloudsdale_vis.20.t
+ 	desc = cloudsdale_vis.20.d
+	trigger = {
+		original_tag = NEV
+		has_country_leader = {
+			name = "Senator Seafire"
+			ruling_only = yes
+		}
+		MAN = {is_subject_of = NEV}
+		OR = {
+			owns_state = 571
+			owns_state = 794
+			owns_state = 575
+		}
+	}
+ 	fire_only_once = yes
+
+	#give them the stuff
+	option = {
+		ai_chance = { factor = 90 }
+		name = cloudsdale_vis.20.a
+		if = {
+			limit = {
+				owns_state = 571
+			}
+			MAN = {transfer_state = 571 add_state_core = 571}
+		}
+		if = {
+			limit = {
+				owns_state = 794
+			}
+			MAN = {transfer_state = 794 add_state_core = 794}
+		}
+		if = {
+			limit = {
+				owns_state = 575
+			}
+			MAN = {transfer_state = 575 add_state_core = 575}
+		}
+		set_autonomy = {
+			target = MAN
+			autonomy_state = autonomy_sunshine_colony
+		}
+	}
+	
+	#keep it yourself
+	option = {
+		ai_chance = { factor = 0 }
+		name = cloudsdale_vis.20.b
+		
+	}
+}
+
+##New Cloudsdale offers Friendship
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_vis.21"}
+ 	id = cloudsdale_vis.21
+ 	title = cloudsdale_vis.21.t
+ 	desc = cloudsdale_vis.21.d
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#yes
+	option = {
+		ai_chance = { factor = 80 
+			modifier = {
+				factor = 0
+				ruling_party = destruction
+			}
+		}
+		name = cloudsdale_vis.21.a
+		add_ideas = NEV_sunshine_trade_recipient
+		add_opinion_modifier = { target = NEV modifier = sunshine_trade }
+		reverse_add_opinion_modifier = { target = NEV modifier = sunshine_trade }
+		NEV = {country_event = {id = cloudsdale_vis.22}}
+		diplomatic_relation = { country = NEV relation = non_aggression_pact }
+	}
+	
+	#no
+	option = {
+		ai_chance = { factor = 20 }
+		name = cloudsdale_vis.21.b
+		NEV = {country_event = {id = cloudsdale_vis.23}}
+	}
+}
+
+##NCR has accepted our Friendship
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_vis.22"}
+ 	id = cloudsdale_vis.22
+ 	title = cloudsdale_vis.22.t
+ 	desc = cloudsdale_vis.22.d
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#wohoo
+	option = {
+		ai_chance = { factor = 80 }
+		name = cloudsdale_vis.22.a
+		if = {
+			limit = {
+				has_idea = NEV_sunshine_trade1
+			}
+			swap_ideas = { remove_idea = NEV_sunshine_trade1 add_idea = NEV_sunshine_trade2}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_sunshine_trade2
+			}
+			swap_ideas = { remove_idea = NEV_sunshine_trade2 add_idea = NEV_sunshine_trade3}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_sunshine_trade3
+			}
+			swap_ideas = { remove_idea = NEV_sunshine_trade3 add_idea = NEV_sunshine_trade4}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_sunshine_trade4
+			}
+			swap_ideas = { remove_idea = NEV_sunshine_trade4 add_idea = NEV_sunshine_trade5}
+		}
+		else_if = {
+			limit = {
+				has_idea = NEV_sunshine_trade5
+			}
+			add_offsite_building = { type = industrial_complex level = 4 }
+		}
+	}
+}
+
+##NCR doesn't want our friendship
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_vis.23"}
+ 	id = cloudsdale_vis.23
+ 	title = cloudsdale_vis.23.t
+ 	desc = cloudsdale_vis.23.d
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#well well
+	option = {
+		ai_chance = { factor = 80 }
+		name = cloudsdale_vis.23.a
+		create_wargoal = { 
+						type = puppet
+						target = SHA
+					}
+	}
+}
+
+##New Cloudsdale offers Free movement
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_vis.24"}
+ 	id = cloudsdale_vis.24
+ 	title = cloudsdale_vis.24.t
+ 	desc = cloudsdale_vis.24.d
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#yes
+	option = {
+		ai_chance = { factor = 80 
+			modifier = {
+				factor = 0
+				ruling_party = destruction
+			}
+		}
+		name = cloudsdale_vis.24.a
+		NEV = {country_event = {id = cloudsdale_vis.25}}
+		add_ideas = NEV_SHA_free_movement
+	}
+	
+	#no
+	option = {
+		ai_chance = { factor = 0 }
+		name = cloudsdale_vis.24.b
+		NEV = {country_event = {id = cloudsdale_vis.26}}
+	}
+}
+
+##NCR agrees to free movement
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_vis.25"}
+ 	id = cloudsdale_vis.25
+ 	title = cloudsdale_vis.25.t
+ 	desc = cloudsdale_vis.25.d
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#great
+	option = {
+		ai_chance = { factor = 80 }
+		name = cloudsdale_vis.25.a
+		add_ideas = NEV_SHA_free_movement
+	}
+}
+
+##NCR doesn't want free movement
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_vis.26"}
+ 	id = cloudsdale_vis.26
+ 	title = cloudsdale_vis.26.t
+ 	desc = cloudsdale_vis.26.d
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#a setback
+	option = {
+		ai_chance = { factor = 80 }
+		name = cloudsdale_vis.26.a
+		add_political_power = -50
+	}
+}
+
+##We want to buy swampy coast
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_vis.27"}
+ 	id = cloudsdale_vis.27
+ 	title = cloudsdale_vis.27.t
+ 	desc = cloudsdale_vis.27.d
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#small
+	option = {
+		ai_chance = { factor = 80 }
+		name = cloudsdale_vis.27.a
+		custom_effect_tooltip = NEV_vis_pay_swampy_little_tt
+		MWY = {country_event = {id = cloudsdale_vis.28}}
+	}
+	
+	#big
+	option = {
+		ai_chance = { factor = 20 }
+		name = cloudsdale_vis.27.b
+		custom_effect_tooltip = NEV_vis_pay_swampy_much_tt
+		MWY = {country_event = {id = cloudsdale_vis.29}}
+	}
+}
+
+##NEV offers a little for Swampy Coast
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_vis.28"}
+ 	id = cloudsdale_vis.28
+ 	title = cloudsdale_vis.28.t
+ 	desc = cloudsdale_vis.28.d
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#accept
+	option = {
+		ai_chance = { factor = 40 }
+		name = cloudsdale_vis.28.a
+		add_offsite_building = { type = industrial_complex level = 2 }
+		NEV = {transfer_state = 581 add_state_core = 581 add_timed_idea = { idea = NEV_swampy_payment days = 100 }}
+	}
+	
+	#deny
+	option = {
+		ai_chance = { factor = 60 }
+		name = cloudsdale_vis.28.b
+		NEV = {country_event = {id = cloudsdale_vis.30}}
+	}
+}
+
+##NEV offers a large for Swampy Coast
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_vis.29"}
+ 	id = cloudsdale_vis.29
+ 	title = cloudsdale_vis.29.t
+ 	desc = cloudsdale_vis.29.d
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#accept
+	option = {
+		ai_chance = { factor = 40 }
+		name = cloudsdale_vis.29.a
+		add_offsite_building = { type = industrial_complex level = 5 }
+		NEV = {transfer_state = 581 add_state_core = 581 add_timed_idea = { idea = NEV_swampy_payment days = 250 }}
+	}
+	
+	#deny
+	option = {
+		ai_chance = { factor = 0 }
+		name = cloudsdale_vis.29.b
+		NEV = {country_event = {id = cloudsdale_vis.30}}
+	}
+}
+
+##MWY doesn't sell
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_vis.30"}
+ 	id = cloudsdale_vis.30
+ 	title = cloudsdale_vis.30.t
+ 	desc = cloudsdale_vis.30.d
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#ask them more fiercely
+	option = {
+		ai_chance = { factor = 40 }
+		name = cloudsdale_vis.30.a
+		add_political_power = -50
+		MWY = {country_event = {id = cloudsdale_vis.31}}
+	}
+	
+	#nothing we can do
+	option = {
+		ai_chance = { factor = 0 }
+		name = cloudsdale_vis.30.b
+	}
+}
+
+##Negotiations at Gunpoint
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_vis.31"}
+ 	id = cloudsdale_vis.31
+ 	title = cloudsdale_vis.31.t
+ 	desc = cloudsdale_vis.31.d
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#we can't afford war
+	option = {
+		ai_chance = { factor = 40 }
+		name = cloudsdale_vis.31.a
+		NEV = {transfer_state = 581 add_state_core = 581}
+	}
+	
+	#we'll fight if we must
+	option = {
+		ai_chance = { factor = 0 }
+		name = cloudsdale_vis.31.b
+		NEV = {declare_war_on = { 
+				type = puppet 
+				target = MWY
+		}	  }
+		hidden_effect = {NEV = { add_state_core = 581}}
 	}
 }
 
@@ -2674,7 +3096,7 @@ country_event = {
 
 
 #News from Starfall 1(Only SPP tower left in Griffonia, placed on Cross-island)
-country_event = { 
+#country_event = { 
 	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_flavour.1"}
 	id = cloudsdale_flavour.1
 	title = cloudsdale_flavour.1.t
@@ -2692,7 +3114,7 @@ country_event = {
 		
 		
 	}
-}
+#}
 
 
 
