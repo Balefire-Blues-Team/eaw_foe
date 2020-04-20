@@ -239,18 +239,6 @@ country_event = { #Accept/Decline Goddess
 		complete_national_focus = RED_accept_goddess
 
 	}
-	option = { #Decline
-		name = redeye.8.b
-		ai_chance = { 
-			factor = 0
-			modifier = {
-				add = 20
-				is_historical_focus_on = no
-			}
-		}
-
-		complete_national_focus = RED_decline_goddess
-	}
 }
 
 country_event = {
@@ -269,7 +257,7 @@ country_event = {
 
 		add_manpower = 30
 		create_corps_commander = {
-			name = "Paladin Bad Pony"
+			name = "Paladin Nova Rage"
 			traits = {  }
 			skill = 2
 			rank = 1
@@ -947,9 +935,11 @@ country_event = { #The SPP
 		name = redeye.33.a
 		ai_chance = { factor = 50 }
 
-		NEV = {
-			country_event = {
-				id = redeye.37
+		hidden_effect = {
+			NEV = {
+				country_event = {
+					id = redeye.37
+				}
 			}
 		}
 	}
@@ -964,23 +954,40 @@ country_event = { #Colonel Autumn
  	is_triggered_only = yes
 
 	option = {
-		name = redeye.34.a
-		ai_chance = { factor = 50 }
-
-		if = {
-			limit = {
-				NOT = {
-					NEV = {
-						has_country_leader = {
-    						name = "Autumn Leaf"
-						}
+		trigger = {
+			NOT = {
+				NEV = {
+					has_country_leader = {
+    					name = "Autumn Leaf"
 					}
 				}
 			}
+		}
+		name = redeye.34.a
+		ai_chance = { factor = 50 }
 
-			country_event = {
-				id = redeye.38
-				days = 7 
+		country_event = {
+			id = redeye.38
+			days = 7 
+		}
+	}
+	option = {
+		trigger = {
+			NEV = {
+				has_country_leader = {
+    				name = "Autumn Leaf"
+				}
+			}
+		}
+		name = redeye.34.a
+		ai_chance = { factor = 50 }
+
+		hidden_effect = {
+			NEV = {
+				country_event = {
+					id = redeye.36
+					days = 7 
+				}
 			}
 		}
 	}
@@ -1133,7 +1140,7 @@ country_event = { #April Grove Empty
 	}
 }
 
-country_event = {
+country_event = { #Blood Mane Accepts
  	id = redeye.42
  	title = redeye.42.title
  	desc = redeye.42.desc
@@ -1161,7 +1168,7 @@ country_event = {
 	}
 }
 
-country_event = {
+country_event = { #Blood Mane Declines
  	id = redeye.43
  	title = redeye.43.title
  	desc = redeye.43.desc
@@ -1228,7 +1235,22 @@ country_event = { #The DJ
  	fire_only_once = yes
 
 	option = { #O lawd Homage fucking killed herself
+		trigger = {
+			has_country_flag = new_unity_pip
+		}
 		name = redeye.45.a
+		ai_chance = { factor = 50}
+		
+		add_stability = -0.05
+	}
+
+	option = { #Good Riddence
+		trigger = {
+			NOT = {
+				has_country_flag = new_unity_pip
+			}
+		}
+		name = redeye.45.b
 		ai_chance = { factor = 50}
 		
 		add_stability = -0.05
@@ -1420,6 +1442,7 @@ country_event = { #New Unity
 				traits = {
 				}
 			}
+			set_country_flag = new_unity_pip
 		}
 
 		else_if = { #Red Eye, Autumn, Lavender Basket
@@ -1452,6 +1475,7 @@ country_event = { #New Unity
 				traits = {
 				}
 			}
+			set_country_flag = new_unity_pip
 		}
 	}
 }
