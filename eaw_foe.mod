@@ -38,5 +38,5 @@ dependencies={
 	"Old World Blues"
 	"Equestria at War"
 }
-supported_version="1.8.1"
+supported_version="1.9.1"
 path="C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/eaw_foe"
