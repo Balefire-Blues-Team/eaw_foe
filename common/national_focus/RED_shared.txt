@@ -5296,16 +5296,32 @@ shared_focus = {
 	cost = 7
 
  	prerequisite = { focus = RED_secure_drug_trade }
+ 	available = {
+ 		NCG = {
+ 			OR = {
+ 				exists = no
+ 				is_subject_of = RED
+ 			}
+ 		}
+ 	}
 	ai_will_do = { 
 		factor = 100
 	}
 
-	will_lead_to_war_with = BOG
-	will_lead_to_war_with = RAF
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_fourth_guild"
-		create_wargoal = { type = annex_everything target = BOG }
-		create_wargoal = { type = annex_everything target = RAF }
+
+		if = {
+			limit = {
+				NCG = { exists = yes }
+			}
+			NCG = {
+				swap_ideas = {
+					add_idea = NCG_four_guilds
+					remove_idea = NCG_three_guilds
+				}
+			}
+		}
 	}
 
 }
@@ -5364,6 +5380,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_raids_for_slaves"
+		custom_effect_tooltip = RED_slavery_raids_tt
+		set_country_flag = slavery_raids_flag
 	}
 
 }
@@ -5384,6 +5402,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_raider_queen"
+		RED_best_army = yes
 	}
 
 }
@@ -5537,8 +5556,19 @@ shared_focus = {
 		factor = 100
 	}
 
+	will_lead_to_war_with = BOG
+	will_lead_to_war_with = RAF
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_no_hounds_allowed"
+		add_state_core = 528
+		add_state_core = 800
+
+		create_wargoal = { type = annex_everything target = BOG }
+		create_wargoal = { type = annex_everything target = RAF }
+		EVR = {
+			remove_state_core = 528 
+			remove_state_core = 800
+		}
 		add_state_core = 528
 		add_state_core = 800
 	}
@@ -5558,8 +5588,16 @@ shared_focus = {
 		factor = 100
 	}
 
+	will_lead_to_war_with = GUN
+	will_lead_to_war_with = LGH
+	will_lead_to_war_with = APR
+	will_lead_to_war_with = FRT
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_break_ringers"
+		create_wargoal = { type = annex_everything target = GUN }
+		create_wargoal = { type = annex_everything target = LGH }
+		create_wargoal = { type = annex_everything target = APR }
+		create_wargoal = { type = annex_everything target = FRT }
 	}
 
 }
@@ -5579,6 +5617,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_turn_off_light"
+		add_state_core = 515
+		add_state_core = 503
 	}
 
 }
@@ -5598,6 +5638,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_hats_on_pikes"
+		add_state_core = 493
+		add_state_core = 812
 	}
 
 }
@@ -5618,6 +5660,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_stern_eastlands"
+		add_state_core = 490
+		add_state_core = 791
+		add_state_core = 470
 	}
 
 }

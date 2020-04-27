@@ -1,33 +1,15 @@
-﻿OAP_slaving = {
-
-	OAP_slave_counter = {
-		icon = steel
-		
-
-		available = {
-			always = no
-		}
-
-		complete_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision FSR_money_counter"
-		}
-
-		ai_will_do = {
-			factor = 0
-		}
-	}
-
+OAP_slaving = {
 	OAP_slave_mil_factory = {
 		icon = generic_industry
 		cost = 75
 
 		available = {
 			custom_trigger_tooltip = {
-                tooltip = RED_3_cost_slave_tt
-                check_variable = {
-                    OAP_slaves_var > 2
-                }
-            }
+				tooltip = RED_3_cost_slave_tt
+				check_variable = {
+					OAP_slaves_var > 2
+				}
+			}
 		}
 
 		days_remove = 60
@@ -35,14 +17,7 @@
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_counter"
 
-			random_owned_controlled_state = {
-				add_extra_state_shared_building_slots = 1
-				add_building_construction = {
-					type = arms_factory
-					level = 1
-					instant_build = yes
-				}
-			}
+			one_random_arms_factory = yes
 
 			custom_effect_tooltip = RED_3_lose_slave_tt
 			subtract_from_variable = {
@@ -52,7 +27,7 @@
 		}
 
 		ai_will_do = {
-			factor = 0
+			base = 20
 		}
 	}
 
@@ -62,11 +37,11 @@
 
 		available = {
 			custom_trigger_tooltip = {
-                tooltip = RED_3_cost_slave_tt
-                check_variable = {
-                    OAP_slaves_var > 2
-                }
-            }
+				tooltip = RED_3_cost_slave_tt
+				check_variable = {
+					OAP_slaves_var > 2
+				}
+			}
 		}
 
 		days_remove = 60
@@ -74,14 +49,7 @@
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_counter"
 
-			random_owned_controlled_state = {
-				add_extra_state_shared_building_slots = 1
-				add_building_construction = {
-					type = industrial_complex
-					level = 1
-					instant_build = yes
-				}
-			}
+			one_random_industrial_complex = yes
 
 			custom_effect_tooltip = RED_3_lose_slave_tt
 			subtract_from_variable = {
@@ -91,7 +59,7 @@
 		}
 
 		ai_will_do = {
-			factor = 0
+			base = 15
 		}
 	}
 
@@ -101,11 +69,11 @@
 
 		available = {
 			custom_trigger_tooltip = {
-                tooltip = RED_2_cost_slave_tt
-                check_variable = {
-                    OAP_slaves_var > 1
-                }
-            }
+				tooltip = RED_2_cost_slave_tt
+				check_variable = {
+					OAP_slaves_var > 1
+				}
+			}
 		}
 
 		visible = {
@@ -132,13 +100,13 @@
 		}
 
 		ai_will_do = {
-			factor = 0
+			base = 25
 		}
 	}
 
 	OAP_western_slaves = {
 		icon = slavery
-		cost = 100
+		cost = 80
 
 		days_remove = 60
 		modifier = {
@@ -157,124 +125,23 @@
 		}
 
 		ai_will_do = {
-			factor = 500
-		}
-	}
-	
-	OAP_begin_slave_raid = {
-
-		icon = generic_independence
-		cost = 25
-		fire_only_once = no
-		ai_will_do = {
-			factor = 65
+			base = 10
 			modifier = {
-				factor = 0
-				ai_has_no_other_wars_or_wargoals = no
+				add = 50
+				ccheck_variable = {
+					var = OAP_slaves_var
+					value = 5
+					compare = less_than_or_equals
+				}
 			}
-		}
-		available = {
-		}
-		visible = {
-		}
-		days_re_enable = 50
-		complete_effect = {
-			random_owned_state = {
-				limit = {
-					has_border_war = no
-					is_fully_controlled_by = ROOT
-					any_neighbor_state = {
-						has_border_war = no
-						NOT = { is_owned_by = ROOT }
-						NOT = { check_variable = { impassable_to@PREV = 1 } }
-						owner = {
-							NOT = { has_war_with = ROOT }
-							PREV = {
-								is_fully_controlled_by = PREV
-							}
-						}
-					}
-						ROOT = {
-							OR = {
-								divisions_in_state = {
-									size > 0
-									state = PREV
-								}
-								NOT = {
-									any_owned_state = {
-										has_border_war = no
-										is_fully_controlled_by = ROOT
-										any_neighbor_state = {
-											has_border_war = no
-											NOT = { is_owned_by = ROOT }
-											NOT = { check_variable = { impassable_to@PREV = 1 } }
-											owner = {
-												NOT = { has_war_with = ROOT }
-												PREV = {
-													is_fully_controlled_by = PREV
-												}
-											}
-										}
-										ROOT = {
-											divisions_in_state = {
-												size > 0
-												state = PREV
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-					ROOT = {
-						set_variable = { selected_own_state_for_border_war = PREV.id }
-					}
-					random_neighbor_state = {
-						limit = {
-							NOT = { is_owned_by = ROOT }
-							NOT = { check_variable = { impassable_to@PREV = 1 } }
-							owner = {
-								NOT = { has_war_with = ROOT }
-								PREV = {
-									is_fully_controlled_by = PREV
-								}
-							}
-						}
-						ROOT = {
-							set_variable = { selected_enemy_state_for_border_war = PREV.id }
-						}
-					}
+			modifier = {
+				add = 10
+				ccheck_variable = {
+					var = OAP_slaves_var
+					value = 10
+					compare = less_than_or_equals
 				}
-				meta_effect = {
-					text = {
-						start_border_war = {
-							attacker = {
-								state = selected_own_state_for_border_war
-								num_provinces = 4
-								on_win = add_to_variable = {var = OAP_slaves_var value = 2}
-								on_lose = [ATTACKER_LOSE_EVENT]
-								on_cancel = [ATTACKER_CANCEL_EVENT]
-								leader_score = {
-									base = 1
-								}
-							}
-							defender = {
-								state = selected_enemy_state_for_border_war
-								num_provinces = 4
-								on_win = [DEFENDER_WIN_EVENT]
-								on_lose = selected_enemy_state_for_border_war = { add_manpower = -1000}
-								on_cancel = [DEFENDER_CANCEL_EVENT]
-							}
-						}
-					}
-					ATTACKER_WIN_EVENT = "[This.GetBorderWarMenuAttackerWinEvent]"
-					ATTACKER_LOSE_EVENT = "[This.GetBorderWarMenuAttackerLoseEvent]"
-					ATTACKER_CANCEL_EVENT = "[This.GetBorderWarMenuAttackerCancelEvent]"
-					DEFENDER_WIN_EVENT = "[This.GetBorderWarMenuDefenderWinEvent]"
-					DEFENDER_LOSE_EVENT = "[This.GetBorderWarMenuDefenderLoseEvent]"
-					DEFENDER_CANCEL_EVENT = "[This.GetBorderWarMenuDefenderCancelEvent]"
-				}
-			
+			}
 		}
 	}
 }
