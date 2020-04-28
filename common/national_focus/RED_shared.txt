@@ -74,7 +74,7 @@ shared_focus = {
 		NOT = { country_exists = SSC }
 	}
 	ai_will_do = { 
-		factor = 50
+		factor = 15
 	} 
 
 	completion_reward = {
@@ -996,7 +996,7 @@ shared_focus = {
 
 	}
 	ai_will_do = { 
-		factor = 40
+		factor = 10
 	} 
 
 	completion_reward = {
@@ -1146,10 +1146,10 @@ shared_focus = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_slave_loyalty"
 		add_ideas = slave_loyal
 
-		swap_ideas = {
-    		remove_idea = slave_labor
-    		add_idea = slave_loyal
-		}
+		#swap_ideas = {
+    	#	remove_idea = slave_labor
+    	#	add_idea = slave_loyal
+		#}
 	}
 
 }
@@ -6052,7 +6052,7 @@ shared_focus = {
 	cost = 7
 
 	allow_branch = {
-		has_completed_focus = RED_talon_supremacy
+		#has_completed_focus = RED_talon_supremacy
 	}
  
 	ai_will_do = { 
@@ -6846,7 +6846,7 @@ shared_focus = {
 	cost = 7
 
 	allow_branch = {
-		has_completed_focus = RED_master_supremacy
+		#has_completed_focus = RED_master_supremacy
 	}
  
 	ai_will_do = { 
@@ -6855,6 +6855,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_masters_triumphant"
+		RED_remove_all_opinion_ideas = yes
+		add_ideas = triumphant_masters_idea
 	}
 
 }
@@ -6870,10 +6872,15 @@ shared_focus = {
 	prerequisite = { focus = RED_masters_triumphant }
 	ai_will_do = { 
 		factor = 100
-	} 
+	}
 
+	will_lead_to_war_with = FSR
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_no_mercy_for_rangers"
+		create_wargoal = { 
+			type = annex_everything 
+			target = FSR
+		}
 	}
 
 }
@@ -6887,12 +6894,32 @@ shared_focus = {
 	cost = 7
 
 	prerequisite = { focus = RED_no_mercy_for_rangers }
+	available = {
+		OR = {
+			controls_state = 536
+			controls_state = 538
+		}
+		FSR = {
+			exists = no
+		}
+	}
 	ai_will_do = { 
 		factor = 100
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_master_enslave_downtown"
+		custom_effect_tooltip = RED_15_gain_slave_tt
+
+		add_state_core = 538
+		add_state_core = 536
+		add_state_core = 542
+		add_state_core = 545
+
+		add_to_variable = {
+			var = RED_slaves_var
+			value = 15
+		}
 	}
 
 }
@@ -6910,8 +6937,16 @@ shared_focus = {
 		factor = 100
 	} 
 
+	will_lead_to_war_with = GUN
+	will_lead_to_war_with = LGH
+	will_lead_to_war_with = APR
+	will_lead_to_war_with = FRT
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_crush_the_eastlands"
+		create_wargoal = { type = annex_everything target = GUN }
+		create_wargoal = { type = annex_everything target = LGH }
+		create_wargoal = { type = annex_everything target = APR }
+		create_wargoal = { type = annex_everything target = FRT }
 	}
 
 }
@@ -6932,6 +6967,21 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_new_slave_venture"
+		538 = {	
+			add_extra_state_shared_building_slots = 3
+
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+			}
+
+			add_building_construction = {
+				type = industrial_complex
+				level = 2
+				instant_build = yes
+			}
+		}
 	}
 
 }
@@ -6952,6 +7002,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_city_of_slaves_and_masters"
+		swap_ideas = {
+			remove_idea = slave_labor
+			add_idea = the_way_it_is_idea
+		}
 	}
 
 }
@@ -6972,6 +7026,36 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_riches_of_silverwing"
+		if = {
+			limit = { has_tech = improved_ballistic_weaponry }
+			add_equipment_to_stockpile = {
+    			type = ballistic_equipment_2
+    			amount = 1250
+    			producer = RED
+			}
+			add_state_core = 812
+			add_resource = {
+				type = composites
+				amount = 4
+				state = 812
+			}
+		}
+		else = {
+			set_technology = {
+    			improved_ballistic_weaponry = 1
+			}
+			add_equipment_to_stockpile = {
+    			type = ballistic_equipment_2
+    			amount = 1250
+    			producer = RED
+			}
+			add_state_core = 812
+			add_resource = {
+				type = composites
+				amount = 4
+				state = 812
+			}
+		}
 	}
 
 }
@@ -6993,6 +7077,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_win_over_oap"
+		country_event = redeye.89
 	}
 
 }
@@ -7014,6 +7099,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_favor_with_cathedral"
+		country_event = redeye.88
 	}
 
 }
@@ -7034,6 +7120,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_coup_stern"
+		country_event = redeye.90
 	}
 
 }
