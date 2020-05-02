@@ -1,4 +1,5 @@
-NCR_leslie_prison = {
+ NCR_leslie_prison = {
+
 	SHA_LRA_prisoner_bye = {
 		icon = GFX_decision_category_slavery
 		is_good = yes
@@ -312,6 +313,105 @@ NCR_power_struggle_urp = {
 			factor = 0
 		}
 	}
+}
+
+NCR_incite_ranger_uprising_cat = {
+	NCR_outfit_rangers_with_weapons = {
+		icon = steel
+		is_good = yes
+		available = {
+			has_political_power > 29
+			has_equipment = { infantry_equipment > 249 }
+		}
+		fire_only_once = yes
+		cost = 30
+		days_remove = 30
+		complete_effect = {
+			
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NCR_outfit_rangers_with_weapons"
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = -250
+			}
+			hidden_effect = {
+			set_country_flag = NCR_agree_to_rangers_flag2
+			}
+		}
+		
+		ai_will_do = {
+			factor = 1000
+		}
+	}
+	
+	NCR_launch_ranger_coup = {
+		icon = steel
+		is_good = yes
+		available = {
+			has_political_power > 29
+		}
+		visible = { has_country_flag = NCR_agree_to_rangers_flag2 }
+		fire_only_once = yes
+		cost = 30
+		days_remove = 60
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NCR_launch_ranger_coup"
+			OAP = {
+			if = {
+				limit = {
+					has_government = destruction
+				}
+			
+			start_civil_war = {
+				ruling_party = destruction
+				ideology = visionary
+				size = 0.3
+				capital = 599
+			}
+			}
+			else_if = {
+				limit = {
+					has_government = visionary
+				}
+			
+			start_civil_war = {
+				ruling_party = visionary
+				ideology = survivalism
+				size = 0.3
+				capital = 599
+			}
+			}
+			random_other_country = {
+			limit = { 
+			    original_tag = OAP
+			}
+			
+			set_cosmetic_tag = OAP_NCR_rangers
+			declare_war_on = {
+				target = OAP
+				type = annex_everything
+			}
+			SHA = { puppet = PREV }
+			}
+			}
+			hidden_effect = {
+			clr_country_flag = NCR_agree_to_rangers_flag
+			clr_country_flag = NCR_agree_to_rangers_flag2
+			declare_war_on = {
+				target = OAP
+				type = annex_everything
+			}
+			}
+			
+			
+		}
+		
+		ai_will_do = {
+			factor = 1000
+		}
+	}
+
 }
 
 
