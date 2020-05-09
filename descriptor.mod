@@ -33,7 +33,7 @@ tags={
 	"National Focuses"
 	"Map"
 }
-name="EaW/OWB - Fallout: Equestria"
+name="EaW/OWB - Balefire Blues"
 dependencies={
 	"Old World Blues"
 	"Equestria at War"
