@@ -1,0 +1,114 @@
+core_owned_states_of_prev = {
+	custom_effect_tooltip = core_owned_states_of_prev_tt
+	hidden_effect = {
+		every_owned_state = {
+			if = {
+				limit = {
+					is_core_of = PREV.PREV
+				}
+				add_core_of = PREV
+			}
+		}
+	}
+}
+
+core_all_core_states_of_prev = {
+	custom_effect_tooltip = core_all_core_states_of_prev_tt
+	hidden_effect = {
+		every_state = {
+			if = {
+				limit = {
+					is_core_of = PREV.PREV
+				}
+				add_core_of = PREV
+			}
+		}
+	}
+}
+
+claim_core_states_of_prev = {
+	custom_effect_tooltip = claim_core_states_of_prev_tt
+	hidden_effect = {
+		every_state = {
+			limit = {
+				NOT = { is_owned_by = PREV }
+				is_core_of = PREV.PREV
+			}
+			add_claim_by = PREV
+		}
+	}
+}
+
+grant_wargoals_on_core_states_of_prev = {
+	if = {
+		limit = { country_exists = PREV }
+		custom_effect_tooltip = grant_claims_and_wargoal_for_core_states_of_prev_tt
+		hidden_effect = {
+			claim_core_states_of_prev = yes
+			create_wargoal = {
+				type = take_claimed_state
+				target = PREV
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			any_state = {
+				is_core_of = PREV.PREV
+				NOT = {	is_owned_by = PREV }
+			}
+		}
+		custom_effect_tooltip = grant_claims_and_territory_dispute_decisions_for_core_states_of_prev_tt
+		hidden_effect = {
+			claim_core_states_of_prev = yes
+			activate_targeted_decision = {
+				target = PREV
+				decision = demand_stolen_territory
+			}
+		}
+	}
+}
+
+#Automatically declares the war, useful in situation where the AI is skittish for some reason or another
+grant_wargoals_on_core_states_of_prev_force_ai_war = {
+	if = {
+		limit = { country_exists = PREV }
+		custom_effect_tooltip = grant_claims_and_wargoal_for_core_states_of_prev_tt
+		hidden_effect = {
+			claim_core_states_of_prev = yes
+			if = {
+				limit = {
+					is_ai = yes
+				}
+				declare_war_on = {
+					target = PREV
+					type = annex_everything
+				}
+			}
+			else = {
+				create_wargoal = {
+					type = take_claimed_state
+					target = PREV
+				}
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			any_state = {
+				is_core_of = PREV.PREV
+				NOT = {	is_owned_by = PREV }
+			}
+		}
+		custom_effect_tooltip = grant_claims_and_territory_dispute_decisions_for_core_states_of_prev_tt
+		hidden_effect = {
+			claim_core_states_of_prev = yes
+			activate_targeted_decision = {
+				target = PREV
+				decision = demand_stolen_territory
+			}
+		}
+	}
+}
+
+# vim: set ft=pdx ts=2 sw=2 tw=79 :
