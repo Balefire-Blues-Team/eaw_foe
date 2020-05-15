@@ -1198,8 +1198,11 @@ RED_slaving = {
 
 		available = {
 			any_owned_state = {
-				 not = {is_core_of = RED}
-				 state_population > 5000
+				NOT = { 
+					is_core_of = RED
+				 	is_core_of = SSC
+				}
+				state_population > 5000
 			}
 		}
 
@@ -1210,7 +1213,7 @@ RED_slaving = {
 		}
 
 		days_remove = 50
-		days_re_enable = 1
+		days_re_enable = 20
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_enslave_non_core"
 
@@ -1228,6 +1231,79 @@ RED_slaving = {
 
 		ai_will_do = {
 			factor = 100
+		}
+	}
+
+	RED_slave_enslave_sunnyshore = {
+		icon = infiltrate_state
+		cost = 25
+
+		available = {
+			RED_controls_sunnyshore = yes
+		}
+
+		visible = {
+			RED_controls_sunnyshore = yes
+			NOT = {
+				558 = {
+					is_core_of = RED
+				}
+			}
+			NOT = {
+				has_country_flag = RED_slavery_abolished
+			}
+		}
+
+		fire_only_once = yes
+		days_remove = 100
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_enslave_non_core"
+
+			558 = {
+				add_manpower = -2000
+				remove_core_of = SSC
+				add_core_of = RED
+			}
+			543 = {
+				add_manpower = -2000
+				remove_core_of = SSC
+				add_core_of = RED
+			}
+			546 = {
+				add_manpower = -2000
+				remove_core_of = SSC
+				add_core_of = RED
+			}
+			85 = {
+				add_manpower = -2000
+				remove_core_of = SSC
+				add_core_of = RED
+			}
+			5 = {
+				add_manpower = -2000
+				remove_core_of = SSC
+				add_core_of = RED
+			}
+			487 = {
+				add_manpower = -2000
+				remove_core_of = SSC
+				add_core_of = RED
+			}
+			554 = {
+				add_manpower = -2000
+				remove_core_of = SSC
+				add_core_of = RED
+			}
+
+			custom_effect_tooltip = RED_14_gain_slave_tt
+			add_to_variable = {
+				var = RED_slaves_var
+				value = 14
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
 		}
 	}
 }
@@ -1317,6 +1393,83 @@ RED_stern_palace = {
 		}
 		ai_will_do = {
 			factor = 1
+		}
+	}
+}
+
+RED_mom_secrets_cat = {
+
+	RED_memory_wipes = {
+		icon = GFX_decision_rifles
+		cost = 25
+		ai_will_do = {
+			base = 10
+			modifier = {
+				has_stability < 0.5
+				add = 50
+			}
+		}
+		is_good = yes
+		visible = {
+			NOT = {
+				has_idea = memory_wipes_idea
+			}
+		}
+		modifier = {
+		}
+		days_remove = 7
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove RED_memory_wipes"
+			add_ideas = memory_wipes_idea
+		}
+	}
+
+	RED_stop_memory_wipes = {
+		icon = GFX_decision_rifles
+		cost = 5
+		ai_will_do = {
+			base = 0
+			modifier = {
+				has_manpower < 1500
+				add = 1000
+			}
+		}
+		is_good = yes
+		visible = {
+			has_idea = memory_wipes_idea
+		}
+		modifier = {
+		}
+		days_remove = 7
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove RED_stop_memory_wipes"
+			remove_ideas = memory_wipes_idea
+		}
+	}
+
+	RED_rebuild_spritebot_control = {
+		icon = GFX_decision_rifles
+		cost = 5
+		ai_will_do = {
+			base = 200
+			modifier = {
+				add = 1000
+			}
+		}
+		fire_only_once = yes
+		is_good = yes
+		visible = {
+		}
+		highlight_states = {
+			state = 45
+		}
+		modifier = {
+			civilian_factory_use = 2
+		}
+		days_remove = 180
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove RED_rebuild_spritebot_control"
+			set_country_flag = RED_spritebot_control_flag
 		}
 	}
 }

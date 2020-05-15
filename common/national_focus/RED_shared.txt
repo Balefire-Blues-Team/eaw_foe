@@ -4665,6 +4665,7 @@ shared_focus = {
 			logistics_skill = 1
 			id = 1100
 		}
+		custom_effect_tooltip = RED_chainlink_stats_tt
 
 		create_corps_commander = {
 			name = "Thorn Bush"
@@ -4676,6 +4677,7 @@ shared_focus = {
 			logistics_skill = 2
 			id = 1101
 		}
+		custom_effect_tooltip = RED_thorn_stats_tt
 	}
 
 }
@@ -7160,6 +7162,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_raiders_of_filly"
+		RED_better_army = yes
 	}
 
 }
@@ -7198,6 +7201,48 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_raider_commanders"
+		if = {
+			limit = { has_global_flag = RED_civil_war_flag }
+			create_corps_commander = {
+				name = "Doc Guts"
+				picture = "Barb.tga"
+				traits = { raider_commander intelligent_trait pony_race_trait }
+				skill = 2
+				attack_skill = 1
+				defense_skill = 1
+				planning_skill = 3
+				logistics_skill = 2
+				id = 1104
+			}
+			custom_effect_tooltip = RED_guts_stats_tt
+		}
+		else = {
+			create_corps_commander = {
+				name = "Barb"
+				picture = "Barb.tga"
+				traits = { raider_commander agile_trait pony_race_trait }
+				skill = 2
+				attack_skill = 3
+				defense_skill = 2
+				planning_skill = 1
+				logistics_skill = 2
+				id = 1003
+			}
+			custom_effect_tooltip = RED_barb_stats_tt
+
+			create_corps_commander = {
+				name = "Doc Guts"
+				picture = "Barb.tga"
+				traits = { raider_commander intelligent_trait pony_race_trait }
+				skill = 2
+				attack_skill = 1
+				defense_skill = 1
+				planning_skill = 3
+				logistics_skill = 2
+				id = 1104
+			}
+			custom_effect_tooltip = RED_guts_stats_tt
+		}
 	}
 
 }
@@ -7375,8 +7420,24 @@ shared_focus = {
 		factor = 100
 	} 
 
+	will_lead_to_war_with = EVR
+	will_lead_to_war_with = BOG
+	will_lead_to_war_with = RAF
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_march_to_greenline"
+
+		declare_war_on = {
+    		target = EVR
+    		type = annex_everything
+		}
+		declare_war_on = {
+    		target = BOG
+    		type = annex_everything
+		}
+		declare_war_on = {
+    		target = RAF
+    		type = annex_everything
+		}
 	}
 
 }
@@ -7394,8 +7455,13 @@ shared_focus = {
 		factor = 100
 	} 
 
+	will_lead_to_war_with = SHA
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_land_of_freedom"
+		create_wargoal = {
+			type = annex_everything
+			target = SHA
+		}
 	}
 
 }
@@ -7455,6 +7521,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus  RED_mom_secrets"
+		country_event = redeye.96
 	}
 
 }
@@ -7468,12 +7535,16 @@ shared_focus = {
 	cost = 7
 
 	prerequisite = { focus = RED_mom_secrets }
+	available = {
+		has_country_flag = RED_spritebot_control_flag
+	}
 	ai_will_do = { 
 		factor = 100
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_spybots"
+		add_ideas = ultimate_spies
 	}
 
 }
@@ -7494,6 +7565,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus  RED_new_deal_with_era"
+		ERA = {
+			country_event = redeye.92
+		}
 	}
 
 }
