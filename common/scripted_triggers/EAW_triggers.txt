@@ -1,0 +1,175 @@
+#	Example:
+#
+#	example_trigger = {
+	#		tag = GER
+	#		is_ai = no
+	#	}
+#
+#
+#	In a script file:
+#
+#	trigger = {
+	#		example_trigger = yes
+	#	}
+#
+
+
+
+has_super_force_attack = {
+	OR = {
+		tag = HLR
+		tag = NMS
+		has_completed_focus = SOL_god_empress
+		has_completed_focus = SOL_empress_mother
+		has_completed_focus = SOL_empress_protector
+		has_completed_focus = CRY_SOL_zeal
+		has_completed_focus = OLE_new_vikings
+		has_completed_focus = death_or_dishonour
+		has_completed_focus = AET_madness_calls
+		has_completed_focus = NLR_bat_experts
+		has_completed_focus = MNC_warriors
+		has_completed_focus = LCT_divine_sacrifice
+		has_completed_focus = FIR_divine_fury
+		has_completed_focus = FIR_skeleton_armies
+		has_completed_focus = NIM_fascism_focus_15
+		has_completed_focus = NIM_with_your_shield
+		has_completed_focus = VED_Age_Of_Chivalry
+		has_completed_focus = VED_Doom_Of_Griffonia
+	}
+}
+
+has_super_last_stand = {
+	OR = {
+		
+	}
+}
+
+has_subjects = {
+	num_subjects > 0
+}
+
+is_exempt_from_division_limit = {
+	OR = {
+		has_game_rule = {
+			rule = ai_division_limiter
+			option = no
+		}
+		has_idea = detached_country
+		AND = {
+			has_country_flag = FIR_is_necromancer
+			has_country_leader = { ruling_only = yes name = "Shinespark" }
+		}
+		AND = {
+			tag = ARA
+			has_government = fascism
+		}
+		AND = {
+			tag = NIM
+			has_government = fascism
+		}
+		AND = {
+			tag = AET
+			has_country_leader = { ruling_only = yes name = "Archon Erebus I" }
+		}
+		AND = {
+			tag = MNC
+			has_completed_focus = MNC_chosen_of_maar
+			has_country_leader = { ruling_only = yes name = "Eriviar Sunstriker" }
+		}
+	}
+}
+
+is_former_subject = {
+	OR = {
+		#Regular puppets
+		has_country_flag = former_integrated_puppet
+		has_country_flag = former_puppet
+		has_country_flag = former_colony
+		has_country_flag = former_dominion
+		#Fascist puppets
+		has_country_flag = former_reichskommissariat
+		has_country_flag = former_reichsprotectorate
+		has_country_flag = former_satellite
+		#Feudal puppets
+		has_country_flag = former_subjugated_vassal
+		has_country_flag = former_vassal
+		has_country_flag = former_autonomous_vassal
+		has_country_flag = former_nominal_vassal
+	}
+}
+
+#Race triggers
+is_pony_race = {
+	has_idea = pony_race
+}
+
+is_changeling_race = {
+	has_idea = changeling_race
+}
+
+is_deer_race = {
+	has_idea = deer_race
+}
+
+is_griffon_race = {
+	has_idea = griffon_race
+}
+
+is_diamond_dog_race = {
+	has_idea = diamond_dog_race
+}
+
+is_generic_race = {
+	NOT = {
+		is_pony_race = yes
+		is_changeling_race = yes
+		is_deer_race = yes
+		is_griffon_race = yes
+		is_diamond_dog_race = yes
+	}
+}
+
+any_controlled_state_is_coastal = {
+	custom_trigger_tooltip = {
+		tooltip = any_controlled_state_is_coastal_tt
+		any_state = {
+			is_controlled_by = ROOT
+			is_coastal = yes
+		}
+	}
+}
+
+# All cores owned by THIS are owned by ROOT
+# Example:
+# GRF = { all_cores_owned_by_ROOT = yes } #check if ROOT owns all cores of GRF
+all_cores_owned_by_ROOT = {
+	custom_trigger_tooltip = {
+		tooltip = owns_all_cores_tt
+		hidden_trigger = {
+			all_of = {
+				array = core_states
+				var:v = {
+					is_owned_by = ROOT
+				}
+			}
+		}
+	}
+}
+
+# As above, but also includes ROOT's subjects
+all_cores_owned_by_ROOT_or_subject = {
+	custom_trigger_tooltip = {
+		tooltip = owns_all_cores_subject_tt
+		hidden_trigger = {
+			all_of = {
+				array = core_states
+				var:v = {
+					OR = {
+						is_owned_by = ROOT
+						owner = { is_subject_of = ROOT }
+					}
+				}
+			}
+		}
+	}
+}
