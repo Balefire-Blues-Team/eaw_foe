@@ -22,12 +22,45 @@ UNI_dunk = {
 				amount = 50
 				producer = UNI
 			}
-			add_manpower = -10
+			add_manpower = 10
 			random_controlled_state = {
 					limit = {
 						state_population > 60
 					}
 					add_manpower = -60
+				}
+		}
+	}
+	
+	UNI_dunk_mass = {
+		icon = GFX_decision_generic_ignite_civil_war
+		days_remove = 100
+		available = {
+		}
+		
+		visible = {
+				has_completed_focus = unity_start_4
+		}
+		days_re_enable = 100
+		cost = 75
+
+		ai_will_do = {
+			factor = 20
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision UNI_dunk_p"
+			add_equipment_to_stockpile = {
+				type = dragon_equipment_0
+				amount = 200
+				producer = UNI
+			}
+			add_manpower = 50
+			random_controlled_state = {
+					limit = {
+						state_population > 300
+					}
+					add_manpower = -300
 				}
 		}
 	}
@@ -56,7 +89,6 @@ UNI_dunk = {
 				amount = 50
 				producer = UNI
 			}
-			add_manpower = -50
 			random_controlled_state = {
 					limit = {
 						state_population > 100
@@ -213,7 +245,7 @@ UNI_black_book = {
         }
 
         visible = {
-            has_completed_focus = unity_pop_bb_2
+            has_completed_focus = unity_pop_bb_4
         }
         target_array = neighbors
         target_trigger = {
@@ -242,6 +274,14 @@ UNI_black_book = {
 
         complete_effect = {
 			add_manpower = -100
+				add_equipment_to_stockpile = {
+				type = dragon_equipment_0
+				amount = -100
+				producer = UNI
+			}
+			hidden_effect = {
+			modify_country_flag = { flag = celestia_evil_meter value = 1 }
+		}
         }
 		
 		remove_effect = {
@@ -250,7 +290,41 @@ UNI_black_book = {
                 attacker = {
                     state = 801
                     num_provinces = 2
-                    on_win = add_manpower = -1
+                    on_win = {
+						random_list = {
+							30 = { #Found something
+								modifier = {
+									add = -10
+									has_country_flag = { flag = black_book_raid_meter value > 10 }
+								}
+								modifier = {
+									add = -5
+									has_country_flag = { flag = black_book_raid_meter value > 20 }
+								}
+								country_event = unity_pop_bb.2
+							}
+							10 = { #Found The Book
+								modifier = {
+									add = 10
+									has_country_flag = { flag = black_book_raid_meter value > 10 }
+								}modifier = {
+									add = 10
+									has_country_flag = { flag = black_book_raid_meter value > 20 }
+								}
+								country_event = unity_pop_bb.3
+							}
+							20 = { #Found Nothing
+								country_event = unity_pop_bb.4
+							}
+							30 = { #Contact Lost
+								country_event = unity_pop_bb.5
+								modifier = {
+									add = -5
+									has_country_flag = { flag = black_book_raid_meter value > 20 }
+								}
+							}
+						}
+					}
                     on_lose = add_manpower = -20
                     on_cancel = add_manpower = -10
                 }
