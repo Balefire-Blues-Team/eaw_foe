@@ -4,6 +4,7 @@ replace_path="common/ai_peace"
 replace_path="common/ai_strategy"
 replace_path="common/ai_strategy_plans"
 replace_path="common/ai_templates"
+replace_path="common/ai_equipment"
 replace_path="common/autonomous_states"
 replace_path="common/countries"
 replace_path="common/ideas"
@@ -39,4 +40,4 @@ dependencies={
 	"Equestria at War"
 }
 supported_version="1.9.1"
-path="C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/eaw_foe"
+path="mod/eaw_foe"
