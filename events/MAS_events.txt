@@ -1,0 +1,502 @@
+add_namespace = masevent
+
+
+
+#Reset focus tree. For teasering purposes only.
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event masevent.0"}
+ 	id = masevent.0
+ 	title = masevent.0.t
+ 	desc = masevent.0.d
+	picture = GFX_event_test
+	hidden = yes
+
+	is_triggered_only = yes
+ 	#fire_only_once = yes
+
+	option = {
+		name = masevent.0.a
+		ai_chance = { factor = 1 }
+		if = {
+			limit = {
+				original_tag = MAS
+			}
+			load_focus_tree = MAS_focus_tree
+		}
+	}
+}
+
+#Autoannex for puppet. No fun allowed.
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event masevent.2"}
+ 	id = masevent.2
+ 	title = masevent.2.t
+ 	desc = masevent.2.d
+	picture = GFX_event_test
+	hidden = yes
+
+	trigger = {
+		MAS = {
+			is_puppet_of = ROOT
+		}
+	}
+	
+	option = {
+		name = masevent.2.a
+		ai_chance = { factor = 1 }
+		ROOT = {
+			annex_country = {
+				target = MAS
+			}
+		}
+	}
+}
+
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event masevent.100"}
+	id = masevent.100
+	title = masevent.100.t
+	desc = masevent.100.d
+	picture = GFX_event_test
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = {
+		name = masevent.100.a
+		ai_chance = { factor = 1 }
+	}
+}
+
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event masevent.101"}
+	id = masevent.101
+	title = masevent.101.t
+	desc = masevent.101.d
+	picture = GFX_event_test
+	
+	#is_triggered_only = yes 
+	fire_only_once = yes
+	trigger = {
+		original_tag = MAS
+		focus_progress = { focus = MAS_Chase progress > 0.0 }
+	}
+	
+	option = {
+		name = masevent.101.a
+		ai_chance = { factor = 1 }
+		hidden_effect = {
+			country_event = { id = masevent.1011 days = 14 }
+		}
+	}
+}
+
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event masevent.1011"}
+	id = masevent.1011
+	title = masevent.1011.t ###14 days
+	desc = masevent.1011.d
+	picture = GFX_event_test
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = {
+		name = masevent.1011.a
+		ai_chance = { factor = 1 }
+		hidden_effect = {
+			country_event = { id = masevent.1012 days = 14 }
+		}
+	}
+}
+
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event masevent.101"}
+	id = masevent.1012
+	title = masevent.1012.t # 14 days
+	desc = masevent.1012.d
+	picture = GFX_event_test
+	
+	#is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+	
+	}
+	
+	option = {
+		name = masevent.1012.a
+		ai_chance = { 
+			factor = 1 
+			modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}
+		}
+		set_country_flag = MAS_blossom_dead
+		hidden_effect = {
+			country_event = { id = masevent.102 days = 14 }
+		}
+	}
+	option = {
+		name = masevent.1012.b
+		ai_chance = { factor = 1 }
+		hidden_effect = {
+			country_event = { id = masevent.102 days = 14 }
+		}
+	}
+}
+
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event masevent.102"}
+	id = masevent.102
+	title = masevent.102.t
+	desc = masevent.102.d #14 days
+	picture = GFX_event_test
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	#trigger = {
+	#
+	#}
+	
+	option = {
+		name = masevent.102.a
+		ai_chance = { factor = 1 }
+		country_event = { id = masevent.1021 days = 14 }
+	}
+}
+
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event masevent.1021"}
+	id = masevent.1021
+	title = masevent.1021.t
+	desc = masevent.1021.d #14 days
+	picture = GFX_event_test
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	#trigger = {
+	#
+	#}
+	
+	option = {
+		name = masevent.1021.a
+		ai_chance = { factor = 1 }
+	}
+}
+
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event masevent.110"}
+	id = masevent.110 #at the start of lockdown focus
+	title = masevent.110.t
+	desc = masevent.110.d
+	picture = GFX_event_test
+	
+	trigger = {
+		original_tag = MAS
+		focus_progress = { focus = MAS_Lockdown progress > 0.0 }
+	}
+	fire_only_once = yes
+	
+	option = { #
+		name = masevent.110.a
+		ai_chance = { 
+			factor = 1
+		}
+		set_country_flag = MAS_blossom_notified
+	}
+	option = { #
+		name = masevent.110.b
+		ai_chance = { 
+			factor = 1
+		}
+	}
+}
+
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event masevent.11011"}
+	id = masevent.1101
+	title = masevent.1101.t
+	desc = {
+		text = masevent.1101.d0
+		trigger = { has_country_flag = MAS_blossom_notified }
+	}
+	desc = {
+		text = masevent.1101.d1
+		trigger = { NOT = { has_country_flag = MAS_blossom_notified } }
+	}
+	picture = GFX_event_test
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = { #
+		name = masevent.1101.a
+		ai_chance = { 
+			factor = 1
+		}
+		if = {
+			limit = {
+				has_country_flag = MAS_blossom_notified
+			}
+			clr_country_flag = MAS_blossom_notified
+		}
+		trigger = {
+			NOT = { has_country_flag = MAS_blossom_notified }
+		}
+		set_country_flag = MAS_blossom_dead
+	}
+	option = { #
+		name = masevent.1101.b
+		ai_chance = { 
+			factor = 1
+		}
+		set_country_flag = MAS_rogue_turret_fails
+		country_event = { id = masevent.11011 }
+	}
+	option = { #
+		name = masevent.1101.c
+		ai_chance = { 
+			factor = 1
+		}
+		set_country_flag = MAS_rogue_turret
+		country_event = { id = masevent.11011 }
+	}
+}
+
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event masevent.11011"}
+	id = masevent.11011
+	title = masevent.11011.t
+	desc = {
+		text = masevent.11011.d1
+		trigger = { has_country_flag = MAS_rogue_turret }
+	}
+	desc = {
+		text = masevent.11011.d2
+		trigger = { has_country_flag = MAS_rogue_turret_fails }
+	}
+	picture = GFX_event_test
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = { #
+		name = masevent.11011.a
+		ai_chance = { 
+			factor = 1
+		}
+		if = {
+			limit = {
+				has_country_flag = MAS_rogue_turret_fails
+			}
+			clr_country_flag = MAS_rogue_turret_fails
+		}
+		if = {
+			limit = {
+				has_country_flag = MAS_rogue_turret
+			}
+			clr_country_flag = MAS_rogue_turret
+		}
+		set_country_flag = MAS_blossom_alive
+	}
+	option = { #
+		name = masevent.11011.b
+		ai_chance = { 
+			factor = 1
+		}
+		if = {
+			limit = {
+				has_country_flag = MAS_rogue_turret_fails
+			}
+			clr_country_flag = MAS_rogue_turret_fails
+		}
+		if = {
+			limit = {
+				has_country_flag = MAS_rogue_turret
+			}
+			clr_country_flag = MAS_rogue_turret
+		}
+	}
+}
+
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event masevent.120"}
+	id = masevent.120
+	title = masevent.120.t
+	desc = masevent.120.d
+	picture = GFX_event_test
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = { #Horny
+		name = masevent.120.a
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}
+		}
+		trigger = {
+			has_completed_focus = MAS_StabiliseTheMinistry
+			has_country_flag = MAS_thisisnotreadyyet #remove before flight
+		}
+	}
+	option = { #Mystery
+		name = masevent.120.b
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 1000
+				is_historical_focus_on = yes
+			}
+		}
+		set_country_flag = MAS_mysterynightchosen
+		trigger = {
+			has_completed_focus = MAS_StabiliseTheMinistry
+		}
+	}
+	option = { #Blessed
+		name = masevent.120.c
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}
+		}
+		trigger = { has_completed_focus = MAS_Expeditions }
+	}
+	option = { #Tough
+		name = masevent.120.e
+		ai_chance = { 
+			factor = 1
+			modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}
+		}
+		trigger = { has_completed_focus = MAS_Expeditions }
+	}
+}
+
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event masevent.200"}
+	id = masevent.200
+	title = masevent.200.t
+	desc = masevent.200.d
+	picture = GFX_event_test
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = {
+		name = masevent.200.a
+		ai_chance = { factor = 1 }
+	}
+}
+
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event masevent.201"}
+	id = masevent.201
+	title = masevent.201.t
+	desc = masevent.201.d
+	picture = GFX_event_test
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = {
+		name = masevent.201.a
+		ai_chance = { factor = 1 }
+	}
+}
+
+
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event masevent.202"}
+	id = masevent.202
+	title = masevent.202.t
+	desc = masevent.202.d
+	picture = GFX_event_test
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = {
+		name = masevent.202.a
+		ai_chance = { factor = 1 }
+	}
+}
+
+country_event = { #Assault
+	immediate = {log = "[GetDateText]: [Root.GetName]: event masevent.203"}
+	id = masevent.203
+	title = masevent.203.t
+	desc = masevent.203.d
+	picture = GFX_event_test
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = {
+		name = masevent.203.a
+		ai_chance = { factor = 1 }
+		hidden_effect = { retire_country_leader = yes }
+		create_country_leader = { 
+			name = "Provisional Government"
+			desc = "POLITICS_FALLEN_GOVERNMENT_DESC"
+			picture = "FallenCabinet.tga"
+			expire = "1965.1.1"
+			ideology = rebuilder
+			traits = {
+				#cabinet_crisis
+			}
+		}
+	}
+}
+
+country_event = { #New order
+	immediate = {log = "[GetDateText]: [Root.GetName]: event masevent.204"}
+	id = masevent.204
+	title = masevent.204.t
+	desc = masevent.204.d
+	picture = GFX_event_test
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = {
+		name = masevent.204.a
+		ai_chance = { factor = 1 }
+		set_politics = {
+			ruling_party = continuation
+		}
+		hidden_effect = {
+			set_popularities = {
+				survivalism = 10
+				continuation = 70
+				visionary = 10
+				destruction = 10
+			}
+		}
+	}
+}
+
+country_event = { #Horny Imprisoned
+	immediate = {log = "[GetDateText]: [Root.GetName]: event masevent.205"}
+	id = masevent.205
+	title = masevent.205.t
+	desc = masevent.205.d
+	picture = GFX_event_test
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	
+	option = {
+		name = masevent.205.a
+		ai_chance = { factor = 1 }
+	}
+}
