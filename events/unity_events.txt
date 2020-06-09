@@ -148,7 +148,7 @@ country_event = {
 		UNI = {
 				give_guarantee = RED
 				give_military_access = RED
-				add_ideas = UNI_slave_trade_high
+				add_ideas = UNI_slave_trade_low
 			}
 		RED = {
 				give_guarantee = UNI
@@ -315,7 +315,7 @@ country_event = {
 		text = namespace.count.d.desc_id
 		trigger = {
 
-}
+		}
 
 	}
 	option = {
@@ -324,24 +324,24 @@ country_event = {
 			ROOT = {
 				give_military_access = UNI
 			}
-		set_global_flag = goddess_fielty
+		set_country_flag = goddess_fielty
 		}
 
 	}
 	option = {
 	name = goddess_redeye.6.b
 		hidden_effect = {
-				UNI = {
-						create_wargoal = {
-								type = annex_everything
-								target = ROOT
-								expire = 0
-							}
-					}
+			UNI = {
+				create_wargoal = {
+					type = annex_everything
+					target = ROOT
+					expire = 0
+				}
+			}
 		}
 	}
+}
 
-	}
 country_event = {
 	id = goddess_redeye.7
 	title = goddess_redeye.7.t
@@ -2881,7 +2881,88 @@ country_event = {
 	}
 	option = {
 	name = goddess_slaver.1.a
-
+		set_country_flag = goddess_slave_trade
+		hidden_effect = {
+		UNI = {
+			if = {
+				limit = {
+					NOT = {
+						has_idea = UNI_slave_trade_negligible
+						has_idea = UNI_slave_trade_min
+						has_idea = UNI_slave_trade_low
+						has_idea = UNI_slave_trade_med
+						has_idea = UNI_slave_trade_high
+						has_idea = UNI_slave_trade_very
+						has_idea = UNI_slave_trade_max
+					}
+				}
+				add_ideas = UNI_slave_trade_negligible
+			}
+			else_if = {
+				limit = {
+					has_idea = UNI_slave_trade_negligible
+				}
+				swap_ideas = {
+					add_idea = UNI_slave_trade_min
+					remove_idea = UNI_slave_trade_negligible
+				}
+			}
+			else_if = {
+				limit = {
+					has_idea = UNI_slave_trade_min
+				}
+				swap_ideas = {
+					add_idea = UNI_slave_trade_low
+					remove_idea = UNI_slave_trade_min
+				}
+			}
+			else_if = {
+				limit = {
+					has_idea = UNI_slave_trade_low
+				}
+				swap_ideas = {
+					add_idea = UNI_slave_trade_med
+					remove_idea = UNI_slave_trade_low
+				}
+			}
+			else_if = {
+				limit = {
+					has_idea = UNI_slave_trade_med
+				}
+				swap_ideas = {
+					add_idea = UNI_slave_trade_high
+					remove_idea = UNI_slave_trade_med
+				}
+			}
+			
+			else_if = {
+				limit = {
+					has_idea = UNI_slave_trade_high
+				}
+				swap_ideas = {
+					add_idea = UNI_slave_trade_very
+					remove_idea = UNI_slave_trade_high
+				}
+			}
+			
+			else_if = {
+				limit = {
+					has_idea = UNI_slave_trade_very
+				}
+				swap_ideas = {
+					add_idea = UNI_slave_trade_max
+					remove_idea = UNI_slave_trade_very
+				}
+			}
+			
+			else_if = {
+				limit = {
+					has_idea = UNI_slave_trade_max
+				}
+				add_manpower = 100
+			}
+		}
+		}
 
 	}
 	option = {
