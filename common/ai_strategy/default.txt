@@ -212,22 +212,6 @@ default_unit_production = {
 	}
 }
 
-# Build Mutant Aux/nightkin/paratroopers
-super_mutant_ghouls_special_forces_ratios = {
-	enable = {
-		OR = {
-			has_tech = ghoul_paratrooper_tech
-			has_tech = super_mutant_nightkin_tech
-			has_tech = super_mutant_aux_infantry_tech
-		}
-	}
-	ai_strategy = {
-		type = role_ratio
-		id = special_mutants
-		value = 10
-	}
-
-}
 
 # stop making divisions
 stop_building_too_many_units = { # Please Stop Building Units
@@ -421,7 +405,7 @@ stop_building_units_reserve_manpower_2000 = { # Please Stop Building Units
 # Robots
 generic_boost_light_for_light_armor = {
 	enable = {
-		has_tech = robot_protectron_tech_1
+		has_tech = robot_makeshift_automatons_tech
 		NOT = { has_template_ai_majority_unit = support_robot }
 	}
 
@@ -466,32 +450,6 @@ generic_boost_build_armor = {
 	}
 }
 
-# lacking basic tech, get it
-# research_basic_tech_melee = {
-# 	enable = {
-# 		NOT = {
-# 			has_tech = melee_weaponry_tech_1
-# 		}
-# 	}
-# 	ai_strategy = {
-# 		type = research_tech
-# 		id = melee_weaponry_tech_1
-# 		value = 50
-# 	}
-# }
-
-# research_basic_tech_firearms = {
-# 	enable = {
-# 		NOT = {
-# 			has_tech = standard_weaponry_tech
-# 		}
-# 	}
-# 	ai_strategy = {
-# 		type = research_tech
-# 		id = standard_weaponry_tech
-# 		value = 50
-# 	}
-# }
 
 save_admiral_pp_for_later = {
 	enable = {
@@ -695,53 +653,28 @@ put_garrisons_on_high_prio = {
 	}
 }
 
-#default_spyplanes_production = {
-#	enable = {
-#		has_tech = scout_plane1
-#		is_major = yes
-#		#OR = {
-#		#	has_equipment = {
-#		#		scout_plane_equipment > 50
-#		#	}
-#		#	has_deployed_air_force_size = {
-#		#		size > 50
-#		#		type = scout_plane
-#		#	}
-#		#}
-#	}
-#
-#	abort_when_not_enabled = yes
-#
-#	ai_strategy = {
-#		type = unit_ratio
-#		id = scout_plane
-#		value = -99
-#	}
-#
-#	ai_strategy = {
-#		type = equipment_production_factor
-#		id = scout_plane
-#		value = -99
-#	}
-#
-#	ai_strategy = {
-#		type = equipment_production_min_factories
-#		id = scout_plane
-#		value = 1
-#	}
-#}
+build_up_your_industry_early = {
+	enable = {
+		not = {
+			OR = {
+				tag = SHA
+				tag = NEV
+				tag = UNI
+				tag = TEN
+			}
+		}
+		date < 1240.1.1
+		date > 1235.1.1
+		has_war = no
+	}
+	abort={
+		date > 1242.1.1
+		has_war = yes
+	}
 
-#minors_dont_spy = {
-#	enable = {
-#		has_tech = scout_plane1
-#		is_major = no
-#	}
-#
-#	abort_when_not_enabled = yes
-#
-#	ai_strategy = {
-#		type = unit_ratio
-#		id = scout_plane
-#		value = -10
-#	}
-#}
+	ai_strategy = {
+		type = added_military_to_civilian_factory_ratio
+		value = 20
+	}
+}
+
