@@ -352,38 +352,6 @@ RED_fund_bloody_army = {
 	}
 }
 
-RED_raiding = {
-	RED_raid_villages = {
-		icon = GFX_decision_rifles
-		available = {
-			has_manpower > 100
-		}
-		cost = 50
-
-		days_re_enable = 75
-
-		ai_will_do = {
-			base = 0
-			modifier = {
-				add = 10
-				has_manpower > 150
-			}
-		}
-		fire_only_once = yes
-		is_good = yes
-		visible = {
-			has_completed_focus = RED_raiding_parties
-		}
-		modifier = {
-		}
-		days_remove = 25
-		remove_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision remove RED_bloody_army_manpower"
-
-		}
-	}
-}
-
 RED_steel_rangers = {
 	RED_attack_fillybanks = {
 		icon = border_war
@@ -534,7 +502,7 @@ RED_canterlot = {
 			log = "[GetDateText]: [Root.GetName]: Decision remove RED_expedition_canterlot"
 
 			country_event = {
-    			id = redeye.13
+    			id = redeye_canterlot.1
     			days = 1
     			random = 2
 			}
@@ -563,7 +531,11 @@ RED_canterlot = {
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision remove RED_expedition_canterlot"
 
-			set_country_flag = RED_canterlot_ex_ai_skip
+			country_event = {
+	    		id = redeye_canterlot.12
+	    		days = 25
+	    		random = 2
+			}
 		}
 	}
 }
@@ -921,7 +893,6 @@ RED_rebuilding_eqs = {
 			}
 		}
 	}
-
 }
 
 RED_slaving = {
@@ -963,7 +934,7 @@ RED_slaving = {
 		}
 
 		ai_will_do = {
-			factor = 0
+			factor = 5
 		}
 	}
 
@@ -1014,7 +985,7 @@ RED_slaving = {
 		}
 
 		ai_will_do = {
-			factor = 0
+			factor = 20
 		}
 	}
 
@@ -1052,7 +1023,7 @@ RED_slaving = {
 		}
 
 		ai_will_do = {
-			factor = 0
+			factor = 30
 		}
 	}
 
@@ -1081,14 +1052,7 @@ RED_slaving = {
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_counter"
 
-			random_owned_controlled_state = {
-				add_extra_state_shared_building_slots = 1
-				add_building_construction = {
-					type = arms_factory
-					level = 1
-					instant_build = yes
-				}
-			}
+			one_random_arms_factory = yes
 
 			custom_effect_tooltip = RED_3_lose_slave_tt
 			subtract_from_variable = {
@@ -1098,7 +1062,7 @@ RED_slaving = {
 		}
 
 		ai_will_do = {
-			factor = 0
+			base = 15
 		}
 	}
 
@@ -1126,14 +1090,7 @@ RED_slaving = {
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_counter"
 
-			random_owned_controlled_state = {
-				add_extra_state_shared_building_slots = 1
-				add_building_construction = {
-					type = industrial_complex
-					level = 1
-					instant_build = yes
-				}
-			}
+			one_random_industrial_complex = yes
 
 			custom_effect_tooltip = RED_3_lose_slave_tt
 			subtract_from_variable = {
@@ -1143,7 +1100,7 @@ RED_slaving = {
 		}
 
 		ai_will_do = {
-			factor = 0
+			base = 20
 		}
 	}
 
@@ -1184,7 +1141,7 @@ RED_slaving = {
 		}
 
 		ai_will_do = {
-			factor = 0
+			base = 25
 		}
 	}
 
@@ -1199,7 +1156,7 @@ RED_slaving = {
                 	OAP_slaves_var > 1
             	}
 			}
-			has_equipment = = {infantry_equipment > 25}
+			has_equipment = { infantry_equipment > 25}
 		}
 
 		visible = {
@@ -1231,7 +1188,7 @@ RED_slaving = {
 		}
 
 		ai_will_do = {
-			factor = 0
+			factor = 50
 		}
 	}
 	
@@ -1270,7 +1227,96 @@ RED_slaving = {
 		}
 
 		ai_will_do = {
-			factor = 0
+			factor = 100
+		}
+	}
+}
+
+RED_stern_palace = {
+	RED_stern_palace_effort = {
+		icon = generic_construction
+		available = {
+			has_government = destruction
+		}
+		cost = 25
+
+		days_remove = 70
+		#is_good = yes
+		visible = {
+			has_government = destruction
+			NOT = {
+				has_country_flag = {
+					flag = stern_palace_flag
+					value > 4
+				}
+			}
+		}
+		modifier = {
+			civilian_factory_use = 1
+		}
+		cancel_trigger = {
+			NOT = {
+				has_government = destruction
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove CHN_queens_tower_effort"
+			modify_country_flag = { flag = stern_palace_flag value = 2 }
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				has_political_power > 160
+				factor = 10
+			}
+		}
+	}
+	RED_stern_palace_finish = {
+		icon = STG_palace_construction_effort
+		available = {
+			has_government = destruction
+			custom_trigger_tooltip = {
+				tooltip = stern_palace_finish_trigger_tt
+				has_country_flag = {
+					flag = stern_palace_flag
+					value > 4
+				}
+			}
+			hidden_trigger = {
+				has_country_flag = {
+					flag = stern_palace_flag
+					value > 4
+				}
+			}
+		}
+		cost = 50
+
+		days_remove = 70
+
+		fire_only_once = yes
+		visible = {
+			has_government = destruction
+		}
+		modifier = {
+			civilian_factory_use = 2
+		}
+		cancel_trigger = {
+			NOT = {
+				has_government = destruction
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove CHN_queens_tower_finish"
+			set_country_flag = RED_palace_complete
+			add_political_power = 200
+			set_province_name = { id = 9132 name = "Stern's Palace"}
+			set_capital = 538
+			538 = {
+				add_extra_state_shared_building_slots = 1
+			}
+		}
+		ai_will_do = {
+			factor = 1
 		}
 	}
 }

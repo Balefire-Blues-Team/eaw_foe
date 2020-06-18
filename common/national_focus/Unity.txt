@@ -8,11 +8,12 @@ focus_tree = {
 		}
 	}
 	default = no
+	continuous_focus_position = { x = 1 y = 1 }
 	focus = {
 		id = unity_start_1
 		icon = GFX_goal_tfv_generic_tech_sharing
 		cost = 1.00
-		x = 21
+		x = 34
 		y = 0
 			completion_reward = {
 					if = {
@@ -66,13 +67,30 @@ focus_tree = {
 		id = goddess_redeye_12
 		icon = GFX_goal_unknown
 		cost = 10.00
+		
+		available = {
+			NOT = { has_war_with = RED }
+		}
+		
+		bypass = {
+			any_other_country = {
+				has_completed_focus = NEV_des_goddess
+			}
+		}
+		
+		prerequisite = {
+			focus = goddess_redeye_15
+		}
 		prerequisite = {
 			focus = goddess_redeye_10
+		}
+		prerequisite = {
 			focus = goddess_redeye_6
 		}
+		
 		x = 2
-		y = 0
-		relative_position_id = goddess_unification
+		y = 1
+		relative_position_id = goddess_redeye_15
 			completion_reward = {
 					if = {
 							limit = {
@@ -157,8 +175,15 @@ focus_tree = {
 		prerequisite = {
 			focus = unity_start_4
 		}
-		x = 14
+		x = 31
 		y = 4
+			ai_will_do = {
+					factor = 30
+					modifier = {
+							is_historical_focus_on = yes
+							factor = 100
+						}
+				}
 			completion_reward = {
 					set_rule = {
 							can_send_volunteers = yes
@@ -176,14 +201,12 @@ focus_tree = {
 		mutually_exclusive = {
 			focus = goddess_perfection
 		}
-		x = 10
-		y = 5
-			available = {
-
-}
+		x = -4
+		y = 1
+		relative_position_id = goddess_1
 			ai_will_do = {
-					factor = 1
-				}
+					factor = 30
+			}
 			completion_reward = {
 					add_ideas = UNI_preacher_idea
 					set_country_flag = uni_preachers
@@ -200,8 +223,14 @@ focus_tree = {
 		mutually_exclusive = {
 			focus = goddess_preacher
 		}
-		x = 18
-		y = 5
+		x = 4
+		y = 1
+		relative_position_id = goddess_1
+		
+		ai_will_do = {
+					factor = 40
+		}
+				
 			completion_reward = {
 					add_stability = 0.05
 					add_war_support = 0.15
@@ -226,14 +255,19 @@ focus_tree = {
 			focus = goddess_preacher
 			focus = goddess_perfection
 		}
+		ai_will_do = {
+					factor = 40
+					modifier = {
+							is_historical_focus_on = yes
+							factor = 100
+						}
+				}
 		mutually_exclusive = {
 			focus = goddess_dunking_1
 		}
-		x = 12
-		y = 6
-			available = {
-
-}
+		x = -4
+		y = 1
+		relative_position_id = goddess_preacher
 			ai_will_do = {
 					factor = 1
 				}
@@ -253,19 +287,38 @@ focus_tree = {
 		mutually_exclusive = {
 			focus = goddess_slaver_1
 		}
-		x = 16
-		y = 6
+		x = 4
+		y = 1
+		relative_position_id = goddess_perfection
+		
+		ai_will_do = {
+					factor = 0
+					modifier = {
+							is_historical_focus_on = yes
+							factor = 0
+						}
+				}
 
 	}
 	focus = {
 		id = goddess_canon_1
-		icon = GFX_goal_unknown
+		icon = GFX_goal_redeye
 		cost = 5.00
 		prerequisite = {
 			focus = goddess_slaver_1
 		}
+		mutually_exclusive = {
+			focus = unity_slaver_1
+		}
 		x = 6
 		y = 7
+			ai_will_do = {
+					factor = 25
+					modifier = {
+							is_historical_focus_on = yes
+							factor = 100
+						}
+				}
 			completion_reward = {
 					if = {
 							limit = {
@@ -328,10 +381,24 @@ focus_tree = {
 		x = 3
 		y = 1
 		relative_position_id = goddess_canon_1
+		
+		ai_will_do = {
+					factor = 30
+					modifier = {
+							is_historical_focus_on = yes
+							factor = 100
+						}
+				}
+				
 			completion_reward = {
 					custom_effect_tooltip = uni_research_together
 					RED = {
 							load_oob = "RED_bodyguard"
+							add_equipment_to_stockpile = {
+									type = dragon_equipment_0
+									amount = 200
+									producer = UNI
+								}
 						}
 				}
 
@@ -343,36 +410,65 @@ focus_tree = {
 		prerequisite = {
 			focus = goddess_redeye_1
 		}
-		prerequisite = {
-			focus = goddess_redeye_2
-		}
 		x = -1
 		y = 1
 		relative_position_id = goddess_redeye_1
+			completion_reward = {
+					if = {
+							limit = {
+									has_global_flag = debug_logs
+								}
+							log = "[GetDateText]: [Root.GetName] face_off entered"
+						}
+					country_event = {
+							id = goddess_redeye.19
+						}
+					RED = {
+							country_event = {
+									id = goddess_redeye.16
+								}
+						}
+					add_ideas = UNI_slave_trade_builders
+					if = {
+							limit = {
+									has_global_flag = debug_logs
+								}
+							log = "[GetDateText]: [Root.GetName] face_off exited"
+						}
+				}
 
 	}
 	focus = {
 		id = goddess_redeye_4
 		icon = GFX_goal_unknown
-		cost = 20.00
+		cost = 10.00
 		prerequisite = {
 			focus = goddess_redeye_3
 		}
-		mutually_exclusive = {
-			focus = goddess_redeye_5
-		}
-		x = -2
+		x = 0
 		y = 1
 		relative_position_id = goddess_redeye_3
-			available = {
-
-}
-			ai_will_do = {
-					factor = 1
-				}
 			completion_reward = {
-					Red = {
-							add_ideas = RED_research_low
+					if = {
+							limit = {
+									has_global_flag = debug_logs
+								}
+							log = "[GetDateText]: [Root.GetName] face_off entered"
+						}
+					country_event = {
+							id = goddess_redeye.20
+						}
+					RED = {
+							country_event = {
+									id = goddess_redeye.17
+								}
+						}
+					add_ideas = UNI_slave_trade_factories
+					if = {
+							limit = {
+									has_global_flag = debug_logs
+								}
+							log = "[GetDateText]: [Root.GetName] face_off exited"
 						}
 				}
 
@@ -382,23 +478,32 @@ focus_tree = {
 		icon = GFX_goal_unknown
 		cost = 10.00
 		prerequisite = {
-			focus = goddess_redeye_3
+			focus = goddess_redeye_8
 		}
-		mutually_exclusive = {
-			focus = goddess_redeye_4
-		}
-		x = 2
+		x = 0
 		y = 1
-		relative_position_id = goddess_redeye_3
-			available = {
-
-}
-			ai_will_do = {
-					factor = 1
-				}
+		relative_position_id = goddess_redeye_8
 			completion_reward = {
-					Red = {
-							add_ideas = RED_research_high
+					if = {
+							limit = {
+									has_global_flag = debug_logs
+								}
+							log = "[GetDateText]: [Root.GetName] face_off entered"
+						}
+					country_event = {
+							id = goddess_redeye.14
+						}
+					RED = {
+							country_event = {
+									id = goddess_redeye.13
+								}
+						}
+					add_ideas = UNI_slave_trade_research_bonus
+					if = {
+							limit = {
+									has_global_flag = debug_logs
+								}
+							log = "[GetDateText]: [Root.GetName] face_off exited"
 						}
 				}
 
@@ -406,18 +511,34 @@ focus_tree = {
 	focus = {
 		id = goddess_redeye_6
 		icon = GFX_goal_unknown
-		cost = 10.00
+		cost = 5.00
 		prerequisite = {
 			focus = goddess_redeye_4
-			focus = goddess_redeye_5
 		}
 		x = 0
-		y = 2
-		relative_position_id = goddess_redeye_3
+		y = 1
+		relative_position_id = goddess_redeye_4
 			completion_reward = {
-					custom_effect_tooltip = uni_research_together
+					if = {
+							limit = {
+									has_global_flag = debug_logs
+								}
+							log = "[GetDateText]: [Root.GetName] face_off entered"
+						}
+					country_event = {
+							id = goddess_redeye.15
+						}
 					RED = {
-							load_oob = "RED_alicorn_spawns"
+							country_event = {
+									id = goddess_redeye.18
+								}
+							add_ideas = RED_slave_trade_engine
+						}
+					if = {
+							limit = {
+									has_global_flag = debug_logs
+								}
+							log = "[GetDateText]: [Root.GetName] face_off exited"
 						}
 				}
 
@@ -429,25 +550,43 @@ focus_tree = {
 		prerequisite = {
 			focus = goddess_redeye_2
 		}
-		prerequisite = {
-			focus = goddess_redeye_1
-		}
 		x = 1
 		y = 1
 		relative_position_id = goddess_redeye_2
-			available = {
-
-}
-			ai_will_do = {
-					factor = 1
+		
+		ai_will_do = {
+					factor = 30
+					modifier = {
+							is_historical_focus_on = yes
+							factor = 100
+						}
 				}
+				
 			completion_reward = {
-					RED = {
-							add_timed_idea = {
-									idea = RED_imp_penalty1
-									days = 720
+					if = {
+							limit = {
+									has_global_flag = debug_logs
 								}
-							load_oob = "RED_alicorn_spawns"
+							log = "[GetDateText]: [Root.GetName] face_off entered"
+						}
+					every_country = {
+							limit = {
+									OR = {
+											owns_state = 507
+											owns_state = 799
+										}
+								}
+							ROOT = {
+									country_event = {
+									id = goddess_redeye.6
+								}
+							}
+						}
+					if = {
+							limit = {
+									has_global_flag = debug_logs
+								}
+							log = "[GetDateText]: [Root.GetName] face_off exited"
 						}
 				}
 
@@ -457,24 +596,37 @@ focus_tree = {
 		icon = GFX_goal_unknown
 		cost = 10.00
 		prerequisite = {
-			focus = goddess_redeye_7
+			focus = goddess_redeye_c_1
 		}
-		mutually_exclusive = {
-			focus = goddess_redeye_9
-		}
-		x = -2
+		x = 0
 		y = 1
-		relative_position_id = goddess_redeye_7
-			available = {
-
-}
-			ai_will_do = {
-					factor = 1
-				}
+		relative_position_id = goddess_redeye_c_1
 			completion_reward = {
-					custom_effect_tooltip = uni_slaves_armed
-					hidden_effect = {
-							set_country_flag = slaves_prepared_uni
+					if = {
+							limit = {
+									has_global_flag = debug_logs
+								}
+							log = "[GetDateText]: [Root.GetName] face_off entered"
+						}
+					country_event = {
+							id = goddess_redeye.11
+						}
+					RED = {
+							country_event = {
+									id = goddess_redeye.12
+								}
+							add_equipment_to_stockpile = {
+									type = dragon_equipment_0
+									amount = 200
+									producer = UNI
+								}
+						}
+					add_ideas = UNI_slave_trade_IMP_bonus
+					if = {
+							limit = {
+									has_global_flag = debug_logs
+								}
+							log = "[GetDateText]: [Root.GetName] face_off exited"
 						}
 				}
 
@@ -486,25 +638,29 @@ focus_tree = {
 		prerequisite = {
 			focus = goddess_redeye_7
 		}
-		mutually_exclusive = {
-			focus = goddess_redeye_8
-		}
-		x = 2
+		x = 0
 		y = 1
 		relative_position_id = goddess_redeye_7
-			available = {
-
-}
-			ai_will_do = {
-					factor = 1
-				}
 			completion_reward = {
-					custom_effect_tooltip = uni_unicorns_ordered
-					hidden_effect = {
-							set_country_flag = unicorns_ordered_uni
-							country_event = {
-									id = goddess_redeye.5
+					if = {
+							limit = {
+									has_global_flag = debug_logs
 								}
+							log = "[GetDateText]: [Root.GetName] face_off entered"
+						}
+					country_event = {
+							id = goddess_redeye.7
+						}
+					RED = {
+							country_event = {
+									id = goddess_redeye.8
+								}
+						}
+					if = {
+							limit = {
+									has_global_flag = debug_logs
+								}
+							log = "[GetDateText]: [Root.GetName] face_off exited"
 						}
 				}
 
@@ -514,28 +670,38 @@ focus_tree = {
 		icon = GFX_goal_unknown
 		cost = 10.00
 		prerequisite = {
-			focus = goddess_redeye_8
 			focus = goddess_redeye_9
 		}
 		x = 0
-		y = 2
-		relative_position_id = goddess_redeye_7
-			available = {
-
-}
-			ai_will_do = {
-					factor = 1
-				}
+		y = 1
+		relative_position_id = goddess_redeye_9
 			completion_reward = {
-					custom_effect_tooltip = uni_wings_recalled
-					hidden_effect = {
-							set_country_flag = wings_recalled_uni
+					if = {
+							limit = {
+									has_global_flag = debug_logs
+								}
+							log = "[GetDateText]: [Root.GetName] face_off entered"
+						}
+					country_event = {
+							id = goddess_redeye.9
+						}
+					RED = {
+							country_event = {
+									id = goddess_redeye.10
+								}
+							add_ideas = RED_Alicorn_Troops
+						}
+					if = {
+							limit = {
+									has_global_flag = debug_logs
+								}
+							log = "[GetDateText]: [Root.GetName] face_off exited"
 						}
 				}
 
 	}
 	focus = {
-		id = goddess_lightbringer_redeye
+		id = goddess_redeye_c_1
 		icon = GFX_goal_unknown
 		cost = 10.00
 		prerequisite = {
@@ -544,6 +710,13 @@ focus_tree = {
 		x = 0
 		y = 1
 		relative_position_id = goddess_canon_1
+			completion_reward = {
+					add_equipment_to_stockpile = {
+							type = dragon_equipment_0
+							amount = 200
+							producer = UNI
+						}
+				}
 
 	}
 	focus = {
@@ -551,42 +724,65 @@ focus_tree = {
 		icon = GFX_goal_unknown
 		cost = 10.00
 		prerequisite = {
+			focus = goddess_redeye_15	
+		}
+		prerequisite = {
 			focus = goddess_redeye_10
+		}
+		prerequisite = {
 			focus = goddess_redeye_6
 		}
+
 		x = 0
-		y = 5
-		relative_position_id = goddess_canon_1
+		y = 1
+		
+		ai_will_do = {
+					factor = 5
+					modifier = {
+							is_historical_focus_on = yes
+							factor = 1
+						}
+					modifier = {
+							has_global_flag = windsheer_pact
+							factor = 0
+						}
+					modifier = {
+							has_war = yes
+							factor = 0
+						}
+				}
+				
+		relative_position_id = goddess_redeye_15
 			completion_reward = {
-					if = {
-							limit = {
-									has_global_flag = debug_logs
+					RED = {
+							country_event = {
+									id = goddess_redeye.3
 								}
-							log = "[GetDateText]: [Root.GetName] wasteland_unity entered"
-						}
-					country_event = {
-							id = goddess_redeye.3
-						}
-					if = {
-							limit = {
-									has_global_flag = debug_logs
-								}
-							log = "[GetDateText]: [Root.GetName] wasteland_unity exited"
 						}
 				}
 
 	}
 	focus = {
 		id = goddess_redeye_11
-		icon = GFX_goal_unknown
+		icon = GFX_goal_tenpony
 		cost = 10.00
 		prerequisite = {
+			focus = goddess_redeye_15
+		}
+		prerequisite = {
 			focus = goddess_redeye_6
+		}
+		prerequisite = {
 			focus = goddess_redeye_10
 		}
 		x = -2
-		y = 0
-		relative_position_id = goddess_unification
+		y = 1
+		relative_position_id = goddess_redeye_15
+		completion_reward = {
+					country_event = {
+						id = unity_tenpony.3
+					}
+				}
 
 	}
 	focus = {
@@ -600,14 +796,25 @@ focus_tree = {
 			focus = goddess_redeye_11
 		}
 		x = -1
-		y = 1
-		relative_position_id = goddess_unification
+		y = 2
+		relative_position_id = goddess_redeye_15
 
 	}
 	focus = {
 		id = goddess_redeye_14
 		icon = GFX_goal_unknown
 		cost = 10.00
+		
+		available = {
+			OR = {
+				AND = { 
+					is_in_faction_with = NEV
+					RED = { exists = no }
+				}
+				NEV = { exists = no }
+			}
+		}
+		
 		prerequisite = {
 			focus = goddess_unification
 		}
@@ -615,8 +822,8 @@ focus_tree = {
 			focus = goddess_redeye_12
 		}
 		x = 1
-		y = 1
-		relative_position_id = goddess_unification
+		y = 2
+		relative_position_id = goddess_redeye_15
 
 	}
 	focus = {
@@ -625,25 +832,53 @@ focus_tree = {
 		cost = 10.00
 		prerequisite = {
 			focus = goddess_redeye_13
-		}
-		prerequisite = {
 			focus = goddess_redeye_14
 		}
 		x = 0
-		y = 2
-		relative_position_id = goddess_unification
+		y = 3
+		
+		available = {
+			RED = { exists = no }
+		}
+		
+		relative_position_id = goddess_redeye_15
+			completion_reward = {
+					every_country = {
+							limit = {
+									NOT = {
+											tag = UNI
+										}
+								}
+							ROOT = {
+									hidden_effect = {
+											create_wargoal = {
+													type = annex_everything
+													target = PREV
+												}
+										}
+								}
+						}
+				}
 
 	}
 	focus = {
 		id = goddess_shared_1
-		icon = GFX_goal_unknown
+		icon = GFX_goal_splended
 		cost = 10.00
 		prerequisite = {
 			focus = goddess_slaver_1
 			focus = goddess_dunking_1
 		}
-		x = 14
-		y = 7
+		ai_will_do = {
+					factor = 20
+					modifier = {
+							is_historical_focus_on = yes
+							factor = 1
+						}
+				}
+		x = 0
+		y = 3
+		relative_position_id = goddess_1
 			completion_reward = {
 					if = {
 							limit = {
@@ -672,9 +907,19 @@ focus_tree = {
 		prerequisite = {
 			focus = unity_start_4
 		}
-		x = 6
-		y = 1
-		relative_position_id = unity_start_4
+		ai_will_do = {
+					factor = 1
+					modifier = {
+							is_historical_focus_on = yes
+							factor = 1
+					}
+					modifier = {
+							has_completed_focus = goddess_redeye_1
+							factor = 15
+					}
+				}
+		x = 48
+		y = 4
 			available = {
 					518 = {
 							OWNER = {
@@ -717,13 +962,11 @@ focus_tree = {
 		x = -2
 		y = 1
 		relative_position_id = unity_eco_1
+				
 			available = {
-					518 = {
-							OWNER = {
-									is_owned_and_controlled_by = UNI
-								}
-						}
-				}
+				has_full_control_of_state = 518
+			}
+			
 			completion_reward = {
 					if = {
 							limit = {
@@ -758,13 +1001,11 @@ focus_tree = {
 		x = 2
 		y = 1
 		relative_position_id = unity_eco_1
+		
 			available = {
-					350 = {
-							OWNER = {
-									is_owned_and_controlled_by = UNI
-								}
-						}
-				}
+				has_full_control_of_state = 458
+			}
+			
 			completion_reward = {
 					if = {
 							limit = {
@@ -772,7 +1013,7 @@ focus_tree = {
 								}
 							log = "[GetDateText]: [Root.GetName] ncr_mint entered"
 						}
-					350 = {
+					458 = {
 							add_extra_state_shared_building_slots = 2
 							add_building_construction = {
 									type = industrial_complex
@@ -780,7 +1021,6 @@ focus_tree = {
 									instant_build = yes
 								}
 						}
-					add_ideas = ncrmint
 					if = {
 							limit = {
 									has_global_flag = debug_logs
@@ -800,6 +1040,775 @@ focus_tree = {
 		x = -2
 		y = 1
 		relative_position_id = unity_eco_2
+		
+		completion_reward = {
+			add_equipment_to_stockpile = {
+				type = dragon_equipment_0
+				amount = 500
+				producer = UNI
+			}
+			add_manpower = -600
+		}
+
+	}
+	focus = {
+		id = unity_slaver_1
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = goddess_slaver_1
+		}
+		mutually_exclusive = {
+			focus = goddess_canon_1
+		}
+		x = 22
+		y = 7
+
+	}
+	focus = {
+		id = unity_slaver_2
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_1
+		}
+		x = -7
+		y = 1
+		relative_position_id = unity_slaver_1
+
+	}
+	focus = {
+		id = unity_slaver_3
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_2
+		}
+		x = 0
+		y = 1
+		relative_position_id = unity_slaver_2
+
+	}
+	focus = {
+		id = unity_slaver_4
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_3
+		}
+		x = 0
+		y = 1
+		relative_position_id = unity_slaver_3
+
+	}
+	focus = {
+		id = unity_slaver_5
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_4
+		}
+		mutually_exclusive = {
+			focus = unity_slaver_6
+		}
+		x = -2
+		y = 1
+		relative_position_id = unity_slaver_4
+
+	}
+	focus = {
+		id = unity_slaver_6
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_4
+		}
+		mutually_exclusive = {
+			focus = unity_slaver_5
+		}
+		x = 2
+		y = 1
+		relative_position_id = unity_slaver_4
+
+	}
+	focus = {
+		id = unity_slaver_7
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_5
+			focus = unity_slaver_6
+		}
+		x = 0
+		y = 2
+		relative_position_id = unity_slaver_4
+
+	}
+	focus = {
+		id = unity_population
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_start_4
+		}
+		x = 59
+		y = 4
+			ai_will_do = {
+					factor = 10
+					modifier = {
+							is_historical_focus_on = yes
+							factor = 0
+						}
+				}
+			completion_reward = {
+					if = {
+							limit = {
+									has_global_flag = debug_logs
+								}
+							log = "[GetDateText]: [Root.GetName] face_off entered"
+						}
+					country_event = {
+							id = unity_pop.1
+						}
+					if = {
+							limit = {
+									has_global_flag = debug_logs
+								}
+							log = "[GetDateText]: [Root.GetName] face_off exited"
+						}
+				}
+
+	}
+	focus = {
+		id = unity_pop_bb_1
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_population
+		}
+		x = 56
+		y = 5
+		ai_will_do = {
+					factor = 1
+					modifier = {
+							is_historical_focus_on = yes
+							factor = 1
+					}
+					modifier = {
+							has_completed_focus = goddess_redeye_1
+							factor = 15
+					}
+		}
+			completion_reward = {
+					if = {
+							limit = {
+									has_global_flag = debug_logs
+								}
+							log = "[GetDateText]: [Root.GetName] face_off entered"
+						}
+					country_event = {
+							id = unity_pop_bb.0
+						}
+					if = {
+							limit = {
+									has_global_flag = debug_logs
+								}
+							log = "[GetDateText]: [Root.GetName] face_off exited"
+						}
+				}
+
+	}
+	focus = {
+		id = unity_pop_bb_2
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_pop_bb_1
+		}
+		x = 56
+		y = 6
+		ai_will_do = {
+			factor = 25
+			modifier = {
+					is_historical_focus_on = yes
+					factor = 100
+				}
+		}
+				
+		available = {
+			owns_state = 486
+		}
+
+		}
+	focus = {
+		id = unity_pop_bb_3
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_pop_bb_2
+		}
+		x = 56
+		y = 7
+		
+		ai_will_do = {
+			factor = 25
+			modifier = {
+					is_historical_focus_on = yes
+					factor = 100
+				}
+		}
+		
+		available = {
+					owns_state = 476
+		}
+		
+		completion_reward = {
+					if = {
+							limit = {
+									has_global_flag = debug_logs
+								}
+							log = "[GetDateText]: [Root.GetName] face_off entered"
+						}
+					add_state_claim = 801
+					create_wargoal = {
+							type = puppet_wargoal_focus
+							target = GLY
+							expire = 0
+						}
+					if = {
+							limit = {
+									has_global_flag = debug_logs
+								}
+							log = "[GetDateText]: [Root.GetName] face_off exited"
+						}
+				}
+
+	}
+	focus = {
+		id = unity_pop_bb_4
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_pop_bb_3
+		}
+		
+		available = {
+					owns_state = 801
+		}
+		
+		x = 56
+		y = 8
+			completion_reward = {
+					if = {
+							limit = {
+									has_global_flag = debug_logs
+								}
+							log = "[GetDateText]: [Root.GetName] face_off entered"
+						}
+					country_event = {
+							id = unity_pop_bb.1
+						}
+					set_country_flag = { flag = celestia_evil_meter value = 0 }
+					if = {
+							limit = {
+									has_global_flag = debug_logs
+								}
+							log = "[GetDateText]: [Root.GetName] face_off exited"
+						}
+				}
+
+	}
+	focus = {
+		id = unity_pop_bb_5
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_pop_bb_4
+		}
+		
+		available = {
+			has_country_flag = black_book_found
+		}
+		
+		x = 56
+		y = 9
+
+		completion_reward = {
+			add_ideas = UNI_Black_Book_1
+		}
+
+	}
+	focus = {
+		id = unity_pop_bb_6
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_pop_bb_5
+		}
+		mutually_exclusive = {
+			focus = unity_pop_bb_7
+		}
+		x = 54
+		y = 10
+		
+		completion_reward = {
+			add_ideas = UNI_Black_Book_2
+		}
+
+	}
+	focus = {
+		id = unity_pop_bb_7
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_pop_bb_5
+		}
+		mutually_exclusive = {
+			focus = unity_pop_bb_6
+		}
+		x = 58
+		y = 10
+		
+		completion_reward = {
+			swap_ideas = {
+				add_idea = UNI_Black_Book_3
+				remove_idea = UNI_breeding_idea
+			}
+		}
+
+	}
+	focus = {
+		id = goddess_redeye_15
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = goddess_redeye_5
+		}
+		x = 0
+		y = 1
+		relative_position_id = goddess_redeye_5
+
+	}
+	
+	focus = {
+		id = unity_slaver_8
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_1
+		}
+		mutually_exclusive = {
+			focus = unity_slaver_2
+		}
+		x = 8
+		y = 1
+		relative_position_id = unity_slaver_1
+
+	}
+	focus = {
+		id = unity_slaver_9
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_8
+		}
+		mutually_exclusive = {
+			focus = unity_slaver_10
+		}
+		x = -2
+		y = 1
+		relative_position_id = unity_slaver_8
+
+	}
+	focus = {
+		id = unity_slaver_10
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_8
+		}
+		mutually_exclusive = {
+			focus = unity_slaver_9
+		}
+		x = 2
+		y = 1
+		relative_position_id = unity_slaver_8
+
+	}
+	focus = {
+		id = unity_slaver_11
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_9
+			focus = unity_slaver_10
+		}
+		x = 0
+		y = 2
+		relative_position_id = unity_slaver_8
+
+	}
+	focus = {
+		id = unity_slaver_12
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_9
+		}
+		x = -1
+		y = 1
+		relative_position_id = unity_slaver_9
+
+	}
+	focus = {
+		id = unity_slaver_13
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_10
+		}
+		x = 1
+		y = 1
+		relative_position_id = unity_slaver_10
+
+	}
+	focus = {
+		id = unity_slaver_14
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_12
+		}
+		x = 0
+		y = 1
+		relative_position_id = unity_slaver_12
+
+	}
+	focus = {
+		id = unity_slaver_15
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_11
+		}
+		x = 0
+		y = 1
+		relative_position_id = unity_slaver_11
+
+	}
+	focus = {
+		id = unity_slaver_16
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_13
+		}
+		x = 0
+		y = 1
+		relative_position_id = unity_slaver_13
+
+	}
+	focus = {
+		id = unity_slaver_17
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_14
+		}
+		x = 0
+		y = 1
+		relative_position_id = unity_slaver_14
+
+	}
+	focus = {
+		id = unity_slaver_18
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_15
+		}
+		x = 0
+		y = 1
+		relative_position_id = unity_slaver_15
+
+	}
+	focus = {
+		id = unity_slaver_19
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_16
+		}
+		x = 0
+		y = 1
+		relative_position_id = unity_slaver_16
+
+	}
+	focus = {
+		id = unity_slaver_20
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_17
+			focus = unity_slaver_19
+		}
+		prerequisite = {
+			focus = unity_slaver_18
+		}
+		x = 0
+		y = 1
+		relative_position_id = unity_slaver_18
+
+	}
+	focus = {
+		id = unity_slaver_21
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_7
+		}
+		x = 0
+		y = 1
+		relative_position_id = unity_slaver_7
+
+	}
+	focus = {
+		id = unity_slaver_22
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_2
+			focus = unity_slaver_8
+		}
+		x = 0
+		y = 2
+		relative_position_id = unity_slaver_1
+
+	}
+	focus = {
+		id = unity_slaver_23
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_22
+		}
+		x = -2
+		y = 1
+		relative_position_id = unity_slaver_22
+
+	}
+	focus = {
+		id = unity_slaver_24
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_22
+		}
+		x = 2
+		y = 1
+		relative_position_id = unity_slaver_22
+
+	}
+	focus = {
+		id = unity_slaver_27
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_23
+		}
+		prerequisite = {
+			focus = unity_slaver_24
+		}
+		mutually_exclusive = {
+			focus = unity_slaver_26
+		}
+		x = 0
+		y = 1
+		relative_position_id = unity_slaver_23
+
+	}
+	focus = {
+		id = unity_slaver_26
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_23
+		}
+		prerequisite = {
+			focus = unity_slaver_24
+		}
+		mutually_exclusive = {
+			focus = unity_slaver_27
+			focus = unity_slaver_25
+		}
+		x = 0
+		y = 2
+		relative_position_id = unity_slaver_22
+
+	}
+	focus = {
+		id = unity_slaver_25
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_23
+		}
+		prerequisite = {
+			focus = unity_slaver_24
+		}
+		mutually_exclusive = {
+			focus = unity_slaver_26
+		}
+		x = 0
+		y = 1
+		relative_position_id = unity_slaver_24
+
+	}
+	focus = {
+		id = unity_slaver_28
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_25
+			focus = unity_slaver_26
+		}
+		x = -1
+		y = 1
+		relative_position_id = unity_slaver_25
+
+	}
+	focus = {
+		id = unity_slaver_29
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_27
+			focus = unity_slaver_26
+		}
+		x = 1
+		y = 1
+		relative_position_id = unity_slaver_27
+
+	}
+	focus = {
+		id = unity_slaver_30
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_29
+		}
+		prerequisite = {
+			focus = unity_slaver_28
+		}
+		x = 0
+		y = 2
+		relative_position_id = unity_slaver_26
+
+	}
+	focus = {
+		id = unity_slaver_31
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_21
+			focus = unity_slaver_20
+		}
+		prerequisite = {
+			focus = unity_slaver_30
+		}
+		x = 0
+		y = 1
+		relative_position_id = unity_slaver_30
+
+	}
+	focus = {
+		id = unity_slaver_32
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_31
+		}
+		x = 0
+		y = 1
+		relative_position_id = unity_slaver_31
+
+	}
+	focus = {
+		id = unity_slaver_33
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_32
+		}
+		x = -2
+		y = 1
+		relative_position_id = unity_slaver_32
+
+	}
+	focus = {
+		id = unity_slaver_34
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_32
+		}
+		x = 0
+		y = 1
+		relative_position_id = unity_slaver_32
+
+	}
+	focus = {
+		id = unity_slaver_35
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_32
+		}
+		x = 2
+		y = 1
+		relative_position_id = unity_slaver_32
+
+	}
+	focus = {
+		id = unity_slaver_36
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_33
+		}
+		x = 0
+		y = 1
+		relative_position_id = unity_slaver_33
+
+	}
+	focus = {
+		id = unity_slaver_37
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_35
+		}
+		x = 0
+		y = 1
+		relative_position_id = unity_slaver_35
+
+	}
+	focus = {
+		id = unity_slaver_38
+		icon = GFX_goal_unknown
+		cost = 10.00
+		prerequisite = {
+			focus = unity_slaver_36
+		}
+		prerequisite = {
+			focus = unity_slaver_37
+		}
+		prerequisite = {
+			focus = unity_slaver_34
+		}
+		x = 0
+		y = 2
+		relative_position_id = unity_slaver_34
 
 	}
 }

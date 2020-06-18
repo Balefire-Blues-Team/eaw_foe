@@ -1,0 +1,709 @@
+<<<<<<< Updated upstream
+# How to use:
+# Activate decision with the target being the country who's original territory should be returned
+# I.E Scorpions is annexed by somebody, and NCR should reclaim all territory, then
+# NCR = { activate_targeted_decision = { target = SCR decision = demand_stolen_territory } }
+# Scripted by Mechano
+# How many days they have to respond
+@dispute_time_to_respond = 10
+territory_disputes = {
+	demand_stolen_territory = {
+		icon = border_war
+		fire_only_once = yes
+		highlight_states = {
+			is_core_of = FROM
+		}
+		complete_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] demand_stolen_territory (decision) complete entered"
+			}
+			hidden_effect = {
+				set_variable = {
+					var = dispute_country_to_reclaim
+					value = FROM
+				}
+			}
+			every_country = {
+				limit = {
+					NOT = {
+						OR = {
+							tag = ROOT
+							is_in_faction_with = ROOT
+							is_puppet_of = ROOT
+							has_war_with = ROOT
+						}
+					}
+					any_owned_state = {
+						is_core_of = FROM
+					}
+				}
+				if = {
+					limit = {
+						is_major = yes
+					}
+					add_named_threat = {
+						threat = 5
+						name = took_territory
+					}
+					else = {
+						add_named_threat = {
+							threat = 2
+							name = took_territory
+						}
+					}
+				}
+				if = {
+					limit = {
+						is_puppet = yes
+					}
+					OVERLORD = {
+						reverse_add_opinion_modifier = {
+							target = ROOT
+							modifier = stole_territory
+						}
+						hidden_effect = {
+							activate_targeted_decision = {
+								target = ROOT
+								decision = return_stolen_territory_timer
+							}
+						}
+						activate_targeted_decision = {
+							target = ROOT
+							decision = return_stolen_territory
+						}
+					}
+
+					else = {
+						reverse_add_opinion_modifier = {
+							target = ROOT
+							modifier = stole_territory
+						}
+						hidden_effect = {
+							activate_targeted_decision = {
+								target = ROOT
+								decision = return_stolen_territory_timer
+							}
+						}
+						activate_targeted_decision = {
+							target = ROOT
+							decision = return_stolen_territory
+						}
+					}
+				}
+				#Country event to tell these idiots they have this decision
+				country_event = helper_events.1
+				ROOT = {
+					hidden_effect = {
+						activate_targeted_decision = {
+							target = PREV
+							decision = return_stolen_territory_timer_demand_sender
+						}
+					}
+				}
+			}
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] demand_stolen_territory (decision) complete exited"
+			}
+		}
+		ai_will_do = {
+			factor = 100
+		}
+	}
+
+	return_stolen_territory_timer_demand_sender = {
+		icon = border_war
+		war_with_target_on_timeout = yes
+		fire_only_once = yes
+		Is_good = no
+		days_mission_timeout = @dispute_time_to_respond
+		highlight_states = {
+			NOT = { is_owned_by = ROOT }
+			is_core_of = FROM.dispute_country_to_reclaim
+		}
+		available = {
+			has_war_with = FROM
+		}
+		timeout_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] return_stolen_territory_timer_demand_sender (decision) timeout entered"
+			}
+			effect_tooltip = {
+				FROM = {
+					every_owned_state = {
+						limit = {
+							is_core_of = ROOT.dispute_country_to_reclaim
+							NOT = { is_claimed_by = ROOT }
+						}
+						add_claim_by = ROOT
+					}
+					every_country = {
+						limit = {
+							is_puppet_of = PREV
+						}
+						every_owned_state = {
+							limit = {
+								is_core_of = ROOT.dispute_country_to_reclaim
+							}
+							add_claim_by = ROOT
+						}
+					}
+				}
+				create_wargoal = {
+					type = take_claimed_state
+					target = FROM
+				}
+			}
+			add_war_support = 0.1
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] return_stolen_territory_timer_demand_sender (decision) timeout exited"
+			}
+		}
+	}
+
+	return_stolen_territory_timer = {
+		icon = border_war
+		war_with_target_on_timeout = yes
+		fire_only_once = yes
+		highlight_states = {
+			is_owned_by = ROOT
+			is_core_of = FROM.dispute_country_to_reclaim
+		}
+		Is_good = no
+		days_mission_timeout = @dispute_time_to_respond
+		available = {
+			has_war_with = FROM
+		}
+		complete_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] return_stolen_territory_timer (decision) complete entered"
+			}
+			remove_targeted_decision = {
+				target = FROM
+				decision = return_stolen_territory
+			}
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] return_stolen_territory_timer (decision) complete exited"
+			}
+		}
+		timeout_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] return_stolen_territory_timer (decision) timeout entered"
+			}
+			every_owned_state = {
+				limit = {
+					is_core_of = FROM.dispute_country_to_reclaim
+					NOT = { is_claimed_by = FROM }
+				}
+				add_claim_by = FROM
+			}
+			FROM = {
+				create_wargoal = {
+					type = take_claimed_state
+					target = PREV
+				}
+			}
+			remove_targeted_decision = {
+				target = FROM
+				decision = return_stolen_territory
+			}
+			if = {
+				limit = {
+					is_puppet = yes
+					OVERLORD = {
+						NOT = {
+							any_owned_state = {
+								is_core_of = FROM.dispute_country_to_reclaim
+							}
+						}
+					}
+				}
+				OVERLORD = {
+					remove_targeted_decision = {
+						target = FROM
+						decision = return_stolen_territory
+					}
+				}
+				hidden_effect = {
+					FROM = {
+						remove_targeted_decision = {
+							target = PREV
+							decision = return_stolen_territory_timer_demand_sender
+						}
+					}
+				}
+			}
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] return_stolen_territory_timer (decision) timeout exited"
+			}
+		}
+	}
+
+	return_stolen_territory = {
+		icon = border_war
+		fire_only_once = yes
+		highlight_states = {
+			is_owned_by = ROOT
+			is_claimed_by = FROM
+		}
+		complete_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] return_stolen_territory (decision) complete entered"
+			}
+			return_all_disputed_states = yes
+			hidden_effect = {
+				FROM = {
+					remove_targeted_decision = {
+						target = PREV
+						decision = return_stolen_territory_timer_demand_sender
+					}
+				}
+				remove_targeted_decision = {
+					target = FROM
+					decision = return_stolen_territory_timer
+				}
+			}
+			if = {
+				limit = {
+					is_major = yes
+				}
+				add_named_threat = {
+					threat = -5
+					name = returned_territory
+				}
+				else = {
+					add_named_threat = {
+						threat = -2
+						name = returned_territory
+					}
+				}
+			}
+			every_country = {
+				limit = {
+					is_puppet_of = ROOT
+				}
+				if = {
+					limit = {
+						is_major = yes
+					}
+					add_named_threat = {
+						threat = -5
+						name = returned_territory
+					}
+					else = {
+						add_named_threat = {
+							threat = -2
+							name = returned_territory
+						}
+					}
+				}
+				return_all_disputed_states = yes
+				hidden_effect = {
+					FROM = {
+						remove_targeted_decision = {
+							target = PREV
+							decision = return_stolen_territory_timer_demand_sender
+						}
+					}
+				}
+			}
+			build_2_random_civ_factory = yes
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] return_stolen_territory (decision) complete exited"
+			}
+		}
+		ai_will_do = {
+			factor = 100
+			modifier = {
+				factor = 0
+				OR = {
+					AND = {
+						NOT = { is_major = yes }
+						strength_ratio = {
+							tag = FROM
+							ratio > 1.5
+						}
+					}
+					AND = {
+						is_major = yes
+						strength_ratio = {
+							tag = FROM
+							ratio > 0.75
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				OR = {
+				has_variable = dont_return_stolen_territory@FROM
+				has_variable = never_return_stolen_territory
+				}
+			}
+		}
+	}
+}
+=======
+# How to use:
+# Activate decision with the target being the country who's original territory should be returned
+# I.E Scorpions is annexed by somebody, and NCR should reclaim all territory, then
+# NCR = { activate_targeted_decision = { target = SCR decision = demand_stolen_territory } }
+# Scripted by Mechano
+# How many days they have to respond
+@dispute_time_to_respond = 10
+territory_disputes = {
+	demand_stolen_territory = {
+		icon = border_war
+		fire_only_once = yes
+		highlight_states = {
+			is_core_of = FROM
+		}
+		complete_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] demand_stolen_territory (decision) complete entered"
+			}
+			hidden_effect = {
+				set_variable = {
+					var = dispute_country_to_reclaim
+					value = FROM
+				}
+			}
+			every_country = {
+				limit = {
+					NOT = {
+						OR = {
+							tag = ROOT
+							is_in_faction_with = ROOT
+							is_puppet_of = ROOT
+							has_war_with = ROOT
+						}
+					}
+					any_owned_state = {
+						is_core_of = FROM
+					}
+				}
+				if = {
+					limit = {
+						is_major = yes
+					}
+					add_named_threat = {
+						threat = 5
+						name = took_territory
+					}
+					else = {
+						add_named_threat = {
+							threat = 2
+							name = took_territory
+						}
+					}
+				}
+				if = {
+					limit = {
+						is_puppet = yes
+					}
+					OVERLORD = {
+						reverse_add_opinion_modifier = {
+							target = ROOT
+							modifier = stole_territory
+						}
+						hidden_effect = {
+							activate_targeted_decision = {
+								target = ROOT
+								decision = return_stolen_territory_timer
+							}
+						}
+						activate_targeted_decision = {
+							target = ROOT
+							decision = return_stolen_territory
+						}
+					}
+
+					else = {
+						reverse_add_opinion_modifier = {
+							target = ROOT
+							modifier = stole_territory
+						}
+						hidden_effect = {
+							activate_targeted_decision = {
+								target = ROOT
+								decision = return_stolen_territory_timer
+							}
+						}
+						activate_targeted_decision = {
+							target = ROOT
+							decision = return_stolen_territory
+						}
+					}
+				}
+				#Country event to tell these idiots they have this decision
+				country_event = helper_events.1
+				ROOT = {
+					hidden_effect = {
+						activate_targeted_decision = {
+							target = PREV
+							decision = return_stolen_territory_timer_demand_sender
+						}
+					}
+				}
+			}
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] demand_stolen_territory (decision) complete exited"
+			}
+		}
+		ai_will_do = {
+			factor = 100
+		}
+	}
+
+	return_stolen_territory_timer_demand_sender = {
+		icon = border_war
+		war_with_target_on_timeout = yes
+		fire_only_once = yes
+		Is_good = no
+		days_mission_timeout = @dispute_time_to_respond
+		highlight_states = {
+			NOT = { is_owned_by = ROOT }
+			is_core_of = FROM.dispute_country_to_reclaim
+		}
+		available = {
+			has_war_with = FROM
+		}
+		timeout_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] return_stolen_territory_timer_demand_sender (decision) timeout entered"
+			}
+			effect_tooltip = {
+				FROM = {
+					every_owned_state = {
+						limit = {
+							is_core_of = ROOT.dispute_country_to_reclaim
+							NOT = { is_claimed_by = ROOT }
+						}
+						add_claim_by = ROOT
+					}
+					every_country = {
+						limit = {
+							is_puppet_of = PREV
+						}
+						every_owned_state = {
+							limit = {
+								is_core_of = ROOT.dispute_country_to_reclaim
+							}
+							add_claim_by = ROOT
+						}
+					}
+				}
+				create_wargoal = {
+					type = take_claimed_state
+					target = FROM
+				}
+			}
+			add_war_support = 0.1
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] return_stolen_territory_timer_demand_sender (decision) timeout exited"
+			}
+		}
+	}
+
+	return_stolen_territory_timer = {
+		icon = border_war
+		war_with_target_on_timeout = yes
+		fire_only_once = yes
+		highlight_states = {
+			is_owned_by = ROOT
+			is_core_of = FROM.dispute_country_to_reclaim
+		}
+		Is_good = no
+		days_mission_timeout = @dispute_time_to_respond
+		available = {
+			has_war_with = FROM
+		}
+		complete_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] return_stolen_territory_timer (decision) complete entered"
+			}
+			remove_targeted_decision = {
+				target = FROM
+				decision = return_stolen_territory
+			}
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] return_stolen_territory_timer (decision) complete exited"
+			}
+		}
+		timeout_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] return_stolen_territory_timer (decision) timeout entered"
+			}
+			every_owned_state = {
+				limit = {
+					is_core_of = FROM.dispute_country_to_reclaim
+					NOT = { is_claimed_by = FROM }
+				}
+				add_claim_by = FROM
+			}
+			FROM = {
+				create_wargoal = {
+					type = take_claimed_state
+					target = PREV
+				}
+			}
+			remove_targeted_decision = {
+				target = FROM
+				decision = return_stolen_territory
+			}
+			if = {
+				limit = {
+					is_puppet = yes
+					OVERLORD = {
+						NOT = {
+							any_owned_state = {
+								is_core_of = FROM.dispute_country_to_reclaim
+							}
+						}
+					}
+				}
+				OVERLORD = {
+					remove_targeted_decision = {
+						target = FROM
+						decision = return_stolen_territory
+					}
+				}
+				hidden_effect = {
+					FROM = {
+						remove_targeted_decision = {
+							target = PREV
+							decision = return_stolen_territory_timer_demand_sender
+						}
+					}
+				}
+			}
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] return_stolen_territory_timer (decision) timeout exited"
+			}
+		}
+	}
+
+	return_stolen_territory = {
+		icon = border_war
+		fire_only_once = yes
+		highlight_states = {
+			is_owned_by = ROOT
+			is_claimed_by = FROM
+		}
+		complete_effect = {
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] return_stolen_territory (decision) complete entered"
+			}
+			return_all_disputed_states = yes
+			hidden_effect = {
+				FROM = {
+					remove_targeted_decision = {
+						target = PREV
+						decision = return_stolen_territory_timer_demand_sender
+					}
+				}
+				remove_targeted_decision = {
+					target = FROM
+					decision = return_stolen_territory_timer
+				}
+			}
+			if = {
+				limit = {
+					is_major = yes
+				}
+				add_named_threat = {
+					threat = -5
+					name = returned_territory
+				}
+				else = {
+					add_named_threat = {
+						threat = -2
+						name = returned_territory
+					}
+				}
+			}
+			every_country = {
+				limit = {
+					is_puppet_of = ROOT
+				}
+				if = {
+					limit = {
+						is_major = yes
+					}
+					add_named_threat = {
+						threat = -5
+						name = returned_territory
+					}
+					else = {
+						add_named_threat = {
+							threat = -2
+							name = returned_territory
+						}
+					}
+				}
+				return_all_disputed_states = yes
+				hidden_effect = {
+					FROM = {
+						remove_targeted_decision = {
+							target = PREV
+							decision = return_stolen_territory_timer_demand_sender
+						}
+					}
+				}
+			}
+			build_2_random_civ_factory = yes
+			if = {
+				limit = { has_global_flag = debug_logs }
+				log = "[GetDateText]: [Root.GetName] return_stolen_territory (decision) complete exited"
+			}
+		}
+		ai_will_do = {
+			factor = 100
+			modifier = {
+				factor = 0
+				OR = {
+					AND = {
+						NOT = { is_major = yes }
+						strength_ratio = {
+							tag = FROM
+							ratio > 1.5
+						}
+					}
+					AND = {
+						is_major = yes
+						strength_ratio = {
+							tag = FROM
+							ratio > 0.75
+						}
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				OR = {
+				has_variable = dont_return_stolen_territory@FROM
+				has_variable = never_return_stolen_territory
+				}
+			}
+		}
+	}
+}
+>>>>>>> Stashed changes

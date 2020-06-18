@@ -411,6 +411,19 @@ country_event = {
 			}
 		}
 	}
+
+	option = { #Death
+		name = lightbringer.8.b
+		ai_chance = { factor = 0}
+
+		every_country = { 
+			limit = { is_ai = no }
+
+			country_event = {
+				id = lpspecial.1
+			}
+		}
+	}
 }
 
 ##The Moral Of The Story
@@ -429,7 +442,7 @@ country_event = {
 
 		hidden_effect = {
 			country_event = {
-    			id = lpoffshoot.4
+    			id = lpoffshoot.3
 			}
 		}
 	}
@@ -449,16 +462,44 @@ country_event = { #Pinkie Belle's Farm
 		ai_chance = { factor = 50 }
 
 		hidden_effect = {
-			add_to_variable = {
-    			var = lp_apathy
-    			value = 1
-			}
-
 			country_event = {
     			id = lpoffshoot.4
 			}
 		}
+	}
 
+	option = {#Mmm Tasty Mentals
+		name = lpoffshoot.3.a
+		ai_chance = { factor = 50 }
+
+		hidden_effect = {
+			add_to_variable = {
+    			var = lp_apathy
+    			value = 1
+			}
+		}
+
+		if = {
+			limit = { has_global_flag = player_lightbringer }
+
+			hidden_effect = {
+				country_event = {
+    				id = lightbringer.10
+    				days = 30
+				}
+			}
+		}
+
+		else = {
+			hidden_effect = {
+				SHA = {
+					country_event = {
+    					id = lightbringer.10
+    					days = 30
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -589,7 +630,7 @@ country_event = {
 		}
 
 		if = {
-			limit = { has_global_flag = player_lightbringer}
+			limit = { has_global_flag = player_lightbringer }
 
 			hidden_effect = {
 				country_event = {
@@ -789,6 +830,19 @@ country_event = {
 			}
 		}
 	}
+
+	option = { #Death
+		name = lightbringer.15.b
+		ai_chance = { factor = 0}
+
+		every_country = { 
+			limit = { is_ai = no }
+
+			country_event = {
+				id = lpspecial.1
+			}
+		}
+	}
 }
 
 ##Towers
@@ -843,6 +897,31 @@ country_event = {
 		name = lightbringer.17.a
 		ai_chance = { factor = 50}
 
+		hidden_effect = {
+			country_event = {
+    			id = lpoffshoot.5
+			}
+		}
+	}
+}
+
+country_event = { #The Villain Of The Piece 1
+ 	id = lpoffshoot.5
+ 	title = lpoffshoot.5.title
+	desc = lpoffshoot.5.desc
+ 	picture = GFX_event_test
+
+ 	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {#Kill The Ghoul
+		name = lpoffshoot.5.a
+		ai_chance = { factor = 80 }
+
+		hidden_effect = {
+			set_global_flag = GUT_saved
+		}
+
 		if = {
 			limit = { has_global_flag = player_lightbringer}
 
@@ -863,6 +942,71 @@ country_event = {
     				}
 				}
 			}
+		}
+	}
+
+
+	option = {#Let The Ghoul Continue
+		name = lpoffshoot.5.b
+		ai_chance = { factor = 15 }
+
+		hidden_effect = {
+			add_to_variable = {
+    			var = lp_apathy
+    			value = 2
+			}
+			set_global_flag = GUT_destroyed
+			TEN = {
+				country_event = {
+    				id = lpoffshoot.6
+    				days = 3
+    			}
+			}
+		}
+
+		if = {
+			limit = { has_global_flag = player_lightbringer}
+
+			hidden_effect = {
+				country_event = {
+    				id = lightbringer.18
+    				days = 20
+				}
+			}
+		}
+
+		else = {
+			hidden_effect = {
+				TEN = {
+					country_event = {
+    					id = lightbringer.18
+    					days = 20
+    				}
+				}
+			}
+		}
+	}
+}
+
+country_event = { #TEN - Gutterville Destroyed
+ 	id = lpoffshoot.6
+ 	title = lpoffshoot.6.title
+	desc = lpoffshoot.6.desc
+ 	picture = GFX_event_test
+
+ 	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {#Ah Damn
+		name = lpoffshoot.5.a
+		ai_chance = { factor = 80 }
+
+		annex_country = {
+    		target = GUT
+		    transfer_troops = yes
+		}
+		478 = {
+			add_manpower = -3500
 		}
 	}
 }
@@ -900,6 +1044,19 @@ country_event = {
     					days = 5
     				}
 				}
+			}
+		}
+	}
+
+	option = { #Death
+		name = lightbringer.18.b
+		ai_chance = { factor = 0}
+
+		every_country = { 
+			limit = { is_ai = no }
+
+			country_event = {
+				id = lpspecial.1
 			}
 		}
 	}
@@ -1182,12 +1339,45 @@ country_event = {
 		ai_chance = { factor = 50}
 
 		if = {
-			limit = { has_global_flag = player_lightbringer}
+			limit = { 
+				has_global_flag = player_lightbringer
+				RED = { exists = yes }
+			}
 
 			hidden_effect = {
 				country_event = {
     				id = lightbringer.25
     				days = 15
+				}
+			}
+		}
+
+		else_if = {
+			limit = {
+				has_global_flag = player_lightbringer
+				RED = { exists = no }
+			}
+			hidden_effect = {
+				country_event = {
+    				id = lightbringer.28
+    				days = 98
+    			}
+			}
+		}
+
+		else_if = {
+			limit = {
+				NOT = {
+					has_global_flag = player_lightbringer
+				}
+				RED = { exists = no }
+			}
+			hidden_effect = {
+				STA = {
+					country_event = {
+    					id = lightbringer.28
+    					days = 98
+    				}
 				}
 			}
 		}
@@ -1257,6 +1447,109 @@ country_event = {
 		name = lightbringer.26.a
 		ai_chance = { factor = 50}
 
+		hidden_effect = {
+			country_event = {
+    			id = lpoffshoot.7
+			}
+		}
+	}
+}
+
+country_event = { #Xenith 1 (Am I a monster?)
+ 	id = lpoffshoot.7
+ 	title = lpoffshoot.7.title
+	desc = lpoffshoot.7.desc
+ 	picture = GFX_event_test
+
+ 	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {#Of Course
+		name = lpoffshoot.7.a
+		ai_chance = { factor = 80 }
+
+		hidden_effect = {
+			country_event = {
+    			id = lpoffshoot.8
+			}
+		}
+	}
+
+
+	option = {#No, you're not a monster
+		name = lpoffshoot.7.b
+		ai_chance = { factor = 15 }
+
+		trigger = {
+			check_variable = {
+				lp_apathy > 3
+			}
+		}
+		hidden_effect = {
+			add_to_variable = {
+    			var = lp_apathy
+    			value = 1
+			}
+		}
+
+		hidden_effect = {
+			country_event = {
+    			id = lpoffshoot.9
+			}
+		}
+	}
+}
+
+country_event = { #Xenith 2a
+ 	id = lpoffshoot.8
+ 	title = lpoffshoot.8.title
+	desc = lpoffshoot.8.desc
+ 	picture = GFX_event_test
+
+ 	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {
+		name = lpoffshoot.8.a
+		ai_chance = { factor = 80 }
+
+		if = {
+			limit = { has_global_flag = player_lightbringer}
+
+			hidden_effect = {
+				country_event = {
+    				id = lightbringer.27
+    				days = 3
+				}
+			}
+		}
+
+		else = {
+			hidden_effect = {
+				FSR = {
+					country_event = {
+    					id = lightbringer.27
+    					days = 3
+    				}
+				}
+			}
+		}
+	}
+}
+
+country_event = { #Xenith 2b
+ 	id = lpoffshoot.9
+ 	title = lpoffshoot.9.title
+	desc = lpoffshoot.9.desc
+ 	picture = GFX_event_test
+
+ 	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {
+		name = lpoffshoot.9.a
+		ai_chance = { factor = 80 }
+
 		if = {
 			limit = { has_global_flag = player_lightbringer}
 
@@ -1306,6 +1599,68 @@ country_event = {
 			}
 		}
 
+		else_if = {
+			limit = {
+				has_global_flag = player_lightbringer
+				FSR = { has_country_flag = FSR_stable_2_scouted_flag }
+			}
+			hidden_effect = {
+				country_event = {
+    				id = lightbringer.29
+    				days = 95
+    			}
+			}
+		}
+
+		else_if = {
+			limit = {
+				NOT = {
+					has_global_flag = player_lightbringer
+				}
+				FSR = { has_country_flag = FSR_stable_2_scouted_flag }
+			}
+			hidden_effect = {
+				UNI = {
+					country_event = {
+    					id = lightbringer.29
+    					days = 95
+    				}
+				}
+			}
+		}
+
+		else_if = {
+			limit = {
+				has_global_flag = player_lightbringer
+				FSR = { has_country_flag = FSR_stable_2_scouted_flag }
+				UNI = { exists = no }
+			}
+			hidden_effect = {
+				country_event = {
+    				id = lightbringer.31
+    				days = 102
+    			}
+			}
+		}
+
+		else_if = {
+			limit = {
+				NOT = {
+					has_global_flag = player_lightbringer
+				}
+				FSR = { has_country_flag = FSR_stable_2_scouted_flag }
+				UNI = { exists = no }
+			}
+			hidden_effect = {
+				TEN = {
+					country_event = {
+    					id = lightbringer.31
+    					days = 102
+    				}
+				}
+			}
+		}
+
 		else = {
 			hidden_effect = {
 				STA = {
@@ -1335,7 +1690,6 @@ country_event = {
 				limit = {
 					has_government = continuation
 				}
-				#set_country_flag = duce_nukedem_flag
 			}
 		}
 	}
@@ -1344,6 +1698,44 @@ country_event = {
 		name = lightbringer.28.a
 		ai_chance = { factor = 50}
 
+		hidden_effect = {
+			country_event = {
+				id = lpoffshoot.10
+			}
+		}
+	}
+
+	option = { #Death
+		name = lightbringer.28.b
+		ai_chance = { factor = 0}
+
+		every_country = { 
+			limit = { is_ai = no }
+
+			country_event = {
+				id = lpspecial.1
+			}
+		}
+	}
+}
+
+country_event = { #Hour Of The Wolf 1
+ 	id = lpoffshoot.10
+ 	title = lpoffshoot.10.title
+	desc = lpoffshoot.10.desc
+ 	picture = GFX_event_test
+
+ 	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = {#Applejack's Ranger
+		name = lpoffshoot.10.a
+		ai_chance = { factor = 80 }
+
+		hidden_effect = {
+			set_global_flag = stable_2_applejack_rangers_flag
+		}
+
 		if = {
 			limit = { has_global_flag = player_lightbringer}
 
@@ -1351,6 +1743,36 @@ country_event = {
 				country_event = {
     				id = lightbringer.29
     				days = 25
+				}
+			}
+		}
+
+		else_if = {
+			limit = {
+				has_global_flag = player_lightbringer
+				UNI = { exists = no }
+			}
+			hidden_effect = {
+				country_event = {
+    				id = lightbringer.31
+    				days = 32
+    			}
+			}
+		}
+
+		else_if = {
+			limit = {
+				NOT = {
+					has_global_flag = player_lightbringer
+				}
+				UNI = { exists = no }
+			}
+			hidden_effect = {
+				TEN = {
+					country_event = {
+    					id = lightbringer.31
+    					days = 32
+    				}
 				}
 			}
 		}
@@ -1440,6 +1862,19 @@ country_event = {
     					days = 200
     				}
 				}
+			}
+		}
+	}
+
+	option = { #Death
+		name = lightbringer.30.b
+		ai_chance = { factor = 0}
+
+		every_country = { 
+			limit = { is_ai = no }
+
+			country_event = {
+				id = lpspecial.1
 			}
 		}
 	}
@@ -1950,9 +2385,9 @@ country_event = {
 
 		trigger = {
 			has_global_flag = lp_no_gardens
-			#check_variable = {
-    		#	lp_apathy = 2
-			#}
+			check_variable = {
+    			lp_apathy > 4
+			}
 		}
 
 		set_global_flag = lightbringer_new_unity_flag
@@ -1996,7 +2431,7 @@ country_event = {
 				NEV = {
 					country_event = {
     					id = lightbringer.45
-    					days = 15
+    					days = 30
     				}
 				}
 			}
