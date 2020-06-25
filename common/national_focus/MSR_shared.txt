@@ -18,16 +18,37 @@ shared_focus = {
 		}
 	}
 
+#Continues Events
+shared_focus = {
+	id = MSR_Continue_1
+	icon = GFX_goal_steel_rangers
+	x = 10
+	y = 1
+	cost = 1.5
+	available_if_capitulated = yes 
+	prerequisite = { focus = MSR_Starting_Focus } 
+	ai_will_do = { 
+		factor = 300
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus MSR_Continue_1"
+		country_event = { id = MSR.2 }
+
+	}
+
+}
+
 #Raising Man Power & Industry
 shared_focus {
 	id = MSR_from_the_Waste
 	icon = GFX_goal_steel_rangers
 	x = 12
-	y = 1
+	y = 2
 	cost = 1.5
 
 	available_if_capitulated = yes 
-	prerequisite = { focus = MSR_Starting_Focus } 
+	prerequisite = { focus = MSR_Continue_1 } 
 	ai_will_do = { 
 		factor = 300
 	} 
@@ -42,11 +63,11 @@ shared_focus {
 	id = MSR_Reorganizing_The_Rangers
 	icon = GFX_goal_steel_rangers
 	x = 10
-	y = 1
+	y = 2
 	cost = 1.5
 
 	available_if_capitulated = yes 
-	prerequisite = { focus = MSR_Starting_Focus } 
+	prerequisite = { focus = MSR_Continue_1 } 
 	ai_will_do = { 
 		factor = 300
 	} 
@@ -61,11 +82,11 @@ shared_focus {
 	id = MSR_Strengthing_Control
 	icon = GFX_goal_steel_rangers
 	x = 8
-	y = 1
+	y = 2
 	cost = 1.5
 
 	available_if_capitulated = yes 
-	prerequisite = { focus = MSR_Starting_Focus } 
+	prerequisite = { focus = MSR_Continue_1 } 
 	ai_will_do = { 
 		factor = 300
 	} 
@@ -80,7 +101,7 @@ shared_focus {
 	id = MSR_Finished
 	icon = GFX_goal_steel_rangers
 	x = 10
-	y = 2
+	y = 3
 	cost = 1.5
 
 	available_if_capitulated = yes 
@@ -99,33 +120,58 @@ shared_focus {
 
 #####Army Sub Tree######
 
+# Manehatten raiders need to be targeted 
+# Have focus for Empire
 
-#Expansion into manehatten
+
+#Producing up Industry
 shared_focus = { 
-		id = MSR_Second_Focus
+		id = MSR_Expand_Underground_Industry
 		icon = GFX_goal_stg_nukes
 		
 		x = 10
 		y = 5
 		cost = 1.5
 
-		available_if_capitulated = yes 
+		available_if_capitulated = no
+		ai_will_do = { 
+			factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: MSR_Expand_Underground_Industry"
+			#Rewards = 3 Military Factor and 2 Civilian Factor
+		}
+	}
+
+
+#Expansion into manehatten
+shared_focus = {
+		id = MSR_Second_Focus
+		icon = GFX_goal_stg_nukes
+		
+		x = 10
+		y = 7
+		cost = 1.5
+
+		available_if_capitulated = yes
+		prerequisite = { focus = MSR_Expand_Underground_Industry } 
 		ai_will_do = { 
 			factor = 1
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Second_Focus"
-
+			#Rewards = gains event
 		}
 	}
 
-#Taking Arbur
+#Taking Fortshoof
 shared_focus {
-	id = MSR_Arbur
+	id = MSR_Forsthoof
 	icon = GFX_goal_steel_rangers
 	x = 13
-	y = 7
+	y = 8
 	cost = 3.5
 
 	available_if_capitulated = no 
@@ -135,17 +181,17 @@ shared_focus {
 	} 
 
 	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus MSR_Arbur"
+		log = "[GetDateText]: [Root.GetName]: Focus MSR_Forsthoof"
 		#Get war annex
 	}
 }
 
-#Taking Tenpony
+#Taking Empire
 shared_focus {
-	id = MSR_Tenpony
+	id = MSR_Empire
 	icon = GFX_goal_steel_rangers
 	x = 10
-	y = 7
+	y = 8
 	cost = 3.5
 
 	available_if_capitulated = no 
@@ -155,7 +201,7 @@ shared_focus {
 	} 
 
 	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus MSR_Tenpony"
+		log = "[GetDateText]: [Root.GetName]: Focus MSR_Empire"
 		#Get war annex gpa;
 	}
 }
@@ -165,7 +211,7 @@ shared_focus {
 	id = MSR_Marelem
 	icon = GFX_goal_steel_rangers
 	x = 7
-	y = 7
+	y = 8
 	cost = 3.5
 
 	available_if_capitulated = no 
@@ -178,4 +224,102 @@ shared_focus {
 		log = "[GetDateText]: [Root.GetName]: Focus MSR_Marelem"
 		#Get war annex gpa;
 	}
+}
+
+#####Leader Branch######
+
+
+shared_focus = { 
+		id = MSR_Cottage
+		icon = GFX_goal_steel_rangers
+		x = 5
+		y = 4
+		cost = 1.5
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 1
+		}
+
+		prerequisite = { Focus = MSR_Finished }
+		mutually_exclusive = { focus = MSR_River }
+		mutually_exclusive = { focus = MSR_Crossroads }
+		mutually_exclusive = { focus = MSR_Hooves }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: "
+			country_event = {  }
+		}
+}
+
+shared_focus = { 
+		id = MSR_River
+		icon = GFX_goal_steel_rangers
+		x = 9
+		y = 4
+		cost = 1.5
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 1
+		}
+
+		prerequisite = { Focus = MSR_Finished }
+		mutually_exclusive = { focus = MSR_Crossroads }
+		mutually_exclusive = { focus = MSR_Hooves }
+		mutually_exclusive = { focus = MSR_Cottage }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: "
+			country_event = {  }
+
+		}
+}
+
+shared_focus = { 
+		id = MSR_Hooves
+		icon = GFX_goal_steel_rangers
+		x = 13
+		y = 4
+		cost = 1.5
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 1
+		}
+
+		prerequisite = { Focus = MSR_Finished }
+		mutually_exclusive = { focus = MSR_River }
+		mutually_exclusive = { focus = MSR_Crossroads }
+		mutually_exclusive = { focus = MSR_Cottage }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]:"
+			country_event = {  }
+
+		}
+}
+
+shared_focus = { 
+		id = MSR_Crossroads
+		icon = GFX_goal_steel_rangers
+		x = 16
+		y = 4
+		cost = 1.5
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 1
+		}
+
+		prerequisite = { Focus = MSR_Finished }
+		mutually_exclusive = { focus = MSR_River }
+		mutually_exclusive = { focus = MSR_Cottage }
+		mutually_exclusive = { focus = MSR_Hooves }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]:"
+			country_event = {}
+
+		}
 }
