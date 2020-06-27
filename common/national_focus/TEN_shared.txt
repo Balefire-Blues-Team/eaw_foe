@@ -669,13 +669,292 @@ shared_focus = {
 	}
 }
 
+#Dwindling Financial Budget
+shared_focus = { 
+	id = TEN_economy_issue
+	icon = GFX_goal_unknown
+	relative_position_id = TEN_protect_celestia_line
+	x = 1
+	y = 1
+	cost = 1
+
+	available_if_capitulated = yes 
+	prerequisite = { focus = TEN_protect_celestia_line }
+	ai_will_do = { 
+		factor = 10
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus TEN_economy_issue "
+		country_event = { id = TEN.40 }
+	}
+}
+
+#Import Cheaper Prewar Food
+shared_focus = { 
+	id = TEN_import_prewar_food
+	icon = GFX_goal_unknown
+	relative_position_id = TEN_economy_issue
+	x = -1
+	y = 1
+	cost = 1
+
+	available_if_capitulated = yes
+	prerequisite = { focus = TEN_economy_issue }
+
+	mutually_exclusive = { 
+        focus = TEN_import_meat_Arbu
+    }
+
+	ai_will_do = { 
+		factor = 10
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus TEN_import_prewar_food"
+		add_ideas = TEN_prewar_food
+	}
+}
+
+#Restaurant recipes
+shared_focus = { 
+	id = TEN_restaurant_recipes
+	icon = GFX_goal_unknown
+	relative_position_id = TEN_import_prewar_food
+	x = -2
+	y = 1
+	cost = 1 
+
+	available_if_capitulated = yes
+	prerequisite = { focus = TEN_import_prewar_food }
+	ai_will_do = { 
+		factor = 10
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus TEN_restaurant_recipes "
+		swap_ideas = { remove_idea = TEN_prewar_food add_idea = TEN_prewar_food2 }
+	}
+}
+
+#Import fresh meat from Arbu
+shared_focus = { 
+	id = TEN_import_meat_Arbu
+	icon = GFX_goal_unknown
+	relative_position_id = TEN_economy_issue
+	x = 1
+	y = 1
+	cost = 1
+
+	available_if_capitulated = yes  
+	prerequisite = { focus = TEN_economy_issue }
+
+	mutually_exclusive = { 
+        focus = TEN_import_prewar_food
+    }
+
+	ai_will_do = { 
+		factor = 10
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus TEN_import_meat_Arbu"
+		add_ideas = TEN_radigator_meat
+	}
+}
+
+#Elite Cuisine
+shared_focus = { 
+	id = TEN_elite_cuisine
+	icon = GFX_goal_unknown
+	relative_position_id = TEN_import_meat_Arbu
+	x = 2
+	y = 1
+	cost = 1
+
+	available_if_capitulated = yes
+	prerequisite = { focus = TEN_import_meat_Arbu }
+	ai_will_do = { 
+		factor = 10
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus TEN_elite_cuisine "
+		swap_ideas = { remove_idea = TEN_radigator_meat add_idea = TEN_radigator_meat2 }
+	}
+}
+
+#Support Local Merchants
+shared_focus = { 
+	id = TEN_support_local_merchants
+	icon = GFX_goal_unknown
+	relative_position_id = TEN_import_prewar_food
+	x = 0
+	y = 1
+	cost = 1
+
+	available_if_capitulated = yes
+	prerequisite = { focus = TEN_import_prewar_food  focus = TEN_import_meat_Arbu }
+
+	mutually_exclusive = { 
+        focus = TEN_attract_foreign_merchants
+    }
+
+	ai_will_do = { 
+		factor = 10
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus TEN_support_local_merchants"
+		swap_ideas = { remove_idea = TEN_import_economy add_idea = TEN_import_economy1 }
+
+	}
+}
+
+shared_focus = { 
+	id = TEN_attract_foreign_merchants
+	icon = GFX_goal_unknown
+	relative_position_id = TEN_import_meat_Arbu
+	x = 0
+	y = 1
+	cost = 1
+
+	available_if_capitulated = yes 
+	prerequisite = { focus = TEN_import_prewar_food  focus = TEN_import_meat_Arbu }
+
+	mutually_exclusive = { 
+        focus = TEN_support_local_merchants
+    }
+
+
+	ai_will_do = { 
+		factor = 10
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus TEN_attract_foreign_merchants"
+		swap_ideas = { remove_idea = TEN_import_economy add_idea = TEN_import_economy2 }
+	}
+}
+
+#Military contracts
+shared_focus = { 
+	id = TEN_military_contracts
+	icon = GFX_goal_unknown
+	relative_position_id = TEN_attract_foreign_merchants
+	x = 0
+	y = 1
+	cost = 1
+
+	available_if_capitulated = yes
+	prerequisite = { focus = TEN_attract_foreign_merchants focus = TEN_support_local_merchants }
+
+	mutually_exclusive = { 
+        focus = TEN_increase_wages
+    }
+
+	ai_will_do = { 
+		factor = 10
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus TEN_military_contracts"
+		21 = {
+			limit = {
+				free_building_slots = {
+					building = arms_factory
+					size > 0
+					include_locked = yes
+				}
+				OR = {
+					is_in_home_area = yes
+					NOT = {
+						owner = {
+							any_owned_state = {
+								free_building_slots = {
+									building = arms_factory
+									size > 0
+									include_locked = yes
+								}
+								is_in_home_area = yes
+							}
+						}
+					}
+				}
+			}
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+			}
+		}
+		if = {
+				limit = {
+					has_tech = ballistic_weaponry_tech_2 = 1
+				}
+			}
+			else = {	
+				set_technology = { ballistic_weaponry_tech_2 = 1}
+			}
+
+	}
+}
+
+#Increase Wages
+shared_focus = { 
+	id = TEN_increase_wages
+	icon = GFX_goal_unknown
+	relative_position_id = TEN_support_local_merchants
+	x = 0
+	y = 1
+	cost = 1
+
+	available_if_capitulated = yes
+	prerequisite = { focus = TEN_support_local_merchants focus = TEN_attract_foreign_merchants }
+
+	mutually_exclusive = { 
+        focus = TEN_military_contracts
+    }
+
+	ai_will_do = { 
+		factor = 10
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus TEN_increase_wages"
+		add_ideas = TEN_wages_increased
+	}
+}
+
+#Recovering Economy
+shared_focus = { 
+	id = TEN_recovering_economy
+	icon = GFX_goal_unknown
+	relative_position_id = TEN_increase_wages
+	x = 1
+	y = 1
+	cost = 1
+
+	available_if_capitulated = yes
+	prerequisite = { focus = TEN_increase_wages focus = TEN_military_contracts }
+	ai_will_do = { 
+		factor = 10
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus TEN_recovering_economy "
+		country_event = { id = TEN.41 }
+	}
+}
+
 #Gutterville Scrap
 shared_focus = {
 	id = TEN_gutterville_scrap
 	icon = GFX_goal_unknown
 	relative_position_id = TEN_protect_celestia_line
-	x = 2
-	y = 1
+	x = 6
+	y = 3
 	cost = 1
 
 	available_if_capitulated = yes
@@ -696,7 +975,7 @@ shared_focus = {
 	}
 }
 
-#Make Contact with Gutterville Settlement
+#Make Contact with Gutterville
 shared_focus = {
 	id = TEN_contact_gutterville_settlement
 	icon = GFX_goal_unknown
@@ -714,29 +993,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_contact_gutterville_settlement"
+		country_event = { id = TEN.32 }
 	}
 }
 
-#Send scouts into the MoM hub
-shared_focus = {
-	id = TEN_send_scouts_MoM
-	icon = GFX_goal_unknown
-	relative_position_id = TEN_gutterville_scrap
-	x = 1
-	y = 1
-	cost = 1
-
-	available_if_capitulated = yes
-	prerequisite = { focus = TEN_gutterville_scrap }
-	
-	ai_will_do = {
-		factor = 10
-	}
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: focus TEN_sent_scouts_MoM"
-	}
-}
 
 #Guard Gutterville
 shared_focus = {
@@ -756,6 +1016,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_guard_gutterville"
+		country_event = { id = TEN.33 }
 	}
 }
 
@@ -763,42 +1024,144 @@ shared_focus = {
 shared_focus = {
 	id = TEN_clear_MoM_hub
 	icon = GFX_goal_unknown
-	relative_position_id = TEN_send_scouts_MoM
-	x = 0
+	relative_position_id = TEN_gutterville_scrap
+	x = 2
 	y = 1
 	cost = 1
 
 	available_if_capitulated = yes
-	prerequisite = { focus = TEN_send_scouts_MoM }
-	
+	prerequisite = { focus = TEN_gutterville_scrap }
 	ai_will_do = {
 		factor = 10
 	}
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_clear_MoM_hub"
+
+		GUT = {
+		remove_ideas = manticore_problems 
+
+		}
 	}
 }
 
-#Integrate Gutterville
-shared_focus = {
-	id = TEN_integrate_Gutterville
+shared_focus = { 
+	id = TEN_scavenge_MoM
 	icon = GFX_goal_unknown
-	relative_position_id = TEN_guard_gutterville
+	relative_position_id = TEN_clear_MoM_hub
+	x = -1
+	y = 1
+	cost = 1
+
+	available_if_capitulated = yes 
+	prerequisite = { focus = TEN_clear_MoM_hub }
+
+	mutually_exclusive = { 
+        focus = TEN_fortify_MoM
+    }
+
+
+	ai_will_do = { 
+		factor = 10
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus TEN_scavenge_MoM "
+
+		21 = {
+			add_resource = {
+					type = circuitry
+					amount = 5
+			}
+
+			add_resource = {
+					type = advanced
+					amount = 5
+			}
+		}
+	}
+}
+
+shared_focus = { 
+	id = TEN_fortify_MoM
+	icon = GFX_goal_unknown
+	relative_position_id = TEN_clear_MoM_hub
 	x = 1
 	y = 1
 	cost = 1
 
-	available_if_capitulated = yes
-	prerequisite = { focus = TEN_guard_gutterville }
+	available_if_capitulated = yes 
 	prerequisite = { focus = TEN_clear_MoM_hub }
+
+	mutually_exclusive = { 
+        focus = TEN_scavenge_MoM
+    }
+
+	ai_will_do = { 
+		factor = 10
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus TEN_fortify_MoM "
+
+		478 = {
+			add_building_construction = {
+				type = bunker2
+				level = 2
+				instant_build = yes
+				province = 10307
+			}
+		}
+
+	}
+}
+
+#Form the Manehattan Trade Coalition
+shared_focus = { 
+	id = TEN_form_MTC
+	icon = GFX_goal_unknow
+	relative_position_id = TEN_guard_gutterville
+	x = -4
+	y = 2
+	cost = 1
+
+	available_if_capitulated = yes 
+	prerequisite = { focus = TEN_guard_gutterville focus = TEN_raiderwar_aftermath }
+	prerequisite = { focus = TEN_recovering_economy }
+
+	ai_will_do = { 
+		factor = 10
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus TEN_form_MTC"
+		create_faction = "Manehattan Trade Coalition"
+	}
+}
+
+
+#Invite Gutterville
+shared_focus = {
+	id = TEN_invite_Gutterville
+	icon = GFX_goal_unknown
+	relative_position_id = TEN_guard_gutterville
+	x = 1
+	y = 3
+	cost = 1
+
+	available_if_capitulated = yes
+	prerequisite = { focus = TEN_form_MTC }
 	
 	ai_will_do = {
 		factor = 10
 	}
 
 	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: focus TEN_integrate_Gutterville"
+		log = "[GetDateText]: [Root.GetName]: focus TEN_invite_Gutterville"
+
+		GUT = { 
+		country_event = { id = TEN.35 }
+		}
 	}
 }
 
@@ -806,13 +1169,13 @@ shared_focus = {
 shared_focus = {
 	id = TEN_Gutterville_workposts
 	icon = GFX_goal_unknown
-	relative_position_id = TEN_integrate_Gutterville
+	relative_position_id = TEN_invite_Gutterville
 	x = -1
 	y = 1
 	cost = 1
 
 	available_if_capitulated = yes
-	prerequisite = { focus = TEN_integrate_Gutterville }
+	prerequisite = { focus = TEN_invite_Gutterville }
 	
 	ai_will_do = {
 		factor = 10
@@ -827,13 +1190,13 @@ shared_focus = {
 shared_focus = {
 	id = TEN_tackle_manticores
 	icon = GFX_goal_unknown
-	relative_position_id = TEN_integrate_Gutterville 
+	relative_position_id = TEN_invite_Gutterville
 	x = 1
 	y = 1
 	cost = 1
 
 	available_if_capitulated = yes
-	prerequisite = { focus = TEN_integrate_Gutterville }
+	prerequisite = { focus = TEN_invite_Gutterville }
 	
 	ai_will_do = {
 		factor = 10
@@ -849,8 +1212,8 @@ shared_focus = {
 	id = TEN_help_marelem
 	icon = GFX_goal_unknown
 	relative_position_id = TEN_protect_celestia_line 
-	x = -2
-	y = 1
+	x = -5
+	y = 2
 	cost = 1
 
 	available_if_capitulated = yes
@@ -862,6 +1225,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_help_marelem"
+		country_event = { id = TEN.39 }
+
 	}
 }
 
@@ -870,7 +1235,7 @@ shared_focus = {
 	id = TEN_protect_marelem
 	icon = GFX_goal_unknown
 	relative_position_id = TEN_help_marelem
-	x = 0
+	x = -1
 	y = 1
 	cost = 1
 
@@ -883,6 +1248,40 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_protect_marelem"
+
+		MAR = { remove_ideas = MAR_raider_extortion }
+
+		18 = {
+			add_building_construction = {
+				type = bunker
+				level = 1
+				instant_build = yes
+				province = 10302
+			}
+		}
+	}
+}
+
+#Boost Marelem's Economy
+shared_focus = { 
+	id = TEN_boost_marelem
+	icon = GFX_goal_unknown
+	relative_position_id = TEN_help_marelem
+	x = 1
+	y = 1
+	cost = 1
+
+	available_if_capitulated = yes 
+	prerequisite = { focus = TEN_help_marelem }
+	ai_will_do = { 
+		factor = 10
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus TEN_boost_Marelem"
+		MAR = {
+		add_timed_idea = { idea = TEN_boosted_marelem days = 365 } 
+		}
 	}
 }
 
@@ -891,40 +1290,81 @@ shared_focus = {
 	id = TEN_deal_with_MRA
 	icon = GFX_goal_unknown
 	relative_position_id = TEN_protect_marelem
-	x = 0
+	x = 1
 	y = 1
 	cost = 1
 
 	available_if_capitulated = yes
 	prerequisite = { focus = TEN_protect_marelem }
+	prerequisite = { focus = TEN_boost_marelem }
+
 	
 	ai_will_do = {
 		factor = 10
 	}
 
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: focus TEN_deal_with_MRA"
-	}
+	will_lead_to_war_with = MRA
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus TEN_deal_with_MRA"
+			every_other_country = {
+				limit = {
+					has_full_control_of_state = 469
+					has_full_control_of_state = 55
+					has_full_control_of_state = 53
+				}
+				TEN = {
+					declare_war_on = { 
+						type = annex_everything 
+						target = PREV 
+					}
+				}
+			}
+			
+		}
 }
 
-#Integrate Marelem
-shared_focus = {
-	id = TEN_integrate_marelem
+#Raider war aftermath
+shared_focus = { 
+	id = TEN_raiderwar_aftermath
 	icon = GFX_goal_unknown
 	relative_position_id = TEN_deal_with_MRA
-	x = -1
+	x = 0
 	y = 1
 	cost = 1
 
-	available_if_capitulated = yes
+	available_if_capitulated = yes 
 	prerequisite = { focus = TEN_deal_with_MRA }
+	ai_will_do = { 
+		factor = 10 
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus TEN_raiderwar_aftermath "
+	}
+}
+
+#Invite Marelem
+shared_focus = {
+	id = TEN_invite_marelem
+	icon = GFX_goal_unknown
+	relative_position_id = TEN_deal_with_MRA
+	x = 1
+	y = 5
+	cost = 1
+
+	available_if_capitulated = yes
+	prerequisite = { focus = TEN_form_MTC }
 	
 	ai_will_do = {
 		factor = 10
 	}
 
 	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: focus TEN_integrate_marelem"
+		log = "[GetDateText]: [Root.GetName]: focus TEN_invite_marelem"
+
+		MAR = { 
+		country_event = { id = TEN.37 }
+		}
 	}
 }
 
@@ -933,19 +1373,34 @@ shared_focus = {
 	id = TEN_fetlock_autonomy
 	icon = GFX_goal_unknown
 	relative_position_id = TEN_deal_with_MRA
-	x = 1
-	y = 1
+	x = -1
+	y = 5
 	cost = 1
 
 	available_if_capitulated = yes
-	prerequisite = { focus = TEN_deal_with_MRA }
+	prerequisite = { focus = TEN_raiderwar_aftermath }
+	prerequisite = { focus = TEN_form_MTC }
 	
 	ai_will_do = {
 		factor = 10
 	}
 
+	available = {
+		owns_state = 53
+	}
+
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_fetlock_autonomy"
+
+    	release = FET
+    	if = {
+        	limit = { has_dlc = "Together for Victory" }
+        	set_autonomy = {
+            target = FET
+            autonomous_state = puppet
+            freedom_level = 0.5
+        	}
+    	}
 	}
 }
 
@@ -954,19 +1409,41 @@ shared_focus = {
 	id = TEN_create_neutral_zone
 	icon = GFX_goal_unknown
 	relative_position_id = TEN_fetlock_autonomy
-	x = 0
+	x = 1
 	y = 1
 	cost = 1
 
 	available_if_capitulated = yes
 	prerequisite = { focus = TEN_fetlock_autonomy }
+	prerequisite = { focus = TEN_invite_marelem }
 	
 	ai_will_do = {
 		factor = 10
 	}
 
+	available = {
+		owns_state = 469
+		owns_state = 55
+	}
+
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_create_neutral_zone"
+
+		if = {
+        	limit = { has_dlc = "Together for Victory" }
+        	set_autonomy = {
+            target = MAR
+            autonomous_state = dominion
+            freedom_level = 0.5
+        	}
+    	}
+
+		469 = { 
+     	MAR = { transfer_state = PREV }
+		}
+		55 = {
+		MAR = { transfer_state = PREV }
+		}
 	}
 }
 
@@ -975,7 +1452,7 @@ shared_focus = {
 	id = TEN_secret_chambers
 	icon = GFX_goal_unknown
 	relative_position_id = TEN_real_society
-	x = -4
+	x = -8
 	y =	2
 	cost = 1
 
