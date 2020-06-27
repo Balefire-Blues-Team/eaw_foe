@@ -148,7 +148,7 @@ country_event = {
 		UNI = {
 				give_guarantee = RED
 				give_military_access = RED
-				add_ideas = UNI_slave_trade_high
+				add_ideas = UNI_slave_trade_low
 			}
 		RED = {
 				give_guarantee = UNI
@@ -315,7 +315,7 @@ country_event = {
 		text = namespace.count.d.desc_id
 		trigger = {
 
-}
+		}
 
 	}
 	option = {
@@ -324,25 +324,24 @@ country_event = {
 			ROOT = {
 				give_military_access = UNI
 			}
+		set_country_flag = goddess_fielty
 		}
-		set_global_flag = goddess_fielty
 
 	}
 	option = {
 	name = goddess_redeye.6.b
 		hidden_effect = {
-				UNI = {
-						create_wargoal = {
-								type = annex_everything
-								target = ROOT
-								expire = 0
-							}
-					}
+			UNI = {
+				create_wargoal = {
+					type = annex_everything
+					target = ROOT
+					expire = 0
+				}
 			}
-
+		}
 	}
+}
 
-	}
 country_event = {
 	id = goddess_redeye.7
 	title = goddess_redeye.7.t
@@ -788,6 +787,7 @@ country_event = {
 	
 	trigger = {
 		AND = {
+			original_tag = UNI
 			has_global_flag = windsheer_pact
 			NEV = {
 				has_war_with = RED
@@ -1088,6 +1088,48 @@ country_event = {
 
 	}
 }
+
+country_event = {
+	id = unity_misc.6
+	title = unity_misc.6.t
+	desc = {
+		text = unity_misc.6.d
+	}
+	picture = GFX_event_test
+	trigger = {
+		original_tag = UNI
+		controls_state = 234
+	}
+	mean_time_to_happen = { days = 15 }
+	
+	option = {
+	name = unity_misc.1.a
+		CAL = {
+				transfer_state = 234
+				hidden_effect = {
+					country_event = unity_misc.7
+				}
+			}
+		set_global_flag = goddess_spv
+	}
+	}
+	
+	country_event = {
+	id = unity_misc.7
+	title = unity_misc.7.t
+	desc = {
+		text = unity_misc.7.d
+	}
+	picture = GFX_event_test
+	is_triggered_only = yes
+	
+	mean_time_to_happen = { days = 15 }
+	
+	option = {
+	name = unity_misc.2.a
+		load_oob = "CAL_1235"
+	}
+	}
 	
 	country_event = {
 	id = goddess_redeye_result.1
@@ -1200,6 +1242,55 @@ country_event = {
 		add_manpower = -10
 		}
 	}
+	}
+}
+
+country_event = {
+	id = unity_pop_bb.6
+	title = unity_pop_bb.5.t
+	desc = {
+		text = unity_pop_bb.5.d
+	}
+	picture = GFX_event_test
+	is_triggered_only = yes
+	
+	option = {
+	name = unity_pop_bb.5.a
+		
+						random_list = {
+							30 = { #Found something
+								modifier = {
+									add = -10
+									has_country_flag = { flag = black_book_raid_meter value > 10 }
+								}
+								modifier = {
+									add = -5
+									has_country_flag = { flag = black_book_raid_meter value > 20 }
+								}
+								country_event = unity_pop_bb.2
+							}
+							10 = { #Found The Book
+								modifier = {
+									add = 10
+									has_country_flag = { flag = black_book_raid_meter value > 10 }
+								}modifier = {
+									add = 10
+									has_country_flag = { flag = black_book_raid_meter value > 20 }
+								}
+								country_event = unity_pop_bb.3
+							}
+							20 = { #Found Nothing
+								country_event = unity_pop_bb.4
+							}
+							30 = { #Contact Lost
+								country_event = unity_pop_bb.5
+								modifier = {
+									add = -5
+									has_country_flag = { flag = black_book_raid_meter value > 20 }
+								}
+							}
+						}
+					}
 	}
 }
 
@@ -2698,6 +2789,82 @@ news_event = {
 	}
 }
 
+#maripony falls
+
+news_event = {
+	id = unity_misc.4
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cityfall.27"}
+	title = unity_misc.4.t
+	desc = unity_misc.4.d
+	picture = GFX_news_event_changeling_hive
+
+	major = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_global_flag = fall_of_maripony
+		518 = { set_state_flag = state_has_fallen }
+		FROM.FROM = { save_event_target_as = old_controller }
+		ROOT = { save_event_target_as = new_controller }
+	}
+
+	option = { 
+		name = unity_misc.4.a
+		trigger = {
+			tag = event_target:old_controller
+		}
+	}
+
+	option = { 
+		name = unity_misc.4.b
+		trigger = {
+			tag = event_target:new_controller
+		}
+	}
+
+	option = { 
+		name = unity_misc.4.c
+		trigger = {
+			NOT = {
+				tag = event_target:old_controller
+				tag = event_target:new_controller
+			}
+		}
+	}
+}
+
+#economy events
+
+country_event = {
+	id = unity_misc.5
+	title = unity_misc.5.t
+	picture = GFX_event_test
+	is_triggered_only = yes
+	desc = {
+		text = unity_misc.5.d
+		trigger = {
+
+	}
+
+	}
+	option = {
+	name = unity_misc.5.a
+		add_offsite_building = { type = arms_factory level = 2 }
+
+	}
+	option = {
+	name = unity_misc.5.b
+		518 = {
+				add_resource = {
+					type = crystals
+					amount = 5
+				}
+			}
+
+	}
+
+}
+
 #Slaver Events (cntrlf)
 
 country_event = {
@@ -2714,11 +2881,184 @@ country_event = {
 	}
 	option = {
 	name = goddess_slaver.1.a
-
+	
+		ai_will_do = {
+			factor = 25
+			modifier = {
+				has_global_flag = goddess_takeover
+				factor = 5
+			}
+			modifier = {
+				has_completed_focus = generic_placeholder
+				factor = 10
+			}
+		}
+		set_country_flag = goddess_slave_trade
+		UNI = {
+			give_guarantee = ROOT
+			give_military_access = ROOT
+			country_event = {
+				id = goddess_slaver.3
+			}
+		}
+		hidden_effect = {
+				set_technology = {
+						popup = no
+						dragons_imp = 1
+					}
+			}
 
 	}
 	option = {
 	name = goddess_slaver.1.b
+		ai_will_do = {
+			factor = 20
+		}
+		
+
+	}
+
+}
+
+country_event = {
+	id = goddess_slaver.2
+	title = goddess_slaver.2.t
+	picture = GFX_event_test
+	is_triggered_only = yes
+	desc = {
+		text = goddess_slaver.2.d
+		trigger = {
+
+	}
+
+	}
+	option = {
+	name = goddess_slaver.2.a
+	
+		ai_will_do = {
+			factor = 15
+			modifier = {
+				has_global_flag = goddess_takeover
+				factor = 5
+			}
+		}
+		
+		set_country_flag = goddess_takeover_accepted
+	
+		UNI = {
+				puppet = ROOT
+			}
+
+	}
+	option = {
+	name = goddess_slaver.2.b
+		set_country_flag = goddess_takeover_refused
+		UNI = {
+			create_wargoal = {
+				type = puppet_wargoal_focus
+				target = ROOT
+				expire = 0
+			}
+		}
+		ai_will_do = {
+			factor = 20
+		}
+
+	}
+
+}
+
+country_event = {
+	id = goddess_slaver.3
+	title = goddess_slaver.3.t
+	picture = GFX_event_test
+	is_triggered_only = yes
+	desc = {
+		text = goddess_slaver.3.d
+		trigger = {
+
+	}
+
+	}
+	option = {
+	name = goddess_slaver.3.a
+	if = {
+				limit = {
+					NOT = {
+						has_idea = UNI_slave_trade_negligible
+						has_idea = UNI_slave_trade_min
+						has_idea = UNI_slave_trade_low
+						has_idea = UNI_slave_trade_med
+						has_idea = UNI_slave_trade_high
+						has_idea = UNI_slave_trade_very
+						has_idea = UNI_slave_trade_max
+					}
+				}
+				add_ideas = UNI_slave_trade_negligible
+			}
+			else_if = {
+				limit = {
+					has_idea = UNI_slave_trade_negligible
+				}
+				swap_ideas = {
+					add_idea = UNI_slave_trade_min
+					remove_idea = UNI_slave_trade_negligible
+				}
+			}
+			else_if = {
+				limit = {
+					has_idea = UNI_slave_trade_min
+				}
+				swap_ideas = {
+					add_idea = UNI_slave_trade_low
+					remove_idea = UNI_slave_trade_min
+				}
+			}
+			else_if = {
+				limit = {
+					has_idea = UNI_slave_trade_low
+				}
+				swap_ideas = {
+					add_idea = UNI_slave_trade_med
+					remove_idea = UNI_slave_trade_low
+				}
+			}
+			else_if = {
+				limit = {
+					has_idea = UNI_slave_trade_med
+				}
+				swap_ideas = {
+					add_idea = UNI_slave_trade_high
+					remove_idea = UNI_slave_trade_med
+				}
+			}
+			
+			else_if = {
+				limit = {
+					has_idea = UNI_slave_trade_high
+				}
+				swap_ideas = {
+					add_idea = UNI_slave_trade_very
+					remove_idea = UNI_slave_trade_high
+				}
+			}
+			
+			else_if = {
+				limit = {
+					has_idea = UNI_slave_trade_very
+				}
+				swap_ideas = {
+					add_idea = UNI_slave_trade_max
+					remove_idea = UNI_slave_trade_very
+				}
+			}
+			
+			else_if = {
+				limit = {
+					has_idea = UNI_slave_trade_max
+				}
+				add_manpower = 100
+			}
 
 	}
 
