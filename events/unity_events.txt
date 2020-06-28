@@ -1,8 +1,14 @@
 add_namespace = unity_start
 add_namespace = goddess_redeye
 add_namespace = unity_misc
+add_namespace = unity_tenpony
+add_namespace = unity_tenpony_result
 add_namespace = unity_pop
 add_namespace = unity_pop_bb
+add_namespace = goddess_redeye_result
+add_namespace = goddess_slaver
+
+
 country_event = {
 	id = unity_start.1
 	title = unity_start.1.t
@@ -12,16 +18,16 @@ country_event = {
 		text = unity_start.1.d
 		trigger = {
 
-}
+	}
 
 	}
 	option = {
 	name = unity_start.1.a
 		add_equipment_to_stockpile = {
-				type = dragon_equipment_0
-				amount = 500
-				producer = UNI
-			}
+			type = dragon_equipment_0
+			amount = 500
+			producer = UNI
+		}
 
 	}
 	option = {
@@ -30,7 +36,7 @@ country_event = {
 
 	}
 
-	}
+}
 country_event = {
 	id = unity_start.2
 	title = unity_start.2.t
@@ -69,10 +75,16 @@ country_event = {
 	}
 	option = {
 	name = unity_start.3.a
+	add_ideas = UNI_recon_idea
 
 	}
 	option = {
 	name = unity_start.3.b
+	
+	add_ideas = UNI_worship_idea
+	every_other_country = { limit = { NOT = {is_in_faction_with = ROOT }} 	
+		add_opinion_modifier = { target = ROOT modifier = demanding_worship }
+	}
 
 	}
 
@@ -135,9 +147,12 @@ country_event = {
 	name = goddess_redeye.2.a
 		UNI = {
 				give_guarantee = RED
+				give_military_access = RED
+				add_ideas = UNI_slave_trade_low
 			}
 		RED = {
 				give_guarantee = UNI
+				give_military_access = UNI
 			}
 		add_equipment_to_stockpile = {
 				type = dragon_equipment_0
@@ -174,7 +189,7 @@ country_event = {
 			ai_chance = {
 				factor = 1
 			}
-
+		set_global_flag = goddess_redeye_success
 	}
 	option = {
 	name = goddess_redeye.3.b
@@ -211,29 +226,45 @@ country_event = {
 		text = goddess_redeye.4.d
 		trigger = {
 
-}
+		}
 
 	}
 	option = {
-	name = namespace.count.a
+	name = goddess_redeye.4.a
+	
+		UNI = {
+				create_wargoal = {
+						type = annex_everything
+						target = NEV
+						expire = 0
+					}
+			}
+
+	}
+	
+	option = {
+	name = goddess_redeye.4.b
+		set_global_flag = windsheer_pact
 
 	}
 
-	}
+}
+
 country_event = {
-	id = unity_pop.0
-	title = unity_pop.0.t
+	id = unity_pop.1
+	title = unity_pop.1.t
 	picture = GFX_event_test
 	is_triggered_only = yes
 	desc = {
-		text = namespace.count.d.desc_id
+		text = unity_pop.1.d
 		trigger = {
 
 }
 
 	}
 	option = {
-	name = namespace.count.a
+	name = unity_pop.1.a
+	
 
 	}
 
@@ -251,25 +282,26 @@ country_event = {
 
 	}
 	option = {
-	name = namespace.count.a
+	name = unity_pop_bb.0.a
 
 	}
 
-	}
+}
+
 country_event = {
 	id = unity_pop_bb.1
 	title = unity_pop_bb.1.t
 	picture = GFX_event_test
 	is_triggered_only = yes
 	desc = {
-		text = namespace.count.d.desc_id
+		text = unity_pop_bb.1.d
 		trigger = {
 
 }
 
 	}
 	option = {
-	name = namespace.count.a
+	name = unity_pop_bb.1.a
 
 	}
 
@@ -283,40 +315,33 @@ country_event = {
 		text = namespace.count.d.desc_id
 		trigger = {
 
-}
+		}
 
 	}
 	option = {
 	name = goddess_redeye.6.a
 		hidden_effect = {
-				ROOT = {
-						give_military_access = UNI
-					}
+			ROOT = {
+				give_military_access = UNI
 			}
+		set_country_flag = goddess_fielty
+		}
 
 	}
 	option = {
 	name = goddess_redeye.6.b
 		hidden_effect = {
-				UNI = {
-						create_wargoal = {
-								type = annex_everything
-								target = ROOT
-								expire = 0
-							}
-					}
+			UNI = {
+				create_wargoal = {
+					type = annex_everything
+					target = ROOT
+					expire = 0
+				}
 			}
-		ai_chance = {
-				factor = 5
-				modifier = {
-						factor = 20
-						original_tag = REP
-					}
-			}
-
+		}
 	}
+}
 
-	}
 country_event = {
 	id = goddess_redeye.7
 	title = goddess_redeye.7.t
@@ -374,7 +399,7 @@ country_event = {
 		text = namespace.count.d.desc_id
 		trigger = {
 
-}
+	}
 
 	}
 	option = {
@@ -388,7 +413,7 @@ country_event = {
 
 	}
 
-	}
+}
 country_event = {
 	id = goddess_redeye.10
 	title = goddess_redeye.10.t
@@ -695,7 +720,7 @@ country_event = {
 	}
 	option = {
 	name = goddess_redeye.22.b
-
+		set_global_flag = goddess_redeye_patience
 	}
 
 	}
@@ -729,14 +754,8 @@ country_event = {
 
 	}
 	trigger = {
-		OR = {
-				original_tag = REP
-				original_tag = PRA
-			}
 		has_global_flag = goddess_redeye_war
-		NOT = {
-			has_country_flag = goddess_fielty
-		}
+		has_country_flag = goddess_fielty
 	}
 	mean_time_to_happen = { days = 15 }
 	
@@ -749,7 +768,6 @@ country_event = {
 						expire = 0
 					}
 			}
-		set_country_flag = goddess_fielty
 
 	}
 	option = {
@@ -757,12 +775,38 @@ country_event = {
 		UNI = {
 				puppet = ROOT
 			}
-		set_country_flag = goddess_fielty	
 
 	}
+	}
+	
+	country_event = {
+	id = goddess_redeye.25
+	title = goddess_redeye.25.t
+	picture = GFX_event_test
+	is_triggered_only = yes
+	
+	trigger = {
+		AND = {
+			original_tag = UNI
+			has_global_flag = windsheer_pact
+			NEV = {
+				has_war_with = RED
+			}
+		}
+	}
 
+	option = {
+		name = goddess_redeye.25.a
+		declare_war_on = {
+				target = RED
+				type = annex_everything
+			}
+		set_global_flag = goddess_redeye_war
+		NEV = { add_to_faction = UNI }
 
 	}
+	}
+
 	
 	country_event = {
 	id = unity_misc.1
@@ -783,9 +827,2239 @@ country_event = {
 		SPV = {
 				transfer_state = 797
 			}
+		set_global_flag = goddess_spv
+	}
+	}
+	
+	country_event = {
+	id = unity_misc.2
+	title = unity_misc.2.t
+	desc = {
+		text = unity_misc.2.d
+	}
+	fire_only_once = yes
+	picture = GFX_event_test
+	trigger = {
+		original_tag = SPV
+		controls_state = 797
+		has_global_flag = goddess_spv
+
+	}
+	mean_time_to_happen = { days = 15 }
+	
+	option = {
+	name = unity_misc.2.a
 		load_oob = "SPV_whitetail"
+	}
+	}
+	
+country_event = {
+	id = unity_tenpony.3
+	title = unity_tenpony.3.t
+	desc = {
+		text = unity_tenpony.3.d
+	}
+	picture = GFX_event_test
+	is_triggered_only = yes
+
+	option = {
+	name = unity_tenpony.3.a
+
+	}
+	option = {
+	name = unity_tenpony.3.b
+		country_event = {
+    				id = unity_tenpony.4
+		}
+
+	}
+	
+	option = {
+	name = unity_tenpony.3.c
+
+	}
+}
+
+country_event = {
+	id = unity_tenpony.4
+	title = unity_tenpony.4.t
+	desc = {
+		text = unity_tenpony.4.d
+	}
+	picture = GFX_event_test
+	is_triggered_only = yes
+
+	option = {
+	name = unity_tenpony.4.a
+		set_global_flag = tpblue
+		country_event = {
+    				id = unity_tenpony.5
+		}
+
+	}
+	option = {
+	name = unity_tenpony.4.b
+		set_global_flag = tppurp
+		country_event = {
+    				id = unity_tenpony.5
+		}
+
+	}
+	
+	option = {
+	name = unity_tenpony.4.c
+		set_global_flag = tpgreen
+		country_event = {
+    				id = unity_tenpony.5
+		}
+
+	}
+	
+	option = {
+	name = unity_tenpony.4.e
+		set_global_flag = tpmix
+		country_event = {
+    				id = unity_tenpony.5
+		}
+
+	}
+}
+
+country_event = {
+	id = unity_tenpony.5
+	title = unity_tenpony.5.t
+	desc = {
+		text = unity_tenpony.5.d
+	}
+	picture = GFX_event_test
+	is_triggered_only = yes
+
+	option = {
+	name = unity_tenpony.5.a
+		set_global_flag = tpsky
+		country_event = {
+    				id = unity_tenpony.6
+		}
+
+	}
+	option = {
+	name = unity_tenpony.5.b
+		set_global_flag = tproad
+		country_event = {
+    				id = unity_tenpony.6
+		}
+
+	}
+	
+	option = {
+	name = unity_tenpony.5.c
+		set_global_flag = tpbuild
+		country_event = {
+    				id = unity_tenpony.6
+		}
+
+	}
+	
+}
+
+country_event = {
+	id = unity_tenpony.6
+	title = unity_tenpony.6.t
+	desc = {
+		text = unity_tenpony.6.d
+	}
+	picture = GFX_event_test
+	is_triggered_only = yes
+
+	option = {
+	name = unity_tenpony.6.a
+		set_global_flag = tproof
+		country_event = {
+    				id = unity_tenpony.7
+		}
+
+	}
+	option = {
+	name = unity_tenpony.6.b
+		set_global_flag = tpfront
+		country_event = {
+    				id = unity_tenpony.7
+		}
+
+	}
+	
+	option = {
+	name = unity_tenpony.6.c
+		set_global_flag = tpbase
+		country_event = {
+    				id = unity_tenpony.7
+		}
+
+	}
+	
+}
+
+country_event = {
+	id = unity_tenpony.7
+	title = unity_tenpony.7.t
+	desc = {
+		text = unity_tenpony.7.d
+	}
+	picture = GFX_event_test
+	is_triggered_only = yes
+
+	option = {
+	name = unity_tenpony.7.a
+		set_global_flag = tphide
+		country_event = {
+    				id = unity_tenpony.8
+		}
+
+	}
+	option = {
+	name = unity_tenpony.7.b
+		set_global_flag = tphide
+		country_event = {
+    				id = unity_tenpony.8
+		}
+
+	}
+	
+	option = {
+	name = unity_tenpony.7.c
+		set_global_flag = tphide
+		country_event = {
+    				id = unity_tenpony.8
+		}
+
+	}
+	
+	option = {
+	name = unity_tenpony.7.e
+		set_global_flag = tphide
+		country_event = {
+    				id = unity_tenpony.8
+		}
+
+	}
+	
+}
+
+
+
+country_event = {
+	id = unity_tenpony.9
+	title = unity_tenpony.9.t
+	desc = {
+		text = unity_tenpony.9.d
+	}
+	picture = GFX_event_test
+	is_triggered_only = yes
+
+	option = {
+	name = unity_tenpony.9.a
+
+	}
+}
+
+country_event = {
+	id = unity_misc.3
+	title = unity_misc.3.t
+	desc = {
+		text = unity_misc.3.d
+	}
+	picture = GFX_event_test
+	fire_only_once = yes
+	trigger = {
+		original_tag = UNI
+		controls_state = 415
+		NOT = {
+			has_war = yes
+		}
 
 	}
 
+	option = {
+	name = unity_misc.1.a
+	GLY = {
+				transfer_state = 415
+			}
+		set_global_flag = goddess_gly
 
 	}
+}
+
+country_event = {
+	id = unity_misc.6
+	title = unity_misc.6.t
+	desc = {
+		text = unity_misc.6.d
+	}
+	picture = GFX_event_test
+	trigger = {
+		original_tag = UNI
+		controls_state = 234
+	}
+	mean_time_to_happen = { days = 15 }
+	
+	option = {
+	name = unity_misc.1.a
+		CAL = {
+				transfer_state = 234
+				hidden_effect = {
+					country_event = unity_misc.7
+				}
+			}
+		set_global_flag = goddess_spv
+	}
+	}
+	
+	country_event = {
+	id = unity_misc.7
+	title = unity_misc.7.t
+	desc = {
+		text = unity_misc.7.d
+	}
+	picture = GFX_event_test
+	is_triggered_only = yes
+	
+	mean_time_to_happen = { days = 15 }
+	
+	option = {
+	name = unity_misc.2.a
+		load_oob = "CAL_1235"
+	}
+	}
+	
+	country_event = {
+	id = goddess_redeye_result.1
+	title = goddess_redeye_result.1.t
+	picture = GFX_event_test
+	trigger = {
+		OR = {
+			has_global_flag = goddess_redeye_success
+			has_global_flag = goddess_redeye_patience
+		}
+		OR = {
+		}
+	}
+	mean_time_to_happen = { days = 15 }
+	fire_only_once = yes
+	
+	option = {
+	name = goddess_redeye_result.1.a
+
+	}
+	option = {
+	name = goddess_redeye_result.1.b
+
+	}
+	}
+	
+	
+#Canterlot raid result event (cntrlf)
+
+country_event = {
+	id = unity_pop_bb.2
+	title = unity_pop_bb.2.t
+	desc = {
+		text = unity_pop_bb.2.d
+	}
+	picture = GFX_event_test
+	is_triggered_only = yes
+	
+	immediate = {
+		select_scavenging_reward = yes
+	}
+	
+	option = {
+	name = unity_pop_bb.2.a
+		grant_scavenging_reward = yes
+
+	}
+}
+
+country_event = {
+	id = unity_pop_bb.3
+	title = unity_pop_bb.3.t
+	desc = {
+		text = unity_pop_bb.3.d
+	}
+	picture = GFX_event_test
+	is_triggered_only = yes
+	
+	option = {
+	name = unity_pop_bb.3.a
+		set_country_flag = black_book_found
+		add_equipment_to_stockpile = {
+			type = dragon_equipment_0
+			amount = -75
+			producer = UNI
+		}
+	add_manpower = -75
+	}
+}
+
+country_event = {
+	id = unity_pop_bb.4
+	title = unity_pop_bb.4.t
+	desc = {
+		text = unity_pop_bb.4.d
+	}
+	picture = GFX_event_test
+	is_triggered_only = yes
+	
+	option = {
+	name = unity_pop_bb.4.a
+
+	}
+}
+
+country_event = {
+	id = unity_pop_bb.5
+	title = unity_pop_bb.5.t
+	desc = {
+		text = unity_pop_bb.5.d
+	}
+	picture = GFX_event_test
+	is_triggered_only = yes
+	
+	option = {
+	name = unity_pop_bb.5.a
+		add_equipment_to_stockpile = {
+			type = dragon_equipment_0
+			amount = -100
+			producer = UNI
+		}
+	add_manpower = -100
+	hidden_effect = {
+		CAL = {
+			add_equipment_to_stockpile = {
+			type = dragon_equipment_0
+			amount = 10
+			producer = UNI
+		}
+		add_manpower = -10
+		}
+	}
+	}
+}
+
+country_event = {
+	id = unity_pop_bb.6
+	title = unity_pop_bb.5.t
+	desc = {
+		text = unity_pop_bb.5.d
+	}
+	picture = GFX_event_test
+	is_triggered_only = yes
+	
+	option = {
+	name = unity_pop_bb.5.a
+		
+						random_list = {
+							30 = { #Found something
+								modifier = {
+									add = -10
+									has_country_flag = { flag = black_book_raid_meter value > 10 }
+								}
+								modifier = {
+									add = -5
+									has_country_flag = { flag = black_book_raid_meter value > 20 }
+								}
+								country_event = unity_pop_bb.2
+							}
+							10 = { #Found The Book
+								modifier = {
+									add = 10
+									has_country_flag = { flag = black_book_raid_meter value > 10 }
+								}modifier = {
+									add = 10
+									has_country_flag = { flag = black_book_raid_meter value > 20 }
+								}
+								country_event = unity_pop_bb.3
+							}
+							20 = { #Found Nothing
+								country_event = unity_pop_bb.4
+							}
+							30 = { #Contact Lost
+								country_event = unity_pop_bb.5
+								modifier = {
+									add = -5
+									has_country_flag = { flag = black_book_raid_meter value > 20 }
+								}
+							}
+						}
+					}
+	}
+}
+
+
+
+#The Tenpony result event (cntrlf)
+	
+country_event = {
+	id = unity_tenpony.8
+	title = unity_tenpony.8.t
+	desc = {
+		text = unity_tenpony.8.d
+	}
+	picture = GFX_event_test
+	is_triggered_only = yes
+	
+	#Through the buildings, basement, and hiding priority
+
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpblue
+			has_global_flag = tpbuild
+			has_global_flag = tpbase
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				50 = {
+					set_country_flag = prime_captured_stealth
+					country_event = {
+						id = unity_tenpony.9
+					}
+				}
+				15 = {
+					set_global_flag = prime_destroyed
+					news_event = unity_tenpony_result.1
+				}
+				5 = {
+					set_global_flag = prime_sabotaged
+					news_event = unity_tenpony_result.1
+				}
+				15 = {
+					set_country_flag = raid_failed
+					news_event = unity_tenpony_result.2
+				}
+				15 = {
+				log = "[GetDateText]: [Root.GetName]: event river_cup.1"
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tppurp
+			has_global_flag = tpbuild
+			has_global_flag = tpbase
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				10 = {
+					set_country_flag = prime_captured_stealth
+					country_event = {
+						id = unity_tenpony.9 days = 4 random = 48
+					}
+				}
+				20 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.1
+				}
+				20 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.1
+				}
+				30 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.2
+				}
+				20 = {
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpgreen
+			has_global_flag = tpbuild
+			has_global_flag = tpbase
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				5 = {
+					set_country_flag = prime_captured_stealth
+					country_event = {
+						id = unity_tenpony.9 days = 4 random = 48
+					}
+				}
+				5 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.1
+				}
+				10 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.1
+				}
+				20 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.2
+				}
+				60 = {
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpmix
+			has_global_flag = tpbuild
+			has_global_flag = tpbase
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				50 = {
+					set_country_flag = prime_captured_stealth
+					country_event = {
+						id = unity_tenpony.9 days = 4 random = 48
+					}
+				}
+				20 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.1
+				}
+				20 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.1
+				}
+				5 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.2
+				}
+				5 = {
+				}
+			}
+		}
+	}
+	
+	#Through the street, basement, and hiding priority
+
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpblue
+			has_global_flag = tproad
+			has_global_flag = tpbase
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				45 = {
+					set_country_flag = prime_captured_stealth
+					country_event = {
+						id = unity_tenpony.9 days = 4 random = 48
+					}
+				}
+				15 = {
+					set_global_flag = prime_destroyed
+					news_event = unity_tenpony_result.1
+				}
+				5 = {
+					set_global_flag = prime_sabotaged
+					news_event = unity_tenpony_result.1
+				}
+				25 = {
+					set_country_flag = raid_failed
+					news_event = unity_tenpony_result.2
+				}
+				10 = {
+				}
+			}
+		}
+
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tppurp
+			has_global_flag = tproad
+			has_global_flag = tpbase
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				5 = {
+					set_country_flag = prime_captured_stealth
+					country_event = {
+						id = unity_tenpony.9 days = 4 random = 48
+					}
+				}
+				20 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.1
+				}
+				20 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.1
+				}
+				40 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.2
+				}
+				15 = {
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpgreen
+			has_global_flag = tproad
+			has_global_flag = tpbase
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				0 = {
+					set_country_flag = prime_captured_stealth
+					country_event = {
+						id = unity_tenpony.9 days = 4 random = 48
+					}
+				}
+				5 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.1
+				}
+				10 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.1
+				}
+				30 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.2
+				}
+				55 = {
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpmix
+			has_global_flag = tproad
+			has_global_flag = tpbase
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				45 = {
+					set_country_flag = prime_captured_stealth
+					country_event = {
+						id = unity_tenpony.9 days = 4 random = 48
+					}
+				}
+				20 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.1
+				}
+				20 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.1
+				}
+				10 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.2
+				}
+				5 = {
+				}
+			}
+		}
+	}
+	
+	#Through the sky, basement, and hiding priority
+
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpblue
+			has_global_flag = tpsky
+			has_global_flag = tpbase
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				40 = {
+					set_country_flag = prime_captured_stealth
+					country_event = {
+						id = unity_tenpony.9 days = 4 random = 48
+					}
+				}
+				15 = {
+					set_global_flag = prime_destroyed
+					news_event = unity_tenpony_result.1
+				}
+				10 = {
+					set_global_flag = prime_sabotaged
+					news_event = unity_tenpony_result.1
+				}
+				30 = {
+					set_country_flag = raid_failed
+					news_event = unity_tenpony_result.2
+				}
+				5 = {
+				}
+			}
+		}
+
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tppurp
+			has_global_flag = tpsky
+			has_global_flag = tpbase
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				5 = {
+					set_country_flag = prime_captured_stealth
+					country_event = {
+						id = unity_tenpony.9 days = 4 random = 48
+					}
+				}
+				25 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.1
+				}
+				25 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.1
+				}
+				40 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.2
+				}
+				20 = {
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpgreen
+			has_global_flag = tpsky
+			has_global_flag = tpbase
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				0 = {
+					set_country_flag = prime_captured_stealth
+					country_event = {
+						id = unity_tenpony.9 days = 4 random = 48
+					}
+				}
+				5 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.1
+				}
+				10 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.1
+				}
+				35 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.2
+				}
+				50 = {
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpmix
+			has_global_flag = tpsky
+			has_global_flag = tpbase
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				45 = {
+					set_country_flag = prime_captured_stealth
+					country_event = {
+						id = unity_tenpony.9 days = 4 random = 48
+					}
+				}
+				20 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.1
+				}
+				20 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.1
+				}
+				15 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.2
+				}
+				0 = {
+				}
+			}
+		}
+	}
+	
+	#Through the buildings, main entrance, and hiding priority
+
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpblue
+			has_global_flag = tpbuild
+			has_global_flag = tpfront
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				10 = {
+					set_country_flag = prime_captured
+					news_event = unity_tenpony_result.9
+				}
+				25 = {
+					set_global_flag = prime_destroyed
+					news_event = unity_tenpony_result.7
+				}
+				10 = {
+					set_global_flag = prime_sabotaged
+					news_event = unity_tenpony_result.8
+				}
+				45 = {
+					set_country_flag = raid_failed
+					news_event = unity_tenpony_result.10
+				}
+				10 = {
+				log = "[GetDateText]: [Root.GetName]: event river_cup.1"
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tppurp
+			has_global_flag = tpbuild
+			has_global_flag = tpfront
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				0 = {
+					set_country_flag = prime_captured
+					news_event = unity_tenpony_result.9
+				}
+				25 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.7
+				}
+				25 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.8
+				}
+				40 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.10
+				}
+				10 = {
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpgreen
+			has_global_flag = tpbuild
+			has_global_flag = tpfront
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				0 = {
+					set_country_flag = prime_captured
+					news_event = unity_tenpony_result.9
+				}
+				5 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.8
+				}
+				10 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.7
+				}
+				45 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.10
+				}
+				40 = {
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpmix
+			has_global_flag = tpbuild
+			has_global_flag = tpfront
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				20 = {
+					set_country_flag = prime_captured
+					news_event = unity_tenpony_result.9
+				}
+				25 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.8
+				}
+				35 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.7
+				}
+				15 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.10
+				}
+				5 = {
+				}
+			}
+		}
+	}
+	
+	#Through the streets, main entrance, and hiding priority
+
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpblue
+			has_global_flag = tproad
+			has_global_flag = tpfront
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				5 = {
+					set_country_flag = prime_captured
+					news_event = unity_tenpony_result.9
+				}
+				25 = {
+					set_global_flag = prime_destroyed
+					news_event = unity_tenpony_result.7
+				}
+				10 = {
+					set_global_flag = prime_sabotaged
+					news_event = unity_tenpony_result.8
+				}
+				50 = {
+					set_country_flag = raid_failed
+					news_event = unity_tenpony_result.10
+				}
+				10 = {
+				log = "[GetDateText]: [Root.GetName]: event river_cup.1"
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tppurp
+			has_global_flag = tproad
+			has_global_flag = tpfront
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				0 = {
+					set_country_flag = prime_captured
+					news_event = unity_tenpony_result.9
+				}
+				30 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.8
+				}
+				30 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.7
+				}
+				35 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.10
+				}
+				5 = {
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpgreen
+			has_global_flag = tproad
+			has_global_flag = tpfront
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				0 = {
+					set_country_flag = prime_captured
+					news_event = unity_tenpony_result.9
+				}
+				5 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.7
+				}
+				10 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.8
+				}
+				55 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.10
+				}
+				30 = {
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpmix
+			has_global_flag = tproad
+			has_global_flag = tpfront
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				10 = {
+					set_country_flag = prime_captured
+					news_event = unity_tenpony_result.9
+				}
+				30 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.7
+				}
+				40 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.8
+				}
+				20 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.10
+				}
+				0 = {
+				}
+			}
+		}
+	}
+	
+	#Through the sky, main entrance, and hiding priority
+
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpblue
+			has_global_flag = tpsky
+			has_global_flag = tpfront
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				15 = {
+					set_country_flag = prime_captured
+					news_event = unity_tenpony_result.9
+				}
+				25 = {
+					set_global_flag = prime_destroyed
+					news_event = unity_tenpony_result.8
+				}
+				15 = {
+					set_global_flag = prime_sabotaged
+					news_event = unity_tenpony_result.7
+				}
+				35 = {
+					set_country_flag = raid_failed
+					news_event = unity_tenpony_result.10
+				}
+				5 = {
+				log = "[GetDateText]: [Root.GetName]: event river_cup.1"
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tppurp
+			has_global_flag = tpsky
+			has_global_flag = tpfront
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				5 = {
+					set_country_flag = prime_captured
+					news_event = unity_tenpony_result.9
+				}
+				30 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.7
+				}
+				30 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.7
+				}
+				30 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.10
+				}
+				5 = {
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpgreen
+			has_global_flag = tpsky
+			has_global_flag = tpfront
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				5 = {
+					set_country_flag = prime_captured
+					news_event = unity_tenpony_result.9
+				}
+				5 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.7
+				}
+				10 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.8
+				}
+				55 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.10
+				}
+				25 = {
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpmix
+			has_global_flag = tpsky
+			has_global_flag = tpfront
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				15 = {
+					set_country_flag = prime_captured
+					news_event = unity_tenpony_result.9
+				}
+				30 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.8
+				}
+				40 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.7
+				}
+				15 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.10
+				}
+				0 = {
+				}
+			}
+		}
+	}
+	
+	#Through the roof, buildings, and hiding priority
+
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpblue
+			has_global_flag = tpbuild
+			has_global_flag = tproof
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				35 = {
+					set_country_flag = prime_captured_stealth
+					country_event = {
+						id = unity_tenpony.9
+					}
+				}
+				5 = {
+					set_global_flag = prime_captured
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.5
+				}
+				15 = {
+					set_global_flag = prime_destroyed
+					news_event = unity_tenpony_result.3
+				}
+				5 = {
+					set_global_flag = prime_sabotaged
+					news_event = unity_tenpony_result.4
+				}
+				35 = {
+					set_country_flag = raid_failed
+					news_event = unity_tenpony_result.6
+				}
+				5 = {
+				log = "[GetDateText]: [Root.GetName]: event river_cup.1"
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tppurp
+			has_global_flag = tproof
+			has_global_flag = tpbuild
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				15 = {
+					set_country_flag = prime_captured_stealth
+					country_event = {
+						id = unity_tenpony.9 days = 4 random = 48
+					}
+				}
+				15 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.4
+				}
+				20 = {
+					set_global_flag = prime_captured
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.5
+				}
+				20 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.3
+				}
+				20 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.6
+				}
+				10 = {
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpgreen
+			has_global_flag = tproof
+			has_global_flag = tpbuild
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				5 = {
+					set_country_flag = prime_captured_stealth
+					country_event = {
+						id = unity_tenpony.9 days = 4 random = 48
+					}
+				}
+				5 = {
+					set_global_flag = prime_captured
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.5
+				}
+				5 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.4
+				}
+				10 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.4
+				}
+				45 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.6
+				}
+				30 = {
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpmix
+			has_global_flag = tproof
+			has_global_flag = tpbuild
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				15 = {
+					set_country_flag = prime_captured_stealth
+					country_event = {
+						id = unity_tenpony.9 days = 4 random = 48
+					}
+				}
+				45 = {
+					set_global_flag = prime_captured
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.5
+				}
+				10 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.3
+				}
+				20 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.4
+				}
+				5 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.6
+				}
+				5 = {
+				}
+			}
+		}
+	}
+	
+	#Through the roof, streets, and hiding priority
+
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpblue
+			has_global_flag = tproad
+			has_global_flag = tproof
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				30 = {
+					set_country_flag = prime_captured_stealth
+					country_event = {
+						id = unity_tenpony.9
+					}
+				}
+				5 = {
+					set_global_flag = prime_captured
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.5
+				}
+				10 = {
+					set_global_flag = prime_destroyed
+					news_event = unity_tenpony_result.4
+				}
+				10 = {
+					set_global_flag = prime_sabotaged
+					news_event = unity_tenpony_result.3
+				}
+				35 = {
+					set_country_flag = raid_failed
+					news_event = unity_tenpony_result.6
+				}
+				10 = {
+				log = "[GetDateText]: [Root.GetName]: event river_cup.1"
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tppurp
+			has_global_flag = tproof
+			has_global_flag = tproad
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				10 = {
+					set_country_flag = prime_captured_stealth
+					country_event = {
+						id = unity_tenpony.9 days = 4 random = 48
+					}
+				}
+				25 = {
+					set_global_flag = prime_captured
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.5
+				}
+				20 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.3
+				}
+				20 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.4
+				}
+				20 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.6
+				}
+				5 = {
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpgreen
+			has_global_flag = tproof
+			has_global_flag = tproad
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				5 = {
+					set_country_flag = prime_captured_stealth
+					country_event = {
+						id = unity_tenpony.9 days = 4 random = 48
+					}
+				}
+				5 = {
+					set_global_flag = prime_captured
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.5
+				}
+				5 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.4
+				}
+				10 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.3
+				}
+				50 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.6
+				}
+				25 = {
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpmix
+			has_global_flag = tproof
+			has_global_flag = tproad
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				25 = {
+					set_country_flag = prime_captured_stealth
+					country_event = {
+						id = unity_tenpony.9 days = 4 random = 48
+					}
+				}
+				20 = {
+					set_global_flag = prime_captured
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.5
+				}
+				20 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.4
+				}
+				20 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.3
+				}
+				15 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.6
+				}
+				0 = {
+				}
+			}
+		}
+	}
+	
+	#Through the roof, sky, and hiding priority
+
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpblue
+			has_global_flag = tpsky
+			has_global_flag = tproof
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				40 = {
+					set_country_flag = prime_captured_stealth
+					country_event = {
+						id = unity_tenpony.9
+					}
+				}
+				5 = {
+					set_global_flag = prime_captured
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.5
+				}
+				20 = {
+					set_global_flag = prime_destroyed
+					news_event = unity_tenpony_result.4
+				}
+				10 = {
+					set_global_flag = prime_sabotaged
+					news_event = unity_tenpony_result.3
+				}
+				25 = {
+					set_country_flag = raid_failed
+					news_event = unity_tenpony_result.6
+				}
+				0 = {
+				log = "[GetDateText]: [Root.GetName]: event river_cup.1"
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tppurp
+			has_global_flag = tproof
+			has_global_flag = tpsky
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				15 = {
+					set_country_flag = prime_captured_stealth
+					country_event = {
+						id = unity_tenpony.9 days = 4 random = 48
+					}
+				}
+				30 = {
+					set_global_flag = prime_captured
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.5
+				}
+				15 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.4
+				}
+				15 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.3
+				}
+				20 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.6
+				}
+				5 = {
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpgreen
+			has_global_flag = tproof
+			has_global_flag = tpsky
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				10 = {
+					set_country_flag = prime_captured_stealth
+					country_event = {
+						id = unity_tenpony.9 days = 4 random = 48
+					}
+				}
+				5 = {
+					set_global_flag = prime_captured
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.5
+				}
+				5 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.4
+				}
+				10 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.3
+				}
+				45 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.6
+				}
+				25 = {
+				}
+			}
+		}
+	}
+	
+	option = {
+	name = unity_tenpony.8.a
+	trigger = {
+			has_global_flag = tpmix
+			has_global_flag = tproof
+			has_global_flag = tpsky
+			has_global_flag = tphide
+		}
+		hidden_effect = {
+			random_list = {#days to hours applied
+				35 = {
+					set_country_flag = prime_captured_stealth
+					country_event = {
+						id = unity_tenpony.9 days = 4 random = 48
+					}
+				}
+				35 = {
+					set_global_flag = prime_captured
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.5
+				}
+				10 = {
+					set_global_flag = prime_destroyed
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.3
+				}
+				10 = {
+					set_global_flag = prime_sabotaged
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.4
+				}
+				10 = {
+					set_country_flag = raid_complete
+					news_event = unity_tenpony_result.6
+				}
+				0 = {
+				}
+			}
+		}
+	}
+}
+
+news_event = { 
+	id = unity_tenpony_result.1
+	immediate = {log = "[GetDateText]: [Root.GetName]: event unity_tenpony_result.1"}
+	title = unity_tenpony_result.1.t
+	desc = unity_tenpony_result.1.d
+	picture = GFX_news_event_friendship_games
+
+	is_triggered_only = yes
+
+	option = {
+		name = unity_tenpony_result.1.a
+	}
+}
+
+news_event = { 
+	id = unity_tenpony_result.2
+	immediate = {log = "[GetDateText]: [Root.GetName]: event unity_tenpony_result.1"}
+	title = unity_tenpony_result.2.t
+	desc = unity_tenpony_result.2.d
+	picture = GFX_news_event_friendship_games
+
+	is_triggered_only = yes
+
+	option = {
+		name = unity_tenpony_result.2.a
+	}
+}
+
+news_event = { 
+	id = unity_tenpony_result.3
+	immediate = {log = "[GetDateText]: [Root.GetName]: event unity_tenpony_result.1"}
+	title = unity_tenpony_result.3.t
+	desc = unity_tenpony_result.3.d
+	picture = GFX_news_event_friendship_games
+
+	is_triggered_only = yes
+
+	option = {
+		name = unity_tenpony_result.3.a
+	}
+}
+
+news_event = { 
+	id = unity_tenpony_result.4
+	immediate = {log = "[GetDateText]: [Root.GetName]: event unity_tenpony_result.1"}
+	title = unity_tenpony_result.4.t
+	desc = unity_tenpony_result.4.d
+	picture = GFX_news_event_friendship_games
+
+	is_triggered_only = yes
+
+	option = {
+		name = unity_tenpony_result.4.a
+	}
+}
+
+news_event = { 
+	id = unity_tenpony_result.5
+	immediate = {log = "[GetDateText]: [Root.GetName]: event unity_tenpony_result.1"}
+	title = unity_tenpony_result.5.t
+	desc = unity_tenpony_result.5.d
+	picture = GFX_news_event_friendship_games
+
+	is_triggered_only = yes
+
+	option = {
+		name = unity_tenpony_result.5.a
+	}
+}
+
+news_event = { 
+	id = unity_tenpony_result.6
+	immediate = {log = "[GetDateText]: [Root.GetName]: event unity_tenpony_result.1"}
+	title = unity_tenpony_result.6.t
+	desc = unity_tenpony_result.6.d
+	picture = GFX_news_event_friendship_games
+
+	is_triggered_only = yes
+
+	option = {
+		name = unity_tenpony_result.6.a
+	}
+}
+
+news_event = { 
+	id = unity_tenpony_result.7
+	immediate = {log = "[GetDateText]: [Root.GetName]: event unity_tenpony_result.1"}
+	title = unity_tenpony_result.7.t
+	desc = unity_tenpony_result.7.d
+	picture = GFX_news_event_friendship_games
+
+	is_triggered_only = yes
+
+	option = {
+		name = unity_tenpony_result.7.a
+	}
+}
+
+news_event = { 
+	id = unity_tenpony_result.8
+	immediate = {log = "[GetDateText]: [Root.GetName]: event unity_tenpony_result.1"}
+	title = unity_tenpony_result.8.t
+	desc = unity_tenpony_result.8.d
+	picture = GFX_news_event_friendship_games
+
+	is_triggered_only = yes
+
+	option = {
+		name = unity_tenpony_result.8.a
+	}
+}
+
+news_event = { 
+	id = unity_tenpony_result.9
+	immediate = {log = "[GetDateText]: [Root.GetName]: event unity_tenpony_result.1"}
+	title = unity_tenpony_result.9.t
+	desc = unity_tenpony_result.9.d
+	picture = GFX_news_event_friendship_games
+
+	is_triggered_only = yes
+
+	option = {
+		name = unity_tenpony_result.9.a
+	}
+}
+
+news_event = { 
+	id = unity_tenpony_result.10
+	immediate = {log = "[GetDateText]: [Root.GetName]: event unity_tenpony_result.1"}
+	title = unity_tenpony_result.10.t
+	desc = unity_tenpony_result.10.d
+	picture = GFX_news_event_friendship_games
+
+	is_triggered_only = yes
+
+	option = {
+		name = unity_tenpony_result.10.a
+	}
+}
+
+#maripony falls
+
+news_event = {
+	id = unity_misc.4
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cityfall.27"}
+	title = unity_misc.4.t
+	desc = unity_misc.4.d
+	picture = GFX_news_event_changeling_hive
+
+	major = yes
+	is_triggered_only = yes
+
+	immediate = {
+		set_global_flag = fall_of_maripony
+		518 = { set_state_flag = state_has_fallen }
+		FROM.FROM = { save_event_target_as = old_controller }
+		ROOT = { save_event_target_as = new_controller }
+	}
+
+	option = { 
+		name = unity_misc.4.a
+		trigger = {
+			tag = event_target:old_controller
+		}
+	}
+
+	option = { 
+		name = unity_misc.4.b
+		trigger = {
+			tag = event_target:new_controller
+		}
+	}
+
+	option = { 
+		name = unity_misc.4.c
+		trigger = {
+			NOT = {
+				tag = event_target:old_controller
+				tag = event_target:new_controller
+			}
+		}
+	}
+}
+
+#economy events
+
+country_event = {
+	id = unity_misc.5
+	title = unity_misc.5.t
+	picture = GFX_event_test
+	is_triggered_only = yes
+	desc = {
+		text = unity_misc.5.d
+		trigger = {
+
+	}
+
+	}
+	option = {
+	name = unity_misc.5.a
+		add_offsite_building = { type = arms_factory level = 2 }
+
+	}
+	option = {
+	name = unity_misc.5.b
+		518 = {
+				add_resource = {
+					type = crystals
+					amount = 5
+				}
+			}
+
+	}
+
+}
+
+#Slaver Events (cntrlf)
+
+country_event = {
+	id = goddess_slaver.1
+	title = goddess_slaver.1.t
+	picture = GFX_event_test
+	is_triggered_only = yes
+	desc = {
+		text = goddess_slaver.1.d
+		trigger = {
+
+	}
+
+	}
+	option = {
+	name = goddess_slaver.1.a
+	
+		ai_will_do = {
+			factor = 25
+			modifier = {
+				has_global_flag = goddess_takeover
+				factor = 5
+			}
+			modifier = {
+				has_completed_focus = generic_placeholder
+				factor = 10
+			}
+		}
+		set_country_flag = goddess_slave_trade
+		UNI = {
+			give_guarantee = ROOT
+			give_military_access = ROOT
+			country_event = {
+				id = goddess_slaver.3
+			}
+		}
+		hidden_effect = {
+				set_technology = {
+						popup = no
+						dragons_imp = 1
+					}
+			}
+
+	}
+	option = {
+	name = goddess_slaver.1.b
+		ai_will_do = {
+			factor = 20
+		}
+		
+
+	}
+
+}
+
+country_event = {
+	id = goddess_slaver.2
+	title = goddess_slaver.2.t
+	picture = GFX_event_test
+	is_triggered_only = yes
+	desc = {
+		text = goddess_slaver.2.d
+		trigger = {
+
+	}
+
+	}
+	option = {
+	name = goddess_slaver.2.a
+	
+		ai_will_do = {
+			factor = 15
+			modifier = {
+				has_global_flag = goddess_takeover
+				factor = 5
+			}
+		}
+		
+		set_country_flag = goddess_takeover_accepted
+	
+		UNI = {
+				puppet = ROOT
+			}
+
+	}
+	option = {
+	name = goddess_slaver.2.b
+		set_country_flag = goddess_takeover_refused
+		UNI = {
+			create_wargoal = {
+				type = puppet_wargoal_focus
+				target = ROOT
+				expire = 0
+			}
+		}
+		ai_will_do = {
+			factor = 20
+		}
+
+	}
+
+}
+
+country_event = {
+	id = goddess_slaver.3
+	title = goddess_slaver.3.t
+	picture = GFX_event_test
+	is_triggered_only = yes
+	desc = {
+		text = goddess_slaver.3.d
+		trigger = {
+
+	}
+
+	}
+	option = {
+	name = goddess_slaver.3.a
+	if = {
+				limit = {
+					NOT = {
+						has_idea = UNI_slave_trade_negligible
+						has_idea = UNI_slave_trade_min
+						has_idea = UNI_slave_trade_low
+						has_idea = UNI_slave_trade_med
+						has_idea = UNI_slave_trade_high
+						has_idea = UNI_slave_trade_very
+						has_idea = UNI_slave_trade_max
+					}
+				}
+				add_ideas = UNI_slave_trade_negligible
+			}
+			else_if = {
+				limit = {
+					has_idea = UNI_slave_trade_negligible
+				}
+				swap_ideas = {
+					add_idea = UNI_slave_trade_min
+					remove_idea = UNI_slave_trade_negligible
+				}
+			}
+			else_if = {
+				limit = {
+					has_idea = UNI_slave_trade_min
+				}
+				swap_ideas = {
+					add_idea = UNI_slave_trade_low
+					remove_idea = UNI_slave_trade_min
+				}
+			}
+			else_if = {
+				limit = {
+					has_idea = UNI_slave_trade_low
+				}
+				swap_ideas = {
+					add_idea = UNI_slave_trade_med
+					remove_idea = UNI_slave_trade_low
+				}
+			}
+			else_if = {
+				limit = {
+					has_idea = UNI_slave_trade_med
+				}
+				swap_ideas = {
+					add_idea = UNI_slave_trade_high
+					remove_idea = UNI_slave_trade_med
+				}
+			}
+			
+			else_if = {
+				limit = {
+					has_idea = UNI_slave_trade_high
+				}
+				swap_ideas = {
+					add_idea = UNI_slave_trade_very
+					remove_idea = UNI_slave_trade_high
+				}
+			}
+			
+			else_if = {
+				limit = {
+					has_idea = UNI_slave_trade_very
+				}
+				swap_ideas = {
+					add_idea = UNI_slave_trade_max
+					remove_idea = UNI_slave_trade_very
+				}
+			}
+			
+			else_if = {
+				limit = {
+					has_idea = UNI_slave_trade_max
+				}
+				add_manpower = 100
+			}
+
+	}
+
+}
