@@ -5,7 +5,7 @@ UNI_dunk = {
 		available = {
 			any_state = {
 				state_population > 60
-				NOT = { state = 518 }
+				NOT = { is_core_of = UNI }
 				is_owned_and_controlled_by = UNI
 			}
 		}
@@ -13,7 +13,7 @@ UNI_dunk = {
 		visible = {
 				has_completed_focus = unity_start_4
 		}
-		days_re_enable = 100
+		days_re_enable = 1
 		cost = 25
 
 		ai_will_do = {
@@ -27,11 +27,11 @@ UNI_dunk = {
 				amount = 50
 				producer = UNI
 			}
-			add_manpower = 10
+			add_manpower = 25
 			random_controlled_state = {
 					limit = {
 						state_population > 60
-						NOT = { state = 518 }
+						NOT = { is_core_of = UNI }
 					}
 					add_manpower = -60
 				}
@@ -40,11 +40,11 @@ UNI_dunk = {
 	
 	UNI_dunk_mass = {
 		icon = GFX_decision_generic_ignite_civil_war
-		days_remove = 100
+		days_remove = 200
 		available = {
 			any_state = {
-				state_population > 60
-				NOT = { state = 518 }
+				state_population > 300
+				NOT = { is_core_of = UNI }
 				is_owned_and_controlled_by = UNI
 			}
 		}
@@ -52,11 +52,11 @@ UNI_dunk = {
 		visible = {
 				has_completed_focus = unity_start_4
 		}
-		days_re_enable = 100
+		days_re_enable = 1
 		cost = 75
 
 		ai_will_do = {
-			factor = 20
+			factor = 100
 		}
 
 		complete_effect = {
@@ -254,7 +254,7 @@ UNI_black_book = {
 	
 	UNI_canterlot_raid = {
         icon = border_war
-		days_remove = 180
+		days_remove = 25
 
         available = {
             NOT = {
@@ -278,28 +278,28 @@ UNI_black_book = {
         }
 
         ai_will_do = {
-            base = 20
+            base = 200
             modifier = 2
                 factor = 0
                 has_war = yes
             }
         }
 
-        cost = 50
+        cost = 25
 
         fire_only_once = no
 
-        days_re_enable = 100
+        days_re_enable = 50
 
         complete_effect = {
 			add_manpower = -100
-				add_equipment_to_stockpile = {
+			add_equipment_to_stockpile = {
 				type = dragon_equipment_0
 				amount = -100
 				producer = UNI
 			}
 			hidden_effect = {
-			modify_country_flag = { flag = celestia_evil_meter value = 1 }
+			modify_country_flag = { flag = black_book_raid_meter value = 1 }
 		}
         }
 		
@@ -309,41 +309,7 @@ UNI_black_book = {
                 attacker = {
                     state = 801
                     num_provinces = 2
-                    on_win = {
-						random_list = {
-							30 = { #Found something
-								modifier = {
-									add = -10
-									has_country_flag = { flag = black_book_raid_meter value > 10 }
-								}
-								modifier = {
-									add = -5
-									has_country_flag = { flag = black_book_raid_meter value > 20 }
-								}
-								country_event = unity_pop_bb.2
-							}
-							10 = { #Found The Book
-								modifier = {
-									add = 10
-									has_country_flag = { flag = black_book_raid_meter value > 10 }
-								}modifier = {
-									add = 10
-									has_country_flag = { flag = black_book_raid_meter value > 20 }
-								}
-								country_event = unity_pop_bb.3
-							}
-							20 = { #Found Nothing
-								country_event = unity_pop_bb.4
-							}
-							30 = { #Contact Lost
-								country_event = unity_pop_bb.5
-								modifier = {
-									add = -5
-									has_country_flag = { flag = black_book_raid_meter value > 20 }
-								}
-							}
-						}
-					}
+                    on_win = unity_pop_bb.6
                     on_lose = add_manpower = -20
                     on_cancel = add_manpower = -10
                 }
@@ -357,4 +323,122 @@ UNI_black_book = {
 
     }
 	
+}
+
+UNI_slaver_interractions
+	UNI_offer_again = {
+        icon = border_war
+		days_remove = 50
+
+        available = {
+            has_completed_focus = unity_slaver_1
+        }
+
+        visible = {
+            has_completed_focus = unity_slaver_1
+			FROM = {
+                OR = {
+					has_completed_focus = GR_slaves
+					has_completed_focus = generic_placeholder
+				}
+				NOT = {
+					has_country_flag = goddess_slave_trade
+				}
+            }
+        }
+		
+        target_trigger = {
+            FROM = {
+                OR = {
+					has_completed_focus = GR_slaves
+					has_completed_focus = generic_placeholder
+				}
+				NOT = {
+					has_country_flag = goddess_slave_trade
+				}
+				NOT = {
+					original_tag = CAL
+					original_tag = SPV
+				}
+            }
+        }
+
+        ai_will_do = {
+            base = 20
+            modifier = {
+                factor = 5
+                has_war = yes
+            }
+        }
+
+        cost = 50
+
+        fire_only_once = no
+
+        complete_effect = {
+			FROM = {
+				country_event = {
+					id = goddess_slaver.1
+				}
+			}
+        }
+    }
+	
+	UNI_puppet_new = {
+        icon = border_war
+		days_remove = 50
+
+        available = {
+            has_completed_focus = unity_slaver_8
+        }
+
+        visible = {
+            has_completed_focus = unity_slaver_8
+			FROM = {
+                OR = {
+					has_completed_focus = GR_slaves
+					has_completed_focus = generic_placeholder
+				}
+				has_country_flag = goddess_slave_trade
+				NOT = {
+					has_country_flag = goddess_takeover_refused
+				}
+				NOT = {
+					has_country_flag = goddess_takeover_accepted
+				}
+            }
+        }
+		
+        target_trigger = {
+            FROM = {
+                OR = {
+					has_completed_focus = GR_slaves
+					has_completed_focus = generic_placeholder
+				}
+				NOT = {
+					has_country_flag = goddess_takeover_refused
+				}
+				NOT = {
+					original_tag = CAL
+					original_tag = SPV
+				}
+            }
+        }
+
+        ai_will_do = {
+            base = 20
+        }
+
+        cost = 50
+
+        fire_only_once = yes
+
+        complete_effect = {
+			FROM = {
+				country_event = {
+					id = goddess_slaver.2
+				}
+			}
+        }
+    }
 }
