@@ -118,14 +118,14 @@ country_event = {
 	}
 	
 	option = {
-	ai_chance = { factor = 0 }
+	ai_chance = { factor = 100 }
 		name = shatteredhoof.4.b
 		custom_effect_tooltip = sha_talons_siege_tt
 		hidden_effect = { SHA = { load_oob = "SHA_siege_talons"}}
 	}
 	
 	option = {
-	ai_chance = { factor = 100 }
+	ai_chance = { factor = 0 }
 		name = shatteredhoof.4.c
 		custom_effect_tooltip = sha_talons_large_tt
 		hidden_effect = { SHA = { load_oob = "SHA_large_talons"}}
@@ -166,7 +166,7 @@ country_event = {
 	}
 	
 	option = {
-	ai_chance = { factor = 0 }
+	ai_chance = { factor = 10 }
 		name = shatteredhoof.5.c
 		add_manpower = 300
 	}	
@@ -976,14 +976,508 @@ country_event = {
  	fire_only_once = yes
 
 	option = {
-	ai_chance = { factor = 90 }
+	ai_chance = { 
+		factor = 1 
+		modifier = {
+			factor = 1000
+			has_country_leader = {
+				name = "Homage"
+				ruling_only = yes
+			}
+		}
+		modifier = {
+			factor = 9
+			has_country_leader = {
+				name = "The Twilight Society"
+				ruling_only = yes
+			}
+		}
+		modifier = {
+			factor = 4
+			has_country_leader = {
+				name = "Chief Grim Star"
+				ruling_only = yes
+			}
+		}
+	}
 		name = shatteredhoof_ncr.16.a
-		
+		custom_effect_tooltip = TEN_agreed_to_help_NCR_tt
+		hidden_effect = {
+			set_country_flag = TEN_agreed_to_help_NCR
+			SHA = {
+				country_event = shatteredhoof_ncr.1611
+			}
+		}
 	}
 	
 	option = {
-	ai_chance = { factor = 10 }
+	ai_chance = { factor = 1 }
 		name = shatteredhoof_ncr.16.b
+		custom_effect_tooltip = TEN_is_enemy_of_NCR_tt
+		hidden_effect = {
+			set_country_flag = TEN_is_enemy_of_NCR
+		}
+		SHA = {
+				country_event = shatteredhoof_ncr.1612
+			}
+	}
+	
+}
+
+#TEN accepts pincer
+country_event = {
+ 	id = shatteredhoof_ncr.1611
+ 	title = shatteredhoof_ncr.1611.t
+ 	desc = shatteredhoof_ncr.1611.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 1 }
+		name = shatteredhoof_ncr.1611.a
+		declare_war_on = { 
+				type = annex_everything 
+				target = LGH 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = GUN 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = APR 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = RWK
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = FRT
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = RAR
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = FER
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = STT
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = MUD
+			}
+		hidden_effect = {
+			TEN = { dismantle_faction = yes }
+			add_to_faction = TEN
+			SHA = {
+					add_ai_strategy = {
+						type = alliance
+						id = "TEN"
+						value = 200
+					}
+				}
+			TEN = {
+					add_ai_strategy = {
+						type = alliance
+						id = "SHA"
+						value = 200
+					}
+				declare_war_on = { 
+					type = annex_everything 
+					target = RAR
+				}
+				declare_war_on = { 
+					type = annex_everything 
+					target = FER
+				}
+			}
+		}
+	}	
+}
+
+#Tenpony refuses us
+country_event = {
+ 	id = shatteredhoof_ncr.1612
+ 	title = shatteredhoof_ncr.1612.t
+ 	desc = shatteredhoof_ncr.1612.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 10 }
+		name = shatteredhoof_ncr.1612.a
+			declare_war_on = { 
+				type = annex_everything 
+				target = LGH 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = GUN 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = APR 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = RWK
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = FRT
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = RAR
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = FER
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = STT
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = MUD
+			}
+	}
+	
+}
+
+#The Sunrise Peace-conference
+country_event = {
+ 	id = shatteredhoof_ncr.1613
+ 	title = shatteredhoof_ncr.1613.t
+ 	desc = shatteredhoof_ncr.1613.d
+	picture = GFX_event_test
+
+	trigger = {
+		TEN = { has_country_flag = TEN_agreed_to_help_NCR }
+		SHA = {
+			AND = {
+			RAR = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+			MUD = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+			STT = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+			FER = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+			FRT = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+			RWK = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+			APR = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+			GUN = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+			LGH = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+			}
+		}
+		original_tag = SHA
+	}
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 10 }
+		name = shatteredhoof_ncr.1613.a
+		custom_effect_tooltip = SHA_offer_TEN_sunrise_1_tt
+		TEN = {
+				country_event = shatteredhoof_ncr.1614
+			}
+	}
+	
+}
+
+#The Conference
+country_event = {
+ 	id = shatteredhoof_ncr.1614
+ 	title = shatteredhoof_ncr.1614.t
+ 	desc = shatteredhoof_ncr.1614.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		ai_chance = { factor = 30 
+		modifier = {
+			factor = 0.1
+			has_country_leader = {
+				name = "Chief Grim Star"
+				ruling_only = yes
+			}
+		}
+		}
+		name = shatteredhoof_ncr.1614.a
+		hidden_effect = {
+		TEN = {
+			transfer_state = 58
+			transfer_state = 471
+			transfer_state = 87
+			transfer_state = 449
+			transfer_state = 49
+			
+		}
+		every_state = {
+				limit = {
+					AND = {
+						NOT = { is_core_of = RAR}
+						OR = {
+						is_core_of = FER
+						is_core_of = STT
+						is_core_of = MUD
+						is_core_of = APR
+						is_core_of = FRT
+						is_core_of = GUN
+						is_core_of = RWK
+						is_core_of = LGH
+						}
+						is_owned_by = TEN
+					}
+				}
+				SHA = { transfer_state = prev }
+			}
+		}
+	}
+	
+	option = {
+	ai_chance = { factor = 10 
+		modifier = {
+			factor = 0
+			has_country_leader = {
+				name = "Homage"
+				ruling_only = yes
+			}
+		}
+		modifier = {
+			factor = 0.5
+			has_country_leader = {
+				name = "The Twilight Society"
+				ruling_only = yes
+			}
+		}
+	}
+		name = shatteredhoof_ncr.1614.b
+		hidden_effect = {
+			SHA = {
+				country_event = shatteredhoof_ncr.1615
+			}
+		}
+	}
+	
+	option = {
+	ai_chance = { factor = 0 }
+		name = shatteredhoof_ncr.1614.c
+		hidden_effect = {
+			SHA = {
+				country_event = shatteredhoof_ncr.1616
+			}
+		}
+	}
+	
+}
+
+#Tenpony wants more
+country_event = {
+ 	id = shatteredhoof_ncr.1615
+ 	title = shatteredhoof_ncr.1615.t
+ 	desc = shatteredhoof_ncr.1615.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 10 }
+		name = shatteredhoof_ncr.1615.a
+		hidden_effect = {
+		TEN = {
+			transfer_state = 58
+			transfer_state = 471
+			transfer_state = 87
+			transfer_state = 449
+			transfer_state = 49
+			transfer_state = 508
+			transfer_state = 461
+			transfer_state = 440
+			
+		}
+		every_state = {
+				limit = {
+					AND = {
+						NOT = { is_core_of = RAR}
+						OR = {
+						is_core_of = STT
+						is_core_of = MUD
+						is_core_of = APR
+						is_core_of = FRT
+						is_core_of = GUN
+						is_core_of = LGH
+						}
+						is_owned_by = TEN
+					}
+				}
+				SHA = { transfer_state = prev }
+			}
+			SHA = {
+				transfer_state = 534
+				transfer_state = 524
+				transfer_state = 462
+			}
+		}
+	}
+	
+	option = {
+	ai_chance = { factor = 15 }
+		name = shatteredhoof_ncr.1615.b
+		TEN = {
+			leave_faction = yes
+			country_event = shatteredhoof_ncr.1617
+		}
+		hidden_effect = {
+			TEN = {
+				clr_country_flag = TEN_agreed_to_help_NCR
+				set_country_flag = TEN_is_enemy_of_NCR
+			}
+			SHA = {
+					add_ai_strategy = {
+						type = alliance
+						id = "TEN"
+						value = -200
+					}
+					add_ai_strategy = {
+						type = alliance
+						id = "TEN"
+						value = -200
+					}
+				}
+			TEN = {
+					add_ai_strategy = {
+						type = antagonize
+						id = "SHA"
+						value = 200
+					}
+					add_ai_strategy = {
+						type = antagonize
+						id = "TEN"
+						value = 200
+					}
+			}
+		}
+	}
+	
+}
+
+#Tenpony wants to keep the border
+country_event = {
+ 	id = shatteredhoof_ncr.1616
+ 	title = shatteredhoof_ncr.1616.t
+ 	desc = shatteredhoof_ncr.1616.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 10 }
+		name = shatteredhoof_ncr.1616.a
+		TEN = { country_event = shatteredhoof_ncr.1618 }
+	}
+	
+	option = {
+	ai_chance = { factor = 2 }
+		name = shatteredhoof_ncr.1616.b
+		TEN = {
+			leave_faction = yes
+			country_event = shatteredhoof_ncr.1617
+		}
+		hidden_effect = {
+			SHA = {
+					add_ai_strategy = {
+						type = alliance
+						id = "TEN"
+						value = -200
+					}
+					add_ai_strategy = {
+						type = alliance
+						id = "TEN"
+						value = -200
+					}
+				}
+			TEN = {
+					add_ai_strategy = {
+						type = antagonize
+						id = "SHA"
+						value = 200
+					}
+					add_ai_strategy = {
+						type = antagonize
+						id = "TEN"
+						value = 200
+					}
+			}
+		}
+	}
+	
+}
+
+#The NCR kicked us out.
+country_event = {
+ 	id = shatteredhoof_ncr.1617
+ 	title = shatteredhoof_ncr.1617.t
+ 	desc = shatteredhoof_ncr.1617.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 10 }
+		name = shatteredhoof_ncr.1617.a
+		hidden_effect = {
+		TEN = {
+				clr_country_flag = TEN_agreed_to_help_NCR
+				set_country_flag = TEN_is_enemy_of_NCR
+			}
+		}
+	}
+	
+}
+#the NCR agrees to current borders.
+country_event = {
+ 	id = shatteredhoof_ncr.1618
+ 	title = shatteredhoof_ncr.1618.t
+ 	desc = shatteredhoof_ncr.1618.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 10 }
+		name = shatteredhoof_ncr.1618.a
 		
 	}
 	
@@ -1025,16 +1519,16 @@ country_event = {
 	option = {
 	ai_chance = { factor = 10 }
 		name = shatteredhoof_ncr.18.a
-		country_event = { id = shatteredhoof_ncr.18.1 }
+		country_event = { id = shatteredhoof_ncr.1811 }
 	}
 	
 }
 
 #Breaching Neighvarro 2
 country_event = {
- 	id = shatteredhoof_ncr.18.1
- 	title = shatteredhoof_ncr.18.1.t
- 	desc = shatteredhoof_ncr.18.1.d
+ 	id = shatteredhoof_ncr.1811
+ 	title = shatteredhoof_ncr.1811.t
+ 	desc = shatteredhoof_ncr.1811.d
 	picture = GFX_event_test
 
 	is_triggered_only = yes
@@ -1042,17 +1536,17 @@ country_event = {
 
 	option = {
 	ai_chance = { factor = 10 }
-		name = shatteredhoof_ncr.18.1.a
-		country_event = { id = shatteredhoof_ncr.18.2 }
+		name = shatteredhoof_ncr.1811.a
+		country_event = { id = shatteredhoof_ncr.1812 }
 	}
 	
 }
 
 #Breaching Neighvarro 3
 country_event = {
- 	id = shatteredhoof_ncr.18.2
- 	title = shatteredhoof_ncr.18.2.t
- 	desc = shatteredhoof_ncr.18.2.d
+ 	id = shatteredhoof_ncr.1812
+ 	title = shatteredhoof_ncr.1812.t
+ 	desc = shatteredhoof_ncr.1812.d
 	picture = GFX_event_test
 
 	is_triggered_only = yes
@@ -1060,7 +1554,7 @@ country_event = {
 
 	option = {
 	ai_chance = { factor = 10 }
-		name = shatteredhoof_ncr.18.2.a
+		name = shatteredhoof_ncr.1812.a
 		add_political_power = 150
 	}
 	
@@ -1107,6 +1601,225 @@ country_event = {
 	}
 	
 	
+}
+
+#Sorting out Manehattan
+country_event = {
+ 	id = shatteredhoof_ncr.21
+ 	title = shatteredhoof_ncr.21.t
+ 	desc = shatteredhoof_ncr.21.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	trigger { TEN = { has_country_flag = TEN_agreed_to_help_NCR } }
+	ai_chance = { factor = 10 }
+		name = shatteredhoof_ncr.21.a
+		
+	}
+	
+	option = {
+	trigger { TEN = { has_country_flag = TEN_agreed_to_help_NCR } }
+	ai_chance = { factor = 10 }
+		name = shatteredhoof_ncr.21.b
+		TEN = {
+			leave_faction = yes
+			country_event = shatteredhoof_ncr.1617
+		}
+	}
+	
+	option = {
+	trigger { TEN = { has_country_flag = TEN_is_enemy_of_NCR } }
+	ai_chance = { factor = 10 }
+		name = shatteredhoof_ncr.21.c
+		
+	}	
+}
+
+#A deal with Tenpony
+country_event = {
+ 	id = shatteredhoof_ncr.22
+ 	title = shatteredhoof_ncr.22.t
+ 	desc = shatteredhoof_ncr.22.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 10 
+		modifier = {
+			factor = 999
+			has_country_leader = {
+				name = "Merchants"
+				ruling_only = yes
+			}
+		}
+	}
+		name = shatteredhoof_ncr.22.a
+		declare_war_on = { 
+				type = annex_everything 
+				target = EMP 
+				}
+				declare_war_on = { 
+				type = annex_everything 
+				target = MSR 
+				}
+				declare_war_on = { 
+				type = annex_everything 
+				target = ARB 
+				}
+				declare_war_on = { 
+				type = annex_everything 
+				target = MRA 
+				}
+				declare_war_on = { 
+				type = annex_everything 
+				target = MAR 
+				}
+				declare_war_on = { 
+				type = annex_everything 
+				target = TEN 
+				}
+				declare_war_on = { 
+				type = annex_everything 
+				target = GUT 
+				}
+				declare_war_on = { 
+				type = annex_everything 
+				target = FRI 
+				}
+			hidden_effect = {
+				every_state = {
+				limit = {
+					is_core_of = MRA
+					is_core_of = MAR
+					is_core_of = GUT
+					is_core_of = FRI
+					is_core_of = EMP
+					is_core_of = ARB
+					is_core_of = MSR
+				}
+				add_core_of = TEN
+				}
+			}
+	}
+	
+	option = {
+	ai_chance = { factor = 10 
+		modifier = {
+			factor = 999
+			has_country_leader = {
+				name = "Chief Grim Star"
+				ruling_only = yes
+			}
+		}
+		modifier = {
+			factor = 999
+			has_country_leader = {
+				name = "The Twilight Society"
+				ruling_only = yes
+			}
+		}
+	}
+		name = shatteredhoof_ncr.22.b
+		leave_faction = yes
+		hidden_effect = {
+		TEN = {
+				clr_country_flag = TEN_agreed_to_help_NCR
+				set_country_flag = TEN_is_enemy_of_NCR
+			}
+		}
+	}
+	
+	option = {
+	trigger { 
+		TEN = { 
+			has_country_leader = {
+				name = "Homage"
+				ruling_only = yes 
+			}
+		}
+	}
+	ai_chance = { factor = 1000 }
+		name = shatteredhoof_ncr.22.c
+		SHA = { puppet = TEN }
+		declare_war_on = { 
+				type = annex_everything 
+				target = EMP 
+				}
+				declare_war_on = { 
+				type = annex_everything 
+				target = MSR 
+				}
+				declare_war_on = { 
+				type = annex_everything 
+				target = ARB 
+				}
+				declare_war_on = { 
+				type = annex_everything 
+				target = MRA 
+				}
+				declare_war_on = { 
+				type = annex_everything 
+				target = MAR 
+				}
+				declare_war_on = { 
+				type = annex_everything 
+				target = GUT 
+				}
+				declare_war_on = { 
+				type = annex_everything 
+				target = FRI 
+				}
+		hidden_effect = {
+			every_state = {
+				limit = {
+					is_core_of = MRA
+					is_core_of = MAR
+					is_core_of = GUT
+					is_core_of = FRI
+					is_core_of = EMP
+					is_core_of = ARB
+					is_core_of = MSR
+				}
+				add_core_of = TEN
+			}
+			drop_cosmetic_tag = yes
+			set_cosmetic_tag = TEN_NCR_state
+		}
+	}
+
+}
+
+country_event = {
+ 	id = shatteredhoof_ncr.23
+ 	title = shatteredhoof_ncr.23.t
+ 	desc = shatteredhoof_ncr.23.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 10 }
+		name = shatteredhoof_ncr.23.a
+		
+	}
+	
+	option = {
+	ai_chance = { factor = 10 }
+		name = shatteredhoof_ncr.23.b
+		
+	}
+	
+	option = {
+	ai_chance = { factor = 10 }
+		name = shatteredhoof_ncr.23.c
+		
+	}	
 }
 
 
