@@ -1674,8 +1674,6 @@ shared_focus = {
 			}
 			add_manpower = -100
 		}
-
-		custom_effect_tooltip = RED_bloody_army_tt
 	}
 
 }
@@ -1938,8 +1936,8 @@ shared_focus = {
 }
 
 shared_focus = { 
-	id = RED_canterlot
-	icon = GFX_goal_pink_canterlot
+	id = RED_bloody_army
+	icon = GFX_goal_RED_blood_mane
 	relative_position_id = RED_old_fashioned_way
 	x = -1
 	y = 1
@@ -1948,36 +1946,24 @@ shared_focus = {
 	prerequisite = { focus = RED_old_fashioned_way } 
 	ai_will_do = { 
 		factor = 40
-	} 
+	}
 
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_canterlot"
-
-		custom_effect_tooltip = RED_canterlot_annex_tt
-		hidden_effect = { # ugly tooltip
-			every_other_country = {
-				limit = {
-					has_full_control_of_state = 180 # South Canterlot
-				}
-				RED = {
-					create_wargoal = { 
-						type = annex_everything 
-						target = PREV 
-					}
-				}
-			}
-			every_other_country = {
-				limit = {
-					has_full_control_of_state = 234 # South Canterlot
-				}
-				RED = {
-					create_wargoal = { 
-						type = annex_everything 
-						target = PREV 
-					}
-				}
+	bypass = {
+		OR = {
+			ERA = { exists = no }
+			ERA = {
+				has_full_control_of_state = 549
 			}
 		}
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_bloody_army"
+
+		country_event = {
+			id = redeye.97
+		}
+		custom_effect_tooltip = RED_bloody_army_tt
 	}
 }
 
@@ -1994,40 +1980,54 @@ shared_focus = {
 		factor = 40
 	} 
 
-	will_lead_to_war_with = PRA
+	will_lead_to_war_with = HIT
+	will_lead_to_war_with = GRV
+	will_lead_to_war_with = FTR
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_drums_of_war"
 
 		add_war_support = 0.1
-		create_wargoal = { type = annex_everything target = PRA }
-		create_wargoal = { type = annex_everything target = GLY }
+		create_wargoal = { type = annex_everything target = GRV }
+		create_wargoal = { type = annex_everything target = HIT }
+		if = {
+			limit = { has_country_flag = RED_foaltopia_accepts_flag }
+			create_wargoal = { type = annex_everything target = FTR }
+		}
 	}
 
 }
 
 shared_focus = { 
-	id = RED_restore_canterlot
-	icon = GFX_goal_eqs_canterlot
-	relative_position_id = RED_canterlot
+	id = RED_bloody_talons
+	icon = GFX_goal_griffon_special_force
+	relative_position_id = RED_bloody_army
 	x = 0
 	y = 1
 	cost = 5
 
-	prerequisite = { focus = RED_canterlot } 
+	prerequisite = { focus = RED_bloody_army } 
 	ai_will_do = { 
 		factor = 40
 	} 
 
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_restore_canterlot"
-		custom_effect_tooltip = RED_restore_canterlot_tt
-
-		hidden_effect = {
-			set_variable = {var = RED_canter_talon_dead value = 0}
-			set_variable = {var = RED_canter_firework_clue value = 0}
+	bypass = {
+		OR = {
+			ERA = { exists = no }
+			ERA = {
+				has_full_control_of_state = 549
+			}
 		}
 	}
 
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_bloody_talons"
+		
+		ERA = {
+			country_event = {
+				id = redeye.99
+			}
+		}
+	}
 }
 
 shared_focus = { 
@@ -2036,7 +2036,7 @@ shared_focus = {
 	relative_position_id = RED_drums_of_war
 	x = 0
 	y = 1
-	cost = 10
+	cost = 5
 
 	bypass = {
         NOT = { country_exists = GUN }
@@ -2064,7 +2064,7 @@ shared_focus = {
 	cost = 10
 
 	prerequisite = { focus = RED_break_the_mob } 
-	prerequisite = { focus = RED_restore_canterlot } 
+	prerequisite = { focus = RED_bloody_talons } 
 	ai_will_do = { 
 		factor = 45
 	} 
@@ -2953,21 +2953,11 @@ shared_focus = {
 		factor = 55
 	} 
 
-	will_lead_to_war_with = HIT
-	will_lead_to_war_with = GRV
 	will_lead_to_war_with = CCD
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_foal_mountains"
 
-		declare_war_on = {
-    		target = HIT
-    		type = annex_everything
-		}
-		declare_war_on = {
-    		target = GRV
-    		type = annex_everything
-		}
 		declare_war_on = {
     		target = CCD
     		type = annex_everything
