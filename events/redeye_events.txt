@@ -2339,6 +2339,10 @@ country_event = { #Chainlink's Coup
 				sadist_slaver
 			}
 		}
+		hidden_effect = {
+			drop_cosmetic_tag = yes
+			set_cosmetic_tag = RED_chainlink
+		}
 		remove_ideas = {
 			starving_talons_idea
 		}
@@ -2634,7 +2638,7 @@ country_event = { #NCG does not submit
 		ai_chance = { factor = 50}
 
 		create_wargoal = {
-    		type = puppet
+    		type = puppet_wargoal_focus
     		target = NCG
 		}
 	}
@@ -2685,6 +2689,104 @@ country_event = { #Traded with Red Eye
 				one_random_infrastructure = yes
 			}
 		}
+	}
+}
+
+country_event = { #Slaver Marraige Propsal - ERA
+ 	id = redeye.105
+ 	title = redeye.105.title
+ 	desc = redeye.105.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Accept
+		name = redeye.105.a
+		ai_chance = { factor = 80}
+		RED = {
+			country_event = {
+				id = redeye.106
+				days = 6
+			}
+		}
+	}
+
+	option = { #With Chainlink? Never!
+		name = redeye.105.b
+		ai_chance = { factor = 20}
+		RED = {
+			country_event = {
+				id = redeye.107
+				days = 6
+			}
+		}
+	}
+}
+
+country_event = { #Blood Mane Accepts
+ 	id = redeye.106
+ 	title = redeye.106.title
+ 	desc = redeye.106.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = redeye.106.a
+		ai_chance = { factor = 80}
+		if = {
+			limit = {
+				has_dlc = "Together for Victory"
+			}
+			set_autonomy = {
+				target = ERA
+				autonomous_state = autonomy_personal_union
+			}
+			else = {
+				puppet = ERA
+			}
+		}
+	}
+}
+
+country_event = { #Blood Mane Reject's the Proposal
+ 	id = redeye.107
+ 	title = redeye.107.title
+ 	desc = redeye.107.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = redeye.107.a
+		ai_chance = { factor = 80}
+		ERA = {
+			remove_from_faction = BLOODY_PACT_NAME
+		}
+		create_wargoal = {
+   			target = ERA
+   			type = annex_everything
+		}
+	}
+}
+
+country_event = { #Slaver New Order
+ 	id = redeye.108
+ 	title = redeye.108.title
+ 	desc = redeye.108.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = redeye.108.a
+		ai_chance = { factor = 80}
+		add_stability = 0.25
+		add_political_power = 200
 	}
 }
 
