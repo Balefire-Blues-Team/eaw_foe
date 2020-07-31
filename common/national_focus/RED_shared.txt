@@ -1156,8 +1156,9 @@ shared_focus = {
 shared_focus = { 
 	id = RED_wasteland_army
 	icon = GFX_goal_generic_land_doctrines_focus
-	x = 26
-	y = 6
+	relative_position_id = RED_everfree_road
+	x = 0
+	y = 2
 	cost = 10
 
 	available = {
@@ -1186,7 +1187,7 @@ shared_focus = {
 	id = RED_merc_army
 	icon = GFX_goal_conscription
 	relative_position_id = RED_wasteland_army
-	x = 2
+	x = 4
 	y = 1
 	cost = 10
 
@@ -1196,7 +1197,7 @@ shared_focus = {
         focus = RED_slave_army
     }
     mutually_exclusive = {
-        focus = RED_conscript_army
+        focus = RED_raider_army
     }
 
 	ai_will_do = { 
@@ -1228,7 +1229,7 @@ shared_focus = {
         focus = RED_merc_army
     }
     mutually_exclusive = {
-        focus = RED_conscript_army
+        focus = RED_raider_army
     }
 
 	ai_will_do = { 
@@ -1237,20 +1238,16 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_slave_army"
-		add_tech_bonus = {
-    		bonus = 0.5
-    		uses = 2
-    		category = cat_terror_tactics
-		}
+		add_manpower = 1500
 	}
 
 } 
 
 shared_focus = { 
-	id = RED_conscript_army
-	icon = GFX_goal_military_mission_soldier
+	id = RED_raider_army
+	icon = GFX_goal_dead_boss
 	relative_position_id = RED_wasteland_army
-	x = -2
+	x = -4
 	y = 1
 	cost = 10
 
@@ -1268,25 +1265,116 @@ shared_focus = {
 	} 
 
 	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_conscript_army"
+		log = "[GetDateText]: [Root.GetName]: Focus RED_raider_army"
 		add_tech_bonus = {
     		bonus = 0.5
     		uses = 2
-    		category = cat_grand_army
+    		category = cat_terror_tactics
 		}
 	}
 
 } 
 
 shared_focus = { 
-	id = RED_combat_doctrine
-	icon = GFX_goal_bookstack
-	relative_position_id = RED_conscript_army
-	x = -2
+	id = RED_military_cache
+	icon = GFX_goal_generic_supplies_focus
+	relative_position_id = RED_raider_army
+	x = 0
 	y = 1
 	cost = 10
 
-	prerequisite = { focus = RED_conscript_army } 
+	prerequisite = { focus = RED_raider_army } 
+
+	ai_will_do = { 
+		factor = 0
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_military_cache"
+		if = {
+			limit = { has_tech = ballistic_weaponry_tech_2 }
+			add_equipment_to_stockpile = {
+    			type = ballistic_equipment_2
+    			amount = 2000
+    			producer = RED
+			}
+		}
+		else = {
+			set_technology = {
+    			ballistic_weaponry_tech_2 = 1
+			}
+			add_equipment_to_stockpile = {
+    			type = ballistic_equipment_2
+    			amount = 2000
+    			producer = RED
+			}
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = RED_strong_leadership
+	icon = GFX_goal_step_on_skull
+	relative_position_id = RED_military_cache
+	x = 0
+	y = 1
+	cost = 10
+
+	prerequisite = { focus = RED_military_cache } 
+
+	ai_will_do = { 
+		factor = 0
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_strong_leadership"
+
+		RED_better_army = yes
+	}
+
+}
+
+shared_focus = { 
+	id = RED_tank_focus
+	icon = GFX_focus_NZL_bob_semple_tank
+	relative_position_id = RED_strong_leadership
+	x = 0
+	y = 2
+	cost = 10
+
+	prerequisite = { focus = RED_strong_leadership } 
+	prerequisite = { focus = RED_motor_focus }
+	prerequisite = { focus = RED_weapons_of_war }  
+
+	ai_will_do = { 
+		factor = 0
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: RED_tank_focus"
+
+		set_technology = {
+    		tank_tech_1 = 1
+		}
+		
+	}
+
+}
+
+shared_focus = { 
+	id = RED_combat_doctrine
+	icon = GFX_goal_bookstack
+	relative_position_id = RED_raider_army
+	x = 2
+	y = 1
+	cost = 10
+
+	prerequisite = { 
+		focus = RED_raider_army
+		focus = RED_slave_army
+		focus = RED_merc_army
+	} 
 
 	ai_will_do = { 
 		factor = 0
@@ -1300,14 +1388,116 @@ shared_focus = {
 } 
 
 shared_focus = { 
-	id = RED_slave_loyalty
-	icon = GFX_goal_redeye_army
+	id = RED_motor_focus
+	icon = GFX_goal_NCR_Army_of_Mobility
+	relative_position_id = RED_combat_doctrine
+	x = 0
+	y = 2
+	cost = 10
+
+	prerequisite = { focus = RED_combat_doctrine }
+	prerequisite = { 
+		focus = RED_strong_leadership
+		focus = RED_slave_commanders
+		focus = RED_talon_training
+	}
+
+	ai_will_do = { 
+		factor = 0
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_motor_focus"
+
+		add_tech_bonus = {
+    		bonus = 0.75
+    		uses = 1
+    		category = motorized_equipment
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = RED_fighters_workers
+	icon = GFX_goal_revolution_pony
 	relative_position_id = RED_slave_army
 	x = 0
 	y = 1
 	cost = 10
 
 	prerequisite = { focus = RED_slave_army } 
+
+	ai_will_do = { 
+		factor = 0
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_fighters_workers"
+		48 = {
+			decimate_half_all_industry = yes
+			add_manpower = -4500
+		}
+		add_manpower = 4500
+	}
+
+}
+
+shared_focus = { 
+	id = RED_slave_commanders
+	icon = GFX_goal_generic_pony_volunteer
+	relative_position_id = RED_fighters_workers
+	x = 0
+	y = 1
+	cost = 10
+
+	prerequisite = { focus = RED_fighters_workers } 
+
+	ai_will_do = { 
+		factor = 0
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_slave_commanders"
+		create_corps_commander = {
+			name = "Lavender Basket"
+			picture = "Lavender.tga"
+			traits = { enduring_trait pony_race_trait }
+			skill = 3
+			attack_skill = 2
+			defense_skill = 4
+			planning_skill = 3
+			logistics_skill = 1
+			id = 1004
+		}
+		custom_effect_tooltip = RED_lavender_stats_tt
+		create_corps_commander = {
+			name = "Bleeding Heart"
+			picture = "BleedingHeart.dds"
+			traits = { pony_race_trait charismatic_trait }
+			skill = 2
+			attack_skill = 1
+			defense_skill = 2
+			planning_skill = 3
+			logistics_skill = 2
+			id = 1001
+		}
+		custom_effect_tooltip = RED_bleeding_stats_tt
+	}
+
+}
+
+shared_focus = { 
+	id = RED_slave_loyalty
+	icon = GFX_goal_redeye_army
+	relative_position_id = RED_slave_commanders
+	x = 0
+	y = 2
+	cost = 10
+
+	prerequisite = { focus = RED_slave_commanders }
+	prerequisite = { focus = RED_motor_focus }
+	prerequisite = { focus = RED_weapons_of_war }  
 
 	ai_will_do = { 
 		factor = 0
@@ -1329,7 +1519,7 @@ shared_focus = {
 	id = RED_elite_mercs
 	icon = GFX_goal_griffon_special_force
 	relative_position_id = RED_merc_army
-	x = 2
+	x = 0
 	y = 1
 	cost = 10
 
@@ -1347,58 +1537,64 @@ shared_focus = {
 		}
 	}
 
-} 
+}
 
 shared_focus = { 
-	id = RED_military_cache
-	icon = GFX_goal_generic_supplies_focus
-	relative_position_id = RED_conscript_army
+	id = RED_talon_training
+	icon = GFX_goal_RED_stern
+	relative_position_id = RED_elite_mercs
 	x = 0
 	y = 1
 	cost = 10
 
-	prerequisite = { 
-		focus = RED_slave_army 
-		focus = RED_conscript_army
-	} 
+	prerequisite = { focus = RED_elite_mercs } 
 
 	ai_will_do = { 
 		factor = 0
 	} 
 
 	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_military_cache"
-		if = {
-			limit = { has_tech = improved_ballistic_weaponry }
-			add_equipment_to_stockpile = {
-    			type = ballistic_equipment_2
-    			amount = 2000
-    			producer = RED
-			}
-		}
-		else = {
-			set_technology = {
-    			improved_ballistic_weaponry = 1
-			}
-			add_equipment_to_stockpile = {
-    			type = ballistic_equipment_2
-    			amount = 2000
-    			producer = RED
-			}
+		log = "[GetDateText]: [Root.GetName]: Focus RED_talon_training"
+		add_ideas = training_law_talon
+	}
+
+}
+
+shared_focus = { 
+	id = RED_pa_focus
+	icon = GFX_goal_generic_t51b_power_armour_focus
+	relative_position_id = RED_talon_training
+	x = 0
+	y = 2
+	cost = 10
+
+	prerequisite = { focus = RED_talon_training } 
+	prerequisite = { focus = RED_motor_focus }
+	prerequisite = { focus = RED_weapons_of_war }  
+
+	ai_will_do = { 
+		factor = 0
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: RED_pa_focus"
+		set_technology = {
+    		power_armour_talon = 1
 		}
 	}
 
 }
 
 shared_focus = { 
-	id = RED_talon_commanders
-	icon = GFX_goal_griffon_knights
+	id = RED_anti_tank_focus
+	icon = GFX_goal_anti_tank
 	relative_position_id = RED_merc_army
-	x = 0
+	x = -2
 	y = 1
 	cost = 10
 
 	prerequisite = { 
+		focus = RED_raider_army
 		focus = RED_slave_army 
 		focus = RED_merc_army
 	} 
@@ -1408,65 +1604,15 @@ shared_focus = {
 	} 
 
 	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_talon_commanders"
-		create_field_marshal = {
-			name = "Heinreich Von Goldwing"
-			traits = { merc_commander trait_reckless }
-			skill = 3
-			rank = 1
-			attack_skill = 3
-			defense_skill = 1
-			planning_skill = 2
-			logistics_skill = 1
+		log = "[GetDateText]: [Root.GetName]: Focus RED_anti_tank_focus"
+
+		add_tech_bonus = {
+    		bonus = 0.75
+    		uses = 1
+    		category = anti_tank_tech
 		}
-		create_corps_commander = {
-			name = "Murwyn"
-			traits = { merc_commander }
-			skill = 2
-			rank = 1
-			attack_skill = 1
-			defense_skill = 1
-			planning_skill = 1
-			logistics_skill = 2
-		}
-		create_corps_commander = {
-			name = "Beaklin Varney"
-			traits = { merc_commander }
-			skill = 2
-			rank = 1
-			attack_skill = 1
-			defense_skill = 1
-			planning_skill = 2
-			logistics_skill = 1
-		}
-	}
-
-}
-
-shared_focus = { 
-	id = RED_discipline_army
-	icon = GFX_goal_generic_security_crackdown
-	relative_position_id = RED_talon_commanders
-	x = -1
-	y = 1
-	cost = 15
-
-	prerequisite = { 
-		focus = RED_talon_commanders
-		focus = RED_military_cache
-	} 
-
-	ai_will_do = { 
-		factor = 0
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_discipline_army"
-
-		country_event = {
-    		id = redeye.6
-    		days = 80
-    		random = 50
+		set_technology = {
+			anti_tank_equipment_tech_3 = 1
 		}
 	}
 
@@ -1474,16 +1620,18 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_weapons_of_war
-	icon = GFX_KHA_focus_arty
-	relative_position_id = RED_military_cache
-	x = 1
-	y = 1
+	icon = GFX_goal_MOJ_gun_runner_caravan_raids
+	relative_position_id = RED_anti_tank_focus
+	x = 0
+	y = 2
 	cost = 10
 
+	prerequisite = { focus = RED_anti_tank_focus }
 	prerequisite = { 
-		focus = RED_talon_commanders
-		focus = RED_military_cache
-	} 
+		focus = RED_strong_leadership
+		focus = RED_slave_commanders
+		focus = RED_talon_training
+	}
 
 	ai_will_do = { 
 		factor = 0
@@ -1495,84 +1643,7 @@ shared_focus = {
 		add_tech_bonus = {
     		bonus = 0.75
     		uses = 1
-    		category = artillery
-		}
-	}
-
-}
-
-shared_focus = { 
-	id = RED_motor_focus
-	icon = GFX_goal_NCR_Army_of_Mobility
-	relative_position_id = RED_weapons_of_war
-	x = 1
-	y = 1
-	cost = 10
-
-	prerequisite = { focus = RED_weapons_of_war } 
-	prerequisite = { focus = RED_discipline_army } 
-
-	ai_will_do = { 
-		factor = 0
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_motor_focus"
-
-		add_tech_bonus = {
-    		bonus = 0.75
-    		uses = 1
-    		category = motorized_equipment
-		}
-	}
-
-}
-
-shared_focus = { 
-	id = RED_tank_focus
-	icon = GFX_focus_NZL_bob_semple_tank
-	relative_position_id = RED_weapons_of_war
-	x = -1
-	y = 1
-	cost = 10
-
-	prerequisite = { focus = RED_weapons_of_war } 
-	prerequisite = { focus = RED_discipline_army } 
-
-	ai_will_do = { 
-		factor = 0
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: RED_tank_focus"
-
-		set_technology = {
-    		tank_tech_2 = 1
-		}
-		
-	}
-
-}
-
-shared_focus = { 
-	id = RED_pa_focus
-	icon = GFX_goal_generic_t51b_power_armour_focus
-	relative_position_id = RED_discipline_army
-	x = 1
-	y = 1
-	cost = 12
-
-	prerequisite = { focus = RED_weapons_of_war } 
-	prerequisite = { focus = RED_discipline_army } 
-
-	ai_will_do = { 
-		factor = 0
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: RED_pa_focus"
-		set_technology = {
-    		power_armour_talon = 1
+    		category = infantry_tech
 		}
 	}
 
