@@ -27,7 +27,7 @@ country_event = {
 	option = {
 	ai_chance = { factor = 10 }
 		name = shatteredhoof.1.c
-		610 = { add_building_construction = {type = arms_factory level = 1 instant_build = yes } add_building_construction = {type = infrastructure level = 1 instant_build = yes } }	
+		610 = { add_extra_state_shared_building_slots = 1 add_building_construction = {type = arms_factory level = 1 instant_build = yes } add_building_construction = {type = infrastructure level = 1 instant_build = yes } }	
 	}
 	
 }
@@ -1820,6 +1820,394 @@ country_event = {
 		name = shatteredhoof_ncr.23.c
 		
 	}	
+}
+
+#How to deal with the Steel Rangers
+country_event = {
+ 	id = shatteredhoof_ncr.24
+ 	title = shatteredhoof_ncr.24.t
+ 	desc = shatteredhoof_ncr.24.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 10 }
+		name = shatteredhoof_ncr.24.a
+		MSR = { country_event = { id = shatteredhoof_ncr.25 }}
+	}
+	
+	option = {
+	ai_chance = { factor = 10 }
+		name = shatteredhoof_ncr.24.b
+		add_stability = 0.03
+	}
+	
+}
+
+#NCR is offering an alliance
+country_event = {
+ 	id = shatteredhoof_ncr.25
+ 	title = shatteredhoof_ncr.25.t
+ 	desc = shatteredhoof_ncr.25.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 20 }
+		name = shatteredhoof_ncr.25.a
+		dismantle_faction = yes
+		SHA = { add_to_faction = MSR}
+		add_timed_idea = { idea = NCR_investement_from_sha days = 365 }
+		hidden_effect = {
+			SHA = {
+					add_ai_strategy = {
+						type = alliance
+						id = "MSR"
+						value = 200
+					}
+					
+				}
+			MSR = {
+					add_ai_strategy = {
+						type = alliance
+						id = "SHA"
+						value = 200
+					}
+					
+			}
+		}
+	}
+	
+	option = {
+	ai_chance = { factor = 10 }
+		name = shatteredhoof_ncr.25.b
+		add_war_support = 0.05
+		SHA = { country_event = { id = shatteredhoof_ncr.26 }}
+	}
+	
+}
+
+#MSR refuses
+country_event = {
+ 	id = shatteredhoof_ncr.26
+ 	title = shatteredhoof_ncr.26.t
+ 	desc = shatteredhoof_ncr.26.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 10 }
+		name = shatteredhoof_ncr.26.a
+		add_war_support = 0.05
+		hidden_effect = {
+			set_country_flag = SHA_MSR_refused_us_flag
+		}
+	}
+	
+}
+
+#Fillydelphia Panis
+country_event = {
+ 	id = shatteredhoof_ncr.27
+ 	title = shatteredhoof_ncr.27.t
+ 	desc = shatteredhoof_ncr.27.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	trigger { 
+		MSR = {
+			is_in_faction_with = SHA
+		}
+	}
+	ai_chance = { factor = 10 }
+		name = shatteredhoof_ncr.27.a
+		MSR = {
+				country_event = { id = shatteredhoof_ncr.29 }
+			}
+	}
+	
+	option = {
+	ai_chance = { factor = 15 
+		modifier = {
+			factor = 0
+			MSR = {
+			is_in_faction_with = SHA
+			}
+		}
+	}
+		name = shatteredhoof_ncr.27.b
+		if = {
+			limit = {
+				MSR = {
+					is_in_faction_with = SHA
+				}
+			}
+			MSR = {
+				leave_faction = yes
+				country_event = { id = shatteredhoof_ncr.28 }
+			}
+			hidden_effect = {
+			SHA = {
+					add_ai_strategy = {
+						type = alliance
+						id = "MSR"
+						value = -200
+					}
+					
+				}
+			MSR = {
+					add_ai_strategy = {
+						type = alliance
+						id = "SHA"
+						value = -200
+					}
+					
+			}
+			}
+		}
+		
+	}
+	
+	option = {
+	trigger { 
+		has_country_flag = SHA_MSR_refused_us_flag
+	}
+	ai_chance = { factor = 10 }
+		name = shatteredhoof_ncr.27.c
+		custom_effect_tooltip = SHA_form_new_rangers_tt
+		hidden_effect = {
+			FSR = {
+				transfer_state = 538
+				transfer_state = 536
+				transfer_state = 542
+				transfer_state = 545
+				transfer_state = 543
+				transfer_state = 546
+				transfer_state = 558
+				drop_cosmetic_tag = yes
+				set_cosmetic_tag = FSR_NCR_puppet
+			}
+			puppet = FSR
+			every_state = {
+				limit = { is_owned_by = FSR}
+				add_core_of = FSR
+			}
+		}
+	}	
+}
+
+
+#SHA betrayed MSR
+country_event = {
+ 	id = shatteredhoof_ncr.28
+ 	title = shatteredhoof_ncr.28.t
+ 	desc = shatteredhoof_ncr.28.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 10 }
+		name = shatteredhoof_ncr.28.a
+		SHA = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+	}
+		
+}
+
+#NCR wants us to relocate to Fillydelphia
+country_event = {
+ 	id = shatteredhoof_ncr.29
+ 	title = shatteredhoof_ncr.29.t
+ 	desc = shatteredhoof_ncr.29.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 10 }
+		name = shatteredhoof_ncr.29.a
+		custom_effect_tooltip = MSR_relocate_filly_tt
+		hidden_effect = {
+			every_state = {
+				limit = { is_core_of = MSR}
+				remove_core_of = MSR
+				add_core_of = SHA
+			}
+			every_state = {
+				limit = { is_owned_by = MSR}
+				SHA = { transfer_state = PREV }
+			}
+			MSR = {
+				transfer_state = 538
+				transfer_state = 536
+				transfer_state = 542
+				transfer_state = 545
+				transfer_state = 543
+				transfer_state = 546
+				transfer_state = 558
+			}
+			every_state = {
+				limit = { is_owned_by = MSR}
+				add_core_of = MSR
+			}
+			
+		}
+	}
+	
+	option = {
+	ai_chance = { factor = 10 }
+		name = shatteredhoof_ncr.29.b
+		MSR = {
+				leave_faction = yes
+			}
+		SHA = {
+			MSR = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+		hidden_effect = {
+			SHA = {
+					add_ai_strategy = {
+						type = alliance
+						id = "MSR"
+						value = -200
+					}
+					
+				}
+			MSR = {
+					add_ai_strategy = {
+						type = alliance
+						id = "SHA"
+						value = -200
+					}
+					
+			}
+		}
+	}
+	
+}
+
+
+country_event = {
+ 	id = shatteredhoof_ncr.30
+ 	title = shatteredhoof_ncr.30.t
+ 	desc = shatteredhoof_ncr.30.d
+	picture = GFX_event_test
+
+	trigger = {
+		original_tag = SHA
+		owns_state = 696
+		has_completed_focus = NCR_the_first_election
+	}
+	mean_time_to_happen = { days = 100}
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 10 }
+		name = shatteredhoof_ncr.30.a
+		add_ideas = followers_of_the_apocalypse_idea
+	}
+		
+}
+
+country_event = {
+ 	id = shatteredhoof_ncr.31
+ 	title = shatteredhoof_ncr.31.t
+ 	desc = shatteredhoof_ncr.31.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 10 }
+		name = shatteredhoof_ncr.31.a
+		remove_ideas = followers_of_the_apocalypse_idea
+		add_stability = -0.08
+		add_popularity = {
+					ideology = survivalism
+					popularity = -0.1
+				}
+		add_political_power = 50
+	}
+		
+}
+
+#NCR wants to puppet TEN
+country_event = {
+ 	id = shatteredhoof_ncr.32
+ 	title = shatteredhoof_ncr.32.t
+ 	desc = shatteredhoof_ncr.32.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 80 }
+		name = shatteredhoof_ncr.32.a
+		SHA = {
+			puppet = TEN
+		}
+		retire_country_leader = yes
+		create_country_leader = {
+			name = "Governor Highrise"
+			picture = 
+			expire = "1965.1.1"
+			ideology = ncr_urp
+			desc = 
+			traits = {  }
+		}
+		drop_cosmetic_tag = yes
+		set_cosmetic_tag = TEN_NCR_state
+	}
+	
+	option = {
+	ai_chance = { factor = 20 }
+		name = shatteredhoof_ncr.32.b
+		TEN = {
+				leave_faction = yes
+			}
+		SHA = {
+			declare_war_on = TEN
+		}
+		hidden_effect = {
+			SHA = {
+					add_ai_strategy = {
+						type = alliance
+						id = "TEN"
+						value = -200
+					}
+					
+				}
+			TEN = {
+					add_ai_strategy = {
+						type = alliance
+						id = "SHA"
+						value = -200
+					}
+					
+			}
+		}
+	}
+	
 }
 
 

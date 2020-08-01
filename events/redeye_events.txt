@@ -1,6 +1,6 @@
 add_namespace = redeye
-add_namespace = redeye_canterlot
 add_namespace = redeye_stablize
+add_namespace = redeye_borderwar
 add_namespace = redeye_stabletec
 
 ##Birth Of A Monster
@@ -197,6 +197,18 @@ country_event = {
 
 		add_ideas = raider_partisans
 
+		554 = {
+			set_demilitarized_zone = yes
+		}
+		487 = {
+			set_demilitarized_zone = yes
+		}
+		50 = {
+			set_demilitarized_zone = yes
+		}
+		543 = {
+			set_demilitarized_zone = yes
+		}
 	}
 }
 
@@ -213,7 +225,6 @@ country_event = {
 		name = redeye.6.a
 		ai_chance = { factor = 5 }
 
-		remove_ideas = army_chaos
 	}
 }
 
@@ -353,11 +364,16 @@ country_event = {
 	option = {
 		name = redeye.12.a
 		ai_chance = { factor = 50}
-		
+		hidden_effect = {
+			set_country_flag = RED_foaltopia_accepts_flag
+		}
+
 		annex_country = {
     		target = FTP
     		transfer_troops = no
 		}
+
+		custom_effect_tooltip = RED_foaltopia_cut_off_tt
 	}
 }
 
@@ -1214,7 +1230,7 @@ country_event = { #Blood Mane Declines
 	}
 
 	option = {
-		name = redeye.43.a
+		name = redeye.43.b
 		ai_chance = { factor = 50}
 
 		trigger = {
@@ -1545,7 +1561,7 @@ country_event = { #Freedom through Unity
 
 	option = { 
 		name = redeye.57.a
-		ai_chance = { factor = 50}
+		
 		
 	}
 }
@@ -1562,18 +1578,17 @@ country_event = {
 
  	option = { #Let Them Fight
 		name = redeye.58.a
-		ai_chance = { factor = 10 }
+		ai_chance = { factor = 50}
 
-		hidden_effect = { 
-				random_unit_leader = {
-					limit = {
-						has_id = id = 59302
-					}
-					promote_leader = yes
-					set_nationality = RSH
+		#hidden_effect = { 
+			every_unit_leader = {
+				limit = {
+					has_id = 59302
 				}
+				promote_leader = yes
+				set_nationality = RSH
 			}
-		}
+		#}
 	}
 
 	option = { #Fight as RSH
@@ -1582,15 +1597,14 @@ country_event = {
 
 		custom_effect_tooltip = RED_play_RSH_tt
 
-		hidden_effect = { 
+		#hidden_effect = { 
 			RSH = { change_tag_from = ROOT }
-				random_unit_leader = {
-					limit = { has_id = id = 59302 }
-					promote_leader = yes
-					set_nationality = RSH
-				}
+			every_unit_leader = {
+				limit = { has_id = 59302 }
+				promote_leader = yes
+				set_nationality = RSH
 			}
-		}
+		#}
 	}
 }
 
@@ -1620,6 +1634,7 @@ country_event = {
 				limit = { is_core_of = SHA }
 				add_core_of = RSH
 			}
+			load_oob = SHA_invasion_militia
 			RSH = {
 				add_manpower = 800
 				transfer_state = 562
@@ -2266,645 +2281,513 @@ country_event = { #Chainlink's Demise
 	}
 }
 
-############################
-### Canterlot Expedition ###
-############################
-
-country_event = { #Canterlot Expedition
- 	id = redeye_canterlot.1
- 	title = redeye_canterlot.1.title
- 	desc = redeye_canterlot.1.desc
+country_event = { #Win Over Cathedral
+ 	id = redeye.88
+ 	title = redeye.88.title
+ 	desc = redeye.88.desc
 	picture = GFX_event_test
 
-	is_triggered_only = yes
- 	
-
-	option = { # Use Talons
-		name = redeye_canterlot.1.a
-		ai_chance = { factor = 50}
-		
-		trigger = {
-			check_variable = { RED_canter_talon_dead < 4 }
-		}
-
-		hidden_effect = {
-			set_country_flag = canterlot_ex_talon
-			country_event = {
-    			id = redeye_canterlot.2
-    			days = 10
-    			random = 2
-			}
-		}
-	}
-
-	option = { #Hire Wastelanders
-		name = redeye_canterlot.1.b
-		ai_chance = { factor = 20}
-
-		trigger = {
-			NOT = {
-				has_country_flag = canterlot_ex_waste_dead
-			}
-		}
-		
-		hidden_effect = {
-			set_country_flag = canterlot_ex_waste
-			country_event = {
-    			id = redeye_canterlot.3
-			}
-		}
-	}
-
-	option = { #Send Slaves
-		name = redeye_canterlot.1
-		ai_chance = { factor = 35}
-		
-		hidden_effect = {
-			set_country_flag = canterlot_ex_slave
-			country_event = {
-    			id = redeye_canterlot.4
-    			days = 10
-    			random = 2
-			}
-		}
-	}
-}
-
-country_event = { #Canterlot Expedition 2: Talon
- 	id = redeye_canterlot.2
- 	title = redeye_canterlot.2.title
- 	desc = redeye_canterlot.2.desc
-	picture = GFX_event_test
-
-	is_triggered_only = yes
- 	
-
-	option = { #Ministry Walk
-		name = redeye_canterlot.2.a
-		ai_chance = { factor = 50}
-		
-		hidden_effect = {
-			random_list = {
-				50 = {
-					country_event = {
-	    				id = redeye_canterlot.10
-	    				days = 5
-	    				random = 2
-					}
-				}
-				50 = {
-					country_event = {
-	    				id = redeye_canterlot.11
-	    				days = 5
-	    				random = 2
-					}
-				}
-			}
-		}
-	}
-
-	option = { #Dry run at Zebratown
-		name = redeye_canterlot.2.c
-		ai_chance = { factor = 50}
-		
-		hidden_effect = {
-			random_list = {
-				60 = {
-					country_event = {
-	    				id = redeye_canterlot.6
-	    				days = 5
-	    				random = 2
-					}
-				}
-				40 = {
-					country_event = {
-	    				id = redeye_canterlot.7
-	    				days = 5
-	    				random = 2
-					}
-				}
-			}
-		}
-	}
-}
-
-country_event = { #Canterlot Expedition 2: Wastelanders
- 	id = redeye_canterlot.3
- 	title = redeye_canterlot.3.title
- 	desc = redeye_canterlot.3.desc
-	picture = GFX_event_test
-
-	is_triggered_only = yes
-
-	option = { #Hire them
-		name = redeye_canterlot.3.a
-		ai_chance = { factor = 50}
-		
-		hidden_effect = {
-			country_event = {
-    			id = redeye_canterlot.5
-			}
-		}
-	}
-
-	option = { #Don't hire them
-		name = redeye_canterlot.3.b
-		ai_chance = { factor = 0}
-		
-		hidden_effect = {
-			country_event = {
-    			id = redeye_canterlot.1
-			}
-		}
-	}
-}
-
-country_event = { #Canterlot Expedition 2: Slaves
- 	id = redeye_canterlot.4
- 	title = redeye_canterlot.4.title
- 	desc = redeye_canterlot.4.desc
-	picture = GFX_event_test
-
-	is_triggered_only = yes
- 	
-
-	option = { #Ministry Walk
-		name = redeye_canterlot.4.a
-		ai_chance = { factor = 50}
-		
-		hidden_effect = {
-			random_list = {
-				30 = {
-					country_event = {
-	    				id = redeye_canterlot.10
-	    				days = 5
-	    				random = 2
-					}
-				}
-				70 = {
-					country_event = {
-	    				id = redeye_canterlot.11
-	    				days = 5
-	    				random = 2
-					}
-				}
-			}
-		}
-	}
-}
-
-country_event = { #Canterlot Expedition: Wastelander Canterlot
-	id = redeye_canterlot.5
- 	title = redeye_canterlot.5.title
-	desc = redeye_canterlot.5.desc
-	picture = GFX_event_test
-	
 	is_triggered_only = yes
  	fire_only_once = yes
 
-	option = { #Ministry Walk
-		name = redeye_canterlot.5.a
+	option = {
+		name = redeye.88.a
+	}
+}
+
+country_event = { #Win Over OAP
+ 	id = redeye.89
+ 	title = redeye.89.title
+ 	desc = redeye.89.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = redeye.89.a
+	}
+}
+
+country_event = { #Chainlink's Coup
+ 	id = redeye.90
+ 	title = redeye.90.title
+ 	desc = redeye.90.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = redeye.90.a
+
+		kill_country_leader = yes
+		add_popularity = {
+  			ideology = destruction
+    		popularity = 0.15
+		}
+		add_stability = -0.05
+		add_political_power = -100
+		create_country_leader = {
+			name = "Chainlink Shackles"
+			#desc = "The True Emperor"
+			picture = "ChainlinkShackles.tga"
+			expire = "1965.1.1"
+			ideology = slaver
+			traits = {
+				sadist_slaver
+			}
+		}
+		hidden_effect = {
+			drop_cosmetic_tag = yes
+			set_cosmetic_tag = RED_chainlink
+		}
+		remove_ideas = {
+			starving_talons_idea
+		}
+		45 = {
+			set_demilitarized_zone = no
+		}
+		532 = {
+			set_demilitarized_zone = no
+		}
+		48 = {
+			set_demilitarized_zone = no
+		}
+		525 = {
+			set_demilitarized_zone = no
+		}
+	}
+}
+
+country_event = { #Protege is murdered
+ 	id = redeye.91
+ 	title = redeye.91.title
+ 	desc = redeye.91.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = redeye.91.a
+		set_country_flag = RED_protege_dead
+	}
+}
+
+country_event = { #Master Proposal - ERA
+ 	id = redeye.92
+ 	title = redeye.92.title
+ 	desc = redeye.92.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #sure
+		name = redeye.92.a
 		ai_chance = { factor = 50}
-			
-		hidden_effect = { 
-			random_list = {
-				60 = {
-					country_event = {
-	    				id = redeye_canterlot.10
-	    				days = 5
-	    				random = 2
-					}
-				}
-				40 = {
-					country_event = {
-	    				id = redeye_canterlot.11
-	    				days = 5
-	    				random = 2
-					}
-				}
+		custom_effect_tooltip = RED_attack_MWY_month_tt
+		RED = {
+			country_event = {
+				id = redeye.93
+				days = 6
 			}
 		}
 	}
 
-	option = { #Zebratown Dry Run
-		name = redeye_canterlot.5.c
-		ai_chance = { factor = 70}
-		
-		hidden_effect = { 
-			random_list = {
-				65 = {
-					country_event = {
-	    				id = redeye_canterlot.10
-	    				days = 5
-	    				random = 2
-					}
-				}
-				30 = {
-					country_event = {
-	    				id = redeye_canterlot.11
-	    				days = 5
-	    				random = 2
-					}
-				}
-			}
-		}
-	}
-
-	option = { #Crystal Caverns
-		name = redeye_canterlot.5.d
-		ai_chance = { factor = 50}
-		
-		hidden_effect = { 
-			random_list = {
-				75 = {
-					country_event = {
-	    				id = redeye_canterlot.8
-	    				days = 5
-	    				random = 2
-					}
-				}
-				25 = {
-					country_event = {
-	    				id = redeye_canterlot.9
-	    				days = 5
-	    				random = 2
-					}
-				}
+	option = { #no
+		name = redeye.92.b
+		ai_chance = { factor = 10}
+		RED = {
+			country_event = {
+				id = redeye.95
+				days = 6
 			}
 		}
 	}
 }
 
-country_event = { #Canterlot Expedition: Zebratown Success
- 	id = redeye_canterlot.6
- 	title = redeye_canterlot.6.title
- 	desc = redeye_canterlot.6.desc
+country_event = { #Proposal Succeeds
+ 	id = redeye.93
+ 	title = redeye.93.title
+ 	desc = redeye.93.desc
 	picture = GFX_event_test
 
 	is_triggered_only = yes
- 	
-	immediate = {
-		set_country_flag = canterlot_ex_zebratown_win
-	}
+ 	fire_only_once = yes
 
-	option = { #Ministry Walk
-		name = redeye_canterlot.6.a
-		ai_chance = { factor = 50}
-		
-		hidden_effect = {
-			random_list = {
-				75 = {
-					country_event = {
-	    				id = redeye_canterlot.6
-	    				days = 5
-	    				random = 2
-					}
-				}
-				25 = {
-					country_event = {
-	    				id = redeye_canterlot.7
-	    				days = 5
-	    				random = 2
-					}
-				}
-			}
-		}
-	}
-
-	option = { #Crystal Caverns
-		name = redeye_canterlot.6.b
+	option = { #Mazel-Tov!
+		name = redeye.93.a
 		ai_chance = { factor = 50}
 
-		trigger = { has_country_flag = canterlot_ex_waste }		
-
-		hidden_effect = {
-			random_list = {
-				85 = {
-					country_event = {
-	    				id = redeye_canterlot.8
-	    				days = 5
-	    				random = 2
-					}
-				}
-				15 = {
-					country_event = {
-	    				id = redeye_canterlot.9
-	    				days = 5
-	    				random = 2
-					}
-				}
-			}
-		}
-		
-	}
-}
-
-country_event = { #Canterlot Expedition: Zebratown Failure
- 	id = redeye_canterlot.7
- 	title = redeye_canterlot.7.title
- 	desc = redeye_canterlot.7.desc
-	picture = GFX_event_test
-
-	is_triggered_only = yes
- 	
-	immediate = {
-		if = {
-			limit = { has_country_flag = canterlot_ex_waste }
-			clr_country_flag = canterlot_ex_waste
-			set_country_flag = canterlot_ex_waste_dead
-		}
-		else_if = {
-			limit = { has_country_flag = canterlot_ex_talon }
-			add_to_variable = {var = RED_canter_talon_dead value = 1}
-			clr_country_flag = canterlot_ex_talon
-		}
-	}
-
-	option = { #Organize another expedition
-		name = redeye_canterlot.7.a
-		ai_chance = { factor = 50}
-		
+		create_faction = BLOODY_PACT_NAME
+		RED = { add_to_faction = ERA }
+		custom_effect_tooltip = RED_attack_MWY_month_tt
 		hidden_effect = {
 			country_event = {
-    			id = redeye_canterlot.1
-    			days = 30
-    			random = 2
+				id = redeye.94
+				days = 30
 			}
 		}
 	}
 }
 
-country_event = { #Canterlot Expedition: Crystal Caverns Success
- 	id = redeye_canterlot.8
- 	title = redeye_canterlot.8.title
- 	desc = redeye_canterlot.8.desc
+country_event = { #War were declare
+ 	id = redeye.94
+ 	title = redeye.94.title
+ 	desc = redeye.94.desc
 	picture = GFX_event_test
 
 	is_triggered_only = yes
+ 	fire_only_once = yes
 
-	option = { #Royal Palace
-		name = redeye_canterlot.8.b
+	option = {
+		name = redeye.94.a
+		ai_chance = { factor = 50}
+		ERA = {
+			declare_war_on = {
+   				target = MWY
+   				type = annex_everything
+			}
+		}
+		add_to_war = { 
+   			targeted_alliance = ERA
+    		enemy = MWY
+    		hostility_reason = asked_to_join
+		}
+	}
+}
+
+country_event = { #Proposal Fails
+ 	id = redeye.95
+ 	title = redeye.95.title
+ 	desc = redeye.95.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Shame.
+		name = redeye.95.a
+		ai_chance = { factor = 50}
+		create_wargoal = {
+   			target = MWY
+   			type = annex_everything
+		}
+		create_wargoal = {
+   			target = ERA
+   			type = annex_everything
+		}
+	}
+}
+
+country_event = { #MoM Secrets
+ 	id = redeye.96
+ 	title = redeye.96.title
+ 	desc = redeye.96.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = redeye.96.a
+		ai_chance = { factor = 50}
+		custom_effect_tooltip = RED_mom_secrets_tt
+	}
+}
+
+country_event = { #Send ERA Supplies
+ 	id = redeye.97
+ 	title = redeye.97.title
+ 	desc = redeye.97.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = redeye.97.a
+		ai_chance = { factor = 50}
+		send_equipment = {
+    		equipment = infantry_equipment
+   			amount = 500
+    		target = ERA
+		}
+		ERA = {
+			country_event = {
+				id = redeye.98
+			}
+		}
+	}
+}
+
+country_event = { #RED sends us guns - ERA
+ 	id = redeye.98
+ 	title = redeye.98.title
+ 	desc = redeye.98.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = redeye.98.a
+		ai_chance = { factor = 50}
+	}
+}
+
+country_event = { #RED sends us talons - ERA
+ 	id = redeye.99
+ 	title = redeye.99.title
+ 	desc = redeye.99.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = redeye.99.a
+		ai_chance = { factor = 50}
+		hidden_effect = {
+			load_oob = ERA_bloody_talons
+		}
+	}
+}
+
+country_event = { #RED demands our submission - NCG
+ 	id = redeye.100
+ 	title = redeye.100.title
+ 	desc = redeye.100.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #accept
+		name = redeye.100.a
+		ai_chance = { 
+			base = 20
+			modifier = {
+				add = 30
+				ERA = {
+					has_full_control_of_state = 549
+				}
+			}
+		}
+		RED = {
+			country_event = {
+				id = redeye.101
+				days = 4
+			}
+		}
+	}
+
+	option = { #decline
+		name = redeye.100.b
+		ai_chance = { 
+			base = 50
+		}
+		RED = {
+			country_event = {
+				id = redeye.102
+				days = 4
+			}
+		}
+	}
+}
+
+country_event = { #NCG submits
+ 	id = redeye.101
+ 	title = redeye.101.title
+ 	desc = redeye.101.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = redeye.101.a
+		ai_chance = { factor = 50}
+		puppet = NCG
+		NCG = {
+			set_politics = {
+				ruling_party = destruction
+			}
+			add_popularity = {
+    			ideology = destruction
+    			popularity = 0.45
+			}
+		}
+	}
+}
+
+country_event = { #NCG does not submit
+ 	id = redeye.102
+ 	title = redeye.102.title
+ 	desc = redeye.102.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = redeye.102.a
 		ai_chance = { factor = 50}
 
-		hidden_effect = {
-			if = {
-				limit = { has_country_flag = canterlot_ex_zebratown_win}
-				random_list = {
-					75 = {
-						country_event = {
-	    					id = redeye_canterlot.12
-	    					days = 5
-	    					random = 2
-						}
-					}
-					25 = {
-						country_event = {
-	    					id = redeye_canterlot.13
-	    					days = 5
-	    					random = 2
-						}
-					}
-				}
+		create_wargoal = {
+    		type = puppet_wargoal_focus
+    		target = NCG
+		}
+	}
+}
+
+country_event = { #The Place of the Talons
+ 	id = redeye.103
+ 	title = redeye.103.title
+ 	desc = redeye.103.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Defenders of Fillydelphia
+		name = redeye.103.a
+		ai_chance = { factor = 80}
+		add_ideas = defensive_talons_idea
+	}
+
+	option = { #The Front Line
+		name = redeye.103.b
+		ai_chance = { factor = 30}
+		add_ideas = attack_talons_idea
+	}
+}
+
+country_event = { #Traded with Red Eye
+ 	id = redeye.104
+ 	title = redeye.104.title
+ 	desc = redeye.104.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = redeye.104.a
+		ai_chance = { factor = 80}
+		random_list = {
+			33 = {
+				one_random_arms_factory = yes
+			}
+			33 = {
+				one_random_industrial_complex = yes
+			}
+			34 = {
+				one_random_infrastructure = yes
+			}
+		}
+	}
+}
+
+country_event = { #Slaver Marraige Propsal - ERA
+ 	id = redeye.105
+ 	title = redeye.105.title
+ 	desc = redeye.105.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Accept
+		name = redeye.105.a
+		ai_chance = { factor = 80}
+		RED = {
+			country_event = {
+				id = redeye.106
+				days = 6
+			}
+		}
+	}
+
+	option = { #With Chainlink? Never!
+		name = redeye.105.b
+		ai_chance = { factor = 20}
+		RED = {
+			country_event = {
+				id = redeye.107
+				days = 6
+			}
+		}
+	}
+}
+
+country_event = { #Blood Mane Accepts
+ 	id = redeye.106
+ 	title = redeye.106.title
+ 	desc = redeye.106.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = redeye.106.a
+		ai_chance = { factor = 80}
+		if = {
+			limit = {
+				has_dlc = "Together for Victory"
+			}
+			set_autonomy = {
+				target = ERA
+				autonomous_state = autonomy_personal_union
 			}
 			else = {
-				random_list = {
-					55 = {
-						country_event = {
-	    					id = redeye_canterlot.12
-	    					days = 5
-	    					random = 2
-						}
-					}
-					45 = {
-						country_event = {
-	    					id = redeye_canterlot.13
-	    					days = 5
-	    					random = 2
-						}
-					}
-				}
+				puppet = ERA
 			}
 		}
-		
 	}
 }
 
-country_event = { #Canterlot Expedition: Crystal Caverns Failure
- 	id = redeye_canterlot.9
- 	title = redeye_canterlot.9.title
- 	desc = redeye_canterlot.9.desc
+country_event = { #Blood Mane Reject's the Proposal
+ 	id = redeye.107
+ 	title = redeye.107.title
+ 	desc = redeye.107.desc
 	picture = GFX_event_test
 
 	is_triggered_only = yes
- 	
-	immediate = {
-		clr_country_flag = canterlot_ex_waste
-		set_country_flag = canterlot_ex_waste_dead
-	}
+ 	fire_only_once = yes
 
-	option = { #Organize another expedition
-		name = redeye_canterlot.9.a
-		ai_chance = { factor = 50}
-		
-		hidden_effect = {
-			country_event = {
-    			id = redeye_canterlot.1
-    			days = 32
-    			random = 2
-			}
+	option = {
+		name = redeye.107.a
+		ai_chance = { factor = 80}
+		ERA = {
+			remove_from_faction = BLOODY_PACT_NAME
+		}
+		create_wargoal = {
+   			target = ERA
+   			type = annex_everything
 		}
 	}
 }
 
-country_event = { #Canterlot Expedition: Ministry Walk Success
- 	id = redeye_canterlot.10
- 	title = redeye_canterlot.10.title
- 	desc = redeye_canterlot.10.desc
+country_event = { #Slaver New Order
+ 	id = redeye.108
+ 	title = redeye.108.title
+ 	desc = redeye.108.desc
 	picture = GFX_event_test
 
 	is_triggered_only = yes
+ 	fire_only_once = yes
 
-	option = { #Royal Palace
-		name = redeye_canterlot.10.b
-		ai_chance = { factor = 50}
-
-		hidden_effect = {
-			if = {
-				limit = { 
-					has_country_flag = canterlot_ex_zebratown_win
-					has_country_flag = canterlot_ex_talon
-				}
-				random_list = {
-					60 = {
-						country_event = {
-	    					id = redeye_canterlot.12
-	    					days = 5
-	    					random = 2
-						}
-					}
-					40 = {
-						country_event = {
-	    					id = redeye_canterlot.13
-	    					days = 5
-	    					random = 2
-						}
-					}
-				}
-			}
-			else_if = {
-				limit = { 
-					has_country_flag = canterlot_ex_zebratown_win
-					has_country_flag = canterlot_ex_waste
-				}
-				random_list = {
-					70 = {
-						country_event = {
-	    					id = redeye_canterlot.12
-	    					days = 5
-	    					random = 2
-						}
-					}
-					30 = {
-						country_event = {
-	    					id = redeye_canterlot.13
-	    					days = 5
-	    					random = 2
-						}
-					}
-				}
-			}
-			else = {
-				random_list = {
-					25 = {
-						country_event = {
-	    					id = redeye_canterlot.12
-	    					days = 5
-	    					random = 2
-						}
-					}
-					75 = {
-						country_event = {
-	    					id = redeye_canterlot.13
-	    					days = 5
-	    					random = 2
-						}
-					}
-				}
-			}
-		}
-		
+	option = {
+		name = redeye.108.a
+		ai_chance = { factor = 80}
+		add_stability = 0.25
+		add_political_power = 200
 	}
 }
-
-country_event = { #Canterlot Expedition: Ministry Walk Failure
- 	id = redeye_canterlot.11
- 	title = redeye_canterlot.11.title
- 	desc = redeye_canterlot.11.desc
-	picture = GFX_event_test
-
-	is_triggered_only = yes
- 	
- 	immediate = {
-		if = {
-			limit = { has_country_flag = canterlot_ex_waste }
-			clr_country_flag = canterlot_ex_waste
-			set_country_flag = canterlot_ex_waste_dead
-		}
-		else_if = {
-			limit = { has_country_flag = canterlot_ex_talon }
-			add_to_variable = {var = RED_canter_talon_dead value = 1}
-			clr_country_flag = canterlot_ex_talon
-		}
-	}
-
-	option = { #Organize another expedition
-		name = redeye_canterlot.11.a
-		ai_chance = { factor = 50}
-		
-		hidden_effect = {
-			country_event = {
-    			id = redeye_canterlot.1
-    			days = 32
-    			random = 2
-			}
-		}
-	}
-}
-
-country_event = { #Canterlot Expedition: Royal Palace Success
- 	id = redeye_canterlot.12
- 	title = redeye_canterlot.12.title
- 	desc = redeye_canterlot.12.desc
-	picture = GFX_event_test
-
-	is_triggered_only = yes
- 	
-
-	option = { #Royal Palace
-		name = redeye_canterlot.12.b
-		ai_chance = { factor = 50}
-
-		custom_effect_tooltip = remove_pink_cloud_tt
-		hidden_effect = {
-			234 = {
-				remove_province_modifier = {
-					static_modifiers = { pink_cloud }
-					province = { 
-						id = 8719
-						id = 8738
-						id = 4561
-					}
-				}
-			}
-			180 = {
-				remove_province_modifier = {
-					static_modifiers = { pink_cloud }
-					province = { 
-						id = 8746
-						id = 8748
-						id = 8775
-					}
-				}
-			}
-		}
-	}
-}
-
-country_event = { #Canterlot Expedition: Royal Palace Failure
- 	id = redeye_canterlot.13
- 	title = redeye_canterlot.13.title
- 	desc = redeye_canterlot.13.desc
-	picture = GFX_event_test
-
-	is_triggered_only = yes
- 	
-	immediate = {
-		if = {
-			limit = { has_country_flag = canterlot_ex_waste }
-			clr_country_flag = canterlot_ex_waste
-			set_country_flag = canterlot_ex_waste_dead
-		}
-		else_if = {
-			limit = { has_country_flag = canterlot_ex_talon }
-			add_to_variable = {var = RED_canter_talon_dead value = 1}
-			clr_country_flag = canterlot_ex_talon
-		}
-	}
-
-	option = { #Organize another expedition
-		name = redeye_canterlot.11.a
-		ai_chance = { factor = 50}
-		
-		hidden_effect = {
-			country_event = {
-    			id = redeye_canterlot.1
-    			days = 32
-    			random = 2
-			}
-		}
-	}
-}
-
 
 
 ################################
@@ -2912,17 +2795,17 @@ country_event = { #Canterlot Expedition: Royal Palace Failure
 ################################
 
 country_event = { #Take Filly Banks
-	id = redeye.100
-	immediate = {log = "[Root.GetName]: event redeye.100"}#Auto-logging
-	title = redeye.100.t
-	desc = redeye.100.d
+	id = redeye_borderwar.1
+	immediate = {log = "[Root.GetName]: event redeye_borderwar.1"}#Auto-logging
+	title = redeye_borderwar.1.t
+	desc = redeye_borderwar.1.d
 	picture = GFX_event_pony_soldiers_sunset
 
 	is_triggered_only = yes
 
 
 	option = {#Yay
-		name = redeye.100.a
+		name = redeye_borderwar.1.a
 		add_political_power = 100
 		add_war_support = 0.05
 		ROOT = {
@@ -2933,17 +2816,17 @@ country_event = { #Take Filly Banks
 }
 
 country_event = { #Lose Take Filly Banks
-	id = redeye.101
-	immediate = {log = "[Root.GetName]: event redeye.101"}#Auto-logging
-	title = redeye.101.t
-	desc = redeye.101.d
+	id = redeye_borderwar.2
+	immediate = {log = "[Root.GetName]: event redeye_borderwar.2"}#Auto-logging
+	title = redeye_borderwar.2.t
+	desc = redeye_borderwar.2.d
 	picture = GFX_event_pony_soldiers_sunset
 
 	is_triggered_only = yes
 
 
 	option = {#Yay
-		name = scs.101.a
+		name = redeye_borderwar.2.a
 		add_political_power = -50
 		hidden_effect = {
 			set_country_flag = { flag = RED_defeat_in_border_war days = 120 value = 1 }
@@ -2953,17 +2836,17 @@ country_event = { #Lose Take Filly Banks
 
 
 country_event = { #Cancel Take Filly Banks
-	id = redeye.102
-	immediate = {log = "[Root.GetName]: event redeye.102"}#Auto-logging
-	title = redeye.102.t
-	desc = redeye.102.d
+	id = redeye_borderwar.3
+	immediate = {log = "[Root.GetName]: event redeye_borderwar.3"}#Auto-logging
+	title = redeye_borderwar.3.t
+	desc = redeye_borderwar.3.d
 	picture = GFX_event_pony_soldiers_sunset
 
 	is_triggered_only = yes
 
 
 	option = {#Yay
-		name = redeye.102.a
+		name = redeye_borderwar.3.a
 		add_political_power = -25
 		hidden_effect = {
 			set_country_flag = { flag = RED_defeat_in_border_war days = 120 value = 1 }
@@ -2973,66 +2856,66 @@ country_event = { #Cancel Take Filly Banks
 
 
 country_event = {#Defender defends Filly Banks
-	id = redeye.103
-	immediate = {log = "[Root.GetName]: event redeye.103"}#Auto-logging
-	title = redeye.103.t
-	desc = redeye.103.d
+	id = redeye_borderwar.4
+	immediate = {log = "[Root.GetName]: event redeye_borderwar.4"}#Auto-logging
+	title = redeye_borderwar.4.t
+	desc = redeye_borderwar.4.d
 	picture = GFX_event_pony_soldiers_sunset
 
 	is_triggered_only = yes
 
 
 	option = {#Oof
-		name = redeye.103.a
+		name = redeye_borderwar.4.a
 		add_political_power = 50
 		add_war_support = 0.05
 	}
 }
 
 country_event = {#Defender defends Filly Banks
-	id = redeye.104
-	immediate = {log = "[Root.GetName]: event redeye.104"}#Auto-logging
-	title = redeye.104.t
-	desc = redeye.104.d
+	id = redeye_borderwar.5
+	immediate = {log = "[Root.GetName]: event redeye_borderwar.5"}#Auto-logging
+	title = redeye_borderwar.5.t
+	desc = redeye_borderwar.5.d
 	picture = GFX_event_pony_soldiers_sunset
 
 	is_triggered_only = yes
 
 
 	option = {#Oof
-		name = redeye.104.a
+		name = redeye_borderwar.5.a
 		add_political_power = -50
 	}
 }
 
 country_event = {#Cancel defence of Filly Banks
-	id = redeye.105
-	immediate = {log = "[Root.GetName]: event redeye.105"}#Auto-logging
-	title = redeye.105.t
-	desc = redeye.105.d
+	id = redeye_borderwar.6
+	immediate = {log = "[Root.GetName]: event redeye_borderwar.6"}#Auto-logging
+	title = redeye_borderwar.6.t
+	desc = redeye_borderwar.6.d
 	picture = GFX_event_pony_soldiers_sunset
 
 	is_triggered_only = yes
 
 
 	option = {#Oof
-		name = redeye.105.a
+		name = redeye_borderwar.6.a
 		add_political_power = -25
 	}
 }
 
 country_event = { #Take South End
-	id = redeye.106
-	immediate = {log = "[Root.GetName]: event redeye.106"}#Auto-logging
-	title = redeye.106.t
-	desc = redeye.106.d
+	id = redeye_borderwar.7
+	immediate = {log = "[Root.GetName]: event redeye_borderwar.7"}#Auto-logging
+	title = redeye_borderwar.7.t
+	desc = redeye_borderwar.7.d
 	picture = GFX_event_pony_soldiers_sunset
 
 	is_triggered_only = yes
 
 
 	option = {#Yay
-		name = redeye.106.a
+		name = redeye_borderwar.7.a
 		add_political_power = 100
 		add_war_support = 0.05
 		ROOT = {
@@ -3042,17 +2925,17 @@ country_event = { #Take South End
 }
 
 country_event = { #Lose Take South End
-	id = redeye.107
-	immediate = {log = "[Root.GetName]: event redeye.107"}#Auto-logging
-	title = redeye.107.t
-	desc = redeye.107.d
+	id = redeye_borderwar.8
+	immediate = {log = "[Root.GetName]: event redeye_borderwar.8"}#Auto-logging
+	title = redeye_borderwar.8.t
+	desc = redeye_borderwar.8.d
 	picture = GFX_event_pony_soldiers_sunset
 
 	is_triggered_only = yes
 
 
 	option = {#Yay
-		name = scs.108.a
+		name = redeye_borderwar.8.a
 		add_political_power = -50
 		hidden_effect = {
 			set_country_flag = { flag = RED_defeat_in_border_war days = 120 value = 1 }
@@ -3062,17 +2945,17 @@ country_event = { #Lose Take South End
 
 
 country_event = { #Cancel Take South End
-	id = redeye.108
-	immediate = {log = "[Root.GetName]: event redeye.108"}#Auto-logging
-	title = redeye.108.t
-	desc = redeye.108.d
+	id = redeye_borderwar.9
+	immediate = {log = "[Root.GetName]: event redeye_borderwar.9"}#Auto-logging
+	title = redeye_borderwar.9.t
+	desc = redeye_borderwar.9.d
 	picture = GFX_event_pony_soldiers_sunset
 
 	is_triggered_only = yes
 
 
 	option = {#Yay
-		name = redeye.108.a
+		name = redeye_borderwar.9.a
 		add_political_power = -25
 		hidden_effect = {
 			set_country_flag = { flag = RED_defeat_in_border_war days = 120 value = 1 }
@@ -3082,50 +2965,50 @@ country_event = { #Cancel Take South End
 
 
 country_event = {#Defender defends South End
-	id = redeye.109
-	immediate = {log = "[Root.GetName]: event redeye.109"}#Auto-logging
-	title = redeye.109.t
-	desc = redeye.109.d
+	id = redeye_borderwar.10
+	immediate = {log = "[Root.GetName]: event redeye_borderwar.10"}#Auto-logging
+	title = redeye_borderwar.10.t
+	desc = redeye_borderwar.10.d
 	picture = GFX_event_pony_soldiers_sunset
 
 	is_triggered_only = yes
 
 
 	option = {#Oof
-		name = redeye.109.a
+		name = redeye_borderwar.10.a
 		add_political_power = 50
 		add_war_support = 0.05
 	}
 }
 
 country_event = {#Defender defends South End
-	id = redeye.110
-	immediate = {log = "[Root.GetName]: event redeye.110"}#Auto-logging
-	title = redeye.110.t
-	desc = redeye.110.d
+	id = redeye_borderwar.11
+	immediate = {log = "[Root.GetName]: event redeye_borderwar.11"}#Auto-logging
+	title = redeye_borderwar.11.t
+	desc = redeye_borderwar.11.d
 	picture = GFX_event_pony_soldiers_sunset
 
 	is_triggered_only = yes
 
 
 	option = {#Oof
-		name = redeye.110.a
+		name = redeye_borderwar.11.a
 		add_political_power = -50
 	}
 }
 
 country_event = {#Cancel defence of South End
-	id = redeye.111
-	immediate = {log = "[Root.GetName]: event redeye.111"}#Auto-logging
-	title = redeye.111.t
-	desc = redeye.111.d
+	id = redeye_borderwar.12
+	immediate = {log = "[Root.GetName]: event redeye_borderwar.12"}#Auto-logging
+	title = redeye_borderwar.12.t
+	desc = redeye_borderwar.12.d
 	picture = GFX_event_pony_soldiers_sunset
 
 	is_triggered_only = yes
 
 
 	option = {#Oof
-		name = redeye.111.a
+		name = redeye_borderwar.12.a
 		add_political_power = -25
 	}
 }
@@ -3160,7 +3043,13 @@ country_event = {
 
 	option = { #Bread And Circuses 
 		name = redeye_stablize.1.b
-		ai_chance = { factor = 15 }
+		ai_chance = { 
+			base = 0
+			modifier = {
+				is_historical_focus_on = no
+				add = 15
+			}
+		}
 
 		add_ideas = panem
 
@@ -3184,7 +3073,9 @@ country_event = {
 
 	option = { #Crush Unions
 		name = redeye_stablize.2.a
-		ai_chance = { factor = 30 }
+		ai_chance = { 
+			base = 30
+		}
 
 		remove_ideas = slave_resistance
 		add_stability = -0.15
@@ -3197,7 +3088,13 @@ country_event = {
 
 	option = { #Bargain With Unions
 		name = redeye_stablize.2.b
-		ai_chance = { factor = 5 }
+		ai_chance = { 
+			base = 0
+			modifier = {
+				is_historical_focus_on = no
+				add = 5
+			}
+		}
 
 		#country_event = {
     	#	id = my_event.1
@@ -3262,7 +3159,7 @@ country_event = {
 
 	option = { #Rebuild Infrastructure
 		name = redeye_stablize.4.a
-		ai_chance = { factor = 10 }
+		ai_chance = { factor = 25 }
 
 		532 = {
 			remove_building = {
@@ -3279,7 +3176,13 @@ country_event = {
 
 	option = { #Rebuild Factories
 		name = redeye_stablize.4.b
-		ai_chance = { factor = 25 }
+		ai_chance = { 
+			base = 0
+			modifier = {
+				is_historical_focus_on = no
+				add = 10
+			}
+		}
 
 		532 = {
 			remove_building = {
@@ -3423,21 +3326,9 @@ country_event = {
 	is_triggered_only = yes
  	fire_only_once = yes
 
- 	option = { #Stern
-		name = redeye_stablize.8.a
-		trigger = { is_ai = no }
-
-		kill_country_leader = yes
-		set_politics = {
-			ruling_party = destruction
-		}
-		add_popularity = {
-  			ideology = destruction
-    		popularity = 0.50
-		}
-
-		#hidden_effect = { 
-			RED = { set_cosmetic_tag = RED_stern }
+ 	immediate = {
+ 		hidden_effect = {
+ 			RED = { set_cosmetic_tag = RED_stern }
 			load_focus_tree = redeye_stern
 			set_global_flag = redeye_is_dead
 			set_global_flag = RED_civil_war_flag
@@ -3463,6 +3354,26 @@ country_event = {
 					type = annex_everything
 				}
 			}
+ 		}
+ 	}
+
+ 	option = { #Stern
+		name = redeye_stablize.8.a
+		trigger = { is_ai = no }
+
+		kill_country_leader = yes
+		set_politics = {
+			ruling_party = destruction
+		}
+		add_popularity = {
+  			ideology = destruction
+    		popularity = 0.50
+		}
+
+		#hidden_effect = { 
+			FFD = {
+				add_manpower = 250 #Cheating AI
+			}
 		#}
 
 	}
@@ -3481,31 +3392,8 @@ country_event = {
 		}
 
 		#hidden_effect = { 
-			RED = { set_cosmetic_tag = RED_stern }
-			set_global_flag = redeye_is_dead
-			set_global_flag = RED_civil_war_flag
-			FFD = { change_tag_from = ROOT }
-			every_state = {
-				limit = { is_core_of = RED }
-				add_core_of = FFD
-			}
-			FFD = {
-				change_tag_from = RED 
-				delete_unit_template_and_units = {
-					division_template = "Talon Company"
-				}
-				add_manpower = 600
-				transfer_state = 45
-				transfer_state = 48
-				transfer_state = 532
-				transfer_state = 525
-				
-				load_oob = FFD_1235
-				inherit_technology = RED
-				declare_war_on = {
-					target = RED
-					type = annex_everything
-				}
+			FFD = { 
+				change_tag_from = ROOT
 			}
 		#}
 
