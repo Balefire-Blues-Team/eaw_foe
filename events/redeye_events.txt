@@ -301,9 +301,22 @@ country_event = {
 	option = {
 		name = redeye.9.a
 		ai_chance = { factor = 50}
-		custom_effect_tooltip = RED_militia_tt
+		custom_effect_tooltip = RED_turncoats_tt
 
 		add_manpower = 30
+		add_equipment_to_stockpile = {
+    		type = power_armor_equipment
+    		amount = 150
+    		producer = FSR
+		}
+		if = {
+			limit = {
+				NOT = { has_tech = stripped_pa_tech }
+			}
+			set_technology = {
+				stripped_pa_tech = 1
+			}
+		}
 		FSR = {
 			every_unit_leader = {
 				limit = {
@@ -2801,6 +2814,50 @@ country_event = { #Slaver New Order
 		ai_chance = { factor = 80}
 		add_stability = 0.25
 		add_political_power = 200
+	}
+}
+
+country_event = { ### New Mareway Beaten
+ 	id = redeye.109
+ 	title = redeye.109.title
+ 	desc = redeye.109.desc
+	picture = GFX_event_test
+
+	trigger = {
+		has_country_flag = RED_bloody_attack
+		MWY = {
+			controls_state = 549
+		}
+		ERA = {
+			exists = no
+		}
+		NOT = {
+			has_global_flag = redeye_is_dead
+		}
+	}
+ 	fire_only_once = yes
+
+	option = {
+		name = redeye.109.a
+		ai_chance = { factor = 50}
+
+		trigger = {
+			has_war = no
+		}
+		
+		create_wargoal = {
+    		type = annex_everything
+    		target = MWY
+		}
+	}
+
+	option = {
+		name = redeye.109.b
+		ai_chance = { factor = 50}
+
+		trigger = {
+			has_war = yes
+		}
 	}
 }
 
