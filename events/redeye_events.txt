@@ -97,7 +97,7 @@ country_event = {
 	}
 }
 
-#Future Of A Monster
+#Red Eye's Army
 country_event = {
  	id = redeye.3
  	title = redeye.3.title
@@ -109,23 +109,38 @@ country_event = {
 
 	option = {
 		name = redeye.3.a
-		ai_chance = { factor = 50}
+		ai_chance = { factor = 60}
 		
-		add_ideas = long_game
-
-		hidden_effect = {
-			set_country_flag = slow_and_steady
-		}
+		RED_better_army = yes
+		set_country_flag = RED_raider_army_flag
 	}
 	option = {
 		name = redeye.3.b
-		ai_chance = { factor = 5}
+		ai_chance = { factor = 50}
 
-		add_ideas = short_game
-
+		custom_effect_tooltip = RED_frontline_slaves_tt
 		hidden_effect = {
-			set_country_flag = blitz_reunification
+			load_oob = RED_more_slaves
 		}
+		set_country_flag = RED_slave_army_flag
+	}
+
+	option = {
+		name = redeye.3.c
+		ai_chance = { factor = 60}
+
+		create_corps_commander = {
+			name = "Henri Dawnfeather"
+			traits = { enduring_trait merc_commander griffon_race_trait }
+			skill = 3
+			attack_skill = 3
+			defense_skill = 3
+			planning_skill = 2
+			logistics_skill = 2
+			id = 59304
+		}
+		custom_effect_tooltip = RED_dawnfeather_stats_tt
+		set_country_flag = RED_talon_army_flag
 	}
 }
 
@@ -286,9 +301,22 @@ country_event = {
 	option = {
 		name = redeye.9.a
 		ai_chance = { factor = 50}
-		custom_effect_tooltip = RED_militia_tt
+		custom_effect_tooltip = RED_turncoats_tt
 
 		add_manpower = 30
+		add_equipment_to_stockpile = {
+    		type = power_armor_equipment
+    		amount = 150
+    		producer = FSR
+		}
+		if = {
+			limit = {
+				NOT = { has_tech = stripped_pa_tech }
+			}
+			set_technology = {
+				stripped_pa_tech = 1
+			}
+		}
 		FSR = {
 			every_unit_leader = {
 				limit = {
@@ -1625,6 +1653,7 @@ country_event = {
 		RED = {
 			country_event = {
 				id = redeye.58
+				days = 1
 			}
 		}
 
@@ -1632,13 +1661,15 @@ country_event = {
 			set_global_flag = SHA_RED_invasion_flag
 			every_state = {
 				limit = { is_core_of = SHA }
-				add_core_of = RSH
+				add_claim_by = RSH
 			}
 			load_oob = SHA_invasion_militia
 			RSH = {
 				add_manpower = 800
 				transfer_state = 562
 				transfer_state = 578
+
+				add_offsite_building = { type = arms_factory level = 3 }
 				
 				load_oob = RSH_starting_troops
 				inherit_technology = RED
@@ -2789,6 +2820,50 @@ country_event = { #Slaver New Order
 	}
 }
 
+country_event = { ### New Mareway Beaten
+ 	id = redeye.109
+ 	title = redeye.109.title
+ 	desc = redeye.109.desc
+	picture = GFX_event_test
+
+	trigger = {
+		has_country_flag = RED_bloody_attack
+		MWY = {
+			controls_state = 549
+		}
+		ERA = {
+			exists = no
+		}
+		NOT = {
+			has_global_flag = redeye_is_dead
+		}
+	}
+ 	fire_only_once = yes
+
+	option = {
+		name = redeye.109.a
+		ai_chance = { factor = 50}
+
+		trigger = {
+			has_war = no
+		}
+		
+		create_wargoal = {
+    		type = annex_everything
+    		target = MWY
+		}
+	}
+
+	option = {
+		name = redeye.109.b
+		ai_chance = { factor = 50}
+
+		trigger = {
+			has_war = yes
+		}
+	}
+}
+
 
 ################################
 ### Steel Rangers Border War ###
@@ -3211,7 +3286,7 @@ country_event = {
 
 	option = { #No Mercy
 		name = redeye_stablize.5.a
-		ai_chance = { factor = 10 }
+		ai_chance = { factor = 50 }
 
 		add_stability = 0.05
 		RED_better_army = yes
@@ -3224,7 +3299,7 @@ country_event = {
 
 	option = { #Integrate Some Gangs
 		name = redeye_stablize.5.b
-		ai_chance = { factor = 25 }
+		ai_chance = { factor = 5 }
 
 		add_stability = -0.15
 		add_manpower = 1500
