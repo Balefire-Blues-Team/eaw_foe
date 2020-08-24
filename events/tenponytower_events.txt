@@ -65,7 +65,7 @@ country_event = {
 
 	option = {
 		name = TEN.2.b
-		ai_chance = { factor = 1000}
+		ai_chance = { factor = 1}
 		add_ideas = TEN_inner_walls
 	}
 }
@@ -81,7 +81,7 @@ country_event = {
 
  	option = {
 		name = TEN.3.a
-		ai_chance = { factor = 1000}
+		ai_chance = { factor = 1}
 
 		21 = {
 			add_resource = {
@@ -987,14 +987,10 @@ country_event = {
 		name = TEN.47.a
 		ai_chance = { factor = 1000}
 
-		custom_effect_tooltip = TEN_claim_south_manehattan
+		custom_effect_tooltip = TEN_unlock_conscription_laws_tt
 
 		hidden_effect = {
-			478 = { add_claim_by = TEN }
-			18 = { add_claim_by = TEN }
-			469 = { add_claim_by = TEN }
-			55 = { add_claim_by = TEN }
-			53 = { add_claim_by = TEN }
+			clr_country_flag = manpower_laws_blocked
 		}
 	}
 }
@@ -1296,17 +1292,17 @@ country_event = {
 	desc = TEN.59.desc
 	picture = GFX_event_test
 
+	fire_only_once = yes
 	trigger = {
     	original_tag = TEN
     	has_global_flag = ARB_cannibalism_revealed
     	has_country_flag = TEN_imported_meat
 	}
 
- 	fire_only_once = no
 
  	option = {
 		name = TEN.59.a
-		ai_chance = { factor = 1000}
+		ai_chance = { factor = 10s}
 
 		add_timed_idea = { idea = TEN_truth_of_meat days = 180 }
 	}
@@ -1325,13 +1321,41 @@ country_event = {
     		has_country_flag = TEN_elite_cuisine
    	}
 
- 	fire_only_once = no
+ 	fire_only_once = yes
 
  	option = {
 		name = TEN.60.a
 		ai_chance = { factor = 1000}
 
 		add_timed_idea = { idea = TEN_truth_of_meat2 days = 180 }
+	}
+}
+
+#Enclave Attacks
+country_event = {
+	id = TEN.61
+	title = TEN.61.title
+	desc = TEN.61.desc
+	picture = GFX_event_test
+
+	
+ 	fire_only_once = yes
+
+ 	option = {
+		name = TEN.61.a
+		ai_chance = { factor = 1000}
+
+		if = {
+			limit = {
+				has_country_flag = TEN_naval_focus
+			}
+			load_focus_tree = TEN_society_enclavewar_naval
+			set_country_flag = TEN_society_enclave_war_naval
+		}
+		else = {
+			load_focus_tree = TEN_society_enclavewar
+			set_country_flag = TEN_society_enclave_war
+		}
 	}
 }
 
