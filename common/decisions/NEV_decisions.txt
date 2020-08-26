@@ -1,3 +1,240 @@
+NEV_war_exhaustion_category = {
+	
+	NEV_exhaustion_points_monthly = {
+		icon = GFX_decision_unknown
+		### Never "complete" success
+		activation  = {
+			has_country_flag = NEV_deploy_points_unlock
+			has_completed_focus = NEV_des_launch_cauterize
+		}
+		available = {
+			NOT = {
+				has_global_flag = NEV_cauterize_start_tt
+			}
+		}
+		allowed = {
+			tag = NEV
+		}
+		is_good = yes
+		days_mission_timeout = 30
+		fire_only_once = no
+		###Add points to actual number
+		timeout_effect = {
+			custom_effect_tooltip = NEV_exhaustion_gain_tt
+				
+				###Add points of monthly net
+				
+				add_to_variable = {
+				var = war_exhaustion
+				value = exhaustion_monthly
+				}
+		}
+		days_re_enable = 0
+		days_remove = 1
+	}
+	
+	NEV_domestic_propaganda_decision = {
+		icon = generic_construction
+		ai_will_do = {
+			factor = 20
+			
+		}
+		is_good = yes
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = NEV_has_5_exhaustion
+                    check_variable = {
+                        war_exhaustion > 4
+                    }
+            }
+			has_political_power > 49
+		}
+		days_re_enable = 50
+		cost = 50
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEV_domestic_Propaganda_decision"
+			custom_effect_tooltip = NEV_loose_5_exhaustion
+			custom_effect_tooltip = NEV_gain_1_mexhaustion
+			
+			subtract_from_variable = {
+				var = war_exhaustion
+				value = 5
+			}
+			add_to_variable = {
+				var = exhaustion_monthly
+				value = 1
+			}
+			
+		}
+	}
+	
+	NEV_military_crackdown_decision = {
+		icon = generic_construction
+		ai_will_do = {
+			factor = 20
+			
+		}
+		is_good = yes
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = NEV_has_10_exhaustion
+                    check_variable = {
+                        war_exhaustion > 9
+                    }
+            }
+			has_political_power > 9
+			has_manpower > 249
+			has_equipment = {
+				energy_equipment_2 > 249
+			}
+		}
+		days_re_enable = 150
+		cost = 10
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEV_domestic_Propaganda_decision"
+			custom_effect_tooltip = NEV_loose_10_exhaustion
+			custom_effect_tooltip = NEV_gain_2_mexhaustion
+			
+			subtract_from_variable = {
+				var = war_exhaustion
+				value = 10
+			}
+			add_to_variable = {
+				var = exhaustion_monthly
+				value = 2
+			}
+			add_manpower = -250
+			add_equipment_to_stockpile = {
+				type = energy_equipment_2 amount = -250 producer = NEV
+			}
+			
+		}
+	}
+	
+	NEV_take_new_mango_mission = {
+		icon = GFX_decision_unknown
+		activation  = {
+			has_global_flag = NEV_cauterize_start_tt
+		}
+		available = {
+			controls_state = 795
+		}
+		allowed = {
+			tag = NEV
+		}
+		is_good = yes
+		days_mission_timeout = 90
+		fire_only_once = yes
+		###Add points to actual number
+		timeout_effect = {
+			custom_effect_tooltip = NEV_add_4_exhaustion
+				
+				###Add points of monthly net
+				
+				add_to_variable = {
+				var = war_exhaustion
+				value = 4
+				}
+		}
+		complete_effect = {
+			add_war_support = 0.05
+		}
+	}
+	
+	NEV_take_new_mareway_mission = {
+		icon = GFX_decision_unknown
+		activation  = {
+			has_global_flag = NEV_cauterize_start_tt
+		}
+		available = {
+			controls_state = 549
+		}
+		allowed = {
+			tag = NEV
+		}
+		is_good = yes
+		days_mission_timeout = 120
+		fire_only_once = yes
+		###Add points to actual number
+		timeout_effect = {
+			custom_effect_tooltip = NEV_loose_4_exhaustion
+				
+				###Add points of monthly net
+				
+				add_to_variable = {
+				var = war_exhaustion
+				value = 4
+				}
+		}
+		complete_effect = {
+			add_war_support = 0.05
+		}
+	}
+	
+	NEV_take_junktion_r7_mission = {
+		icon = GFX_decision_unknown
+		activation  = {
+			has_global_flag = NEV_cauterize_start_tt
+		}
+		available = {
+			controls_state = 808
+		}
+		allowed = {
+			tag = NEV
+		}
+		is_good = yes
+		days_mission_timeout = 200
+		fire_only_once = yes
+		###Add points to actual number
+		timeout_effect = {
+			custom_effect_tooltip = NEV_loose_4_exhaustion
+				
+				###Add points of monthly net
+				
+				add_to_variable = {
+				var = war_exhaustion
+				value = 4
+				}
+		}
+		complete_effect = {
+			add_war_support = 0.05
+		}
+	}
+	
+	NEV_take_cathedral_mission = {
+		icon = GFX_decision_unknown
+		activation  = {
+			has_global_flag = NEV_cauterize_start_tt
+		}
+		available = {
+			controls_state = 593
+		}
+		allowed = {
+			tag = NEV
+		}
+		is_good = yes
+		days_mission_timeout = 200
+		fire_only_once = yes
+		###Add points to actual number
+		timeout_effect = {
+			custom_effect_tooltip = NEV_loose_4_exhaustion
+				
+				###Add points of monthly net
+				
+				add_to_variable = {
+				var = war_exhaustion
+				value = 4
+				}
+		}
+		complete_effect = {
+			add_war_support = 0.05
+		}
+	}
+
+
+
+}
+
 NEV_deployment_points = {
 	
 	NEV_deploy_points_income = {
@@ -50,12 +287,10 @@ NEV_deployment_points = {
                         deploy_points > 7
                     }
             }
-		}
-		
-		visible = {
-			
+			has_political_power > 4
 		}
 		days_re_enable = 20
+		cost = 5
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NEV_deploy_guns"
 			custom_effect_tooltip = NEV_loose_5_deploy
@@ -86,12 +321,10 @@ NEV_deployment_points = {
                         deploy_points > 8
                     }
             }
+			has_political_power > 4
 		}
-		
-		visible = {
-			
-		}
-		days_re_enable = 20
+		cost = 5
+		days_re_enable = 25
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NEV_deploy_soldiers"
 			custom_effect_tooltip = NEV_loose_6_deploy
@@ -100,7 +333,7 @@ NEV_deployment_points = {
 				var = deploy_points
 				value = 9
 			}
-			add_manpower = 300
+			add_manpower = 200
 		}
 	}
 	
@@ -118,11 +351,9 @@ NEV_deployment_points = {
                         deploy_points > 14
                     }
             }
+			has_political_power > 4
 		}
-		
-		visible = {
-			
-		}
+		cost = 5
 		days_re_enable = 40
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NEV_deploy_arms_factory"
@@ -150,11 +381,10 @@ NEV_deployment_points = {
                         deploy_points > 19
                     }
             }
+			has_political_power > 4
 		}
 		
-		visible = {
-			
-		}
+		cost = 5
 		days_re_enable = 40
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NEV_deploy_industrial_complex"
@@ -180,8 +410,9 @@ NEV_deployment_centre = {
                         deploy_points > 5
                     }
             }
+			has_political_power > 4
 		}
-
+		cost = 5
 		is_good = yes
 		days_re_enable = 1
 		complete_effect = {
@@ -216,8 +447,9 @@ NEV_deployment_centre = {
                         deploy_points > 8
                     }
             }
+			has_political_power > 4
 		}
-
+		cost = 5
 		is_good = yes
 		days_re_enable = 10
 		complete_effect = {
@@ -256,11 +488,10 @@ NEV_deployment_centre = {
                         deploy_points > 6
                     }
             }
+			has_political_power > 4
 		}
 		
-		visible = {
-			
-		}
+		cost = 5
 		days_re_enable = 10
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NEC_deploy_guns"
@@ -293,11 +524,10 @@ NEV_deployment_centre = {
                         deploy_points > 6
                     }
             }
+			has_political_power > 4
 		}
 		
-		visible = {
-			
-		}
+		cost = 5
 		days_re_enable = 10
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NEC_deploy_pa"
@@ -334,8 +564,9 @@ NEV_deployment_north = {
                         deploy_points > 5
                     }
             }
+			has_political_power > 4
 		}
-
+		cost = 5
 		is_good = yes
 		days_re_enable = 1
 		complete_effect = {
@@ -370,8 +601,9 @@ NEV_deployment_north = {
                         deploy_points > 8
                     }
             }
+			has_political_power > 4
 		}
-
+		cost = 5
 		is_good = yes
 		days_re_enable = 10
 		complete_effect = {
@@ -410,11 +642,10 @@ NEV_deployment_north = {
                         deploy_points > 6
                     }
             }
+			has_political_power > 4
 		}
 		
-		visible = {
-			
-		}
+		cost = 5
 		days_re_enable = 10
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NEN_deploy_guns"
@@ -447,11 +678,10 @@ NEV_deployment_north = {
                         deploy_points > 6
                     }
             }
+			has_political_power > 4
 		}
 		
-		visible = {
-			
-		}
+		cost = 5
 		days_re_enable = 10
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NEN_deploy_pa"
@@ -495,6 +725,9 @@ NEV_kommiserrats = {
 			log = "[GetDateText]: [Root.GetName]: Decision NEV_link_up_centre"
 			NEV = { annex_country = { target = NEC transfer_troops = yes }}
 			if = { limit = { is_ai = yes } add_manpower = 1000 }
+			hidden_effect = {
+				set_country_flag = NEV_centre_annexxed
+			}
 			
 			
 		}
@@ -521,7 +754,9 @@ NEV_kommiserrats = {
 			log = "[GetDateText]: [Root.GetName]: Decision NEV_link_up_north"
 			NEV = { annex_country = { target = NEN transfer_troops = yes }}
 			if = { limit = { is_ai = yes } add_manpower = 1000 }
-			
+			hidden_effect = {
+				set_country_flag = NEV_north_annexxed
+			}
 			
 			
 		}
@@ -1028,43 +1263,7 @@ NEV_senate = {
 		}
 	}
 	
-	NEV_dev_surface_settlement = {
-		icon = generic_construction
-		cost = 50
-		ai_will_do = {
-			factor = 10
-			modifier = {
-				factor = 0
-				has_manpower > 5500
-			}
-			modifier = {
-				factor = 10
-				has_manpower < 2000
-			}
-		}
-		fire_only_once = no
-		is_good = yes
-		
-		visible = {
-			OR = {	
-					has_idea = NEV_senate_strong
-					has_idea = NEV_senate_dominant
-					has_idea = NEV_senate_council_merge
-			}
-		}
-		available = { any_owned_state = is_core_of = NEV state_population < 10000}}
-		modifier = {
-			civilian_factory_use = 4
-		}
-		days_remove = 50
-		remove_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision NEV_rename_headwaters"
-			random_owned_controlled_state = {
-				limit = { is_core_of = NEV state_population < 10000}
-				add_manpower = 800
-			}
-		}
-	}
+	
 	
 	NEV_dev_surface_industry = {
 		icon = generic_construction
@@ -1105,6 +1304,141 @@ NEV_senate = {
 				add_offsite_building = { type = industrial_complex level = 1 }
 		}
 	}
+
+
+
+
+}
+
+NEV_warplans = {
+
+	NEV_plan_red = {
+		icon = generic_construction
+		cost = 100
+		ai_will_do = {
+			factor = 100
+			
+		}
+		fire_only_once = yes
+		is_good = yes
+		
+		visible = {
+			has_war_with  = RED
+			OR = {
+				has_country_flag= NEV_des_RED_plan
+				has_country_flag = NEV_con_RED_plan
+			}
+		}
+		available = {
+			has_war_with  = RED
+			has_political_power > 99
+		}
+		modifier = {
+			IF = {
+			limit = { has_country_flag = NEV_des_RED_plan }
+			targeted_modifier = {
+				tag = RED
+				attack_bonus_against  = 0.15
+				defense_bonus_against = -0.15
+			}
+			}
+			else_if = {
+			limit = { has_country_flag = NEV_con_RED_plan }
+			targeted_modifier = {
+				tag = RED
+				attack_bonus_against  = -0.15
+				defense_bonus_against = 0.15
+			}
+			}
+		}
+		days_remove = 150
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEV_plan_red"
+			hidden_effect = {
+			clr_country_flag = NEV_des_RED_plan
+			clr_country_flag = NEV_con_RED_plan
+			}
+		}
+	}
+	
+	NEV_plan_sha = {
+		icon = generic_construction
+		cost = 100
+		ai_will_do = {
+			factor = 100
+			
+		}
+		fire_only_once = yes
+		is_good = yes
+		
+		visible = {
+			has_war_with  = SHA
+			has_country_flag = NEV_SHA_plan
+		}
+		available = {
+			has_war_with  = SHA
+			has_political_power > 99
+		}
+		modifier = {
+			
+			targeted_modifier = {
+				tag = SHA
+				attack_bonus_against  = 0.08
+				defense_bonus_against = 0.08
+				army_speed_factor = -0.15
+			}
+			
+		}
+		days_remove = 150
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEV_plan_sha"
+			hidden_effect = {
+			clr_country_flag = NEV_SHA_plan
+			}
+		}
+	}
+	
+	NEV_plan_uni = {
+		icon = generic_construction
+		cost = 100
+		ai_will_do = {
+			factor = 100
+			
+		}
+		fire_only_once = yes
+		is_good = yes
+		
+		visible = {
+			has_war_with  = UNI
+			has_country_flag = NEV_UNI_plan
+		}
+		available = {
+			has_war_with  = UNI
+			has_political_power > 99
+		}
+		modifier = {
+			
+			targeted_modifier = {
+				tag = UNI
+				defense_bonus_against = 0.20
+			}
+			
+		}
+		days_remove = 150
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEV_plan_uni"
+			hidden_effect = {
+			clr_country_flag = NEV_UNI_plan
+			}
+		}
+	}
+
+
+
+
+
+
+
 
 
 

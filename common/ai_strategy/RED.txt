@@ -9,12 +9,12 @@ RED_unit_production = {
 	ai_strategy = {
 		type = role_ratio
 		id = infantry
-		value = 20
+		value = 40
 	}
 	ai_strategy = {
 		type = role_ratio
 		id = suppression
-		value = 40
+		value = 20
 	}
 	ai_strategy = {
 		type = role_ratio
@@ -51,13 +51,96 @@ RED_unit_production = {
 	}
 }
 
-force_red_to_maintain_army = { 
+RED_prepare_against_rangers = { 
 	enable = {
-		has_army_size = { size < 40 }
+		OR = {
+			focus_progress = {
+    			focus = RED_filly_rangers
+    			progress > 0.01
+			}
+			focus_progress = {
+    			focus = RED_end_the_rangers
+    			progress > 0.01
+			}
+			focus_progress = {
+    			focus = RED_no_mercy_for_rangers
+    			progress > 0.01
+			}
+			FSR = {
+				OR = {
+					is_justifying_wargoal_against = ROOT
+					has_wargoal_against = ROOT
+				}
+			}
+		}
 		original_tag = RED
 	}
 	abort = {
-		NOT = { has_army_size = { size < 40 } }
+		always = no
+	}
+
+	ai_strategy = {
+		type = prepare_for_war
+		id = FSR
+		value = 75
+	}
+
+	ai_strategy = {
+		type = research_tech
+		id = anti_tank_equipment_tech_2
+		value = 25
+	}
+
+	ai_strategy = {
+		type = role_ratio
+		id = anti_armor
+		value = 10
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = talons
+		value = 20
+	}
+}
+
+RED_be_nice_to_ERA = { 
+	enable = {
+		original_tag = RED
+	}
+	abort = {
+		has_country_flag = bloody_attack_betrayal
+	}
+
+	ai_strategy = {
+		type = befriend
+		id = ERA
+		value = 25
+	}
+}
+
+RED_fuck_ERA = { 
+	enable = {
+		original_tag = RED
+		has_country_flag = bloody_attack_betrayal
+	}
+	abort = {
+		ERA = { exists = no }
+	}
+
+	ai_strategy = {
+		type = antagonize
+		id = ERA
+		value = 40
+	}
+}
+
+force_red_to_maintain_army = { 
+	enable = {
+		has_army_size = { size < 30 }
+		original_tag = RED
+	}
+	abort = {
+		NOT = { has_army_size = { size < 30 } }
 	}
 	ai_strategy = {
 		type = build_army
@@ -75,7 +158,7 @@ RED_anti_pa = {
 			ROOT = {
 				estimated_intel_max_power_armour = {
 					tag = PREV
-					value > 8
+					value > 6
 				}
 			}
 		}
