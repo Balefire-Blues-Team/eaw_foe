@@ -65,7 +65,7 @@ country_event = {
 
 	option = {
 		name = TEN.2.b
-		ai_chance = { factor = 1000}
+		ai_chance = { factor = 1}
 		add_ideas = TEN_inner_walls
 	}
 }
@@ -81,7 +81,7 @@ country_event = {
 
  	option = {
 		name = TEN.3.a
-		ai_chance = { factor = 1000}
+		ai_chance = { factor = 1}
 
 		21 = {
 			add_resource = {
@@ -681,11 +681,7 @@ country_event = {
 
 		GUT = {
 			load_oob = GUT_guards
-		}
-
-		diplomatic_relation = {
-			country = GUT
-			relation = non_aggression_pact
+			add_timed_idea = { idea = TEN_foreign_guards days = 365 }
 		}
 	}
 }
@@ -826,7 +822,9 @@ country_event = {
 
 		MAR = {
 			load_oob = MAR_guards
+			add_timed_idea = { idea = TEN_foreign_guards days = 365 }
 		}
+		
 	}
 }
 
@@ -987,14 +985,10 @@ country_event = {
 		name = TEN.47.a
 		ai_chance = { factor = 1000}
 
-		custom_effect_tooltip = TEN_claim_south_manehattan
+		custom_effect_tooltip = TEN_unlock_conscription_laws_tt
 
 		hidden_effect = {
-			478 = { add_claim_by = TEN }
-			18 = { add_claim_by = TEN }
-			469 = { add_claim_by = TEN }
-			55 = { add_claim_by = TEN }
-			53 = { add_claim_by = TEN }
+			clr_country_flag = manpower_laws_blocked
 		}
 	}
 }
@@ -1243,10 +1237,127 @@ country_event = {
  	option = {
 		name = TEN.58.a
 		ai_chance = { factor = 1000}
+
+		TEN = {
+			create_faction = "Twin City Alliance"
+			add_to_faction = FRI
+		}
+
+		hidden_effect = {
+			GUT = {
+				if = {
+					limit = {
+						is_in_faction_with = TEN
+					}
+					
+					TEN = {
+					add_to_faction = GUT
+					}
+				}
+			}
+
+			MAR = {
+				if = {
+					limit = {
+						is_in_faction_with = TEN
+					}
+					
+					TEN = {
+					add_to_faction = MAR
+					}
+				}
+			}
+		}
 	}
 
 	option = {
 		name = TEN.58.b
-		ai_chance = { factor = 1000}
+		ai_chance = { factor = 0}
+
+		TEN = {
+			create_wargoal = {
+   				type = puppet_wargoal_focus
+    			target = FRI
+			}
+		}
 	}
 }
+
+#The Truth of the Meat
+country_event = {
+	id = TEN.59
+	title = TEN.59.title
+	desc = TEN.59.desc
+	picture = GFX_event_test
+
+	fire_only_once = yes
+	trigger = {
+    	original_tag = TEN
+    	has_global_flag = ARB_cannibalism_revealed
+    	has_country_flag = TEN_imported_meat
+	}
+
+
+ 	option = {
+		name = TEN.59.a
+		ai_chance = { factor = 10s}
+
+		add_timed_idea = { idea = TEN_truth_of_meat days = 180 }
+	}
+}
+
+#The Truth of the Meat (worse)
+country_event = {
+	id = TEN.60
+	title = TEN.60.title
+	desc = TEN.60.desc
+	picture = GFX_event_test
+
+	trigger = {
+    		original_tag = TEN
+    		has_global_flag = ARB_cannibalism_revealed
+    		has_country_flag = TEN_elite_cuisine
+   	}
+
+ 	fire_only_once = yes
+
+ 	option = {
+		name = TEN.60.a
+		ai_chance = { factor = 1000}
+
+		add_timed_idea = { idea = TEN_truth_of_meat2 days = 180 }
+	}
+}
+
+#Enclave Attacks
+country_event = {
+	id = TEN.61
+	title = TEN.61.title
+	desc = TEN.61.desc
+	picture = GFX_event_test
+
+	trigger = {
+    		original_tag = TEN
+    		has_global_flag = cauterize_in_progress_flag
+   	}
+
+ 	fire_only_once = yes
+
+ 	option = {
+		name = TEN.61.a
+		ai_chance = { factor = 1000}
+
+		if = {
+			limit = {
+				has_country_flag = TEN_naval_focus
+			}
+			load_focus_tree = TEN_society_enclavewar_naval
+			set_country_flag = TEN_society_enclave_war_naval
+		}
+		else = {
+			load_focus_tree = TEN_society_enclavewar
+			set_country_flag = TEN_society_enclave_war
+		}
+	}
+}
+

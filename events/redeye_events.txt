@@ -1133,8 +1133,13 @@ country_event = { #Oh god of fuck oh man
 		ai_chance = { factor = 50 }
 
 		kill_country_leader = yes
+		add_stability = -0.3
 		set_politics = {
 			ruling_party = destruction
+		}
+		add_popularity = {
+		    ideology = destruction
+		    popularity = 0.5
 		}
 
 		create_country_leader = {
@@ -1142,6 +1147,9 @@ country_event = { #Oh god of fuck oh man
 			picture = "ProtégéPortrait.dds"
 			expire = "1965.1.1"
 			ideology = redeye
+			traits = {
+				symp_slaver
+			}
 		}
 	}
 }
@@ -1159,17 +1167,33 @@ country_event = { #Yo what the actual fuck
 		ai_chance = { factor = 50 }
 
 		kill_country_leader = yes
-		set_politics = {
-			ruling_party = visionary
-		}
-
+		add_stability = -0.2
 		create_country_leader = {
-			name = "Longknife"
+			name = "Chainlink Shackles"
 			#desc = "The True Emperor"
-			picture = "Moriset.tga"
+			picture = "ChainlinkShackles.tga"
 			expire = "1965.1.1"
-			ideology = raider
+			ideology = slaver
 			traits = {
+				sadist_slaver
+			}
+		}
+		hidden_effect = {
+			if = {
+				limit = {
+					any_country = {
+						AND = {
+							is_major = yes
+							has_war_with = RED
+						}
+					}
+				}
+				set_country_flag = RED_start_cathedral_leave_flag
+				load_focus_tree = redeye_chainlink_war
+			}
+
+			else = {
+				load_focus_tree = redeye_chainlink_peace
 			}
 		}
 	}
@@ -1648,16 +1672,17 @@ country_event = {
 
  	option = { #Fuck!
 		name = redeye.59.a
-		trigger = { is_ai = no }
 
 		RED = {
 			country_event = {
 				id = redeye.58
-				days = 1
 			}
 		}
 
-		#hidden_effect = { 
+		custom_effect_tooltip = RED_RSH_invasion_tt
+		custom_effect_tooltip = RED_SHA_militia_tt
+
+		hidden_effect = { 
 			set_global_flag = SHA_RED_invasion_flag
 			every_state = {
 				limit = { is_core_of = SHA }
@@ -1678,7 +1703,7 @@ country_event = {
 					type = annex_everything
 				}
 			}
-		#}
+		}
 	}
 }
 
@@ -2860,6 +2885,35 @@ country_event = { ### New Mareway Beaten
 
 		trigger = {
 			has_war = yes
+		}
+	}
+}
+
+country_event = { #Cathedral Breakaway
+ 	id = redeye.110
+ 	title = redeye.110.title
+ 	desc = redeye.110.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = redeye.110.a
+		CAT = {
+			add_state_core = 593
+			add_state_core = 513
+			add_state_core = 505
+			add_state_core = 492
+			add_state_core = 533
+
+			transfer_state = 593
+			transfer_state = 513
+			transfer_state = 505
+			transfer_state = 492
+			transfer_state = 533
+			
+			transfer_technology = yes
 		}
 	}
 }
