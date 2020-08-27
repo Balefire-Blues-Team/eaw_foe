@@ -1,0 +1,289 @@
+add_namespace = HIT_event
+add_namespace = GRV_event
+
+#Ask CCD for alliance
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event HIT_event.1"}
+ 	id = HIT_event.1
+ 	title = HIT_event.1.t
+ 	desc = HIT_event.1.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = HIT_event.1.a
+		ai_chance = { factor = 80 }
+		if = {
+			limit = {
+				is_in_faction = yes
+			}
+			leave_faction = yes
+		}
+		HIT = { add_to_faction = CCD }
+	}
+	
+	option = {
+		name = HIT_event.1.b
+		ai_chance = { factor = 20 }
+		HIT = {country_event = { id = HIT_event.2 } }
+	}
+}
+
+#CCD refuses alliance
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event HIT_event.2"}
+ 	id = HIT_event.2
+ 	title = HIT_event.2.t
+ 	desc = HIT_event.2.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = HIT_event.2.a
+		ai_chance = { factor = 80 }
+		
+	}
+}
+
+#Moon Speaks #not Spark#
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event GRV_event.1"}
+ 	id = GRV_event.1
+ 	title = GRV_event.1.t
+ 	desc = GRV_event.1.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = GRV_event.1.a
+		ai_chance = { factor = 80 }
+		complete_national_focus = GRV_embrace_prophecy
+	}
+	
+}
+
+#Moon Speaks Spark
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event GRV_event.2"}
+ 	id = GRV_event.2
+ 	title = GRV_event.2.t
+ 	desc = GRV_event.2.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = GRV_event.2.a
+		ai_chance = { factor = 80 }
+		complete_national_focus = GRV_change_ways
+	}
+	
+}
+
+#Offer to HIT
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event GRV_event.3"}
+ 	id = GRV_event.3
+ 	title = GRV_event.3.t
+ 	desc = GRV_event.3.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = GRV_event.3.a
+		ai_chance = { factor = 30 }
+		GRV = {
+				puppet = HIT
+				add_timed_idea = { idea = GRV_industry_payments days = 150 }
+			}
+		add_ideas = GRV_electric_marvel3
+		one_random_industrial_complex = yes
+	}
+	
+	option = {
+		name = GRV_event.3.b
+		ai_chance = { factor = 70 }
+		GRV = {create_wargoal = { type = annex_everything target = HIT }}
+	}
+	
+}
+
+#Offer to CCD
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event GRV_event.4"}
+ 	id = GRV_event.4
+ 	title = GRV_event.4.t
+ 	desc = GRV_event.4.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = GRV_event.4.a
+		ai_chance = { factor = 80 }
+		GRV = {
+				puppet = CCD
+				if = {
+					limit = {
+						has_idea = GRV_industry_payments
+					}
+					modify_timed_idea = {
+						idea = GRV_industry_payments
+						days = 150
+					}
+				}
+				else = {
+					add_timed_idea = { idea = GRV_industry_payments days = 150 }
+				}
+			}
+		add_ideas = GRV_electric_marvel3
+		475 = {
+			add_resource = { type = metal amount = 6 }
+			add_resource = { type = energy amount = 10 }
+			add_resource = { type = crystals amount = 6 }
+		}
+	}
+	
+	option = {
+		name = GRV_event.4.b
+		ai_chance = { factor = 20 }
+		GRV = {create_wargoal = { type = annex_everything target = CCD }}
+	}
+	
+}
+
+#Offer to FTP
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event GRV_event.5"}
+ 	id = GRV_event.5
+ 	title = GRV_event.5.t
+ 	desc = GRV_event.5.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = GRV_event.5.a
+		ai_chance = { factor = 70 }
+		GRV = {
+				puppet = FTP
+				if = {
+					limit = {
+						has_idea = GRV_industry_payments
+					}
+					modify_timed_idea = {
+						idea = GRV_industry_payments
+						days = 150
+					}
+				}
+				else = {
+					add_timed_idea = { idea = GRV_industry_payments days = 150 }
+				}
+			}
+		add_ideas = GRV_electric_marvel3
+		410 = {
+			add_resource = { type = metal amount = 6 }
+			add_resource = { type = energy amount = 8 }
+			add_resource = { type = crystals amount = 6 }
+		}
+	}
+	
+	option = {
+		name = GRV_event.5.b
+		ai_chance = { factor = 30 }
+		GRV = {create_wargoal = { type = annex_everything target = FTP }}
+	}
+	
+}
+
+#Offer to FTR
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event GRV_event.6"}
+ 	id = GRV_event.6
+ 	title = GRV_event.6.t
+ 	desc = GRV_event.6.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = GRV_event.6.a
+		ai_chance = { factor = 50 }
+		GRV = {
+				puppet = FTR
+				if = {
+					limit = {
+						has_idea = GRV_industry_payments
+					}
+					modify_timed_idea = {
+						idea = GRV_industry_payments
+						days = 150
+					}
+				}
+				else = {
+					add_timed_idea = { idea = GRV_industry_payments days = 150 }
+				}
+			}
+		add_ideas = GRV_electric_marvel3
+		491 = {
+			add_resource = { type = metal amount = 6 }
+			add_resource = { type = energy amount = 8 }
+		}
+		one_random_industrial_complex = yes
+	}
+	
+	option = {
+		name = GRV_event.6.b
+		ai_chance = { factor = 50 }
+		GRV = {create_wargoal = { type = annex_everything target = FTR }}
+	}
+	
+}
+
+#Offer to WNF
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event GRV_event.7"}
+ 	id = GRV_event.7
+ 	title = GRV_event.7.t
+ 	desc = GRV_event.7.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = GRV_event.7.a
+		ai_chance = { factor = 50 }
+		GRV = {
+				puppet = WNF
+				if = {
+					limit = {
+						has_idea = GRV_industry_payments
+					}
+					modify_timed_idea = {
+						idea = GRV_industry_payments
+						days = 150
+					}
+				}
+				else = {
+					add_timed_idea = { idea = GRV_industry_payments days = 150 }
+				}
+			}
+		add_ideas = GRV_electric_marvel3
+		479 = {
+			add_resource = { type = metal amount = 6 }
+			add_resource = { type = energy amount = 8 }
+			add_resource = { type = water amount = 8 }
+		}
+	}
+	
+	option = {
+		name = GRV_event.7.b
+		ai_chance = { factor = 50 }
+		GRV = {create_wargoal = { type = annex_everything target = WNF }}
+	}
+	
+}
