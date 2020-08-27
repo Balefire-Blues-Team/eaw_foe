@@ -2941,24 +2941,54 @@ country_event = {
 	ai_chance = { factor = 90} 
 		NEC = {
 				
-				transfer_state = 5
+				transfer_state = 487
+				add_state_core = 487
 				set_country_flag = NEC_deployment_mode
 				set_country_flag = NEC_deployment_mode_inf
 				set_country_flag = NEC_deployment_mode_eli
 				set_country_flag = NEC_deployment_mode_arm
 				set_country_flag = NEC_deployment_mode_pa
+				hidden_effect = {
+					487 = {
+						add_building_construction = {
+						type = naval_base
+						province = 14244
+						level = 3
+						instant_build = yes
+						}
+					}
+				}
 			}
 		puppet = NEC
 		NEN = {
 				
-				transfer_state = 47
+				transfer_state = 57
+				add_state_core = 57
 				set_country_flag = NEN_deployment_mode
 				set_country_flag = NEN_deployment_mode_inf
 				set_country_flag = NEN_deployment_mode_eli
 				set_country_flag = NEN_deployment_mode_arm
 				set_country_flag = NEN_deployment_mode_pa
+				hidden_effect = {
+					57 = {
+						add_building_construction = {
+						type = naval_base
+						province = 8698
+						level = 3
+						instant_build = yes
+						}
+					}
+				}
 			}
 		puppet = NEN
+		hidden_effect = {
+			NEV = { add_ai_strategy = { type = alliance id = "NEC" value = 200} add_opinion_modifier = { target = NEC modifier = huge_increase } }
+			NEV = { add_ai_strategy = { type = alliance id = "NEN" value = 200} add_opinion_modifier = { target = NEN modifier = huge_increase } }
+			NEN = { add_ai_strategy = { type = alliance id = "NEV" value = 200} add_opinion_modifier = { target = NEV modifier = huge_increase } }
+			NEC = { add_ai_strategy = { type = alliance id = "NEV" value = 200} add_opinion_modifier = { target = NEV modifier = huge_increase } }
+			NEV = { add_ai_strategy = { type = protect id = "NEN" value = 200} add_opinion_modifier = { target = NEN modifier = huge_increase } }
+			NEV = { add_ai_strategy = { type = protect id = "NEC" value = 200} add_opinion_modifier = { target = NEC modifier = huge_increase } }
+		}
 	}
 }
 
@@ -3131,8 +3161,236 @@ country_event = {
 	}
 }
 
+#At war once more
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_purge.8"}
+	id = cloudsdale_purge.8
+	title = cloudsdale_purge.8.t
+	desc = cloudsdale_purge.8.d
+
+	picture = GFX_event_griffon_back
+	
+	
+	fire_only_once = yes
+	trigger = {
+		tag = NEV
+		has_global_flag = NEV_cauterize_start_tt
+		check_variable = {
+                        war_exhaustion > 0
+                    }
+	}
+	
+	option ={
+	name = cloudsdale_purge.8.a
+	ai_chance = { factor = 90} 
+		custom_effect_tooltip = NEV_gain_2_exhaustion
+		add_to_variable = {
+				var = war_exhaustion
+				value = 2
+			}
+	}
+}
+
+#Coffins arriving Home
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_purge.9"}
+	id = cloudsdale_purge.9
+	title = cloudsdale_purge.9.t
+	desc = cloudsdale_purge.9.d
+
+	picture = GFX_event_griffon_back
+	
+	
+	fire_only_once = yes
+	trigger = {
+		tag = NEV
+		is_ai = no
+		has_global_flag = NEV_cauterize_start_tt
+	}
+	mean_time_to_happen = { days = 60 }
+	option ={
+	name = cloudsdale_purge.9.a
+	ai_chance = { factor = 90} 
+		custom_effect_tooltip = NEV_gain_1_mexhaustion
+		add_to_variable = {
+				var = exhaustion_monthly
+				value = 1
+			}
+	}
+}
+
+#The Passive Resistance
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_purge.10"}
+	id = cloudsdale_purge.10
+	title = cloudsdale_purge.10.t
+	desc = cloudsdale_purge.10.d
+
+	picture = GFX_event_griffon_back
+	
+	
+	fire_only_once = yes
+	trigger = {
+		tag = NEV
+		has_global_flag = NEV_cauterize_start_tt
+		check_variable = {
+                        war_exhaustion > 24
+                    }
+	}
+	option ={
+	name = cloudsdale_purge.10.a
+	ai_chance = { factor = 90} 
+		custom_effect_tooltip = NEV_going_back_doesnt_help_tt
+		add_ideas = NEV_exhaustion_25_idea
+	}
+}
+
+#Widespread Factory Strikes
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_purge.11"}
+	id = cloudsdale_purge.11
+	title = cloudsdale_purge.11.t
+	desc = cloudsdale_purge.11.d
+
+	picture = GFX_event_griffon_back
+	
+	
+	fire_only_once = yes
+	trigger = {
+		tag = NEV
+		has_global_flag = NEV_cauterize_start_tt
+		check_variable = {
+                        war_exhaustion > 49
+                    }
+	}
+	option ={
+	name = cloudsdale_purge.11.a
+	ai_chance = { factor = 90} 
+		custom_effect_tooltip = NEV_going_back_doesnt_help_tt
+		swap_ideas = { add_idea = NEV_exhaustion_50_idea remove_idea = NEV_exhaustion_25_idea }
+	}
+}
+
+#Open Defiance of the Government
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_purge.12"}
+	id = cloudsdale_purge.12
+	title = cloudsdale_purge.12.t
+	desc = cloudsdale_purge.12.d
+
+	picture = GFX_event_griffon_back
+	
+	
+	fire_only_once = yes
+	trigger = {
+		tag = NEV
+		has_global_flag = NEV_cauterize_start_tt
+		check_variable = {
+                        war_exhaustion > 74
+                    }
+	}
+	option ={
+	name = cloudsdale_purge.12.a
+	ai_chance = { factor = 90} 
+		custom_effect_tooltip = NEV_going_back_doesnt_help_tt
+		swap_ideas = { add_idea = NEV_exhaustion_75_idea remove_idea = NEV_exhaustion_50_idea }
+	}
+}
+
+#Societal Breakdow
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_purge.13"}
+	id = cloudsdale_purge.13
+	title = cloudsdale_purge.13.t
+	desc = cloudsdale_purge.13.d
+
+	picture = GFX_event_griffon_back
+	
+	
+	fire_only_once = yes
+	trigger = {
+		tag = NEV
+		has_global_flag = NEV_cauterize_start_tt
+		check_variable = {
+                        war_exhaustion > 99
+                    }
+	}
+	option ={
+	name = cloudsdale_purge.13.a
+	ai_chance = { factor = 90} 
+		custom_effect_tooltip = NEV_going_back_doesnt_help_tt
+		swap_ideas = { add_idea = NEV_exhaustion_100_idea remove_idea = NEV_exhaustion_75_idea }
+	}
+}
+
+#NEN Defeated
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_purge.14"}
+	id = cloudsdale_purge.14
+	title = cloudsdale_purge.14.t
+	desc = cloudsdale_purge.14.d
+
+	picture = GFX_event_griffon_back
+	
+	
+	fire_only_once = yes
+	trigger = {
+		tag = NEV
+		has_global_flag = NEV_cauterize_start_tt
+		NEN = { has_capitulated  = yes }
+	}
+	option ={
+	name = cloudsdale_purge.14.a
+	ai_chance = { factor = 90} 
+		custom_effect_tooltip = NEV_gain_8_exhaustion
+		add_to_variable = {
+				var = war_exhaustion
+				value = 8
+			}
+		custom_effect_tooltip = NEV_gain_1_mexhaustion
+		add_to_variable = {
+				var = exhaustion_monthly
+				value = 1
+			}
+	}
+}
+
+#NEC Defeated
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event cloudsdale_purge.15"}
+	id = cloudsdale_purge.15
+	title = cloudsdale_purge.15.t
+	desc = cloudsdale_purge.15.d
+
+	picture = GFX_event_griffon_back
+	
+	
+	fire_only_once = yes
+	trigger = {
+		tag = NEV
+		has_global_flag = NEV_cauterize_start_tt
+		NEC = { has_capitulated  = yes }
+	}
+	option ={
+	name = cloudsdale_purge.15.a
+	ai_chance = { factor = 90} 
+		custom_effect_tooltip = NEV_gain_8_exhaustion
+		add_to_variable = {
+				var = war_exhaustion
+				value = 8
+			}
+		custom_effect_tooltip = NEV_gain_1_mexhaustion
+		add_to_variable = {
+				var = exhaustion_monthly
+				value = 1
+			}
+	}
+}
 
 
+#################
+###News-Events###
+#################
 
 #News from Starfall 1(Only SPP tower left in Griffonia, placed on Cross-island)
 #country_event = { 

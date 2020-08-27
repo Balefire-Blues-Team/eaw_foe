@@ -4,7 +4,7 @@
 #The Great War
 shared_focus = {
 		id = FSR_thegreatwar
-		icon = GFX_goal_stg_nukes
+		icon = GFX_goal_generic_megaspell
 		x = 20
 		y = 0
 		cost = 1
@@ -193,7 +193,8 @@ shared_focus = {
 		
 		available_if_capitulated = yes 
 		available = {
-        continuation > 0.5
+        visionary < 0.5
+		destruction < 0.5
         has_civil_war = no
 		}
 		
@@ -659,6 +660,9 @@ shared_focus = {
 			custom_effect_tooltip = FSR_robots_tt
 			hidden_effect = {
 			load_oob = "FSR_robots"
+			set_technology = {
+				robot_makeshift_automatons_tech = 1
+			}
 			}
 		}
 }
@@ -880,7 +884,7 @@ shared_focus = {
 #Technology Reclamation
 shared_focus = {
 	id = FSR_techreclaim
-		icon = GFX_goal_generic_advanced_focus
+		icon = GFX_goal_generic_advanced_technology_focus
 		x = 7
 		y = 18
 		cost = 8.64
@@ -905,13 +909,14 @@ shared_focus = {
 #Raid Silverwing
 shared_focus = {
 	id = FSR_raidsilver
-		icon = GFX_goal_generic_advanced_focus
+		icon = GFX_goal_MOJ_gun_runner_caravan_raids
 		x = 6
 		y = 19
 		cost = 8.64
 		
 		prerequisite = { focus = FSR_techreclaim }
 		available = {
+			has_completed_focus = FSR_hqprotectrons
 		}
 		available_if_capitulated = yes 
 		
@@ -937,6 +942,7 @@ shared_focus = {
 		
 		prerequisite = { focus = FSR_techreclaim }
 		available = {
+			has_completed_focus = FSR_hqprotectrons
 		}
 		available_if_capitulated = yes 
 		
@@ -976,7 +982,6 @@ shared_focus = {
 		will_lead_to_war_with = RED
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_slapredeye"
-			effect_tooltip = { create_wargoal = { type = annex_everything target = RED } }
 			declare_war_on = { 
 				type = annex_everything 
 				target = RED 
@@ -1044,6 +1049,703 @@ shared_focus = {
 		}
 }
 
+#New Territories
+shared_focus = {
+	id = FSR_con_the_new_territories
+	icon = GFX_goal_DOM_End_Judicial_Corruption
+		x = 0
+		y = 1
+		cost = 2.86
+		relative_position_id = FSR_slapredeye
+		prerequisite = { focus = FSR_slapredeye }
+		allow_branch = {
+		has_country_flag = FSR_victory_red_con
+		}
+		available = {
+		}
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 600
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_con_the_new_territories"
+			country_event = { id = fillysr_bs.90 }
+			hidden_effect = {
+				add_ideas = FSR_angry_slaves_2
+			}
+		}
+}
+
+#Emancipation
+shared_focus = {
+	id = FSR_con_emancipation
+	icon = GFX_goal_city_slaves
+		x = 2
+		y = 2
+		cost = 2.86
+		relative_position_id = FSR_slapredeye
+		prerequisite = { focus = FSR_con_the_new_territories }
+		mutually_exclusive = { focus = FSR_con_subjugation }
+		available = {
+		}
+		
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 100
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_con_emancipation"
+			swap_ideas = { remove_idea = FSR_angry_slaves_2 add_idea = FSR_angry_slaves_4}
+		}
+}
+
+#Subjugation
+shared_focus = {
+	id = FSR_con_subjugation
+	icon = GFX_goal_TEN_trade_barons
+		x = -2
+		y = 2
+		cost = 2.86
+		relative_position_id = FSR_slapredeye
+		prerequisite = { focus = FSR_con_the_new_territories }
+		mutually_exclusive = { focus = FSR_con_emancipation }
+
+		available = {
+		}
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 100
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_con_the_new_territories"
+			swap_ideas = { remove_idea = FSR_angry_slaves_2 add_idea = FSR_angry_slaves_4}
+		}
+}
+
+#Keep old Quotas
+shared_focus = {
+	id = FSR_con_old_quotas
+	icon = GFX_goal_NLR_work_sets_you_free
+		x = -2
+		y = 3
+		cost = 5.73
+		relative_position_id = FSR_slapredeye
+		prerequisite = { focus = FSR_con_subjugation }
+
+		available = {
+		}
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 100
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_con_subjugation"
+			swap_ideas = { remove_idea = FSR_angry_slaves_4 add_idea = FSR_slaves_subjugation}
+		}
+}
+
+#Expand foundries
+shared_focus = {
+	id = FSR_con_expand_foundries
+	icon = GFX_Steel
+		x = -2
+		y = 4
+		cost = 5.73
+		relative_position_id = FSR_slapredeye
+		prerequisite = { focus = FSR_con_old_quotas }
+
+		available = {
+		}
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 100
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_con_old_quotas"
+			532 = { add_resource = { type = metal amount = 18 }}
+			48 = {add_resource = { type = metal amount = 11 }}
+		}
+}
+
+#Slave Rangers
+shared_focus = {
+	id = FSR_con_slave_rangers
+	icon = GFX_goal_conscription_pony
+		x = 2
+		y = 3
+		cost = 5.73
+		relative_position_id = FSR_slapredeye
+		prerequisite = { focus = FSR_con_emancipation }
+
+		available = {
+		}
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 100
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_con_slave_rangers"
+			swap_ideas = { remove_idea = FSR_angry_slaves_4 add_idea = FSR_slaves_emancipation1}
+			add_manpower = 250
+		}
+}
+
+#lots of Compromise
+shared_focus = {
+	id = FSR_con_slave_compromise
+	icon = GFX_focus_generic_diplomatic_treaty_pony
+		x = 2
+		y = 4
+		cost = 5.73
+		relative_position_id = FSR_slapredeye
+		prerequisite = { focus = FSR_con_slave_rangers }
+
+		available = {
+		}
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 100
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_con_slave_compromise"
+			swap_ideas = { remove_idea = FSR_slaves_emancipation1 add_idea = FSR_slaves_emancipation2}
+			add_political_power = -100
+		}
+}
+
+#Scour Fillydelphia
+shared_focus = {
+	id = FSR_con_scour_ruins
+	icon = GFX_All_resource
+		x = 0
+		y = 3
+		cost = 5.73
+		relative_position_id = FSR_slapredeye
+		prerequisite = { focus = FSR_con_emancipation focus = FSR_con_subjugation }
+
+		available = {
+		}
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 100
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_con_scour_ruins"
+			538 = { add_resource = { type = composites amount = 12 }add_resource = { type = circuitry amount = 9 }add_resource = { type = advanced amount = 6 }}
+		}
+}
+
+#Rebuild key Infrastructure
+shared_focus = {
+	id = FSR_con_rebuild_key_infra
+	icon = GFX_goal_generic_infrastructure
+		x = 0
+		y = 4
+		cost = 5.73
+		relative_position_id = FSR_slapredeye
+		prerequisite = { focus = FSR_con_old_quotas focus = FSR_con_slave_rangers }
+		prerequisite = { focus = FSR_con_scour_ruins }
+
+		available = {
+		}
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 100
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_con_rebuild_key_infra"
+			48 = {add_resource = { type = water amount = 10 }}
+			45 = {add_resource = { type = energy amount = 9 }}
+			532 = {add_resource = { type = energy amount = 12 }}
+		}
+}
+
+#A United Fillydelphia
+shared_focus = {
+	id = FSR_con_united_filly
+	icon = GFX_goal_generic_industrialization
+		x = 0
+		y = 5
+		cost = 5.73
+		relative_position_id = FSR_slapredeye
+		prerequisite = { focus = FSR_con_expand_foundries focus = FSR_con_slave_compromise }
+		prerequisite = { focus = FSR_con_rebuild_key_infra }
+
+		available = {
+		}
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 100
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_con_united_filly"
+			add_state_core = 45
+			add_state_core = 48
+			add_state_core = 532
+			add_state_core = 525
+			add_state_core = 543
+		}
+}
+
+#Flatlands industrial aid
+shared_focus = {
+	id = FSR_con_flatlands_industry
+	icon = GFX_goal_improve_industry
+		x = -2
+		y = 6
+		cost = 5.73
+		relative_position_id = FSR_slapredeye
+		prerequisite = { focus = FSR_con_united_filly }
+
+		available = {
+		}
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_con_flatlands_industry"
+			FLT = {
+				random_owned_controlled_state = {
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+			type = industrial_complex
+			level = 1
+			instant_build = yes
+			}
+			}
+			random_owned_controlled_state = {
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+			type = arms_factory
+			level = 1
+			instant_build = yes
+			}
+			}
+			}
+		}
+}
+
+#Flatlands build agony
+shared_focus = {
+	id = FSR_con_flatlands_agony
+	icon = GFX_goal_rct_expand_the_city
+		x = -2
+		y = 7
+		cost = 5.73
+		relative_position_id = FSR_slapredeye
+		prerequisite = { focus = FSR_con_flatlands_industry }
+
+		available = {
+		}
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_con_flatlands_agony"
+			FLT = {
+			502 = {
+				add_extra_state_shared_building_slots = 6
+				add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+				}
+				add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+				}
+			}
+			}
+		}
+}
+
+#Flatlands train army
+shared_focus = {
+	id = FSR_con_flatlands_army
+	icon = GFX_goal_NLR_army
+		x = -2
+		y = 8
+		cost = 5.73
+		relative_position_id = FSR_slapredeye
+		prerequisite = { focus = FSR_con_flatlands_agony }
+
+		available = {
+		}
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_con_flatlands_army"
+			FLT = {
+				add_ideas = FSR_FLT_puppet_army
+			}
+			hidden_effect = {
+				FLT = { add_manpower = 1000 }
+			}
+		}
+}
+
+#March to Silverwing
+shared_focus = {
+	id = FSR_con_march_silverwing
+	icon = GFX_goal_GEA_guerilla_warfare
+		x = 0
+		y = 6
+		cost = 5.73
+		relative_position_id = FSR_slapredeye
+		prerequisite = { focus = FSR_con_united_filly }
+
+		available = {
+		}
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_con_march_silverwing"
+			LGH = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			APR = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			GUN = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			FRT = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+}
+
+#Silverwing Contingent
+shared_focus = {
+	id = FSR_con_contingent_silverwing
+	icon = GFX_goal_steel_rangers
+		x = 0
+		y = 7
+		cost = 5.73
+		relative_position_id = FSR_slapredeye
+		prerequisite = { focus = FSR_con_march_silverwing }
+
+		available = {
+			every_state = {
+				limit = {
+					is_core_of = GUN
+					is_core_of = LGH
+					is_core_of = APR
+					is_core_of = FRT
+				}
+				is_owned_and_controlled_by = FSR
+			}
+		}
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_con_contingent_silverwing"
+			custom_effect_tooltip = FSR_found_silverwing_contingent_tt
+			hidden_effect = {
+				FSR = {
+				puppet = APR
+				}
+				APR = {
+				add_state_core = 652
+				add_state_core = 490
+				add_state_core = 647
+				add_state_core = 493
+				add_state_core = 812
+				add_state_core = 503
+				add_state_core = 648
+				add_state_core = 791
+				add_state_core = 470
+
+				transfer_state = 652
+				transfer_state = 490
+				transfer_state = 647
+				transfer_state = 493
+				transfer_state = 812
+				transfer_state = 503
+				transfer_state = 648
+				transfer_state = 791
+				transfer_state = 470
+				
+				add_state_claim = 125
+				add_state_claim = 479
+				add_state_claim = 459
+				add_state_claim = 612
+				add_state_claim = 448
+				
+				inherit_technology = FSR
+				set_cosmetic_tag = FSR_APR_puppet
+				create_country_leader = {
+						name = "Ranger Council"
+						desc = "foreign_rule"
+						picture = ""
+						expire = "1965.1.1"
+						ideology = steel_ranger_cont
+						traits = {}
+				}
+				set_capital = 812
+				add_idea = advanced_research_base
+				add_idea = old_world_society
+				division_template = {
+					name = "Silverwing Auxilliary"
+					priority = 1
+					regiments = {
+					infantry = { x = 0 y = 0 }
+					infantry = { x = 0 y = 1 }
+					infantry = { x = 0 y = 2 }
+					infantry = { x = 1 y = 0 }
+					infantry = { x = 1 y = 1 }
+					}
+				}
+				division_template = {
+					name = "Silverwing Rangers"
+					priority = 1
+					regiments = {
+					power_armour = { x = 0 y = 0 }
+					power_armour = { x = 0 y = 1 }
+					power_armour = { x = 0 y = 2 }
+					power_armour = { x = 1 y = 0 }
+					power_armour = { x = 1 y = 1 }
+					}
+					support = {
+					power_armour_support = { x = 0 y = 0 }
+					}
+				}
+				812 = {
+					create_unit = {
+						division = "name = \"1st Silverwing Auxilliary\" division_template = \"Silverwing Auxilliary\" start_experience_factor = 0.3" 
+						owner = APR
+					}
+					create_unit = {
+						division = "name = \"2nd Silverwing Auxilliary\" division_template = \"Silverwing Auxilliary\" start_experience_factor = 0.3" 
+						owner = APR
+					}
+					create_unit = {
+						division = "name = \"3rd Silverwing Auxilliary\" division_template = \"Silverwing Auxilliary\" start_experience_factor = 0.3" 
+						owner = APR
+					}
+					create_unit = {
+						division = "name = \"1st Silverwing Rangers\" division_template = \"Silverwing Rangers\" start_experience_factor = 0.6" 
+						owner = APR
+					}
+				}
+				}
+			}
+		}
+}
+
+#Integrate Luminous City
+shared_focus = {
+	id = FSR_con_integrate_light
+	icon = GFX_goal_generic_lightbulb
+		x = 0
+		y = 8
+		cost = 5.73
+		relative_position_id = FSR_slapredeye
+		prerequisite = { focus = FSR_con_contingent_silverwing }
+
+		available = {
+			owns_state = 653
+			owns_state = 515
+		}
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_con_integrate_light"
+			add_state_core = 653
+			add_state_core = 515
+		}
+}
+
+#Sunnyshore salvage
+shared_focus = {
+	id = FSR_con_sunnyshore_salvage
+	icon = GFX_focus_indy_excavations
+		x = 2
+		y = 6
+		cost = 5.73
+		relative_position_id = FSR_slapredeye
+		prerequisite = { focus = FSR_con_united_filly }
+
+		available = {
+		}
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_con_sunnyshore_salvage"
+			487 = {add_resource = { type = energy amount = 10 }}
+			554 = {add_resource = { type = water amount = 8 }}
+			5 = {add_resource = { type = energy amount = 6 } add_resource = { type = advanced amount = 4 }}
+			558 = {add_resource = { type = advanced amount = 8 }}
+		}
+}
+
+#Sunnyshore recruits
+shared_focus = {
+	id = FSR_con_sunnyshore_recruit
+	icon = GFX_goal_MWT
+		x = 2
+		y = 7
+		cost = 5.73
+		relative_position_id = FSR_slapredeye
+		prerequisite = { focus = FSR_con_sunnyshore_salvage }
+
+		available = {
+		}
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_con_sunnyshore_recruit"
+			SSC = {
+				add_ideas = FSR_SSC_puppet_army
+			}
+			hidden_effect = {
+				SSC = { add_manpower = 1000}
+			}
+		}
+}
+
+#Sunnyshore electronics
+shared_focus = {
+	id = FSR_con_sunnyshore_electronics
+	icon = GFX_goal_generic_electronics_focus
+		x = 2
+		y = 8
+		cost = 5.73
+		relative_position_id = FSR_slapredeye
+		prerequisite = { focus = FSR_con_sunnyshore_recruit }
+
+		available = {
+		}
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_con_sunnyshore_electronics"
+			558 = {add_resource = { type = circuitry amount = 16 }}
+		}
+}
+
+#United through Knowledge
+shared_focus = {
+	id = FSR_con_united_knowledge
+	icon = GFX_goal_BOS_generic_research
+		x = 0
+		y = 9
+		cost = 5.73
+		relative_position_id = FSR_slapredeye
+		prerequisite = { focus = FSR_con_sunnyshore_electronics }
+		prerequisite = { focus = FSR_con_flatlands_army }
+		prerequisite = { focus = FSR_con_integrate_light }
+
+		available = {
+		}
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 50
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_con_united_knowledge"
+			add_research_slot = 1
+			add_to_tech_sharing_group = SR_Filly_research
+			every_other_country = {
+				limit = { is_subject_of = FSR }
+				add_to_tech_sharing_group = SR_Filly_research
+			}
+		}
+}
+
+#Into the Future
+shared_focus = {
+	id = FSR_con_into_the_future
+	icon = GFX_goal_generic_balefire_phoenix
+		x = 0
+		y = 10
+		cost = 5.73
+		relative_position_id = FSR_slapredeye
+		prerequisite = { focus = FSR_con_united_knowledge }
+
+		available = {
+		}
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 500
+		} 
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus FSR_con_into_the_future"
+			add_ideas = FSR_con_rangers_triumphant_idea
+		}
+}
+
+
+
+
+
 
 ###############
 ##Destruction##
@@ -1095,7 +1797,10 @@ shared_focus = {
 		
 		available_if_capitulated = yes 
 		
-		available = {
+		bypass = {
+			NOT = {
+				has_idea = FSR_bad_scribes
+			}
 		}
 		prerequisite = { focus = FSR_takeover }
 		
@@ -2054,7 +2759,7 @@ shared_focus = {
 		icon = GFX_goal_solar_phoenix_defence
 		x = 31
 		y = 14
-		cost = 5
+		cost = 4.29
 		
 		available_if_capitulated = yes 
 		available = {
@@ -2079,7 +2784,7 @@ shared_focus = {
 		x = -1
 		y = 1
 		relative_position_id = FSR_outlook
-		cost = 3
+		cost = 2.86
 		
 		available_if_capitulated = yes 
 		prerequisite = { focus = FSR_outlook }
@@ -2103,7 +2808,7 @@ shared_focus = {
 		x = -3
 		y = 2
 		relative_position_id = FSR_outlook
-		cost = 5
+		cost = 4.29
 		
 		available_if_capitulated = yes 
 		prerequisite = { focus = FSR_for_politics }
@@ -2126,7 +2831,7 @@ shared_focus = {
 		x = -3
 		y = 3
 		relative_position_id = FSR_outlook
-		cost = 5
+		cost = 4.29
 		
 		available_if_capitulated = yes 
 		available = {
@@ -2152,7 +2857,7 @@ shared_focus = {
 		x = -3
 		y = 4
 		relative_position_id = FSR_outlook
-		cost = 5
+		cost = 4.29
 		
 		available_if_capitulated = yes 
 		prerequisite = { focus = FSR_save_slaves }
@@ -2177,7 +2882,7 @@ shared_focus = {
 		x = -1
 		y = 2
 		relative_position_id = FSR_outlook
-		cost = 5
+		cost = 4.29
 		
 		available_if_capitulated = yes 
 		prerequisite = { focus = FSR_for_politics }
@@ -2203,7 +2908,7 @@ shared_focus = {
 		x = -1
 		y = 3
 		relative_position_id = FSR_outlook
-		cost = 5
+		cost = 4.29
 		
 		available_if_capitulated = yes 
 		prerequisite = { focus = FSR_partisan_meeting }
@@ -2226,7 +2931,7 @@ shared_focus = {
 		x = -1
 		y = 4
 		relative_position_id = FSR_outlook
-		cost = 5
+		cost = 4.29
 		
 		available_if_capitulated = yes 
 		prerequisite = { focus = FSR_partisan_knights }
@@ -2267,7 +2972,7 @@ shared_focus = {
 		x = -2
 		y = 5
 		relative_position_id = FSR_outlook
-		cost = 6
+		cost = 5.72
 		
 		available_if_capitulated = yes 
 		prerequisite = { focus = FSR_partisan_experts }
@@ -2321,7 +3026,7 @@ shared_focus = {
 		x = 1
 		y = 1
 		relative_position_id = FSR_outlook
-		cost = 3
+		cost = 2.86
 		
 		available_if_capitulated = yes 
 		prerequisite = { focus = FSR_outlook }
@@ -2345,7 +3050,7 @@ shared_focus = {
 		x = 1
 		y = 2
 		relative_position_id = FSR_outlook
-		cost = 5
+		cost = 4.29
 		
 		available_if_capitulated = yes 
 		prerequisite = { focus = FSR_dom_politics }
@@ -2376,7 +3081,7 @@ shared_focus = {
 		x = 1
 		y = 3
 		relative_position_id = FSR_outlook
-		cost = 5
+		cost = 4.29
 		
 		available_if_capitulated = yes 
 		prerequisite = { focus = FSR_reform_scribes }
@@ -2399,7 +3104,7 @@ shared_focus = {
 		x = 1
 		y = 4
 		relative_position_id = FSR_outlook
-		cost = 5
+		cost = 4.29
 		
 		available_if_capitulated = yes 
 		prerequisite = { focus = FSR_reform_citizens }
@@ -2428,7 +3133,7 @@ shared_focus = {
 		x = 3
 		y = 2
 		relative_position_id = FSR_outlook
-		cost = 5
+		cost = 4.29
 		
 		available_if_capitulated = yes 
 		prerequisite = { focus = FSR_dom_politics }
@@ -2452,7 +3157,7 @@ shared_focus = {
 		x = 3
 		y = 3
 		relative_position_id = FSR_outlook
-		cost = 5
+		cost = 4.29
 		
 		available_if_capitulated = yes 
 		prerequisite = { focus = FSR_opposition }
@@ -2475,7 +3180,7 @@ shared_focus = {
 		x = 3
 		y = 4
 		relative_position_id = FSR_outlook
-		cost = 5
+		cost = 4.29
 		
 		available_if_capitulated = yes 
 		prerequisite = { focus = FSR_deal_nova }
@@ -2498,7 +3203,7 @@ shared_focus = {
 		x = 2
 		y = 5
 		relative_position_id = FSR_outlook
-		cost = 6
+		cost = 5.72
 		
 		available_if_capitulated = yes 
 		prerequisite = { focus = FSR_deal_crossroads }
@@ -2523,7 +3228,7 @@ shared_focus = {
 		x = 0
 		y = 6
 		relative_position_id = FSR_outlook
-		cost = 6
+		cost = 5.72
 		
 		available_if_capitulated = no
 		prerequisite = { focus = FSR_war_prep }
@@ -2679,7 +3384,7 @@ shared_focus = {
 			name = infantry_weapons_bonus
 			bonus = 0.5
 			uses = 1
-			category = anti_personnel_tech
+			category = fireteam_tech
 			}
 			
 			add_tech_bonus = {
@@ -2713,7 +3418,7 @@ shared_focus = {
 			name = infantry_weapons_bonus
 			bonus = 1.0
 			uses = 1
-			category = energy_weaponry_tech
+			category = energy_weapon_tech
 			}
 			
 		}
@@ -2913,7 +3618,7 @@ shared_focus = {
 				name = explosive_bonus
 				bonus = 0.5
 				uses = 2
-				category = explosive_tech
+				category = demolition_tech
 			}
 			
 		}
@@ -3106,7 +3811,7 @@ shared_focus = {
 				name = anti_personnel_bonus
 				bonus = 0.5
 				uses = 2
-				category = anti_personnel_tech
+				category = fireteam_tech
 			}
 			
 		}
@@ -3208,7 +3913,7 @@ shared_focus = {
 				name = chem_bonus
 				bonus = 0.5
 				uses = 2
-				category = chem_tech
+				category = medical_tech
 			}
 			
 		}
@@ -6345,7 +7050,7 @@ shared_focus = {
 			custom_effect_tooltip = FSR_rebuild_eqs_tt
 			180 = { add_core_of = ROOT }
 			set_capital = 180
-			set_province_name = { id = 8748 name = "Canterlot"}
+			set_province_name = { id = 8775 name = "Canterlot"}
 		}
 		
 }
@@ -6849,7 +7554,7 @@ shared_focus = {
 				name = anti_personnel_bonus
 				bonus = 1.0
 				uses = 2
-				category = anti_personnel_tech
+				category = fireteam_tech
 			}
 		}
 		
@@ -7281,7 +7986,7 @@ shared_focus = {
 				name = hospital_bonus
 				bonus = 1.0
 				uses = 2
-				category = chem_tech
+				category = medical_tech
 			}
 		}
 		

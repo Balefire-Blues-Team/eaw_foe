@@ -654,8 +654,7 @@ shared_focus = {
 		y = 5
 
 		cost = 4.38
-		prerequisite = { focus = SHA_offer_leslie_to_join }
-		prerequisite = { focus = SHA_conquer_leslie_raiders }
+		prerequisite = { focus = SHA_offer_leslie_to_join focus = SHA_conquer_leslie_raiders}
 		ai_will_do = {
 			factor = 50
 		}
@@ -1578,13 +1577,6 @@ shared_focus = {
 		icon = GFX_goal_generic_small_arms
 		x = 0
 		y = 7
-		available = {
-			OR = {
-				has_war_with = NEV
-				NEV = {has_government = continuation}
-				NEV = {has_government = visionary}
-			}
-		}
 		
 		relative_position_id = NCR_provisional_republic
 		cost = 10
@@ -1609,13 +1601,13 @@ shared_focus = {
 				limit = {
 					NEV = {has_government = continuation}
 				}
-				create_wargoal = { type = annex_everything target = NEV}
+				country_event = { id = shatteredhoof.15 }
 			}
 			else_if = {
 				limit = {
-					has_war_with = NEV
+					NEV = {has_government = destruction}
 				}
-				add_timed_idea = { idea = NCR_early_cauterize days = 200 }
+				add_timed_idea = { idea = NCR_early_cauterize days = 300 }
 			}
 		}
 
@@ -1749,7 +1741,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = NCR_make_republic_official
-		icon = Waving_NCR_flag_goal
+		icon = GFX_goal_NCR_flag_wave
 		x = 0
 		y = 9
 		
@@ -1897,7 +1889,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = NCR_restructuring_the_economy
-		icon = restructuring_the_economy_focus
+		icon = GFX_goal_NCR_restructuring_economy
 		x = 2
 		y = 2
 		
@@ -2008,17 +2000,19 @@ shared_focus = {
 		
 		relative_position_id = NCR_make_republic_official
 		cost = 4.38
+		
+		bypass = { MSR = { exists = no }}
 
 		prerequisite = {focus = NCR_proposal_216 }
 		ai_will_do = {
-			factor = 50
+			factor = 500
 		}
 
 		cancel_if_invalid = yes
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			country_event = { id = shatteredhoof_ncr.24 }
 		}
 } 
 
@@ -2030,17 +2024,21 @@ shared_focus = {
 		
 		relative_position_id = NCR_make_republic_official
 		cost = 4.38
+		available = { 
+			every_state = { limit = { is_core_of = FSR} is_owned_by = SHA}
+			FSR = { exists = no }
+		}
 
 		prerequisite = {focus = NCR_the_steel_rangers }
 		ai_will_do = {
-			factor = 50
+			factor = 500
 		}
 
 		cancel_if_invalid = yes
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			country_event = { id = shatteredhoof_ncr.27 }
 		}
 } 
 
@@ -2052,6 +2050,8 @@ shared_focus = {
 		
 		relative_position_id = NCR_make_republic_official
 		cost = 4.38
+		available = { always = no }
+		bypass = { has_idea = followers_of_the_apocalypse_idea}
 
 		prerequisite = {focus = NCR_proposal_216 }
 		ai_will_do = {
@@ -2073,19 +2073,19 @@ shared_focus = {
 		y = 6
 		
 		relative_position_id = NCR_make_republic_official
-		cost = 4.38
+		cost = 1.43
 
 		prerequisite = {focus = NCR_how_to_deal_with_the_followers }
 		mutually_exclusive = { focus = NCR_help_spread_the_followers }
 		ai_will_do = {
-			factor = 50
+			factor = 10
 		}
 
 		cancel_if_invalid = yes
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			country_event = { id = shatteredhoof_ncr.31 }
 		}
 } 
 
@@ -2096,19 +2096,20 @@ shared_focus = {
 		y = 6
 		
 		relative_position_id = NCR_make_republic_official
-		cost = 4.38
+		cost = 1.43
 
 		prerequisite = {focus = NCR_how_to_deal_with_the_followers }
 		mutually_exclusive = { focus = NCR_operation_broken_heart }
 		ai_will_do = {
-			factor = 50
+			factor = 500
 		}
 
 		cancel_if_invalid = yes
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			custom_effect_tooltip = NCR_followers_spread_tt
+			swap_ideas = { remove_idea = followers_of_the_apocalypse_idea add_idea = followers_of_the_apocalypse_idea2}
 		}
 } 
 
@@ -2235,7 +2236,12 @@ shared_focus = {
 		y = 2
 		
 		cost = 4.38
-		available = { has_completed_focus = NCR_the_first_election}
+		available = { 
+			has_completed_focus = NCR_the_first_election
+			NOT = {
+				has_war_with = NEV
+			}
+		}
 		ai_will_do = {
 			factor = 50
 		}
@@ -2853,7 +2859,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = NCR_a_deal_with_tenpony
-		icon = a_deal_with_tenpony_focus
+		icon = GFX_goal_NCR_deal_with_tenpony
 		x = -3
 		y = 8
 		
@@ -4202,7 +4208,7 @@ shared_focus = {
 		y = 7
 		
 		cost = 4.38
-		
+		available = { TEN = { is_in_faction_with = SHA}}
 		ai_will_do = {
 			factor = 500
 		}
@@ -4213,7 +4219,10 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			custom_effect_tooltip = NCR_influence_TEN_tt
+			TEN = {
+				add_ideas = NCR_investement_to_TEN
+			}
 		}
 } 
 
@@ -4235,7 +4244,7 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			custom_effect_tooltip = NCR_influence_TEN_mil_tt
 		}
 } 
 
@@ -4257,7 +4266,7 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			custom_effect_tooltip = NCR_influence_TEN_eco_tt
 		}
 } 
 
@@ -4407,7 +4416,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = NCR_consolidate_industry
-		icon = Consolidate_our_industry_focus
+		icon = GFX_goal_NCR_consolidate_industry
 		x = 60
 		y = 2
 		
@@ -4434,7 +4443,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = NCR_expand_dord
-		icon = Department_of_researchDevelopment_001
+		icon = GFX_goal_NCR_research_development
 		x = -6
 		y = 1
 		
@@ -4456,7 +4465,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = NCR_expand_stablepony_knowledge
-		icon = old_world_knowledge_focus
+		icon = GFX_goal_NCR_aquire_knowledge
 		x = -6
 		y = 2
 		
@@ -4478,7 +4487,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = NCR_proper_research_centre
-		icon = A_proper_research_centre_001
+		icon = GFX_goal_NCR_research_center
 		x = -6
 		y = 3
 		
@@ -4501,7 +4510,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = NCR_breach_neighvarro
-		icon = Brech_Nieigvarro_001
+		icon = GFX_goal_NCR_breach_neighvarro
 		x = -4
 		y = 2
 		
@@ -4527,7 +4536,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = NCR_neighvarro_blueprints
-		icon = Salvage_Enclave_Blueprints_001
+		icon = GFX_goal_NCR_salvage_enclave
 		x = -4
 		y = 3
 		
@@ -4562,7 +4571,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = NCR_found_flwda
-		icon = NCR_found_FLWDA_focus
+		icon = GFX_goal_NCR_FLWDA
 		x = 0
 		y = 1
 		
@@ -4584,7 +4593,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = NCR_appleloosa_railway_hub
-		icon = New_Applooza_railway_hub_001
+		icon = GFX_goal_NCR_new_appleloosa
 		x = -2
 		y = 2
 		
@@ -4611,7 +4620,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = NCR_repair_cloudsdale
-		icon = Repair_Cloudsdale_001
+		icon = GFX_goal_NCR_repair_cloudsdale
 		x = -2
 		y = 3
 		
@@ -4640,7 +4649,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = NCR_wonderbolts_manufacturing
-		icon = Wonderbolt_manufacturing_001
+		icon = GFX_goal_NCR_wonderbolt_manufacturing
 		x = -2
 		y = 4
 		
@@ -4664,7 +4673,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = NCR_labour_hayseed_tribals
-		icon = Labour_Hayseed_Tribals_001
+		icon = GFX_goal_NCR_hayseed_swamps
 		x = 0
 		y = 2
 		
@@ -4687,7 +4696,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = NCR_modern_poldering_techniques
-		icon = Modern_Poldering_001
+		icon = GFX_goal_NCR_polders
 		x = 0
 		y = 3
 		
@@ -4717,7 +4726,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = NCR_mine_gorges
-		icon = Mine_Gorges_001
+		icon = GFX_goal_NCR_mine_gorges
 		x = 0
 		y = 4
 		
@@ -4746,7 +4755,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = NCR_neocastle_industrial_plan
-		icon = neocastle_industrial_plan_focus
+		icon = GFX_goal_NCR_neocastle_plan
 		x = 2
 		y = 2
 		
@@ -4800,7 +4809,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = NCR_gem_farms_thing
-		icon = Gem_farms_thing_001
+		icon = GFX_goal_NCR_gem_farms
 		x = 4
 		y = 2
 		
@@ -4858,13 +4867,13 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			custom_effect_tooltip = NCR_New_canterlot_plan_1_tt
 		}
 } 
 
 shared_focus = { 
 	id = NCR_trans_azuria_railway
-		icon = Trans_Azuria_Railway_001
+		icon = GFX_goal_NCR_azuria_railway
 		x = 4
 		y = 3
 		
@@ -4886,13 +4895,13 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			custom_effect_tooltip = NCR_azuria_railway_decision_tt
 		}
 } 
 
 shared_focus = { 
 	id = NCR_leslie_arms_industry
-		icon = Leslie_Arms_Industry_001
+		icon = GFX_goal_NCR_leslie_arms
 		x = 8
 		y = 2
 		
@@ -4908,7 +4917,12 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			575 = {
+				add_extra_state_shared_building_slots = 2 add_building_construction = { type = arms_factory instant_build = yes level = 1}
+			}
+			571 = {
+				add_extra_state_shared_building_slots = 2 add_building_construction = { type = arms_factory instant_build = yes level = 1}
+			}
 		}
 } 
 
@@ -4919,7 +4933,14 @@ shared_focus = {
 		y = 3
 		
 		cost = 4.38
-		
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = NCR_40_reform_check_tt
+                    check_variable = {
+                        reform_progress > 39
+                    }
+            }
+		}
 		ai_will_do = {
 			factor = 50
 		}
@@ -4934,13 +4955,18 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			custom_effect_tooltip = NCR_New_canterlot_plan_2_tt
+			custom_effect_tooltip = NCR_gain_2_reform_capital_tt
+			add_to_variable = {
+				var = reform_capital
+				value = 2
+			}
 		}
 } 
 
 shared_focus = { 
 	id = NCR_gunpowder_belt
-		icon = Gunpowder_Belt_001
+		icon = GFX_goal_NCR_gunpowder_belt
 		x = 2
 		y = 3
 		
@@ -4957,13 +4983,18 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			575 = {
+				add_extra_state_shared_building_slots = 1 add_building_construction = { type = arms_factory instant_build = yes level = 1}
+			}
+			747 = {
+				add_extra_state_shared_building_slots = 2 add_building_construction = { type = arms_factory instant_build = yes level = 2}
+			}
 		}
 } 
 
 shared_focus = { 
 	id = NCR_republic_breadbasket
-		icon = Republics_Breadbasket_001
+		icon = GFX_goal_NCR_breadbasket
 		x = 8
 		y = 3
 		
@@ -4980,13 +5011,13 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			add_ideas = NCR_mechanized_agriculture_idea
 		}
 } 
 
 shared_focus = { 
 	id = NCR_land_reclamation_initiative
-		icon = Land_reclamation_initiative_001
+		icon = GFX_goal_NCR_land_reclaimation
 		x = 8
 		y = 4
 		
@@ -5004,13 +5035,15 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			every_owned_state = {
+				add_extra_state_shared_building_slots = 1
+			}
 		}
 } 
 
 shared_focus = { 
 	id = NCR_everfree_ressources
-		icon = Everfree_Ressources_001
+		icon = GFX_goal_NCR_everfree_resources
 		x = 2
 		y = 6
 		
@@ -5029,13 +5062,21 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
+			800 = {
+				add_resource = { type = composites amount = 12}
+				add_manpower = 1000
+			}
 			
+			513 = {
+				add_resource = { type = energy amount = 10}
+				add_manpower = 1000
+			}
 		}
 } 
 
 shared_focus = { 
 	id = NCR_buerau_of_settlement
-		icon = Buero_of_Settlement_001
+		icon = GFX_goal_NCR_bureau_of_settlement
 		x = 6
 		y = 5
 		
@@ -5051,13 +5092,34 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
+			every_owned_state = {
+				limit = {
+					is_core_of = SHA
+				}
+				add_manpower = 100
+			}
 			
+			hidden_effect = {
+				if = {
+					limit = {
+						OAP = {
+							is_puppet_of = SHA
+						}
+					}
+					every_state = {
+						limit = {
+							is_core_of = OAP
+						}
+						add_manpower = 1000
+					}
+				}
+			}
 		}
 } 
 
 shared_focus = { 
 	id = NCR_tear_down_old_build_new
-		icon = Tear_down_old_build_new_001
+		icon = goal_NCR_tear_old_build_new
 		x = 2
 		y = 7
 		
@@ -5079,13 +5141,44 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
+			532 = {
+				remove_building = {
+   				type = arms_factory
+    			level = 4
+				}
+				add_resource = { type = energy amount = 8}
+				add_resource = { type = metal amount = 12}
+				set_state_name = "Heart of Fillydelphia"
+			}
 			
+			48 = {
+				remove_building = {
+   				type = arms_factory
+    			level = 2
+				}
+				add_resource = { type = energy amount = 4}
+				add_resource = { type = metal amount = 6}
+				set_state_name = "Beatitudinem"
+			}
+			set_province_name = {
+				id = 9017
+				name = "Heart of Fillydelphia"
+			}
+			set_province_name = {
+				id = 9068
+				name = "Bea Libertum"
+			}
+			set_province_name = {
+				id = 6474
+				name = "Memorial Avenue"
+			}
+			add_stability = 0.1
 		}
 } 
 
 shared_focus = { 
 	id = NCR_build_on_redeye
-		icon = build_on_Red_Eye_001
+		icon = GFX_goal_NCR_build_on_red_eye
 		x = 6
 		y = 7
 		
@@ -5106,13 +5199,22 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
+			532 = {
+				add_extra_state_shared_building_slots = 2 add_building_construction = { type = arms_factory instant_build = yes level = 2}
+				set_state_name = "NCR Factories"
+			}
 			
+			set_province_name = {
+				id = 9017
+				name = "NCR Factories"
+			}
+			add_stability = -0.2
 		}
 } 
 
 shared_focus = { 
 	id = NCR_comission_to_exploit_foal_mountains
-		icon = Commission_to_exploit_Foal_mountains_001
+		icon = GFX_goal_NCR_foal_mountain_exploitation
 		x = 0
 		y = 6
 		
@@ -5120,6 +5222,12 @@ shared_focus = {
 		available = {
 			has_completed_focus = NCR_the_wasteland_exploitation_treaty
 			has_completed_focus = NCR_state_of_foal_mountain
+			every_state = {
+				limit = {
+					is_core_of = CCD
+				}
+				is_owned_by = SHA
+			}
 		}
 		ai_will_do = {
 			factor = 50
@@ -5132,13 +5240,44 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			475 = {
+				add_state_modifier = = {
+					modifier = {
+						local_resources = 0.8
+						conscription_factor = -0.8
+					}				
+				}
+			}
+			446 = {
+				add_state_modifier = = {
+					modifier = {
+						local_resources = 0.8
+						conscription_factor = -0.8
+					}				
+				}
+			}
+			491 = {
+				add_state_modifier = = {
+					modifier = {
+						local_resources = 0.8
+						conscription_factor = -0.8
+					}				
+				}
+			}
+			483 = {
+				add_state_modifier = = {
+					modifier = {
+						local_resources = 0.8
+						conscription_factor = -0.8
+					}				
+				}
+			}
 		}
 } 
 
 shared_focus = { 
 	id = NCR_extend_comission_control
-		icon = Extend_Commission_control_001
+		icon = GFX_goal_NCR_extend_commission_control
 		x = 0
 		y = 7
 		
@@ -5154,7 +5293,7 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			swap_ideas = { remove_idea = NCR_waste_exploitation_1_idea add_idea = NCR_waste_exploitation_2_idea }
 		}
 } 
 
@@ -5167,7 +5306,14 @@ shared_focus = {
 		y = 8
 		
 		cost = 4.38
-		
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = NCR_100_reform_check_tt
+                    check_variable = {
+                        reform_progress > 99
+                    }
+            }
+		}
 		ai_will_do = {
 			factor = 50
 		}
@@ -5178,13 +5324,23 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			hidden_effect = {
+			808 = { add_manpower = 4000 
+				add_state_modifier = = {
+					modifier = {
+						monthly_population = 2
+					}				
+				}
+			}
+			}
+			add_ideas = NCR_city_of_the_worlds_desire_idea
+			swap_ideas = { remove_idea = wasteland_society add_idea = wasteland_society2}
 		}
 } 
 
 shared_focus = { 
 	id = NCR_4_cities_proposal
-		icon = The_4_cities_Proposal_001
+		icon = GFX_goal_NCR_four_cities
 		x = 4
 		y = 9
 		
@@ -5205,13 +5361,16 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			add_offsite_building = { type = arms_factory level = 3 }
+			add_offsite_building = { type = industrial_complex level = 3 }
+			add_offsite_building = { type = dockyard level = 3 }
+			add_manpower = 3000
 		}
 } 
 
 shared_focus = { 
 	id = NCR_new_east_sea_fleet
-		icon = Refurbish_the_East_sea_Fleet_001
+		icon = GFX_goal_NCR_refurbish_fleet
 		x = 7
 		y = 9
 		
@@ -5227,12 +5386,12 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			custom_effect_tooltip = Rustwreck_navy_ncr_tt
 		}
 } 
 
 shared_focus = { 
-	id = NCR_university_of_new_canterlot
+	id = GFX_goal_NCR_university
 		icon = University_of_the_New_Canterlot_001
 		x = -4
 		y = 4
@@ -5250,13 +5409,13 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			custom_effect_tooltip = NCR_universtity_decisons_unlocked_tt
 		}
 } 
 
 shared_focus = { 
 	id = NCR_spirit_of_mwt
-		icon = Spirit_of_the_MWT_001
+		icon = GFX_goal_NCR_MWT
 		x = -6
 		y = 5
 		
@@ -5273,13 +5432,13 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			add_ideas = NCR_mwt_spirit_idea
 		}
 } 
 
 shared_focus = { 
 	id = NCR_spirit_of_mas
-		icon = Spirit_of_the_MAS_001
+		icon = GFX_goal_NCR_MAS
 		x = -2
 		y = 5
 		
@@ -5296,18 +5455,20 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			add_ideas = NCR_mas_spirit_idea
 		}
 } 
 
 shared_focus = { 
 	id = NCR_restore_fillydelphia_hub
-		icon = Rebuild_Fillydelphia_001
+		icon = GFX_goal_NCR_rebuild_fillydelphia
 		x = -6
 		y = 6
 		
 		cost = 4.38
-		
+		available = {
+			has_completed_focus = NCR_state_of_fillydelphia
+		}
 		ai_will_do = {
 			factor = 50
 		}
@@ -5319,18 +5480,21 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			538 = { add_extra_state_shared_building_slots = 6}
+			add_research_slot = 1
 		}
 } 
 
 shared_focus = { 
 	id = NCR_rebuild_canterlot_hub
-		icon = Rebuild_Canterlot_001
+		icon = GFX_goal_NCR_rebuild_canterlot
 		x = -2
 		y = 6
 		
 		cost = 4.38
-		
+		available = {
+			has_completed_focus = NCR_state_of_canterlot
+		}
 		ai_will_do = {
 			factor = 50
 		}
@@ -5342,13 +5506,14 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			234 = { add_extra_state_shared_building_slots = 6}
+			add_research_slot = 1
 		}
 } 
 
 shared_focus = { 
 	id = NCR_old_world_wonders
-		icon = Old_world_wonders_001
+		icon = GFX_goal_NCR_old_world_wonders
 		x = -4
 		y = 6
 		
@@ -5364,17 +5529,18 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			custom_effect_tooltip = NCR_oww_rebuilding_tt
 		}
 } 
 
 shared_focus = { 
 	id = NCR_equestrias_deepest_secrets
-		icon = Equestrias_deepest_secrets_001
+		icon = GFX_goal_NCR_deepest_secrets
 		x = -4
 		y = 7
 		
 		cost = 4.38
+		available = {always = no}
 		
 		ai_will_do = {
 			factor = 50
@@ -5387,7 +5553,7 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
-			
+			custom_effect_tooltip = NCR_deepest_secrets_university_tt
 		}
 } 
 

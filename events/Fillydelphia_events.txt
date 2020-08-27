@@ -496,7 +496,7 @@ country_event = {
 				name = infantry_weapons_bonus
 				bonus = 0.5
 				uses = 2
-				category = infantry_weapons
+				category = infantry_tech
 			}
 		add_popularity = {
 				ideology = destruction
@@ -1091,6 +1091,40 @@ country_event = {
 	}
 }
 
+#Demand ERA northern Lands
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event fillysr.24"}
+	id = fillysr.24
+	title = fillysr.24.t
+	desc = fillysr.24.d
+
+	picture = GFX_event_test
+	
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	
+	option ={
+	name = fillysr.24.a
+	ai_chance = { factor = 10}
+		FSR = {
+			transfer_state = 510
+			transfer_state = 523
+		}
+	}
+	
+	option ={
+	name = fillysr.24.b
+	ai_chance = { factor = 0}
+		FSR = {
+			declare_war_on = {
+			target = ROOT
+			type = annex_everything
+			}
+		}
+	}
+}
+
 ################
 ##Continuation##
 ################
@@ -1349,6 +1383,151 @@ country_event = {
 	name = fillysr_bs.8.a
 		add_political_power = -100
 		add_manpower = -50
+	}
+}
+
+#The New Administration
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event fillysr_bs.90"}
+	id = fillysr_bs.90
+	title = fillysr_bs.90.t
+	desc = fillysr_bs.90.d
+
+	picture = GFX_event_griffon_back
+	
+	is_triggered_only = yes
+
+	
+	option = {
+	name = fillysr_bs.90.a
+		custom_effect_tooltip = FSR_con_new_admin_puppets_tt
+		hidden_effect = {
+			FSR = {
+				puppet = FLT
+				puppet = SSC
+			}
+			FLT = {
+				add_state_core = 529
+				add_state_core = 504
+				add_state_core = 502
+				add_state_core = 50
+				add_state_core = 512
+				add_state_core = 523
+				add_state_core = 498
+
+				transfer_state = 529
+				transfer_state = 504
+				transfer_state = 502
+				transfer_state = 50
+				transfer_state = 512
+				transfer_state = 523
+				transfer_state = 498
+				
+				add_state_claim = 805
+				add_state_claim = 217
+				add_state_claim = 484
+				add_state_claim = 491
+				add_state_claim = 78
+				add_state_claim = 474
+				
+				inherit_technology = FSR
+				set_cosmetic_tag = FSR_FLT_puppet
+				create_country_leader = {
+						name = "Ranger Administration"
+						desc = "foreign_rule"
+						picture = ""
+						expire = "1965.1.1"
+						ideology = steel_ranger_cont
+						traits = {}
+				}
+			}
+			SSC = {
+				add_state_core = 554
+				add_state_core = 487
+				add_state_core = 5
+				add_state_core = 85
+				add_state_core = 546
+				add_state_core = 558
+
+				transfer_state = 554
+				transfer_state = 487
+				transfer_state = 5
+				transfer_state = 85
+				transfer_state = 546
+				transfer_state = 558
+				
+				add_state_claim = 69
+				add_state_claim = 804
+				add_state_claim = 549
+				add_state_claim = 553
+				
+				inherit_technology = FSR
+				set_cosmetic_tag = FSR_SSC_puppet
+				create_country_leader = {
+						name = "Ranger Administration"
+						desc = "foreign_rule"
+						picture = ""
+						expire = "1965.1.1"
+						ideology = steel_ranger_cont
+						traits = {}
+				}
+			}
+			
+		}
+	}
+}
+
+#Cathedral breaks free
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event fillysr_bs.91"}
+	id = fillysr_bs.91
+	title = fillysr_bs.91.t
+	desc = fillysr_bs.91.d
+
+	picture = GFX_event_griffon_back
+	
+	trigger = {
+		tag = FSR
+		FSR = {
+			focus_progress = {
+				focus = FSR_con_the_new_territories
+				progress > 0.1
+			}
+		}
+	}
+	fire_only_once = yes
+
+	
+	option = {
+	name = fillysr_bs.91.a
+		custom_effect_tooltip = FSR_con_cathedral_evacuated_tt
+		593 = {
+			add_resource = { type = advanced amount = -8 }
+			add_resource = { type = circuitry amount = -6 }
+		}
+		538 = {
+			add_resource = { type = advanced amount = 8 }
+			add_resource = { type = circuitry amount = 6 }
+		}
+		hidden_effect = {
+			CAT = {
+				add_state_core = 593
+				add_state_core = 513
+				add_state_core = 505
+				add_state_core = 492
+				add_state_core = 533
+				add_state_core = 510
+
+				transfer_state = 593
+				transfer_state = 513
+				transfer_state = 505
+				transfer_state = 492
+				transfer_state = 533
+				transfer_state = 510
+				
+				transfer_technology = yes
+			}
+		}
 	}
 }
 
@@ -1628,6 +1807,7 @@ country_event = {
 	name = fillysr_cr.10.b
 	trigger { is_in_faction_with = RED}
 	ai_chance = { factor = 30}
+		custom_effect_tooltip = FSR_spoils_tt
 		RED = {
 			country_event = { id = fillysr_cr.11 days = 2 }
 			
@@ -1657,9 +1837,21 @@ country_event = {
 			}
 		}
 		IF = {
+			limit = { RED = { owns_state = 653 } }
+			FSR = {
+				transfer_state = 653
+			}
+		}
+		IF = {
 			limit = { RED = { owns_state = 503 } }
 			FSR = {
 				transfer_state = 503
+			}
+		}
+		IF = {
+			limit = { RED = { owns_state = 648 } }
+			FSR = {
+				transfer_state = 648
 			}
 		}
 		IF = {
@@ -1678,6 +1870,24 @@ country_event = {
 			limit = { RED = { owns_state = 534 } }
 			FSR = {
 				transfer_state = 534
+			}
+		}
+		IF = {
+			limit = { RED = { owns_state = 162 } }
+			FSR = {
+				transfer_state = 162
+			}
+		}
+		IF = {
+			limit = { RED = { owns_state = 203 } }
+			FSR = {
+				transfer_state = 203
+			}
+		}
+		IF = {
+			limit = { RED = { owns_state = 235 } }
+			FSR = {
+				transfer_state = 235
 			}
 		}
 	}
@@ -1946,6 +2156,7 @@ country_event = {
 	option ={
 	name = fillysr_cr.21.a
 	ai_chance = { factor = 70}
+		custom_effect_tooltip = FSR_RED_annexxes_us_tt
 		RED = {
 		country_event = { id = fillysr_cr.22 days = 1 }}
 	}
@@ -1953,6 +2164,7 @@ country_event = {
 	option ={
 	name = fillysr_cr.21.b
 	ai_chance = { factor = 30}
+	custom_effect_tooltip = FSR_RED_annex_them_tt
 	RED = {
 		country_event = { id = fillysr_cr.23 days = 1 }}
 	}
@@ -1987,7 +2199,7 @@ country_event = {
 	#no
 	option ={
 	name = fillysr_cr.22.b
-	ai_chance = { factor = 0}
+	ai_chance = { factor = 30}
 		add_political_power = 100
 	}
 	
@@ -2023,7 +2235,7 @@ country_event = {
 	#no
 	option ={
 	name = fillysr_cr.23.b
-	ai_chance = { factor = 0}
+	ai_chance = { factor = 30}
 		add_political_power = 100
 	}
 	
@@ -2054,7 +2266,9 @@ country_event = {
 	name = fillysr_sl.2.a
 		add_political_power = 200
 		add_stability = -0.15
-		set_cosmetic_tag = FSR_applejack
+		hidden_effect = {
+			set_cosmetic_tag = FSR_applejack
+		}
 	}
 }
 
@@ -2351,6 +2565,40 @@ country_event = {
 	hidden_effect = {
 	load_focus_tree = fillysr_reclaim_focus
 	set_country_flag = FSR_victory_red
+	}
+	}
+	
+}
+
+#Victory over Redeye CON
+country_event = { 
+	immediate = {log = "[GetDateText]: [Root.GetName]: event fillysr_sl.1301"}
+	id = fillysr_sl.1301
+	title = fillysr_sl.1301.title
+	desc = fillysr_sl.1301.desc
+
+	picture = GFX_event_griffon_back
+	
+	mean_time_to_happen = { days = 15 }
+	trigger = {
+		has_completed_focus = FSR_slapredeye
+		original_tag = FSR
+		ruling_party = continuation
+		
+		RED = {
+			exists = no
+		}
+	}
+	fire_only_once = yes
+
+	
+	option ={
+	name = fillysr_sl.1301.a
+	ai_chance = { factor = 10}
+	custom_effect_tooltip = UNLOCK_NEW_FOCUS_TREE
+	hidden_effect = {
+	set_country_flag = FSR_victory_red_con
+	load_focus_tree = fillysr_con_post_red_focus
 	}
 	}
 	
@@ -3069,6 +3317,11 @@ country_event = {
 		owns_state = 474
 		owns_state = 491
 		owns_state = 484
+		owns_state = 101
+		owns_state = 81
+		owns_state = 78
+		owns_state = 217
+		owns_state = 125
 		original_tag = FSR
 		has_government = visionary
 	}
@@ -3086,6 +3339,11 @@ country_event = {
 				transfer_state = 474
 				transfer_state = 491
 				transfer_state = 484
+				transfer_state = 101
+				transfer_state = 81
+				transfer_state = 78
+				transfer_state = 217
+				transfer_state = 125
 			}
 		puppet = ERM
 	}
@@ -3755,7 +4013,6 @@ country_event = {
 	
 	trigger = {
 		owns_state = 410
-		owns_state = 451
 		owns_state = 74
 		owns_state = 446
 		owns_state = 475
@@ -3771,11 +4028,16 @@ country_event = {
 		ERM = {
 				
 				transfer_state = 410
-				transfer_state = 451
 				transfer_state = 74
 				transfer_state = 446
 				transfer_state = 475
+				transfer_state = 814
+				transfer_state = 813
 			}
+		IF = {
+			limit = { owns_state = 451 }
+			ERM = {transfer_state = 451} 
+		}
 	}
 }
 
@@ -3792,7 +4054,6 @@ country_event = {
 	trigger = {
 		ERM = {
 		owns_state = 410
-		owns_state = 451
 		owns_state = 74
 		owns_state = 446
 		owns_state = 475
@@ -3809,12 +4070,6 @@ country_event = {
 				remove_building = {
 				type = industrial_complex
 				level = 2
-				}
-		}
-		451 = {
-				remove_building = {
-				type = arms_factory
-				level = 1
 				}
 		}
 		446 = {
