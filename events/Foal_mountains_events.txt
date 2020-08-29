@@ -1,5 +1,7 @@
 add_namespace = HIT_event
 add_namespace = GRV_event
+add_namespace = FTP_event
+add_namespace = WNF_event
 
 #Ask CCD for alliance
 country_event = {
@@ -284,6 +286,247 @@ country_event = {
 		name = GRV_event.7.b
 		ai_chance = { factor = 50 }
 		GRV = {create_wargoal = { type = annex_everything target = WNF }}
+	}
+	
+}
+
+#Friendship for CCD
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event FTP_event.1"}
+ 	id = FTP_event.1
+ 	title = FTP_event.1.t
+ 	desc = FTP_event.1.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = FTP_event.1.a
+		ai_chance = { factor = 80 }
+		if = {
+			limit = {
+				is_in_faction = yes
+			}
+			leave_faction = yes
+		}
+		if = {
+			limit = {
+				FTP = { exists = yes }
+			}
+			FTP = { add_to_faction = CCD }
+			hidden_effect = { FTP = { add_ai_strategy = { type = alliance id = "ROOT" value = 200} add_opinion_modifier = { target = ROOT modifier = huge_increase } } }
+			hidden_effect = { ROOT = { add_ai_strategy = { type = alliance id = "FTP" value = 200} add_opinion_modifier = { target = FTP modifier = huge_increase } }
+		}
+		else_if = {
+			limit = {
+				FTR = { exists = yes }
+			}
+			FTR = { add_to_faction = CCD }
+			hidden_effect = { FTR = { add_ai_strategy = { type = alliance id = "ROOT" value = 200} add_opinion_modifier = { target = ROOT modifier = huge_increase } } }
+			hidden_effect = { ROOT = { add_ai_strategy = { type = alliance id = "FTR" value = 200} add_opinion_modifier = { target = FTR modifier = huge_increase } } }
+		}
+		}
+	}
+	
+	option = {
+		name = FTP_event.1.b
+		ai_chance = { factor = 0 }
+		if = {
+			limit = {
+				FTP = { exists = yes }
+			}
+			FTP = {create_wargoal = { type = annex_everything target = CCD }}
+		}
+		else_if = {
+			limit = {
+				FTR = { exists = yes }
+			}
+			FTR = {create_wargoal = { type = annex_everything target = CCD }}
+		}
+	}
+	
+}
+
+
+#FTP Friendship generic
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event FTP_event.2"}
+ 	id = FTP_event.2
+ 	title = FTP_event.2.t
+ 	desc = FTP_event.2.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = no
+	
+	option = {
+		name = FTP_event.2.a
+		ai_chance = { factor = 50 
+			modifier = {
+				factor = 0
+				tag = WNF
+			}
+		}
+		if = {
+			limit = {
+				is_in_faction = yes
+			}
+			leave_faction = yes
+		}
+		if = {
+			limit = {
+				FTP = { exists = yes }
+			}
+			FTP = { add_to_faction = ROOT }
+			hidden_effect = { FTP = { add_ai_strategy = { type = alliance id = "ROOT" value = 200} add_opinion_modifier = { target = ROOT modifier = huge_increase } } }
+			hidden_effect = { ROOT = { add_ai_strategy = { type = alliance id = "FTP" value = 200} add_opinion_modifier = { target = FTP modifier = huge_increase } } }
+
+		}
+		else_if = {
+			limit = {
+				FTR = { exists = yes }
+			}
+			FTR = { add_to_faction = ROOT }
+			hidden_effect = { FTR = { add_ai_strategy = { type = alliance id = "ROOT" value = 200} add_opinion_modifier = { target = ROOT modifier = huge_increase } } }
+			hidden_effect = { ROOT = { add_ai_strategy = { type = alliance id = "FTR" value = 200} add_opinion_modifier = { target = FTR modifier = huge_increase } } }
+
+		}
+	}
+	
+	option = {
+		name = FTP_event.2.b
+		ai_chance = { factor = 50 }
+		if = {
+			limit = {
+				FTP = { exists = yes }
+			}
+			FTP = {create_wargoal = { type = annex_everything target = ROOT }}
+		}
+		else_if = {
+			limit = {
+				FTR = { exists = yes }
+			}
+			FTR = {create_wargoal = { type = annex_everything target = ROOT }}
+		}
+	}
+	
+}
+
+#FTP wants integration
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event FTP_event.3"}
+ 	id = FTP_event.3
+ 	title = FTP_event.3.t
+ 	desc = FTP_event.3.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = no
+	
+	option = {
+		name = FTP_event.3.a
+		ai_chance = { factor = 70 }
+		if = {
+			limit = {
+				FTP = { exists = yes }
+			}
+			FTP = { puppet = ROOT }
+
+		}
+		else_if = {
+			limit = {
+				FTR = { exists = yes }
+			}
+			FTR = { puppet = ROOT }
+			
+		}
+	}
+	
+	option = {
+		name = FTP_event.3.b
+		ai_chance = { factor = 30 }
+		if = {
+			limit = {
+				FTP = { exists = yes }
+			}
+			leave_faction = yes
+			FTP = {create_wargoal = { type = annex_everything target = ROOT }}
+		}
+		else_if = {
+			limit = {
+				FTR = { exists = yes }
+			}
+			leave_faction = yes
+			FTR = {create_wargoal = { type = annex_everything target = ROOT }}
+		}
+	}
+	
+}
+
+
+#WNF Seeks Alliance
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event WNF_event.1"}
+ 	id = WNF_event.1
+ 	title = WNF_event.1.t
+ 	desc = WNF_event.1.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = no
+	
+	option = {
+		name = WNF_event.1.a
+		ai_chance = { factor = 50 }
+		if = {
+			limit = {
+				is_in_faction = yes
+			}
+			leave_faction = yes
+		}
+			WNF = { add_to_faction = ROOT }
+			hidden_effect = { WNF = { add_ai_strategy = { type = alliance id = "ROOT" value = 200} add_opinion_modifier = { target = ROOT modifier = huge_increase } } }
+			hidden_effect = { ROOT = { add_ai_strategy = { type = alliance id = "WNF" value = 200} add_opinion_modifier = { target = WNF modifier = huge_increase } } }
+			
+	}
+	
+	option = {
+		name = WNF_event.1.b
+		ai_chance = { factor = 0 }
+
+			WNF = {create_wargoal = { type = annex_everything target = ROOT }}
+		
+	}
+	
+}
+
+#Offer to CCD
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event WNF_event.2"}
+ 	id = WNF_event.2
+ 	title = WNF_event.2.t
+ 	desc = WNF_event.2.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = WNF_event.2.a
+		ai_chance = { factor = 80 }
+		WNF = {
+			puppet = CCD
+		}
+		475 = {
+			add_resource = { type = metal amount = 6 }
+			add_resource = { type = energy amount = 10 }
+			add_resource = { type = crystals amount = 6 }
+		}
+		set_cosmetic_tag = CCD_republic_puppet
+			hidden_effect = { WNF = { add_ai_strategy = { type = alliance id = "ROOT" value = 200} add_opinion_modifier = { target = ROOT modifier = huge_increase } } }
+			hidden_effect = { ROOT = { add_ai_strategy = { type = alliance id = "WNF" value = 200} add_opinion_modifier = { target = WNF modifier = huge_increase } } }
+	}
+	
+	option = {
+		name = WNF_event.2.b
+		ai_chance = { factor = 0 }
+		WNF = {create_wargoal = { type = annex_everything target = CCD }}
 	}
 	
 }
