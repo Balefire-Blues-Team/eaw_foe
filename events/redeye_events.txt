@@ -196,7 +196,7 @@ country_event = {
 	picture = GFX_event_generic_raider_1
 
 	trigger = {
-		tag = RED
+		original_tag = RED
 		OR = {
 			SSC = { exists = no }
 			SSC = { is_subject_of = RED }
@@ -461,6 +461,12 @@ country_event = { #NAP Accepts
     		target = NAP
     		transfer_troops = yes
 		}
+		every_owned_state = {
+			limit = {
+				is_core_of = NAP
+			}
+			add_core_of = RED
+		}
 	}
 }
 
@@ -480,6 +486,20 @@ country_event = { #OAP Accepts
 		annex_country = {
     		target = OAP
     		transfer_troops = yes
+		}
+		every_owned_state = {
+			limit = {
+				is_core_of = OAP
+			}
+			add_core_of = RED
+		}
+		OAP = {
+			every_unit_leader = {
+				limit = {
+					has_id = 59601
+				}
+				set_nationality = RED
+			}
 		}
 	}
 }
@@ -1305,13 +1325,15 @@ country_event = { #Final Slavery Question
 		ai_chance = { factor = 50}
 		
 		remove_ideas = slave_labor
+		set_country_flag = RED_slavery_abolished
+		clr_country_flag = slavery_allowed
 	}
 
 	option = { #Keep Slavery
 		name = redeye.44.a
 		ai_chance = { factor = 20}
 
-
+		add_stability = 0.15
 	}
 }
 
@@ -1321,8 +1343,28 @@ country_event = { #The DJ
  	desc = redeye.45.desc
 	picture = GFX_event_test
 
-	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	trigger = {
+ 		original_tag = RED
+ 		has_country_flag = RED_new_unity_flag
+ 		OR = {
+ 			AND = {
+				TEN = { exists = no }
+				RED = { has_full_control_of_state = 21 }
+ 			}
+			AND = {
+				TEN = { 
+					is_subject_of = RED
+					has_full_control_of_state = 21
+				}
+			}
+			AND = {
+				TEN = { is_subject_of = RED }
+				RED = { has_full_control_of_state = 21 }
+			}
+		}
+ 	}
 
 	option = { #O lawd Homage fucking killed herself
 		trigger = {
@@ -1353,7 +1395,26 @@ country_event = { #SR Secrets
  	desc = redeye.46.desc
 	picture = GFX_event_test
 
-	is_triggered_only = yes
+	trigger = {
+ 		original_tag = RED
+ 		has_country_flag = RED_new_unity_flag
+ 		OR = {
+ 			AND = {
+				MSR = { exists = no }
+				RED = { has_full_control_of_state = 19 }
+ 			}
+			AND = {
+				MSR = { 
+					is_subject_of = RED
+					has_full_control_of_state = 19
+				}
+			}
+			AND = {
+				MSR = { is_subject_of = RED }
+				RED = { has_full_control_of_state = 19 }
+			}
+		}
+ 	}
  	fire_only_once = yes
 
 	option = { #Secrets of the old world
@@ -1379,7 +1440,12 @@ country_event = { #Integrate the Pegasi
 	option = { 
 		name = redeye.47.a
 		ai_chance = { factor = 50}
-		
+
+		add_stability = 0.10
+		swap_ideas = {
+			remove_idea = RED_pegasus_resistance
+			add_idea = RED_pegasus_integration
+		}
 	}
 }
 
@@ -1396,6 +1462,13 @@ country_event = { #Pegasi Genocide
 		name = redeye.48.a
 		ai_chance = { factor = 50}
 		
+		add_stability = -0.25
+		696 = {
+			add_manpower = -7000
+		}
+		remove_ideas = {
+			RED_pegasus_resistance
+		}
 	}
 }
 
@@ -1431,19 +1504,41 @@ country_event = { #SPP Efficiency
 	}
 }
 
-country_event = { #The End of Ditzy Doo
+country_event = { #Pegasi Resistance
  	id = redeye.51
  	title = redeye.51.title
  	desc = redeye.51.desc
 	picture = GFX_event_test
 
-	is_triggered_only = yes
+	trigger = {
+ 		original_tag = RED
+ 		has_country_flag = RED_new_unity_flag
+ 		OR = {
+ 			AND = {
+				NEV = { exists = no }
+				RED = { has_full_control_of_state = 696 }
+ 			}
+			AND = {
+				NEV = { 
+					is_subject_of = RED
+					has_full_control_of_state = 696
+				}
+			}
+			AND = {
+				NEV = { is_subject_of = RED }
+				RED = { has_full_control_of_state = 696 }
+			}
+		}
+ 	}
  	fire_only_once = yes
 
 	option = { 
 		name = redeye.51.a
 		ai_chance = { factor = 50}
 		
+		add_ideas = {
+			RED_pegasus_resistance
+		}
 	}
 }
 
@@ -1491,6 +1586,15 @@ country_event = { #New Unity
 	option = { 
 		name = redeye.54.a
 		ai_chance = { factor = 50}
+
+		set_country_flag = RED_new_unity_flag
+
+		UNI = {
+			country_event = {
+				id = redeye.111
+				days = 3
+			}
+		}
 		
 		if = { #Red Eye, Murky, Lavender Basket
 			limit = {
@@ -2915,9 +3019,125 @@ country_event = { #Cathedral Breakaway
 			
 			transfer_technology = yes
 		}
+		every_unit_leader = {
+			limit = {
+				has_id = 59304
+			}
+			set_nationality = CAT
+		}
 	}
 }
 
+country_event = { #A Threat to the Unity
+ 	id = redeye.111
+ 	title = redeye.111.title
+ 	desc = redeye.111.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #seperate but equal
+		name = redeye.111.a
+		ai_chance = {
+			base = 0 
+
+			modifier = {
+			 	is_historical_focus_on = yes
+        		add = 1
+    		}
+    		modifier = {
+			 	is_historical_focus_on = no
+        		add = 20
+    		}
+		}
+
+		RED = {
+			country_event = {
+				id = redeye.112
+				days = 3
+			}
+		}
+	}
+
+	option = { #there can only be one
+		name = redeye.111.b
+		ai_chance = {
+			base = 0 
+			
+			modifier = {
+			 	is_historical_focus_on = yes
+        		add = 99
+    		}
+    		modifier = {
+			 	is_historical_focus_on = no
+        		add = 80
+    		}
+		}
+
+		RED = {
+			country_event = {
+				id = redeye.113
+				days = 3
+			}
+		}
+	}
+}
+
+country_event = { #Seperate but Equal
+ 	id = redeye.112
+ 	title = redeye.112.title
+ 	desc = redeye.112.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Friends Forever
+		name = redeye.112.a
+		ai_chance = { factor = 80 }
+
+		create_faction = NEW_UNITY_FACTION_NAME
+		RED = { add_to_faction = UNI }
+	}
+
+	option = { #no.
+		name = redeye.112.b
+		ai_chance = { factor = 10 }
+
+		create_wargoal = {
+    		type = annex_everything
+    		target = UNI
+		}
+	}
+}
+
+country_event = { #One Unity to Rule Them All
+ 	id = redeye.113
+ 	title = redeye.113.title
+ 	desc = redeye.113.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = redeye.113.a
+		ai_chance = { factor = 80 }
+
+		create_wargoal = {
+    		type = annex_everything
+    		target = UNI
+		}
+
+		UNI = {
+			create_wargoal = {
+    			type = annex_everything
+    			target = RED
+			}
+		}
+	}
+}
 
 ################################
 ### Steel Rangers Border War ###
