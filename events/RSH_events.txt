@@ -116,6 +116,7 @@ country_event = { ###Leading the Charge
 			defense_skill = 1
 			planning_skill = 2
 			logistics_skill = 3
+			id = 56201
 		}
 		custom_effect_tooltip = RSH_hermann_stats_tt
 	}
@@ -135,6 +136,7 @@ country_event = { ###Leading the Charge
 			defense_skill = 2
 			planning_skill = 1
 			logistics_skill = 1
+			id = 56202
 		}
 		custom_effect_tooltip = RSH_bobby_stats_tt
 	}
@@ -163,7 +165,7 @@ country_event = { ###Leading the Charge
 			planning_skill = 3
 			logistics_skill = 1
 			female = yes
-			#id = 1004
+			id = 59306
 		}
 		custom_effect_tooltip = RED_lavender_stats_tt
 
@@ -404,3 +406,119 @@ country_event = { ###Dealing with the Populace
 		}
 	}
 }
+
+country_event = { ###We won!
+ 	id = redforces.12
+ 	title = redforces.12.title
+ 	desc = redforces.12.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Rejoin RED
+		name = redforces.12.a
+		ai_chance = {
+			base = 50
+		}
+		trigger = {
+			RED = {
+				exists = yes
+			}
+		}
+
+		RED = {
+			country_event = {
+				id = redforces.14
+			}
+		}
+	}
+
+	option = { #Bigger ambitions
+		name = redforces.12.b
+		ai_chance = {
+			base = 5
+			modifier = {
+				RED = {
+					surrender_progress > 0.5
+				}
+				add = 55
+			}
+		}
+
+		RED = {
+			country_event = {
+				id = redforces.13
+			}
+		}
+	}
+}
+
+country_event = { ###Blackclaw's trechery
+ 	id = redforces.13
+ 	title = redforces.13.title
+ 	desc = redforces.13.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Yay
+		name = redforces.13.a
+		ai_chance = {
+			base = 50
+		}
+
+		create_wargoal = { type = annex_everything target = RSH }
+	}
+}
+
+country_event = { ###Blackclaw's victory
+ 	id = redforces.14
+ 	title = redforces.14.title
+ 	desc = redforces.14.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Yay
+		name = redforces.14.a
+		ai_chance = {
+			base = 50
+		}
+
+		if = {
+			limit = {
+				RSH = {
+					random_army_leader = {
+						has_id = 59306
+					}
+				}
+			}
+			custom_effect_tooltip = RED_lavender_unlock_tt
+
+			hidden_effect = {
+				set_country_flag = RED_has_lavender
+			}
+		}
+		RSH = {
+			every_unit_leader = {
+				limit = {
+					OR = {
+						has_id = 59302
+						has_id = 59306
+						has_id = 56201
+						has_id = 56202
+					}
+				}
+				set_nationality = RED
+			}
+		}
+		annex_country = {
+		    target = RSH
+		    transfer_troops = yes
+		}
+	}
+}
+
