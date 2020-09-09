@@ -11,7 +11,7 @@ focus_tree = {
 		}
 	}
 	default = no
-	continuous_focus_position = { x = 500 y = 2500 }
+	continuous_focus_position = { x = 0 y = 0 }
 	
 	############# 3 introduction focuses ###########
 	focus = {
@@ -25,6 +25,7 @@ focus_tree = {
 			factor = 100
 		}
 		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_opening1"
 			country_event = { id = settlers.1 }
 		}
 	}
@@ -34,8 +35,9 @@ focus_tree = {
 		prerequisite = {
 			focus = gs_opening1
 		}
-		x = 8
+		x = 0
 		y = 1
+		relative_position_id = gs_opening1
 		
 		cost = 1
 		ai_will_do = {
@@ -43,6 +45,7 @@ focus_tree = {
 		}
 		
 		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_opening2"
 			country_event = { id = settlers.2 }				
 		}
 	}
@@ -52,8 +55,9 @@ focus_tree = {
 		prerequisite = {
 			focus = gs_opening2
 		}
-		x = 8
-		y = 2
+		x = 0
+		y = 1
+		relative_position_id = gs_opening2
 		
 		cost = 1
 		ai_will_do = {
@@ -61,13 +65,1331 @@ focus_tree = {
 		}
 		
 		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_opening3"
 			country_event = { id = settlers.3 }			
 		}
 	}
 
-}	
+### Factory Focuses ###
+
+	focus = {
+		id = gs_open_up_workshops
+		prerequisite = {
+			focus = gs_opening3
+		}
+		
+		x = 0
+		y = 1
+		relative_position_id = gs_opening3
+		
+		cost = 10
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_open_up_workshops"
+			random_owned_controlled_state = {
+				limit = {
+					free_building_slots = {
+						building = industrial_complex
+						size > 1
+						include_locked = yes
+					}
+					OR = {
+						is_in_home_area = yes
+						NOT = {
+							owner = {
+								any_owned_state = {
+									free_building_slots = {
+										building = industrial_complex
+										size > 1
+										include_locked = yes
+									}
+									is_in_home_area = yes
+								}
+							}
+						}
+					}
+				}
+			
+				add_extra_state_shared_building_slots = 2
+				add_building_construction = {
+					type = industrial_complex
+					level = 2
+					instant_built = yes
+				}
+			}
+		}
+	}
+	
+	focus = {
+		id = gs_reconstruct_roads
+		prerequisite = {
+			focus = gs_open_up_workshops
+		}
+		
+		x = 0
+		y = 1
+		relative_position_id = gs_open_up_workshops
+		
+		cost = 10
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_reconstruct_roads"
+			random_owned_controlled_state = {
+				add_building_construction = {
+					type = infrastructure
+					level = 2
+					instant_built = yes
+				}
+			}
+		}
+	}
+	
+	focus = {
+		id = gs_focus_essentials
+		prerequisite = {
+			focus = gs_reconstruct_roads
+		}
+		
+		x = -2
+		y = 1
+		relative_position_id = gs_reconstruct_roads
+		
+		cost = 10
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_focus_essentials"
+			add_tech_bonus = {
+				name = energy_bonus
+				uses = 1
+				bonus = 0.5
+				category = energy_tech
+			}
+			add_tech_bonus = {
+				name = water_bonus
+				uses = 1
+				bonus = 0.5
+				category = water_tech
+			}
+			add_tech_bonus = {
+				name = metal_bonus
+				uses = 1
+				bonus = 0.5
+				category = metal_tech
+			}
+			
+		}
+	}
+	
+	focus = {
+		id = gs_extra_research_roles
+		prerequisite = {
+			focus = gs_focus_essentials
+		}
+		
+		x = 0
+		y = 1
+		relative_position_id = gs_focus_essentials
+		
+		cost = 10
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_extra_research_roles"
+			add_research_slot = 1
+			
+		}
+	}
+	
+	focus = {
+		id = gs_building_effort
+		prerequisite = {
+			focus = gs_reconstruct_roads
+		}
+		
+		x = 0
+		y = 1
+		relative_position_id = gs_reconstruct_roads
+		
+		cost = 10
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_building_effort"
+			
+			add_tech_bonus = {
+				name = industry_bonus
+				bonus = 1.00
+				uses = 3
+				category = construction_tech
+			}
+		}
+	}
+	
+	focus = {
+		id = gs_agricultural_research
+		prerequisite = {
+			focus = gs_building_effort
+		}
+		
+		x = 0
+		y = 1
+		relative_position_id = gs_building_effort
+		
+		cost = 10
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_agricultural_research"
+			
+			add_tech_bonus = {
+				name = industry_bonus
+				bonus = 1.00
+				uses = 3
+				category = agriculture_tech
+			}
+		}
+	}	
+
+	focus = {
+		id = gs_expand_workshops
+		prerequisite = {
+			focus = gs_reconstruct_roads
+		}
+		
+		x = 2
+		y = 1
+		relative_position_id = gs_reconstruct_roads
+		
+		cost = 10
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_expand_workshops"
+			random_owned_controlled_state = {
+				limit = {
+					free_building_slots = {
+						building = industrial_complex
+						size > 0
+						include_locked = yes
+					}
+					OR = {
+						is_in_home_area = yes
+						NOT = {
+							owner = {
+								any_owned_state = {
+									free_building_slots = {
+										building = industrial_complex
+										size > 0
+										include_locked = yes
+									}
+									is_in_home_area = yes
+								}
+							}
+						}
+					}
+				}
+			
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_built = yes
+				}
+			}
+		}
+	}
+	
+	focus = { 
+		id = gs_wasteland_civilization
+		prerequisite = { 
+			focus = gs_expand_workshops
+		}
+		
+		x = 0
+		y = 1
+		relative_position_id = gs_expand_workshops
+		
+		cost = 10
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_wasteland_civilization"
+			add_ideas = GS_wasteland_rebuilding
+		}
+	}
+	
+	focus = { 
+		id = gs_scavenging_roles
+		prerequisite = { 
+			focus = gs_opening3
+		}
+		
+		x = 5
+		y = 1
+		relative_position_id = gs_opening3
+		
+		cost = 10
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_scavenging_roles"
+			add_equipment_to_stockpile = {
+				type = ballistic_equipment_1	
+				amount = 200
+			}
+		}
+	}
+	
+	focus = { 
+		id = gs_open_armament_shops
+		prerequisite = { 
+			focus = gs_scavenging_roles
+		}
+		
+		x = -1
+		y = 1
+		relative_position_id = gs_scavenging_roles
+		
+		cost = 10
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_weapons_research"
+			random_owned_controlled_state = {
+				limit = {
+					free_building_slots = {
+						building = arms_factory
+						size > 0
+						include_locked = yes
+					}
+					OR = {
+						is_in_home_area = yes
+						NOT = {
+							owner = {
+								any_owned_state = {
+									free_building_slots = {
+										building = arms_factory
+										size > 0
+										include_locked = yes
+									}
+									is_in_home_area = yes
+								}
+							}
+						}
+					}
+				}
+			
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = arms_factory
+					level = 1
+					instant_built = yes
+				}
+			}			
+		}
+	}
+	
+	focus = { 
+		id = gs_extra_arm_shops
+		prerequisite = { 
+			focus = gs_open_armament_shops
+		}
+		
+		x = 0
+		y = 1
+		relative_position_id = gs_open_armament_shops
+		
+		cost = 10
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_support_equipment_research"
+			random_owned_controlled_state = {
+				limit = {
+					free_building_slots = {
+						building = arms_factory
+						size > 1
+						include_locked = yes
+					}
+					OR = {
+						is_in_home_area = yes
+						NOT = {
+							owner = {
+								any_owned_state = {
+									free_building_slots = {
+										building = arms_factory
+										size > 1
+										include_locked = yes
+									}
+									is_in_home_area = yes
+								}
+							}
+						}
+					}
+				}
+			
+				add_extra_state_shared_building_slots = 2
+				add_building_construction = {
+					type = arms_factory
+					level = 2
+					instant_built = yes
+				}
+			}
+		}
+	}
+	
+	focus = { 
+		id = gs_expand_research_teams
+		prerequisite = { 
+			focus = gs_extra_arm_shops
+		}
+		
+		x = 0
+		y = 1
+		relative_position_id = gs_extra_arm_shops
+		
+		cost = 10
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_expand_research_teams"
+			add_research_slot = 1
+		}
+	}
+	
+	focus = { 
+		id = gs_armament_trade
+		prerequisite = { 
+			focus = gs_scavenging_roles
+		}
+		
+		x = 1
+		y = 1
+		relative_position_id = gs_scavenging_roles
+		
+		cost = 10
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_organized_training"
+			random_owned_controlled_state = {
+				limit = {
+					free_building_slots = {
+						building = arms_factory
+						size > 0
+						include_locked = yes
+					}
+					OR = {
+						is_in_home_area = yes
+						NOT = {
+							owner = {
+								any_owned_state = {
+									free_building_slots = {
+										building = arms_factory
+										size > 0
+										include_locked = yes
+									}
+									is_in_home_area = yes
+								}
+							}
+						}
+					}
+				}
+			
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = arms_factory
+					level = 1
+					instant_built = yes
+				}
+			}
 
 
+		}
+	}
+	
+	
+	focus = { 
+		id = gs_expand_armament_roles
+		prerequisite = { 
+			focus = gs_armament_trade
+		}
+		
+		x = 0
+		y = 1
+		relative_position_id = gs_armament_trade
+		
+		cost = 10
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_organized_training"
+			random_owned_controlled_state = {
+				limit = {
+					free_building_slots = {
+						building = arms_factory
+						size > 0
+						include_locked = yes
+					}
+					OR = {
+						is_in_home_area = yes
+						NOT = {
+							owner = {
+								any_owned_state = {
+									free_building_slots = {
+										building = arms_factory
+										size > 0
+										include_locked = yes
+									}
+									is_in_home_area = yes
+								}
+							}
+						}
+					}
+				}
+			
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = arms_factory
+					level = 1
+					instant_built = yes
+				}
+			}
+
+
+		}
+	}
+	
+	focus = { 
+		id = gs_prioritize_production
+		prerequisite = { 
+			focus = gs_expand_armament_roles
+		}
+		
+		x = 0
+		y = 1
+		relative_position_id = gs_expand_armament_roles
+		
+		cost = 10
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_form_research_branch"
+			add_ideas = GS_arms_production
+		}
+	}
+	
+	focus = { 
+		id = gs_settlement_funding
+		prerequisite = { 
+			focus = gs_opening3
+		}
+		
+		x = -6
+		y = 1
+		relative_position_id = gs_opening3
+		
+		cost = 10
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_form_research_branch"
+			add_political_power = 100
+		}
+	}
+	
+	focus = { 
+		id = gs_mutant_question
+		prerequisite = { 
+			focus = gs_settlement_funding
+		}
+		
+		x = -2
+		y = 1
+		relative_position_id = gs_settlement_funding
+		
+		cost = 10
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_form_research_branch"
+			add_political_power = 100
+		}
+	}
+	
+	focus = { 
+		id = gs_immigration_question
+		prerequisite = { 
+			focus = gs_settlement_funding
+		}
+		
+		x = 0
+		y = 1
+		relative_position_id = gs_settlement_funding
+		
+		cost = 10
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_form_research_branch"
+			add_political_power = 100
+		}
+	}
+	
+	focus = { 
+		id = gs_drug_question
+		prerequisite = { 
+			focus = gs_settlement_funding
+		}
+		
+		x = 2
+		y = 1
+		relative_position_id = gs_settlement_funding
+		
+		cost = 10
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_form_research_branch"
+			add_political_power = 100
+		}
+	}
+	
+	## TODO ##
+	focus = {
+		id = gs_wasteland_guard_training
+		icon = GFX_goal_generic_small_arms
+
+		
+		x =  30
+		y = 1
+		
+		cost = 5
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_wasteland_guard_training"
+			army_experience = 10
+			air_experience = 10
+			navy_experience = 10
+		}
+	}
+
+
+
+	focus = {
+		id = gs_guard_patrol_routines
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
+			focus = gs_wasteland_guard_training
+		}
+		
+		x = 0
+		y = 2
+		relative_position_id = gs_wasteland_guard_training
+		
+		cost = 5
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_guard_patrol_routines"
+			army_experience = 30
+		}
+	}
+	
+	focus = {
+		id = gs_balanced_tactics
+		icon = GFX_goal_generic_small_arms
+		
+		prerequisite = {
+			focus = gs_guard_patrol_routines
+		}
+		
+		mutually_exclusive = {
+			focus = gs_ruthless_tactics
+		}
+		
+		x = -1
+		y = 1
+		relative_position_id = gs_guard_patrol_routines
+		
+		cost = 5
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_guard_patrol_routines"
+			add_tech_bonus = {
+				bonus = 1.0
+				uses = 1
+				category = cat_grand_army
+			}
+		}
+	}
+	
+	focus = {
+		id = gs_ruthless_tactics
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
+			focus = gs_guard_patrol_routines
+		}
+		
+		mutually_exclusive = {
+			focus = gs_balanced_tactics
+		}
+		
+		x = 1
+		y = 1
+		relative_position_id = gs_guard_patrol_routines
+		
+		cost = 5
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_guard_patrol_routines"
+			add_tech_bonus = {
+				bonus = 1.0
+				uses = 1
+				category = cat_terror_tactics
+			}
+		}
+	}
+	
+	
+	focus = { 
+		id = gs_infantry_focus
+		prerequisite = { 
+			focus = gs_balanced_tactics
+			OR = gs_ruthless_tactics
+		}
+		
+		x = 1
+		y = 1
+		relative_position_id = gs_balanced_tactics
+		
+		cost = 10
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_weapons_research"
+			add_tech_bonus = {
+				name = weaponry_bonus
+				bonus = 0.50
+				uses = 2
+				category = infantry_tech
+			}
+		}
+	}
+
+	focus = { 
+		id = gs_establish_support_roles
+		prerequisite = { 
+			focus = gs_infantry_focus
+		}
+		
+		x = 0
+		y = 2
+		relative_position_id = gs_infantry_focus
+		
+		cost = 10
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_support_equipment_research"
+			add_tech_bonus = {
+				name = support_weaponry_bonus
+				bonus = 0.50
+				uses = 2
+				category = support_tech
+			}
+		}
+	}
+	
+	focus = { 
+		id = gs_old_world_transports
+		prerequisite = { 
+			focus = gs_infantry_focus
+		}
+		
+		x = -1
+		y = 1
+		relative_position_id = gs_infantry_focus
+		
+		cost = 10
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_vehicle_engineering"
+			add_tech_bonus = {
+				name = vehicle_bonus
+				bonus = 0.50
+				uses = 2
+				category = vehicle_tech
+			}
+		}
+	}
+	
+	focus = { 
+		id = gs_old_world_relics
+		prerequisite = { 
+			focus = gs_infantry_focus
+		}
+		
+		x = 1
+		y = 1
+		relative_position_id = gs_infantry_focus
+		
+		cost = 10
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_vehicle_engineering"
+			add_tech_bonus = {
+				name = vehicle_bonus
+				bonus = 0.50
+				uses = 2
+				category = robotics_tech
+			}
+		}
+	}
+	
+	focus = {
+		id = gs_flying_techniques
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
+			focus = gs_wasteland_guard_training
+		}
+		
+		x = -5
+		y = 2
+		relative_position_id = gs_wasteland_guard_training
+		
+		cost = 5
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_flying_techniques"
+			air_experience = 30
+		}
+	}
+	
+	focus = {
+		id = gs_fighter_strategy
+		icon = GFX_goal_generic_small_arms
+		
+		prerequisite = {
+			focus = gs_flying_techniques
+		}
+		
+		mutually_exclusive = {
+			focus = gs_strategic_destruction
+		}
+		
+		x = -1
+		y = 1
+		relative_position_id = gs_flying_techniques
+		
+		cost = 5
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_guard_patrol_routines"
+			add_tech_bonus = {
+				bonus = 1.0
+				uses = 1
+				category = light_fighter
+			}
+		}
+	}
+	
+	focus = {
+		id = gs_strategic_destruction
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
+			focus = gs_flying_techniques
+		}
+		
+		mutually_exclusive = {
+			focus = gs_fighter_strategy
+		}
+		
+		x = 1
+		y = 1
+		relative_position_id = gs_flying_techniques
+		
+		cost = 5
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_guard_patrol_routines"
+			add_tech_bonus = {
+				bonus = 1.0
+				uses = 1
+				category = cat_strategic_bomber
+			}
+		}
+	}
+	
+	focus = { 
+		id = gs_establish_airbase
+		prerequisite = { 
+			focus = gs_flying_techniques
+		}
+		
+		x = 0
+		y = 2
+		relative_position_id = gs_flying_techniques
+		
+		cost = 10
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_organized_training"
+			random_owned_controlled_state = {
+				limit = {
+					free_building_slots = {
+						building = air_base
+						size > 0
+						include_locked = yes
+					}
+					OR = {
+						is_in_home_area = yes
+						NOT = {
+							owner = {
+								any_owned_state = {
+									free_building_slots = {
+										building = air_base
+										size > 0
+										include_locked = yes
+									}
+									is_in_home_area = yes
+								}
+							}
+						}
+					}
+				}
+			
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = air_base
+					level = 1
+					instant_built = yes
+				}
+			}
+
+
+		}
+	}
+	
+	focus = {
+		id = gs_better_support
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
+			focus = gs_fighter_strategy
+			OR = gs_strategic_destruction
+		}
+		
+		
+		x = 0
+		y = 2
+		relative_position_id = gs_fighter_strategy
+		
+		cost = 5
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_guard_patrol_routines"
+			add_tech_bonus = {
+				bonus = 1.0
+				uses = 1
+				category = cas_bomber
+			}
+		}
+	}
+	
+	focus = {
+		id = gs_better_aerodynamics
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
+			focus = gs_fighter_strategy
+			OR = gs_strategic_destruction
+		}
+		
+		
+		x = 0
+		y = 2
+		relative_position_id = gs_strategic_destruction
+		
+		cost = 5
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_guard_patrol_routines"
+			add_tech_bonus = {
+				bonus = 1.0
+				uses = 1
+				category = air_equipment
+			}
+		}
+	}
+	
+	focus = {
+		id = gs_river_crossing_experience
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
+			focus = gs_wasteland_guard_training
+		}
+		
+		x = 5
+		y = 2
+		relative_position_id = gs_wasteland_guard_training
+		
+		cost = 5
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_flying_techniques"
+			navy_experience = 30
+		}
+	}
+	
+	focus = {
+		id = gs_light_ships
+		icon = GFX_goal_generic_small_arms
+		
+		prerequisite = {
+			focus = gs_river_crossing_experience
+		}
+		
+		mutually_exclusive = {
+			focus = gs_reliable_ships
+		}
+		
+		mutually_exclusive = {
+			focus = gs_armored_ships
+		}
+		
+		x = -2
+		y = 1
+		relative_position_id = gs_river_crossing_experience
+		
+		cost = 5
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_guard_patrol_routines"
+			add_tech_bonus = {
+				bonus = 1.0
+				uses = 1
+				category = naval_light_hull_tech
+			}
+		}
+	}
+	
+	focus = {
+		id = gs_reliable_ships
+		icon = GFX_goal_generic_small_arms
+		
+		prerequisite = {
+			focus = gs_river_crossing_experience
+		}
+		
+		mutually_exclusive = {
+			focus = gs_light_ships
+		}
+		
+		mutually_exclusive = {
+			focus = gs_armored_ships
+		}
+		
+		x = 0
+		y = 1
+		relative_position_id = gs_river_crossing_experience
+		
+		cost = 5
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_guard_patrol_routines"
+			add_tech_bonus = {
+				bonus = 1.0
+				uses = 1
+				category = naval_medium_hull_tech
+			}
+		}
+	}
+	
+	focus = {
+		id = gs_armored_ships
+		icon = GFX_goal_generic_small_arms
+		
+		prerequisite = {
+			focus = gs_river_crossing_experience
+		}
+		
+		mutually_exclusive = {
+			focus = gs_light_ships
+		}
+		
+		mutually_exclusive = {
+			focus = gs_reliable_ships
+		}
+		
+		x = 2
+		y = 1
+		relative_position_id = gs_river_crossing_experience
+		
+		cost = 5
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_guard_patrol_routines"
+			add_tech_bonus = {
+				bonus = 1.0
+				uses = 1
+				category = naval_heavy_hull_tech
+			}
+		}
+	}
+	
+	focus = {
+		id = gs_better_navy_equipment
+		icon = GFX_goal_generic_small_arms
+		
+		prerequisite = {
+			focus = gs_light_ships
+			OR = gs_reliable_ships
+			OR = gs_armored_ships
+		}
+		
+		
+		x = 0
+		y = 1
+		relative_position_id = gs_reliable_ships
+		
+		cost = 5
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_guard_patrol_routines"
+			add_tech_bonus = {
+				bonus = 0.5
+				uses = 2
+				category = naval_upgrade_tech
+			}
+		}
+	}
+	
+	focus = {
+		id = gs_better_navy_equipment
+		icon = GFX_goal_generic_small_arms
+		
+		prerequisite = {
+			focus = gs_light_ships
+			OR = gs_reliable_ships
+			OR = gs_armored_ships
+		}
+		
+		
+		x = 0
+		y = 1
+		relative_position_id = gs_reliable_ships
+		
+		cost = 5
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_guard_patrol_routines"
+			add_tech_bonus = {
+				bonus = 0.5
+				uses = 2
+				category = naval_upgrade_tech
+			}
+		}
+	}
+	
+	focus = {
+		id = gs_armament_modules
+		icon = GFX_goal_generic_small_arms
+		
+		prerequisite = {
+			focus = gs_better_navy_equipment
+		}
+		
+		
+		x = 0
+		y = 1
+		relative_position_id = gs_better_navy_equipment
+		
+		cost = 5
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_guard_patrol_routines"
+			add_tech_bonus = {
+				bonus = 0.5
+				uses = 2
+				category = naval_arms_tech
+			}
+		}
+	}
+	
+	focus = {
+		id = gs_reinforce_ships
+		icon = GFX_goal_generic_small_arms
+		
+		prerequisite = {
+			focus = gs_better_navy_equipment
+		}
+		
+		
+		x = -2
+		y = 1
+		relative_position_id = gs_better_navy_equipment
+		
+		cost = 5
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_guard_patrol_routines"
+			add_tech_bonus = {
+				bonus = 0.5
+				uses = 2
+				category = naval_armour_tech
+			}
+		}
+	}
+	
+		focus = {
+		id = gs_improved_command_techniques
+		icon = GFX_goal_generic_small_arms
+		
+		prerequisite = {
+			focus = gs_better_navy_equipment
+		}
+		
+		
+		x = 2
+		y = 1
+		relative_position_id = gs_better_navy_equipment
+		
+		cost = 5
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_guard_patrol_routines"
+			add_tech_bonus = {
+				bonus = 0.5
+				uses = 2
+				category = naval_command_tech
+			}
+		}
+	}
+	
+}
 	#random_owned_controlled_state = {
 			limit = { is_capital = yes }
 			
