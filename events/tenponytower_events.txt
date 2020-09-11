@@ -65,7 +65,7 @@ country_event = {
 
 	option = {
 		name = TEN.2.b
-		ai_chance = { factor = 1000}
+		ai_chance = { factor = 1}
 		add_ideas = TEN_inner_walls
 	}
 }
@@ -81,7 +81,7 @@ country_event = {
 
  	option = {
 		name = TEN.3.a
-		ai_chance = { factor = 1000}
+		ai_chance = { factor = 1}
 
 		21 = {
 			add_resource = {
@@ -681,11 +681,7 @@ country_event = {
 
 		GUT = {
 			load_oob = GUT_guards
-		}
-
-		diplomatic_relation = {
-			country = GUT
-			relation = non_aggression_pact
+			add_timed_idea = { idea = TEN_foreign_guards days = 365 }
 		}
 	}
 }
@@ -713,7 +709,23 @@ country_event = {
 		}
 
 		TEN = {
-		add_to_faction = GUT
+			add_to_faction = GUT
+		}
+		hidden_effect = {
+			GUT = {
+				add_ai_strategy = {
+					type = alliance
+					id = "TEN"
+					value = 200
+				}
+			}
+			TEN = {
+				add_ai_strategy = {
+					type = alliance
+					id = "GUT"
+					value = 200
+				}
+			}
 		}
 	}
 
@@ -772,6 +784,22 @@ country_event = {
 
 		TEN = {
 		add_to_faction = MAR
+			hidden_effect = {
+				GUT = {
+					add_ai_strategy = {
+						type = alliance
+						id = "TEN"
+						value = 200
+					}
+				}
+				TEN = {
+					add_ai_strategy = {
+						type = alliance
+						id = "GUT"
+						value = 200
+					}
+				}
+			}
 		}
 	}
 
@@ -826,7 +854,9 @@ country_event = {
 
 		MAR = {
 			load_oob = MAR_guards
+			add_timed_idea = { idea = TEN_foreign_guards days = 365 }
 		}
+		
 	}
 }
 
@@ -987,15 +1017,10 @@ country_event = {
 		name = TEN.47.a
 		ai_chance = { factor = 1000}
 
-		custom_effect_tooltip = TEN_claim_south_manehattan
+		custom_effect_tooltip = TEN_unlock_conscription_laws_tt
 
 		hidden_effect = {
 			clr_country_flag = manpower_laws_blocked
-			478 = { add_claim_by = TEN }
-			18 = { add_claim_by = TEN }
-			469 = { add_claim_by = TEN }
-			55 = { add_claim_by = TEN }
-			53 = { add_claim_by = TEN }
 		}
 	}
 }
@@ -1297,17 +1322,17 @@ country_event = {
 	desc = TEN.59.desc
 	picture = GFX_event_test
 
+	fire_only_once = yes
 	trigger = {
     	original_tag = TEN
     	has_global_flag = ARB_cannibalism_revealed
     	has_country_flag = TEN_imported_meat
 	}
 
- 	fire_only_once = no
 
  	option = {
 		name = TEN.59.a
-		ai_chance = { factor = 1000}
+		ai_chance = { factor = 10}
 
 		add_timed_idea = { idea = TEN_truth_of_meat days = 180 }
 	}
@@ -1326,7 +1351,7 @@ country_event = {
     		has_country_flag = TEN_elite_cuisine
    	}
 
- 	fire_only_once = no
+ 	fire_only_once = yes
 
  	option = {
 		name = TEN.60.a
@@ -1336,3 +1361,615 @@ country_event = {
 	}
 }
 
+#Enclave Attacks
+country_event = {
+	id = TEN.61
+	title = TEN.61.title
+	desc = TEN.61.desc
+	picture = GFX_event_test
+
+	trigger = {
+    		original_tag = TEN
+    		has_global_flag = cauterize_in_progress_flag
+   	}
+
+ 	fire_only_once = yes
+
+ 	option = {
+		name = TEN.61.a
+		ai_chance = { factor = 1000}
+
+		if = {
+			limit = {
+				has_country_flag = TEN_naval_focus
+			}
+			load_focus_tree = TEN_society_enclavewar_naval
+			set_country_flag = TEN_society_enclave_war_naval
+		}
+		else = {
+			load_focus_tree = TEN_society_enclavewar
+			set_country_flag = TEN_society_enclave_war
+		}
+	}
+}
+
+#A United Manehattan
+country_event = {
+	id = TEN.62
+	title = TEN.62.title
+	desc = TEN.62.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = no
+
+ 	option = {
+		name = TEN.62.a
+		ai_chance = { factor = 10}
+
+
+		hidden_effect = {
+			GUT = {
+				country_event = { id = TEN.63 }
+			}
+			MAR = {
+				country_event = { id = TEN.64 }
+			}
+			FRI = {
+				country_event = { id = TEN.65 }
+			}
+			ARB = {
+				country_event = { id = TEN.66 }
+			}
+			MSR = {
+				country_event = { id = TEN.67 }
+			}
+			MRA = {
+				country_event = { id = TEN.68 }
+			}
+		}
+	}
+
+	option = {
+		name = TEN.62.b
+		ai_chance = { factor = 10}
+
+		if = {
+			limit = {
+				GUT = { exists = yes }
+				GUT = {
+					NOT = {
+						AND = {
+							is_in_faction_with = TEN
+							is_subject_of = TEN
+						}
+					}
+				}
+			}
+			create_wargoal = {
+   				type = annex_everything
+    			target = GUT
+			}
+		}
+
+		if = {
+			limit = {
+				MAR = { exists = yes }
+				MAR = {
+					NOT = {
+						AND = {
+							is_in_faction_with = TEN
+							is_subject_of = TEN
+						}
+					}
+				}
+			}
+			create_wargoal = {
+   				type = annex_everything
+    			target = MAR
+			}
+		}
+
+		if = {
+			limit = {
+				FRI = { exists = yes }
+				FRI = {
+					NOT = {
+						AND = {
+							is_in_faction_with = TEN
+							is_subject_of = TEN
+						}
+					}
+				}
+			}
+			create_wargoal = {
+   				type = annex_everything
+    			target = FRI
+			}
+		}
+
+		if = {
+			limit = {
+				ARB = { exists = yes }
+				ARB = {
+					NOT = {
+						AND = {
+							is_in_faction_with = TEN
+							is_subject_of = TEN
+						}
+					}
+				}
+			}
+			create_wargoal = {
+   				type = annex_everything
+    			target = ARB
+			}
+		}
+
+		if = {
+			limit = {
+				MSR = { exists = yes }
+				MSR = {
+					NOT = {
+						AND = {
+							is_in_faction_with = TEN
+							is_subject_of = TEN
+						}
+					}
+				}
+			}
+			create_wargoal = {
+   				type = annex_everything
+    			target = MSR
+			}
+		}
+
+		if = {
+			limit = {
+				MRA = { exists = yes }
+				MRA = {
+					NOT = {
+						AND = {
+							is_in_faction_with = TEN
+							is_subject_of = TEN
+						}
+					}
+				}
+			}
+			create_wargoal = {
+   				type = annex_everything
+    			target = MRA
+			}
+		}
+	}
+}
+
+#A United Manehattan (GUT Invite)
+country_event = {
+	id = TEN.63
+	title = TEN.63.title
+	desc = TEN.63.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = no
+
+ 	option = {
+		name = TEN.63.a
+		ai_chance = { factor = 10}
+
+		TEN = {
+			add_to_faction = GUT
+		}
+		hidden_effect = {
+			GUT = {
+				add_ai_strategy = {
+					type = alliance
+					id = "TEN"
+					value = 200
+				}
+			}
+			TEN = {
+				add_ai_strategy = {
+					type = alliance
+					id = "GUT"
+					value = 200
+				}
+			}
+		}
+	}
+
+	option = {
+		name = TEN.63.b
+		ai_chance = { factor = 10}
+
+		TEN = {
+			country_event = { id = TEN.69 }
+		}
+	}
+}
+
+#A United Manehattan (MAR Invite)
+country_event = {
+	id = TEN.64
+	title = TEN.64.title
+	desc = TEN.64.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = no
+
+ 	option = {
+		name = TEN.64.a
+		ai_chance = { factor = 10}
+
+		TEN = {
+			add_to_faction = MAR
+		}
+		hidden_effect = {
+			MAR = {
+				add_ai_strategy = {
+					type = alliance
+					id = "TEN"
+					value = 200
+				}
+			}
+			TEN = {
+				add_ai_strategy = {
+					type = alliance
+					id = "MAR"
+					value = 200
+				}
+			}
+		}
+	}
+
+	option = {
+		name = TEN.64.b
+		ai_chance = { factor = 10}
+
+		TEN = {
+			country_event = { id = TEN.70 }
+		}
+	}
+}
+
+#A United Manehattan (FRI Invite)
+country_event = {
+	id = TEN.65
+	title = TEN.65.title
+	desc = TEN.65.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = no
+
+ 	option = {
+		name = TEN.65.a
+		ai_chance = { factor = 10}
+
+		TEN = {
+			add_to_faction = FRI
+		}
+		hidden_effect = {
+			FRI = {
+				add_ai_strategy = {
+					type = alliance
+					id = "TEN"
+					value = 200
+				}
+			}
+			TEN = {
+				add_ai_strategy = {
+					type = alliance
+					id = "FRI"
+					value = 200
+				}
+			}
+		}
+	}
+
+	option = {
+		name = TEN.65.b
+		ai_chance = { factor = 10}
+
+		TEN = {
+			country_event = { id = TEN.71 }
+		}
+	}
+}
+
+#A United Manehattan (ARB Invite)
+country_event = {
+	id = TEN.66
+	title = TEN.66.title
+	desc = TEN.66.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = no
+
+ 	option = {
+		name = TEN.66.a
+		ai_chance = { factor = 10}
+
+		TEN = {
+			add_to_faction = ARB
+		}
+		hidden_effect = {
+			ARB = {
+				add_ai_strategy = {
+					type = alliance
+					id = "TEN"
+					value = 200
+				}
+			}
+			TEN = {
+				add_ai_strategy = {
+					type = alliance
+					id = "ARB"
+					value = 200
+				}
+			}
+		}
+	}
+
+	option = {
+		name = TEN.66.b
+		ai_chance = { factor = 10}
+
+		TEN = {
+			country_event = { id = TEN.72 }
+		}
+	}
+}
+
+#A United Manehattan (MSR Invite)
+country_event = {
+	id = TEN.67
+	title = TEN.67.title
+	desc = TEN.67.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = no
+
+ 	option = {
+		name = TEN.67.a
+		ai_chance = { factor = 10}
+
+		TEN = {
+			add_to_faction = ARB
+		}
+		hidden_effect = {
+			MSR = {
+				add_ai_strategy = {
+					type = alliance
+					id = "TEN"
+					value = 200
+				}
+			}
+			TEN = {
+				add_ai_strategy = {
+					type = alliance
+					id = "MSR"
+					value = 200
+				}
+			}
+		}
+	}
+
+	option = {
+		name = TEN.67.b
+		ai_chance = { factor = 10}
+
+		TEN = {
+			country_event = { id = TEN.73 }
+		}
+	}
+}
+
+#A United Manehattan (MRA Invite)
+country_event = {
+	id = TEN.68
+	title = TEN.68.title
+	desc = TEN.68.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = no
+
+ 	option = {
+		name = TEN.68.a
+		ai_chance = { factor = 10}
+
+		TEN = {
+			add_to_faction = MRA
+		}
+		hidden_effect = {
+			MRA = {
+				add_ai_strategy = {
+					type = alliance
+					id = "TEN"
+					value = 200
+				}
+			}
+			TEN = {
+				add_ai_strategy = {
+					type = alliance
+					id = "MRA"
+					value = 200
+				}
+			}
+		}
+	}
+
+	option = {
+		name = TEN.68.b
+		ai_chance = { factor = 10}
+
+		TEN = {
+			country_event = { id = TEN.74 }
+		}
+	}
+}
+
+#A United Manehattan (GUT denies)
+country_event = {
+	id = TEN.69
+	title = TEN.69.title
+	desc = TEN.69.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = no
+
+ 	option = {
+		name = TEN.69.a
+		ai_chance = { factor = 10}
+
+		create_wargoal = {
+   			type = annex_everything
+    		target = GUT
+		}
+	}
+}
+
+#A United Manehattan (MAR denies)
+country_event = {
+	id = TEN.70
+	title = TEN.70.title
+	desc = TEN.70.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = no
+
+ 	option = {
+		name = TEN.70.a
+		ai_chance = { factor = 10}
+
+		create_wargoal = {
+   			type = annex_everything
+    		target = MAR
+		}
+	}
+}
+
+#A United Manehattan (FRI denies)
+country_event = {
+	id = TEN.71
+	title = TEN.71.title
+	desc = TEN.71.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = no
+
+ 	option = {
+		name = TEN.71.a
+		ai_chance = { factor = 10}
+
+		create_wargoal = {
+   				type = annex_everything
+    			target = FRI
+		}
+	}
+}
+
+#A United Manehattan (ARB denies)
+country_event = {
+	id = TEN.72
+	title = TEN.72.title
+	desc = TEN.72.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = no
+
+ 	option = {
+		name = TEN.72.a
+		ai_chance = { factor = 10}
+
+		create_wargoal = {
+   			type = annex_everything
+    		target = ARB
+		}
+	}
+}
+
+#A United Manehattan (MSR denies)
+country_event = {
+	id = TEN.73
+	title = TEN.73.title
+	desc = TEN.73.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = no
+
+ 	option = {
+		name = TEN.73.a
+		ai_chance = { factor = 10}
+
+		create_wargoal = {
+   				type = annex_everything
+    			target = MSR
+		}
+	}
+}
+
+#A United Manehattan (MRA denies)
+country_event = {
+	id = TEN.74
+	title = TEN.74.title
+	desc = TEN.74.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = no
+
+ 	option = {
+		name = TEN.74.a
+		ai_chance = { factor = 10}
+
+		create_wargoal = {
+   				type = annex_everything
+    			target = MRA
+		}
+	}
+}
+
+#Fate of the Society
+country_event = {
+	id = TEN.75
+	title = TEN.75.title
+	desc = TEN.75.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = no
+
+ 	option = {
+		name = TEN.75.a
+		ai_chance = { factor = 10}
+
+		swap_ideas = { remove_idea = TEN_twilight_resistance add_idea = TEN_twilight_resistance1 }
+		add_popularity = { ideology = visionary popularity = 0.10}
+	}
+}
+
+country_event = {
+	id = TEN.76
+	title = TEN.76.title
+	desc = TEN.76.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = no
+
+ 	option = {
+		name = TEN.75.a
+		ai_chance = { factor = 10}
+	}
+}
