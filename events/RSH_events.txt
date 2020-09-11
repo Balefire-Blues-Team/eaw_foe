@@ -1,0 +1,528 @@
+add_namespace = redforces
+
+country_event = { ###Three Piece Army
+ 	id = redforces.1
+ 	title = redforces.1.title
+ 	desc = redforces.1.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Raiders
+		name = redforces.1.a
+		ai_chance = {
+			factor = 25
+		}
+
+		add_ideas = RSH_raider_idea
+		hidden_effect = {
+			set_country_flag = RSH_raider_flag
+		}
+	}
+
+	option = { #Slaves
+		name = redforces.1.b
+		ai_chance = {
+			factor = 30
+		}
+
+		custom_effect_tooltip = RSH_slave_reinforcements_tt
+		hidden_effect = {
+			load_oob = RSH_slave_units
+		}
+		hidden_effect = {
+			set_country_flag = RSH_slave_flag
+		}
+	}
+
+	option = { #Talons
+		name = redforces.1.c
+		ai_chance = {
+			factor = 45
+		}
+
+		add_ideas = training_law_talon
+		hidden_effect = {
+			set_country_flag = RSH_talon_flag
+		}
+	}
+}
+
+country_event = { ###Siezing Assets
+ 	id = redforces.2
+ 	title = redforces.2.title
+ 	desc = redforces.2.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Military
+		name = redforces.2.a
+		ai_chance = {
+			factor = 33
+		}
+
+		add_offsite_building = { type = arms_factory level = 1 }
+	}
+
+	option = { #Civilian
+		name = redforces.2.b
+		ai_chance = {
+			factor = 33
+		}
+
+		add_offsite_building = { type = industrial_complex level = 2 }
+	}
+
+	option = { #Infrastructure
+		name = redforces.2.c
+		ai_chance = {
+			factor = 33
+		}
+
+		every_controlled_state = {
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+	}
+}
+
+country_event = { ###Leading the Charge
+ 	id = redforces.3
+ 	title = redforces.3.title
+ 	desc = redforces.3.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Talon
+		name = redforces.3.a
+		ai_chance = {
+			factor = 50
+		}
+
+		create_corps_commander = {
+			name = "Hermann Bluedown"
+			#picture = "Brimstone.tga"
+			traits = { merc_commander intelligent_trait griffon_race_trait }
+			skill = 2
+			attack_skill = 1
+			defense_skill = 1
+			planning_skill = 2
+			logistics_skill = 3
+			id = 56201
+		}
+		custom_effect_tooltip = RSH_hermann_stats_tt
+	}
+
+	option = { #Raider
+		name = redforces.3.b
+		ai_chance = {
+			factor = 50
+		}
+
+		create_corps_commander = {
+			name = "Bobby Breaknecks"
+			#picture = "Brimstone.tga"
+			traits = { raider_commander strong_trait pony_race_trait }
+			skill = 2
+			attack_skill = 3
+			defense_skill = 2
+			planning_skill = 1
+			logistics_skill = 1
+			id = 56202
+		}
+		custom_effect_tooltip = RSH_bobby_stats_tt
+	}
+
+	option = { #Lavender
+		name = redforces.3.c
+		ai_chance = {
+			factor = 400
+		}
+
+		trigger = {
+			NOT = {
+				RED = {
+					has_global_flag = RED_has_lavender
+				}
+			}
+		}
+
+		create_corps_commander = {
+			name = "Lavender Basket"
+			picture = "LavenderSlave.tga"
+			traits = { lavender_leader_trait enduring_trait pony_race_trait }
+			skill = 3
+			attack_skill = 2
+			defense_skill = 4
+			planning_skill = 3
+			logistics_skill = 1
+			female = yes
+			id = 59306
+		}
+		custom_effect_tooltip = RED_lavender_stats_tt
+
+		hidden_effect = {
+			set_country_flag = RSH_has_lavender
+		}
+	}
+}
+
+country_event = { ###The Headwaters Landing
+ 	id = redforces.4
+ 	title = redforces.4.title
+ 	desc = redforces.4.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Send Em
+		name = redforces.4.a
+		ai_chance = {
+			factor = 30
+		}
+
+		if = {
+			limit = { set_country_flag = RSH_raider_flag }
+			custom_effect_tooltip = RSH_headwater_r_tt
+			hidden_effect = {
+				load_oob = RSH_headwater_r
+			}
+		}
+
+		else_if = {
+			limit = { set_country_flag = RSH_slave_flag }
+			custom_effect_tooltip = RSH_headwater_s_tt
+			hidden_effect = {
+				load_oob = RSH_headwater_s
+			}
+		}
+
+		else_if = {
+			limit = { set_country_flag = RSH_talon_flag }
+			custom_effect_tooltip = RSH_headwater_t_tt
+			hidden_effect = {
+				load_oob = RSH_headwater_t
+			}
+		}
+	}
+}
+
+country_event = { ###RSH asks for Guns
+ 	id = redforces.5
+ 	title = redforces.5.title
+ 	desc = redforces.5.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Accept the Request
+		name = redforces.5.a
+		ai_chance = {
+			base = 0
+			modifier = {
+				has_equipment = {
+    				infantry_equipment > 300
+				}
+				add = 50
+			}
+			modifier = {
+				has_equipment = {
+    				infantry_equipment > 500
+				}
+				add = 500
+			}
+		}
+
+		trigger = {
+			has_equipment = {
+    			infantry_equipment > 250
+			}
+		}
+
+		send_equipment = {
+    		equipment = infantry_equipment
+   			amount = 250
+    		target = RSH
+		}
+
+	}
+
+	option = { #Decline the Request
+		name = redforces.5.b
+		ai_chance = {
+			base = 50
+		}
+
+	}
+}
+
+country_event = { ###RED gives us guns
+ 	id = redforces.6
+ 	title = redforces.6.title
+ 	desc = redforces.6.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Yay
+		name = redforces.6.a
+		ai_chance = {
+			base = 50
+		}
+
+		add_war_support = 0.05
+	}
+}
+
+country_event = { ###RED declines to give guns
+ 	id = redforces.7
+ 	title = redforces.7.title
+ 	desc = redforces.7.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Yay
+		name = redforces.7.a
+		ai_chance = {
+			base = 50
+		}
+
+		add_war_support = -0.05
+	}
+}
+
+country_event = { ###RSH asks for troops
+ 	id = redforces.8
+ 	title = redforces.8.title
+ 	desc = redforces.8.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Accept the Request
+		name = redforces.8.a
+		ai_chance = {
+			base = 0
+			modifier = {
+				has_manpower > 500
+				add = 50
+			}
+			modifier = {
+				has_manpower > 1000
+				add = 500
+			}
+		}
+
+		trigger = {
+			has_manpower > 500
+		}
+
+		add_manpower = -500
+		RSH = {
+			add_manpower = 500
+		}
+
+	}
+
+	option = { #Decline the Request
+		name = redforces.8.b
+		ai_chance = {
+			base = 50
+		}
+
+	}
+}
+
+country_event = { ###RED gives us troops
+ 	id = redforces.9
+ 	title = redforces.9.title
+ 	desc = redforces.9.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Yay
+		name = redforces.9.a
+		ai_chance = {
+			base = 50
+		}
+
+		add_stability = 0.05
+	}
+}
+
+country_event = { ###RED declines to give troops
+ 	id = redforces.10
+ 	title = redforces.10.title
+ 	desc = redforces.10.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Yay
+		name = redforces.10.a
+		ai_chance = {
+			base = 50
+		}
+
+		add_stability = -0.05
+	}
+}
+
+country_event = { ###Dealing with the Populace
+ 	id = redforces.11
+ 	title = redforces.11.title
+ 	desc = redforces.11.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Yay
+		name = redforces.11.a
+		ai_chance = {
+			base = 50
+		}
+
+		add_ideas = RSH_harsh_treatment
+		every_controlled_state = {
+			add_manpower = -500
+		}
+	}
+}
+
+country_event = { ###We won!
+ 	id = redforces.12
+ 	title = redforces.12.title
+ 	desc = redforces.12.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Rejoin RED
+		name = redforces.12.a
+		ai_chance = {
+			base = 50
+		}
+		trigger = {
+			RED = {
+				exists = yes
+			}
+		}
+
+		RED = {
+			country_event = {
+				id = redforces.14
+			}
+		}
+	}
+
+	option = { #Bigger ambitions
+		name = redforces.12.b
+		ai_chance = {
+			base = 5
+			modifier = {
+				RED = {
+					surrender_progress > 0.5
+				}
+				add = 55
+			}
+		}
+
+		hidden_effect = {
+			load_focus_tree = GR_focus
+		}
+
+		RED = {
+			country_event = {
+				id = redforces.13
+			}
+		}
+	}
+}
+
+country_event = { ###Blackclaw's trechery
+ 	id = redforces.13
+ 	title = redforces.13.title
+ 	desc = redforces.13.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Yay
+		name = redforces.13.a
+		ai_chance = {
+			base = 50
+		}
+
+		create_wargoal = { type = annex_everything target = RSH }
+	}
+}
+
+country_event = { ###Blackclaw's victory
+ 	id = redforces.14
+ 	title = redforces.14.title
+ 	desc = redforces.14.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Yay
+		name = redforces.14.a
+		ai_chance = {
+			base = 50
+		}
+
+		if = {
+			limit = {
+				RSH = {
+					random_army_leader = {
+						has_id = 59306
+					}
+				}
+			}
+			custom_effect_tooltip = RED_lavender_unlock_tt
+
+			hidden_effect = {
+				set_country_flag = RED_has_lavender
+			}
+		}
+		RSH = {
+			every_unit_leader = {
+				limit = {
+					OR = {
+						has_id = 59302
+						has_id = 59306
+						has_id = 56201
+						has_id = 56202
+					}
+				}
+				set_nationality = RED
+			}
+		}
+		annex_country = {
+		    target = RSH
+		    transfer_troops = yes
+		}
+	}
+}
+

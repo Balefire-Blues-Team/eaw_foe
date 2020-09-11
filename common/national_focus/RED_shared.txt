@@ -20,7 +20,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_lifeofamonster
-	icon = GFX_goal_redeye
+	icon = GFX_goal_RED_new_world
 	relative_position_id = RED_birthofamonster
 	x = 0
 	y = 1
@@ -1155,7 +1155,7 @@ shared_focus = {
 ### Army Tree
 shared_focus = { 
 	id = RED_wasteland_army
-	icon = GFX_goal_generic_land_doctrines_focus
+	icon = GFX_goal_RED_officers
 	relative_position_id = RED_everfree_road
 	x = 0
 	y = 2
@@ -1470,32 +1470,58 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_slave_commanders"
-		create_corps_commander = {
-			name = "Lavender Basket"
-			picture = "LavenderSlave.tga"
-			traits = { lavender_leader_trait enduring_trait pony_race_trait }
-			skill = 3
-			attack_skill = 2
-			defense_skill = 4
-			planning_skill = 3
-			logistics_skill = 1
-			female = yes
-			#id = 1004
-		}
-		custom_effect_tooltip = RED_lavender_stats_tt
-		create_corps_commander = {
-			name = "Bleeding Heart"
-			picture = "BleedingHeart.dds"
-			traits = { pony_race_trait charismatic_trait }
-			skill = 1
-			attack_skill = 1
-			defense_skill = 1
-			planning_skill = 2
-			logistics_skill = 1
-		}
-		custom_effect_tooltip = RED_bleeding_stats_tt
-		custom_effect_tooltip = RED_lavender_unlock_tt
+		if = {
+			limit = { 
+				NOT = {
+					RSH = {
+						has_country_flag = RSH_has_lavender
+					}
+				}
+			}
+			create_corps_commander = {
+				name = "Lavender Basket"
+				picture = "LavenderSlave.tga"
+				traits = { lavender_leader_trait enduring_trait pony_race_trait }
+				skill = 3
+				attack_skill = 2
+				defense_skill = 4
+				planning_skill = 3
+				logistics_skill = 1
+				female = yes
+				id = 59306
+			}
+			custom_effect_tooltip = RED_lavender_stats_tt
+			create_corps_commander = {
+				name = "Bleeding Heart"
+				picture = "BleedingHeart.dds"
+				traits = { pony_race_trait charismatic_trait }
+				skill = 1
+				attack_skill = 1
+				defense_skill = 1
+				planning_skill = 2
+				logistics_skill = 1
+				id = 59307
+			}
+			custom_effect_tooltip = RED_bleeding_stats_tt
+			custom_effect_tooltip = RED_lavender_unlock_tt
 
+			hidden_effect = {
+				set_country_flag = RED_has_lavender
+			}
+		}
+		else = {
+			create_corps_commander = {
+				name = "Bleeding Heart"
+				picture = "BleedingHeart.dds"
+				traits = { pony_race_trait charismatic_trait }
+				skill = 1
+				attack_skill = 1
+				defense_skill = 1
+				planning_skill = 2
+				logistics_skill = 1
+			}
+			custom_effect_tooltip = RED_bleeding_stats_tt
+		}
 	}
 
 }
@@ -2325,6 +2351,7 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_break_the_mob"
 		create_wargoal = { type = annex_everything target = GUN }
+		create_wargoal = { type = annex_everything target = LGH }
 	}
 
 } 
@@ -2348,6 +2375,7 @@ shared_focus = {
 
 		add_political_power = 150
 		set_cosmetic_tag = RED_empire
+		custom_effect_tooltip = RED_core_tribes_and_rural_tt
 		every_owned_state = {
 			limit = {
 				OR = {
@@ -2359,6 +2387,13 @@ shared_focus = {
 					is_core_of = APR
 					is_core_of = FRT
 					is_core_of = ERA
+				}
+				NOT = {
+					OR = {
+						state = 490
+						state = 812
+						state = 515
+					}
 				}
 
 			}
@@ -2415,6 +2450,12 @@ shared_focus = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_filly_rangers"
 
 		custom_effect_tooltip = RED_sr_decisions_tt
+		hidden_effect = {
+			set_variable = {
+			    var = RED_lose_sr_var
+			    value = 0
+			}
+		}
 	}
 
 }
@@ -2690,6 +2731,10 @@ shared_focus = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_new_unity"
 
 		country_event = { id = redeye.54 }
+		country_event = { 
+			id = redeye.44
+			days = 7
+		}
 	}
 
 }
@@ -2725,9 +2770,9 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_tale_of_two_cities
-	icon = GFX_goal_RED_new_unity
+	icon = GFX_goal_generic_major_war
 	relative_position_id = RED_new_unity
-	x = -4
+	x = -2
 	y = 1
 	cost = 10
 
@@ -2746,44 +2791,60 @@ shared_focus = {
 	will_lead_to_war_with = FER
 	will_lead_to_war_with = RWK
 	will_lead_to_war_with = RAR
-	will_lead_to_war_with = RTA
 	will_lead_to_war_with = MRA
-	will_lead_to_war_with = EMP
+	will_lead_to_war_with = PRA
+	will_lead_to_war_with = GLY
+	will_lead_to_war_with = SCI
+	will_lead_to_war_with = CAL
+	will_lead_to_war_with = WNF
+	will_lead_to_war_with = CCD
+	
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_tale_of_two_cities"
-
-		declare_war_on = {
-    		target = MUD
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = MUD
 		}
-		declare_war_on = {
-    		target = STT
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = STT
 		}
-		declare_war_on = {
-    		target = FER
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = RAR
 		}
-		declare_war_on = {
-    		target = RWK
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = RWK
 		}
-		declare_war_on = {
-    		target = RAR
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = MRA
 		}
-		declare_war_on = {
-    		target = RTA
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = PRA
 		}
-		declare_war_on = {
-    		target = MRA
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = GLY
 		}
-		declare_war_on = {
-    		target = EMP
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = SCI
+		}
+		create_wargoal = { 
+			type = annex_everything 
+			target = CAL
+		}
+		create_wargoal = { 
+			type = annex_everything 
+			target = WNF
+		}
+		create_wargoal = { 
+			type = annex_everything 
+			target = CCD
 		}
 	}
 
@@ -2791,7 +2852,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_ivory_tower
-	icon = GFX_goal_RED_new_unity
+	icon = GFX_goal_tenpony
 	relative_position_id = RED_tale_of_two_cities
 	x = -1
 	y = 1
@@ -2814,30 +2875,29 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_ivory_tower"
-
-		declare_war_on = {
-    		target = MAR
-    		type = annex_everything
+    	create_wargoal = { 
+			type = annex_everything 
+			target = MAR
 		}
-		declare_war_on = {
-    		target = TEN
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = TEN
 		}
-		declare_war_on = {
-    		target = GUT
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = GUT
 		}
-		declare_war_on = {
-    		target = FRI
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = FRI
 		}
 	}
 
 }
 
 shared_focus = { 
-	id = RED_radio_question
-	icon = GFX_goal_RED_new_unity
+	id = RED_greatest_contingent
+	icon = GFX_goal_steel_rangers
 	relative_position_id = RED_ivory_tower
 	x = 0
 	y = 1
@@ -2853,91 +2913,47 @@ shared_focus = {
 		factor = 55
 	} 
 
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_radio_question"
-
-		country_event = { id = redeye.45 }
-	}
-
-}
-
-shared_focus = { 
-	id = RED_greatest_contingent
-	icon = GFX_goal_RED_new_unity
-	relative_position_id = RED_tale_of_two_cities
-	x = 1
-	y = 1
-	cost = 5
-
-	prerequisite = { focus = RED_tale_of_two_cities } 
-
-	available = {
-
-	}
-
-	ai_will_do = { 
-		factor = 55
-	} 
-
 	will_lead_to_war_with = MSR
 	will_lead_to_war_with = ARB
 	will_lead_to_war_with = ABT
+	will_lead_to_war_with = EMP
+	will_lead_to_war_with = RTA
 
 	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_ivory_tower"
-
-		declare_war_on = {
-    		target = MSR
-    		type = annex_everything
+		log = "[GetDateText]: [Root.GetName]: Focus RED_greatest_contingent"
+		create_wargoal = { 
+			type = annex_everything 
+			target = MSR
 		}
-		declare_war_on = {
-    		target = ARB
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = ARB
 		}
-		declare_war_on = {
-    		target = ABT
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = ABT
 		}
-	}
-
-}
-
-shared_focus = { 
-	id = RED_secrets_of_the_rangers
-	icon = GFX_goal_RED_new_unity
-	relative_position_id = RED_greatest_contingent
-	x = 0
-	y = 1
-	cost = 5
-
-	prerequisite = { focus = RED_greatest_contingent } 
-
-	available = {
-
-	}
-
-	ai_will_do = { 
-		factor = 55
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_secrets_of_the_rangers"
-
-		country_event = { id = redeye.46 }
+		create_wargoal = { 
+			type = annex_everything 
+			target = EMP
+		}
+		create_wargoal = { 
+			type = annex_everything 
+			target = RTA
+		}
 	}
 
 }
 
 shared_focus = { 
 	id = RED_manehattan_core
-	icon = GFX_goal_RED_new_unity
-	relative_position_id = RED_tale_of_two_cities
-	x = 0
-	y = 3
+	icon = GFX_goal_generic_formable_manhattan
+	relative_position_id = RED_greatest_contingent
+	x = 1
+	y = 1
 	cost = 10
 
-	prerequisite = { focus = RED_radio_question } 
-	prerequisite = { focus = RED_secrets_of_the_rangers } 
+	prerequisite = { focus = RED_greatest_contingent } 
 
 	available = {
 
@@ -2952,99 +2968,72 @@ shared_focus = {
 
 		custom_effect_tooltip = RED_core_manehattan_tt
 		hidden_effect = {
+			#Canterlot
+			add_state_core = 65
+			add_state_core = 477
+			add_state_core = 476
+			add_state_core = 801
+			add_state_core = 415
+			add_state_core = 234
+			add_state_core = 180
+			add_state_core = 813
+			add_state_core = 475
+			add_state_core = 446
+			add_state_core = 74
+
+			#Manehattan
+			add_state_core = 125
+			add_state_core = 479
 			add_state_core = 459
+			add_state_core = 612
 			add_state_core = 448
 			add_state_core = 790
-			add_state_core = 534
-			add_state_core = 524
-			add_state_core = 508
-			add_state_core = 462
 			add_state_core = 440
 			add_state_core = 461
+			add_state_core = 462
+			add_state_core = 164
+			add_state_core = 534
+			add_state_core = 203
+			add_state_core = 524
+			add_state_core = 508
+			add_state_core = 235
 			add_state_core = 87
 			add_state_core = 449
 			add_state_core = 471
-			add_state_core = 49
 			add_state_core = 58
+			add_state_core = 49
 			add_state_core = 442
+			add_state_core = 815
 			add_state_core = 423
 			add_state_core = 53
+			add_state_core = 55
+			add_state_core = 469
+			add_state_core = 18
+			add_state_core = 680
+			add_state_core = 21
+			add_state_core = 478
+			add_state_core = 39
+			add_state_core = 19
+			add_state_core = 646
+			add_state_core = 54
+			add_state_core = 642
+			add_state_core = 15
 			add_state_core = 44
 			add_state_core = 51
 			add_state_core = 436
 			add_state_core = 66
-			add_state_core = 469
-			add_state_core = 55
-			add_state_core = 18
-			add_state_core = 19
-			add_state_core = 54
-			add_state_core = 478
-			add_state_core = 15
-			add_state_core = 39
-			add_state_core = 57
+			add_state_core = 598
 			add_state_core = 47
-
+			add_state_core = 57
+			add_state_core = 601
 		}
-	}
-
-}
-
-
-shared_focus = { 
-	id = RED_final_question
-	icon = GFX_goal_RED_new_unity
-	relative_position_id = RED_new_unity
-	x = -2
-	y = 1
-	cost = 5
-
-	prerequisite = { focus = RED_new_unity } 
-
-	available = {
-
-	}
-
-	ai_will_do = { 
-		factor = 55
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_final_question"
-
-		country_event = { id = redeye.44 }
-	}
-
-}
-
-shared_focus = { 
-	id = RED_unity_freedom
-	icon = GFX_goal_RED_new_unity
-	relative_position_id = RED_final_question
-	x = 0
-	y = 3
-	cost = 5
-
-	prerequisite = { focus = RED_final_question } 
-
-	available = {
-
-	}
-
-	ai_will_do = { 
-		factor = 55
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_unity_freedom"
-
-		country_event = { id = redeye.57 }
 	}
 
 }
 
 shared_focus = { 
 	id = RED_bring_hell_to_sky
-	icon = GFX_goal_RED_new_unity
+	icon = GFX_goal_enclave_attack
 	relative_position_id = RED_new_unity
 	x = 0
 	y = 1
@@ -3052,6 +3041,9 @@ shared_focus = {
 
 	prerequisite = { focus = RED_new_unity } 
 
+	bypass = {
+		has_war_with = NEV
+	}
 	available = {
 
 	}
@@ -3065,9 +3057,9 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_bring_hell_to_sky"
 
-		declare_war_on = {
-    		target = NEV
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = NEV
 		}
 	}
 
@@ -3075,7 +3067,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_integrate_pegasi
-	icon = GFX_goal_RED_new_unity
+	icon = GFX_goal_generic_enclave_power_armor
 	relative_position_id = RED_bring_hell_to_sky
 	x = -1
 	y = 1
@@ -3101,7 +3093,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_equestrian_unity
-	icon = GFX_goal_RED_new_unity
+	icon = GFX_focus_generic_diplomatic_treaty_pony
 	relative_position_id = RED_integrate_pegasi
 	x = 0
 	y = 1
@@ -3127,7 +3119,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_cloud_genocide
-	icon = GFX_goal_RED_new_unity
+	icon = GFX_goal_generic_raider_skull
 	relative_position_id = RED_bring_hell_to_sky
 	x = 1
 	y = 1
@@ -3157,7 +3149,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_efficent_clouds
-	icon = GFX_goal_RED_new_unity
+	icon = GFX_goal_NEV_cloud_economy
 	relative_position_id = RED_cloud_genocide
 	x = 0
 	y = 1
@@ -3183,7 +3175,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_enclave_core
-	icon = GFX_goal_RED_new_unity
+	icon = GFX_goal_improve_relations_pony_pony
 	relative_position_id = RED_bring_hell_to_sky
 	x = 0
 	y = 3
@@ -3207,11 +3199,14 @@ shared_focus = {
 
 		custom_effect_tooltip = RED_core_enclave_tt
 		hidden_effect = {
+			add_state_core = 295
 			add_state_core = 568
 			add_state_core = 574
+			add_state_core = 447
 			add_state_core = 793
 			add_state_core = 796
 			add_state_core = 696
+			add_state_core = 219
 			add_state_core = 592
 			add_state_core = 809
 			add_state_core = 792
@@ -3221,69 +3216,11 @@ shared_focus = {
 
 }
 
-
-shared_focus = { 
-	id = RED_foal_mountains
-	icon = GFX_goal_RED_new_unity
-	relative_position_id = RED_new_unity
-	x = 2
-	y = 1
-	cost = 5
-
-	prerequisite = { focus = RED_new_unity } 
-
-	available = {
-
-	}
-
-	ai_will_do = { 
-		factor = 55
-	} 
-
-	will_lead_to_war_with = CCD
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_foal_mountains"
-
-		declare_war_on = {
-    		target = CCD
-    		type = annex_everything
-		}
-	}
-
-}
-
-shared_focus = { 
-	id = RED_crystal_caverns
-	icon = GFX_goal_RED_new_unity
-	relative_position_id = RED_foal_mountains
-	x = 0
-	y = 3
-	cost = 5
-
-	prerequisite = { focus = RED_foal_mountains } 
-
-	available = {
-
-	}
-
-	ai_will_do = { 
-		factor = 55
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_crystal_caverns"
-
-		country_event = { id = redeye.55 }
-	}
-
-}
-
 shared_focus = { 
 	id = RED_gate_to_the_south
-	icon = GFX_goal_RED_new_unity
+	icon = GFX_goal_generic_major_war
 	relative_position_id = RED_new_unity
-	x = 4
+	x = 2
 	y = 1
 	cost = 10
 
@@ -3309,42 +3246,41 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_gate_to_the_south"
-
-		declare_war_on = {
-    		target = EVR
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = EVR
 		}
-		declare_war_on = {
-    		target = NCG
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = NCG
 		}
-		declare_war_on = {
-    		target = BOG
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = BOG
 		}
-		declare_war_on = {
-    		target = RAF
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = RAF
 		}
-		declare_war_on = {
-    		target = PBN
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = PBN
 		}
-		declare_war_on = {
-    		target = REP
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = REP
 		}
-		declare_war_on = {
-    		target = GOR
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = GOR
 		}
-		declare_war_on = {
-    		target = FTA
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = FTA
 		}
-		declare_war_on = {
-    		target = SPV
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = SPV
 		}
 	}
 
@@ -3352,9 +3288,9 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_appleloosas
-	icon = GFX_goal_RED_new_unity
+	icon = GFX_goal_appleloosa
 	relative_position_id = RED_gate_to_the_south
-	x = -1
+	x = 1
 	y = 1
 	cost = 5
 
@@ -3388,8 +3324,8 @@ shared_focus = {
 }
 
 shared_focus = { 
-	id = RED_past_voices
-	icon = GFX_goal_RED_new_unity
+	id = RED_dragons_den
+	icon = GFX_goal_NEV_atc_SHA
 	relative_position_id = RED_appleloosas
 	x = 0
 	y = 1
@@ -3405,91 +3341,51 @@ shared_focus = {
 		factor = 55
 	} 
 
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_past_voices"
-
-		country_event = { id = redeye.51 }
-	}
-
-}
-
-shared_focus = { 
-	id = RED_dragons_den
-	icon = GFX_goal_RED_new_unity
-	relative_position_id = RED_gate_to_the_south
-	x = 1
-	y = 1
-	cost = 5
-
-	prerequisite = { focus = RED_gate_to_the_south } 
-
-	available = {
-
-	}
-
-	ai_will_do = { 
-		factor = 55
-	} 
-
 	will_lead_to_war_with = SHA
 	will_lead_to_war_with = LRA
 	will_lead_to_war_with = MAN
+	will_lead_to_war_with = ROK
+	will_lead_to_war_with = LIT
+	will_lead_to_war_with = MAS
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_dragons_den"
-
-		declare_war_on = {
-    		target = SHA
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = SHA
 		}
-		declare_war_on = {
-    		target = LRA
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = LRA
 		}
-		declare_war_on = {
-    		target = MAN
-    		type = annex_everything
+		create_wargoal = { 
+			type = annex_everything 
+			target = MAN
+		}
+		create_wargoal = { 
+			type = annex_everything 
+			target = ROK
+		}
+		create_wargoal = { 
+			type = annex_everything 
+			target = LIT
+		}
+		create_wargoal = { 
+			type = annex_everything 
+			target = MAS
 		}
 	}
 
 }
-
-shared_focus = { 
-	id = RED_fate_of_griffons
-	icon = GFX_goal_RED_new_unity
-	relative_position_id = RED_dragons_den
-	x = 0
-	y = 1
-	cost = 5
-
-	prerequisite = { focus = RED_dragons_den } 
-
-	available = {
-
-	}
-
-	ai_will_do = { 
-		factor = 55
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus RED_secrets_of_the_rangers"
-
-		country_event = { id = redeye.52 }
-	}
-
-}
-
 shared_focus = { 
 	id = RED_azuria_core
-	icon = GFX_goal_RED_new_unity
-	relative_position_id = RED_gate_to_the_south
-	x = 0
-	y = 3
+	icon = GFX_goal_generic_forceful_treaty
+	relative_position_id = RED_dragons_den
+	x = -1
+	y = 1
 	cost = 10
 
-	prerequisite = { focus = RED_fate_of_griffons } 
-	prerequisite = { focus = RED_past_voices } 
+	prerequisite = { focus = RED_dragons_den } 
 
 	available = {
 
@@ -3504,55 +3400,98 @@ shared_focus = {
 
 		custom_effect_tooltip = RED_core_azuria_tt
 		hidden_effect = {
-			add_state_core = 800
-			add_state_core = 528
-			add_state_core = 799
-			add_state_core = 507
-			add_state_core = 511
-			add_state_core = 486
-			add_state_core = 797
-			add_state_core = 458
-			add_state_core = 518
-			add_state_core = 520
-			add_state_core = 303
-			add_state_core = 526
-			add_state_core = 556
-			add_state_core = 806
-			add_state_core = 747
-			add_state_core = 544
-			add_state_core = 537
-			add_state_core = 807
-			add_state_core = 42
-			add_state_core = 281
-			add_state_core = 557
-			add_state_core = 548
-			add_state_core = 561
-			add_state_core = 564
-			add_state_core = 36
-			add_state_core = 803
-			add_state_core = 589
-			add_state_core = 811
-			add_state_core = 798
-			add_state_core = 565
-			add_state_core = 550
-			add_state_core = 551
-			add_state_core = 571
-			add_state_core = 575
-			add_state_core = 794
-			add_state_core = 608
-			add_state_core = 594
-			add_state_core = 795
-			add_state_core = 810
-			add_state_core = 311
-			add_state_core = 261
-			add_state_core = 610
-			add_state_core = 334
-			add_state_core = 578
-			add_state_core = 562
-			add_state_core = 500
-			add_state_core = 558
-			add_state_core = 572
-
+			every_owned_state = {
+				limit = {
+					is_core_of = SHA
+				}
+				add_core_of = RED
+			}
+			every_owned_state = {
+				limit = {
+					is_core_of = LRA
+				}
+				add_core_of = RED
+			}
+			every_owned_state = {
+				limit = {
+					is_core_of = MAN
+				}
+				add_core_of = RED
+			}
+			every_owned_state = {
+				limit = {
+					is_core_of = ROK
+				}
+				add_core_of = RED
+			}
+			every_owned_state = {
+				limit = {
+					is_core_of = MAS
+				}
+			
+				add_core_of = RED
+			}
+			every_owned_state = {
+				limit = {
+					is_core_of = LIT
+				}
+				add_core_of = RED
+			}
+			every_owned_state = {
+				limit = {
+					is_core_of = EVR
+				}
+				add_core_of = RED
+			}
+			every_owned_state = {
+				limit = {
+					is_core_of = NCG
+				}
+				add_core_of = RED
+			}
+			every_owned_state = {
+				limit = {
+					is_core_of = BOG
+				}
+				add_core_of = RED
+			}
+			every_owned_state = {
+				limit = {
+					is_core_of = RAF
+				}
+				add_core_of = RED
+			}
+			every_owned_state = {
+				limit = {
+					is_core_of = PBN
+				}
+			
+				add_core_of = RED
+			}
+			every_owned_state = {
+				limit = {
+					is_core_of = REP
+				}
+				add_core_of = RED
+			}
+			every_owned_state = {
+				limit = {
+					is_core_of = GOR
+				}
+				add_core_of = RED
+			}
+			every_owned_state = {
+				limit = {
+					is_core_of = FTA
+				}
+				add_core_of = RED
+			}
+			every_owned_state = {
+				limit = {
+					is_core_of = SPV
+				}
+				add_core_of = RED
+			}
 		}
 	}
 
@@ -3560,7 +3499,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_complete_unity
-	icon = GFX_goal_RED_new_unity
+	icon = GFX_goal_redeye
 	relative_position_id = RED_new_unity
 	x = 0
 	y = 5
@@ -3616,7 +3555,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_stern_talons
-	icon = GFX_goal_generic_political_pressure
+	icon = GFX_goal_RED_talon_flag
 	relative_position_id = RED_stern_political
 	x = -4
 	y = 1
@@ -3636,7 +3575,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_talon_masters
-	icon = GFX_goal_generic_political_pressure
+	icon = GFX_goal_BRK_enslave_the_opposition
 	relative_position_id = RED_stern_talons
 	x = -1
 	y = 1
@@ -3659,7 +3598,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_talon_enforcers
-	icon = GFX_goal_generic_political_pressure
+	icon = GFX_goal_griffon_special_force
 	relative_position_id = RED_stern_talons
 	x = 1
 	y = 1
@@ -3681,7 +3620,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_source_of_power
-	icon = GFX_goal_generic_political_pressure
+	icon = GFX_goal_griffon_levy
 	relative_position_id = RED_stern_talons
 	x = 0
 	y = 2
@@ -3709,7 +3648,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_no_pit_army
-	icon = GFX_goal_generic_political_pressure
+	icon = GFX_goal_unicorn_soldier
 	relative_position_id = RED_talon_masters
 	x = 0
 	y = 2
@@ -3738,7 +3677,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_strongarm_the_weak
-	icon = GFX_goal_generic_political_pressure
+	icon = GFX_goal_generic_security_crackdown
 	relative_position_id = RED_talon_enforcers
 	x = 0
 	y = 2
@@ -3760,7 +3699,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_round_up_masters
-	icon = GFX_goal_generic_political_pressure
+	icon = GFX_goal_BRK_slave_rights
 	relative_position_id = RED_no_pit_army
 	x = -1
 	y = 1
@@ -3781,7 +3720,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_who_protects
-	icon = GFX_goal_generic_political_pressure
+	icon = GFX_goal_skull_fortification
 	relative_position_id = RED_source_of_power
 	x = 0
 	y = 2
@@ -3950,7 +3889,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_reeducation
-	icon = GFX_goal_generic_political_pressure
+	icon = GFX_goal_generic_slavery_pony
 	relative_position_id = RED_stamp_out_torch
 	x = 0
 	y = 2
@@ -4051,7 +3990,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_free_reign
-	icon = GFX_goal_generic_political_pressure
+	icon = GFX_goal_generic_enslaved_ponies
 	relative_position_id = RED_sadistic_brutality
 	x = 0
 	y = 2
@@ -4308,7 +4247,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_new_talon
-	icon = GFX_goal_generic_political_pressure
+	icon = GFX_goal_generic_talon_flag
 	relative_position_id = RED_everfilly_train
 	x = 0
 	y = 2
@@ -4387,7 +4326,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_stern_masters
-	icon = GFX_goal_generic_political_pressure
+	icon = GFX_goal_slavery
 	relative_position_id = RED_stern_political
 	x = 4
 	y = 1
@@ -4407,7 +4346,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_masters_complicit
-	icon = GFX_goal_generic_political_pressure
+	icon = GFX_goal_generic_dangerous_deal_pony_griffon
 	relative_position_id = RED_stern_masters
 	x = -1
 	y = 1
@@ -4429,7 +4368,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_masters_warlords
-	icon = GFX_goal_generic_political_pressure
+	icon = GFX_goal_fire
 	relative_position_id = RED_stern_masters
 	x = 1
 	y = 1
@@ -4505,7 +4444,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_more_pit_army
-	icon = GFX_goal_generic_political_pressure
+	icon = GFX_goal_generic_raider_skull
 	relative_position_id = RED_masters_warlords
 	x = 0
 	y = 2
@@ -4554,7 +4493,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_lynch_talons
-	icon = GFX_goal_generic_political_pressure
+	icon = GFX_goal_guillotine
 	relative_position_id = RED_more_pit_army
 	x = 1
 	y = 1
@@ -4609,7 +4548,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_kick_out_stern
-	icon = GFX_goal_generic_political_pressure
+	icon = GFX_goal_RED_no_stern
 	relative_position_id = RED_lynch_talons
 	x = -1
 	y = 1
@@ -4959,7 +4898,7 @@ shared_focus = {
 			defense_skill = 1
 			planning_skill = 3
 			logistics_skill = 1
-			id = 1100
+			id = 59308
 		}
 		custom_effect_tooltip = RED_chainlink_stats_tt
 
@@ -4971,7 +4910,7 @@ shared_focus = {
 			defense_skill = 1
 			planning_skill = 1
 			logistics_skill = 2
-			id = 1101
+			id = 59309
 		}
 		custom_effect_tooltip = RED_thorn_stats_tt
 	}
@@ -5014,7 +4953,7 @@ shared_focus = {
 			defense_skill = 2
 			planning_skill = 2
 			logistics_skill = 1
-			id = 1102
+			id = 59310
 		}
 
 		create_corps_commander = {
@@ -5025,7 +4964,7 @@ shared_focus = {
 			defense_skill = 1
 			planning_skill = 3
 			logistics_skill = 2
-			id = 1103
+			id = 59311
 		}
 	}
 
@@ -5180,7 +5119,7 @@ shared_focus = {
 ### Talon-Master Balance Tree
 shared_focus = { 
 	id = RED_wretched_hive
-	icon = GFX_goal_unknown
+	icon = GFX_goal_RED_new_world
 	relative_position_id = RED_careful_balence
 	x = 0
 	y = 1
@@ -5204,7 +5143,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_end_the_rangers
-	icon = GFX_goal_unknown
+	icon = GFX_goal_steel_rangers
 	relative_position_id = RED_wretched_hive
 	x = 0
 	y = 1
@@ -5228,7 +5167,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_enslave_downtown
-	icon = GFX_goal_unknown
+	icon = GFX_goal_generic_slavery_pony
 	relative_position_id = RED_end_the_rangers
 	x = 0
 	y = 1
@@ -5267,7 +5206,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_expand_the_wall
-	icon = GFX_goal_unknown
+	icon = GFX_goal_generic_walls_focus
 	relative_position_id = RED_enslave_downtown
 	x = 0
 	y = 2
@@ -5348,7 +5287,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_sterns_rangers
-	icon = GFX_goal_unknown
+	icon = GFX_goal_generic_BoS_diplomatic_focus
 	relative_position_id = RED_stern_nova_rage
 	x = 0
 	y = 1
@@ -5369,7 +5308,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_kill_all_rangers
-	icon = GFX_goal_unknown
+	icon = GFX_focus_indy_bound_by_blood
 	relative_position_id = RED_end_the_rangers
 	x = 2
 	y = 2
@@ -5410,7 +5349,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_scrap_stable_tec
-	icon = GFX_goal_unknown
+	icon = GFX_goal_generic_stable_tec
 	relative_position_id = RED_kill_all_rangers
 	x = 0
 	y = 1
@@ -5443,7 +5382,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_fillydelphia_queen
-	icon = GFX_goal_unknown
+	icon = GFX_focus_hun_elect_a_king
 	relative_position_id = RED_expand_the_wall
 	x = 0
 	y = 1
@@ -5468,7 +5407,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_subjugate_tribals
-	icon = GFX_goal_unknown
+	icon = GFX_focus_generic_strike_at_democracy1
 	relative_position_id = RED_fillydelphia_queen
 	x = -6
 	y = 1
@@ -5497,7 +5436,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_smash_holy_sites
-	icon = GFX_goal_unknown
+	icon = GFX_goal_step_on_skull
 	relative_position_id = RED_subjugate_tribals
 	x = -1
 	y = 1
@@ -5528,7 +5467,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_child_labour
-	icon = GFX_goal_unknown
+	icon = GFX_goal_No_One_is_Truly_Innocent
 	relative_position_id = RED_subjugate_tribals
 	x = 1
 	y = 1
@@ -5561,7 +5500,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_flush_out_dogs
-	icon = GFX_goal_unknown
+	icon = GFX_goal_generic_formable_mountains
 	relative_position_id = RED_subjugate_tribals
 	x = 0
 	y = 2
@@ -5609,7 +5548,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_fourth_guild
-	icon = GFX_goal_unknown
+	icon = GFX_goal_bag_of_money_pony_griffon
 	relative_position_id = RED_secure_drug_trade
 	x = 0
 	y = 2
@@ -5651,7 +5590,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_raider_book
-	icon = GFX_goal_unknown
+	icon = GFX_goal_generic_raider_skull
 	relative_position_id = RED_fillydelphia_queen
 	x = -2
 	y = 1
@@ -5671,7 +5610,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_raids_for_glory
-	icon = GFX_goal_unknown
+	icon = GFX_goal_resisting_villages
 	relative_position_id = RED_raider_book
 	x = -1
 	y = 1
@@ -5694,7 +5633,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_raids_for_slaves
-	icon = GFX_goal_unknown
+	icon = GFX_goal_slave_decorations
 	relative_position_id = RED_raider_book
 	x = 1
 	y = 1
@@ -5715,7 +5654,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_raider_queen
-	icon = GFX_goal_unknown
+	icon = GFX_goal_RED_stern
 	relative_position_id = RED_raider_book
 	x = 0
 	y = 2
@@ -5757,7 +5696,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_tea_in_mareway
-	icon = GFX_goal_unknown
+	icon = GFX_goal_tea_cry
 	relative_position_id = RED_blood_mane
 	x = 0
 	y = 2
@@ -5791,7 +5730,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_redeyes_followers
-	icon = GFX_goal_unknown
+	icon = GFX_goal_skull_treaty
 	relative_position_id = RED_fillydelphia_queen
 	x = 2
 	y = 1
@@ -5811,7 +5750,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_end_protege
-	icon = GFX_goal_unknown
+	icon = GFX_goal_RED_protege_skull
 	relative_position_id = RED_redeyes_followers
 	x = -1
 	y = 1
@@ -5831,7 +5770,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_doc_slaughter
-	icon = GFX_goal_unknown
+	icon = GFX_focus_research2
 	relative_position_id = RED_redeyes_followers
 	x = 1
 	y = 1
@@ -5851,7 +5790,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_stern_burn_everfree
-	icon = GFX_goal_unknown
+	icon = GFX_goal_generic_forest_fire
 	relative_position_id = RED_redeyes_followers
 	x = 0
 	y = 2
@@ -5893,7 +5832,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_everfree_dogs
-	icon = GFX_goal_unknown
+	icon = GFX_goal_forest_spirit
 	relative_position_id = RED_fillydelphia_queen
 	x = 4
 	y = 1
@@ -5914,7 +5853,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_no_hounds_allowed
-	icon = GFX_goal_unknown
+	icon = GFX_goal_fire
 	relative_position_id = RED_everfree_dogs
 	x = 0
 	y = 2
@@ -5938,24 +5877,22 @@ shared_focus = {
 	will_lead_to_war_with = RAF
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_no_hounds_allowed"
-		add_state_core = 528
-		add_state_core = 800
-
-		create_wargoal = { type = annex_everything target = BOG }
-		create_wargoal = { type = annex_everything target = RAF }
 		EVR = {
 			remove_state_core = 528 
 			remove_state_core = 800
 		}
 		add_state_core = 528
 		add_state_core = 800
+
+		create_wargoal = { type = annex_everything target = BOG }
+		create_wargoal = { type = annex_everything target = RAF }
 	}
 
 }
 
 shared_focus = { 
 	id = RED_break_ringers
-	icon = GFX_goal_unknown
+	icon = GFX_goal_attack_ringers
 	relative_position_id = RED_fillydelphia_queen
 	x = 6
 	y = 1
@@ -5982,7 +5919,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_turn_off_light
-	icon = GFX_goal_unknown
+	icon = GFX_goal_MOJ_energy_boom
 	relative_position_id = RED_break_ringers
 	x = -1
 	y = 1
@@ -6003,7 +5940,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_hats_on_pikes
-	icon = GFX_goal_unknown
+	icon = GFX_goal_GEA_guerilla_warfare
 	relative_position_id = RED_break_ringers
 	x = 1
 	y = 1
@@ -6024,7 +5961,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_stern_eastlands
-	icon = GFX_goal_unknown
+	icon = GFX_goal_generic_forceful_treaty
 	relative_position_id = RED_break_ringers
 	x = 0
 	y = 2
@@ -6047,7 +5984,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_land_for_loyal
-	icon = GFX_goal_unknown
+	icon = GFX_goal_land_flag
 	relative_position_id = RED_fourth_guild
 	x = 0
 	y = 1
@@ -6071,7 +6008,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_equestrian_slave_trade
-	icon = GFX_goal_unknown
+	icon = GFX_goal_redeye_octopus
 	relative_position_id = RED_tea_in_mareway
 	x = 0
 	y = 1
@@ -6094,7 +6031,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_chainlink_dies
-	icon = GFX_goal_unknown
+	icon = GFX_goal_RED_chainlink
 	relative_position_id = RED_no_hounds_allowed
 	x = 0
 	y = 1
@@ -6116,7 +6053,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_reclaim_escaped_slaves
-	icon = GFX_goal_unknown
+	icon = GFX_goal_NEV_atc_SHA
 	relative_position_id = RED_equestrian_slave_trade
 	x = 0
 	y = 1
@@ -6139,7 +6076,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_tech_sharing
-	icon = GFX_goal_unknown
+	icon = GFX_goal_tfv_generic_tech_sharing
 	relative_position_id = RED_stern_nova_rage
 	x = -2
 	y = 0
@@ -6168,7 +6105,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_request_knights
-	icon = GFX_goal_unknown
+	icon = GFX_goal_SR_power_armor_t
 	relative_position_id = RED_tech_sharing
 	x = 0
 	y = 1
@@ -6190,7 +6127,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_stern_robots
-	icon = GFX_goal_unknown
+	icon = GFX_goal_generic_robots_focus
 	relative_position_id = RED_request_knights
 	x = -1
 	y = 1
@@ -6216,7 +6153,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_stern_power_armor
-	icon = GFX_goal_unknown
+	icon = GFX_goal_generic_foe_power_armor
 	relative_position_id = RED_request_knights
 	x = 1
 	y = 1
@@ -6236,7 +6173,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_prototype_stable
-	icon = GFX_goal_unknown
+	icon = GFX_goal_FSR_stabletec
 	relative_position_id = RED_kill_all_rangers
 	x = 2
 	y = 0
@@ -6270,7 +6207,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_build_stern_palace
-	icon = GFX_goal_unknown
+	icon = GFX_KHA_focus_boneyard_skyscraper_tfr
 	relative_position_id = RED_prototype_stable
 	x = 0
 	y = 1
@@ -6291,7 +6228,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_filly_spy_eye
-	icon = GFX_goal_unknown
+	icon = GFX_goal_BRF_mason_eye
 	relative_position_id = RED_build_stern_palace
 	x = -1
 	y = 1
@@ -6315,7 +6252,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_beacon_for_talons
-	icon = GFX_goal_unknown
+	icon = GFX_goal_generic_talon_flag
 	relative_position_id = RED_build_stern_palace
 	x = 1
 	y = 1
@@ -7135,7 +7072,7 @@ shared_focus = {
 ### Slaver Tree
 shared_focus = { 
 	id = RED_masters_triumphant
-	icon = GFX_goal_unknown
+	icon = GFX_goal_RED_chainlink
 	relative_position_id = RED_careful_balence
 	x = 0
 	y = 1
@@ -7159,7 +7096,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_no_mercy_for_rangers
-	icon = GFX_goal_unknown
+	icon = GFX_goal_steel_rangers
 	relative_position_id = RED_masters_triumphant
 	x = 0
 	y = 1
@@ -7183,7 +7120,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_master_enslave_downtown
-	icon = GFX_goal_unknown
+	icon = GFX_goal_generic_slave_collars
 	relative_position_id = RED_no_mercy_for_rangers
 	x = -1
 	y = 1
@@ -7222,7 +7159,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_crush_the_eastlands
-	icon = GFX_goal_unknown
+	icon = GFX_goal_attack_ringers
 	relative_position_id = RED_no_mercy_for_rangers
 	x = 1
 	y = 1
@@ -7249,7 +7186,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_new_slave_venture
-	icon = GFX_goal_unknown
+	icon = GFX_goal_NCR_Industrialcomplex
 	relative_position_id = RED_master_enslave_downtown
 	x = -1
 	y = 1
@@ -7308,7 +7245,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_riches_of_silverwing
-	icon = GFX_goal_unknown
+	icon = GFX_goal_BOS_forbidden_weapons
 	relative_position_id = RED_crush_the_eastlands
 	x = 1
 	y = 1
@@ -7358,7 +7295,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_win_over_oap
-	icon = GFX_goal_unknown
+	icon = GFX_goal_generic_old_appleloosa
 	relative_position_id = RED_riches_of_silverwing
 	x = -1
 	y = 1
@@ -7380,7 +7317,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_favor_with_cathedral
-	icon = GFX_goal_unknown
+	icon = GFX_goal_solar_church
 	relative_position_id = RED_city_of_slaves_and_masters
 	x = -1
 	y = 1
@@ -7402,7 +7339,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_coup_stern
-	icon = GFX_goal_unknown
+	icon = GFX_goal_RED_no_stern
 	relative_position_id = RED_win_over_oap
 	x = -1
 	y = 1
@@ -7423,7 +7360,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_proteges_accident
-	icon = GFX_goal_unknown
+	icon = GFX_goal_RED_protege_skull
 	relative_position_id = RED_coup_stern
 	x = -3
 	y = 1
@@ -7443,7 +7380,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_raiders_of_filly
-	icon = GFX_goal_unknown
+	icon = GFX_goal_dead_boss
 	relative_position_id = RED_proteges_accident
 	x = -2
 	y = 1
@@ -7498,7 +7435,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_raider_commanders
-	icon = GFX_goal_unknown
+	icon = GFX_goal_generic_raider_skull
 	relative_position_id = RED_grand_reopening
 	x = 0
 	y = 1
@@ -7522,7 +7459,7 @@ shared_focus = {
 				defense_skill = 1
 				planning_skill = 3
 				logistics_skill = 2
-				id = 1104
+				id = 59312
 			}
 			custom_effect_tooltip = RED_guts_stats_tt
 		}
@@ -7536,7 +7473,7 @@ shared_focus = {
 				defense_skill = 2
 				planning_skill = 1
 				logistics_skill = 2
-				id = 1003
+				id = 59313
 			}
 			custom_effect_tooltip = RED_barb_stats_tt
 
@@ -7549,7 +7486,7 @@ shared_focus = {
 				defense_skill = 1
 				planning_skill = 3
 				logistics_skill = 2
-				id = 1104
+				id = 59312
 			}
 			custom_effect_tooltip = RED_guts_stats_tt
 		}
@@ -7559,7 +7496,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_no_more_kindness
-	icon = GFX_goal_unknown
+	icon = GFX_goal_strike_harmony
 	relative_position_id = RED_proteges_accident
 	x = 0
 	y = 1
@@ -7580,7 +7517,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_blackclaws_loyalty
-	icon = GFX_goal_unknown
+	icon = GFX_goal_RED_blackclaw
 	relative_position_id = RED_coup_stern
 	x = -1
 	y = 1
@@ -7608,7 +7545,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_place_of_the_talons
-	icon = GFX_goal_unknown
+	icon = GFX_goal_RED_talon_flag
 	relative_position_id = RED_blackclaws_loyalty
 	x = 0
 	y = 1
@@ -7629,7 +7566,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_cult_of_personality
-	icon = GFX_goal_unknown
+	icon = GFX_goal_RED_chainlink
 	relative_position_id = RED_coup_stern
 	x = 1
 	y = 1
@@ -7649,7 +7586,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_rewriting_history
-	icon = GFX_goal_unknown
+	icon = GFX_goal_constitutional_guarantees
 	relative_position_id = RED_cult_of_personality
 	x = 0
 	y = 1
@@ -7672,7 +7609,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_pit_victors
-	icon = GFX_goal_unknown
+	icon = GFX_goal_generic_pony_soldier
 	relative_position_id = RED_coup_stern
 	x = 3
 	y = 1
@@ -7695,7 +7632,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_more_pits
-	icon = GFX_goal_unknown
+	icon = GFX_goal_conscription_pony
 	relative_position_id = RED_pit_victors
 	x = 0
 	y = 1
@@ -7715,7 +7652,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_army_of_slaves
-	icon = GFX_goal_unknown
+	icon = GFX_goal_RED_officers
 	relative_position_id = RED_pit_victors
 	x = 2
 	y = 1
@@ -7735,7 +7672,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_march_to_greenline
-	icon = GFX_goal_unknown
+	icon = GFX_goal_generic_major_war
 	relative_position_id = RED_army_of_slaves
 	x = -1
 	y = 1
@@ -7770,7 +7707,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_land_of_freedom
-	icon = GFX_goal_unknown
+	icon = GFX_goal_NEV_atc_SHA
 	relative_position_id = RED_march_to_greenline
 	x = 0
 	y = 1
@@ -7814,7 +7751,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_great_network
-	icon = GFX_goal_unknown
+	icon = GFX_goal_generic_slavers
 	relative_position_id = RED_empire_of_slaves
 	x = 0
 	y = 1
@@ -7835,7 +7772,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_mom_secrets
-	icon = GFX_goal_unknown
+	icon = GFX_goal_MOM
 	relative_position_id = RED_place_of_the_talons
 	x = 1
 	y = 1
@@ -7856,7 +7793,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_spybots
-	icon = GFX_goal_unknown
+	icon = GFX_goal_spritebot_RED
 	relative_position_id = RED_mom_secrets
 	x = 0
 	y = 1
@@ -7879,7 +7816,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_new_deal_with_era
-	icon = GFX_goal_unknown
+	icon = GFX_goal_generic_military_deal_pony
 	relative_position_id = RED_rewriting_history
 	x = 1
 	y = 1
@@ -7902,7 +7839,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_deal_with_ncg
-	icon = GFX_goal_unknown
+	icon = GFX_goal_rct_deal
 	relative_position_id = RED_new_deal_with_era
 	x = 0
 	y = 1
@@ -7926,7 +7863,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_trade_with_raiders
-	icon = GFX_goal_unknown
+	icon = GFX_goal_generic_trade
 	relative_position_id = RED_great_network
 	x = 0
 	y = 1
@@ -7975,7 +7912,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_slaver_new_order
-	icon = GFX_goal_unknown
+	icon = GFX_goal_redeye_octopus
 	relative_position_id = RED_spybots
 	x = 0
 	y = 2
@@ -7993,3 +7930,367 @@ shared_focus = {
 	}
 
 }
+
+### Chainlink Peace Tree
+shared_focus = { 
+	id = RED_chainlink_political
+	icon = GFX_goal_RED_chainlink
+	x = 9
+	y = 5
+	cost = 5
+
+	ai_will_do = { 
+		factor = 100
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_chainlink_political"
+		add_political_power = 150
+		add_popularity = {
+		    ideology = destruction
+		    popularity = 0.05
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = RED_chainlink_restore_order
+	icon = GFX_goal_step_on_skull
+	relative_position_id = RED_chainlink_political
+	x = -1
+	y = 1
+	cost = 7
+
+	prerequisite = { focus = RED_chainlink_political }
+	ai_will_do = { 
+		factor = 100
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_chainlink_restore_order"
+		add_popularity = {
+		    ideology = destruction
+		    popularity = 0.05
+		}
+		add_stability = 0.05
+	}
+
+}
+
+shared_focus = { 
+	id = RED_chainlink_secure_talons
+	icon = GFX_goal_RED_talon_flag
+	relative_position_id = RED_chainlink_political
+	x = 1
+	y = 1
+	cost = 7
+
+	prerequisite = { focus = RED_chainlink_political }
+	ai_will_do = { 
+		factor = 100
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_chainlink_secure_talons"
+		add_popularity = {
+		    ideology = destruction
+		    popularity = 0.05
+		}
+		add_war_support = 0.05
+	}
+
+}
+
+shared_focus = { 
+	id = RED_chainlink_raider_leaders
+	icon = GFX_goal_dead_boss
+	relative_position_id = RED_chainlink_restore_order
+	x = 0
+	y = 1
+	cost = 7
+
+	prerequisite = { focus = RED_chainlink_restore_order }
+	ai_will_do = { 
+		factor = 100
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_chainlink_raider_leaders"
+		if = {
+			limit = { has_global_flag = RED_civil_war_flag }
+			create_corps_commander = {
+				name = "Doc Guts"
+				#picture = "Barb.tga"
+				traits = { raider_commander intelligent_trait pony_race_trait }
+				skill = 2
+				attack_skill = 1
+				defense_skill = 1
+				planning_skill = 3
+				logistics_skill = 2
+				id = 59312
+			}
+			custom_effect_tooltip = RED_guts_stats_tt
+		}
+		else = {
+			create_corps_commander = {
+				name = "Barb"
+				picture = "Barb.tga"
+				traits = { raider_commander agile_trait pony_race_trait }
+				skill = 2
+				attack_skill = 3
+				defense_skill = 2
+				planning_skill = 1
+				logistics_skill = 2
+				id = 59313
+			}
+			custom_effect_tooltip = RED_barb_stats_tt
+
+			create_corps_commander = {
+				name = "Doc Guts"
+				#picture = "Barb.tga"
+				traits = { raider_commander intelligent_trait pony_race_trait }
+				skill = 2
+				attack_skill = 1
+				defense_skill = 1
+				planning_skill = 3
+				logistics_skill = 2
+				id = 59312
+			}
+			custom_effect_tooltip = RED_guts_stats_tt
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = RED_chainlink_factories
+	icon = GFX_goal_generic_military_industry_focus
+	relative_position_id = RED_chainlink_secure_talons
+	x = 0
+	y = 1
+	cost = 7
+
+	prerequisite = { focus = RED_chainlink_secure_talons }
+	ai_will_do = { 
+		factor = 100
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_chainlink_factories"
+		48 = {	
+			add_extra_state_shared_building_slots = 2
+
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+			}
+
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+		}
+		532 = {	
+			add_extra_state_shared_building_slots = 2
+
+			add_building_construction = {
+				type = industrial_complex
+				level = 2
+				instant_build = yes
+			}
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = RED_chainlink_master
+	icon = GFX_goal_generic_slavers
+	relative_position_id = RED_chainlink_political
+	x = 0
+	y = 3
+	cost = 7
+
+	prerequisite = { focus = RED_chainlink_raider_leaders }
+	prerequisite = { focus = RED_chainlink_factories }
+	ai_will_do = { 
+		factor = 100
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_chainlink_master"
+		add_country_leader_trait = chainlink_cult
+	}
+
+}
+
+
+
+### Chainlink War Tree
+shared_focus = { 
+	id = RED_chainlink_w_political
+	icon = GFX_goal_RED_chainlink
+	x = 9
+	y = 5
+	cost = 5
+
+	ai_will_do = { 
+		factor = 100
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_chainlink_w_political"
+		add_political_power = 50
+		add_popularity = {
+		    ideology = destruction
+		    popularity = 0.05
+		}
+		add_war_support = 0.05
+	}
+
+}
+
+shared_focus = { 
+	id = RED_chainlink_w_rally_talons
+	icon = GFX_goal_RED_stern
+	relative_position_id = RED_chainlink_w_political
+	x = -1
+	y = 1
+	cost = 7
+
+	prerequisite = { focus = RED_chainlink_w_political }
+	ai_will_do = { 
+		factor = 100
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_chainlink_w_rally_talons"
+		add_war_support = 0.05
+		add_popularity = {
+		    ideology = destruction
+		    popularity = 0.05
+		}
+
+		every_unit_leader = {
+			limit = {
+				has_id = 59302
+			}
+			promote_leader = yes
+			add_planning = 1
+			add_logistics = 1
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = RED_chainlink_w_rally_raiders
+	icon = GFX_goal_generic_raider_skull
+	relative_position_id = RED_chainlink_w_political
+	x = 1
+	y = 1
+	cost = 7
+
+	prerequisite = { focus = RED_chainlink_w_political }
+	ai_will_do = { 
+		factor = 120
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_chainlink_w_rally_raiders"
+		add_war_support = 0.05
+		add_manpower = 1000
+
+	}
+
+}
+
+shared_focus = { 
+	id = RED_chainlink_w_secure_slaves
+	icon = GFX_goal_generic_enslaved_ponies
+	relative_position_id = RED_chainlink_w_rally_talons
+	x = 0
+	y = 1
+	cost = 7
+
+	prerequisite = { focus = RED_chainlink_w_rally_talons }
+	ai_will_do = { 
+		factor = 100
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_chainlink_w_secure_slaves"
+		add_stability = 0.10
+		532 = {	
+			add_extra_state_shared_building_slots = 1
+
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+			}
+		}
+
+		48 = {	
+			add_extra_state_shared_building_slots = 1
+
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+			}
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = RED_chainlink_w_secure_cathedral
+	icon = GFX_goal_solar_church
+	relative_position_id = RED_chainlink_w_rally_raiders
+	x = 0
+	y = 1
+	cost = 7
+
+	prerequisite = { focus = RED_chainlink_w_rally_raiders }
+	bypass = {
+		CAT = {
+			exists = yes
+		}
+	}
+	ai_will_do = { 
+		factor = 500
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_chainlink_w_secure_cathedral"
+		custom_effect_tooltip = RED_cathedral_stopped_tt
+		add_stability = 0.05
+		add_political_power = 50
+		
+
+	}
+
+}
+
+shared_focus = { 
+	id = RED_chainlink_w_total_war
+	icon = GFX_goal_fire
+	relative_position_id = RED_chainlink_political
+	x = 0
+	y = 3
+	cost = 7
+
+	prerequisite = { focus = RED_chainlink_w_secure_slaves }
+	prerequisite = { focus = RED_chainlink_w_secure_cathedral }
+	ai_will_do = { 
+		factor = 100
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus RED_chainlink_w_total_war"
+		add_timed_idea = { idea = offensive_war_effort  days = 180 }
+	}
