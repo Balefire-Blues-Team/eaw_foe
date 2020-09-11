@@ -174,68 +174,12 @@ focus_tree = {
 
 	}
 	focus = {
-		id = goddess_preacher
-		icon = GFX_goal_unknown
-		cost = 5.00
-		prerequisite = {
-			focus = goddess_1
-		}
-		mutually_exclusive = {
-			focus = goddess_perfection
-		}
-		x = -4
-		y = 1
-		relative_position_id = goddess_1
-			ai_will_do = {
-					factor = 30
-			}
-			completion_reward = {
-					add_ideas = UNI_preacher_idea
-					set_country_flag = uni_preachers
-				}
 
-	}
-	focus = {
-		id = goddess_perfection
-		icon = GFX_goal_unknown
-		cost = 5.00
-		prerequisite = {
-			focus = goddess_1
-		}
-		mutually_exclusive = {
-			focus = goddess_preacher
-		}
-		x = 4
-		y = 1
-		relative_position_id = goddess_1
-		
-		ai_will_do = {
-					factor = 20
-		}
-				
-			completion_reward = {
-					add_stability = 0.05
-					add_war_support = 0.15
-					every_other_country = {
-							limit = {
-									has_government = democratic
-								}
-							add_opinion_modifier = {
-									target = ROOT
-									modifier = promote_equality
-								}
-						}
-					add_ideas = UNI_perfection_idea
-				}
-
-	}
-	focus = {
 		id = goddess_slaver_1
 		icon = GFX_goal_unknown
 		cost = 5.00
 		prerequisite = {
-			focus = goddess_preacher
-			focus = goddess_perfection
+			focus = goddess_1
 		}
 		ai_will_do = {
 					factor = 40
@@ -249,29 +193,28 @@ focus_tree = {
 		}
 		x = -17
 		y = 1
-		relative_position_id = goddess_preacher
+
+		relative_position_id = goddess_1
 			ai_will_do = {
 					factor = 1
 				}
 			completion_reward = {
 					add_ideas = UNI_slave_idea
 				}
-
 	}
 	focus = {
 		id = goddess_dunking_1
 		icon = GFX_goal_unknown
 		cost = 5.00
 		prerequisite = {
-			focus = goddess_perfection
-			focus = goddess_preacher
+			focus = goddess_1
 		}
 		mutually_exclusive = {
 			focus = goddess_slaver_1
 		}
 		x = 4
 		y = 1
-		relative_position_id = goddess_perfection
+		relative_position_id = goddess_1
 		
 		ai_will_do = {
 					factor = 10
@@ -1542,6 +1485,10 @@ focus_tree = {
 				has_completed_focus = goddess_redeye_1
 				factor = 15
 			}
+			modifier = {
+				has_idea = UNI_war_prep
+				factor = -15
+			}
 		}
 			completion_reward = {
 				country_event = {
@@ -1564,6 +1511,10 @@ focus_tree = {
 			modifier = {
 				is_historical_focus_on = yes
 				factor = 100
+			}
+			modifier = {
+				has_idea = UNI_war_prep
+				factor = -15
 			}
 		}
 				
@@ -1588,6 +1539,10 @@ focus_tree = {
 				has_war = yes
 				factor = 0
 			}
+			modifier = {
+				has_idea = UNI_war_prep
+				factor = -15
+			}
 		}
 		
 		available = {
@@ -1595,11 +1550,10 @@ focus_tree = {
 		}
 		
 		completion_reward = {
-			add_state_claim = 801
-			create_wargoal = {
-				type = annex_everything
-				target = GLY
-				expire = 0
+			GLY = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
 			}
 		}
 
@@ -1618,6 +1572,19 @@ focus_tree = {
 		
 		x = 65
 		y = 8
+		
+		ai_will_do = {
+			factor = 25
+			modifier = {
+				has_war = yes
+				factor = 0
+			}
+			modifier = {
+				has_idea = UNI_war_prep
+				factor = -15
+			}
+		}
+		
 			completion_reward = {
 					if = {
 							limit = {
@@ -2175,11 +2142,7 @@ focus_tree = {
 		y = 7
 		
 		completion_reward = {
-			custom_effect_tooltip = uni_warplan_unlock
-			add_timed_idea = {
-				idea = UNI_war_prep
-				days = 1080
-			}
+			add_ideas = UNI_flyover
 		}
 
 	}
@@ -2337,7 +2300,11 @@ focus_tree = {
 		relative_position_id = goddess_master_3
 		
 		completion_reward = {
-			add_ideas = UNI_flyover
+			custom_effect_tooltip = uni_warplan_unlock
+			add_timed_idea = {
+				idea = UNI_war_prep
+				days = 1080
+			}
 		}
 
 	}
@@ -2465,12 +2432,13 @@ focus_tree = {
 		}
 		
 		completion_reward = {
-			GOR = {
-				alicorn_purges = yes
-			}
+			
 			custom_effect_tooltip = med_spawn
 			hidden_effect = {
 				load_oob = "UNI_med"
+				GOR = {
+					alicorn_purges = yes
+				}
 			}
 		}
 
@@ -2643,12 +2611,12 @@ focus_tree = {
 		}
 		
 		completion_reward = {
-			FTA = {
-				alicorn_purges = yes
-			}
 			custom_effect_tooltip = small_spawn
 			hidden_effect = {
 				load_oob = "UNI_small"
+				FTA = {
+					alicorn_purges = yes
+				}
 			}
 		}
 
@@ -2781,12 +2749,12 @@ focus_tree = {
 		}
 		
 		completion_reward = {
-			PBN = {
-				alicorn_purges = yes
-			}
 			custom_effect_tooltip = small_spawn
 			hidden_effect = {
 				load_oob = "UNI_small"
+				PBN = {
+					alicorn_purges = yes
+				}
 			}
 		}
 
@@ -3059,12 +3027,12 @@ focus_tree = {
 		}
 		
 		completion_reward = {
-			LIT = {
-				alicorn_purges = yes
-			}
 			custom_effect_tooltip = big_spawn
 			hidden_effect = {
 				load_oob = "UNI_big"
+				LIT = {
+					alicorn_purges = yes
+				}
 			}
 		}
 
@@ -3100,12 +3068,12 @@ focus_tree = {
 		}
 		
 		completion_reward = {
-			NAP = {
-				alicorn_purges = yes
-			}
 			custom_effect_tooltip = small_spawn
 			hidden_effect = {
 				load_oob = "UNI_small"
+				NAP = {
+					alicorn_purges = yes
+				}
 			}
 		}
 
@@ -3168,12 +3136,12 @@ focus_tree = {
 		}
 		
 		completion_reward = {
-			ROK = {
-				alicorn_purges = yes
-			}
 			custom_effect_tooltip = big_spawn
 			hidden_effect = {
 				load_oob = "UNI_big"
+				ROK = {
+					alicorn_purges = yes
+				}
 			}
 		}
 
@@ -3224,12 +3192,12 @@ focus_tree = {
 		}
 		
 		completion_reward = {
-			RAF = {
-				alicorn_purges = yes
-			}
 			custom_effect_tooltip = med_spawn
 			hidden_effect = {
 				load_oob = "UNI_med"
+				RAF = {
+					alicorn_purges = yes
+				}
 			}
 		}
 
@@ -3289,6 +3257,20 @@ focus_tree = {
 		
 		x = 54
 		y = 18
+		
+		completion_reward = {
+			807 = {
+				add_building_construction = {
+					type = bunker
+					level = 2
+					province = {
+						id = 9234
+						id = 3606
+					}
+					instant_build = yes
+				}
+			}
+		}
 
 	}
 	focus = {
@@ -3342,6 +3324,20 @@ focus_tree = {
 		}
 		x = 48
 		y = 19
+		
+		completion_reward = {
+			36 = {
+				add_building_construction = {
+					type = bunker
+					level = 2
+					province = {
+						id = 9329
+						id = 10686
+					}
+					instant_build = yes
+				}
+			}
+		}
 
 	}
 	focus = {
@@ -3694,20 +3690,52 @@ focus_tree = {
 	focus = {
 		id = goddess_master_63
 		icon = GFX_goal_unknown
-		cost = 10.00
+		cost = 5.00
 		prerequisite = {
 			focus = goddess_master_10
 		}
+		
+		available = {
+			REP = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+		}
+		
 		x = 58
 		y = 12
+		
+		completion_reward = {
+			every_owned_state = {
+				limit = {
+					any_neighbor_state = {
+						is_fully_controlled_by = EVR
+					}
+				}
+				add_building_construction = {
+					type = bunker
+					province = {
+						all_provinces = yes
+						limit_to_border = yes
+					}
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
 
 	}
 	focus = {
 		id = goddess_master_64
 		icon = GFX_goal_unknown
-		cost = 10.00
+		cost = 5.00
 		prerequisite = {
 			focus = goddess_master_10
+		}
+		
+		available = {
+			NOT = {
+				has_completed_focus = goddess_master_81
+			}
 		}
 		x = 62
 		y = 12
@@ -3716,7 +3744,7 @@ focus_tree = {
 	focus = {
 		id = goddess_master_65
 		icon = GFX_goal_unknown
-		cost = 10.00
+		cost = 5.00
 		prerequisite = {
 			focus = goddess_master_63
 		}
@@ -3730,7 +3758,7 @@ focus_tree = {
 	focus = {
 		id = goddess_master_66
 		icon = GFX_goal_unknown
-		cost = 10.00
+		cost = 20.00
 		prerequisite = {
 			focus = goddess_master_63
 		}
@@ -3744,10 +3772,17 @@ focus_tree = {
 	focus = {
 		id = goddess_master_67
 		icon = GFX_goal_unknown
-		cost = 10.00
+		cost = 5.00
 		prerequisite = {
 			focus = goddess_master_64
 		}
+		
+		available = {
+			NOT = {
+				has_completed_focus = goddess_master_81
+			}
+		}
+		
 		x = 65
 		y = 13
 
@@ -3755,10 +3790,17 @@ focus_tree = {
 	focus = {
 		id = goddess_master_68
 		icon = GFX_goal_unknown
-		cost = 10.00
+		cost = 5.00
 		prerequisite = {
 			focus = goddess_master_67
 		}
+		
+		available = {
+			NOT = {
+				has_completed_focus = goddess_master_81
+			}
+		}
+		
 		x = 67
 		y = 14
 
@@ -3766,7 +3808,7 @@ focus_tree = {
 	focus = {
 		id = goddess_master_69
 		icon = GFX_goal_unknown
-		cost = 10.00
+		cost = 5.00
 		prerequisite = {
 			focus = goddess_master_65
 			focus = goddess_master_66
@@ -3778,7 +3820,7 @@ focus_tree = {
 	focus = {
 		id = goddess_master_70
 		icon = GFX_goal_unknown
-		cost = 10.00
+		cost = 5.00
 		prerequisite = {
 			focus = goddess_master_65
 			focus = goddess_master_66
@@ -3790,7 +3832,7 @@ focus_tree = {
 	focus = {
 		id = goddess_master_71
 		icon = GFX_goal_unknown
-		cost = 10.00
+		cost = 5.00
 		prerequisite = {
 			focus = goddess_master_66
 		}
@@ -3801,7 +3843,7 @@ focus_tree = {
 	focus = {
 		id = goddess_master_72
 		icon = GFX_goal_unknown
-		cost = 10.00
+		cost = 5.00
 		prerequisite = {
 			focus = goddess_master_69
 		}
@@ -3812,7 +3854,7 @@ focus_tree = {
 	focus = {
 		id = goddess_master_73
 		icon = GFX_goal_unknown
-		cost = 10.00
+		cost = 5.00
 		prerequisite = {
 			focus = goddess_master_70
 		}
@@ -3823,7 +3865,7 @@ focus_tree = {
 	focus = {
 		id = goddess_master_74
 		icon = GFX_goal_unknown
-		cost = 10.00
+		cost = 5.00
 		prerequisite = {
 			focus = goddess_master_70
 			focus = goddess_master_71
@@ -3835,7 +3877,7 @@ focus_tree = {
 	focus = {
 		id = goddess_master_75
 		icon = GFX_goal_unknown
-		cost = 10.00
+		cost = 5.00
 		prerequisite = {
 			focus = goddess_master_71
 		}
@@ -3846,7 +3888,7 @@ focus_tree = {
 	focus = {
 		id = goddess_master_76
 		icon = GFX_goal_unknown
-		cost = 10.00
+		cost = 5.00
 		prerequisite = {
 			focus = goddess_master_71
 		}
@@ -3857,13 +3899,9 @@ focus_tree = {
 	focus = {
 		id = goddess_master_77
 		icon = GFX_goal_unknown
-		cost = 10.00
-		prerequisite = {
-			focus = goddess_master_72
-			focus = goddess_master_73
-			focus = goddess_master_74
-			focus = goddess_master_75
-			focus = goddess_master_76
+		cost = 5.00
+		available = {
+			has_completed_focus = goddess_master_10
 		}
 		x = 62
 		y = 17
