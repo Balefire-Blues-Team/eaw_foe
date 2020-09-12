@@ -118,7 +118,7 @@ RED_fund_bloody_army = {
 
 }
 
-RED_steel_rangers = {
+RED_steel_rangers_cat = {
 	RED_attack_fillybanks = {
 		icon = border_war
 
@@ -138,6 +138,11 @@ RED_steel_rangers = {
 			has_war = no
 			NOT = {
 				owns_state = 542
+				check_variable = {
+				    var = RED_lose_sr_var
+				    value = 3
+				    compare = greater_than_or_equals
+				}
 			}
 			owns_state = 543
 		}
@@ -200,6 +205,11 @@ RED_steel_rangers = {
 			has_war = no
 			NOT = {
 				owns_state = 536
+				check_variable = {
+				    var = RED_lose_sr_var
+				    value = 3
+				    compare = greater_than_or_equals
+				}
 			}
 			owns_state = 542
 		}
@@ -242,12 +252,117 @@ RED_steel_rangers = {
 			}
 		}
 	}
+
+	RED_attack_downtown = {
+		icon = border_war
+
+		available = {
+			has_full_control_of_state = 536
+			divisions_in_state = {
+				state = 536
+				size > 0
+			}
+			NOT = {
+				has_country_flag = RED_defeat_in_border_war
+			}
+		}
+
+		visible = {
+			has_completed_focus = RED_filly_rangers
+			has_war = no
+			NOT = {
+				owns_state = 538
+				check_variable = {
+				    var = RED_lose_sr_var
+				    value = 3
+				    compare = greater_than_or_equals
+				}
+			}
+			owns_state = 536
+		}
+
+		highlight_states = {
+			state = 538
+		}
+
+		cost = 100
+		days_re_enable = 60
+
+		ai_will_do = {
+			factor = 10
+		}
+
+		fire_only_once = no
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RED_attack_downtown"
+			start_border_war = {
+				change_state_after_war = no
+				attacker = {
+					state = 536
+					num_provinces = 5
+					on_win = redeye_borderwar.13
+					on_lose = redeye_borderwar.14
+					on_cancel = redeye_borderwar.15
+				}
+
+				defender = {
+					state = 538
+					num_provinces = 5
+					on_win = redeye_borderwar.16
+					on_lose = redeye_borderwar.17
+					on_cancel = redeye_borderwar.18
+				}
+			}
+		}
+	}
+
+	RED_attack_filly_rangers = {
+		icon = GFX_decision_generic_ignite_civil_war
+
+		available = {
+			check_variable = {
+				var = RED_lose_sr_var
+				value = 3
+				compare = greater_than_or_equals
+			}
+		}
+
+		visible = {
+			has_completed_focus = RED_filly_rangers
+			check_variable = {
+				var = RED_lose_sr_var
+				value = 3
+				compare = greater_than_or_equals
+			}
+		}
+
+		highlight_states = {
+			state = 538
+		}
+
+		cost = 50
+
+		ai_will_do = {
+			factor = 20
+		}
+
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RED_attack_filly_rangers"
+			create_wargoal = {
+    			type = annex_everything
+    			target = FSR
+			}
+		}
+	}
 }
 
 RED_rebuilding_eqs = {
 
 	RED_gifted_school = {
-		icon = GFX_decision_rifles
+		icon = GFX_decision_book
 		cost = 100
 		ai_will_do = {
 			base = 0
@@ -269,31 +384,8 @@ RED_rebuilding_eqs = {
 		}
 	}
 
-	RED_restore_the_bit = {
-		icon = GFX_decision_rifles
-		cost = 150
-		ai_will_do = {
-			base = 0
-			modifier = {
-				add = 30
-			}
-		}
-		fire_only_once = yes
-		is_good = yes
-		visible = {
-			has_completed_focus = RED_rebuild
-		}
-		modifier = {
-		}
-		days_remove = 90
-		remove_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision remove RED_restore_the_bit"
-			
-		}
-	}
-
 	RED_restore_sparkle_cola = {
-		icon = GFX_decision_rifles
+		icon = GFX_decision_category_caf_trading
 		cost = 100
 		available = {
 			controls_state = 549
@@ -321,7 +413,7 @@ RED_rebuilding_eqs = {
 	}
 
 	RED_restore_hmi = {
-		icon = GFX_decision_rifles
+		icon = GFX_decision_HMI
 		cost = 100
 		available = {
 			controls_state = 491
@@ -349,7 +441,7 @@ RED_rebuilding_eqs = {
 	}
 
 	RED_hmi_crystal_mines = {
-		icon = GFX_decision_rifles
+		icon = GFX_decision_crystals
 		cost = 75
 		available = {
 			controls_state = 410
@@ -385,7 +477,7 @@ RED_rebuilding_eqs = {
 	}
 
 	RED_hmi_april_grove = {
-		icon = GFX_decision_rifles
+		icon = GFX_decision_steel
 		cost = 75
 		available = {
 			controls_state = 490
@@ -425,6 +517,7 @@ RED_rebuilding_eqs = {
 				country_event = {
 					id = redeye.41
 					days = 421
+					random = 24
 				}
 			}
 
@@ -432,7 +525,7 @@ RED_rebuilding_eqs = {
 	}
 
 	RED_restore_hippocampus = {
-		icon = GFX_decision_rifles
+		icon = GFX_decision_hol_drain_water_lines
 		cost = 100
 		available = {
 			controls_state = 538
@@ -460,7 +553,7 @@ RED_rebuilding_eqs = {
 	}
 
 	RED_hippocampus_hydroelectric = {
-		icon = GFX_decision_rifles
+		icon = GFX_decision_generic_construction
 		cost = 75
 		available = {
 			controls_state = 512
@@ -520,7 +613,7 @@ RED_rebuilding_eqs = {
 	}
 
 	RED_rebuild_sunrise_highway = {
-		icon = GFX_decision_rifles
+		icon = GFX_decision_category_celestia_cat
 		cost = 50
 		available = {
 			controls_state = 515
@@ -683,7 +776,7 @@ RED_slaving = {
 				}
 
 				set_technology = {
-    				dragons_light = 1
+    				tech_alicorn_eq = 1
 				}
 			}
 		}
@@ -697,6 +790,8 @@ RED_slaving = {
 		icon = generic_magic
 		cost = 25
 
+		fire_only_once = yes
+
 		available = {
 			controls_state = 593
 		}
@@ -709,7 +804,6 @@ RED_slaving = {
 		}
 
 		days_remove = 30
-		days_re_enable = 60
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision RED_IMP_experiment"
 
@@ -718,6 +812,9 @@ RED_slaving = {
 			subtract_from_variable = {
 				var = RED_slaves_var
 				value = 1
+			}
+			set_technology = {
+    			tech_alicorns = 1
 			}
 			hidden_effect = { 
 				load_oob = "RED_new_alicorns"
@@ -1063,37 +1160,30 @@ RED_slaving = {
 
 			558 = {
 				add_manpower = -2000
-				remove_core_of = SSC
 				add_core_of = RED
 			}
 			543 = {
 				add_manpower = -2000
-				remove_core_of = SSC
 				add_core_of = RED
 			}
 			546 = {
 				add_manpower = -2000
-				remove_core_of = SSC
 				add_core_of = RED
 			}
 			85 = {
 				add_manpower = -2000
-				remove_core_of = SSC
 				add_core_of = RED
 			}
 			5 = {
 				add_manpower = -2000
-				remove_core_of = SSC
 				add_core_of = RED
 			}
 			487 = {
 				add_manpower = -2000
-				remove_core_of = SSC
 				add_core_of = RED
 			}
 			554 = {
 				add_manpower = -2000
-				remove_core_of = SSC
 				add_core_of = RED
 			}
 
@@ -1202,7 +1292,7 @@ RED_stern_palace = {
 RED_mom_secrets_cat = {
 
 	RED_memory_wipes = {
-		icon = GFX_decision_rifles
+		icon = GFX_decision_generic_magic
 		cost = 25
 		ai_will_do = {
 			base = 10
@@ -1227,7 +1317,7 @@ RED_mom_secrets_cat = {
 	}
 
 	RED_stop_memory_wipes = {
-		icon = GFX_decision_rifles
+		icon = GFX_decision_generic_magic
 		cost = 5
 		ai_will_do = {
 			base = 0
@@ -1250,7 +1340,7 @@ RED_mom_secrets_cat = {
 	}
 
 	RED_rebuild_spritebot_control = {
-		icon = GFX_decision_rifles
+		icon = GFX_decision_generic_construction
 		cost = 5
 		ai_will_do = {
 			base = 200
