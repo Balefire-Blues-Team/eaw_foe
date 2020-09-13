@@ -1609,7 +1609,11 @@ shared_focus = {
 
 	prerequisite = { focus = RED_talon_training } 
 	prerequisite = { focus = RED_motor_focus }
-	prerequisite = { focus = RED_weapons_of_war }  
+	prerequisite = { focus = RED_weapons_of_war } 
+
+	bypass = {
+		has_tech = talon_pa_tech
+	}
 
 	ai_will_do = { 
 		factor = 0
@@ -2282,17 +2286,12 @@ shared_focus = {
 
 	will_lead_to_war_with = HIT
 	will_lead_to_war_with = GRV
-	will_lead_to_war_with = FTR
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_drums_of_war"
 
 		add_war_support = 0.1
 		create_wargoal = { type = annex_everything target = GRV }
 		create_wargoal = { type = annex_everything target = HIT }
-		if = {
-			limit = { has_country_flag = RED_foaltopia_accepts_flag }
-			create_wargoal = { type = annex_everything target = FTR }
-		}
 	}
 
 }
@@ -2348,6 +2347,9 @@ shared_focus = {
 	} 
 
 	will_lead_to_war_with = GUN
+	will_lead_to_war_with = LGH
+	will_lead_to_war_with = APR
+	will_lead_to_war_with = FRT
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_break_the_mob"
 		create_wargoal = { type = annex_everything target = GUN }
@@ -6166,6 +6168,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_stern_power_armor"
+		add_tech_bonus = {
+			name = power_armor_tech_bonus
+			bonus = 0.75
+			uses = 1
+			category = power_armor_tech
+		}
 	}
 
 }
@@ -6293,6 +6301,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_new_griffon_home"
+
+		add_ideas = triumphant_talons_idea
 	}
 
 }
@@ -6314,6 +6324,10 @@ shared_focus = {
 	will_lead_to_war_with = FSR
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_united_city"
+		create_wargoal = { 
+			type = annex_everything 
+			target = FSR
+		}
 	}
 
 }
@@ -6339,6 +6353,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_keep_rangers_alive"
+		FSR = {
+			country_event = redeye.114
+		}
 	}
 
 }
@@ -6352,12 +6369,25 @@ shared_focus = {
 	cost = 7
 
 	prerequisite = { focus = RED_united_city }
+	available = {
+		OR = {
+			controls_state = 536
+			controls_state = 538
+		}
+		FSR = {
+			exists = no
+		}
+	}
 	ai_will_do = { 
 		factor = 120
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_work_rangers"
+		add_state_core = 538
+		add_state_core = 536
+		add_state_core = 542
+		add_state_core = 545
 	}
 
 }
@@ -6380,6 +6410,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_master_to_slaves"
+		add_stability = -0.25
+		custom_effect_tooltip = RED_5_gain_slave_tt
+		add_to_variable = {
+			var = RED_slaves_var
+			value = 5
+		}
 	}
 
 }
@@ -6393,12 +6429,18 @@ shared_focus = {
 	cost = 7
 
 	prerequisite = { focus = RED_keep_rangers_alive }
+	available = {
+		is_in_faction_with = FSR
+	}
 	ai_will_do = { 
 		factor = 100
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_almost_equal"
+		FSR = {
+			country_event = redeye.117
+		}
 	}
 
 }
@@ -6412,12 +6454,18 @@ shared_focus = {
 	cost = 7
 
 	prerequisite = { focus = RED_work_rangers }
+	bypass = {
+		has_tech = talon_pa_tech
+	}
 	ai_will_do = { 
 		factor = 90
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_talon_power_armor"
+		set_technology = {
+    		talon_pa_tech = 1
+		}
 	}
 
 }
@@ -6441,6 +6489,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_talon_queen"
+		add_political_power = 100
+		set_cosmetic_tag = RED_empire
 	}
 
 }
@@ -6454,6 +6504,9 @@ shared_focus = {
 	cost = 7
 
 	prerequisite = { focus = RED_almost_equal }
+	available = {
+		is_in_faction_with = FSR
+	}
 	ai_will_do = { 
 		factor = 90
 	} 
@@ -6479,6 +6532,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_all_ponies_slaves"
+		swap_ideas = {
+			remove_idea = slave_labor
+			add_idea = pony_slave_labor
+		}
 	}
 
 }
@@ -6497,8 +6554,14 @@ shared_focus = {
 		factor = 100
 	} 
 
+	will_lead_to_war_with = GUN
+	will_lead_to_war_with = LGH
+	will_lead_to_war_with = APR
+	will_lead_to_war_with = FRT
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_shatter_the_mob"
+		create_wargoal = { type = annex_everything target = GUN }
+		create_wargoal = { type = annex_everything target = LGH }
 	}
 
 }
@@ -6519,6 +6582,36 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_road_to_manehattan"
+		if = {
+			limit = { has_tech = improved_ballistic_weaponry }
+			add_equipment_to_stockpile = {
+    			type = ballistic_equipment_2
+    			amount = 1250
+    			producer = OWE
+			}
+			add_state_core = 812
+			add_resource = {
+				type = composites
+				amount = 4
+				state = 812
+			}
+		}
+		else = {
+			set_technology = {
+    			improved_ballistic_weaponry = 1
+			}
+			add_equipment_to_stockpile = {
+    			type = ballistic_equipment_2
+    			amount = 1250
+    			producer = OWE
+			}
+			add_state_core = 812
+			add_resource = {
+				type = composites
+				amount = 4
+				state = 812
+			}
+		}
 	}
 
 }
@@ -6536,8 +6629,13 @@ shared_focus = {
 		factor = 100
 	} 
 
+	will_lead_to_war_with = RWK
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_poninsula_detour"
+		create_wargoal = { 
+			type = annex_everything 
+			target = RWK
+		}
 	}
 
 }
@@ -6555,8 +6653,18 @@ shared_focus = {
 		factor = 100
 	} 
 
+	will_lead_to_war_with = RAR
+	will_lead_to_war_with = MRA
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_blood_road"
+		create_wargoal = { 
+			type = annex_everything 
+			target = RAR
+		}
+		create_wargoal = { 
+			type = annex_everything 
+			target = MRA
+		}
 	}
 
 }
@@ -6575,12 +6683,35 @@ shared_focus = {
 		factor = 100
 	} 
 
+	will_lead_to_war_with = MAR
+	will_lead_to_war_with = TEN
+	will_lead_to_war_with = GUT
+	will_lead_to_war_with = FRI
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_stern_takes_manehattan"
+		create_wargoal = { 
+			type = annex_everything 
+			target = MAR
+		}
+		create_wargoal = { 
+			type = annex_everything 
+			target = TEN
+		}
+		create_wargoal = { 
+			type = annex_everything 
+			target = GUT
+		}
+		create_wargoal = { 
+			type = annex_everything 
+			target = FRI
+		}
 	}
 
 }
 
+will_lead_to_war_with = MSR
+will_lead_to_war_with = ARB
+will_lead_to_war_with = ABT
 shared_focus = { 
 	id = RED_crossing_the_river
 	icon = GFX_goal_unknown
@@ -6596,6 +6727,18 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_crossing_the_river"
+		create_wargoal = { 
+			type = annex_everything 
+			target = MSR
+		}
+		create_wargoal = { 
+			type = annex_everything 
+			target = ARB
+		}
+		create_wargoal = { 
+			type = annex_everything 
+			target = ABT
+		}
 	}
 
 }
@@ -6749,9 +6892,29 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 100
 	} 
-
+	
+	will_lead_to_war_with = HIT
+	will_lead_to_war_with = GRV
+	will_lead_to_war_with = FTR
+	will_lead_to_war_with = FTP
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_secure_foothills"
+		create_wargoal = { 
+			type = annex_everything 
+			target = HIT
+		}
+		create_wargoal = { 
+			type = annex_everything 
+			target = GRV
+		}
+		create_wargoal = { 
+			type = annex_everything 
+			target = FTR
+		}
+		create_wargoal = { 
+			type = annex_everything 
+			target = FTP
+		}
 	}
 
 }
@@ -6769,6 +6932,7 @@ shared_focus = {
 		factor = 100
 	} 
 
+	will_lead_to_war_with = EVR
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_everfree_question"
 	}
@@ -6848,8 +7012,17 @@ shared_focus = {
 	} 
 
 	will_lead_to_war_with = ERA
+	will_lead_to_war_with = MWY
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_deal_with_bloody_army"
+		create_wargoal = { 
+			type = annex_everything 
+			target = ERA
+		}
+		create_wargoal = { 
+			type = annex_everything 
+			target = MWY
+		}
 	}
 
 }
@@ -6867,7 +7040,7 @@ shared_focus = {
 		factor = 100
 	} 
 
-	will_lead_to_war_with = MWY
+	
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_burn_new_mareway"
 	}
@@ -7571,8 +7744,56 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_empire_of_slaves"
+		502 = {	
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+		504 = {	
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+		529 = {	
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+		50 = {	
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+		512 = {	
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+				instant_build = yes
+			}
+		}
+		525 = {	
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+				instant_build = yes
+			}
+		}
+		498 = {	
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+				instant_build = yes
+			}
+		}
 	}
-
 }
 
 shared_focus = { 
