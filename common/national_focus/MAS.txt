@@ -78,10 +78,16 @@ focus_tree = {
     }
     default = no
     continuous_focus_position = { x = 0 y = 0 }
-    #shared_focus = MAS_Photo
-    #shared_focus = MAS_P2S
-    #shared_focus = MAS_P3HS
     shared_focus = MAS_P4PUS
+}
+focus_tree = {
+    id = MAS_Unicornia_focus_tree
+    country = {
+    	factor = 0
+    }
+    default = no
+    continuous_focus_position = { x = 0 y = 0 }
+    shared_focus = MAS_Unicornia_begins
 }
 ###############
 ### FOCUSES ###
@@ -1464,7 +1470,10 @@ shared_focus = { #CB on Georgetown.
     available = {
         AND = {
             NOT = { country_exists = FTA }
+			OR = {
             NOT = { country_exists = PBN }
+				PBN = {is_puppet_of = ROOT}
+			}
         }
     }
     x = 0
@@ -1531,13 +1540,6 @@ shared_focus = { #Lebensraum.
     prerequisite = {
         focus = MAS_P3H5
     }
-#    available = {
-#        AND = {
-#            GOR = { has_capitulated = yes }
-#            FTA = { has_capitulated = yes }
-#            PBN = { has_capitulated = yes }
-#        }
-#    }
     x = -2
     y = 1
     relative_position_id = MAS_P3H5
@@ -1551,6 +1553,8 @@ shared_focus = { #Lebensraum.
                 limit = { NOT = { has_idea = MAS_unhappy_wastelanders } }
                 add_ideas = MAS_unhappy_wastelanders
             }
+			if = {limit = { 33 = {is_owned_by = LIT} transfer_state = 33}}
+			if = {limit = { 34 = {is_owned_by = LIT} transfer_state = 34}}
         }
         34 = {
             add_core_of = MAS
@@ -1772,8 +1776,7 @@ shared_focus = { #Steel hoof of ministry.
     prerequisite = {
         focus = MAS_P4PUS
     }
-    relative_position_id = P4PUS
-    x = 0
+    x = 15
     y = 1
     cost = 5
     ai_will_do = {
@@ -1794,9 +1797,8 @@ shared_focus = { #Grand military parade.
     prerequisite = {
         focus = MAS_P4PU1
     }
-    relative_position_id = P4PU1
-    x = -2
-    y = 1
+    x = 13
+    y = 2
     cost = 5
     ai_will_do = {
         factor = 1
@@ -1812,9 +1814,8 @@ shared_focus = { #Medical investments.
     prerequisite = {
         focus = MAS_P4PU1
     }
-    relative_position_id = P4PU1
-    x = 0
-    y = 1
+    x = 15
+    y = 2
     cost = 5
     ai_will_do = {
         factor = 1
@@ -1833,9 +1834,8 @@ shared_focus = { #Magical weapons.
     prerequisite = {
         focus = MAS_P4PU1
     }
-    relative_position_id = P4PU1
-    x = 2
-    y = 1
+    x = 17
+    y = 2
     cost = 5
     ai_will_do = {
         factor = 1
@@ -1862,9 +1862,8 @@ shared_focus = { #CB on Unity.
     bypass = {
         NOT = { country_exists = UNI }
     }
-    relative_position_id = P4PU1
-    x = 0
-    y = 2
+    x = 15
+    y = 3
     cost = 5
     ai_will_do = {
         factor = 1
@@ -1885,9 +1884,8 @@ shared_focus = { #Alliance to NCR.
     bypass = {
         NOT = { country_exists = SHA }
     }
-    relative_position_id = P4PU3
-    x = 0
-    y = 1
+    x = 15
+    y = 4
     cost = 5
     ai_will_do = {
         factor = 1
@@ -1904,9 +1902,8 @@ shared_focus = { #Forward to Victory!
     prerequisite = {
         focus = MAS_P4PU4
     }
-    relative_position_id = P4PU4
-    x = -1
-    y = 1
+    x = 14
+    y = 5
     cost = 5
     ai_will_do = {
         factor = 1
@@ -1924,9 +1921,8 @@ shared_focus = { #Preparations on secret plan.
     prerequisite = {
         focus = MAS_P4PU4
     }
-    relative_position_id = P4PU4
-    x = 1
-    y = 1
+    x = 16
+    y = 5
     cost = 5
     ai_will_do = {
         factor = 1
@@ -1959,20 +1955,50 @@ shared_focus = { #Evacuation.
     available = {
         NOT = { country_exists = UNI }
     }
-    relative_position_id = P4PU3
-    x = 0
-    y = 2
+    x = 15
+    y = 6
     cost = 5
     ai_will_do = {
         factor = 1
     }
     completion_reward = {
-        527 = { remove_core_of = MAS add_manpower -3000}
-        526 = { add_core_of = MAS add_manpower 2500}
+        527 = { remove_core_of = MAS add_manpower -9000}
+		33 = { remove_core_of = MAS }
+		34 = { remove_core_of = MAS }
+        526 = { add_core_of = MAS add_manpower 8500}
         set_capital = 526
+		add_research_slot = -1
+		if = {limit = {FTA = {is_puppet_of = ROOT}}annex_country = {target = FTA transfer_troops = no}}
         load_oob = MAS_3_DF
 		hidden_effect = {
 			add_manpower = -200
+			if = {
+                limit = {
+                    has_idea = MAS_magic_army_MagicalSupremacy_idea
+                }
+                swap_ideas = {
+                     remove_idea = MAS_magic_army_MagicalSupremacy_idea
+                     add_idea = MAS_magic_army_CapableMages_idea
+                }
+            }
+            else_if = {
+                limit = {
+                    has_idea = MAS_magic_army_CapableMages_idea
+                }
+                swap_ideas = {
+                    remove_idea = MAS_magic_army_CapableMages_idea
+                    add_idea = MAS_magic_army_BasicMagicalTraining_idea
+                }
+            }
+            else_if = {
+                limit = {
+                    has_idea = MAS_magic_army_BasicMagicalTraining_idea
+                }
+                swap_ideas = {
+                    remove_idea = MAS_magic_army_BasicMagicalTraining_idea
+                    add_idea = MAS_magic_army_MagicalOfficers_idea
+                }
+            }
 		}
     }
 }
@@ -1982,9 +2008,8 @@ shared_focus = { #Canterlot is mine!
     prerequisite = {
         focus = MAS_P4PU6
     }
-    relative_position_id = P4PU3
-    x = 0
-    y = 3
+    x = 15
+    y = 7
     cost = 5
     ai_will_do = {
         factor = 1
@@ -2014,29 +2039,59 @@ shared_focus = { #Next evac point.
     prerequisite = {
         focus = MAS_P4PU7
     }
-    relative_position_id = P4PU4
-    x = -1
-    y = 4
+    x = 14
+    y = 8
+	available = {
+		OR = {
+			owns_state = 486
+			SPV = {is_puppet_of = MAS}
+		}
+	}
     cost = 5
     ai_will_do = {
         factor = 1
     }
     completion_reward = {
         load_oob = MAS_3_DF
-        527 = {
-            add_manpower = -3000
-        }
         486 = {
             add_core_of = MAS
-			add_manpower = 5000
+			add_manpower = 8000
         }
-        set_capital = 505
+        set_capital = 486
         526 = {
             remove_core_of = MAS
-			add_manpower = -2500
+			add_manpower = -8000
         }
+		if = {limit = {SPV = {is_puppet_of = ROOT}}annex_country = {target = SPV transfer_troops = no}}
 		hidden_effect = {
 			add_manpower = -200
+			if = {
+                limit = {
+                    has_idea = MAS_magic_army_MagicalSupremacy_idea
+                }
+                swap_ideas = {
+                     remove_idea = MAS_magic_army_MagicalSupremacy_idea
+                     add_idea = MAS_magic_army_CapableMages_idea
+                }
+            }
+            else_if = {
+                limit = {
+                    has_idea = MAS_magic_army_CapableMages_idea
+                }
+                swap_ideas = {
+                    remove_idea = MAS_magic_army_CapableMages_idea
+                    add_idea = MAS_magic_army_BasicMagicalTraining_idea
+                }
+            }
+            else_if = {
+                limit = {
+                    has_idea = MAS_magic_army_BasicMagicalTraining_idea
+                }
+                swap_ideas = {
+                    remove_idea = MAS_magic_army_BasicMagicalTraining_idea
+                    add_idea = MAS_magic_army_MagicalOfficers_idea
+                }
+            }
 		}
     }
 }
@@ -2046,9 +2101,8 @@ shared_focus = { #My glorious city!
     prerequisite = {
         focus = MAS_P4PU4
     }
-    relative_position_id = P4PU4
-    x = 1
-    y = 4
+    x = 16
+    y = 8
     cost = 5
     ai_will_do = {
         factor = 1
@@ -2075,9 +2129,8 @@ shared_focus = { #The last evac point.
     available = {
         has_country_flag = MAS_415_Cleared
     }
-    relative_position_id = P4PU3
-    x = 0
-    y = 5
+    x = 15
+    y = 9
     cost = 5
     ai_will_do = {
         factor = 1
@@ -2085,7 +2138,14 @@ shared_focus = { #The last evac point.
     completion_reward = {
         add_research_slot = -1
         set_capital = 415
-		
+		486 = {
+            remove_core_of = MAS
+			add_manpower = -7500
+        }
+		415 = {
+            add_core_of = MAS
+			add_manpower = 7500
+        }
     }
 }
 shared_focus = { #I achieved an imposable goal.
@@ -2097,9 +2157,8 @@ shared_focus = { #I achieved an imposable goal.
     available = {
         has_country_flag = MAS_234_cleared
     }
-    relative_position_id = P4PU3
-    x = 0
-    y = 6
+    x = 15
+    y = 10
     cost = 5
     ai_will_do = {
         factor = 1
@@ -2112,10 +2171,21 @@ shared_focus = { #I achieved an imposable goal.
                 }
                 SHA = { country_event = { id = masevent.350 } } #CB on MAS.
             }
+			retire = yes
+			create_country_leader = {
+				name = "Prince Horny Miracle"
+				picture = "PrinceHornyMiracle.tga"
+				expire = "1965.1.1"
+				ideology = rebuilder
+				traits = {
+		
+				}
+			}
+			load_focus_tree = MAS_Unicornia_focus_tree
         }
         set_cosmetic_tag = MAS_Unicornia
         set_capital = 234
-		486 = { remove_core_of = MAS add_manpower = -5000}
+		415 = { add_manpower = -5000}
         234 = { add_manpower = 5000}
         if = {
             limit = {
@@ -2141,5 +2211,20 @@ shared_focus = { #I achieved an imposable goal.
 				set_state_owner = 34
             }
         }
+    }
+}
+
+shared_focus = { #reformation
+    id = MAS_Unicornia_begins
+    icon = GFX_focus_MAS_P4PU9
+    
+    x = 15
+    y = 0
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+        
     }
 }
