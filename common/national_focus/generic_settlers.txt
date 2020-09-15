@@ -17,8 +17,8 @@ focus_tree = {
 	focus = {
 		id = gs_opening1
 		icon = GFX_goal_generic_small_arms
-		x = 8
-		y = 0
+		x = 15
+		y = 1
 		
 		cost = 1
 		ai_will_do = {
@@ -73,654 +73,995 @@ focus_tree = {
 ### Factory Focuses ###
 
 	focus = {
-		id = gs_open_up_workshops
+		id = gs_industry_1
+		icon = GFX_goal_generic_small_arms
 		prerequisite = {
 			focus = gs_opening3
 		}
-		
-		x = 0
+		x = -10
 		y = 1
 		relative_position_id = gs_opening3
 		
-		cost = 10
+		cost = 8.58
 		ai_will_do = {
 			factor = 100
 		}
 		
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus gs_open_up_workshops"
-			random_owned_controlled_state = {
-				limit = {
-					free_building_slots = {
-						building = industrial_complex
-						size > 1
-						include_locked = yes
-					}
-					OR = {
-						is_in_home_area = yes
-						NOT = {
-							owner = {
-								any_owned_state = {
-									free_building_slots = {
-										building = industrial_complex
-										size > 1
-										include_locked = yes
-									}
-									is_in_home_area = yes
-								}
-							}
-						}
-					}
+			log = "[GetDateText]: [Root.GetName]: Focus gs_industry_1"
+				add_tech_bonus = {
+                bonus = 0.6
+                uses = 2
+                category = industry
 				}
-			
-				add_extra_state_shared_building_slots = 2
-				add_building_construction = {
-					type = industrial_complex
-					level = 2
-					instant_built = yes
+		}
+	}
+	
+	focus = {
+		id = gs_industry_2
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
+			focus = gs_industry_1
+		}
+		x = -3
+		y = 1
+		relative_position_id = gs_industry_1
+		
+		cost = 8.58
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_industry_2"
+				one_random_infrastructure = yes	
+				add_tech_bonus = {
+                bonus = 1.0
+                uses = 1
+                category = agriculture_tech
 				}
-			}
 		}
 	}
 	
 	focus = {
-		id = gs_reconstruct_roads
+		id = gs_industry_3
+		icon = GFX_goal_generic_small_arms
 		prerequisite = {
-			focus = gs_open_up_workshops
+			focus = gs_industry_2
 		}
+		x = -3
+		y = 2
+		relative_position_id = gs_industry_1
 		
-		x = 0
-		y = 1
-		relative_position_id = gs_open_up_workshops
-		
-		cost = 10
+		cost = 8.58
 		ai_will_do = {
 			factor = 100
 		}
 		
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus gs_reconstruct_roads"
-			random_owned_controlled_state = {
-				add_building_construction = {
-					type = infrastructure
-					level = 2
-					instant_built = yes
-				}
-			}
+			log = "[GetDateText]: [Root.GetName]: Focus gs_industry_3"
+				two_random_infrastructure = yes	
+				one_random_infrastructure = yes	
 		}
 	}
 	
 	focus = {
-		id = gs_focus_essentials
+		id = gs_industry_4
+		icon = GFX_goal_generic_small_arms
 		prerequisite = {
-			focus = gs_reconstruct_roads
+			focus = gs_industry_1
 		}
-		
-		x = -2
-		y = 1
-		relative_position_id = gs_reconstruct_roads
-		
-		cost = 10
-		ai_will_do = {
-			factor = 100
-		}
-		
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus gs_focus_essentials"
-			add_tech_bonus = {
-				name = energy_bonus
-				uses = 1
-				bonus = 0.5
-				category = energy_tech
-			}
-			add_tech_bonus = {
-				name = water_bonus
-				uses = 1
-				bonus = 0.5
-				category = water_tech
-			}
-			add_tech_bonus = {
-				name = metal_bonus
-				uses = 1
-				bonus = 0.5
-				category = metal_tech
-			}
-			
-		}
-	}
-	
-	focus = {
-		id = gs_extra_research_roles
-		prerequisite = {
-			focus = gs_focus_essentials
-		}
-		
-		x = 0
-		y = 1
-		relative_position_id = gs_focus_essentials
-		
-		cost = 10
-		ai_will_do = {
-			factor = 100
-		}
-		
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus gs_extra_research_roles"
-			add_research_slot = 1
-			
-		}
-	}
-	
-	focus = {
-		id = gs_building_effort
-		prerequisite = {
-			focus = gs_reconstruct_roads
-		}
-		
-		x = 0
-		y = 1
-		relative_position_id = gs_reconstruct_roads
-		
-		cost = 10
-		ai_will_do = {
-			factor = 100
-		}
-		
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus gs_building_effort"
-			
-			add_tech_bonus = {
-				name = industry_bonus
-				bonus = 1.00
-				uses = 3
-				category = construction_tech
-			}
-		}
-	}
-	
-	focus = {
-		id = gs_agricultural_research
-		prerequisite = {
-			focus = gs_building_effort
-		}
-		
-		x = 0
-		y = 1
-		relative_position_id = gs_building_effort
-		
-		cost = 10
-		ai_will_do = {
-			factor = 100
-		}
-		
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus gs_agricultural_research"
-			
-			add_tech_bonus = {
-				name = industry_bonus
-				bonus = 1.00
-				uses = 3
-				category = agriculture_tech
-			}
-		}
-	}	
-
-	focus = {
-		id = gs_expand_workshops
-		prerequisite = {
-			focus = gs_reconstruct_roads
-		}
-		
-		x = 2
-		y = 1
-		relative_position_id = gs_reconstruct_roads
-		
-		cost = 10
-		ai_will_do = {
-			factor = 100
-		}
-		
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus gs_expand_workshops"
-			random_owned_controlled_state = {
-				limit = {
-					free_building_slots = {
-						building = industrial_complex
-						size > 0
-						include_locked = yes
-					}
-					OR = {
-						is_in_home_area = yes
-						NOT = {
-							owner = {
-								any_owned_state = {
-									free_building_slots = {
-										building = industrial_complex
-										size > 0
-										include_locked = yes
-									}
-									is_in_home_area = yes
-								}
-							}
-						}
-					}
-				}
-			
-				add_extra_state_shared_building_slots = 1
-				add_building_construction = {
-					type = industrial_complex
-					level = 1
-					instant_built = yes
-				}
-			}
-		}
-	}
-	
-	focus = { 
-		id = gs_wasteland_civilization
-		prerequisite = { 
-			focus = gs_expand_workshops
-		}
-		
-		x = 0
-		y = 1
-		relative_position_id = gs_expand_workshops
-		
-		cost = 10
-
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus gs_wasteland_civilization"
-			add_ideas = GS_wasteland_rebuilding
-		}
-	}
-	
-	focus = { 
-		id = gs_scavenging_roles
-		prerequisite = { 
-			focus = gs_opening3
-		}
-		
-		x = 5
-		y = 1
-		relative_position_id = gs_opening3
-		
-		cost = 10
-
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus gs_scavenging_roles"
-			add_equipment_to_stockpile = {
-				type = ballistic_equipment_1	
-				amount = 200
-			}
-		}
-	}
-	
-	focus = { 
-		id = gs_open_armament_shops
-		prerequisite = { 
-			focus = gs_scavenging_roles
-		}
-		
 		x = -1
 		y = 1
-		relative_position_id = gs_scavenging_roles
+		relative_position_id = gs_industry_1
 		
-		cost = 10
-
-		ai_will_do = { 
+		cost = 8.58
+		ai_will_do = {
 			factor = 100
-		} 
-
+		}
+		
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus gs_weapons_research"
-			random_owned_controlled_state = {
-				limit = {
-					free_building_slots = {
-						building = arms_factory
-						size > 0
-						include_locked = yes
-					}
-					OR = {
-						is_in_home_area = yes
-						NOT = {
-							owner = {
-								any_owned_state = {
-									free_building_slots = {
-										building = arms_factory
-										size > 0
-										include_locked = yes
-									}
-									is_in_home_area = yes
-								}
-							}
-						}
-					}
+			log = "[GetDateText]: [Root.GetName]: Focus gs_industry_4"
+				random_owned_controlled_state = {
+				limit = {is_capital = yes}
+				add_extra_state_shared_building_slots = 4
 				}
-			
-				add_extra_state_shared_building_slots = 1
+		}
+	}
+	
+	focus = {
+		id = gs_industry_5
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
+			focus = gs_industry_4
+		}
+		x = -1
+		y = 2
+		relative_position_id = gs_industry_1
+		
+		cost = 8.58
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_industry_5"
+				random_owned_controlled_state = {
+				limit = {is_capital = yes}
 				add_building_construction = {
-					type = arms_factory
+					type = industrial_complex
 					level = 1
-					instant_built = yes
+					instant_build = yes
 				}
-			}			
+				}
 		}
 	}
 	
-	focus = { 
-		id = gs_extra_arm_shops
-		prerequisite = { 
-			focus = gs_open_armament_shops
+	focus = {
+		id = gs_industry_6
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
+			focus = gs_industry_1
 		}
-		
-		x = 0
+		x = 2
 		y = 1
-		relative_position_id = gs_open_armament_shops
+		relative_position_id = gs_industry_1
 		
-		cost = 10
-
-		ai_will_do = { 
+		cost = 8.58
+		ai_will_do = {
 			factor = 100
-		} 
-
+		}
+		
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus gs_support_equipment_research"
-			random_owned_controlled_state = {
-				limit = {
-					free_building_slots = {
-						building = arms_factory
-						size > 1
-						include_locked = yes
-					}
-					OR = {
-						is_in_home_area = yes
-						NOT = {
-							owner = {
-								any_owned_state = {
-									free_building_slots = {
-										building = arms_factory
-										size > 1
-										include_locked = yes
-									}
-									is_in_home_area = yes
-								}
-							}
-						}
-					}
-				}
-			
-				add_extra_state_shared_building_slots = 2
-				add_building_construction = {
-					type = arms_factory
-					level = 2
-					instant_built = yes
-				}
-			}
+			log = "[GetDateText]: [Root.GetName]: Focus gs_industry_6"
+				one_random_arms_factory = yes
 		}
 	}
 	
-	focus = { 
-		id = gs_expand_research_teams
-		prerequisite = { 
-			focus = gs_extra_arm_shops
+	focus = {
+		id = gs_industry_7
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
+			focus = gs_industry_6
 		}
-		
-		x = 0
-		y = 1
-		relative_position_id = gs_extra_arm_shops
-		
-		cost = 10
-
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus gs_expand_research_teams"
-			add_research_slot = 1
-		}
-	}
-	
-	focus = { 
-		id = gs_armament_trade
-		prerequisite = { 
-			focus = gs_scavenging_roles
-		}
-		
 		x = 1
-		y = 1
-		relative_position_id = gs_scavenging_roles
+		y = 2
+		relative_position_id = gs_industry_1
 		
-		cost = 10
-
-		ai_will_do = { 
+		cost = 8.58
+		ai_will_do = {
 			factor = 100
-		} 
-
+		}
+		
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus gs_organized_training"
-			random_owned_controlled_state = {
-				limit = {
-					free_building_slots = {
-						building = arms_factory
-						size > 0
-						include_locked = yes
-					}
-					OR = {
-						is_in_home_area = yes
-						NOT = {
-							owner = {
-								any_owned_state = {
-									free_building_slots = {
-										building = arms_factory
-										size > 0
-										include_locked = yes
-									}
-									is_in_home_area = yes
-								}
-							}
-						}
-					}
-				}
-			
-				add_extra_state_shared_building_slots = 1
-				add_building_construction = {
-					type = arms_factory
-					level = 1
-					instant_built = yes
-				}
-			}
-
-
+			log = "[GetDateText]: [Root.GetName]: Focus gs_industry_2"
+				add_ideas = GS_border_fortify_idea
 		}
 	}
 	
-	
-	focus = { 
-		id = gs_expand_armament_roles
-		prerequisite = { 
-			focus = gs_armament_trade
+	focus = {
+		id = gs_industry_8
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
+			focus = gs_industry_6
+		}
+		x = 3
+		y = 2
+		relative_position_id = gs_industry_1
+		
+		cost = 8.58
+		ai_will_do = {
+			factor = 100
 		}
 		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_industry_8"
+				add_tech_bonus = {
+                bonus = 0.6
+                uses = 2
+                category = race_tech
+				}
+		}
+	}
+	
+	focus = {
+		id = gs_industry_9
+		icon = GFX_goal_generic_small_arms
+		prerequisite = { focus = gs_industry_3 }
+		prerequisite = { focus = gs_industry_5 }
+		x = -2
+		y = 3
+		relative_position_id = gs_industry_1
+		mutually_exclusive = {focus = gs_industry_10}
+		
+		cost = 8.58
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_industry_9"
+				add_ideas = GS_civ_industry_idea
+		}
+	}
+	
+	focus = {
+		id = gs_industry_10
+		icon = GFX_goal_generic_small_arms
+		prerequisite = { focus = gs_industry_7 }
+		prerequisite = { focus = gs_industry_8 }
+		x = 2
+		y = 3
+		relative_position_id = gs_industry_1
+		mutually_exclusive = {focus = gs_industry_9}
+		
+		cost = 8.58
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_industry_10"
+				add_ideas = GS_civ_military_idea
+		}
+	}
+	
+	focus = {
+		id = gs_industry_11
+		icon = GFX_goal_generic_small_arms
+		prerequisite = { focus = gs_industry_9 focus = gs_industry_10 }
+		x = -4
+		y = 4
+		relative_position_id = gs_industry_1
+		
+		cost = 8.58
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_industry_11"
+				every_owned_state = {
+					add_manpower = 300
+				}
+		}
+	}
+	
+	focus = {
+		id = gs_industry_12
+		icon = GFX_goal_generic_small_arms
+		prerequisite = { focus = gs_industry_9 focus = gs_industry_10 }
+		x = -2
+		y = 4
+		relative_position_id = gs_industry_1
+		
+		cost = 8.58
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_industry_12"
+				every_owned_state = {
+					add_extra_state_shared_building_slots = 1
+				}
+		}
+	}
+	
+	focus = {
+		id = gs_industry_13
+		icon = GFX_goal_generic_small_arms
+		prerequisite = { focus = gs_industry_9 focus = gs_industry_10 }
 		x = 0
-		y = 1
-		relative_position_id = gs_armament_trade
+		y = 4
+		relative_position_id = gs_industry_1
 		
-		cost = 10
-
-		ai_will_do = { 
+		cost = 8.58
+		ai_will_do = {
 			factor = 100
-		} 
-
+		}
+		
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus gs_organized_training"
-			random_owned_controlled_state = {
-				limit = {
-					free_building_slots = {
-						building = arms_factory
-						size > 0
-						include_locked = yes
-					}
-					OR = {
-						is_in_home_area = yes
-						NOT = {
-							owner = {
-								any_owned_state = {
-									free_building_slots = {
-										building = arms_factory
-										size > 0
-										include_locked = yes
-									}
-									is_in_home_area = yes
-								}
-							}
-						}
-					}
-				}
-			
-				add_extra_state_shared_building_slots = 1
-				add_building_construction = {
-					type = arms_factory
-					level = 1
-					instant_built = yes
-				}
-			}
-
-
+			log = "[GetDateText]: [Root.GetName]: Focus gs_industry_13"
+				one_random_infrastructure = yes
+				one_random_infrastructure = yes
+				add_stability = 0.06
 		}
 	}
 	
-	focus = { 
-		id = gs_prioritize_production
-		prerequisite = { 
-			focus = gs_expand_armament_roles
+	focus = {
+		id = gs_industry_14
+		icon = GFX_goal_generic_small_arms
+		prerequisite = { focus = gs_industry_9 focus = gs_industry_10 }
+		x = 2
+		y = 4
+		relative_position_id = gs_industry_1
+		
+		cost = 8.58
+		ai_will_do = {
+			factor = 100
 		}
 		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_industry_14"
+				one_random_arms_factory = yes
+		}
+	}
+	
+	focus = {
+		id = gs_industry_15
+		icon = GFX_goal_generic_small_arms
+		prerequisite = { focus = gs_industry_9 focus = gs_industry_10 }
+		x = 4
+		y = 4
+		relative_position_id = gs_industry_1
+		
+		cost = 8.58
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_industry_15"
+				one_random_industrial_complex = yes
+		}
+	}
+	
+	focus = {
+		id = gs_industry_16
+		icon = GFX_goal_generic_small_arms
+		prerequisite = { focus = gs_industry_15 }
+		prerequisite = { focus = gs_industry_14 }
+		x = 3
+		y = 5
+		relative_position_id = gs_industry_1
+		
+		cost = 8.58
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_industry_16"
+				one_random_industrial_complex = yes
+				one_random_arms_factory = yes
+		}
+	}
+	
+	focus = {
+		id = gs_industry_17
+		icon = GFX_goal_generic_small_arms
+		prerequisite = { focus = gs_industry_13 }
 		x = 0
-		y = 1
-		relative_position_id = gs_expand_armament_roles
+		y = 5
+		relative_position_id = gs_industry_1
 		
-		cost = 10
-
-		ai_will_do = { 
+		cost = 8.58
+		ai_will_do = {
 			factor = 100
-		} 
-
+		}
+		
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus gs_form_research_branch"
-			add_ideas = GS_arms_production
+			log = "[GetDateText]: [Root.GetName]: Focus gs_industry_17"
+				every_owned_state = {
+					add_building_construction = {type = infrastructure level = 1 instant_build = yes}
+				}
 		}
 	}
 	
-	focus = { 
-		id = gs_settlement_funding
-		prerequisite = { 
+	focus = {
+		id = gs_industry_18
+		icon = GFX_goal_generic_small_arms
+		prerequisite = { focus = gs_industry_11 }
+		prerequisite = { focus = gs_industry_12 }
+		x = -3
+		y = 5
+		relative_position_id = gs_industry_1
+		
+		cost = 8.58
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_industry_18"
+				add_ideas = GS_population_boom_idea
+		}
+	}
+	
+	
+###Knowledge###
+
+	focus = {
+		id = gs_know_1
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
 			focus = gs_opening3
 		}
-		
-		x = -6
+		x = 0
 		y = 1
 		relative_position_id = gs_opening3
 		
-		cost = 10
-
-		ai_will_do = { 
+		cost = 8.58
+		ai_will_do = {
 			factor = 100
-		} 
-
+		}
+		
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus gs_form_research_branch"
-			add_political_power = 100
+			log = "[GetDateText]: [Root.GetName]: Focus gs_know_1"
+				add_stability = 0.05
+				add_war_support = 0.05
 		}
 	}
 	
-	focus = { 
-		id = gs_mutant_question
-		prerequisite = { 
-			focus = gs_settlement_funding
+	focus = {
+		id = gs_know_2
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
+			focus = gs_know_1
 		}
-		
-		x = -2
+		x = -3
 		y = 1
-		relative_position_id = gs_settlement_funding
+		relative_position_id = gs_know_1
 		
-		cost = 10
-
-		ai_will_do = { 
+		cost = 8.58
+		ai_will_do = {
 			factor = 100
-		} 
-
+		}
+		
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus gs_form_research_branch"
-			add_political_power = 100
+			log = "[GetDateText]: [Root.GetName]: Focus gs_know_2"
+			random_list = {
+				25 = {
+					capital_scope = { add_resource = {type = metal amount = 10}}
+				}
+				25 = {
+					capital_scope = { add_resource = {type = water amount = 10}}
+				}
+				25 = {
+					capital_scope = { add_resource = {type = energy amount = 10}}
+				}
+				25 = {
+					capital_scope = { add_resource = {type = composites amount = 6}}
+				}
+			}
 		}
 	}
 	
-	focus = { 
-		id = gs_immigration_question
-		prerequisite = { 
-			focus = gs_settlement_funding
+	focus = {
+		id = gs_know_3
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
+			focus = gs_know_2
+		}
+		x = -3
+		y = 2
+		relative_position_id = gs_know_1
+		
+		cost = 8.58
+		ai_will_do = {
+			factor = 100
 		}
 		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_know_3"
+				add_ideas = GS_scavenging_idea_1
+		}
+	}
+	
+	focus = {
+		id = gs_know_4
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
+			focus = gs_know_3
+		}
+		x = -4
+		y = 3
+		relative_position_id = gs_know_1
+		
+		cost = 8.58
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_know_4"
+			capital_scope = { add_resource = {type = metal amount = 8}}
+		}
+	}
+	
+	focus = {
+		id = gs_know_5
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
+			focus = gs_know_3
+		}
+		x = -2
+		y = 3
+		relative_position_id = gs_know_1
+		
+		cost = 8.58
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_know_5"
+				random_list = {
+				33 = {
+					capital_scope = { add_resource = {type = composites amount = 10}}
+				}
+				33 = {
+					capital_scope = { add_resource = {type = circuitry amount = 8}}
+				}
+				33 = {
+					capital_scope = { add_resource = {type = advanced amount = 6}}
+				}
+				
+			}
+		}
+	}
+	
+	focus = {
+		id = gs_know_6
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
+			focus = gs_know_1
+		}
 		x = 0
 		y = 1
-		relative_position_id = gs_settlement_funding
+		relative_position_id = gs_know_1
 		
-		cost = 10
-
-		ai_will_do = { 
+		cost = 8.58
+		ai_will_do = {
 			factor = 100
-		} 
-
+		}
+		
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus gs_form_research_branch"
-			add_political_power = 100
+			log = "[GetDateText]: [Root.GetName]: Focus gs_know_6"
+				add_tech_bonus = {
+                bonus = 1.2
+                uses = 1
+                category = medical_tech
+				}
 		}
 	}
 	
-	focus = { 
-		id = gs_drug_question
-		prerequisite = { 
-			focus = gs_settlement_funding
+	focus = {
+		id = gs_know_7
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
+			focus = gs_know_6
+		}
+		x = 0
+		y = 2
+		relative_position_id = gs_know_1
+		
+		cost = 8.58
+		ai_will_do = {
+			factor = 100
 		}
 		
-		x = 2
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_know_7"
+				add_stability = 0.1
+		}
+	}
+	
+	focus = {
+		id = gs_know_8
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
+			focus = gs_know_7
+		}
+		x = 0
+		y = 3
+		relative_position_id = gs_know_1
+		
+		cost = 8.58
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_know_8"
+				add_manpower = 250
+		}
+	}
+	
+	focus = {
+		id = gs_know_9
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
+			focus = gs_know_1
+		}
+		x = 3
 		y = 1
-		relative_position_id = gs_settlement_funding
+		relative_position_id = gs_know_1
 		
-		cost = 10
-
-		ai_will_do = { 
+		cost = 8.58
+		ai_will_do = {
 			factor = 100
-		} 
-
+		}
+		
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus gs_form_research_branch"
-			add_political_power = 100
+			log = "[GetDateText]: [Root.GetName]: Focus gs_know_9"
+				add_ideas = GS_schools_idea
 		}
 	}
 	
-	## TODO ##
+	focus = {
+		id = gs_know_10
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
+			focus = gs_know_9
+		}
+		x = 2
+		y = 2
+		relative_position_id = gs_know_1
+		
+		cost = 8.58
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_know_10"
+				add_research_slot = 1
+		}
+	}
+	
+	focus = {
+		id = gs_know_11
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
+			focus = gs_know_9
+		}
+		x = 4
+		y = 2
+		relative_position_id = gs_know_1
+		
+		cost = 8.58
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_know_11"
+				add_tech_bonus = {
+                bonus = 0.6
+                uses = 2
+                category = production_tech
+				}
+		}
+	}
+	
+	focus = {
+		id = gs_know_12
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
+			focus = gs_know_11
+		}
+		prerequisite = {
+			focus = gs_know_10
+		}
+		x = 3
+		y = 3
+		relative_position_id = gs_know_1
+		
+		cost = 8.58
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_know_12"
+				one_random_industrial_complex = yes
+		}
+	}
+	
+	focus = {
+		id = gs_know_13
+		icon = GFX_goal_generic_small_arms
+		prerequisite = {
+			focus = gs_know_12
+		}
+		prerequisite = {
+			focus = gs_know_4
+		}
+		prerequisite = {
+			focus = gs_know_5
+		}
+		prerequisite = {
+			focus = gs_know_8
+		}
+		x = 0
+		y = 4
+		relative_position_id = gs_know_1
+		
+		cost = 8.58
+		ai_will_do = {
+			factor = 100
+		}
+		
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_know_13"
+				remove_ideas = GS_schools_idea
+				swap_ideas = {
+				remove_idea = GS_scavenging_idea_1
+				add_idea = GS_combo_ideas
+				}
+				add_research_slot = 1
+		}
+	}
+	
+	
+###Politics###
+
+	focus = {
+		id = gs_political_1
+		icon = GFX_goal_generic_small_arms
+		x = 15
+		y = 11
+		allow_branch = {NOT = {has_country_flag = gs_aux_pol_tree_flag}}
+		cost = 8.58
+		ai_will_do = {
+			factor = 100
+		}
+		available = { has_completed_focus = gs_opening3}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_political_1"
+				add_political_power = 100
+		}
+	}
+	
+	focus = {
+		id = gs_political_des1
+		icon = GFX_goal_generic_small_arms
+		x = -3
+		y = 1
+		cost = 8.58
+		relative_position_id = gs_political_1
+		ai_will_do = {
+			factor = 100
+		}
+		mutually_exclusive = {focus = gs_political_vis1 focus = gs_political_con1 focus = gs_political_sur1}
+		prerequisite = {focus = gs_political_1}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_political_des1"
+			set_politics = { ruling_party = destruction elections_allowed = no }
+			add_ideas = GS_des_idea_1
+		}
+	}
+	
+	focus = {
+		id = gs_political_des2
+		icon = GFX_goal_generic_small_arms
+		x = -3
+		y = 2
+		cost = 8.58
+		relative_position_id = gs_political_1
+		ai_will_do = {
+			factor = 100
+		}
+		prerequisite = {focus = gs_political_des1}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_political_des2"
+			add_manpower = 300
+			one_random_arms_factory = yes
+		}
+	}
+	
+	focus = {
+		id = gs_political_des3
+		icon = GFX_goal_generic_small_arms
+		x = -3
+		y = 3
+		cost = 8.58
+		relative_position_id = gs_political_1
+		ai_will_do = {
+			factor = 100
+		}
+		prerequisite = {focus = gs_political_des2}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_political_des3"
+			swap_ideas = {
+				remove_idea = GS_des_idea_1 add_idea = GS_des_idea_2
+			}
+		}
+	}
+	
+	focus = {
+		id = gs_political_vis1
+		icon = GFX_goal_generic_small_arms
+		x = -1
+		y = 1
+		cost = 8.58
+		relative_position_id = gs_political_1
+		ai_will_do = {
+			factor = 100
+		}
+		mutually_exclusive = {focus = gs_political_des1 focus = gs_political_con1 focus = gs_political_sur1}
+		prerequisite = {focus = gs_political_1}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_political_vis1"
+			set_politics = { ruling_party = visionary elections_allowed = no }
+			add_ideas = GS_vis_idea_1
+		}
+	}
+	
+	focus = {
+		id = gs_political_vis2
+		icon = GFX_goal_generic_small_arms
+		x = -1
+		y = 2
+		cost = 8.58
+		relative_position_id = gs_political_1
+		ai_will_do = {
+			factor = 100
+		}
+		prerequisite = {focus = gs_political_vis1}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_political_vis2"
+			add_political_power = 50
+			two_random_infrastructure = yes
+		}
+	}
+	
+	focus = {
+		id = gs_political_vis3
+		icon = GFX_goal_generic_small_arms
+		x = -1
+		y = 3
+		cost = 8.58
+		relative_position_id = gs_political_1
+		ai_will_do = {
+			factor = 100
+		}
+		prerequisite = {focus = gs_political_vis2}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_political_vis3"
+			swap_ideas = {
+				remove_idea = GS_vis_idea_1 add_idea = GS_vis_idea_2
+			}
+		}
+	}
+	
+	focus = {
+		id = gs_political_con1
+		icon = GFX_goal_generic_small_arms
+		x = 1
+		y = 1
+		cost = 8.58
+		relative_position_id = gs_political_1
+		ai_will_do = {
+			factor = 100
+		}
+		mutually_exclusive = {focus = gs_political_vis1 focus = gs_political_des1 focus = gs_political_sur1}
+		prerequisite = {focus = gs_political_1}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_political_con1"
+			set_politics = { ruling_party = continuation elections_allowed = no }
+			add_ideas = GS_con_idea_1
+		}
+	}
+	
+	focus = {
+		id = gs_political_con2
+		icon = GFX_goal_generic_small_arms
+		x = 1
+		y = 2
+		cost = 8.58
+		relative_position_id = gs_political_1
+		ai_will_do = {
+			factor = 100
+		}
+		prerequisite = {focus = gs_political_con1}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_political_con2"
+			one_random_industrial_complex = yes
+			add_stability = 0.05
+		}
+	}
+	
+	focus = {
+		id = gs_political_con3
+		icon = GFX_goal_generic_small_arms
+		x = 1
+		y = 3
+		cost = 8.58
+		relative_position_id = gs_political_1
+		ai_will_do = {
+			factor = 100
+		}
+		prerequisite = {focus = gs_political_con2}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_political_con3"
+			swap_ideas = {
+				remove_idea = GS_con_idea_1 add_idea = GS_con_idea_2
+			}
+		}
+	}
+	
+	focus = {
+		id = gs_political_sur1
+		icon = GFX_goal_generic_small_arms
+		x = 3
+		y = 1
+		cost = 8.58
+		relative_position_id = gs_political_1
+		ai_will_do = {
+			factor = 100
+		}
+		mutually_exclusive = {focus = gs_political_vis1 focus = gs_political_con1 focus = gs_political_des1}
+		prerequisite = {focus = gs_political_1}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_political_sur1"
+			set_politics = { ruling_party = survivalism elections_allowed = no }
+			add_ideas = GS_sur_idea_1
+		}
+	}
+	
+	focus = {
+		id = gs_political_sur2
+		icon = GFX_goal_generic_small_arms
+		x = 3
+		y = 2
+		cost = 8.58
+		relative_position_id = gs_political_1
+		ai_will_do = {
+			factor = 100
+		}
+		prerequisite = {focus = gs_political_sur1}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_political_sur2"
+			one_random_arms_factory = yes
+			one_random_industrial_complex = yes
+			add_political_power = -100
+		}
+	}
+	
+	focus = {
+		id = gs_political_sur3
+		icon = GFX_goal_generic_small_arms
+		x = 3
+		y = 3
+		cost = 8.58
+		relative_position_id = gs_political_1
+		ai_will_do = {
+			factor = 100
+		}
+		prerequisite = {focus = gs_political_sur2}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus gs_political_sur3"
+			swap_ideas = {
+				remove_idea = GS_sur_idea_1 add_idea = GS_sur_idea_2
+			}
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+### MIlitary Foci ###
+
 	focus = {
 		id = gs_wasteland_guard_training
 		icon = GFX_goal_generic_small_arms
 
 		
-		x =  30
-		y = 1
+		x =  27
+		y = 4
 		
-		cost = 5
+		cost = 8.58
 		ai_will_do = {
 			factor = 100
 		}
+		prerequisite = {focus = gs_opening3}
 		
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus gs_wasteland_guard_training"
@@ -743,7 +1084,7 @@ focus_tree = {
 		y = 2
 		relative_position_id = gs_wasteland_guard_training
 		
-		cost = 5
+		cost = 8.58
 		ai_will_do = {
 			factor = 100
 		}
@@ -770,7 +1111,7 @@ focus_tree = {
 		y = 1
 		relative_position_id = gs_guard_patrol_routines
 		
-		cost = 5
+		cost = 8.58
 		ai_will_do = {
 			factor = 100
 		}
@@ -800,7 +1141,7 @@ focus_tree = {
 		y = 1
 		relative_position_id = gs_guard_patrol_routines
 		
-		cost = 5
+		cost = 8.58
 		ai_will_do = {
 			factor = 100
 		}
@@ -827,7 +1168,7 @@ focus_tree = {
 		y = 1
 		relative_position_id = gs_balanced_tactics
 		
-		cost = 10
+		cost = 8.58
 
 		ai_will_do = { 
 			factor = 100
@@ -854,7 +1195,7 @@ focus_tree = {
 		y = 2
 		relative_position_id = gs_infantry_focus
 		
-		cost = 10
+		cost = 8.58
 
 		ai_will_do = { 
 			factor = 100
@@ -881,7 +1222,7 @@ focus_tree = {
 		y = 1
 		relative_position_id = gs_infantry_focus
 		
-		cost = 10
+		cost = 8.58
 
 		ai_will_do = { 
 			factor = 100
@@ -908,7 +1249,7 @@ focus_tree = {
 		y = 1
 		relative_position_id = gs_infantry_focus
 		
-		cost = 10
+		cost = 8.58
 
 		ai_will_do = { 
 			factor = 100
@@ -936,7 +1277,7 @@ focus_tree = {
 		y = 2
 		relative_position_id = gs_wasteland_guard_training
 		
-		cost = 5
+		cost = 8.58
 		ai_will_do = {
 			factor = 100
 		}
@@ -963,7 +1304,7 @@ focus_tree = {
 		y = 1
 		relative_position_id = gs_flying_techniques
 		
-		cost = 5
+		cost = 8.58
 		ai_will_do = {
 			factor = 100
 		}
@@ -993,7 +1334,7 @@ focus_tree = {
 		y = 1
 		relative_position_id = gs_flying_techniques
 		
-		cost = 5
+		cost = 8.58
 		ai_will_do = {
 			factor = 100
 		}
@@ -1018,7 +1359,7 @@ focus_tree = {
 		y = 2
 		relative_position_id = gs_flying_techniques
 		
-		cost = 10
+		cost = 8.58
 
 		ai_will_do = { 
 			factor = 100
@@ -1075,7 +1416,7 @@ focus_tree = {
 		y = 2
 		relative_position_id = gs_fighter_strategy
 		
-		cost = 5
+		cost = 8.58
 		ai_will_do = {
 			factor = 100
 		}
@@ -1103,7 +1444,7 @@ focus_tree = {
 		y = 2
 		relative_position_id = gs_strategic_destruction
 		
-		cost = 5
+		cost = 8.58
 		ai_will_do = {
 			factor = 100
 		}
@@ -1129,7 +1470,7 @@ focus_tree = {
 		y = 2
 		relative_position_id = gs_wasteland_guard_training
 		
-		cost = 5
+		cost = 8.58
 		ai_will_do = {
 			factor = 100
 		}
@@ -1160,7 +1501,7 @@ focus_tree = {
 		y = 1
 		relative_position_id = gs_river_crossing_experience
 		
-		cost = 5
+		cost = 8.58
 		ai_will_do = {
 			factor = 100
 		}
@@ -1195,7 +1536,7 @@ focus_tree = {
 		y = 1
 		relative_position_id = gs_river_crossing_experience
 		
-		cost = 5
+		cost = 8.58
 		ai_will_do = {
 			factor = 100
 		}
@@ -1230,7 +1571,7 @@ focus_tree = {
 		y = 1
 		relative_position_id = gs_river_crossing_experience
 		
-		cost = 5
+		cost = 8.58
 		ai_will_do = {
 			factor = 100
 		}
@@ -1260,7 +1601,7 @@ focus_tree = {
 		y = 1
 		relative_position_id = gs_reliable_ships
 		
-		cost = 5
+		cost = 8.58
 		ai_will_do = {
 			factor = 100
 		}
@@ -1290,7 +1631,7 @@ focus_tree = {
 		y = 1
 		relative_position_id = gs_reliable_ships
 		
-		cost = 5
+		cost = 8.58
 		ai_will_do = {
 			factor = 100
 		}
@@ -1318,7 +1659,7 @@ focus_tree = {
 		y = 1
 		relative_position_id = gs_better_navy_equipment
 		
-		cost = 5
+		cost = 8.58
 		ai_will_do = {
 			factor = 100
 		}
@@ -1346,7 +1687,7 @@ focus_tree = {
 		y = 1
 		relative_position_id = gs_better_navy_equipment
 		
-		cost = 5
+		cost = 8.58
 		ai_will_do = {
 			factor = 100
 		}
@@ -1361,7 +1702,7 @@ focus_tree = {
 		}
 	}
 	
-		focus = {
+	focus = {
 		id = gs_improved_command_techniques
 		icon = GFX_goal_generic_small_arms
 		
@@ -1374,7 +1715,7 @@ focus_tree = {
 		y = 1
 		relative_position_id = gs_better_navy_equipment
 		
-		cost = 5
+		cost = 8.58
 		ai_will_do = {
 			factor = 100
 		}
@@ -1390,10 +1731,7 @@ focus_tree = {
 	}
 	
 }
-	#random_owned_controlled_state = {
-			limit = { is_capital = yes }
-			
-	}
+	
 	
 	
 	
