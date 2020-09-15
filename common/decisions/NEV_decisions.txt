@@ -4,9 +4,8 @@ NEV_war_exhaustion_category = {
 		icon = GFX_decision_unknown
 		### Never "complete" success
 		activation  = {
-			#has_country_flag = NEV_deploy_points_unlock
-			#has_completed_focus = NEV_des_launch_cauterize
-			always = yes
+			has_country_flag = NEV_deploy_points_unlock
+			has_completed_focus = NEV_des_launch_cauterize
 		}
 		available = {
 			NOT = {
@@ -325,7 +324,7 @@ NEV_deployment_points = {
 			has_political_power > 4
 		}
 		cost = 5
-		days_re_enable = 20
+		days_re_enable = 25
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NEV_deploy_soldiers"
 			custom_effect_tooltip = NEV_loose_6_deploy
@@ -334,7 +333,7 @@ NEV_deployment_points = {
 				var = deploy_points
 				value = 9
 			}
-			add_manpower = 250
+			add_manpower = 200
 		}
 	}
 	
@@ -1264,43 +1263,7 @@ NEV_senate = {
 		}
 	}
 	
-	NEV_dev_surface_settlement = {
-		icon = generic_construction
-		cost = 50
-		ai_will_do = {
-			factor = 10
-			modifier = {
-				factor = 0
-				has_manpower > 5500
-			}
-			modifier = {
-				factor = 10
-				has_manpower < 2000
-			}
-		}
-		fire_only_once = no
-		is_good = yes
-		
-		visible = {
-			OR = {	
-					has_idea = NEV_senate_strong
-					has_idea = NEV_senate_dominant
-					has_idea = NEV_senate_council_merge
-			}
-		}
-		available = { any_owned_state = is_core_of = NEV state_population < 10000}}
-		modifier = {
-			civilian_factory_use = 4
-		}
-		days_remove = 50
-		remove_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision NEV_rename_headwaters"
-			random_owned_controlled_state = {
-				limit = { is_core_of = NEV state_population < 10000}
-				add_manpower = 800
-			}
-		}
-	}
+	
 	
 	NEV_dev_surface_industry = {
 		icon = generic_construction
@@ -1341,6 +1304,141 @@ NEV_senate = {
 				add_offsite_building = { type = industrial_complex level = 1 }
 		}
 	}
+
+
+
+
+}
+
+NEV_warplans = {
+
+	NEV_plan_red = {
+		icon = generic_construction
+		cost = 100
+		ai_will_do = {
+			factor = 100
+			
+		}
+		fire_only_once = yes
+		is_good = yes
+		
+		visible = {
+			has_war_with  = RED
+			OR = {
+				has_country_flag= NEV_des_RED_plan
+				has_country_flag = NEV_con_RED_plan
+			}
+		}
+		available = {
+			has_war_with  = RED
+			has_political_power > 99
+		}
+		modifier = {
+			IF = {
+			limit = { has_country_flag = NEV_des_RED_plan }
+			targeted_modifier = {
+				tag = RED
+				attack_bonus_against  = 0.15
+				defense_bonus_against = -0.15
+			}
+			}
+			else_if = {
+			limit = { has_country_flag = NEV_con_RED_plan }
+			targeted_modifier = {
+				tag = RED
+				attack_bonus_against  = -0.15
+				defense_bonus_against = 0.15
+			}
+			}
+		}
+		days_remove = 150
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEV_plan_red"
+			hidden_effect = {
+			clr_country_flag = NEV_des_RED_plan
+			clr_country_flag = NEV_con_RED_plan
+			}
+		}
+	}
+	
+	NEV_plan_sha = {
+		icon = generic_construction
+		cost = 100
+		ai_will_do = {
+			factor = 100
+			
+		}
+		fire_only_once = yes
+		is_good = yes
+		
+		visible = {
+			has_war_with  = SHA
+			has_country_flag = NEV_SHA_plan
+		}
+		available = {
+			has_war_with  = SHA
+			has_political_power > 99
+		}
+		modifier = {
+			
+			targeted_modifier = {
+				tag = SHA
+				attack_bonus_against  = 0.08
+				defense_bonus_against = 0.08
+				army_speed_factor = -0.15
+			}
+			
+		}
+		days_remove = 150
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEV_plan_sha"
+			hidden_effect = {
+			clr_country_flag = NEV_SHA_plan
+			}
+		}
+	}
+	
+	NEV_plan_uni = {
+		icon = generic_construction
+		cost = 100
+		ai_will_do = {
+			factor = 100
+			
+		}
+		fire_only_once = yes
+		is_good = yes
+		
+		visible = {
+			has_war_with  = UNI
+			has_country_flag = NEV_UNI_plan
+		}
+		available = {
+			has_war_with  = UNI
+			has_political_power > 99
+		}
+		modifier = {
+			
+			targeted_modifier = {
+				tag = UNI
+				defense_bonus_against = 0.20
+			}
+			
+		}
+		days_remove = 150
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEV_plan_uni"
+			hidden_effect = {
+			clr_country_flag = NEV_UNI_plan
+			}
+		}
+	}
+
+
+
+
+
+
+
 
 
 

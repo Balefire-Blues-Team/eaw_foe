@@ -3,24 +3,23 @@ MAS_ChangeArmyLaws = {
 		icon = generic_industry
 		available = {
 			tag = MAS
+			 NOT = { has_idea = MAS_magic_army_MagicalSupremacy_idea }
 		}
-		visible = {
-		    NOT = { has_idea = MAS_magic_army_MagicalSupremacy_idea }
-		}
+		
 		fire_only_once = no
 		days_re_enable = 90
 		cost = 100
 		complete_effect = {
             if = {
                 limit = {
-                    has_idea = MAS_magic_army_CapableMages_idea
+                    has_idea = MAS_magic_army_MagicalOfficers_idea
                 }
                 swap_ideas = {
-                     remove_idea = MAS_magic_army_CapableMages_idea
-                     add_idea = MAS_magic_army_MagicalSupremacy_idea
+                     remove_idea = MAS_magic_army_MagicalOfficers_idea
+                     add_idea = MAS_magic_army_BasicMagicalTraining_idea
                 }
             }
-            if = {
+            else_if = {
                 limit = {
                     has_idea = MAS_magic_army_BasicMagicalTraining_idea
                 }
@@ -29,15 +28,16 @@ MAS_ChangeArmyLaws = {
                     add_idea = MAS_magic_army_CapableMages_idea
                 }
             }
-            if = {
+            else_if = {
                 limit = {
-                    has_idea = MAS_magic_army_MagicalOfficers_idea
+                    has_idea = MAS_magic_army_CapableMages_idea
                 }
                 swap_ideas = {
-                    remove_idea = MAS_magic_army_MagicalOfficers_idea
-                    add_idea = MAS_magic_army_BasicMagicalTraining_idea
+                    remove_idea = MAS_magic_army_CapableMages_idea
+                    add_idea = MAS_magic_army_MagicalSupremacy_idea
                 }
             }
+			hidden_effect = {add_manpower = -10}
 		}
 		ai_will_do = {
 			factor = 0
@@ -47,9 +47,7 @@ MAS_ChangeArmyLaws = {
 		icon = generic_industry
 		available = {
 			tag = MAS
-		}
-		visible = {
-		    NOT = { has_idea = MAS_magic_army_MagicalOfficers_idea }
+			 NOT = { has_idea = MAS_magic_army_MagicalOfficers_idea }
 		}
 		fire_only_once = no
 		days_re_enable = 90
@@ -64,7 +62,7 @@ MAS_ChangeArmyLaws = {
                      add_idea = MAS_magic_army_CapableMages_idea
                 }
             }
-            if = {
+            else_if = {
                 limit = {
                     has_idea = MAS_magic_army_CapableMages_idea
                 }
@@ -73,7 +71,7 @@ MAS_ChangeArmyLaws = {
                     add_idea = MAS_magic_army_BasicMagicalTraining_idea
                 }
             }
-            if = {
+            else_if = {
                 limit = {
                     has_idea = MAS_magic_army_BasicMagicalTraining_idea
                 }
@@ -82,12 +80,166 @@ MAS_ChangeArmyLaws = {
                     add_idea = MAS_magic_army_MagicalOfficers_idea
                 }
             }
+			hidden_effect = {add_manpower = -10}
 		}
 		ai_will_do = {
 			factor = 0
 		}
     }
 }
-MAS_RaceToCanterlot = { #I want to die.
+MAS_power_struggle = {
+    MAS_PS_d1 = {
+		icon = generic_industry
+		available = {
+			tag = MAS
+		}
+		fire_only_once = yes
+		cost = 30
+		complete_effect = {
+			custom_effect_tooltip = MAS_raise_C_tt
+            add_stability = 0.05
+            add_war_support = -0.05
+            add_to_variable = {
+                var = MAS_C_Score
+                value = 1
+            }
+		}
+    }
+    MAS_PS_d2 = {
+		icon = generic_industry
+		available = {
+			tag = MAS
+		}
+		fire_only_once = yes
+		cost = 30
+		complete_effect = {
+			custom_effect_tooltip = MAS_raise_A_tt
+            add_stability = -0.05
+            add_war_support = 0.05
+            add_to_variable = {
+                var = MAS_A_Score
+                value = 1
+            }
+		}
+    }
+    MAS_PS_d4 = {
+		icon = generic_industry
+		available = {
+			tag = MAS
+		}
 
+		visible = {
+			NOT = { has_completed_focus =  MAS_P4PU6 }
+		}
+		fire_only_once = no
+		days_re_enable = 70
+		cost = 50
+		complete_effect = {
+			custom_effect_tooltip = MAS_raise_C_tt
+			custom_effect_tooltip = MAS_lower_A_tt
+            add_stability = 0.1
+            add_to_variable = {
+                var = MAS_C_Score
+                value = 1
+            }
+			add_to_variable = {
+				var = MAS_A_Score
+				value = -1
+			}
+		}
+    }
+    MAS_PS_d5 = {
+		icon = generic_industry
+		available = {
+			tag = MAS
+		}
+
+		visible = {
+			NOT = { has_completed_focus =  MAS_P4PU6 }
+		}
+		fire_only_once = no
+		days_re_enable = 70
+		cost = 50
+		complete_effect = {
+			custom_effect_tooltip = MAS_raise_A_tt
+            add_war_support = 0.1
+            add_to_variable = {
+                var = MAS_A_Score
+                value = 1
+            }
+		}
+    }
+}
+MAS_RaceToCanterlot = {
+    MAS_Clear_234 = {
+		icon = generic_industry
+		available = {
+			tag = MAS
+			owns_state = 234
+		}
+		fire_only_once = yes
+		days_remove = 100
+
+		cost = 200
+
+		remove_effect = {
+            set_country_flag = MAS_234_cleared
+			234 = {
+				add_core_of = MAS
+			}
+		}
+    }
+    MAS_Clear_415 = {
+		icon = generic_industry
+		available = {
+			tag = MAS
+			owns_state = 415
+		}
+		fire_only_once = yes
+
+		days_remove = 100
+		cost = 200
+
+		remove_effect = {
+            set_country_flag = MAS_415_cleared
+			415 = {
+				add_core_of = MAS
+			}
+		}
+    }
+    MAS_Clear_801 = {
+		icon = generic_industry
+		available = {
+			tag = MAS
+			owns_state = 801
+		}
+		fire_only_once = yes
+
+		days_remove = 100
+		cost = 200
+
+		remove_effect = {
+            set_country_flag = MAS_801_cleared
+			801 = {
+				add_core_of = MAS
+			}
+		}
+    }
+    MAS_Clear_180 = {
+		icon = generic_industry
+		available = {
+			tag = MAS
+			owns_state = 180
+		}
+		fire_only_once = yes
+		days_remove = 100
+		cost = 200
+
+		remove_effect = {
+            set_country_flag = MAS_180_cleared
+			180 = {
+				add_core_of = MAS
+			}
+		}
+    }
 }
