@@ -15,10 +15,7 @@ RED_fund_bloody_army = {
 		fire_only_once = yes
 		is_good = yes
 		visible = {
-			OR = {
-				has_completed_focus = RED_bloody_army
-				has_completed_focus = RED_bloody_army_stern
-			}
+			has_completed_focus = RED_bloody_army
 		}
 		modifier = {
 		}
@@ -52,10 +49,7 @@ RED_fund_bloody_army = {
 		fire_only_once = yes
 		is_good = yes
 		visible = {
-			OR = {
-				has_completed_focus = RED_bloody_army
-				has_completed_focus = RED_bloody_army_stern
-			}
+			has_completed_focus = RED_bloody_army
 		}
 		highlight_states = {
 			state = 69
@@ -94,10 +88,7 @@ RED_fund_bloody_army = {
 		fire_only_once = yes
 		is_good = yes
 		visible = {
-			OR = {
-				has_completed_focus = RED_bloody_army
-				has_completed_focus = RED_bloody_army_stern
-			}
+			has_completed_focus = RED_bloody_army
 		}
 		highlight_states = {
 			state = 69
@@ -465,6 +456,7 @@ RED_rebuilding_eqs = {
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision remove RED_hmi_crystal_mines"
 			
+			save_current_manpower = yes
 			410 = {
 				add_manpower = -500
 				add_resource = {
@@ -472,6 +464,7 @@ RED_rebuilding_eqs = {
     				amount = 10
 				}
 			}
+			restore_previous_manpower = yes
 
 		}
 	}
@@ -501,6 +494,7 @@ RED_rebuilding_eqs = {
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision remove RED_hmi_april_grove"
 			
+			save_current_manpower = yes
 			490 = {
 				add_manpower = -1000
 				add_resource = {
@@ -512,6 +506,7 @@ RED_rebuilding_eqs = {
     				amount = 12
 				}
 			}
+			restore_previous_manpower = yes
 
 			hidden_effect = {
 				country_event = {
@@ -694,6 +689,170 @@ RED_rebuilding_eqs = {
 
 RED_slaving = {
 
+	RED_new_city_effort = {
+		icon = generic_construction
+		available = {
+			has_government = destruction
+			custom_trigger_tooltip = {
+                tooltip = RED_2_cost_slave_tt
+                check_variable = {
+                    RED_slaves_var > 1
+                }
+            }
+		}
+		cost = 25
+
+		days_remove = 70
+		#is_good = yes
+		visible = {
+			has_completed_focus = RED_legacy_of_griffonstone
+			has_government = destruction
+			NOT = {
+				has_country_flag = {
+					flag = talon_city_flag
+					value > 4
+				}
+			}
+		}
+		modifier = {
+			civilian_factory_use = 1
+		}
+		cancel_trigger = {
+			NOT = {
+				has_government = destruction
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove RED_new_city_effort"
+			modify_country_flag = { flag = talon_city_flag value = 2 }
+			custom_effect_tooltip = RED_2_lose_slave_tt
+			subtract_from_variable = {
+				var = RED_slaves_var
+				value = 2
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				has_political_power > 160
+				factor = 10
+			}
+		}
+	}
+	RED_new_city_effort_stage_2 = {
+		icon = generic_construction
+		available = {
+			has_government = destruction
+			custom_trigger_tooltip = {
+                tooltip = RED_3_cost_slave_tt
+                check_variable = {
+                    RED_slaves_var > 2
+                }
+            }
+		}
+		cost = 25
+
+		days_remove = 90
+		#is_good = yes
+		visible = {
+			has_completed_focus = RED_legacy_of_griffonstone
+			has_government = destruction
+			has_country_flag = {
+				flag = talon_city_flag
+				value > 4
+			}
+			NOT = {
+				has_country_flag = {
+					flag = talon_city_flag
+					value > 8
+				}
+			}
+		}
+		modifier = {
+			civilian_factory_use = 2
+		}
+		cancel_trigger = {
+			NOT = {
+				has_government = destruction
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove RED_new_city_effort_stage_2"
+			modify_country_flag = { flag = talon_city_flag value = 2 }
+			custom_effect_tooltip = RED_3_lose_slave_tt
+			subtract_from_variable = {
+				var = RED_slaves_var
+				value = 3
+			}
+		}
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				has_political_power > 160
+				factor = 10
+			}
+		}
+	}
+	RED_new_city_finish = {
+		icon = STG_palace_construction_effort
+		available = {
+			has_government = destruction
+			custom_trigger_tooltip = {
+				tooltip = stern_palace_finish_trigger_tt
+				has_country_flag = {
+					flag = talon_city_flag
+					value > 8
+				}
+			}
+			hidden_trigger = {
+				has_country_flag = {
+					flag = talon_city_flag
+					value > 8
+				}
+			}
+			custom_trigger_tooltip = {
+                tooltip = RED_2_cost_slave_tt
+                check_variable = {
+                    RED_slaves_var > 1
+                }
+            }
+		}
+		cost = 50
+
+		days_remove = 70
+
+		fire_only_once = yes
+		visible = {
+			has_government = destruction
+		}
+		modifier = {
+			civilian_factory_use = 2
+		}
+		cancel_trigger = {
+			NOT = {
+				has_government = destruction
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove RED_new_city_finish"
+			set_country_flag = RED_city_complete
+			add_political_power = 200
+			set_province_name = { id = 5010 name = "Talonhold"}
+			set_capital = 410
+			410 = {
+				set_state_category = metropolis
+			}
+			custom_effect_tooltip = RED_2_lose_slave_tt
+			subtract_from_variable = {
+				var = RED_slaves_var
+				value = 2
+			}
+		}
+		ai_will_do = {
+			factor = 1
+		}
+	}
+
 	RED_slave_UNI_trade = {
 		icon = generic_magic
 		cost = 25
@@ -849,7 +1008,7 @@ RED_slaving = {
 		}
 
 		days_remove = 60
-		days_re_enable = 30
+		days_re_enable = 60
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_counter"
 
@@ -887,7 +1046,7 @@ RED_slaving = {
 		}
 
 		days_remove = 60
-		days_re_enable = 30
+		days_re_enable = 60
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_counter"
 
@@ -912,9 +1071,9 @@ RED_slaving = {
 		available = {
 			custom_trigger_tooltip = {
                 tooltip = RED_2_cost_slave_tt
-                    check_variable = {
-                        RED_slaves_var > 1
-                    }
+                check_variable = {
+                    RED_slaves_var > 1
+                }
             }
 		}
 
@@ -925,7 +1084,7 @@ RED_slaving = {
 		}
 
 		days_remove = 60
-		days_re_enable = 30
+		days_re_enable = 60
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_counter"
 
@@ -1100,6 +1259,7 @@ RED_slaving = {
 				NOT = { 
 					is_core_of = RED
 				 	is_core_of = SSC
+				 	is_core_of = FSR
 				}
 				state_population > 5000
 			}
@@ -1112,14 +1272,16 @@ RED_slaving = {
 		}
 
 		days_remove = 50
-		days_re_enable = 20
+		days_re_enable = 30
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_enslave_non_core"
 
+			save_current_manpower = yes
 			random_owned_controlled_state = {
 				limit = { NOT = {is_core_of = RED} state_population > 5000}
 				add_manpower = -2000
 			}
+			restore_previous_manpower = yes
 
 			custom_effect_tooltip = RED_2_gain_slave_tt
 			add_to_variable = {
@@ -1156,8 +1318,9 @@ RED_slaving = {
 		fire_only_once = yes
 		days_remove = 100
 		remove_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_enslave_non_core"
+			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_enslave_sunnyshore"
 
+			save_current_manpower = yes
 			558 = {
 				add_manpower = -2000
 				add_core_of = RED
@@ -1186,11 +1349,72 @@ RED_slaving = {
 				add_manpower = -2000
 				add_core_of = RED
 			}
+			restore_previous_manpower = yes
 
 			custom_effect_tooltip = RED_14_gain_slave_tt
 			add_to_variable = {
 				var = RED_slaves_var
 				value = 14
+			}
+		}
+
+		ai_will_do = {
+			factor = 150
+		}
+	}
+
+	RED_slave_enslave_rangers = {
+		icon = infiltrate_state
+		cost = 25
+
+		available = {
+			RED_controls_filly_rangers = yes
+		}
+
+		visible = {
+			RED_controls_filly_rangers = yes
+			FSR = { exists = no }
+			NOT = {
+				538 = {
+					is_core_of = RED
+				}
+			}
+			NOT = {
+				has_country_flag = RED_slavery_abolished
+			}
+			hidden_trigger = {
+			#	has_country_flag = RED_redeye_path_flag
+			}
+		}
+
+		fire_only_once = yes
+		days_remove = 100
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_enslave_rangers"
+
+			save_current_manpower = yes
+			538 = {
+				add_manpower = -4000
+				add_core_of = RED
+			}
+			542 = {
+				add_manpower = -2000
+				add_core_of = RED
+			}
+			536 = {
+				add_manpower = -2000
+				add_core_of = RED
+			}
+			545 = {
+				add_manpower = -2000
+				add_core_of = RED
+			}
+			restore_previous_manpower = yes
+
+			custom_effect_tooltip = RED_10_gain_slave_tt
+			add_to_variable = {
+				var = RED_slaves_var
+				value = 10
 			}
 		}
 
@@ -1387,6 +1611,295 @@ RED_crisis_cat = {
 			custom_effect_tooltip = RED_cathedral_independence_tt
 			hidden_effect = {
 				country_event = redeye.110
+			}
+		}
+	}
+}
+
+RED_griff_nobility_cat = {
+
+	RED_griff_duchess_of_mareway = {
+		icon = GFX_decision_griffon
+		cost = 50
+		ai_will_do = {
+			base = 10
+		}
+		available = {
+			MWY = { exists = no }
+			ERA = { exists = no }
+			RED_controls_mwy_era = yes
+		}
+		is_good = yes
+		visible = {
+			has_completed_focus = RED_restore_griffon_nobility
+		}
+		fire_only_once = yes
+		days_remove = 7
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove RED_griff_duchess_of_mareway"
+			MWY = {
+				set_cosmetic_tag = MWY_empire_puppet
+				transfer_state = 804
+				transfer_state = 549
+				transfer_state = 553
+				transfer_state = 789
+				transfer_state = 581
+				transfer_state = 187
+				transfer_state = 69
+				transfer_state = 805
+				set_politics = {
+					ruling_party = destruction
+				}
+				add_popularity = {
+  					ideology = destruction
+    				popularity = 0.5
+				}
+			}
+			if = {
+				limit = {
+					has_dlc = "Together for Victory"
+				}
+				set_autonomy = {
+					target = MWY
+					autonomous_state = autonomy_vassal
+				}
+			}
+			else = {
+				puppet = MWY
+			}
+		}
+	}
+
+	RED_griff_grand_duke_of_manehattan = {
+		icon = GFX_decision_griffon
+		cost = 50
+		ai_will_do = {
+			base = 10
+		}
+		available = {
+			FRI = { exists = no }
+			GUT = { exists = no }
+			TEN = { exists = no }
+			MAR = { exists = no }
+			MRA = { exists = no }
+			MSR = { exists = no }
+			ARB = { exists = no }
+			ABT = { exists = no }
+			RED_controls_manehattan = yes
+		}
+		is_good = yes
+		visible = {
+			has_completed_focus = RED_restore_griffon_nobility
+		}
+		fire_only_once = yes
+		days_remove = 7
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove RED_griff_grand_duke_of_manehattan"
+			MAR = {
+				set_cosmetic_tag = MAR_empire_puppet
+				transfer_state = 478
+				transfer_state = 21
+				transfer_state = 15
+				transfer_state = 18
+				transfer_state = 19
+				transfer_state = 469
+				transfer_state = 53
+				transfer_state = 54
+				transfer_state = 55
+				transfer_state = 39
+				transfer_state = 680
+				transfer_state = 646
+				transfer_state = 642
+				transfer_state = 57
+				transfer_state = 47
+				transfer_state = 601
+
+				hidden_effect = {
+					add_state_core = 478
+					add_state_core = 21
+					add_state_core = 15
+					add_state_core = 18
+					add_state_core = 19
+					add_state_core = 469
+					add_state_core = 53
+					add_state_core = 54
+					add_state_core = 55
+					add_state_core = 39
+					add_state_core = 680
+					add_state_core = 646
+					add_state_core = 642
+					add_state_core = 57
+					add_state_core = 47
+					add_state_core = 601
+				}
+
+				set_politics = {
+					ruling_party = destruction
+				}
+				add_popularity = {
+  					ideology = destruction
+    				popularity = 0.5
+				}
+				set_capital = 39
+			}
+			if = {
+				limit = {
+					has_dlc = "Together for Victory"
+				}
+				set_autonomy = {
+					target = MAR
+					autonomous_state = autonomy_vassal
+				}
+			}
+			else = {
+				puppet = MAR
+			}
+		}
+	}
+
+	RED_griff_count_of_summerfield = {
+		icon = GFX_decision_griffon
+		cost = 50
+		ai_will_do = {
+			base = 10
+		}
+		available = {
+			RAR = { exists = no }
+			RED_controls_rain_riders = yes
+		}
+		is_good = yes
+		visible = {
+			has_completed_focus = RED_restore_griffon_nobility
+		}
+		fire_only_once = yes
+		days_remove = 7
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove RED_griff_count_of_summerfield"
+			RAR = {
+				set_cosmetic_tag = RAR_empire_puppet
+				transfer_state = 471
+				transfer_state = 58
+				transfer_state = 449
+				transfer_state = 87
+				transfer_state = 49
+
+				hidden_effect = {
+					add_state_claim = 461
+					add_state_claim = 442
+					add_state_claim = 815
+					add_state_claim = 423
+					add_state_claim = 44
+					add_state_claim = 436
+					add_state_claim = 51
+					add_state_claim = 66
+					add_state_claim = 598
+				}
+
+				set_politics = {
+					ruling_party = destruction
+				}
+				add_popularity = {
+  					ideology = destruction
+    				popularity = 0.5
+				}
+			}
+			if = {
+				limit = {
+					has_dlc = "Together for Victory"
+				}
+				set_autonomy = {
+					target = RAR
+					autonomous_state = autonomy_vassal
+				}
+			}
+			else = {
+				puppet = RAR
+			}
+		}
+	}
+
+	RED_griff_duchess_of_sunrise = {
+		icon = GFX_decision_griffon
+		cost = 50
+		ai_will_do = {
+			base = 10
+		}
+		available = {
+			GUN = { exists = no }
+			RWK = { exists = no }
+			LGH = { exists = no }
+			APR = { exists = no }
+			FRT = { exists = no }
+			RED_controls_gun_rwk = yes
+
+		}
+		is_good = yes
+		visible = {
+			has_completed_focus = RED_restore_griffon_nobility
+		}
+		fire_only_once = yes
+		days_remove = 7
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove RED_griff_duchess_of_sunrise"
+			LGH = {
+				set_cosmetic_tag = LGH_empire_puppet
+				transfer_state = 515
+				transfer_state = 653
+				transfer_state = 503
+				transfer_state = 648
+				transfer_state = 493
+				transfer_state = 812
+				transfer_state = 652
+				transfer_state = 490
+				transfer_state = 647
+				transfer_state = 791
+				transfer_state = 470
+				transfer_state = 235
+				transfer_state = 508
+				transfer_state = 203
+				transfer_state = 524
+				transfer_state = 164
+				transfer_state = 534
+
+				hidden_effect = {
+					add_state_core = 515
+					add_state_core = 653
+					add_state_core = 503
+					add_state_core = 648
+					add_state_core = 493
+					add_state_core = 812
+					add_state_core = 652
+					add_state_core = 490
+					add_state_core = 647
+					add_state_core = 791
+					add_state_core = 470
+					add_state_core = 235
+					add_state_core = 508
+					add_state_core = 203
+					add_state_core = 524
+					add_state_core = 164
+					add_state_core = 534
+				}
+
+				set_politics = {
+					ruling_party = destruction
+				}
+				add_popularity = {
+  					ideology = destruction
+    				popularity = 0.5
+				}
+			}
+			if = {
+				limit = {
+					has_dlc = "Together for Victory"
+				}
+				set_autonomy = {
+					target = LGH
+					autonomous_state = autonomy_vassal
+				}
+			}
+			else = {
+				puppet = LGH
 			}
 		}
 	}
