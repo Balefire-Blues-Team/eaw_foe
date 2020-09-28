@@ -610,7 +610,7 @@ shared_focus = { #Now it's my turn.
         factor = 1
     }
     completion_reward = {
-		#country_event = { id = masevent.203 }
+		country_event = { id = masevent.160 }
 		hidden_effect = {
 			set_country_flag = MAS_bravepaperunlocked
 			set_country_flag = MAS_metallwallunlocked
@@ -631,7 +631,7 @@ shared_focus = { #Deal with Horny.
     x = -2
     y = 2
     relative_position_id = MAS_P2F9
-    cost = 1
+    cost = 3
     ai_will_do = {
         factor = 1
     }
@@ -649,7 +649,7 @@ shared_focus = { #Committee seizes control.
     x = 0
     y = 2
     relative_position_id = MAS_P2F9
-    cost = 1
+    cost = 3
     ai_will_do = {
         factor = 1
     }
@@ -668,16 +668,35 @@ shared_focus = { #Everypony is in place.
     x = 2
     y = 2
     relative_position_id = MAS_P2F9
-    cost = 1
+    cost = 3
     ai_will_do = {
         factor = 1
     }
     completion_reward = {
 		add_stability = 0.4
-		swap_ideas = {
-			remove_idea = MAS_IncapableAsServants_idea
-			add_idea = MAS_IncapableAsServantsMystery_idea
-		}
+        remove_unit_leader = 80
+
+        if = {
+            limit = {
+                has_country_flag = MAS_Cursed_Soul_retired_flag
+            }
+            create_field_marshal = {
+                name = "Cursed Soul"
+                picture = "CursedSoul.tga"
+                traits = { MAS_comitee_leader_trait }
+                id = 81
+                skill = 2
+                attack_skill = 2
+                defense_skill = 2
+                planning_skill = 3
+                logistics_skill = 2
+            }
+        }
+
+        hidden_effect = {
+            clr_country_flag = MAS_Iron_replacement_retired_flag
+            set_country_flag = MAS_Tough_Iron_retired_flag
+        }
 	}
 }
 shared_focus = { #Protect the Knowledge.
@@ -695,7 +714,7 @@ shared_focus = { #Protect the Knowledge.
     x = 0
     y = 3
     relative_position_id = MAS_P2F9
-    cost = 1
+    cost = 7
     ai_will_do = {
         factor = 1
     }
@@ -859,6 +878,10 @@ shared_focus = {
 	}
 	completion_reward = {
 		add_manpower = 300
+        swap_ideas = {
+            remove_idea = MAS_IncapableAsServants_idea
+            add_idea = MAS_IncapableAsServantsMystery_idea
+        }
 	}
 }
 shared_focus = {
@@ -1009,10 +1032,21 @@ shared_focus = {
 		factor = 10
 	}
 	completion_reward = {
-		swap_ideas = {
-			remove_idea = MAS_CounterEspionage_idea
-			add_idea = MAS_CounterEspionage1_idea
-		}
+		if = { 
+            limit = { 
+                has_idea = MAS_CounterEspionage_idea 
+            }
+                swap_ideas = {
+		  	       remove_idea = MAS_CounterEspionage_idea
+		  	       add_idea = MAS_magic_army_MagicalSupremacyMystery_idea
+                }   
+        }
+        else = {
+            swap_ideas = {
+                   remove_idea = MAS_magic_army_CapableMages_idea
+                   add_idea = MAS_magic_army_MagicalSupremacyMystery_idea
+                }
+        }
 	}
 }
 shared_focus = {
