@@ -13,6 +13,7 @@ LIT_settlement_category = {
 			has_full_control_of_state = 565
 			565 = {state_population < 4000}
 		}
+		available = {has_political_power > 24}
 		days_remove = 100
 		days_re_enable = 200
 		remove_effect = {
@@ -37,6 +38,7 @@ LIT_settlement_category = {
 			has_full_control_of_state = 32
 			32 = {state_population < 4000}
 		}
+		available = {has_political_power > 24}
 		days_remove = 100
 		days_re_enable = 200
 		remove_effect = {
@@ -61,6 +63,7 @@ LIT_settlement_category = {
 			has_full_control_of_state = 811
 			811 = {state_population < 4000}
 		}
+		available = {has_political_power > 24}
 		days_remove = 100
 		days_re_enable = 200
 		remove_effect = {
@@ -74,4 +77,270 @@ LIT_settlement_category = {
 	
 	
 
+}
+
+LIT_weather_factory_category = {
+
+	LIT_water_fields = {
+		icon = generic_construction
+		cost = 20
+		ai_will_do = {
+			factor = 50
+			modifier = {
+				factor = 0
+				has_political_power < 155
+			}
+		}
+		fire_only_once = no
+		is_good = yes
+		
+		visible = {
+			has_full_control_of_state = 550
+		}
+		available = {has_political_power > 19}
+		days_remove = 200
+		days_re_enable = 100
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision LIT_water_fields"
+			add_ideas = LIT_watered_fields_idea
+			550 = {
+				add_resource = {
+					type = water
+					amount = -6
+				}
+			}
+		}
+		remove_effect = {
+			remove_ideas = LIT_watered_fields_idea
+			550 = {
+				add_resource = {
+					type = water
+					amount = 6
+				}
+			}
+		}
+	}
+	
+	LIT_water_production_increase = {
+		icon = generic_construction
+		cost = 25
+		ai_will_do = {
+			factor = 90
+		}
+		fire_only_once = no
+		is_good = yes
+		
+		visible = {
+			has_full_control_of_state = 550
+		}
+		available = {has_political_power > 24 num_of_civilian_factories_available_for_projects > 1}
+		days_remove = 100
+		days_re_enable = 100
+		modifier = {
+			civilian_factory_use = 2
+			local_resources_factor = -0.1
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision LIT_water_production_increase"
+			random_list = {
+				
+					20 = {
+						custom_effect_tooltip = Lit_water_production_increase_tt_1
+						550 = {add_resource = {type = water amount = 2}}
+					}
+					20 = {
+						custom_effect_tooltip = Lit_water_production_increase_tt_2
+						550 = {add_resource = {type = water amount = 4}}
+					}
+					20 = {
+						custom_effect_tooltip = Lit_water_production_increase_tt_3
+						550 = {add_resource = {type = water amount = 6}}
+					}
+					20 = {
+						custom_effect_tooltip = Lit_water_production_increase_tt_4
+						550 = {add_resource = {type = water amount = 8}}
+					}
+					20 = {
+						custom_effect_tooltip = Lit_water_production_increase_tt_5
+						550 = {add_resource = {type = water amount = 10}}
+					}
+				}
+		}
+	}
+	
+	LIT_make_weather_mild = {
+		icon = generic_construction
+		cost = 25
+		ai_will_do = {
+			factor = 10
+			modifier = {
+				factor = 0
+				has_war = no
+			}
+		}
+		fire_only_once = no
+		is_good = yes
+		
+		visible = {
+			has_full_control_of_state = 550
+		}
+		available = {has_political_power > 24}
+		days_remove = 150
+		days_re_enable = 150
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision LIT_make_weather_mild"
+			add_ideas = LIT_mild_weathers_idea
+			550 = {
+				add_resource = {
+					type = water
+					amount = -4
+				}
+			}
+		}
+		remove_effect = {
+			remove_ideas = LIT_mild_weathers_idea
+			550 = {
+				add_resource = {
+					type = water
+					amount = 4
+				}
+			}
+		}
+	}
+	
+	LIT_improve_air_superiority = {
+		icon = generic_construction
+		cost = 50
+		ai_will_do = {
+			factor = 20
+			modifier = {
+				factor = 0
+				has_war = no
+			}
+		}
+		fire_only_once = no
+		is_good = yes
+		
+		visible = {
+			has_full_control_of_state = 550
+		}
+		available = {
+			has_political_power > 49
+			has_country_flag = LIT_skies_are_free_flag
+		}
+		days_remove = 150
+		days_re_enable = 150
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision LIT_improve_air_superiority"
+			add_ideas = LIT_superiority_weathers_idea
+			550 = {
+				add_resource = {
+					type = water
+					amount = -8
+				}
+			}
+		}
+		remove_effect = {
+			remove_ideas = LIT_superiority_weathers_idea
+			550 = {
+				add_resource = {
+					type = water
+					amount = 8
+				}
+			}
+		}
+	}
+	
+	LIT_summon_mud = {
+		icon = generic_construction
+		cost = 80
+		ai_will_do = {
+			factor = 20
+		}
+		fire_only_once = no
+		is_good = yes
+		
+		visible = {
+			has_full_control_of_state = 550
+		}
+		available = {
+			has_political_power > 79
+			has_country_flag = LIT_skies_are_free_flag
+			has_war = yes
+		}
+		days_remove = 150
+		days_re_enable = 150
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision LIT_summon_mud"
+			custom_effect_tooltip = Lit_muddy_roads_tt_1
+			every_country = {
+				limit = { has_war_with = LIT}
+				add_timed_idea = {idea = LIT_mud_roads_idea days = 150}
+			}
+		}
+		
+	}
+	
+	
+}
+
+
+
+LIT_FTA_borderwar_category = {
+
+	LIT_FTA_borderwar = {
+		icon = border_war
+		cost = 50
+		
+		ai_will_do = {
+			factor = 1000
+		}
+		fire_only_once = no
+		is_good = yes
+		
+		available = {
+			has_war = no
+			has_full_control_of_state = 34
+
+		}
+		
+		visible = {
+			NOT = {
+				owns_state = 802
+			}
+			owns_state = 34
+		}
+
+		days_re_enable = 100
+
+
+		highlight_states = {
+			state = 802
+		}
+		target_array = neighbors
+		target_trigger = {
+			FROM = {
+				owns_state = 802
+			}
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision LIT_FTA_borderwar target: [From.GetName]"
+			start_border_war = {
+				change_state_after_war = no
+				attacker = {
+					state = 34
+					num_provinces = 5
+					on_win = LIT_borderwar_event.1
+					on_lose = LIT_borderwar_event.2
+					on_cancel = LIT_borderwar_event.3
+				}
+
+				defender = {
+					state = 802
+					num_provinces = 5
+				}
+			}
+		}
+	}
 }

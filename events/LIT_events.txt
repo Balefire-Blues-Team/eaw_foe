@@ -1,6 +1,7 @@
 ###By Kingsmen
 
 add_namespace = LIT_event
+add_namespace = LIT_borderwar_event
 
 ################
 ####Defaults####
@@ -42,14 +43,13 @@ country_event = {
 	}
 	option = {
 		name = LIT_event.1.c
-		custom_effect_tooltip = MSR_Never_Started_tt
 		ai_chance = { factor = 30
 			modifier = {
 				factor = 0
 				is_historical_focus_on = yes
 			}
-			550 = { add_extra_state_shared_building_slots = 2 add_building_construction = {type = industrial_complex level = 1 instant_build = yes}}
 		}
+		550 = { add_extra_state_shared_building_slots = 2 add_building_construction = {type = industrial_complex level = 1 instant_build = yes}}
 		
 	}
 }
@@ -194,6 +194,85 @@ country_event = {
 
 
 
+
+
+
+
+
+##For if the Ministry puppets you
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_event.5"}
+ 	id = LIT_event.5
+ 	title = LIT_event.5.t
+ 	desc = LIT_event.5.d
+	picture = GFX_event_test
+
+	trigger = {
+		NOT = {
+			has_country_leader = {
+			name = "Sky Breaker"
+			ruling_only = yes
+			}
+			has_completed_focus = LIT_approach_mas
+		}
+		is_subject_of = MAS
+		original_tag = LIT
+		
+	}
+ 	fire_only_once = yes
+
+	option = {
+		name = LIT_event.5.a
+		ai_chance = { factor = 20}
+		set_politics = { ruling_party = continuation elections_allowed = no }
+		add_popularity = { ideology = continuation popularity = 0.20 }
+	}
+	
+	
+}
+
+##For if you beat the ministry
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_event.6"}
+ 	id = LIT_event.6
+ 	title = LIT_event.6.t
+ 	desc = LIT_event.6.d
+	picture = GFX_event_test
+
+	trigger = {
+		NOT = {
+			country_exists = MAS
+		}
+		original_tag = LIT
+		owns_state = 527
+		
+	}
+ 	fire_only_once = yes
+
+	option = {
+		name = LIT_event.6.a
+		ai_chance = { factor = 20}
+		add_state_core = 527
+		add_tech_bonus = {
+			name = robotics_tech
+			bonus = 0.8
+			uses = 1
+			category = robotics_tech
+			}
+			add_tech_bonus = {
+			name = energy_weapon_bonus
+			bonus = 0.8
+			uses = 1
+			category = energy_weapon_tech
+			}
+	}
+	
+	
+}
+
+
+
+
 ##The Magnificient Find
 country_event = {
 	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_event.11"}
@@ -233,5 +312,73 @@ country_event = {
 				category = light_air
 			}
 	}
+}
+
+
+
+
+
+
+
+
+
+
+##Borderwar Victory
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_borderwar_event.1"}
+ 	id = LIT_borderwar_event.1
+ 	title = LIT_borderwar_event.1.t
+ 	desc = LIT_borderwar_event.1.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = LIT_borderwar_event.1.a
+		ai_chance = { factor = 30}
+		add_war_support = 0.05
+		add_political_power = 50
+		transfer_state = 802
+	}
+	
+}
+
+##Borderwar Loss
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_borderwar_event.2"}
+ 	id = LIT_borderwar_event.2
+ 	title = LIT_borderwar_event.2.t
+ 	desc = LIT_borderwar_event.2.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = LIT_borderwar_event.2.a
+		ai_chance = { factor = 30}
+		add_political_power = -50
+	}
+	
+}
+
+##Borderwar Draw
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_borderwar_event.3"}
+ 	id = LIT_borderwar_event.3
+ 	title = LIT_borderwar_event.3.t
+ 	desc = LIT_borderwar_event.3.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = LIT_borderwar_event.3.a
+		ai_chance = { factor = 30}
+		add_political_power = -25
+	}
+	
 }
 
