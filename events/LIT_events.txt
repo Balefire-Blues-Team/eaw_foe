@@ -226,6 +226,7 @@ country_event = {
 		ai_chance = { factor = 20}
 		set_politics = { ruling_party = continuation elections_allowed = no }
 		add_popularity = { ideology = continuation popularity = 0.20 }
+		hidden_effect = {set_cosmetic_tag = LIT_MAS_colours}
 	}
 	
 	
@@ -270,6 +271,115 @@ country_event = {
 	
 }
 
+##Ask to be MAS-Cuck
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_event.7"}
+ 	id = LIT_event.7
+ 	title = LIT_event.7.t
+ 	desc = LIT_event.7.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#yes
+	option = {
+		name = LIT_event.7.a
+		ai_chance = { factor = 90}
+		set_autonomy = {
+			target = LIT
+			autonomy_state = autonomy_dominion
+		}
+		LIT = {
+			country_event = LIT_event.8
+		}
+	}
+	#no, killmenow
+	option = {
+		name = LIT_event.7.b
+		ai_chance = { factor = 0}
+		LIT = {
+			country_event = LIT_event.9
+		}
+	}
+	
+	
+}
+
+##Ministry has accepted us
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_event.8"}
+ 	id = LIT_event.8
+ 	title = LIT_event.8.t
+ 	desc = LIT_event.8.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#yes
+	option = {
+		name = LIT_event.8.a
+		ai_chance = { factor = 90}
+		set_technology = {
+			MAS_driver_mag_rifle_tech = 1
+		}
+		add_ideas = LIT_MAS_worse_rifles
+		add_stability = -0.15
+		MAS = {
+			transfer_state = 33
+			transfer_state = 34
+		}
+		hidden_effect = {
+		set_politics = { ruling_party = continuation elections_allowed = no }
+		set_cosmetic_tag = LIT_MAS_colours
+		}
+	}
+	
+}
+
+##Ministry has rejected us
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_event.9"}
+ 	id = LIT_event.9
+ 	title = LIT_event.9.t
+ 	desc = LIT_event.9.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#yes
+	option = {
+		name = LIT_event.9.a
+		ai_chance = { factor = 90}
+		set_politics = { ruling_party = survivalism elections_allowed = no }
+		add_popularity = { ideology = survivalism popularity = 0.20 }
+		
+	}
+	
+}
+
+##Lightning Scavengers send us able servants
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_event.10"}
+ 	id = LIT_event.10
+ 	title = LIT_event.10.t
+ 	desc = LIT_event.10.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#yes
+	option = {
+		name = LIT_event.10.a
+		ai_chance = { factor = 90}
+		527 = {add_manpower = 600}
+		
+	}
+	
+}
 
 
 
@@ -312,6 +422,248 @@ country_event = {
 				category = light_air
 			}
 	}
+}
+
+##LIT wants to invade NAP
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_event.12"}
+ 	id = LIT_event.12
+ 	title = LIT_event.12.t
+ 	desc = LIT_event.12.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#yes
+	option = {
+		name = LIT_event.12.a
+		ai_chance = { factor = 70}
+		LIT = {
+			country_event = LIT_event.13
+		}
+	}
+	#no
+	option = {
+		name = LIT_event.12.b
+		ai_chance = { factor = 30}
+		LIT = {
+			country_event = LIT_event.14
+		}
+		custom_effect_tooltip = LIT_very_displeased_tt
+		hidden_effect = {set_country_flag = MAS_LIT_hates_us_flag}
+	}
+	
+	
+}
+
+##MAS Agreed to the Invasion
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_event.13"}
+ 	id = LIT_event.13
+ 	title = LIT_event.13.t
+ 	desc = LIT_event.13.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#yes
+	option = {
+		name = LIT_event.13.a
+		ai_chance = { factor = 90}
+		declare_war_on = {
+			target = NAP
+			type = annex_everything
+		}
+		
+	}
+	
+}
+
+##MAS denied our invasion
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_event.14"}
+ 	id = LIT_event.14
+ 	title = LIT_event.14.t
+ 	desc = LIT_event.14.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#yes
+	option = {
+		name = LIT_event.14.a
+		ai_chance = { factor = 90}
+		
+		
+	}
+	
+}
+
+##LIT wants NAP land
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_event.15"}
+ 	id = LIT_event.15
+ 	title = LIT_event.15.t
+ 	desc = LIT_event.15.d
+	picture = GFX_event_test
+
+	trigger = {
+		original_tag = MAS
+		LIT = {is_subject_of = MAS}
+		OR = {
+		owns_state = 298
+		owns_state = 563
+		owns_state = 241
+		NAP = {is_subject_of = MAS}
+		}
+	}
+ 	fire_only_once = no
+
+	#yes
+	option = {
+		name = LIT_event.15.a
+		ai_chance = { factor = 90}
+		IF = {
+			limit = {owns_state = 298}
+			LIT = {transfer_state = 298}
+		}
+		IF = {
+			limit = {owns_state = 563}
+			LIT = {transfer_state = 563}
+		}
+		IF = {
+			limit = {owns_state = 241}
+			LIT = {transfer_state = 241}
+		}
+		IF = {
+			limit = {NAP = {is_subject_of = MAS}}
+			LIT = {
+				annex_country = {
+				target = NAP
+				transfer_troops = yes
+				}
+			}
+		}
+		
+	}
+	
+	#no
+	option = {
+		name = LIT_event.15.b
+		ai_chance = { factor = 90}
+		custom_effect_tooltip = LIT_very_displeased_tt
+		
+	}
+	
+}
+
+##LIT has properly joined the MAS
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_event.16"}
+ 	id = LIT_event.16
+ 	title = LIT_event.16.t
+ 	desc = LIT_event.16.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#yes
+	option = {
+		name = LIT_event.16.a
+		ai_chance = { factor = 90}
+		add_stability = -0.15
+		
+	}
+	
+}
+
+##LIT demands their Old Lands
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_event.17"}
+ 	id = LIT_event.17
+ 	title = LIT_event.17.t
+ 	desc = LIT_event.17.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#yes
+	option = {
+		name = LIT_event.17.a
+		ai_chance = { factor = 90}
+		add_stability = -0.08
+		IF = {
+			limit = {owns_state = 33}
+			LIT = {transfer_state = 33}
+		}
+		IF = {
+			limit = {owns_state = 34}
+			LIT = {transfer_state = 34}
+		}
+		IF = {
+			limit = {owns_state = 802}
+			LIT = {transfer_state = 802}
+		}
+		set_autonomy = {
+				target = LIT
+				autonomy_state = autonomy_free
+			}
+		hidden_effect = {
+			IF = {
+				limit = {LIT = {NOT = {is_in_faction_with = MAS}}}
+				MAS = { 
+					create_faction = MAS_LIT_faction
+					add_to_faction = LIT 
+				}
+			}
+			}
+		hidden_effect = { LIT = { add_ai_strategy = { type = alliance id = "MAS" value = 200} add_opinion_modifier = { target = MAS modifier = huge_increase } } }
+		hidden_effect = { MAS = { add_ai_strategy = { type = alliance id = "LIT" value = 200} add_opinion_modifier = { target = LIT modifier = huge_increase } } }
+	}
+	
+	#no
+	option = {
+		name = LIT_event.17.b
+		ai_chance = { factor = 90}
+		set_autonomy = {
+				target = LIT
+				autonomy_state = autonomy_free
+			}
+		LIT = {
+			declare_war_on = {
+				target = MAS
+				type = annex_everything
+			}
+		}
+		
+	}
+	
+}
+
+##LIT wants to join NCR
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_event.16"}
+ 	id = LIT_event.16
+ 	title = LIT_event.16.t
+ 	desc = LIT_event.16.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#yes
+	option = {
+		name = LIT_event.16.a
+		ai_chance = { factor = 90}
+		add_stability = -0.15
+		
+	}
+	
 }
 
 
