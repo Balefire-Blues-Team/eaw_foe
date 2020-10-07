@@ -11,9 +11,33 @@ scripted_gui = {
             close_button_click = {
                 clear_variable = show_megaspell_menu
             }
+            healing_spell_button_click = {
+                custom_effect_tooltip = megaspell_use_1_heal_tt
+                add_timed_idea = {
+                    idea = healing_megaspell_idea
+                    days = 7
+                }
+                subtract_from_variable = {
+                    var = healing_spell_amount
+                    value = 1
+                }
+            }
         }
     
         triggers = {
+            healing_spell_button_visible = {
+                NOT = {
+                    has_dlc = "Waking the Tiger"
+                }
+            }
+            healing_spell_use_visible = {
+                NOT = {
+                    has_dlc = "Waking the Tiger"
+                }
+            }
+            healing_spell_button_click_enabled = {
+                check_variable = { healing_spell_amount > 0 }
+            }
         }
     
         dynamic_lists = {
@@ -36,35 +60,6 @@ scripted_gui = {
         }
     
         ai_weights = {
-        }
-    }
-
-    balefire_bomb_gui = {
-        context_type = selected_state_context
-        parent_window_token = selected_state_view
-        
-        window_name = "balefire_bomb_gui"
-        
-        visible = {
-            always = no
-        }
-        
-        effects = {
-            bomb_button_click = {
-                set_variable = { balefire_bomb_amount = 1 }
-            }
-        }
-
-        triggers = {
-            balefire_bomb_gui_visible = {
-                THIS = {
-                    check_variable = {
-                        var = balefire_bomb_amount
-                        value = 0
-                        compare = greater_than
-                    }
-                }
-            }
         }
     }
 }
