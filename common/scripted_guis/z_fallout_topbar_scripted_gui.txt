@@ -1,0 +1,475 @@
+scripted_gui = {
+	# For With "La Resistance"
+	fallout_topbar_toolbar_window_lar = {
+		context_type = player_context
+
+		window_name = "fallout_topbar_toolbar_window_lar"
+		parent_window_token = top_bar
+
+		visible = {
+			is_ai = no
+			has_dlc = "La Resistance"
+		}
+		effects = {
+			drop_down_button_click = {
+				clear_array = fallout_topbar_toolbar_list_array
+				if = {
+					limit = {
+						has_variable = show_fallout_topbar_toolbar_list_window
+					}
+					clear_variable = show_fallout_topbar_toolbar_list_window
+				}
+				else = {
+					set_variable = { show_fallout_topbar_toolbar_list_window = 1 }
+					# populate list with buttons
+					if = {
+						limit = {
+							OR = {
+								add_core_visibility_trigger = yes
+								add_core_tlaloc_visibility_trigger = yes
+							}
+						}
+						add_to_array = { fallout_topbar_toolbar_list_array = 1 }
+					}
+					#if = {
+					#	limit = {
+					#		has_game_rule = {
+					#			rule = caps_system_toggle
+					#			option = ENABLED
+					#		}
+					#		#always = yes # caps are currently always visible
+					#	}
+					#	add_to_array = { fallout_topbar_toolbar_list_array = 2 }
+					#}
+					if = {
+						limit = {
+							num_subjects > 0
+						}
+						add_to_array = { fallout_topbar_toolbar_list_array = 3 }
+					}
+					if = {
+						limit = {
+							country_has_a_senate = yes
+						}
+						add_to_array = { fallout_topbar_toolbar_list_array = 4 }
+					}
+				}
+			}
+		}
+
+		triggers = {
+			drop_down_button_click_enabled = {
+				OR = {
+					add_core_visibility_trigger = yes
+					add_core_tlaloc_visibility_trigger = yes
+					#always = yes # caps are currently always visible
+					has_game_rule = {
+						rule = caps_system_toggle
+						option = ENABLED
+					}
+					num_subjects > 0
+					country_has_a_senate = yes
+				}
+			}
+		}
+	}
+
+	fallout_topbar_toolbar_list_window_lar = {
+		context_type = player_context
+
+		window_name = "fallout_topbar_toolbar_list_window_lar"
+		parent_window_token = top_bar
+
+		visible = {
+			is_ai = no
+			has_dlc = "La Resistance"
+			check_variable = { show_fallout_topbar_toolbar_list_window > 0 }
+		}
+
+		effects = {
+			tab_button_click = {
+				# Megaspell
+				if = {
+					limit = {
+						check_variable = { v = 1 }
+					}
+					if = { 
+                	    limit = { NOT = { has_country_flag = open_my_new_gui } } 
+                	    set_country_flag = open_my_new_gui
+                	}
+                	else = {
+                	    clr_country_flag = open_my_new_gui
+                	}
+                }
+				# Caps Window
+			#	else_if = {
+			#		limit = {
+			#			check_variable = { v = 2 }
+			#		}
+			#		if = {
+			#			limit = {
+			#				has_country_flag = equipment_purchase_menu_show
+			#			}
+			#			clr_country_flag = equipment_purchase_menu_show
+			#			clr_country_flag = caps_breakdown_show
+			#		}
+			#		else = {
+			#			set_country_flag = equipment_purchase_menu_show
+			#		}
+			#	}
+				# Puppet Ledger
+				else_if = {
+					limit = {
+						check_variable = { v = 3 }
+					}
+					if = {
+						limit = {
+							has_variable = show_puppet_ledger
+						}
+						clear_variable = show_puppet_ledger
+					}
+					else = {
+						set_variable = { show_puppet_ledger = 1 }
+					}
+				}
+			#	# Senate Window
+			#	else_if = {
+			#		limit = {
+			#			check_variable = { v = 4 }
+			#		}
+			#		if = {
+			#			limit = {
+			#				tag = RRG
+			#				NOT = { has_cosmetic_tag = RRG_rosado }
+			#			}
+			#			if = {
+			#				limit = {
+			#					has_variable = senate_rrg_screen
+			#				}
+			#				clear_variable = senate_rrg_screen
+			#			}
+			#			else = {
+			#				set_variable = { senate_rrg_screen = 1 }
+			#				get_senate_party_values = yes
+			#				get_house_party_values = yes
+			#			}
+			#		}
+			#	}
+				clear_variable = show_fallout_topbar_toolbar_list_window
+				clear_array = fallout_topbar_toolbar_list_array
+			}
+		}
+
+		triggers = {
+			background_1_visible = {
+				check_variable = { fallout_topbar_toolbar_list_array^num = 1 }
+			}
+			background_2_visible = {
+				check_variable = { fallout_topbar_toolbar_list_array^num = 2 }
+			}
+			background_3_visible = {
+				check_variable = { fallout_topbar_toolbar_list_array^num = 3 }
+			}
+			background_4_visible = {
+				check_variable = { fallout_topbar_toolbar_list_array^num = 4 }
+			}
+			background_5_visible = {
+				check_variable = { fallout_topbar_toolbar_list_array^num > 4 }
+			}
+
+			tab_number_visible = {
+				is_ai = no
+				set_temp_variable = { tab_number = 0 }
+				OR = {
+					AND = {
+						check_variable = { v = 1 }
+						if = {
+							limit = {
+								add_core_visibility_trigger = yes
+							}
+							all_owned_state = {
+								if = {
+									limit = {
+										NOT = { is_core_of = ROOT }
+										add_core_trigger = yes
+									}
+									add_to_temp_variable = { tab_number = 1 }
+								}
+							}
+						}
+						else_if = {
+							limit = {
+								add_core_tlaloc_visibility_trigger = yes
+							}
+							all_owned_state = {
+								if = {
+									limit = {
+										NOT = { is_core_of = ROOT }
+										add_core_tlaloc_trigger = yes
+									}
+									add_to_temp_variable = { tab_number = 1 }
+								}
+							}
+						}
+					}
+					AND = {
+						check_variable = { v = 3 }
+						set_temp_variable = { tab_number = num_subjects }
+					}
+				}
+				check_variable = { tab_number > 0 }
+			}
+		}
+
+		properties = {
+			tab_button = {
+				image = "[This.GetToolbarTabButtonIcon]"
+			}
+		}
+
+		dynamic_lists = {
+			fallout_topbar_toolbar_list_gridbox = {
+				array = fallout_topbar_toolbar_list_array
+				entry_container = fallout_topbar_toolbar_list_entry
+			}
+		}
+	}
+
+	# For Without "La Resistance"
+	fallout_topbar_toolbar_window = {
+		context_type = player_context
+
+		window_name = "fallout_topbar_toolbar_window"
+		parent_window_token = top_bar
+
+		visible = {
+			is_ai = no
+			NOT = { has_dlc = "La Resistance" }
+		}
+		effects = {
+			drop_down_button_click = {
+				clear_array = fallout_topbar_toolbar_list_array
+				if = {
+					limit = {
+						has_variable = show_fallout_topbar_toolbar_list_window
+					}
+					clear_variable = show_fallout_topbar_toolbar_list_window
+				}
+				else = {
+					set_variable = { show_fallout_topbar_toolbar_list_window = 1 }
+					# populate list with buttons
+					if = {
+						limit = {
+							OR = {
+								add_core_visibility_trigger = yes
+								add_core_tlaloc_visibility_trigger = yes
+							}
+						}
+						add_to_array = { fallout_topbar_toolbar_list_array = 1 }
+					}
+					#if = {
+					#	limit = {
+					#		has_game_rule = {
+					#			rule = caps_system_toggle
+					#			option = ENABLED
+					#		}
+					#		#always = yes # caps are currently always visible
+					#	}
+					#	add_to_array = { fallout_topbar_toolbar_list_array = 2 }
+					#}
+					if = {
+						limit = {
+							num_subjects > 0
+						}
+						add_to_array = { fallout_topbar_toolbar_list_array = 3 }
+					}
+					if = {
+						limit = {
+							country_has_a_senate = yes
+						}
+						add_to_array = { fallout_topbar_toolbar_list_array = 4 }
+					}
+				}
+			}
+		}
+
+		triggers = {
+			drop_down_button_click_enabled = {
+				OR = {
+					add_core_visibility_trigger = yes
+					add_core_tlaloc_visibility_trigger = yes
+					#always = yes # caps are currently always visible
+					has_game_rule = {
+						rule = caps_system_toggle
+						option = ENABLED
+					}
+					num_subjects > 0
+					country_has_a_senate = yes
+				}
+			}
+		}
+	}
+
+	fallout_topbar_toolbar_list_window = {
+		context_type = player_context
+
+		window_name = "fallout_topbar_toolbar_list_window"
+		parent_window_token = top_bar
+
+		visible = {
+			is_ai = no
+			NOT = { has_dlc = "La Resistance" }
+			check_variable = { show_fallout_topbar_toolbar_list_window > 0 }
+		}
+
+		effects = {
+			tab_button_click = {
+				# Megaspell
+				if = {
+					limit = {
+						check_variable = { v = 1 }
+					}
+					if = {
+						limit = {
+							has_variable = show_megaspell_menu
+						}
+						clear_variable = show_megaspell_menu
+					}
+					else = {
+						set_variable = { show_megaspell_menu = 1 }
+					}
+                }
+				# Caps Window
+			#	else_if = {
+			#		limit = {
+			#			check_variable = { v = 2 }
+			#		}
+			#		if = {
+			#			limit = {
+			#				has_country_flag = equipment_purchase_menu_show
+			#			}
+			#			clr_country_flag = equipment_purchase_menu_show
+			#			clr_country_flag = caps_breakdown_show
+			#		}
+			#		else = {
+			#			set_country_flag = equipment_purchase_menu_show
+			#		}
+			#	}
+				# Puppet Ledger
+				else_if = {
+					limit = {
+						check_variable = { v = 3 }
+					}
+					if = {
+						limit = {
+							has_variable = show_puppet_ledger
+						}
+						clear_variable = show_puppet_ledger
+					}
+					else = {
+						set_variable = { show_puppet_ledger = 1 }
+					}
+				}
+			#	# Senate Window
+			#	else_if = {
+			#		limit = {
+			#			check_variable = { v = 4 }
+			#		}
+			#		if = {
+			#			limit = {
+			#				tag = RRG
+			#				NOT = { has_cosmetic_tag = RRG_rosado }
+			#			}
+			#			if = {
+			#				limit = {
+			#					has_variable = senate_rrg_screen
+			#				}
+			#				clear_variable = senate_rrg_screen
+			#			}
+			#			else = {
+			#				set_variable = { senate_rrg_screen = 1 }
+			#				get_senate_party_values = yes
+			#				get_house_party_values = yes
+			#			}
+			#		}
+			#	}
+				clear_variable = show_fallout_topbar_toolbar_list_window
+				clear_array = fallout_topbar_toolbar_list_array
+			}
+		}
+
+		triggers = {
+			background_1_visible = {
+				check_variable = { fallout_topbar_toolbar_list_array^num = 1 }
+			}
+			background_2_visible = {
+				check_variable = { fallout_topbar_toolbar_list_array^num = 2 }
+			}
+			background_3_visible = {
+				check_variable = { fallout_topbar_toolbar_list_array^num = 3 }
+			}
+			background_4_visible = {
+				check_variable = { fallout_topbar_toolbar_list_array^num = 4 }
+			}
+			background_5_visible = {
+				check_variable = { fallout_topbar_toolbar_list_array^num > 4 }
+			}
+
+			tab_number_visible = {
+				is_ai = no
+				set_temp_variable = { tab_number = 0 }
+				OR = {
+					AND = {
+						check_variable = { v = 1 }
+						if = {
+							limit = {
+								add_core_visibility_trigger = yes
+							}
+							all_owned_state = {
+								if = {
+									limit = {
+										NOT = { is_core_of = ROOT }
+										add_core_trigger = yes
+									}
+									add_to_temp_variable = { tab_number = 1 }
+								}
+							}
+						}
+						else_if = {
+							limit = {
+								add_core_tlaloc_visibility_trigger = yes
+							}
+							all_owned_state = {
+								if = {
+									limit = {
+										NOT = { is_core_of = ROOT }
+										add_core_tlaloc_trigger = yes
+									}
+									add_to_temp_variable = { tab_number = 1 }
+								}
+							}
+						}
+					}
+					AND = {
+						check_variable = { v = 3 }
+						set_temp_variable = { tab_number = num_subjects }
+					}
+				}
+				check_variable = { tab_number > 0 }
+			}
+		}
+
+		properties = {
+			tab_button = {
+				image = "[This.GetToolbarTabButtonIcon]"
+			}
+		}
+
+		dynamic_lists = {
+			fallout_topbar_toolbar_list_gridbox = {
+				array = fallout_topbar_toolbar_list_array
+				entry_container = fallout_topbar_toolbar_list_entry
+			}
+		}
+	}
+}

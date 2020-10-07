@@ -1,0 +1,191 @@
+scripted_gui = {
+    megaspell_gui = {
+        window_name = "megaspell_gui_window"
+        context_type = player_context
+    
+        visible = {
+    		check_variable = { show_megaspell_menu > 0 }
+        }
+    
+        effects = {
+            close_button_click = {
+                clear_variable = show_megaspell_menu
+            }
+            healing_spell_button_click = {
+                custom_effect_tooltip = megaspell_use_1_heal_tt
+                add_timed_idea = {
+                    idea = healing_megaspell_idea
+                    days = 7
+                }
+                subtract_from_variable = {
+                    var = healing_spell_amount
+                    value = 1
+                }
+            }
+        }
+    
+        triggers = {
+            healing_spell_button_visible = {
+                NOT = {
+                    has_dlc = "Waking the Tiger"
+                }
+            }
+            healing_spell_use_visible = {
+                NOT = {
+                    has_dlc = "Waking the Tiger"
+                }
+            }
+            healing_spell_button_click_enabled = {
+                check_variable = { healing_spell_amount > 0 }
+            }
+        }
+    
+        dynamic_lists = {
+    	}
+    
+        properties = {
+        }
+    
+        ai_enabled = {
+    		always = no
+        }
+    
+        ai_test_interval = 290  # The higher, the long it takes the ai to do actions
+    	ai_test_variance = 0.5
+    
+        ai_check = {
+        }
+    
+        ai_check_scope = {
+        }
+    
+        ai_weights = {
+        }
+    }
+
+    celestia_one_menu_gui = {
+        window_name = "celestia_one_menu_window"
+        context_type = selected_state_context
+        parent_window_token = selected_state_view
+    
+        visible = {
+            ROOT = {
+                has_country_flag = can_use_celestia_one_flag
+            }
+        }
+    
+        effects = {
+            general_button_click = {
+                ROOT = {
+                    launch_nuke = {
+                        state = PREV
+                    }
+                }
+                ROOT = {
+                    hidden_effect = {
+                        country_event = {
+                            id = utility.2
+                        }
+                    }
+                }
+            }
+            factory_button_click = {
+                THIS = {
+                    decimate_half_all_industry = yes
+                }
+                ROOT = {
+                    hidden_effect = {
+                        country_event = {
+                            id = utility.2
+                        }
+                    }
+                }
+            }
+            infra_button_click = {
+                THIS = {
+                    decimate_half_infrastructure = yes
+                }
+                ROOT = {
+                    hidden_effect = {
+                        country_event = {
+                            id = utility.2
+                        }
+                    }
+                }
+            }
+        }
+
+        triggers = {
+            infra_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = CEL1_READY_TO_FIRE
+                    ROOT = {
+                        NOT = {
+                            has_country_flag = celestia_one_cooldown_flag
+                        }
+                    }
+                }
+                custom_trigger_tooltip = {
+                    tooltip = CONTROLLER_HAS_WAR_WITH_ROOT
+                    CONTROLLER = {
+                        has_war_with = ROOT
+                    }
+                }
+            }
+            factory_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = CEL1_READY_TO_FIRE
+                    ROOT = {
+                        NOT = {
+                            has_country_flag = celestia_one_cooldown_flag
+                        }
+                    }
+                }
+                custom_trigger_tooltip = {
+                    tooltip = CONTROLLER_HAS_WAR_WITH_ROOT
+                    CONTROLLER = {
+                        has_war_with = ROOT
+                    }
+                }
+            }
+            general_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = CEL1_READY_TO_FIRE
+                    ROOT = {
+                        NOT = {
+                            has_country_flag = celestia_one_cooldown_flag
+                        }
+                    }
+                }
+                custom_trigger_tooltip = {
+                    tooltip = CONTROLLER_HAS_WAR_WITH_ROOT
+                    CONTROLLER = {
+                        has_war_with = ROOT
+                    }
+                }
+            }
+        }
+    
+        dynamic_lists = {
+        }
+    
+        properties = {
+        }
+    
+        ai_enabled = {
+            always = no
+        }
+    
+        #ai_test_interval = 290  # The higher, the long it takes the ai to do actions
+        #ai_test_variance = 0.5
+    
+        ai_check = {
+        }
+    
+        ai_check_scope = {
+        }
+    
+        ai_weights = {
+        }
+    }
+}
