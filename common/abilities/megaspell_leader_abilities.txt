@@ -1,0 +1,59 @@
+ability = {
+	healing_spell = {
+		name = ABILITY_HEALING_SPELL
+		desc = ABILITY_HEALING_SPELL_DESC
+
+		sound_effect = command_power_ability_offensive
+
+		type = army_leader
+
+		allowed = {
+			is_leading_army_group = no
+			is_border_war = no
+			OWNER = {
+				check_variable = { healing_spell_amount > 0 }
+			}
+		}
+
+		ai_will_do = {
+			factor = -1
+			modifier = {
+				FROM = {
+					has_war_support > 0.1
+					command_power > 1.5
+				}
+				check_variable = { num_units_offensive_combats > 6 }
+				check_variable = { healing_spell_amount > 0 }
+
+				set_temp_variable = { temp = avg_offensive_combat_status }
+				check_variable = { temp > 0.50 }
+				check_variable = { ai_random > temp }
+
+				add = 2
+			}
+		}
+
+		cost = 0.1
+		duration = 168
+
+		one_time_effect = {
+			custom_effect_tooltip = megaspell_use_1_heal_tt
+			OWNER = {
+				hidden_effect = {
+					country_event = {
+					    id = utility.1
+					    days = 7
+					}
+				}
+			}
+			add_temporary_buff_to_units = {
+				org_damage_multiplier = -0.2
+				str_damage_multiplier = -0.8
+				#casualty_trickleback = 0.7
+
+				days = 7
+				tooltip = ABILITY_HEALING_SPELL_TOOLTIP
+			}
+		}
+	}
+}
