@@ -1479,7 +1479,7 @@ shared_focus = { #Raiders no more.
         focus = MAS_P3H3
     }
     bypass = { NOT = { country_exists = PBN }}
-    x = -2
+    x = -1
     y = 1
     relative_position_id = MAS_P3H3
     cost = 10
@@ -1488,33 +1488,34 @@ shared_focus = { #Raiders no more.
     }
     will_lead_to_war_with = PBN
     completion_reward = {
-        create_wargoal = { type = annex_everything target = PBN }
+        create_wargoal = { type = puppet_wargoal_focus target = PBN }
     }
 }
 shared_focus = { #CB on Georgetown.
     id = MAS_P3H4C2
     icon = GFX_focus_MAS_P3H4C2
     prerequisite = {
-        focus = MAS_P3H3
+        focus = MAS_P3H4C1
+        focus = MAS_P3H4C3
     }
     available = {
         AND = {
-            NOT = { country_exists = FTA }
-			OR = {
-            NOT = { country_exists = PBN }
-				PBN = {is_puppet_of = ROOT}
-			}
-        }
+            OR= {
+                NOT = { country_exists = FTA }
+                NOT = { country_exists = PBN }
+                    PBN = {is_puppet_of = ROOT}
+                }
+            }
     }
     x = 0
-    y = 1
+    y = 2
     relative_position_id = MAS_P3H3
     cost = 10
     ai_will_do = {
         factor = 1
     }
     completion_reward = {
-        add_war_support = 0.15
+        create_wargoal = { type = puppet_wargoal_focus target = GOR }
     }
 }
 shared_focus = { #CB on FTA.
@@ -1524,7 +1525,7 @@ shared_focus = { #CB on FTA.
         focus = MAS_P3H3
     }
     bypass = { NOT = { country_exists = FTA } }
-    x = 2
+    x = 1
     y = 1
     relative_position_id = MAS_P3H3
     cost = 10
@@ -1540,19 +1541,26 @@ shared_focus = { #Offer to Old Apple.
     id = MAS_P3H5
     icon = GFX_focus_MAS_P3H5
     prerequisite = {
-        focus = MAS_P3H4C1
-    }
-    prerequisite = {
-        focus = MAS_P3H4C3
-    }
-    prerequisite = {
         focus = MAS_P3H4C2
+    }
+    available = {
+        AND = {
+            NOT = { country_exists = FTA }
+            OR = {
+            NOT = { country_exists = PBN }
+                PBN = {is_puppet_of = ROOT}
+            }
+            OR = {
+            NOT = { country_exists = GOR }
+                PBN = {is_puppet_of = ROOT}
+            }
+        }
     }
     bypass = {
         NOT = { country_exists = OAP }
     }
     x = 0
-    y = 2
+    y = 3
     relative_position_id = MAS_P3H3
     cost = 5
     ai_will_do = {
