@@ -292,10 +292,10 @@ shared_focus = {
 		cost = 2.86
 		
 		available_if_capitulated = yes 
-		available = {date > 1236.5.20}
+		available = {date > 1236.4.1}
 		prerequisite = { focus = LIT_Starting_Focus_3 }
 		ai_will_do = { 
-		factor = 300
+		factor = 3000
 		} 
 
 		completion_reward = {
@@ -311,7 +311,7 @@ shared_focus = {
 		x = 5
 		y = 1
 		relative_position_id = LIT_assembly_is_called
-		cost = 1
+		cost = 2.86
 		available = {
 			OR = {
 				has_country_leader = {
@@ -327,33 +327,35 @@ shared_focus = {
 		available_if_capitulated = yes 
 		prerequisite = { focus = LIT_assembly_is_called }
 		ai_will_do = { 
-		factor = 300
+		factor = 3000
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus LIT_shake_things_up"
-			
+			add_stability = -0.05
+			add_war_support = 0.12
 		}
 }
 
-#Shake Things Up
+#Revanchist Coalition
 shared_focus = {
 		id = LIT_revanchist_coalition
 		icon = GFX_goal_generic_dangerous_deal_pony_pony
 		x = 0
 		y = 1
 		relative_position_id = LIT_shake_things_up
-		cost = 1
+		cost = 2.86
 		
 		available_if_capitulated = yes 
 		prerequisite = { focus = LIT_shake_things_up }
 		ai_will_do = { 
-		factor = 300
+		factor = 3000
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus LIT_revanchist_coalition"
-			
+			add_popularity = { ideology = destruction popularity = 0.20 }
+			add_popularity = { ideology = visionary popularity = 0.20 }
 		}
 }
 
@@ -364,17 +366,17 @@ shared_focus = {
 		x = -2
 		y = 2
 		relative_position_id = LIT_shake_things_up
-		cost = 1
+		cost = 5.72
 		
 		available_if_capitulated = yes 
 		prerequisite = { focus = LIT_revanchist_coalition }
 		ai_will_do = { 
-		factor = 300
+		factor = 3000
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus LIT_deal_with_plainsraiders"
-			
+			PBN = { country_event = LIT_event.19 }
 		}
 }
 
@@ -385,17 +387,20 @@ shared_focus = {
 		x = 0
 		y = 2
 		relative_position_id = LIT_shake_things_up
-		cost = 1
+		cost = 5.72
 		
 		available_if_capitulated = yes 
 		prerequisite = { focus = LIT_revanchist_coalition }
 		ai_will_do = { 
-		factor = 300
+		factor = 3000
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus LIT_black_market_weapons"
-			
+			add_political_power = -40
+			add_equipment_to_stockpile = { type = energy_equipment_2 amount = 90 producer = OWE }
+			add_equipment_to_stockpile = { type = melee_equipment_3 amount = 60 producer = OWE }
+			add_equipment_to_stockpile = { type = ballistic_equipment_3 amount = 30 producer = OWE }
 		}
 }
 
@@ -406,17 +411,19 @@ shared_focus = {
 		x = 2
 		y = 2
 		relative_position_id = LIT_shake_things_up
-		cost = 1
+		cost = 5.72
 		
 		available_if_capitulated = yes 
 		prerequisite = { focus = LIT_revanchist_coalition }
 		ai_will_do = { 
-		factor = 300
+		factor = 3000
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus LIT_push_out_the_complacent"
-			
+			add_war_support = 0.08
+			add_popularity = { ideology = survivalism popularity = -0.15 }
+			add_popularity = { ideology = continuation popularity = -0.15 }
 		}
 }
 
@@ -427,19 +434,29 @@ shared_focus = {
 		x = 0
 		y = 3
 		relative_position_id = LIT_shake_things_up
-		cost = 1
+		cost = 5.72
 		
 		available_if_capitulated = yes 
 		prerequisite = { focus = LIT_deal_with_plainsraiders }
 		prerequisite = { focus = LIT_black_market_weapons }
 		prerequisite = { focus = LIT_push_out_the_complacent }
 		ai_will_do = { 
-		factor = 300
+		factor = 3000
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus LIT_second_thunder_war"
-			
+			FTA = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			hidden_effect = {
+				IF = {
+					limit = { PBN = {is_in_faction_with = LIT}}
+					PBN = {add_state_claim = 161}
+				}
+			}
 		}
 }
 
@@ -450,7 +467,7 @@ shared_focus = {
 		x = 0
 		y = 4
 		relative_position_id = LIT_shake_things_up
-		cost = 1
+		cost = 5.72
 		available = {owns_state = 802 owns_state = 526}
 		available_if_capitulated = yes 
 		prerequisite = { focus = LIT_second_thunder_war }
@@ -460,7 +477,10 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus LIT_inevitable_conclusion"
-			
+			country_event = LIT_event.20
+			hidden_effect = {
+				dismantle_faction = yes
+			}
 		}
 }
 
@@ -471,7 +491,7 @@ shared_focus = {
 		x = -3
 		y = 5
 		relative_position_id = LIT_shake_things_up
-		cost = 1
+		cost = 5.72
 		mutually_exclusive = {focus = LIT_enclavists_wins}
 		available_if_capitulated = yes 
 		prerequisite = { focus = LIT_inevitable_conclusion }
@@ -483,6 +503,7 @@ shared_focus = {
 			log = "[GetDateText]: [Root.GetName]: Focus LIT_hook_hoof_wins"
 			set_politics = { ruling_party = destruction elections_allowed = no }
 			add_popularity = { ideology = destruction popularity = 0.20 }
+			add_manpower = -129
 		}
 }
 
@@ -493,7 +514,7 @@ shared_focus = {
 		x = -5
 		y = 6
 		relative_position_id = LIT_shake_things_up
-		cost = 1
+		cost = 8.58
 		available_if_capitulated = yes 
 		prerequisite = { focus = LIT_hook_hoof_wins }
 		ai_will_do = { 
@@ -502,7 +523,11 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus LIT_kill_enclavists"
-
+			add_popularity = { ideology = visionary popularity = -0.25 }
+			550 = {add_manpower = -56}
+			551 = {add_manpower = -71}
+			798 = {add_manpower = -44}
+			remove_ideas = LIT_coalition_collapse_idea
 		}
 }
 
@@ -513,7 +538,7 @@ shared_focus = {
 		x = -3
 		y = 6
 		relative_position_id = LIT_shake_things_up
-		cost = 1
+		cost = 8.58
 		available_if_capitulated = yes 
 		prerequisite = { focus = LIT_hook_hoof_wins }
 		ai_will_do = { 
@@ -522,7 +547,11 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus LIT_march_plainstown"
-
+			PBN = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 		}
 }
 
@@ -533,8 +562,15 @@ shared_focus = {
 		x = -3
 		y = 7
 		relative_position_id = LIT_shake_things_up
-		cost = 1
+		cost = 8.58
 		available_if_capitulated = yes 
+		available = {
+			owns_state = 561
+			owns_state = 192
+			owns_state = 557
+			owns_state = 196
+			owns_state = 548
+		}
 		prerequisite = { focus = LIT_march_plainstown }
 		ai_will_do = { 
 		factor = 50
@@ -542,7 +578,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus LIT_assimilate_warbands"
-
+			add_war_support = 0.08
+			Core_original_PBN = yes
 		}
 }
 
@@ -553,7 +590,7 @@ shared_focus = {
 		x = -5
 		y = 7
 		relative_position_id = LIT_shake_things_up
-		cost = 1
+		cost = 8.58
 		available_if_capitulated = yes 
 		prerequisite = { focus = LIT_march_plainstown }
 		prerequisite = { focus = LIT_kill_enclavists }
@@ -563,7 +600,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus LIT_ploughshares_swords"
-
+			add_ideas = LIT_ploughs_to_swords_idea
 		}
 }
 
@@ -574,7 +611,7 @@ shared_focus = {
 		x = -3
 		y = 8
 		relative_position_id = LIT_shake_things_up
-		cost = 1
+		cost = 8.58
 		available_if_capitulated = yes 
 		prerequisite = { focus = LIT_ploughshares_swords }
 		prerequisite = { focus = LIT_assimilate_warbands }
@@ -584,7 +621,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus LIT_prepare_great_struggle"
-
+			LIT_lower_tension = yes
+			add_timed_idea = {idea = LIT_uniting_appleloosa_idea days = 365}
 		}
 }
 
@@ -595,16 +633,24 @@ shared_focus = {
 		x = -5
 		y = 9
 		relative_position_id = LIT_shake_things_up
-		cost = 1
+		cost = 8.58
 		available_if_capitulated = yes 
 		prerequisite = { focus = LIT_prepare_great_struggle }
 		ai_will_do = { 
-		factor = 500
+		factor = 5
+		modifier = {
+				factor = 100
+				owns_state = 563
+			}
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus LIT_des_fuck_OAP"
-
+			OAP = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 		}
 }
 
@@ -615,7 +661,7 @@ shared_focus = {
 		x = -3
 		y = 9
 		relative_position_id = LIT_shake_things_up
-		cost = 1
+		cost = 8.58
 		available_if_capitulated = yes 
 		prerequisite = { focus = LIT_prepare_great_struggle }
 		ai_will_do = { 
@@ -624,7 +670,11 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus LIT_des_fuck_NAP"
-
+			NAP = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 		}
 }
 
@@ -635,16 +685,24 @@ shared_focus = {
 		x = -1
 		y = 9
 		relative_position_id = LIT_shake_things_up
-		cost = 1
+		cost = 8.58
 		available_if_capitulated = yes 
 		prerequisite = { focus = LIT_prepare_great_struggle }
 		ai_will_do = { 
-		factor = 500
+		factor = 5
+		modifier = {
+				factor = 100
+				owns_state = 596
+			}
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus LIT_des_fuck_ROK"
-
+			ROK = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 		}
 }
 
@@ -655,7 +713,7 @@ shared_focus = {
 		x = -3
 		y = 10
 		relative_position_id = LIT_shake_things_up
-		cost = 1
+		cost = 8.58
 		available_if_capitulated = yes 
 		prerequisite = { focus = LIT_des_fuck_NAP }
 		prerequisite = { focus = LIT_des_fuck_OAP }
@@ -666,7 +724,10 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus LIT_des_fuck_everyone"
-
+			add_state_claim = 527
+			add_state_claim = 303
+			add_state_claim = 511
+			add_ideas = LIT_fuck_everyone_idea
 		}
 }
 
@@ -677,7 +738,7 @@ shared_focus = {
 		x = 3
 		y = 5
 		relative_position_id = LIT_shake_things_up
-		cost = 1
+		cost = 5.72
 		mutually_exclusive = {focus = LIT_hook_hoof_wins}
 		available_if_capitulated = yes 
 		prerequisite = { focus = LIT_inevitable_conclusion }
@@ -698,7 +759,7 @@ shared_focus = {
 		x = 0
 		y = 6
 		relative_position_id = LIT_shake_things_up
-		cost = 1
+		cost = 8.58
 		available_if_capitulated = yes 
 		prerequisite = { focus = LIT_hook_hoof_wins focus = LIT_enclavists_wins }
 		ai_will_do = { 
@@ -707,7 +768,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus LIT_integrate_local_ponies"
-			
+			LIT_lower_tension = yes
 		}
 }
 
@@ -718,7 +779,7 @@ shared_focus = {
 		x = 0
 		y = 7
 		relative_position_id = LIT_shake_things_up
-		cost = 1
+		cost = 8.58
 		available_if_capitulated = yes 
 		prerequisite = { focus = LIT_integrate_local_ponies }
 		ai_will_do = { 
@@ -727,7 +788,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus LIT_integrate_local_talons"
-			
+			Core_original_FTA = yes
 		}
 }
 
@@ -738,7 +799,7 @@ shared_focus = {
 		x = 3
 		y = 6
 		relative_position_id = LIT_shake_things_up
-		cost = 1
+		cost = 8.58
 		available_if_capitulated = yes 
 		prerequisite = { focus = LIT_enclavists_wins }
 		ai_will_do = { 
@@ -917,7 +978,7 @@ shared_focus = {
 		}
 		prerequisite = { focus = LIT_assembly_is_called }
 		ai_will_do = { 
-		factor = 300
+		factor = 3000
 		} 
 
 		completion_reward = {
@@ -1385,7 +1446,7 @@ shared_focus = {
 		}
 		prerequisite = { focus = LIT_keep_to_tradition }
 		ai_will_do = { 
-		factor = 300
+		factor = 3000
 		} 
 
 		completion_reward = {
@@ -1437,7 +1498,7 @@ shared_focus = {
 		
 		prerequisite = { focus = LIT_skybreaker_has_won }
 		ai_will_do = { 
-		factor = 500
+		factor = 5000
 		} 
 
 		completion_reward = {
@@ -2064,7 +2125,7 @@ shared_focus = {
 		x = -10
 		y = 11
 		relative_position_id = LIT_assembly_is_called
-		cost = 8.58
+		cost = 8.1236
 		available = {has_country_flag = LIT_help_major_needed}
 		available_if_capitulated = yes 
 		prerequisite = { focus = LIT_stab_in_back }
