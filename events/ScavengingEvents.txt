@@ -1,280 +1,342 @@
 ﻿add_namespace = scavenge
 
+# Foot scav success
 country_event = {
 	id = scavenge.1
 	title = scavenge.1.t
 	desc = scavenge.1.d
+	picture = GFX_event_generic_ruins_1
+
+	is_triggered_only = yes
+
+	immediate = {
+		select_scavenging_reward = yes
+	}
+
+	option = {
+		name = scavenge.1.a
+		clr_country_flag = scavenging_underway
+		# Insert reward table roll
+		add_manpower = 50
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 50
+		}
+		grant_scavenging_reward = yes
+	}
+}
+
+# Foot scav return nothing
+country_event = {
+	id = scavenge.2
+	title = scavenge.2.t
+	desc = scavenge.2.d
+	picture = GFX_event_generic_ruins_4
+
+	is_triggered_only = yes
+
+	option = {
+		name = scavenge.2.a
+		clr_country_flag = scavenging_underway
+		add_manpower = 50
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 50
+		}
+	}
+}
+
+# Foot scav retreat
+country_event = {
+	id = scavenge.3
+	title = scavenge.3.t
+	desc = scavenge.3.d
+	picture = GFX_event_generic_event_deathclaw
+
+	is_triggered_only = yes
+
+	option = {
+		name = scavenge.3.a
+		clr_country_flag = scavenging_underway
+		# Insert 50% reward table roll chance
+		custom_effect_tooltip = scav_deathclaw_tt
+		add_manpower = 8
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 6
+		}
+	}
+}
+
+# Foot scav lost
+country_event = {
+	id = scavenge.4
+	title = scavenge.4.t
+	desc = scavenge.4.d
+	picture = GFX_event_radio_new_vegas
+
+	is_triggered_only = yes
+
+	option = {
+		name = scavenge.4.a
+		clr_country_flag = scavenging_underway
+		set_country_flag = scavengers_lost
+	}
+}
+
+# Mot scav success
+country_event = {
+	id = scavenge.5
+	title = scavenge.5.t
+	desc = scavenge.5.d
 	picture = GFX_event_generic_raider_1
 
 	is_triggered_only = yes
 
 	immediate = {
-		set_variable = { resolve_rng = random }
+		select_scavenging_reward = yes
 	}
 
-	option = { # Send out a search party
-		name = scavenge.1.a
-		trigger = {
-			command_power > 9
+	option = {
+		name = scavenge.5.a
+		clr_country_flag = scavenging_underway
+		# Insert Reward Table Roll
+		add_manpower = 50
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 50
 		}
-		add_command_power = -10
-		random_list = {
-			25 = { } # No effect
-			25 = { add_manpower = 6 }
-			25 = { add_manpower = 11 }
-			25 = { add_manpower = 17 }
+		add_equipment_to_stockpile = {
+			type = motorized_equipment
+			amount = 10
 		}
-		clr_country_flag = is_scavenging
-	}
-
-	option = { # They are gonners
-		name = scavenge.1.b
-		clr_country_flag = is_scavenging
-		add_political_power = -10
-		add_stability = -0.02
+		grant_scavenging_reward = yes
 	}
 }
 
-country_event = {
-	id = scavenge.2
-	title = scavenge.2.t
-	desc = scavenge.2.d
-	picture = GFX_event_generic_caravan
-
-	is_triggered_only = yes
-
-	immediate = {
-		set_variable = { resolve_rng = random }
-	}
-
-	option = { # We are glad they return
-		name = scavenge.2.a
-		custom_effect_tooltip = scav_following_are_sent_equip
-		resolve_expedition = yes
-		custom_effect_tooltip = scav_following_are_loot
-		resolve_equip_loot = yes
-	}
-}
-
-country_event = {
-	id = scavenge.3
-	title = scavenge.3.t
-	desc = scavenge.3.d
-	picture = GFX_event_generic_caravan
-
-	is_triggered_only = yes
-
-	immediate = {
-		set_variable = { resolve_rng = random }
-	}
-
-	option = {
-		name = scavenge.2.a
-		custom_effect_tooltip = scav_following_are_sent_equip
-		resolve_expedition = yes
-		custom_effect_tooltip = scav_following_are_loot
-		resolve_robot_loot = yes
-	}
-}
-
-country_event = {
-	id = scavenge.4
-	title = scavenge.4.t
-	desc = scavenge.4.d
-	picture = GFX_event_generic_caravan
-
-	is_triggered_only = yes
-
-	immediate = {
-		set_variable = { resolve_rng = random }
-	}
-
-	option = {
-		name = scavenge.2.a
-		custom_effect_tooltip = scav_following_are_sent_equip
-		resolve_expedition = yes
-		custom_effect_tooltip = scav_following_are_loot
-		resolve_vehicle_loot = yes
-	}
-}
-
-country_event = {
-	id = scavenge.5
-	title = scavenge.5.t
-	desc = scavenge.5.d
-	picture = GFX_event_generic_caravan
-
-	is_triggered_only = yes
-
-	immediate = {
-		set_variable = { resolve_rng = random }
-		old_world_tech_randomiser = yes
-	}
-
-	option = {
-		name = scavenge.2.a
-		custom_effect_tooltip = scav_following_are_sent_equip
-		resolve_expedition = yes
-		custom_effect_tooltip = scav_following_are_loot
-		old_world_tech = yes
-	}
-}
-
+# Mot scav return nothing
 country_event = {
 	id = scavenge.6
 	title = scavenge.6.t
 	desc = scavenge.6.d
-	picture = GFX_event_generic_settlement_1
+	picture = GFX_event_NCR_caravan
 
 	is_triggered_only = yes
 
-	option = { # Hide standard missions
+	option = {
 		name = scavenge.6.a
-		trigger = {
-			NOT = { has_country_flag = scavenge_sm_hidden }
+		clr_country_flag = scavenging_underway
+		add_manpower = 50
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 50
 		}
-		set_country_flag = scavenge_sm_hidden
-	}
-
-	option = { # Show standard missions
-		name = scavenge.6.b
-		trigger = {
-			has_country_flag = scavenge_sm_hidden
+		add_equipment_to_stockpile = {
+			type = motorized_equipment
+			amount = 10
 		}
-		clr_country_flag = scavenge_sm_hidden
-	}
-
-	option = { # Hide PA missions
-		name = scavenge.6.c
-		trigger = {
-			AND = {
-				NOT = { has_country_flag = scavenge_pa_hidden }
-				has_country_flag = SE_pa_upgrade
-			}
-		}
-		set_country_flag = scavenge_pa_hidden
-	}
-
-	option = { # Show PA missions
-		name = scavenge.6.e
-		trigger = {
-			AND = {
-				has_country_flag = scavenge_pa_hidden
-				has_country_flag = SE_pa_upgrade
-			}
-		}
-		clr_country_flag = scavenge_pa_hidden
-	}
-
-	option = { # Hide motorized missions
-		name = scavenge.6.f
-		trigger = {
-			AND = {
-				NOT = { has_country_flag = scavenge_mot_hidden }
-				has_country_flag = SE_mot_upgrade
-			}
-		}
-		set_country_flag = scavenge_mot_hidden
-	}
-
-	option = { # Show motorized missions
-		name = scavenge.6.g
-		trigger = {
-			AND = {
-				has_country_flag = scavenge_mot_hidden
-				has_country_flag = SE_mot_upgrade
-			}
-		}
-		clr_country_flag = scavenge_mot_hidden
-	}
-
-	option = { # Hide flying missions
-		name = scavenge.6.h
-		trigger = {
-			AND = {
-				NOT = { has_country_flag = scavenge_fly_hidden }
-				has_country_flag = SE_fly_upgrade
-			}
-		}
-		set_country_flag = scavenge_fly_hidden
-	}
-
-	option = { # Show flying missions
-		name = scavenge.6.i
-		trigger = {
-			AND = {
-				has_country_flag = scavenge_fly_hidden
-				has_country_flag = SE_fly_upgrade
-			}
-		}
-		clr_country_flag = scavenge_fly_hidden
 	}
 }
 
-### SE ###
-## Possible values ##
-# 90%
-# 100%
-# 110%
-# 120%
-# 130%
-# 140%
-# 150%
-## Modifiers ##
-# Tribal > -10%
-# Binoculars > 10%
-# Portable Radios > 10%
-# Radio Detection > 10%
-# Settler > 10%
-# BOS > 20%
+# Mot scav retreat
+country_event = {
+	id = scavenge.7
+	title = scavenge.7.t
+	desc = scavenge.7.d
+	picture = GFX_event_generic_event_deathclaw
 
-### Equipment ###
-## Common ##
-# Pipe Guns - infantry_equipment_1
-# Basic Firearms - ballistic_equipment_1
-# Basic Melee Weapons - melee_equipment_1
-# Slashing Melee Weapons - melee_equipment_2
-# Support Equipment - support_equipment
-# PMGs - anti_personnel_equipment
-# Dynamite - explosive_equipment
-## Rare ##
-# Laser Muskets - energy_equipment_1
-# Powered Weapons - melee_equipment_3
-# Common Energy Weapons - energy_equipment_2
-# Common Firearms - ballistic_equipment_2
-# Flamers - flamer_equipment
-# Mortars - explosive_equipment_2
-# Scavenged PA (on the rare side) - power_armor_equipment_1
-## Legendary ##
-# Advanced Energy Weapons - energy_equipment_3
-# Advanced Firearms - ballistic_equipment_3
-# T-45d PA - power_armor_equipment_2
-# Miniguns - anti_personnel_equipment_3
-# Missile Launcher - anti_tank_equipment_3
-# Gatling Laser - laser_equipment_3
-# Incinerator - flamer_equipment_3
+	is_triggered_only = yes
 
-### Robots ###
-## Common ##
-# Protectron MK1 & 2 - light_robot_equipment_2 & 3
-## Rare ##
-# Mister Handy - medium_robot_equipment_2
-# Mr. Gutsy - medium_robot_equipment_3
-# Robobrain - heavy_robot_equipment_2
-## Legendary ##
-# Sentry Bot - heavy_robot_equipment_3
+	option = {
+		name = scavenge.7.a
+		clr_country_flag = scavenging_underway
+		add_manpower = 25
+		# Insert 50% reward table roll chance
+		add_equipment_to_stockpile = {
+			type = infantry_equipment
+			amount = 25
+		}
+		add_equipment_to_stockpile = {
+			type = motorized_equipment
+			amount = 5
+		}
+	}
+}
 
-### Vehicles ###
-## Common ##
-# Scarp Motorbikes - motorbike_equipment_1
-# Salvaged Motorbikes - motorbike_equipment_2
-# Scrap Car - car_equipment_1
-## Rare ##
-# Salvaged Car - car_equipment_2
-# Scrap Truck - truck_equipment_1
-# Wasteland Car - car_equipment_3
-# Salvaged Truck - truck_equipment_2
-## Legendary ##
-# Salvaged APC - apc_equipment_1
-# Scarp Tank - tank_equipment_2
-# Great War APC - apc_equipment_3
+# Mot scav lost
+country_event = {
+	id = scavenge.8
+	title = scavenge.8.t
+	desc = scavenge.8.d
+	picture = GFX_event_generic_raider_1
+
+	is_triggered_only = yes
+
+	option = {
+		name = scavenge.8.a
+		clr_country_flag = scavenging_underway
+		set_country_flag = scavengers_lost
+	}
+}
+
+# PA scav success
+country_event = {
+	id = scavenge.9
+	title = scavenge.9.t
+	desc = scavenge.9.d
+	picture = GFX_event_BOS_settler_defense
+
+	is_triggered_only = yes
+
+	immediate = {
+		select_scavenging_reward = yes
+	}
+
+	option = {
+		name = scavenge.9.a
+		clr_country_flag = scavenging_underway
+		#insert reward table roll
+		add_manpower = 50
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 50
+			}
+			add_equipment_to_stockpile = {
+				type = power_armor_equipment
+				amount = 25
+			}
+		grant_scavenging_reward = yes
+	}
+}
+
+# PA scav return nothing
+country_event = {
+	id = scavenge.10
+	title = scavenge.10.t
+	desc = scavenge.10.d
+	picture = GFX_event_generic_raider_1
+
+	is_triggered_only = yes
+
+	option = {
+		name = scavenge.10.a
+		clr_country_flag = scavenging_underway
+		add_manpower = 50
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 50
+			}
+			add_equipment_to_stockpile = {
+				type = power_armor_equipment
+				amount = 25
+		}
+	}
+}
+
+# PA scav retreat
+country_event = {
+	id = scavenge.11
+	title = scavenge.11.t
+	desc = scavenge.11.d
+	picture = GFX_event_generic_raider_1
+
+	is_triggered_only = yes
+
+	option = {
+		name = scavenge.11.a
+		clr_country_flag = scavenging_underway
+		add_manpower = 25
+		# Insert 50% reward table roll chance
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 25
+			}
+			add_equipment_to_stockpile = {
+				type = power_armor_equipment
+				amount = 10
+		}
+	}
+}
+
+# PA scav lost
+country_event = {
+	id = scavenge.12
+	title = scavenge.12.t
+	desc = scavenge.12.d
+	picture = GFX_event_generic_raider_1
+
+	is_triggered_only = yes
+
+	option = {
+		name = scavenge.12.a
+		clr_country_flag = scavenging_underway
+		set_country_flag = scavengers_lost
+	}
+}
+
+# Lost Scavers rescued
+country_event = {
+	id = scavenge.13
+	title = scavenge.13.t
+	desc = scavenge.13.d
+	picture = GFX_event_generic_raider_1
+
+	is_triggered_only = yes
+
+	option = {
+		name = scavenge.13.a
+		clr_country_flag = scavenging_underway
+		# Insert 25% reward table roll chance
+		add_political_power = 30
+		add_manpower = 75
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 75
+			}
+	}
+}
+
+# Lost Scavers ignored
+country_event = {
+	id = scavenge.14
+	title = scavenge.14.t
+	desc = scavenge.14.d
+	picture = GFX_event_generic_ruins_5
+
+	is_triggered_only = yes
+
+	option = {
+		name = scavenge.14.a
+		clr_country_flag = scavenging_underway
+	}
+}
+
+# scavenging project initiated
+country_event = {
+	id = scavenge.15
+	title = scavenge.15.t
+	desc = scavenge.15.d
+	picture = GFX_event_generic_ruins_4
+
+	is_triggered_only = yes
+
+	option = {
+		name = scavenge.15.a
+		clr_country_flag = scavenging_underway
+	}
+}
+
+# scavenging dismanlted
+country_event = {
+	id = scavenge.16
+	title = scavenge.16.t
+	desc = scavenge.16.d
+	picture = GFX_event_generic_raider_1
+
+	is_triggered_only = yes
+
+	option = {
+		name = scavenge.16.a
+		clr_country_flag = scavenging_underway
+	}
+}
