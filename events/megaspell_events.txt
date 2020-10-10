@@ -1,0 +1,149 @@
+add_namespace = megaspells
+
+country_event = { ### NAP Gets A Bomb
+	id = megaspells.1
+	immediate = {log = "[GetDateText]: [Root.GetName]: event megaspells.1"}
+	fire_only_once = yes
+	is_triggered_only = yes
+	option = {
+		name = megaspells.1.a
+		ai_chance = { factor = 50 }
+
+		add_nuclear_bombs = 1
+		set_country_flag = NAP_has_bomb_flag
+	}
+}
+
+country_event = { ### NAP Gets A Bomb
+	id = megaspells.2
+	immediate = {log = "[GetDateText]: [Root.GetName]: event megaspells.2"}
+	hidden = yes
+	fire_only_once = yes
+	trigger = {
+		orginal_tag = NAP
+		has_country_flag = NAP_has_bomb_flag
+		NOT = {
+			has_country_flag = RED_took_NAP_bomb
+		}
+		num_of_nukes < 1
+	}
+
+	option = {
+		name = megaspells.2.a
+		ai_chance = { factor = 50 }
+
+		clr_country_flag = NAP_has_bomb_flag
+	}
+}
+
+country_event = { ### RED learns of NAP's bomb
+	id = megaspells.3
+	immediate = {log = "[GetDateText]: [Root.GetName]: event megaspells.3"}
+	fire_only_once = yes
+	trigger = {
+		orginal_tag = RED
+		NAP = {
+			has_country_flag = NAP_has_bomb_flag
+		}
+	}
+	mean_time_to_happen = {
+		days = 350
+		modifier = {
+			factor = 0.60
+			has_country_leader = {
+			    name = "Red Eye"
+			    ruling_only = yes
+			}
+		}
+	}
+
+	option = { #Demand it
+		name = megaspells.4.a
+		ai_chance = { factor = 50 }
+
+		NAP = {
+			country_event = {
+				id = megaspells.4
+				days = 5
+			}
+		}
+	}
+}
+
+country_event = { ### RED wants our bomb
+	id = megaspells.4
+	immediate = {log = "[GetDateText]: [Root.GetName]: event megaspells.4"}
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	option = { #Yes
+		name = megaspells.4.a
+		ai_chance = { factor = 70 }
+
+		RED = {
+			country_event = {
+				id = megaspells.5
+				days = 5
+			}
+		}
+	}
+
+	option = { #No
+		name = megaspells.4.b
+		ai_chance = { factor = 10 }
+
+		RED = {
+			country_event = {
+				id = megaspells.6
+				days = 5
+			}
+		}
+	}
+}
+
+country_event = { ### NAP gave us bomb
+	id = megaspells.5
+	immediate = {log = "[GetDateText]: [Root.GetName]: event megaspells.5"}
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	option = { #Yes
+		name = megaspells.5.a
+		ai_chance = { factor = 50 }
+
+		NAP = {
+			add_nuclear_bombs = -1
+			has_country_flag = RED_took_NAP_bomb
+		}
+		add_nuclear_bombs = 1
+	}
+}
+
+country_event = { ### NAP refused to give us bomb
+	id = megaspells.6
+	immediate = {log = "[GetDateText]: [Root.GetName]: event megaspells.6"}
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	option = { #Yes
+		name = megaspells.6.a
+		ai_chance = { factor = 50 }
+
+		add_opinion_modifier = { target = NAP modifier = nap_refused_to_give_bomb }
+	}
+}
+
+country_event = { ### The Lightbringer wants our bomb
+	id = megaspells.7
+	immediate = {log = "[GetDateText]: [Root.GetName]: event megaspells.7"}
+	fire_only_once = yes
+	is_triggered_only = yes
+
+	option = { #It's an offer we can't refuse
+		name = megaspells.7.a
+		ai_chance = { factor = 50 }
+
+		add_political_power = -25
+		add_nuclear_bombs = -1
+	}
+}
