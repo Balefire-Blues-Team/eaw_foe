@@ -97,12 +97,17 @@ MAS_power_struggle = {
 		cost = 30
 		complete_effect = {
 			custom_effect_tooltip = MAS_raise_C_tt
+			custom_effect_tooltip = MAS_lower_A_tt
             add_stability = 0.05
             add_war_support = -0.05
             add_to_variable = {
                 var = MAS_C_Score
                 value = 1
             }
+            add_to_variable = {
+				var = MAS_A_Score
+				value = -1
+			}
 		}
     }
     MAS_PS_d2 = {
@@ -114,11 +119,16 @@ MAS_power_struggle = {
 		cost = 30
 		complete_effect = {
 			custom_effect_tooltip = MAS_raise_A_tt
+			custom_effect_tooltip = MAS_lower_C_tt
             add_stability = -0.05
             add_war_support = 0.05
             add_to_variable = {
                 var = MAS_A_Score
                 value = 1
+            }
+            add_to_variable = {
+                var = MAS_C_Score
+                value = -1
             }
 		}
     }
@@ -136,16 +146,11 @@ MAS_power_struggle = {
 		cost = 50
 		complete_effect = {
 			custom_effect_tooltip = MAS_raise_C_tt
-			custom_effect_tooltip = MAS_lower_A_tt
             add_stability = 0.1
             add_to_variable = {
                 var = MAS_C_Score
                 value = 1
             }
-			add_to_variable = {
-				var = MAS_A_Score
-				value = -1
-			}
 		}
     }
     MAS_PS_d5 = {
@@ -170,75 +175,75 @@ MAS_power_struggle = {
 		}
     }
 
-    MAS_Lose_trust_Committee_mission = {
-		
-		icon = generic_civil_support
-
-		visible = {
-			always = no
-		}
-		
-		available = {
-			hidden_trigger = { always = no }
-		}
-
-		selectable_mission = yes
-		days_mission_timeout = 49
-		is_good = no
-		fire_only_once = no
-
-		cancel_trigger = {
-			check_variable = { MAS_C_Score > -3 }
-		}
-		remove_effect = {
-		}
-
-		timeout_effect = {
-			custom_effect_tooltip = MAS_lose_trust_C_tt
-			add_to_variable = {
-                var = MAS_C_Score
-                value = -100
-            }
-		}
-
-		complete_effect = {
-		}
-	}
-
-	MAS_Lose_trust_Department_mission = {
-		
-		icon = generic_civil_support
-
-		visible = {
-			always = no
-		}
-		
-		available = {
-			hidden_trigger = { always = no }
-		}
-
-		selectable_mission = yes
-		days_mission_timeout = 49
-		is_good = no
-		fire_only_once = no
-
-		cancel_trigger = {
-			check_variable = { MAS_A_Score > -3 }
-		}
-		remove_effect = {
-		}
-
-		timeout_effect = {
-			custom_effect_tooltip = MAS_lose_trust_A_tt
-			add_to_variable = {
-                var = MAS_A_Score
-                value = -100
-            }
-		}
-
-		complete_effect = {
-		}
-	}
+#    MAS_Lose_trust_Committee_mission = {
+#		
+#		icon = generic_civil_support
+#
+#		visible = {
+#			always = no
+#		}
+#		
+#		available = {
+#			hidden_trigger = { always = no }
+#		}
+#
+#		selectable_mission = yes
+#		days_mission_timeout = 49
+#		is_good = no
+#		fire_only_once = no
+#
+#		cancel_trigger = {
+#			#check_variable = { MAS_C_Score > -3 }
+#		}
+#		remove_effect = {
+#		}
+#
+#		timeout_effect = {
+#			custom_effect_tooltip = MAS_lose_trust_C_tt
+#			add_to_variable = {
+#               var = MAS_C_Score
+#               value = -100
+#            }
+#		}
+#
+#		complete_effect = {
+#		}
+#	}
+#
+#	MAS_Lose_trust_Department_mission = {
+#		
+#		icon = generic_civil_support
+#
+#		visible = {
+#			always = no
+#		}
+#		
+#		available = {
+#			hidden_trigger = { always = no }
+#		}
+#
+#		selectable_mission = yes
+#		days_mission_timeout = 49
+#		is_good = no
+#		fire_only_once = no
+#
+#		cancel_trigger = {
+#			#check_variable = { MAS_A_Score > -3 }
+#		}
+#		remove_effect = {
+#		}
+#
+#		timeout_effect = {
+#			custom_effect_tooltip = MAS_lose_trust_A_tt
+#			add_to_variable = {
+#               var = MAS_A_Score
+#                value = -100
+#            }
+#		}
+#
+#		complete_effect = {
+#		}
+#	}
 
 
 }
@@ -315,3 +320,72 @@ MAS_RaceToCanterlot = {
 		}
     }
 }
+
+MAS_slave_trading_category = {
+	
+	MAS_slave_trade_1 = {
+		icon = GFX_decision_unknown
+		days_re_enable = 100
+		cost = 50
+		fire_only_once = yes
+		is_good = yes
+
+		available = {
+		has_country_flag = MAS_slave_trade_deal
+		}
+
+		visible = {
+		has_country_flag = MAS_slave_trade_deal
+		}
+		
+		complete_effect = {
+			add_manpower = 200
+
+			custom_effect_tooltip = MAS_OAP_random_tech_boost_tt
+			hidden_effect = {
+				OAP = {
+					Random_tech_bonus = yes
+				}
+			}
+		}
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove MAS_slave_trade_1"
+		}
+	}
+
+	MAS_slave_trade_2 = {
+		icon = GFX_decision_unknown
+		days_re_enable = 100
+		cost = 50
+		fire_only_once = yes
+		is_good = yes
+
+		available = {
+		has_country_flag = MAS_slave_trade_deal
+		has_equipment = {
+				magx_equipment_gun > 59
+			}
+		}
+
+		visible = {
+		has_country_flag = MAS_slave_trade_deal
+		}
+		
+		complete_effect = {
+			add_manpower = 200
+
+			OAP = {
+				add_equipment_to_stockpile = { type = magx_equipment_gun amount = 60 producer = MAS }
+			}
+			add_equipment_to_stockpile = { type = magx_equipment_gun amount = -60 }
+		}
+               		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove MAS_slave_trade_2"
+		}
+	}
+
+
+}
+
