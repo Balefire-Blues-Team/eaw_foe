@@ -75,6 +75,12 @@ scripted_gui = {
         }
     
         effects = {
+            ready_button_click = {
+                THIS = {
+                    set_state_flag = c1_readied_flag
+                }
+            }
+
             general_button_click = {
                 ROOT = {
                     launch_nuke = {
@@ -88,6 +94,9 @@ scripted_gui = {
                         }
                     }
                 }
+                THIS = {
+                    clr_state_flag = c1_readied_flag
+                }
             }
             factory_button_click = {
                 THIS = {
@@ -99,6 +108,9 @@ scripted_gui = {
                             id = utility.2
                         }
                     }
+                }
+                THIS = {
+                    clr_state_flag = c1_readied_flag
                 }
             }
             infra_button_click = {
@@ -112,11 +124,54 @@ scripted_gui = {
                         }
                     }
                 }
+                THIS = {
+                    clr_state_flag = c1_readied_flag
+                }
             }
         }
 
         triggers = {
+            ready_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = CEL1_HAS_DIVISION_SPOTTERS
+                    AND = {
+                        THIS = {
+                            has_ROOT_at_least_1_div_in_current_state_scope = yes
+                        }
+                        21 = {
+                            has_ROOT_at_least_1_div_in_current_state_scope = yes
+                        }
+                    }
+                }
+                custom_trigger_tooltip = {
+                    tooltip = CEL1_READY_TO_FIRE
+                    ROOT = {
+                        NOT = {
+                            has_country_flag = celestia_one_cooldown_flag
+                        }
+                    }
+                }
+                custom_trigger_tooltip = {
+                    tooltip = CONTROLLER_HAS_WAR_WITH_ROOT
+                    CONTROLLER = {
+                        has_war_with = ROOT
+                    }
+                }
+                hidden_trigger = {
+                    NOT = {
+                        THIS = {
+                            has_state_flag = c1_readied_flag
+                        }
+                    }
+                }
+            }
             infra_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = CEL1_AIMED_AT_STATE
+                    THIS = {
+                        has_state_flag = c1_readied_flag
+                    }
+                }
                 custom_trigger_tooltip = {
                     tooltip = CEL1_READY_TO_FIRE
                     ROOT = {
@@ -134,6 +189,12 @@ scripted_gui = {
             }
             factory_button_click_enabled = {
                 custom_trigger_tooltip = {
+                    tooltip = CEL1_AIMED_AT_STATE
+                    THIS = {
+                        has_state_flag = c1_readied_flag
+                    }
+                }
+                custom_trigger_tooltip = {
                     tooltip = CEL1_READY_TO_FIRE
                     ROOT = {
                         NOT = {
@@ -149,6 +210,12 @@ scripted_gui = {
                 }
             }
             general_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = CEL1_AIMED_AT_STATE
+                    THIS = {
+                        has_state_flag = c1_readied_flag
+                    }
+                }
                 custom_trigger_tooltip = {
                     tooltip = CEL1_READY_TO_FIRE
                     ROOT = {
