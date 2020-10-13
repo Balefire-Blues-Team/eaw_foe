@@ -741,6 +741,150 @@ country_event = {
 	
 }
 
+##LIT wnats to join the Enclave
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_event.21"}
+ 	id = LIT_event.21
+ 	title = LIT_event.21.t
+ 	desc = LIT_event.21.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#yes
+	option = {
+		name = LIT_event.21.a
+		ai_chance = { factor = 50
+			modifier = {
+				factor = 0
+				has_country_flag = NEV_des_ai
+			}
+		}
+		LIT = {country_event = LIT_event.22}
+		add_to_faction = LIT
+		add_stability = -0.05
+		hidden_effect = { LIT = { add_ai_strategy = { type = alliance id = "ROOT" value = 200} add_opinion_modifier = { target = ROOT modifier = huge_increase } } }
+		hidden_effect = { ROOT = { add_ai_strategy = { type = alliance id = "LIT" value = 200} add_opinion_modifier = { target = LIT modifier = huge_increase } } }
+	}
+	
+	#no
+	option = {
+		name = LIT_event.21.b
+		ai_chance = { factor = 50
+			modifier = {
+				factor = 0
+				has_country_flag = NEV_vis_ai
+			}
+		}
+		LIT = {country_event = LIT_event.23}
+	}
+	
+}
+
+##Enclave accepted us!
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_event.22"}
+ 	id = LIT_event.22
+ 	title = LIT_event.22.t
+ 	desc = LIT_event.22.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = LIT_event.22.a
+		ai_chance = { factor = 90}
+		custom_effect_tooltip = LIT_reload_focus_tree_tt
+		set_cosmetic_tag = LIT_enclave_cloudsdale
+		hidden_effect = { 
+			set_country_flag = LIT_NEV_acceptance_flag
+			load_focus_tree = LIT_focus_nev 
+		}
+	}
+	
+}
+
+##Enclave denied us!
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_event.23"}
+ 	id = LIT_event.23
+ 	title = LIT_event.23.t
+ 	desc = LIT_event.23.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = LIT_event.22.a
+		ai_chance = { factor = 90}
+		country_event = LIT_event.24
+		add_political_power = -100
+	}
+	
+}
+
+##Swift Storm proclaims a new Destiny
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_event.24"}
+ 	id = LIT_event.24
+ 	title = LIT_event.24.t
+ 	desc = LIT_event.24.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = LIT_event.24.a
+		ai_chance = { factor = 90}
+		custom_effect_tooltip = LIT_reload_focus_tree_tt
+		set_cosmetic_tag = LIT_true_enclave_cloudsdale
+		hidden_effect = { 
+			set_country_flag = LIT_NEV_denial_flag
+			load_focus_tree = LIT_focus_nev 
+			complete_national_focus  = LIT_enclave_denial
+		}
+	}
+	
+}
+
+##We are the New Enclave!
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_event.25"}
+ 	id = LIT_event.25
+ 	title = LIT_event.25.t
+ 	desc = LIT_event.25.d
+	picture = GFX_event_test
+
+	trigger = {
+		has_completed_focus = LIT_denial_deal_with_pretenders
+		owns_state = 696
+	}
+ 	fire_only_once = yes
+
+	option = {
+		name = LIT_event.25.a
+		ai_chance = { factor = 90}
+		custom_effect_tooltip = LIT_we_are_victorious_tt
+		set_cosmetic_tag = LIT_new_enclave_cloudsdale_victory
+		hidden_effect = {
+		retire_country_leader = yes
+		}
+		create_country_leader = {
+			name = "General Swift Storm"
+			picture = "Swift_Storm.tga"
+			expire = "1965.1.1"
+			ideology = rebuilder
+			traits = { }	
+		}
+		add_state_core = 696
+	}
+	
+}
+
 
 
 
