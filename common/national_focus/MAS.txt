@@ -84,6 +84,14 @@ focus_tree = {
     id = MAS_Unicornia_focus_tree
     country = {
     	factor = 0
+		modifier = {
+			add = 15
+			original_tag = MAS
+			has_country_leader = {
+			name = "Prince Horny Miracle"
+			ruling_only = yes
+			}
+		}
     }
     default = no
     continuous_focus_position = { x = 0 y = 0 }
@@ -2304,7 +2312,7 @@ shared_focus = { #I achieved an imposable goal.
 			}
 			load_focus_tree = MAS_Unicornia_focus_tree
         }
-        create_faction = Axis
+        create_faction = Summerdale Axis
 		remove_ideas = MAS_disrupted_reasearch_idea
         set_cosmetic_tag = MAS_Unicornia
         set_capital = 234
@@ -2332,7 +2340,7 @@ shared_focus = { #I achieved an imposable goal.
     }
 }
 
-shared_focus = { #reformation
+shared_focus = { 
     id = MAS_Unicornia_begins
     icon = GFX_focus_MAS_P4PU9
     
@@ -2343,6 +2351,542 @@ shared_focus = { #reformation
         factor = 1
     }
     completion_reward = {
-        
+        country_event = masevent.311
+		remove_ideas = MAS_disrupted_reasearch_idea
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_our_prince
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = 0
+    y = 1
+	prerequisite = { focus = MAS_Unicornia_begins }
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+		custom_effect_tooltip = MAS_unicornia_prince_tt
+		add_country_leader_trait = MAS_unicornia_prince
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_call_unicorns
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = -2
+    y = 2
+	prerequisite = { focus = MAS_Unicornia_our_prince }
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+        add_manpower = 200
+		custom_effect_tooltip = MAS_unlocks_manpower_decision_tt
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_royal_guard
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = 0
+    y = 2
+	prerequisite = { focus = MAS_Unicornia_our_prince }
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+        custom_effect_tooltip = MAS_roayal_guard_tt
+		hidden_effect = {
+			division_template = {
+			name = "Royal Guard"
+			priority = 0
+			is_locked = yes
+			regiments = {
+			infantry = { x = 0 y = 0 }
+			infantry = { x = 0 y = 1 }
+			infantry = { x = 0 y = 2 }
+			infantry = { x = 1 y = 0 }
+			infantry = { x = 1 y = 1 }
+			infantry = { x = 0 y = 3 }
+			infantry = { x = 0 y = 4 }
+			infantry = { x = 1 y = 2 }
+			fireteam_infantry = { x = 1 y = 3 }
+			fireteam_infantry = { x = 1 y = 4 }
+			}
+			support = {
+				medical_chem_company = 1
+				logistics_company = 1
+				unicorn_company = 1
+			}
+			}
+			234 = {
+				create_unit = {
+					division = "name = \"1. Royal Guard\" division_template = \"Royal Guard\" start_experience_factor = 0.8" 
+					owner = MAS
+				}
+				create_unit = {
+					division = "name = \"2. Royal Guard\" division_template = \"Royal Guard\" start_experience_factor = 0.8" 
+					owner = MAS
+				}
+			}
+		}
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_protect_domain
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = 2
+    y = 2
+	prerequisite = { focus = MAS_Unicornia_our_prince }
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+        add_ideas = MAS_protecting_canterlot_idea
+		234 = {
+				add_building_construction = {
+				type = bunker
+				province = 8719
+				level = 3
+				instant_build = yes
+				}
+				add_building_construction = {
+				type = bunker
+				province = 8738
+				level = 3
+				instant_build = yes
+				}
+			}
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_holy_kingdom
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = -4
+    y = 3
+	prerequisite = { focus = MAS_Unicornia_call_unicorns }
+	prerequisite = { focus = MAS_Unicornia_protect_domain }
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+        country_event = masevent.312
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_beauty_of_home
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = -7
+    y = 4
+	prerequisite = { focus = MAS_Unicornia_holy_kingdom }
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+        234 = {
+			add_extra_state_shared_building_slots = 4 add_building_construction = { type = industrial_complex instant_build = yes level = 3}
+		}
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_trains
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = -8
+    y = 5
+	prerequisite = { focus = MAS_Unicornia_beauty_of_home }
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+        234 = {
+			set_building_level = {
+					type = infrastructure
+					level = 10
+				}
+		}
+		415 = {add_building_construction = { type = infrastructure instant_build = yes level = 2}}
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_industry_kind
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = -6
+    y = 5
+	prerequisite = { focus = MAS_Unicornia_beauty_of_home }
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+        one_random_industrial_complex = yes
+		one_random_industrial_complex = yes
+		one_random_industrial_complex = yes
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_R_and_D
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = -7
+    y = 6
+	prerequisite = { focus = MAS_Unicornia_trains }
+	prerequisite = { focus = MAS_Unicornia_industry_kind }
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+        add_research_slot = 1
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_brave_army
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = 4
+    y = 3
+	prerequisite = { focus = MAS_Unicornia_call_unicorns }
+	prerequisite = { focus = MAS_Unicornia_protect_domain }
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+		add_ideas = MAS_army_Unicornia_idea
+		custom_effect_tooltip = MAS_trash_old_army_tt
+		hidden_effect = {
+        remove_ideas = MAS_CombArms_idea
+		remove_ideas = MAS_GrandArmy_idea
+		remove_ideas = MAS_StrongCom_idea
+		remove_ideas = MAS_magic_army_MagicalSupremacy_idea
+		remove_ideas = MAS_magic_army_CapableMages_idea
+		remove_ideas = MAS_magic_army_BasicMagicalTraining_idea
+		remove_ideas = MAS_magic_army_MagicalOfficers_idea
+		clr_country_flag = MAS_HornyArmyDecisionsUnlocked
+		}
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_seize_STA
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = 4
+    y = 4
+	prerequisite = { focus = MAS_Unicornia_brave_army }
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+        STA = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_into_canter_mountains
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = 6
+    y = 4
+	prerequisite = { focus = MAS_Unicornia_brave_army }
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+        CCD = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_unite_the_holy_lands
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = 5
+    y = 5
+	prerequisite = { focus = MAS_Unicornia_into_canter_mountains }
+	prerequisite = { focus = MAS_Unicornia_seize_STA }
+	available = {
+		owns_state = 735
+		owns_state = 65
+		owns_state = 475
+		owns_state = 74
+	}
+    cost = 8.58
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+        Core_original_CCD = yes
+		Core_original_STA = yes
+		Core_original_PRA = yes
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_unicorns_rule
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = 0
+    y = 3
+	prerequisite = { focus = MAS_Unicornia_call_unicorns }
+	prerequisite = { focus = MAS_Unicornia_protect_domain }
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+        add_ideas = MAS_unicorns_rule_idea
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_racial_conclusion
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = 2
+    y = 4
+	prerequisite = { focus = MAS_Unicornia_unicorns_rule }
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+        swap_ideas = {remove_idea = MAS_XenoSlaves0_idea add_idea = MAS_XenoSlaves1_idea}
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_old_friends
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = 2
+    y = 5
+	prerequisite = { focus = MAS_Unicornia_racial_conclusion }
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+       TEN = { country_event = masevent.316 }
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_axis_expansion
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = 2
+    y = 6
+	prerequisite = { focus = MAS_Unicornia_old_friends }
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+        TEN = { country_event = masevent.313 }
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_past_heroes
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = -2
+    y = 4
+	prerequisite = { focus = MAS_Unicornia_unicorns_rule }
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+        army_experience = 25
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_tanks_tanks_tanks
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = -1
+    y = 5
+	prerequisite = { focus = MAS_Unicornia_past_heroes }
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+        add_tech_bonus = {
+			name = tank_bonus
+			bonus = 0.8
+			uses = 2
+			category = tank_tech
+			}
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_military_academy
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = -1
+    y = 6
+	prerequisite = { focus = MAS_Unicornia_tanks_tanks_tanks }
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+        add_research_slot = 1
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_unicorns_on_wheels
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = -1
+    y = 7
+	prerequisite = { focus = MAS_Unicornia_military_academy }
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+        add_tech_bonus = {
+			name = truck_bonus
+			bonus = 0.8
+			uses = 3
+			category = truck_tech
+			}
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_restore_canterlot_ships
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = -4
+    y = 5
+	prerequisite = { focus = MAS_Unicornia_past_heroes }
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+        one_random_arms_factory = yes
+		one_random_arms_factory = yes
+		one_random_arms_factory = yes
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_aeroplanes
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = -5
+    y = 6
+	prerequisite = { focus = MAS_Unicornia_restore_canterlot_ships }
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+         add_tech_bonus = {
+			name = light_fighter
+			bonus = 0.8
+			uses = 2
+			category = light_fighter
+			}
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_airships
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = -3
+    y = 6
+	prerequisite = { focus = MAS_Unicornia_restore_canterlot_ships }
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+        add_tech_bonus = {
+			name = heavy_air
+			bonus = 0.8
+			uses = 2
+			category = heavy_air
+			}
+    }
+}
+
+shared_focus = { 
+    id = MAS_Unicornia_protect_city
+    icon = GFX_focus_MAS_P4PU9
+    relative_position_id = MAS_Unicornia_begins
+    x = -4
+    y = 7
+	prerequisite = { focus = MAS_Unicornia_airships }
+	prerequisite = { focus = MAS_Unicornia_aeroplanes }
+    cost = 5
+    ai_will_do = {
+        factor = 1
+    }
+    completion_reward = {
+        180 = { 
+				add_building_construction = {
+					type = anti_air_building
+					level = 5
+					instant_build = yes
+				} 
+			}
+		234 = { 
+				add_building_construction = {
+					type = anti_air_building
+					level = 5
+					instant_build = yes
+				} 
+			}
+		415 = { 
+				add_building_construction = {
+					type = anti_air_building
+					level = 2
+					instant_build = yes
+				} 
+			}
     }
 }
