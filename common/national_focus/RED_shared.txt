@@ -14,7 +14,6 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_birthofamonster"
 		country_event = { id = redeye.1 }
-		
 	}
 
 } 
@@ -745,7 +744,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_loot_stabletec
-	icon = GFX_goal_generic_electronics_focus
+	icon = GFX_goal_generic_pipbuck
 	relative_position_id = RED_the_city
 	x = 0
 	y = 2
@@ -1838,7 +1837,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_redeye_radio
-	icon = GFX_goal_stg_radio
+	icon = GFX_goal_generic_foe_radio
 	relative_position_id = RED_redeye_political
 	x = 0
 	y = 1
@@ -2020,6 +2019,11 @@ shared_focus = {
 	y = 1
 	cost = 7
 
+	bypass = {
+		NOT = { country_exists = FTP }
+		NOT = { country_exists = FTR }
+	}
+
 	prerequisite = { focus =RED_old_appleloosa } 
 	ai_will_do = { 
 		factor = 70
@@ -2028,12 +2032,22 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_foaltopia_gems"
 
-		FTP = {
-			country_event = {
-    			id = foaltopia.1
-    			days = 1
-    			random = 2
+		if = { 
+			limit = { country_exists = FTP }
+			FTP = {
+				country_event = {
+    				id = foaltopia.1
+    				days = 1
+    				random = 2
+				}
 			}
+		}
+		else_if = {
+			limit = {
+				NOT = { country_exists = FTP }
+				country_exists = FTR
+			}
+			create_wargoal = { type = annex_everything target = FTR }
 		}
 	}
 
@@ -2070,7 +2084,11 @@ shared_focus = {
 	y = 1
 	cost = 7
 
-	prerequisite = { focus = RED_foaltopia_gems } 
+	prerequisite = { focus = RED_foaltopia_gems }
+	available = {
+		NOT = { country_exists = FTP }
+		has_full_control_of_state = 410
+	}
 	ai_will_do = { 
 		factor = 70
 	} 
@@ -2258,7 +2276,7 @@ shared_focus = {
 	relative_position_id = RED_redeye_political
 	x = 8
 	y = 1
-	cost = 5
+	cost = 10
 
 	prerequisite = { focus = RED_redeye_political } 
 	ai_will_do = { 
@@ -2315,6 +2333,11 @@ shared_focus = {
 	x = 1
 	y = 1
 	cost = 7
+
+	bypass = {
+        NOT = { country_exists = GRV }
+        NOT = { country_exists = HIT }
+    }
 
 	prerequisite = { focus = RED_old_fashioned_way } 
 	ai_will_do = { 
@@ -2385,6 +2408,7 @@ shared_focus = {
 
 	bypass = {
         NOT = { country_exists = GUN }
+        NOT = { country_exists = LGH }
     }
 
 	prerequisite = { focus = RED_drums_of_war }
@@ -2414,6 +2438,16 @@ shared_focus = {
 
 	prerequisite = { focus = RED_break_the_mob } 
 	prerequisite = { focus = RED_bloody_talons } 
+	available = {
+		NOT = { country_exists = GUN }
+		NOT = { country_exists = LGH }
+		NOT = { country_exists = APR }
+		NOT = { country_exists = FRT }
+		NOT = { country_exists = HIT }
+		NOT = { country_exists = GRV }
+		NOT = { country_exists = FTR }
+		RED_can_form_empire = yes
+	}
 	ai_will_do = { 
 		factor = 70
 	} 
@@ -2457,7 +2491,7 @@ shared_focus = {
 	relative_position_id = RED_redeye_political
 	x = -8
 	y = 1
-	cost = 5
+	cost = 10
 
 	prerequisite = { focus = RED_redeye_political } 
 	ai_will_do = { 
@@ -2818,7 +2852,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = RED_tale_of_two_cities
-	icon = GFX_goal_generic_major_war
+	icon = GFX_goal_generic_foe_manehattan
 	relative_position_id = RED_new_unity
 	x = -2
 	y = 1
