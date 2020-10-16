@@ -42,5 +42,5 @@ dependencies={
 	"Old World Blues"
 	"Equestria at War"
 }
-supported_version="1.9.1"
+supported_version="1.10.1"
 path="mod/eaw_foe"
