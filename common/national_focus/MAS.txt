@@ -792,10 +792,18 @@ shared_focus = {
 			add_building_construction = {
 				type = bunker
 				province = 270
-				level = 1
+				level = 2
 				instant_build = yes
 			}
 		}
+        527 = {
+            add_building_construction = {
+                type = bunker2
+                province = 270
+                level = 1
+                instant_build = yes
+            }
+        }
 	}
 }
 shared_focus = {
@@ -865,10 +873,19 @@ shared_focus = {
 		factor = 10
 	}
 	completion_reward = {
-		swap_ideas = {
-			remove_idea = MAS_magic_army_MagicalSupremacy_idea
-			add_idea = MAS_magic_army_MagicalSupremacyMystery_idea
-		}
+		if = {
+            Limit = { has_idea = MAS_magic_army_MagicalSupremacy_idea }
+            swap_ideas = {
+		        remove_idea = MAS_magic_army_MagicalSupremacy_idea
+			    add_idea = MAS_magic_army_MagicalSupremacyMystery_idea
+		    }
+        }
+        else = {
+            swap_ideas = {
+                remove_idea = MAS_magic_army_CapableMages_idea
+                add_idea = MAS_magic_army_MagicalSupremacyMystery_idea
+            }
+        }
 	}
 }
 shared_focus = {
@@ -907,8 +924,9 @@ shared_focus = {
 	}
 	completion_reward = {
 		add_equipment_to_stockpile = {
-			type = magx_equipment_gun
+			type = energy_equipment_1
 			amount = 200
+            producer = OWE
 		}
 	}
 }
@@ -993,13 +1011,20 @@ shared_focus = {
 			category = industry
 		}
 		527 = {
-			add_extra_state_shared_building_slots = 1
 			add_building_construction = {
 				type = infrastructure
 				level = 1
 				instant_build = yes
 			}
 		}
+        527 = {
+            add_extra_state_shared_building_slots = 2
+            add_building_construction = {
+                type = industrial_complex
+                level = 2
+                instant_build = yes
+            }
+        }
 	}
 }
 shared_focus = {
@@ -1040,20 +1065,10 @@ shared_focus = {
 		factor = 10
 	}
 	completion_reward = {
-		if = { 
-            limit = { 
-                has_idea = MAS_CounterEspionage_idea 
-            }
-                swap_ideas = {
-		  	       remove_idea = MAS_CounterEspionage_idea
-		  	       add_idea = MAS_magic_army_MagicalSupremacyMystery_idea
-                }   
-        }
-        else = {
-            swap_ideas = {
-                   remove_idea = MAS_magic_army_CapableMages_idea
-                   add_idea = MAS_magic_army_MagicalSupremacyMystery_idea
-                }
+		
+        swap_ideas = {
+            remove_idea = MAS_MysteryDetectives_idea
+            add_idea = MAS_MysteryDetectives_idea1
         }
 	}
 }
@@ -1110,6 +1125,10 @@ shared_focus = {
 			remove_idea = MAS_CounterEspionage1_idea
 			add_idea = MAS_CounterEspionage2_idea
 		}
+        swap_ideas = {
+            remove_idea = closed_stable_society
+            add_idea = open_stable_society
+        }
 	}
 }
 #############
@@ -1324,62 +1343,12 @@ shared_focus = { #Back to work.
         factor = 1
     }
     completion_reward = {
-        if = {
-            limit = {
-                check_variable = { MAS_A_Score > 9 }
-            }
-            load_oob = MAS_3_DF
-        }
-        if = {
-            limit = {
-                check_variable = { MAS_C_Score > 9 }
-            }
-            load_oob = MAS_3_Det
-        }
-        if = {
-            limit = {
-                AND = {
-                    check_variable = { MAS_A_Score > 4 }
-                    check_variable = { MAS_A_Score < 10 }
-                }
-            }
-            load_oob = MAS_1_DF
-        }
-        if = {
-            limit = {
-                AND = {
-                    check_variable = { MAS_C_Score > 4 }
-                    check_variable = { MAS_C_Score < 10 }
-                }
-            }
-            load_oob = MAS_1_Det
-        }
+        
         if = {
             limit = {
                 has_country_flag = MAS_RobotsInArmy
             }
             load_oob = MAS_1_robot
-        }
-        if = {
-            limit = {
-                check_variable = { MAS_C_score > 7 }
-            }
-            add_ideas = MAS_StrongCom_idea
-        }
-        if = {
-            limit = {
-                check_variable = { MAS_A_score > 7 }
-            }
-            add_ideas = MAS_GrandArmy_idea
-        }
-        if = {
-            limit = {
-                AND = {
-                    check_variable = { MAS_A_score < 8 }
-                    check_variable = { MAS_C_score < 8 }
-                }
-            }
-            add_ideas = MAS_CombArms_idea
         }
         add_ideas = old_world_society
 	add_ideas = partial_economic_mobilisation
@@ -1446,6 +1415,9 @@ shared_focus = { #Ultimatum to neighbor.
     cost = 5
     ai_will_do = {
         factor = 1
+    }
+    bypass = {
+        NOT = { country_exists = LIT }
     }
     will_lead_to_war_with = LIT
     completion_reward = { #Let's hope it will work. I tried to make this part as unbreakable as it should be.
@@ -1515,6 +1487,7 @@ shared_focus = { #CB on Georgetown.
                 }
             }
     }
+    bypass = { NOT = { country_exists = GOR }}
     x = 0
     y = 2
     relative_position_id = MAS_P3H3
@@ -2167,33 +2140,6 @@ shared_focus = { #Next evac point.
 		if = {limit = {SPV = {is_puppet_of = ROOT}}annex_country = {target = SPV transfer_troops = no}}
 		hidden_effect = {
 			add_manpower = -200
-			if = {
-                limit = {
-                    has_idea = MAS_magic_army_MagicalSupremacy_idea
-                }
-                swap_ideas = {
-                     remove_idea = MAS_magic_army_MagicalSupremacy_idea
-                     add_idea = MAS_magic_army_CapableMages_idea
-                }
-            }
-            else_if = {
-                limit = {
-                    has_idea = MAS_magic_army_CapableMages_idea
-                }
-                swap_ideas = {
-                    remove_idea = MAS_magic_army_CapableMages_idea
-                    add_idea = MAS_magic_army_BasicMagicalTraining_idea
-                }
-            }
-            else_if = {
-                limit = {
-                    has_idea = MAS_magic_army_BasicMagicalTraining_idea
-                }
-                swap_ideas = {
-                    remove_idea = MAS_magic_army_BasicMagicalTraining_idea
-                    add_idea = MAS_magic_army_MagicalOfficers_idea
-                }
-            }
 		}
     }
 }
@@ -2201,8 +2147,12 @@ shared_focus = { #My glorious city!
     id = MAS_P4PU8C2
     icon = GFX_focus_MAS_P4PU8C2
     prerequisite = {
-        focus = MAS_P4PU4
+        focus = MAS_P4PU5C1
     }
+    prerequisite = {
+        focus = MAS_P4PU5C2
+    }
+
     x = 16
     y = 8
     cost = 5
@@ -2285,7 +2235,7 @@ shared_focus = { #I achieved an imposable goal.
 			}
 			load_focus_tree = MAS_Unicornia_focus_tree
         }
-        create_faction = Summerdale Axis
+        create_faction = "Summerdale Axis"
 		remove_ideas = MAS_disrupted_reasearch_idea
         set_cosmetic_tag = MAS_Unicornia
         set_capital = 234
@@ -2315,7 +2265,7 @@ shared_focus = { #I achieved an imposable goal.
 
 shared_focus = { 
     id = MAS_Unicornia_begins
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_begins
     
     x = 15
     y = 0
@@ -2331,7 +2281,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_our_prince
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_our_prince
     relative_position_id = MAS_Unicornia_begins
     x = 0
     y = 1
@@ -2348,7 +2298,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_call_unicorns
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_call_unicorns
     relative_position_id = MAS_Unicornia_begins
     x = -2
     y = 2
@@ -2365,7 +2315,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_royal_guard
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_royal_guard
     relative_position_id = MAS_Unicornia_begins
     x = 0
     y = 2
@@ -2379,7 +2329,7 @@ shared_focus = {
 		hidden_effect = {
 			division_template = {
 			name = "Royal Guard"
-			priority = 0
+			priority = 2
 			is_locked = yes
 			regiments = {
 			infantry = { x = 0 y = 0 }
@@ -2415,7 +2365,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_protect_domain
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_protect_domain
     relative_position_id = MAS_Unicornia_begins
     x = 2
     y = 2
@@ -2445,7 +2395,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_holy_kingdom
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_holy_kingdom
     relative_position_id = MAS_Unicornia_begins
     x = -4
     y = 3
@@ -2462,7 +2412,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_beauty_of_home
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_beauty_of_home
     relative_position_id = MAS_Unicornia_begins
     x = -7
     y = 4
@@ -2480,7 +2430,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_trains
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_trains
     relative_position_id = MAS_Unicornia_begins
     x = -8
     y = 5
@@ -2502,7 +2452,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_industry_kind
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_industry_kind
     relative_position_id = MAS_Unicornia_begins
     x = -6
     y = 5
@@ -2520,7 +2470,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_R_and_D
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_R_and_D
     relative_position_id = MAS_Unicornia_begins
     x = -7
     y = 6
@@ -2537,7 +2487,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_brave_army
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_brave_army
     relative_position_id = MAS_Unicornia_begins
     x = 4
     y = 3
@@ -2565,7 +2515,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_seize_STA
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_seize_STA
     relative_position_id = MAS_Unicornia_begins
     x = 4
     y = 4
@@ -2585,7 +2535,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_into_canter_mountains
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_into_canter_mountains
     relative_position_id = MAS_Unicornia_begins
     x = 6
     y = 4
@@ -2605,7 +2555,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_unite_the_holy_lands
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_unite_the_holy_lands
     relative_position_id = MAS_Unicornia_begins
     x = 5
     y = 5
@@ -2630,7 +2580,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_unicorns_rule
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_unicorns_rule
     relative_position_id = MAS_Unicornia_begins
     x = 0
     y = 3
@@ -2647,7 +2597,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_racial_conclusion
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_racial_conclusion
     relative_position_id = MAS_Unicornia_begins
     x = 2
     y = 4
@@ -2663,7 +2613,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_old_friends
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_old_friends
     relative_position_id = MAS_Unicornia_begins
     x = 2
     y = 5
@@ -2679,7 +2629,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_axis_expansion
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_axis_expansion
     relative_position_id = MAS_Unicornia_begins
     x = 2
     y = 6
@@ -2695,7 +2645,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_past_heroes
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_past_heroes
     relative_position_id = MAS_Unicornia_begins
     x = -2
     y = 4
@@ -2711,7 +2661,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_tanks_tanks_tanks
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_tanks_tanks_tanks
     relative_position_id = MAS_Unicornia_begins
     x = -1
     y = 5
@@ -2732,7 +2682,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_military_academy
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_military_academy
     relative_position_id = MAS_Unicornia_begins
     x = -1
     y = 6
@@ -2748,7 +2698,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_unicorns_on_wheels
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_unicorns_on_wheels
     relative_position_id = MAS_Unicornia_begins
     x = -1
     y = 7
@@ -2769,7 +2719,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_restore_canterlot_ships
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_restore_canterlot_ships
     relative_position_id = MAS_Unicornia_begins
     x = -4
     y = 5
@@ -2787,7 +2737,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_aeroplanes
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_aeroplanes
     relative_position_id = MAS_Unicornia_begins
     x = -5
     y = 6
@@ -2808,7 +2758,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_airships
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_airships
     relative_position_id = MAS_Unicornia_begins
     x = -3
     y = 6
@@ -2829,7 +2779,7 @@ shared_focus = {
 
 shared_focus = { 
     id = MAS_Unicornia_protect_city
-    icon = GFX_focus_MAS_P4PU9
+    icon = GFX_focus_MAS_Unicornia_protect_city
     relative_position_id = MAS_Unicornia_begins
     x = -4
     y = 7
