@@ -1,391 +1,392 @@
-﻿add_namespace = bankrupt_events
-
-country_event = { ###Informs player of bankruptcy
-	id = bankrupt_events.1
-	title = bankrupt_events.1.t
-	desc = bankrupt_events.1.d
-	#picture = GFX_event_chem_addiction
-	is_triggered_only = yes
-
-	immediate = {
-		hidden_effect = {
-			scoped_sound_effect = "ui_items_bottlecaps_down_01"
-		}
-	}
-	trigger = {
-		has_dynamic_modifier = { modifier = caps_bankruptcy_modifier }
-	}
-	option = {
-		name = bankrupt_events.1.a
-		##Bailout if not already bailed out once for forgiveness.
-		if = {
-			limit = {
-				NOT = { has_country_flag = bailed_out }
-			}
-			set_temp_variable = { caps_to_add = 500 }
-			add_caps = yes
-			set_country_flag = bailed_out
-		}
-		else = {
-			hidden_effect = {
-				random_list = {
-					60 = {
-						country_event = {
-							id = bankrupt_events.2
-							days = 30
-							random = 90
-						}
-					}
-					40 = {
-						country_event = {
-							id = bankrupt_events.3
-							days = 30
-							random = 90
-						}
-					}
-				}
-			}
-		}
-	}
-}
-
-country_event = { ###Damage Infrastructure
-	id = bankrupt_events.2
-	title = bankrupt_events.2.t
-	desc = bankrupt_events.2.d
-	#picture = GFX_event_chem_addiction
-	is_triggered_only = yes
-
-	immediate = {
-		hidden_effect = {
-			scoped_sound_effect = "ui_items_bottlecaps_down_01"
-		}
-	}
-
-	trigger = {
-		has_dynamic_modifier = { modifier = caps_bankruptcy_modifier }
-	}
-	option = {
-		name = bankrupt_events.2.a
-
-		random_owned_state = {
-			damage_building = {
-				type = infrastructure
-				damage = 2
-			}
-		}
-		hidden_effect = {
-			random_list = {
-				30 = {
-					country_event = {
-						id = bankrupt_events.4
-						days = 30
-						random = 90
-					}
-				}
-				70 = {
-					country_event = {
-						id = bankrupt_events.3
-						days = 30
-						random = 90
-					}
-				}
-			}
-		}
-	}
-	option = {
-		###Slave bailout option if has slaves
-		name = bankrupt_events.2.b
-
-		trigger = {
-			NOT = { has_idea = slavery_outlawed }
-			check_variable = { slaves_number_display > 200 }
-		}
-		subtract_from_variable = { slaves_number_display = 200 }
-		custom_effect_tooltip = bankrupt_2_b_tt
-		hidden_effect = {
-			random_list = {
-				50 = {
-					country_event = {
-						id = bankrupt_events.2
-						days = 30
-						random = 90
-					}
-				}
-				50 = {
-					country_event = {
-						id = bankrupt_events.3
-						days = 30
-						random = 90
-					}
-				}
-			}
-		}
-	}
-
-}
-
-country_event = { ###Bankrupt Event Breaks arms factories in two states
-	id = bankrupt_events.4
-	title = bankrupt_events.4.t
-	desc = bankrupt_events.4.d
-	#picture = GFX_event_chem_addiction
-	is_triggered_only = yes
-
-	immediate = {
-		hidden_effect = {
-			scoped_sound_effect = "ui_items_bottlecaps_down_01"
-		}
-	}
-
-	trigger = {
-		has_dynamic_modifier = { modifier = caps_bankruptcy_modifier }
-	}
-	option = {
-		name = bankrupt_events.4.a
-
-		random_owned_state = {
-			limit = {
-				arms_factory > 0
-			}
-			damage_building = {
-				type = arms_factory
-				damage = 3
-			}
-		}
-		random_owned_state = {
-			limit = {
-				arms_factory > 0
-			}
-			damage_building = {
-				type = arms_factory
-				damage = 3
-			}
-		}
-		hidden_effect = {
-			random_list = {
-				40 = {
-					country_event = {
-						id = bankrupt_events.4
-						days = 30
-						random = 90
-					}
-				}
-				40 = {
-					country_event = {
-						id = bankrupt_events.6
-						days = 30
-						random = 90
-					}
-				}
-				20 = {
-					country_event = {
-						id = bankrupt_events.5
-						days = 30
-						random = 90
-					}
-				}
-			}
-		}
-	}
-}
-
-country_event = { ###Bankrupt Event Loses infantry equipment
-	id = bankrupt_events.6
-	title = bankrupt_events.6.t
-	desc = bankrupt_events.6.d
-	#picture = GFX_event_chem_addiction
-	is_triggered_only = yes
-
-	immediate = {
-		hidden_effect = {
-			scoped_sound_effect = "ui_items_bottlecaps_down_01"
-		}
-	}
-
-	trigger = {
-		has_dynamic_modifier = { modifier = caps_bankruptcy_modifier }
-	}
-	option = {
-		name = bankrupt_events.6.a
-
-		add_equipment_to_stockpile = {
-			type = infantry_equipment
-			amount = -600
-		}
-		hidden_effect = {
-			random_list = {
-				40 = {
-					country_event = {
-						id = bankrupt_events.4
-						days = 30
-						random = 90
-					}
-				}
-				40 = {
-					country_event = {
-						id = bankrupt_events.6
-						days = 30
-						random = 90
-					}
-				}
-				20 = {
-					country_event = {
-						id = bankrupt_events.5
-						days = 30
-						random = 90
-					}
-				}
-			}
-		}
-	}
-	option = {
-		name = bankrupt_events.6.b
-		###Bailout via Gun Runner
-		trigger = {
-			check_variable = { gun_runner_opinion > 50 }
-		}
-		subtract_from_variable = { gun_runner_opinion = 50 }
-		custom_effect_tooltip = bankrupt_6_b_tt
-		hidden_effect = {
-			random_list = {
-				50 = {
-					country_event = {
-						id = bankrupt_events.2
-						days = 30
-						random = 90
-					}
-				}
-				50 = {
-					country_event = {
-						id = bankrupt_events.3
-						days = 30
-						random = 90
-					}
-				}
-			}
-		}
-	}
-}
-
-country_event = { ###Bankrupt Event - Lose Manpower
-	id = bankrupt_events.3
-	title = bankrupt_events.3.t
-	desc = bankrupt_events.3.d
-	#picture = GFX_event_chem_addiction
-	is_triggered_only = yes
-
-	immediate = {
-		hidden_effect = {
-			scoped_sound_effect = "ui_items_bottlecaps_down_01"
-		}
-	}
-
-	trigger = {
-		has_dynamic_modifier = { modifier = caps_bankruptcy_modifier }
-	}
-	option = {
-		name = bankrupt_events.3.a
-
-		add_manpower = -300
-		hidden_effect = {
-			random_list = {
-				70 = {
-					country_event = {
-						id = bankrupt_events.2
-						days = 30
-						random = 90
-					}
-				}
-				30 = {
-					country_event = {
-						id = bankrupt_events.6
-						days = 30
-						random = 90
-					}
-				}
-			}
-		}
-	}
-	option = {
-		name = bankrupt_events.3.b
-		### Bailout via chem rep
-		trigger = {
-			check_variable = { chem_runner_opinion > 50 }
-		}
-		add_manpower = -100
-		subtract_from_variable = { chem_runner_opinion = 50 }
-		custom_effect_tooltip = bankrupt_3_b_tt
-		hidden_effect = {
-			random_list = {
-				70 = {
-					country_event = {
-						id = bankrupt_events.2
-						days = 30
-						random = 90
-					}
-				}
-				30 = {
-					country_event = {
-						id = bankrupt_events.3
-						days = 30
-						random = 90
-					}
-				}
-			}
-		}
-	}
-}
-country_event = { ###Bankrupt Event - Total Collapse
-	id = bankrupt_events.5
-	title = bankrupt_events.5.t
-	desc = bankrupt_events.5.d
-	#picture = GFX_event_chem_addiction
-	is_triggered_only = yes
-
-	immediate = {
-		hidden_effect = {
-			scoped_sound_effect = "ui_items_bottlecaps_down_01"
-		}
-	}
-
-	trigger = {
-		has_dynamic_modifier = { modifier = caps_bankruptcy_modifier }
-	}
-	option = {
-
-		name = bankrupt_events.5.a
-		add_timed_idea = {
-			idea = caps_economic_instabillity
-			days = 365
-		}
-		###Set bank to 0
-		set_temp_variable = { caps_temp_fix = caps_number_display }
-		multiply_temp_variable = { caps_temp_fix = -1 }
-		set_temp_variable = { caps_to_add = caps_temp_fix }
-		add_caps = yes
-		### Modify costs by -70% and gains by -50%
-		add_to_variable = { caps_expense_modifier = -0.7 }
-		add_to_variable = { caps_income_modifier = -0.5 }
-		custom_effect_tooltip = bankrupt_event_5_tt
-		hidden_effect = {
-			country_event = {
-				id = bankrupt_events.7
-				days = 180
-			}
-		}
-	}
-}
-country_event = { ###Bankrupt Event - Remove modifiers on country
-	id = bankrupt_events.7
-	title = bankrupt_events.7.t
-	desc = bankrupt_events.7.d
-	#picture = GFX_event_chem_addiction
-	is_triggered_only = yes
-	option = {
-
-		name = bankrupt_events.7.a
-		add_to_variable = { caps_expense_modifier = 0.7 }
-		add_to_variable = { caps_income_modifier = 0.5 }
-	}
-}
+﻿#add_namespace = bankrupt_events
+#
+#country_event = { ###Informs player of bankruptcy
+#	id = bankrupt_events.1
+#	title = bankrupt_events.1.t
+#	desc = bankrupt_events.1.d
+#	#picture = GFX_event_chem_addiction
+#	is_triggered_only = yes
+#
+#	immediate = {
+#		hidden_effect = {
+#			scoped_sound_effect = "ui_items_bottlecaps_down_01"
+#		}
+#	}
+#	trigger = {
+#		has_dynamic_modifier = { modifier = caps_bankruptcy_modifier }
+#	}
+#	option = {
+#		name = bankrupt_events.1.a
+#		##Bailout if not already bailed out once for forgiveness.
+#		if = {
+#			limit = {
+#				NOT = { has_country_flag = bailed_out }
+#			}
+#			set_temp_variable = { caps_to_add = 500 }
+#			add_caps = yes
+#			set_country_flag = bailed_out
+#		}
+#		else = {
+#			hidden_effect = {
+#				random_list = {
+#					60 = {
+#						country_event = {
+#							id = bankrupt_events.2
+#							days = 30
+#							random = 90
+#						}
+#					}
+#					40 = {
+#						country_event = {
+#							id = bankrupt_events.3
+#							days = 30
+#							random = 90
+#						}
+#					}
+#				}
+#			}
+#		}
+#	}
+#}
+#
+#country_event = { ###Damage Infrastructure
+#	id = bankrupt_events.2
+#	title = bankrupt_events.2.t
+#	desc = bankrupt_events.2.d
+#	#picture = GFX_event_chem_addiction
+#	is_triggered_only = yes
+#
+#	immediate = {
+#		hidden_effect = {
+#			scoped_sound_effect = "ui_items_bottlecaps_down_01"
+#		}
+#	}
+#
+#	trigger = {
+#		has_dynamic_modifier = { modifier = caps_bankruptcy_modifier }
+#	}
+#	option = {
+#		name = bankrupt_events.2.a
+#
+#		random_owned_state = {
+#			damage_building = {
+#				type = infrastructure
+#				damage = 2
+#			}
+#		}
+#		hidden_effect = {
+#			random_list = {
+#				30 = {
+#					country_event = {
+#						id = bankrupt_events.4
+#						days = 30
+#						random = 90
+#					}
+#				}
+#				70 = {
+#					country_event = {
+#						id = bankrupt_events.3
+#						days = 30
+#						random = 90
+#					}
+#				}
+#			}
+#		}
+#	}
+#	option = {
+#		###Slave bailout option if has slaves
+#		name = bankrupt_events.2.b
+#
+#		trigger = {
+#			NOT = { has_idea = slavery_outlawed }
+#			check_variable = { slaves_number_display > 200 }
+#		}
+#		subtract_from_variable = { slaves_number_display = 200 }
+#		custom_effect_tooltip = bankrupt_2_b_tt
+#		hidden_effect = {
+#			random_list = {
+#				50 = {
+#					country_event = {
+#						id = bankrupt_events.2
+#						days = 30
+#						random = 90
+#					}
+#				}
+#				50 = {
+#					country_event = {
+#						id = bankrupt_events.3
+#						days = 30
+#						random = 90
+#					}
+#				}
+#			}
+#		}
+#	}
+#
+#}
+#
+#country_event = { ###Bankrupt Event Breaks arms factories in two states
+#	id = bankrupt_events.4
+#	title = bankrupt_events.4.t
+#	desc = bankrupt_events.4.d
+#	#picture = GFX_event_chem_addiction
+#	is_triggered_only = yes
+#
+#	immediate = {
+#		hidden_effect = {
+#			scoped_sound_effect = "ui_items_bottlecaps_down_01"
+#		}
+#	}
+#
+#	trigger = {
+#		has_dynamic_modifier = { modifier = caps_bankruptcy_modifier }
+#	}
+#	option = {
+#		name = bankrupt_events.4.a
+#
+#		random_owned_state = {
+#			limit = {
+#				arms_factory > 0
+#			}
+#			damage_building = {
+#				type = arms_factory
+#				damage = 3
+#			}
+#		}
+#		random_owned_state = {
+#			limit = {
+#				arms_factory > 0
+#			}
+#			damage_building = {
+#				type = arms_factory
+#				damage = 3
+#			}
+#		}
+#		hidden_effect = {
+#			random_list = {
+#				40 = {
+#					country_event = {
+#						id = bankrupt_events.4
+#						days = 30
+#						random = 90
+#					}
+#				}
+#				40 = {
+#					country_event = {
+#						id = bankrupt_events.6
+#						days = 30
+#						random = 90
+#					}
+#				}
+#				20 = {
+#					country_event = {
+#						id = bankrupt_events.5
+#						days = 30
+#						random = 90
+#					}
+#				}
+#			}
+#		}
+#	}
+#}
+#
+#country_event = { ###Bankrupt Event Loses infantry equipment
+#	id = bankrupt_events.6
+#	title = bankrupt_events.6.t
+#	desc = bankrupt_events.6.d
+#	#picture = GFX_event_chem_addiction
+#	is_triggered_only = yes
+#
+#	immediate = {
+#		hidden_effect = {
+#			scoped_sound_effect = "ui_items_bottlecaps_down_01"
+#		}
+#	}
+#
+#	trigger = {
+#		has_dynamic_modifier = { modifier = caps_bankruptcy_modifier }
+#	}
+#	option = {
+#		name = bankrupt_events.6.a
+#
+#		add_equipment_to_stockpile = {
+#			type = infantry_equipment
+#			amount = -600
+#		}
+#		hidden_effect = {
+#			random_list = {
+#				40 = {
+#					country_event = {
+#						id = bankrupt_events.4
+#						days = 30
+#						random = 90
+#					}
+#				}
+#				40 = {
+#					country_event = {
+#						id = bankrupt_events.6
+#						days = 30
+#						random = 90
+#					}
+#				}
+#				20 = {
+#					country_event = {
+#						id = bankrupt_events.5
+#						days = 30
+#						random = 90
+#					}
+#				}
+#			}
+#		}
+#	}
+#	option = {
+#		name = bankrupt_events.6.b
+#		###Bailout via Gun Runner
+#		trigger = {
+#			check_variable = { gun_runner_opinion > 50 }
+#		}
+#		subtract_from_variable = { gun_runner_opinion = 50 }
+#		custom_effect_tooltip = bankrupt_6_b_tt
+#		hidden_effect = {
+#			random_list = {
+#				50 = {
+#					country_event = {
+#						id = bankrupt_events.2
+#						days = 30
+#						random = 90
+#					}
+#				}
+#				50 = {
+#					country_event = {
+#						id = bankrupt_events.3
+#						days = 30
+#						random = 90
+#					}
+#				}
+#			}
+#		}
+#	}
+#}
+#
+#country_event = { ###Bankrupt Event - Lose Manpower
+#	id = bankrupt_events.3
+#	title = bankrupt_events.3.t
+#	desc = bankrupt_events.3.d
+#	#picture = GFX_event_chem_addiction
+#	is_triggered_only = yes
+#
+#	immediate = {
+#		hidden_effect = {
+#			scoped_sound_effect = "ui_items_bottlecaps_down_01"
+#		}
+#	}
+#
+#	trigger = {
+#		has_dynamic_modifier = { modifier = caps_bankruptcy_modifier }
+#	}
+#	option = {
+#		name = bankrupt_events.3.a
+#
+#		add_manpower = -300
+#		hidden_effect = {
+#			random_list = {
+#				70 = {
+#					country_event = {
+#						id = bankrupt_events.2
+#						days = 30
+#						random = 90
+#					}
+#				}
+#				30 = {
+#					country_event = {
+#						id = bankrupt_events.6
+#						days = 30
+#						random = 90
+#					}
+#				}
+#			}
+#		}
+#	}
+#	option = {
+#		name = bankrupt_events.3.b
+#		### Bailout via chem rep
+#		trigger = {
+#			check_variable = { chem_runner_opinion > 50 }
+#		}
+#		add_manpower = -100
+#		subtract_from_variable = { chem_runner_opinion = 50 }
+#		custom_effect_tooltip = bankrupt_3_b_tt
+#		hidden_effect = {
+#			random_list = {
+#				70 = {
+#					country_event = {
+#						id = bankrupt_events.2
+#						days = 30
+#						random = 90
+#					}
+#				}
+#				30 = {
+#					country_event = {
+#						id = bankrupt_events.3
+#						days = 30
+#						random = 90
+#					}
+#				}
+#			}
+#		}
+#	}
+#}
+#country_event = { ###Bankrupt Event - Total Collapse
+#	id = bankrupt_events.5
+#	title = bankrupt_events.5.t
+#	desc = bankrupt_events.5.d
+#	#picture = GFX_event_chem_addiction
+#	is_triggered_only = yes
+#
+#	immediate = {
+#		hidden_effect = {
+#			scoped_sound_effect = "ui_items_bottlecaps_down_01"
+#		}
+#	}
+#
+#	trigger = {
+#		has_dynamic_modifier = { modifier = caps_bankruptcy_modifier }
+#	}
+#	option = {
+#
+#		name = bankrupt_events.5.a
+#		add_timed_idea = {
+#			idea = caps_economic_instabillity
+#			days = 365
+#		}
+#		###Set bank to 0
+#		set_temp_variable = { caps_temp_fix = caps_number_display }
+#		multiply_temp_variable = { caps_temp_fix = -1 }
+#		set_temp_variable = { caps_to_add = caps_temp_fix }
+#		add_caps = yes
+#		### Modify costs by -70% and gains by -50%
+#		add_to_variable = { caps_expense_modifier = -0.7 }
+#		add_to_variable = { caps_income_modifier = -0.5 }
+#		custom_effect_tooltip = bankrupt_event_5_tt
+#		hidden_effect = {
+#			country_event = {
+#				id = bankrupt_events.7
+#				days = 180
+#			}
+#		}
+#	}
+#}
+#country_event = { ###Bankrupt Event - Remove modifiers on country
+#	id = bankrupt_events.7
+#	title = bankrupt_events.7.t
+#	desc = bankrupt_events.7.d
+#	#picture = GFX_event_chem_addiction
+#	is_triggered_only = yes
+#	option = {
+#
+#		name = bankrupt_events.7.a
+#		add_to_variable = { caps_expense_modifier = 0.7 }
+#		add_to_variable = { caps_income_modifier = 0.5 }
+#	}
+#}
+#
