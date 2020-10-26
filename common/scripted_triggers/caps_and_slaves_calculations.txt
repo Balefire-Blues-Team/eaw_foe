@@ -1,74 +1,75 @@
-@CAPS_UNIT_DIVISOR = -160
-get_caps_difference = {
-	###Get raw display diff
-	set_temp_variable = { caps_display_temp = caps_number_display }
-	add_to_temp_variable = { caps_display_temp = caps_diff }
-}
-
-caps_cost_trigger = {
-	get_caps_difference = yes
-	custom_trigger_tooltip = {
-		check_variable = {
-			caps_display_temp > 0
-		}
-		tooltip = "caps_trigger_tt"
-	}
-}
-
-get_caps_daily_difference = {
-	###Check if explicit diff given
-	if = {
-		limit = {
-			check_variable = { caps_daily_diff = 0 }
-		}
-		###Calculate implicit diff
-		set_temp_variable = { caps_daily_diff_after_debug = caps_daily_diff_after }
-		subtract_from_temp_variable = { caps_daily_diff_after = caps_daily_diff_before }
-		set_temp_variable = { caps_daily_diff = caps_daily_diff_after }
-	}
-	###Calculate new daily
-	set_temp_variable = { caps_daily_diff_calc = caps_daily_diff }
-	set_temp_variable = { caps_daily_temp = caps_variable_temp }
-	add_to_temp_variable = { caps_daily_temp = caps_daily_diff_calc }
-	###Zero out for next calc
-	set_temp_variable = { caps_daily_diff = 0 }
-	set_temp_variable = { caps_daily_diff_after = 0 }
-	set_temp_variable = { caps_daily_diff_before = 0 }
-	set_temp_variable = { caps_variable_temp = 0 }
-	###Vars: caps_daily_diff_after: After calculations
-	###Vars: caps_daily_diff_before: Current number
-	###Vars: caps_daily_diff: Difference (can be explicit before effect)
-	###Vars: caps_variable_temp: Pass rolling tracker through (eg gain/loss)
-	###Vars: caps_daily_temp: New rolling value + change in value
-}
-###Calculate Military Expenses
-get_military_expenses = {
-	###Get battalions
-	set_temp_variable = { manpower_temp = num_battalions  }
-	###Isolate special costs
-	set_temp_variable = { battalions_special = num_battalions_with_type@armor }
-	add_to_temp_variable = { battalions_special = num_battalions_with_type@mechanized }
-	subtract_from_temp_variable = { manpower_temp = battalions_special }
-	###Calculate manpower/caps via combined divisor
-	divide_temp_variable = { manpower_temp = @CAPS_UNIT_DIVISOR }
-	###Same as above, but modified for increase costs, every special = 2 normal
-	multiply_temp_variable = { battalions_special = 2 }
-	divide_temp_variable = { battalions_special = @CAPS_UNIT_DIVISOR }
-	###Add together new costs
-	add_to_temp_variable = { manpower_temp = battalions_special }
-	###Square
-	multiply_temp_variable = { manpower_temp = manpower_temp }
-	###Invert due to square
-	multiply_temp_variable = { manpower_temp = -1 }
-}
-###Calculates mil expenses in trigger
-precalculate_military_expenses = {
-	set_temp_variable = { caps_daily_diff_before = caps_military_upkeep }
-	get_military_expenses = yes
-	set_temp_variable = { caps_daily_diff_after = manpower_temp }
-	get_caps_daily_difference = yes
-	set_temp_variable = { temp_expense_calc = caps_daily_temp }
-	add_to_temp_variable = {
-		temp_expense_calc = caps_expense
-	}
-}
+#@CAPS_UNIT_DIVISOR = -160
+#get_caps_difference = {
+#	###Get raw display diff
+#	set_temp_variable = { caps_display_temp = caps_number_display }
+#	add_to_temp_variable = { caps_display_temp = caps_diff }
+#}
+#
+#caps_cost_trigger = {
+#	get_caps_difference = yes
+#	custom_trigger_tooltip = {
+#		check_variable = {
+#			caps_display_temp > 0
+#		}
+#		tooltip = "caps_trigger_tt"
+#	}
+#}
+#
+#get_caps_daily_difference = {
+#	###Check if explicit diff given
+#	if = {
+#		limit = {
+#			check_variable = { caps_daily_diff = 0 }
+#		}
+#		###Calculate implicit diff
+#		set_temp_variable = { caps_daily_diff_after_debug = caps_daily_diff_after }
+#		subtract_from_temp_variable = { caps_daily_diff_after = caps_daily_diff_before }
+#		set_temp_variable = { caps_daily_diff = caps_daily_diff_after }
+#	}
+#	###Calculate new daily
+#	set_temp_variable = { caps_daily_diff_calc = caps_daily_diff }
+#	set_temp_variable = { caps_daily_temp = caps_variable_temp }
+#	add_to_temp_variable = { caps_daily_temp = caps_daily_diff_calc }
+#	###Zero out for next calc
+#	set_temp_variable = { caps_daily_diff = 0 }
+#	set_temp_variable = { caps_daily_diff_after = 0 }
+#	set_temp_variable = { caps_daily_diff_before = 0 }
+#	set_temp_variable = { caps_variable_temp = 0 }
+#	###Vars: caps_daily_diff_after: After calculations
+#	###Vars: caps_daily_diff_before: Current number
+#	###Vars: caps_daily_diff: Difference (can be explicit before effect)
+#	###Vars: caps_variable_temp: Pass rolling tracker through (eg gain/loss)
+#	###Vars: caps_daily_temp: New rolling value + change in value
+#}
+####Calculate Military Expenses
+#get_military_expenses = {
+#	###Get battalions
+#	set_temp_variable = { manpower_temp = num_battalions  }
+#	###Isolate special costs
+#	set_temp_variable = { battalions_special = num_battalions_with_type@armor }
+#	add_to_temp_variable = { battalions_special = num_battalions_with_type@mechanized }
+#	subtract_from_temp_variable = { manpower_temp = battalions_special }
+#	###Calculate manpower/caps via combined divisor
+#	divide_temp_variable = { manpower_temp = @CAPS_UNIT_DIVISOR }
+#	###Same as above, but modified for increase costs, every special = 2 normal
+#	multiply_temp_variable = { battalions_special = 2 }
+#	divide_temp_variable = { battalions_special = @CAPS_UNIT_DIVISOR }
+#	###Add together new costs
+#	add_to_temp_variable = { manpower_temp = battalions_special }
+#	###Square
+#	multiply_temp_variable = { manpower_temp = manpower_temp }
+#	###Invert due to square
+#	multiply_temp_variable = { manpower_temp = -1 }
+#}
+####Calculates mil expenses in trigger
+#precalculate_military_expenses = {
+#	set_temp_variable = { caps_daily_diff_before = caps_military_upkeep }
+#	get_military_expenses = yes
+#	set_temp_variable = { caps_daily_diff_after = manpower_temp }
+#	get_caps_daily_difference = yes
+#	set_temp_variable = { temp_expense_calc = caps_daily_temp }
+#	add_to_temp_variable = {
+#		temp_expense_calc = caps_expense
+#	}
+#}
+#

@@ -1,579 +1,579 @@
-# Allows you to create your own dynamic keys
-# to be called in localization.
-# defined_text -> this is it, we're defining the text
-# text -> a discrete entry that can be picked to display in loc.
-# trigger -> determines if a text entry will be picked or not.
-# (The triggers need to be valid for the scope the key is called in
-# (eg Root or From.From).)
-# localization_key -> points to the localization key
-# that'll be used if trigger passes
-###Calcualte per battalion in division designer. Depricated
-defined_text = {
-	name = GetNextCost
-	text = {
-		trigger = {
-			set_temp_variable = { battalions_temp_calc_tt = num_battalions }
-			add_to_temp_variable = { battalions_temp_calc_tt = 5 }
-			divide_temp_variable = { battalions_temp_calc_tt = -100 }
-			multiply_temp_variable = { battalions_temp_calc_tt = battalions_temp_calc_tt }
-			multiply_temp_variable = { battalions_temp_calc_tt = -1 }
-			subtract_from_temp_variable = { battalions_temp_calc_tt = caps_expense }
-			multiply_temp_variable = { battalions_temp_calc_tt = caps_expense_modifier }
-		}
-		localization_key = "get_next_cap_cost_tt"
-	}
-}
-###Same as above but the expanded TT
-defined_text = {
-	name = GetNextTenCost
-	text = {
-		trigger = {
-			set_temp_variable = { battalions_temp_calc_tt = num_battalions }
-			add_to_temp_variable = { battalions_temp_calc_tt = 10 }
-			divide_temp_variable = { battalions_temp_calc_tt = -100 }
-			multiply_temp_variable = { battalions_temp_calc_tt = battalions_temp_calc_tt }
-			multiply_temp_variable = { battalions_temp_calc_tt = -1 }
-			subtract_from_temp_variable = { battalions_temp_calc_tt = caps_expense }
-			multiply_temp_variable = { battalions_temp_calc_tt = caps_expense_modifier }
-			set_temp_variable = { battalions_temp_calc_tt_2 = num_battalions }
-			add_to_temp_variable = { battalions_temp_calc_tt_2 = 15 }
-			divide_temp_variable = { battalions_temp_calc_tt_2 = -100 }
-			multiply_temp_variable = { battalions_temp_calc_tt_2 = battalions_temp_calc_tt_2 }
-			multiply_temp_variable = { battalions_temp_calc_tt_2 = -1 }
-			subtract_from_temp_variable = { battalions_temp_calc_tt_2 = caps_expense }
-			multiply_temp_variable = { battalions_temp_calc_tt_2 = caps_expense_modifier }
-			set_temp_variable = { battalions_temp_calc_tt_3 = num_battalions }
-			add_to_temp_variable = { battalions_temp_calc_tt_3 = 20 }
-			divide_temp_variable = { battalions_temp_calc_tt_3 = -100 }
-			multiply_temp_variable = { battalions_temp_calc_tt_3 = battalions_temp_calc_tt_3 }
-			multiply_temp_variable = { battalions_temp_calc_tt_3 = -1 }
-			subtract_from_temp_variable = { battalions_temp_calc_tt_3 = caps_expense }
-			multiply_temp_variable = { battalions_temp_calc_tt_3 = caps_expense_modifier }
-			set_temp_variable = { battalions_temp_calc_tt_4 = num_battalions }
-			add_to_temp_variable = { battalions_temp_calc_tt_4 = 25 }
-			divide_temp_variable = { battalions_temp_calc_tt_4 = -100 }
-			multiply_temp_variable = { battalions_temp_calc_tt_4 = battalions_temp_calc_tt_4 }
-			multiply_temp_variable = { battalions_temp_calc_tt_4 = -1 }
-			subtract_from_temp_variable = { battalions_temp_calc_tt_4 = caps_expense }
-			multiply_temp_variable = { battalions_temp_calc_tt_4 = caps_expense_modifier }
-
-		}
-		localization_key = "get_next_cap_cost_ten_tt"
-	}
-}
-###Get cost of MP in training q
-defined_text = {
-	name = GetRecruitCosts
-	text = {
-		trigger = {
-			###Turn into battalions
-			set_temp_variable = { manpower_conversion = amount_manpower_in_deployment_queue }
-			divide_temp_variable = { manpower_conversion = 25 }
-			###Preform normal MP calcs
-			set_temp_variable = { manpower_temp = num_battalions  }
-			set_temp_variable = { battalions_special = num_battalions_with_type@armor }
-			add_to_temp_variable = { battalions_special = num_battalions_with_type@mechanized }
-			subtract_from_temp_variable = { manpower_temp = battalions_special }
-			add_to_temp_variable = { manpower_temp = manpower_conversion }
-			divide_temp_variable = { manpower_temp = -160 }
-			multiply_temp_variable = { battalions_special = 2 }
-			divide_temp_variable = { battalions_special = -160 }
-			add_to_temp_variable = { manpower_temp = battalions_special }
-			multiply_temp_variable = { manpower_temp = manpower_temp }
-			multiply_temp_variable = { manpower_temp = -1 }
-			###Subtract out current expenses for diff
-			subtract_from_temp_variable = { manpower_temp = caps_expense }
-			multiply_temp_variable = { manpower_temp = caps_expense_modifier }
-		}
-		localization_key = "recuit_pop_calc_tt"
-	}
-}
-###Cost trigger localization. Changes per need
-defined_text = {
-	name = GetCapCostTrigger
-	text = {
-		trigger = {
-			check_variable = { caps_display_temp < 0 }
-			set_temp_variable = { caps_trigger_calc = caps_display_temp }
-			multiply_temp_variable = {
-				caps_trigger_calc = -1
-			}
-		}
-		localization_key = "caps_trigger_negative"
-	}
-	text = {
-		trigger = {
-			set_temp_variable = { caps_transaction_temp = caps_diff }
-			multiply_temp_variable = { caps_transaction_temp = -1 }
-		}
-		localization_key = "caps_trigger_positive"
-	}
-}
-defined_text = {
-	name = GetStockActual
-	text = {
-		trigger = {
-			add_to_temp_variable = {
-				minimum_stock_temp = 1
-			}
-			always = yes
-		}
-		localization_key = market_trigger_scripted_tt
-	}
-}
-###Calculates expenses dynamically for tooltips
-defined_text = {
-	name = PrecalculateCapsExpenes
-	text = {
-		trigger = {
-			always = yes
-			precalculate_military_expenses = yes
-			multiply_temp_variable = { temp_expense_calc = caps_expense_modifier }
-		}
-		localization_key = caps_expense_calc_tt
-	}
-}
-###Calculates net dynamically for tooltips
-defined_text = {
-	name = PrecalculateCapsNet
-	text = {
-		trigger = {
-			always = yes
-			precalculate_military_expenses = yes
-			set_temp_variable = { caps_income_temp = caps_income }
-			set_temp_variable = { caps_expense_temp = temp_expense_calc }
-			multiply_temp_variable = { caps_income_temp = caps_income_modifier }
-			multiply_temp_variable = { caps_expense_temp = caps_expense_modifier }
-			set_temp_variable = { caps_total_temp = caps_income_temp }
-			add_to_temp_variable = { caps_total_temp = caps_expense_temp }
-			set_temp_variable = {
-				temp_net_calc = caps_total_temp
-			}
-		}
-		localization_key = caps_net_calc_tt
-	}
-}
-###Passes correct gfx string to use for display
-defined_text = {
-	name = GetCapDisplay
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencyncrdollar }
-		}
-		localization_key = "capdisplayncr"
-	}
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencycesdenarius }
-		}
-		localization_key = "capdisplaylegion"
-	}
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencycad }
-		}
-		localization_key = "capdisplaycad"
-	}
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencyusd }
-		}
-		localization_key = "capdisplayusd"
-	}
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencypeso }
-		}
-		localization_key = "capdisplaypeso"
-	}
-	text = {
-		localization_key = "capdisplaygeneric"
-	}
-
-}
+## Allows you to create your own dynamic keys
+## to be called in localization.
+## defined_text -> this is it, we're defining the text
+## text -> a discrete entry that can be picked to display in loc.
+## trigger -> determines if a text entry will be picked or not.
+## (The triggers need to be valid for the scope the key is called in
+## (eg Root or From.From).)
+## localization_key -> points to the localization key
+## that'll be used if trigger passes
+####Calcualte per battalion in division designer. Depricated
+#defined_text = {
+#	name = GetNextCost
+#	text = {
+#		trigger = {
+#			set_temp_variable = { battalions_temp_calc_tt = num_battalions }
+#			add_to_temp_variable = { battalions_temp_calc_tt = 5 }
+#			divide_temp_variable = { battalions_temp_calc_tt = -100 }
+#			multiply_temp_variable = { battalions_temp_calc_tt = battalions_temp_calc_tt }
+#			multiply_temp_variable = { battalions_temp_calc_tt = -1 }
+#			subtract_from_temp_variable = { battalions_temp_calc_tt = caps_expense }
+#			multiply_temp_variable = { battalions_temp_calc_tt = caps_expense_modifier }
+#		}
+#		localization_key = "get_next_cap_cost_tt"
+#	}
+#}
+####Same as above but the expanded TT
+#defined_text = {
+#	name = GetNextTenCost
+#	text = {
+#		trigger = {
+#			set_temp_variable = { battalions_temp_calc_tt = num_battalions }
+#			add_to_temp_variable = { battalions_temp_calc_tt = 10 }
+#			divide_temp_variable = { battalions_temp_calc_tt = -100 }
+#			multiply_temp_variable = { battalions_temp_calc_tt = battalions_temp_calc_tt }
+#			multiply_temp_variable = { battalions_temp_calc_tt = -1 }
+#			subtract_from_temp_variable = { battalions_temp_calc_tt = caps_expense }
+#			multiply_temp_variable = { battalions_temp_calc_tt = caps_expense_modifier }
+#			set_temp_variable = { battalions_temp_calc_tt_2 = num_battalions }
+#			add_to_temp_variable = { battalions_temp_calc_tt_2 = 15 }
+#			divide_temp_variable = { battalions_temp_calc_tt_2 = -100 }
+#			multiply_temp_variable = { battalions_temp_calc_tt_2 = battalions_temp_calc_tt_2 }
+#			multiply_temp_variable = { battalions_temp_calc_tt_2 = -1 }
+#			subtract_from_temp_variable = { battalions_temp_calc_tt_2 = caps_expense }
+#			multiply_temp_variable = { battalions_temp_calc_tt_2 = caps_expense_modifier }
+#			set_temp_variable = { battalions_temp_calc_tt_3 = num_battalions }
+#			add_to_temp_variable = { battalions_temp_calc_tt_3 = 20 }
+#			divide_temp_variable = { battalions_temp_calc_tt_3 = -100 }
+#			multiply_temp_variable = { battalions_temp_calc_tt_3 = battalions_temp_calc_tt_3 }
+#			multiply_temp_variable = { battalions_temp_calc_tt_3 = -1 }
+#			subtract_from_temp_variable = { battalions_temp_calc_tt_3 = caps_expense }
+#			multiply_temp_variable = { battalions_temp_calc_tt_3 = caps_expense_modifier }
+#			set_temp_variable = { battalions_temp_calc_tt_4 = num_battalions }
+#			add_to_temp_variable = { battalions_temp_calc_tt_4 = 25 }
+#			divide_temp_variable = { battalions_temp_calc_tt_4 = -100 }
+#			multiply_temp_variable = { battalions_temp_calc_tt_4 = battalions_temp_calc_tt_4 }
+#			multiply_temp_variable = { battalions_temp_calc_tt_4 = -1 }
+#			subtract_from_temp_variable = { battalions_temp_calc_tt_4 = caps_expense }
+#			multiply_temp_variable = { battalions_temp_calc_tt_4 = caps_expense_modifier }
+#
+#		}
+#		localization_key = "get_next_cap_cost_ten_tt"
+#	}
+#}
+####Get cost of MP in training q
+#defined_text = {
+#	name = GetRecruitCosts
+#	text = {
+#		trigger = {
+#			###Turn into battalions
+#			set_temp_variable = { manpower_conversion = amount_manpower_in_deployment_queue }
+#			divide_temp_variable = { manpower_conversion = 25 }
+#			###Preform normal MP calcs
+#			set_temp_variable = { manpower_temp = num_battalions  }
+#			set_temp_variable = { battalions_special = num_battalions_with_type@armor }
+#			add_to_temp_variable = { battalions_special = num_battalions_with_type@mechanized }
+#			subtract_from_temp_variable = { manpower_temp = battalions_special }
+#			add_to_temp_variable = { manpower_temp = manpower_conversion }
+#			divide_temp_variable = { manpower_temp = -160 }
+#			multiply_temp_variable = { battalions_special = 2 }
+#			divide_temp_variable = { battalions_special = -160 }
+#			add_to_temp_variable = { manpower_temp = battalions_special }
+#			multiply_temp_variable = { manpower_temp = manpower_temp }
+#			multiply_temp_variable = { manpower_temp = -1 }
+#			###Subtract out current expenses for diff
+#			subtract_from_temp_variable = { manpower_temp = caps_expense }
+#			multiply_temp_variable = { manpower_temp = caps_expense_modifier }
+#		}
+#		localization_key = "recuit_pop_calc_tt"
+#	}
+#}
+####Cost trigger localization. Changes per need
+#defined_text = {
+#	name = GetCapCostTrigger
+#	text = {
+#		trigger = {
+#			check_variable = { caps_display_temp < 0 }
+#			set_temp_variable = { caps_trigger_calc = caps_display_temp }
+#			multiply_temp_variable = {
+#				caps_trigger_calc = -1
+#			}
+#		}
+#		localization_key = "caps_trigger_negative"
+#	}
+#	text = {
+#		trigger = {
+#			set_temp_variable = { caps_transaction_temp = caps_diff }
+#			multiply_temp_variable = { caps_transaction_temp = -1 }
+#		}
+#		localization_key = "caps_trigger_positive"
+#	}
+#}
+#defined_text = {
+#	name = GetStockActual
+#	text = {
+#		trigger = {
+#			add_to_temp_variable = {
+#				minimum_stock_temp = 1
+#			}
+#			always = yes
+#		}
+#		localization_key = market_trigger_scripted_tt
+#	}
+#}
+####Calculates expenses dynamically for tooltips
+#defined_text = {
+#	name = PrecalculateCapsExpenes
+#	text = {
+#		trigger = {
+#			always = yes
+#			precalculate_military_expenses = yes
+#			multiply_temp_variable = { temp_expense_calc = caps_expense_modifier }
+#		}
+#		localization_key = caps_expense_calc_tt
+#	}
+#}
+####Calculates net dynamically for tooltips
+#defined_text = {
+#	name = PrecalculateCapsNet
+#	text = {
+#		trigger = {
+#			always = yes
+#			precalculate_military_expenses = yes
+#			set_temp_variable = { caps_income_temp = caps_income }
+#			set_temp_variable = { caps_expense_temp = temp_expense_calc }
+#			multiply_temp_variable = { caps_income_temp = caps_income_modifier }
+#			multiply_temp_variable = { caps_expense_temp = caps_expense_modifier }
+#			set_temp_variable = { caps_total_temp = caps_income_temp }
+#			add_to_temp_variable = { caps_total_temp = caps_expense_temp }
+#			set_temp_variable = {
+#				temp_net_calc = caps_total_temp
+#			}
+#		}
+#		localization_key = caps_net_calc_tt
+#	}
+#}
+####Passes correct gfx string to use for display
+#defined_text = {
+#	name = GetCapDisplay
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencyncrdollar }
+#		}
+#		localization_key = "capdisplayncr"
+#	}
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencycesdenarius }
+#		}
+#		localization_key = "capdisplaylegion"
+#	}
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencycad }
+#		}
+#		localization_key = "capdisplaycad"
+#	}
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencyusd }
+#		}
+#		localization_key = "capdisplayusd"
+#	}
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencypeso }
+#		}
+#		localization_key = "capdisplaypeso"
+#	}
+#	text = {
+#		localization_key = "capdisplaygeneric"
+#	}
+#
+#}
+#####Same as above
+#defined_text = {
+#	name = GetCapType
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencyncrdollar }
+#		}
+#		localization_key = "ncrdollar"
+#	}
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencycesdenarius }
+#		}
+#		localization_key = "cesdenarius"
+#	}
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencycad }
+#		}
+#		localization_key = "currencycad"
+#	}
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencyusd }
+#		}
+#		localization_key = "currencyusd"
+#	}
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencypeso }
+#		}
+#		localization_key = "currencypeso"
+#	}
+#	text = {
+#		localization_key = "genericcap"
+#	}
+#
+#}
 ####Same as above
-defined_text = {
-	name = GetCapType
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencyncrdollar }
-		}
-		localization_key = "ncrdollar"
-	}
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencycesdenarius }
-		}
-		localization_key = "cesdenarius"
-	}
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencycad }
-		}
-		localization_key = "currencycad"
-	}
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencyusd }
-		}
-		localization_key = "currencyusd"
-	}
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencypeso }
-		}
-		localization_key = "currencypeso"
-	}
-	text = {
-		localization_key = "genericcap"
-	}
-
-}
-###Same as above
-defined_text = {
-	name = GetCapCurrencyType
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencyncrdollar }
-		}
-		localization_key = "currencyncrdollar"
-	}
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencycesdenarius }
-		}
-		localization_key = "currencycesdenarius"
-	}
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencycad }
-		}
-		localization_key = "currencycad"
-	}
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencyusd }
-		}
-		localization_key = "currencyusd"
-	}
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencypeso }
-		}
-		localization_key = "currencypeso"
-	}
-	text = {
-		localization_key = "currencygenericcap"
-	}
-
-
-}
-###Same as above
-defined_text = {
-	name = GetCapTxt
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencyncrdollar }
-		}
-		localization_key = "capdisplayncrtxt"
-	}
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencycesdenarius }
-		}
-		localization_key = "capdisplaylegiontxt"
-	}
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencycad }
-		}
-		localization_key = "capdisplaycadtxt"
-	}
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencyusd }
-		}
-		localization_key = "capdisplayusdtxt"
-	}
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencypeso }
-		}
-		localization_key = "capdisplaypesotxt"
-	}
-	text = {
-		localization_key = "capdisplaygenerictxt"
-	}
-
-}
-###Same as above
-defined_text = {
-	name = GetCapCurrencyInfo
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencyncrdollar }
-		}
-		localization_key = "currencyncrdollar_info"
-	}
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencycesdenarius }
-		}
-		localization_key = "currencycesdenarius_info"
-	}
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencycad }
-		}
-		localization_key = "currencycad_info"
-	}
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencyusd }
-		}
-		localization_key = "currencyusd_info"
-	}
-	text = {
-		trigger = {
-			ROOT = { has_idea = currencypeso }
-		}
-		localization_key = "currencypeso_info"
-	}
-	text = {
-		localization_key = "currencygenericcap_info"
-	}
-
-}
-###Same as above
-defined_text = {
-	name = GetLongCapTT
-	text = {
-		trigger = {
-			always = yes
-		}
-		localization_key = "CAPS_TOOLTIP_delayed_real"
-	}
-}
-###Market GUI
-###Pulls opinion for selected market
-defined_text = {
-	name = "GetMarketOpinion"
-	text = {
-		trigger = {
-			check_variable = { market_var = 1 }
-		}
-		localization_key = "gun_runner_opinion_tt"
-	}
-	text = {
-		trigger = {
-			check_variable = { market_var = 2 }
-		}
-		localization_key = "chem_runner_opinion_tt"
-	}
-	text = {
-		trigger = {
-			check_variable = { market_var = 3 }
-		}
-		localization_key = "slave_runner_opinion_tt"
-	}
-}
-###Pulls name for selected market
-defined_text = {
-	name = "GetOrganizationName"
-	text = {
-		trigger = {
-			check_variable = { market_var = 1 }
-		}
-		localization_key = "gun_runner_name_tt"
-	}
-	text = {
-		trigger = {
-			check_variable = { market_var = 2 }
-		}
-		localization_key = "chem_runner_name_tt"
-	}
-	text = {
-		trigger = {
-			check_variable = { market_var = 3 }
-		}
-		localization_key = "slave_runner_name_tt"
-	}
-}
-defined_text = {
-	name = GetOrganizationNameTT
-	text = {
-		trigger = {
-			check_variable = { org_index = 1 }
-		}
-		localization_key = "gun_runner_name_tt"
-	}
-	text = {
-		trigger = {
-			check_variable = { org_index = 2 }
-		}
-		localization_key = "chem_runner_name_tt"
-	}
-	text = {
-		trigger = {
-			check_variable = { org_index = 3 }
-		}
-		localization_key = "slave_runner_name_tt"
-	}
-}
-###Pulls inventory for selected market
-defined_text = {
-	name = "GetMarketInventory"
-	text = {
-		trigger = {
-			check_variable = { market_var = 1 }
-		}
-		localization_key = "gun_runner_market_tt"
-	}
-	text = {
-		trigger = {
-			check_variable = { market_var = 2 }
-		}
-		localization_key = "chem_runner_market_tt"
-	}
-	text = {
-		trigger = {
-			check_variable = { market_var = 3 }
-		}
-		localization_key = "slave_runner_market_tt"
-	}
-}
-###Pulls icon for selected market
-defined_text = {
-	name = "GetMarketIcon"
-	text = {
-		trigger = {
-			check_variable = { market_var = 1 }
-		}
-		localization_key = "gun_runner_market_icon"
-	}
-}
-###Pulls correct loc string for selected equipment
-defined_text = {
-	name = "GetGunRunnerInventory"
-	text = {
-		trigger = {
-			check_variable = { gun_runner_tech = 1 }
-		}
-		localization_key = "gun_runner_equip_1"
-	}
-	text = {
-		trigger = {
-			check_variable = { gun_runner_tech = 2 }
-		}
-		localization_key = "gun_runner_equip_2"
-	}
-	text = {
-		trigger = {
-			check_variable = { gun_runner_tech = 3 }
-		}
-		localization_key = "gun_runner_equip_3"
-	}
-	text = {
-		trigger = {
-			check_variable = { gun_runner_tech = 4 }
-		}
-		localization_key = "gun_runner_equip_4"
-	}
-	text = {
-		trigger = {
-			check_variable = { gun_runner_tech = 5 }
-		}
-		localization_key = "gun_runner_equip_5"
-	}
-	text = {
-		trigger = {
-			check_variable = { gun_runner_tech = 1 }
-		}
-		localization_key = "gun_runner_equip_6"
-	}
-}
-###Pulls correct icon for selected market
-defined_text = {
-	name = "GetGunRunnerMarketIcon"
-	text = {
-		trigger = {
-			check_variable = { gun_runner_tech = 1 }
-		}
-		localization_key = "GFX_melee_weaponry_tech_1_medium"
-	}
-	text = {
-		trigger = {
-			check_variable = { gun_runner_tech = 2 }
-		}
-		localization_key = "GFX_standard_weaponry_tech_medium"
-	}
-	text = {
-		trigger = {
-			check_variable = { gun_runner_tech = 3 }
-		}
-		localization_key = "GFX_melee_weaponry_tech_2_medium"
-	}
-	text = {
-		trigger = {
-			check_variable = { gun_runner_tech = 4 }
-		}
-		localization_key = "GFX_ballistic_weaponry_tech_1_medium"
-	}
-	text = {
-		trigger = {
-			check_variable = { gun_runner_tech = 5 }
-		}
-		localization_key = "GFX_melee_weaponry_tech_3_medium"
-	}
-	text = {
-		trigger = {
-			check_variable = { gun_runner_tech = 6 }
-		}
-		localization_key = "GFX_ballistic_weaponry_tech_2_medium"
-	}
-}
-###Pulls correct amount for selected market
-defined_text = {
-	name = "GetMarketAmount"
-	text = {
-		trigger = {
-			check_variable = { market_var = 1 }
-		}
-		localization_key = "gun_runner_amount_tt"
-	}
-	text = {
-		trigger = {
-			check_variable = { market_var = 2 }
-		}
-		localization_key = "chem_runner_amount_tt"
-	}
-	text = {
-		trigger = {
-			check_variable = { market_var = 3 }
-		}
-		localization_key = "slave_runner_amount_tt"
-	}
-}
-defined_text = {
-	name = GetAmountTriggerText
-	text = {
-		trigger = {
-			check_variable = {
-				temp_inventory < temp_need
-			}
-			subtract_from_temp_variable = {
-				temp_inventory = temp_need
-			}
-		}
-		localization_key = black_market_inventory_has_not
-	}
-	text = {
-		trigger = {
-			always = yes
-		}
-		localization_key = black_market_inventory_has
-	}
-}
+#defined_text = {
+#	name = GetCapCurrencyType
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencyncrdollar }
+#		}
+#		localization_key = "currencyncrdollar"
+#	}
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencycesdenarius }
+#		}
+#		localization_key = "currencycesdenarius"
+#	}
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencycad }
+#		}
+#		localization_key = "currencycad"
+#	}
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencyusd }
+#		}
+#		localization_key = "currencyusd"
+#	}
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencypeso }
+#		}
+#		localization_key = "currencypeso"
+#	}
+#	text = {
+#		localization_key = "currencygenericcap"
+#	}
+#
+#
+#}
+####Same as above
+#defined_text = {
+#	name = GetCapTxt
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencyncrdollar }
+#		}
+#		localization_key = "capdisplayncrtxt"
+#	}
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencycesdenarius }
+#		}
+#		localization_key = "capdisplaylegiontxt"
+#	}
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencycad }
+#		}
+#		localization_key = "capdisplaycadtxt"
+#	}
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencyusd }
+#		}
+#		localization_key = "capdisplayusdtxt"
+#	}
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencypeso }
+#		}
+#		localization_key = "capdisplaypesotxt"
+#	}
+#	text = {
+#		localization_key = "capdisplaygenerictxt"
+#	}
+#
+#}
+####Same as above
+#defined_text = {
+#	name = GetCapCurrencyInfo
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencyncrdollar }
+#		}
+#		localization_key = "currencyncrdollar_info"
+#	}
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencycesdenarius }
+#		}
+#		localization_key = "currencycesdenarius_info"
+#	}
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencycad }
+#		}
+#		localization_key = "currencycad_info"
+#	}
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencyusd }
+#		}
+#		localization_key = "currencyusd_info"
+#	}
+#	text = {
+#		trigger = {
+#			ROOT = { has_idea = currencypeso }
+#		}
+#		localization_key = "currencypeso_info"
+#	}
+#	text = {
+#		localization_key = "currencygenericcap_info"
+#	}
+#
+#}
+####Same as above
+#defined_text = {
+#	name = GetLongCapTT
+#	text = {
+#		trigger = {
+#			always = yes
+#		}
+#		localization_key = "CAPS_TOOLTIP_delayed_real"
+#	}
+#}
+####Market GUI
+####Pulls opinion for selected market
+#defined_text = {
+#	name = "GetMarketOpinion"
+#	text = {
+#		trigger = {
+#			check_variable = { market_var = 1 }
+#		}
+#		localization_key = "gun_runner_opinion_tt"
+#	}
+#	text = {
+#		trigger = {
+#			check_variable = { market_var = 2 }
+#		}
+#		localization_key = "chem_runner_opinion_tt"
+#	}
+#	text = {
+#		trigger = {
+#			check_variable = { market_var = 3 }
+#		}
+#		localization_key = "slave_runner_opinion_tt"
+#	}
+#}
+####Pulls name for selected market
+#defined_text = {
+#	name = "GetOrganizationName"
+#	text = {
+#		trigger = {
+#			check_variable = { market_var = 1 }
+#		}
+#		localization_key = "gun_runner_name_tt"
+#	}
+#	text = {
+#		trigger = {
+#			check_variable = { market_var = 2 }
+#		}
+#		localization_key = "chem_runner_name_tt"
+#	}
+#	text = {
+#		trigger = {
+#			check_variable = { market_var = 3 }
+#		}
+#		localization_key = "slave_runner_name_tt"
+#	}
+#}
+#defined_text = {
+#	name = GetOrganizationNameTT
+#	text = {
+#		trigger = {
+#			check_variable = { org_index = 1 }
+#		}
+#		localization_key = "gun_runner_name_tt"
+#	}
+#	text = {
+#		trigger = {
+#			check_variable = { org_index = 2 }
+#		}
+#		localization_key = "chem_runner_name_tt"
+#	}
+#	text = {
+#		trigger = {
+#			check_variable = { org_index = 3 }
+#		}
+#		localization_key = "slave_runner_name_tt"
+#	}
+#}
+####Pulls inventory for selected market
+#defined_text = {
+#	name = "GetMarketInventory"
+#	text = {
+#		trigger = {
+#			check_variable = { market_var = 1 }
+#		}
+#		localization_key = "gun_runner_market_tt"
+#	}
+#	text = {
+#		trigger = {
+#			check_variable = { market_var = 2 }
+#		}
+#		localization_key = "chem_runner_market_tt"
+#	}
+#	text = {
+#		trigger = {
+#			check_variable = { market_var = 3 }
+#		}
+#		localization_key = "slave_runner_market_tt"
+#	}
+#}
+####Pulls icon for selected market
+#defined_text = {
+#	name = "GetMarketIcon"
+#	text = {
+#		trigger = {
+#			check_variable = { market_var = 1 }
+#		}
+#		localization_key = "gun_runner_market_icon"
+#	}
+#}
+####Pulls correct loc string for selected equipment
+#defined_text = {
+#	name = "GetGunRunnerInventory"
+#	text = {
+#		trigger = {
+#			check_variable = { gun_runner_tech = 1 }
+#		}
+#		localization_key = "gun_runner_equip_1"
+#	}
+#	text = {
+#		trigger = {
+#			check_variable = { gun_runner_tech = 2 }
+#		}
+#		localization_key = "gun_runner_equip_2"
+#	}
+#	text = {
+#		trigger = {
+#			check_variable = { gun_runner_tech = 3 }
+#		}
+#		localization_key = "gun_runner_equip_3"
+#	}
+#	text = {
+#		trigger = {
+#			check_variable = { gun_runner_tech = 4 }
+#		}
+#		localization_key = "gun_runner_equip_4"
+#	}
+#	text = {
+#		trigger = {
+#			check_variable = { gun_runner_tech = 5 }
+#		}
+#		localization_key = "gun_runner_equip_5"
+#	}
+#	text = {
+#		trigger = {
+#			check_variable = { gun_runner_tech = 1 }
+#		}
+#		localization_key = "gun_runner_equip_6"
+#	}
+#}
+####Pulls correct icon for selected market
+#defined_text = {
+#	name = "GetGunRunnerMarketIcon"
+#	text = {
+#		trigger = {
+#			check_variable = { gun_runner_tech = 1 }
+#		}
+#		localization_key = "GFX_melee_weaponry_tech_1_medium"
+#	}
+#	text = {
+#		trigger = {
+#			check_variable = { gun_runner_tech = 2 }
+#		}
+#		localization_key = "GFX_standard_weaponry_tech_medium"
+#	}
+#	text = {
+#		trigger = {
+#			check_variable = { gun_runner_tech = 3 }
+#		}
+#		localization_key = "GFX_melee_weaponry_tech_2_medium"
+#	}
+#	text = {
+#		trigger = {
+#			check_variable = { gun_runner_tech = 4 }
+#		}
+#		localization_key = "GFX_ballistic_weaponry_tech_1_medium"
+#	}
+#	text = {
+#		trigger = {
+#			check_variable = { gun_runner_tech = 5 }
+#		}
+#		localization_key = "GFX_melee_weaponry_tech_3_medium"
+#	}
+#	text = {
+#		trigger = {
+#			check_variable = { gun_runner_tech = 6 }
+#		}
+#		localization_key = "GFX_ballistic_weaponry_tech_2_medium"
+#	}
+#}
+####Pulls correct amount for selected market
+#defined_text = {
+#	name = "GetMarketAmount"
+#	text = {
+#		trigger = {
+#			check_variable = { market_var = 1 }
+#		}
+#		localization_key = "gun_runner_amount_tt"
+#	}
+#	text = {
+#		trigger = {
+#			check_variable = { market_var = 2 }
+#		}
+#		localization_key = "chem_runner_amount_tt"
+#	}
+#	text = {
+#		trigger = {
+#			check_variable = { market_var = 3 }
+#		}
+#		localization_key = "slave_runner_amount_tt"
+#	}
+#}
+#defined_text = {
+#	name = GetAmountTriggerText
+#	text = {
+#		trigger = {
+#			check_variable = {
+#				temp_inventory < temp_need
+#			}
+#			subtract_from_temp_variable = {
+#				temp_inventory = temp_need
+#			}
+#		}
+#		localization_key = black_market_inventory_has_not
+#	}
+#	text = {
+#		trigger = {
+#			always = yes
+#		}
+#		localization_key = black_market_inventory_has
+#	}
+#}
 ###Changes tooltip based on bailed out status
 defined_text = {
 	name = GetBankruptEventTT
