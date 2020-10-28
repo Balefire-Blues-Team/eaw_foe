@@ -11,7 +11,7 @@ UNI_dunk = {
 		}
 		
 		visible = {
-				has_completed_focus = unity_start_4
+			has_completed_focus = unity_start_4
 		}
 		days_re_enable = 1
 		cost = 25
@@ -22,6 +22,7 @@ UNI_dunk = {
 
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision UNI_dunk_p"
+			save_current_manpower = yes
 			random_controlled_state = {
 					limit = {
 						state_population > 60
@@ -29,6 +30,7 @@ UNI_dunk = {
 					}
 					add_manpower = -60
 				}
+			restore_previous_manpower = yes
 		}
 		
 		remove_effect = {
@@ -211,6 +213,67 @@ UNI_dunk = {
 			}
 		}
     }
+}
+
+UNI_RED_interactions = {
+
+	UNI_RED_get_slaves = {
+		icon = GFX_decision_generic_ignite_civil_war
+		days_remove = 100
+		available = {
+			political_power > 25
+			custom_trigger_tooltip = {
+                tooltip = UNI_needs_some_trust_tt
+                    check_variable = {
+                        UNI_RED_trust > 0
+                    }
+            }
+		}
+		
+		days_re_enable = 20
+		cost = 25
+
+		ai_will_do = {
+			factor = 20
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision UNI_RED_get_slaves"
+			if = {
+				limit = {check_variable = {UNI_RED_trust > 0} check_variable = {UNI_RED_trust < 4}}
+				add_ideas = UNI_slave_trade_min
+			}
+			else_if = {
+				limit = {check_variable = {UNI_RED_trust > 3} check_variable = {UNI_RED_trust < 7}}
+				add_ideas = UNI_slave_trade_low
+			}
+			else_if = {
+				limit = {check_variable = {UNI_RED_trust > 6} check_variable = {UNI_RED_trust < 11}}
+				add_ideas = UNI_slave_trade_med
+			}
+			else_if = {
+				limit = {check_variable = {UNI_RED_trust > 10} check_variable = {UNI_RED_trust < 15}}
+				add_ideas = UNI_slave_trade_high
+			}
+			else_if = {
+				limit = {check_variable = {UNI_RED_trust > 14}}
+				add_ideas = UNI_slave_trade_very
+			}
+		}
+		
+		remove_effect = {
+			custom_effect_tooltip = UNI_remove_slave_trade_tt
+			hidden_effect = {
+			remove_ideas = UNI_slave_trade_min
+			remove_ideas = UNI_slave_trade_low
+			remove_ideas = UNI_slave_trade_med
+			remove_ideas = UNI_slave_trade_high
+			remove_ideas = UNI_slave_trade_very
+			}
+		}
+	}
+
+
 }
 
 UNI_black_book = {
