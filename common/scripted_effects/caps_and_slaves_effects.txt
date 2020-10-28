@@ -1,474 +1,475 @@
-###VARS
-###Maximum caps
-@CAPS_MAX_CLAMP = 25000
-###consumer factories per cap
-@CAPS_CONSUMER_DIVISOR = 2
-###mil factories per cap
-@CAPS_MIL_FACTORY_DIVISOR = -4
-### resources per cap
-@CAPS_RESOURCE_DIVISOR = 20
-###max from trade
-@CAPS_FROM_RESOURCE_MAX = 25
-###miltia battalions per cap
-@CAPS_MILITIA_DIVISOR = -40
-###other units per cap
-@CAPS_UNIT_DIVISOR = 40
-###caps siphoned to overlord
-@CAPS_OVERLORD_MULTIPLIER = 0.75
-###caps lost to corruption
-@CORRUPTION_MULTI = 0.33
-###stability per negative cap
-@BANKRUPT_MULTI = 0.005
-@BANKRUPT_CLAMP = -0.7
-@BANKRUPT_MULTI_SUR = 0.55
-### Change Caps Display
-make_war_go = {
-	start_civil_war = {
-		ideology = ROOT
-		size = 0.8
-	}
-}
-add_caps = {
-	###Sound Effect
-	set_temp_variable = { caps_sound_var = random }
-	multiply_temp_variable = { caps_sound_var = 100 }
-	hidden_effect = {
-		if = {
-			limit = { check_variable = { caps_sound_var > 50 }}
-			scoped_sound_effect = "ui_items_bottlecaps_up_01"
-		}
-		else = { scoped_sound_effect = "ui_items_bottlecaps_up_02"}
-		###Precalculate new caps amount
-		set_temp_variable = { caps_display_temp = caps_number_display }
-		### caps_to_add is set outside effect
-		add_to_temp_variable = { caps_display_temp = caps_to_add }
-		###Add bankrupt if needed
-		check_bankrupt = yes
-	}
-	set_variable = { caps_number_display = caps_display_temp }
-	clamp_variable = {
-		var = caps_number_display
-		min = -1000
-		max = @CAPS_MAX_CLAMP
-	}
-	###Custom TT to show transaction
-	custom_effect_tooltip = add_caps_tt
-}
-###DEPRECATED
-add_caps_500 = {
-	set_temp_variable = { caps_to_add = 500 }
-	hidden_effect = {
-		add_caps = yes
-	}
-	custom_effect_tooltip = add_caps_simple_tt
-}
-add_caps_1000 = {
-	set_temp_variable = { caps_to_add = 1000 }
-	hidden_effect = {
-		add_caps = yes
-	}
-	custom_effect_tooltip = add_caps_simple_tt
-}
-add_caps_2000 = {
-	set_temp_variable = { caps_to_add = 2000 }
-	hidden_effect = {
-		add_caps = yes
-	}
-	custom_effect_tooltip = add_caps_simple_tt
-}
+####VARS
+####Maximum caps
+#@CAPS_MAX_CLAMP = 25000
+####consumer factories per cap
+#@CAPS_CONSUMER_DIVISOR = 2
+####mil factories per cap
+#@CAPS_MIL_FACTORY_DIVISOR = -4
+#### resources per cap
+#@CAPS_RESOURCE_DIVISOR = 20
+####max from trade
+#@CAPS_FROM_RESOURCE_MAX = 25
+####miltia battalions per cap
+#@CAPS_MILITIA_DIVISOR = -40
+####other units per cap
+#@CAPS_UNIT_DIVISOR = 40
+####caps siphoned to overlord
+#@CAPS_OVERLORD_MULTIPLIER = 0.75
+####caps lost to corruption
+#@CORRUPTION_MULTI = 0.33
+####stability per negative cap
+#@BANKRUPT_MULTI = 0.005
+#@BANKRUPT_CLAMP = -0.7
+#@BANKRUPT_MULTI_SUR = 0.55
+#### Change Caps Display
+#make_war_go = {
+#	start_civil_war = {
+#		ideology = ROOT
+#		size = 0.8
+#	}
+#}
+#add_caps = {
+#	###Sound Effect
+#	set_temp_variable = { caps_sound_var = random }
+#	multiply_temp_variable = { caps_sound_var = 100 }
+#	hidden_effect = {
+#		if = {
+#			limit = { check_variable = { caps_sound_var > 50 }}
+#			scoped_sound_effect = "ui_items_bottlecaps_up_01"
+#		}
+#		else = { scoped_sound_effect = "ui_items_bottlecaps_up_02"}
+#		###Precalculate new caps amount
+#		set_temp_variable = { caps_display_temp = caps_number_display }
+#		### caps_to_add is set outside effect
+#		add_to_temp_variable = { caps_display_temp = caps_to_add }
+#		###Add bankrupt if needed
+#		check_bankrupt = yes
+#	}
+#	set_variable = { caps_number_display = caps_display_temp }
+#	clamp_variable = {
+#		var = caps_number_display
+#		min = -1000
+#		max = @CAPS_MAX_CLAMP
+#	}
+#	###Custom TT to show transaction
+#	custom_effect_tooltip = add_caps_tt
+#}
 ####DEPRECATED
-add_caps_daily = {
-	set_temp_variable = { caps_sound_var = random }
-	multiply_temp_variable = { caps_sound_var = 100 }
-	hidden_effect = {
-		if = {
-			limit = { check_variable = { caps_sound_var > 50 }}
-			scoped_sound_effect = "ui_items_bottlecaps_up_01"
-		}
-		else = { scoped_sound_effect = "ui_items_bottlecaps_up_02"}
-		update_caps = yes
-	custom_effect_tooltip = add_caps_daily_tt
-	}
-}
-###Check for bankrupt status
-check_bankrupt = {
-	if = {
-		limit = {
-			AND = {
-				###Triggers for bankrupt
-				check_variable = { caps_number_display < 0 }
-				check_variable = { caps_daily_modified < 0 }
-				is_ai = no
-			}
-		}
-		###Log Caps
-		if = {
-			limit = { has_global_flag = caps_debug_logs }
-			log = "Changing bankrupt caps"
-		}
-		###Calculate the modifiers for dynamic modifier
-		set_variable = { caps_bankrupcy_deficit_stab = caps_daily_modified }
-		multiply_variable = { caps_bankrupcy_deficit_stab = @BANKRUPT_MULTI }
-		clamp_variable = {
-			var = caps_bankrupcy_deficit_stab
-			min = @BANKRUPT_CLAMP
-			max = 0
-		}
-		set_variable = { caps_bankrupcy_deficit_sur = caps_bankrupcy_deficit_stab }
-		multiply_variable = { caps_bankrupcy_deficit_sur = @BANKRUPT_MULTI_SUR }
-		###Add modifier if not applied
-		if = {
-			limit = {
-				NOT = {
-					has_dynamic_modifier = { modifier = caps_bankruptcy_modifier }
-				}
-			}
-			add_dynamic_modifier = { modifier = caps_bankruptcy_modifier }
-			force_update_dynamic_modifier = yes
-			###Start bankrupt event chain -- only happens when intialized bankrupt
-			country_event = bankrupt_events.1
-		}
-	}
-}
-###Divisor (50% from 100 rep)
-@OPINION_DISCOUNT = 140
-###Gets opinion-based caps discount
-get_caps_discount = {
-	if = {
-		limit = {
-			check_variable = { opinion_var_temp > 30 }
-		}
-		### opinion_var_temp set outside of effect
-		subtract_from_temp_variable = { opinion_var_temp = 30 }
-		divide_temp_variable = { opinion_var_temp = @OPINION_DISCOUNT }
-		set_temp_variable = { temp_discount = 1 }
-		subtract_from_temp_variable = { temp_discount = opinion_var_temp }
-		###Passes both a multiplier (temp_discount) and a % off (opinion_var_temp) to effect and tooltip
-	}
-	else = {
-		###Defaults to 0 if not enough reputation
-		set_temp_variable = { opinion_var_temp = 0 }
-		set_temp_variable = { temp_discount = 1 }
-	}
-	###Tooltip
-	custom_effect_tooltip = "caps_opinion_tt"
-}
-###Updates incomes
-update_caps_income = {
-	###This is incase needed in some TT
-	set_temp_variable = { caps_variable_temp = caps_income }
-	if = {
-		limit = {
-			### Calculate caps diff + dumb trigger
-			get_caps_daily_difference = yes
-			always = yes
-		}
-		###caps_daily_temp set from trigger
-		set_variable = { caps_income = caps_daily_temp }
-	}
-	###update caps net
-	update_caps = yes
-}
-### Updates Expenses, same as above
-update_caps_expense = {
-	set_temp_variable = { caps_variable_temp = caps_expense }
-	if = {
-		limit = {
-			### Calculate caps diff + dumb trigger
-			get_caps_daily_difference = yes
-			always = yes
-		}
-		set_variable = { caps_expense = caps_daily_temp }
-	}
-	update_caps = yes
-}
-
-update_caps = {
-	###Set up temp vars to preserve unmodified numbers
-	set_temp_variable = { caps_income_temp = caps_income }
-	set_temp_variable = { caps_expense_temp = caps_expense }
-	###Apply modifiers
-	multiply_temp_variable = { caps_income_temp = caps_income_modifier }
-	multiply_temp_variable = { caps_expense_temp = caps_expense_modifier }
-	###Calculate Net
-	set_temp_variable = { caps_total_temp = caps_income_temp }
-	add_to_temp_variable = { caps_total_temp = caps_expense_temp }
-	set_variable = { caps_daily_modified = caps_total_temp }
-	### Check bankrupt status
-	check_bankrupt = yes
-}
-###Update military costs
-caps_update_military = {
-	###Set pre-calc
-	set_temp_variable = { caps_daily_diff_before = caps_military_upkeep }
-	if = {
-		limit = {
-			always = yes
-			###Get mil expenses trigger
-			get_military_expenses = yes
-		}
-		###Set output of mil expenses trigger to update current expenses
-		set_variable = { caps_military_upkeep = manpower_temp }
-		###Set post-calc
-		set_temp_variable = { caps_daily_diff_after = manpower_temp }
-		###Update expenses
-		update_caps_expense  = yes
-	}
-}
-###Calculate income from consumer goods -- Unused
-caps_update_industry = {
-	set_temp_variable = { caps_daily_diff_before = caps_civilian_income }
-	set_temp_variable = { caps_number_fac_temp = num_of_factories }
-	multiply_temp_variable = { caps_number_fac_temp = modifier@consumer_goods_factor }
-	multiply_temp_variable = { caps_number_fac_temp = 3 }
-	set_temp_variable = { caps_daily_diff_after = caps_number_fac_temp }
-	set_variable = { caps_civilian_income = caps_number_fac_temp }
-	update_caps_income = yes
-}
-chem_iterate_withdrawl = {
-	set_country_flag = {
-		flag = chem_withdrawl_flag
-		days = 40
-		value = 1
-	}
-	if = {
-		limit = {
-			has_dynamic_modifier = { modifier = chem_withdrawl_effect }
-		}
-		add_to_variable = { chem_withdrawl_variable = 2 }
-		clamp_variable = {
-			var = chem_withdrawl_variable
-			max = 10
-		}
-		set_variable = {
-			chem_withdrawl_variable_modifier = chem_withdrawl_variable
-		}
-		multiply_variable = {
-			chem_withdrawl_variable_modifier = -1
-		}
-	}
-	else = {
-		add_dynamic_modifier = {
-			modifier = chem_withdrawl_effect
-		}
-		set_variable = {
-			chem_withdrawl_variable = 2
-		}
-		set_variable = {
-			chem_withdrawl_variable_modifier = -2
-		}
-	}
-}
-organization_add_opinion = {
-	if = {
-		limit = {
-			check_variable = {
-				org_index = 1
-			}
-		}
-		add_to_variable = {
-			gun_runner_opinion = opinion_to_add
-		}
-	}
-	if = {
-		limit = {
-			check_variable = {
-				org_index = 2
-			}
-		}
-		add_to_variable = {
-			chem_runner_opinion = opinion_to_add
-		}
-	}
-	if = {
-		limit = {
-			check_variable = {
-				org_index = 3
-			}
-		}
-		add_to_variable = {
-			slave_runner_opinion = opinion_to_add
-		}
-	}
-	custom_effect_tooltip = org_opinon_add_tt
-}
-@LEVEL_1 = 15
-@LEVEL_2 = 20
-@LEVEL_3 = 30
-advisor_opinion_bonus_check = {
-	###Remove old bonuses
-	subtract_from_variable = {
-		gun_runner_opinion = gun_runner_opinion_advisor
-	}
-	subtract_from_variable = {
-		gun_runner_opinion_max = gun_runner_opinion_advisor
-	}
-	subtract_from_variable = {
-		chem_runner_opinion = chem_runner_opinion_advisor
-	}
-	subtract_from_variable = {
-		chem_runner_opinion_max = chem_runner_opinion_advisor
-	}
-	subtract_from_variable = {
-		slave_runner_opinion = slave_runner_opinion_advisor
-	}
-	subtract_from_variable = {
-		slave_runner_opinion_max = slave_runner_opinion_advisor
-	}
-	###Clear data
-	set_variable = {
-		gun_runner_opinion_advisor = 0
-	}
-	set_variable = {
-		chem_runner_opinion_advisor = 0
-	}
-	set_variable = {
-		slave_runner_opinion_advisor = 0
-	}
-	if = {
-		limit = {
-			has_idea_with_trait  = gun_runner_opinion_1
-		}
-		add_to_variable = {
-			gun_runner_opinion_advisor = @LEVEL_1
-		}
-	}
-	if = {
-		limit = {
-			has_idea_with_trait  = gun_runner_opinion_2
-		}
-		add_to_variable = {
-			gun_runner_opinion_advisor = @LEVEL_2
-		}
-	}
-	if = {
-		limit = {
-			has_idea_with_trait  = gun_runner_opinion_3
-		}
-		add_to_variable = {
-			gun_runner_opinion_advisor = @LEVEL_3
-		}
-	}
-	###Chems
-	if = {
-		limit = {
-			has_idea_with_trait  = chem_runner_opinion_1
-		}
-		add_to_variable = {
-			chem_runner_opinion_advisor = @LEVEL_1
-		}
-	}
-	if = {
-		limit = {
-			has_idea_with_trait  = chem_runner_opinion_2
-		}
-		add_to_variable = {
-			chem_runner_opinion_advisor = @LEVEL_2
-		}
-	}
-	if = {
-		limit = {
-			has_idea_with_trait  = chem_runner_opinion_3
-		}
-		add_to_variable = {
-			chem_runner_opinion_advisor = @LEVEL_3
-		}
-	}
-	###SLAVES
-	if = {
-		limit = {
-			has_idea_with_trait  = slave_runner_opinion_1
-		}
-		add_to_variable = {
-			slave_runner_opinion_advisor = @LEVEL_1
-		}
-	}
-	if = {
-		limit = {
-			has_idea_with_trait  = slave_runner_opinion_2
-		}
-		add_to_variable = {
-			slave_runner_opinion_advisor = @LEVEL_2
-		}
-	}
-	if = {
-		limit = {
-			has_idea_with_trait  = slave_runner_opinion_3
-		}
-		add_to_variable = {
-			slave_runner_opinion_advisor = @LEVEL_3
-		}
-	}
-	###Set new opinions
-	add_to_variable = {
-		slave_runner_opinion = slave_runner_opinion_advisor
-	}
-	add_to_variable = {
-		slave_runner_opinion_max = slave_runner_opinion_advisor
-	}
-	clamp_variable = {
-		var = slave_runner_opinion
-		max = slave_runner_opinion_max
-	}
-	add_to_variable = {
-		chem_runner_opinion = chem_runner_opinion_advisor
-	}
-	add_to_variable = {
-		chem_runner_opinion_max = chem_runner_opinion_advisor
-	}
-	clamp_variable = {
-		var = chem_runner_opinion
-		max = chem_runner_opinion_max
-	}
-	add_to_variable = {
-		gun_runner_opinion = gun_runner_opinion_advisor
-	}
-	add_to_variable = {
-		gun_runner_opinion_max = gun_runner_opinion_advisor
-	}
-	clamp_variable = {
-		var = gun_runner_opinion
-		max = gun_runner_opinion_max
-	}
-
-}
-###Calculate tech level for gun runners
-calculate_gun_runner_inventory = {
-	###Pre-assigns a var to each tech for ease of use in loc
-	if = {
-		limit = {
-			has_tech = basic_infantry_equipment
-		}
-		set_variable = { gun_runner_tech = 6 }
-	}
-		else_if = {
-		limit = {
-			has_tech = melee_weaponry_tech_3
-		}
-		set_variable = { gun_runner_tech = 5 }
-	}
-		else_if = {
-		limit = {
-			has_tech = ballistic_weaponry_tech_1
-		}
-		set_variable = { gun_runner_tech = 4 }
-	}
-	else_if = {
-		limit = {
-			has_tech = melee_weaponry_tech_2
-		}
-		set_variable = { gun_runner_tech = 3 }
-	}
-	else_if = {
-		limit = {
-			has_tech = ballistic_weaponry_tech_2
-		}
-		set_variable = { gun_runner_tech = 2 }
-	}
-	else_if = {
-		limit = {
-			has_tech = melee_weaponry_tech_1
-		}
-		set_variable = { gun_runner_tech = 1 }
-	}
-}
+#add_caps_500 = {
+#	set_temp_variable = { caps_to_add = 500 }
+#	hidden_effect = {
+#		add_caps = yes
+#	}
+#	custom_effect_tooltip = add_caps_simple_tt
+#}
+#add_caps_1000 = {
+#	set_temp_variable = { caps_to_add = 1000 }
+#	hidden_effect = {
+#		add_caps = yes
+#	}
+#	custom_effect_tooltip = add_caps_simple_tt
+#}
+#add_caps_2000 = {
+#	set_temp_variable = { caps_to_add = 2000 }
+#	hidden_effect = {
+#		add_caps = yes
+#	}
+#	custom_effect_tooltip = add_caps_simple_tt
+#}
+#####DEPRECATED
+#add_caps_daily = {
+#	set_temp_variable = { caps_sound_var = random }
+#	multiply_temp_variable = { caps_sound_var = 100 }
+#	hidden_effect = {
+#		if = {
+#			limit = { check_variable = { caps_sound_var > 50 }}
+#			scoped_sound_effect = "ui_items_bottlecaps_up_01"
+#		}
+#		else = { scoped_sound_effect = "ui_items_bottlecaps_up_02"}
+#		update_caps = yes
+#	custom_effect_tooltip = add_caps_daily_tt
+#	}
+#}
+####Check for bankrupt status
+#check_bankrupt = {
+#	if = {
+#		limit = {
+#			AND = {
+#				###Triggers for bankrupt
+#				check_variable = { caps_number_display < 0 }
+#				check_variable = { caps_daily_modified < 0 }
+#				is_ai = no
+#			}
+#		}
+#		###Log Caps
+#		if = {
+#			limit = { has_global_flag = caps_debug_logs }
+#			log = "Changing bankrupt caps"
+#		}
+#		###Calculate the modifiers for dynamic modifier
+#		set_variable = { caps_bankrupcy_deficit_stab = caps_daily_modified }
+#		multiply_variable = { caps_bankrupcy_deficit_stab = @BANKRUPT_MULTI }
+#		clamp_variable = {
+#			var = caps_bankrupcy_deficit_stab
+#			min = @BANKRUPT_CLAMP
+#			max = 0
+#		}
+#		set_variable = { caps_bankrupcy_deficit_sur = caps_bankrupcy_deficit_stab }
+#		multiply_variable = { caps_bankrupcy_deficit_sur = @BANKRUPT_MULTI_SUR }
+#		###Add modifier if not applied
+#		if = {
+#			limit = {
+#				NOT = {
+#					has_dynamic_modifier = { modifier = caps_bankruptcy_modifier }
+#				}
+#			}
+#			add_dynamic_modifier = { modifier = caps_bankruptcy_modifier }
+#			force_update_dynamic_modifier = yes
+#			###Start bankrupt event chain -- only happens when intialized bankrupt
+#			country_event = bankrupt_events.1
+#		}
+#	}
+#}
+####Divisor (50% from 100 rep)
+#@OPINION_DISCOUNT = 140
+####Gets opinion-based caps discount
+#get_caps_discount = {
+#	if = {
+#		limit = {
+#			check_variable = { opinion_var_temp > 30 }
+#		}
+#		### opinion_var_temp set outside of effect
+#		subtract_from_temp_variable = { opinion_var_temp = 30 }
+#		divide_temp_variable = { opinion_var_temp = @OPINION_DISCOUNT }
+#		set_temp_variable = { temp_discount = 1 }
+#		subtract_from_temp_variable = { temp_discount = opinion_var_temp }
+#		###Passes both a multiplier (temp_discount) and a % off (opinion_var_temp) to effect and tooltip
+#	}
+#	else = {
+#		###Defaults to 0 if not enough reputation
+#		set_temp_variable = { opinion_var_temp = 0 }
+#		set_temp_variable = { temp_discount = 1 }
+#	}
+#	###Tooltip
+#	custom_effect_tooltip = "caps_opinion_tt"
+#}
+####Updates incomes
+#update_caps_income = {
+#	###This is incase needed in some TT
+#	set_temp_variable = { caps_variable_temp = caps_income }
+#	if = {
+#		limit = {
+#			### Calculate caps diff + dumb trigger
+#			get_caps_daily_difference = yes
+#			always = yes
+#		}
+#		###caps_daily_temp set from trigger
+#		set_variable = { caps_income = caps_daily_temp }
+#	}
+#	###update caps net
+#	update_caps = yes
+#}
+#### Updates Expenses, same as above
+#update_caps_expense = {
+#	set_temp_variable = { caps_variable_temp = caps_expense }
+#	if = {
+#		limit = {
+#			### Calculate caps diff + dumb trigger
+#			get_caps_daily_difference = yes
+#			always = yes
+#		}
+#		set_variable = { caps_expense = caps_daily_temp }
+#	}
+#	update_caps = yes
+#}
+#
+#update_caps = {
+#	###Set up temp vars to preserve unmodified numbers
+#	set_temp_variable = { caps_income_temp = caps_income }
+#	set_temp_variable = { caps_expense_temp = caps_expense }
+#	###Apply modifiers
+#	multiply_temp_variable = { caps_income_temp = caps_income_modifier }
+#	multiply_temp_variable = { caps_expense_temp = caps_expense_modifier }
+#	###Calculate Net
+#	set_temp_variable = { caps_total_temp = caps_income_temp }
+#	add_to_temp_variable = { caps_total_temp = caps_expense_temp }
+#	set_variable = { caps_daily_modified = caps_total_temp }
+#	### Check bankrupt status
+#	check_bankrupt = yes
+#}
+####Update military costs
+#caps_update_military = {
+#	###Set pre-calc
+#	set_temp_variable = { caps_daily_diff_before = caps_military_upkeep }
+#	if = {
+#		limit = {
+#			always = yes
+#			###Get mil expenses trigger
+#			get_military_expenses = yes
+#		}
+#		###Set output of mil expenses trigger to update current expenses
+#		set_variable = { caps_military_upkeep = manpower_temp }
+#		###Set post-calc
+#		set_temp_variable = { caps_daily_diff_after = manpower_temp }
+#		###Update expenses
+#		update_caps_expense  = yes
+#	}
+#}
+####Calculate income from consumer goods -- Unused
+#caps_update_industry = {
+#	set_temp_variable = { caps_daily_diff_before = caps_civilian_income }
+#	set_temp_variable = { caps_number_fac_temp = num_of_factories }
+#	multiply_temp_variable = { caps_number_fac_temp = modifier@consumer_goods_factor }
+#	multiply_temp_variable = { caps_number_fac_temp = 3 }
+#	set_temp_variable = { caps_daily_diff_after = caps_number_fac_temp }
+#	set_variable = { caps_civilian_income = caps_number_fac_temp }
+#	update_caps_income = yes
+#}
+#chem_iterate_withdrawl = {
+#	set_country_flag = {
+#		flag = chem_withdrawl_flag
+#		days = 40
+#		value = 1
+#	}
+#	if = {
+#		limit = {
+#			has_dynamic_modifier = { modifier = chem_withdrawl_effect }
+#		}
+#		add_to_variable = { chem_withdrawl_variable = 2 }
+#		clamp_variable = {
+#			var = chem_withdrawl_variable
+#			max = 10
+#		}
+#		set_variable = {
+#			chem_withdrawl_variable_modifier = chem_withdrawl_variable
+#		}
+#		multiply_variable = {
+#			chem_withdrawl_variable_modifier = -1
+#		}
+#	}
+#	else = {
+#		add_dynamic_modifier = {
+#			modifier = chem_withdrawl_effect
+#		}
+#		set_variable = {
+#			chem_withdrawl_variable = 2
+#		}
+#		set_variable = {
+#			chem_withdrawl_variable_modifier = -2
+#		}
+#	}
+#}
+#organization_add_opinion = {
+#	if = {
+#		limit = {
+#			check_variable = {
+#				org_index = 1
+#			}
+#		}
+#		add_to_variable = {
+#			gun_runner_opinion = opinion_to_add
+#		}
+#	}
+#	if = {
+#		limit = {
+#			check_variable = {
+#				org_index = 2
+#			}
+#		}
+#		add_to_variable = {
+#			chem_runner_opinion = opinion_to_add
+#		}
+#	}
+#	if = {
+#		limit = {
+#			check_variable = {
+#				org_index = 3
+#			}
+#		}
+#		add_to_variable = {
+#			slave_runner_opinion = opinion_to_add
+#		}
+#	}
+#	custom_effect_tooltip = org_opinon_add_tt
+#}
+#@LEVEL_1 = 15
+#@LEVEL_2 = 20
+#@LEVEL_3 = 30
+#advisor_opinion_bonus_check = {
+#	###Remove old bonuses
+#	subtract_from_variable = {
+#		gun_runner_opinion = gun_runner_opinion_advisor
+#	}
+#	subtract_from_variable = {
+#		gun_runner_opinion_max = gun_runner_opinion_advisor
+#	}
+#	subtract_from_variable = {
+#		chem_runner_opinion = chem_runner_opinion_advisor
+#	}
+#	subtract_from_variable = {
+#		chem_runner_opinion_max = chem_runner_opinion_advisor
+#	}
+#	subtract_from_variable = {
+#		slave_runner_opinion = slave_runner_opinion_advisor
+#	}
+#	subtract_from_variable = {
+#		slave_runner_opinion_max = slave_runner_opinion_advisor
+#	}
+#	###Clear data
+#	set_variable = {
+#		gun_runner_opinion_advisor = 0
+#	}
+#	set_variable = {
+#		chem_runner_opinion_advisor = 0
+#	}
+#	set_variable = {
+#		slave_runner_opinion_advisor = 0
+#	}
+#	if = {
+#		limit = {
+#			has_idea_with_trait  = gun_runner_opinion_1
+#		}
+#		add_to_variable = {
+#			gun_runner_opinion_advisor = @LEVEL_1
+#		}
+#	}
+#	if = {
+#		limit = {
+#			has_idea_with_trait  = gun_runner_opinion_2
+#		}
+#		add_to_variable = {
+#			gun_runner_opinion_advisor = @LEVEL_2
+#		}
+#	}
+#	if = {
+#		limit = {
+#			has_idea_with_trait  = gun_runner_opinion_3
+#		}
+#		add_to_variable = {
+#			gun_runner_opinion_advisor = @LEVEL_3
+#		}
+#	}
+#	###Chems
+#	if = {
+#		limit = {
+#			has_idea_with_trait  = chem_runner_opinion_1
+#		}
+#		add_to_variable = {
+#			chem_runner_opinion_advisor = @LEVEL_1
+#		}
+#	}
+#	if = {
+#		limit = {
+#			has_idea_with_trait  = chem_runner_opinion_2
+#		}
+#		add_to_variable = {
+#			chem_runner_opinion_advisor = @LEVEL_2
+#		}
+#	}
+#	if = {
+#		limit = {
+#			has_idea_with_trait  = chem_runner_opinion_3
+#		}
+#		add_to_variable = {
+#			chem_runner_opinion_advisor = @LEVEL_3
+#		}
+#	}
+#	###SLAVES
+#	if = {
+#		limit = {
+#			has_idea_with_trait  = slave_runner_opinion_1
+#		}
+#		add_to_variable = {
+#			slave_runner_opinion_advisor = @LEVEL_1
+#		}
+#	}
+#	if = {
+#		limit = {
+#			has_idea_with_trait  = slave_runner_opinion_2
+#		}
+#		add_to_variable = {
+#			slave_runner_opinion_advisor = @LEVEL_2
+#		}
+#	}
+#	if = {
+#		limit = {
+#			has_idea_with_trait  = slave_runner_opinion_3
+#		}
+#		add_to_variable = {
+#			slave_runner_opinion_advisor = @LEVEL_3
+#		}
+#	}
+#	###Set new opinions
+#	add_to_variable = {
+#		slave_runner_opinion = slave_runner_opinion_advisor
+#	}
+#	add_to_variable = {
+#		slave_runner_opinion_max = slave_runner_opinion_advisor
+#	}
+#	clamp_variable = {
+#		var = slave_runner_opinion
+#		max = slave_runner_opinion_max
+#	}
+#	add_to_variable = {
+#		chem_runner_opinion = chem_runner_opinion_advisor
+#	}
+#	add_to_variable = {
+#		chem_runner_opinion_max = chem_runner_opinion_advisor
+#	}
+#	clamp_variable = {
+#		var = chem_runner_opinion
+#		max = chem_runner_opinion_max
+#	}
+#	add_to_variable = {
+#		gun_runner_opinion = gun_runner_opinion_advisor
+#	}
+#	add_to_variable = {
+#		gun_runner_opinion_max = gun_runner_opinion_advisor
+#	}
+#	clamp_variable = {
+#		var = gun_runner_opinion
+#		max = gun_runner_opinion_max
+#	}
+#
+#}
+####Calculate tech level for gun runners
+#calculate_gun_runner_inventory = {
+#	###Pre-assigns a var to each tech for ease of use in loc
+#	if = {
+#		limit = {
+#			has_tech = basic_infantry_equipment
+#		}
+#		set_variable = { gun_runner_tech = 6 }
+#	}
+#		else_if = {
+#		limit = {
+#			has_tech = melee_weaponry_tech_3
+#		}
+#		set_variable = { gun_runner_tech = 5 }
+#	}
+#		else_if = {
+#		limit = {
+#			has_tech = ballistic_weaponry_tech_1
+#		}
+#		set_variable = { gun_runner_tech = 4 }
+#	}
+#	else_if = {
+#		limit = {
+#			has_tech = melee_weaponry_tech_2
+#		}
+#		set_variable = { gun_runner_tech = 3 }
+#	}
+#	else_if = {
+#		limit = {
+#			has_tech = ballistic_weaponry_tech_2
+#		}
+#		set_variable = { gun_runner_tech = 2 }
+#	}
+#	else_if = {
+#		limit = {
+#			has_tech = melee_weaponry_tech_1
+#		}
+#		set_variable = { gun_runner_tech = 1 }
+#	}
+#}
+#

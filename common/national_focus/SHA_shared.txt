@@ -415,21 +415,8 @@ shared_focus = {
 		available_if_capitulated = no
 
 		completion_reward = {
-			if = {
-			limit = {
-				has_game_rule = {
-					rule = caps_system_toggle
-					option = ENABLED
-				}
-			}
-			set_temp_variable = { caps_to_add = 1000 }
-			hidden_effect = {
-				add_caps = yes
-			}
-			custom_effect_tooltip = add_caps_simple_tt
-			}
-			add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 90 producer = SHA }
-			add_equipment_to_stockpile = { type = support_equipment amount = 40 producer = SHA }
+			add_equipment_to_stockpile = { type = ballistic_equipment_3 amount = 390 producer = OWE }
+			add_equipment_to_stockpile = { type = support_equipment amount = 140 producer = OWE }
 		}
 
 } 
@@ -915,6 +902,12 @@ shared_focus = {
 				ideology = visionary
 				popularity = 0.15
 			}
+			hidden_effect = {
+				IF = {
+					limit = {SHA = {is_ai = yes}}
+					add_ideas = NCR_resilience_idea
+				}
+			}
 		}
 
 } 
@@ -1059,7 +1052,7 @@ shared_focus = {
 		y = 5
 		
 		relative_position_id = NCR_provisional_republic
-		cost = 10
+		cost = 8.71
 		prerequisite = {focus = NCR_expand_rock_breaking}
 		prerequisite = {focus = NCR_lumber_from_radshore}
 		ai_will_do = {
@@ -1203,7 +1196,7 @@ shared_focus = {
 		y = 5
 		
 		relative_position_id = NCR_provisional_republic
-		cost = 10
+		cost = 8.71
 		prerequisite = {focus = NCR_fortify_leslie}
 		prerequisite = {focus = NCR_subsidise_bat_farms}
 		ai_will_do = {
@@ -1270,11 +1263,11 @@ shared_focus = {
 		completion_reward = {
 			if = {
 				limit = { has_idea = civilian_economy }
-				add_ideas = low_economic_mobilisation
+				add_ideas = war_economy
 			}
 			else_if = {
 				limit = { has_idea = low_economic_mobilisation }
-				add_ideas = partial_economic_mobilisation
+				add_ideas = war_economy
 			}
 			else_if = {
 				limit = { has_idea = partial_economic_mobilisation }
@@ -1457,7 +1450,7 @@ shared_focus = {
 		y = 3
 		
 		relative_position_id = NCR_provisional_republic
-		cost = 10
+		cost = 8.71
 
 		prerequisite = {focus = NCR_build_up_our_forces}
 		ai_will_do = {
@@ -1578,7 +1571,7 @@ shared_focus = {
 		y = 6
 		
 		relative_position_id = NCR_provisional_republic
-		cost = 10
+		cost = 8.71
 
 		prerequisite = {focus = NCR_sponsor_mango_brigades}
 		prerequisite = {focus = NCR_arm_the_fishers}
@@ -1606,7 +1599,7 @@ shared_focus = {
 		y = 7
 		
 		relative_position_id = NCR_provisional_republic
-		cost = 10
+		cost = 8.71
 
 		prerequisite = {focus = NCR_everything_we_have}
 		prerequisite = {focus = NCR_total_war_preparation}
@@ -2408,6 +2401,12 @@ shared_focus = {
 		relative_position_id = NCR_commitee_of_expansion
 		ai_will_do = {
 			factor = 50
+			modifier = {
+			factor = 0.7
+			NOT = {
+				has_completed_focus = NCR_state_of_appleloosa
+			}
+			}
 		}
 
 		cancel_if_invalid = yes
@@ -2554,7 +2553,13 @@ shared_focus = {
 		prerequisite = {focus = NCR_sweep_midlands }
 		relative_position_id = NCR_commitee_of_expansion
 		ai_will_do = {
-			factor = 50
+			factor = 500
+			modifier = {
+			factor = 0.1
+			NOT = {
+				has_completed_focus = NCR_united_azureway
+			}
+			}
 		}
 
 		cancel_if_invalid = yes
@@ -2621,7 +2626,13 @@ shared_focus = {
 		prerequisite = {focus = NCR_sweep_midlands focus = NCR_topple_mareway }
 		relative_position_id = NCR_commitee_of_expansion
 		ai_will_do = {
-			factor = 50
+			factor = 500
+			modifier = {
+			factor = 0
+			NOT = {
+				has_completed_focus = NCR_united_azureway
+			}
+			}
 		}
 
 		cancel_if_invalid = yes
@@ -2671,8 +2682,15 @@ shared_focus = {
 		relative_position_id = NCR_commitee_of_expansion
 		ai_will_do = {
 			factor = 50
+			modifier = {
+			factor = 10
+			OR = {
+				has_completed_focus = NCR_state_of_canterlot
+				has_completed_focus = NCR_state_of_sunnyshore
+			}
+			}
 		}
-
+		available = {has_completed_focus = NCR_united_azureway}
 		cancel_if_invalid = yes
 		available_if_capitulated = no
 		bypass = {
@@ -2755,12 +2773,23 @@ shared_focus = {
 				}
 			}
 			country_exists = TEN
+			OR = {
+				has_completed_focus = NCR_state_of_fillydelphia
+				has_completed_focus = NCR_state_of_foal_mountain
+			}
 		}
 		mutually_exclusive = { focus = NCR_take_ponisnsula}
 		prerequisite = {focus = NCR_liberate_fillydelphia }
 		relative_position_id = NCR_commitee_of_expansion
 		ai_will_do = {
-			factor = 250
+			factor = 1
+			modifier = {
+			factor = 1000
+			OR = {
+				has_completed_focus = NCR_state_of_fillydelphia
+				has_completed_focus = NCR_state_of_foal_mountain
+			}
+			}
 		}
 
 		cancel_if_invalid = yes
@@ -2793,7 +2822,14 @@ shared_focus = {
 		prerequisite = {focus = NCR_liberate_fillydelphia }
 		relative_position_id = NCR_commitee_of_expansion
 		ai_will_do = {
-			factor = 50
+			factor = 1
+			modifier = {
+			factor = 500
+			OR = {
+				has_completed_focus = NCR_state_of_fillydelphia
+				has_completed_focus = NCR_state_of_foal_mountain
+			}
+			}
 		}
 
 		cancel_if_invalid = yes
@@ -2886,7 +2922,11 @@ shared_focus = {
 		prerequisite = {focus = NCR_pincer_sunrise focus = NCR_take_ponisnsula }
 		relative_position_id = NCR_commitee_of_expansion
 		ai_will_do = {
-			factor = 500
+			factor = 50
+			modifier = {
+			factor = 10
+				has_completed_focus = NCR_flourishing_heartland
+			}
 		}
 
 		cancel_if_invalid = yes
@@ -3285,9 +3325,14 @@ shared_focus = {
 			NOT = {
 				has_government = destruction
 			}
-			LIT = {
-				all_core_land_owned_by_prev_sphere = yes
-			}
+			owns_state = 811
+			owns_state = 798
+			owns_state = 32
+			owns_state = 565
+			owns_state = 551
+			owns_state = 550
+			owns_state = 33
+			owns_state = 34
 		}
 		ai_will_do = {
 			factor = 500
@@ -3426,8 +3471,9 @@ shared_focus = {
 			Core_original_GOR = yes
 			Core_original_FTA = yes
 			Core_original_RAP = yes
-			Core_original_PBA = yes
+			Core_original_PBN = yes
 			Core_original_BOG = yes
+			Core_original_REP = yes
 		}
 } 
 
@@ -3454,6 +3500,7 @@ shared_focus = {
 
 		completion_reward = {
 			Core_original_SPV = yes
+			add_state_core = 481
 			set_technology = {
 				tech_ironpaws = 1
 			}
@@ -5554,7 +5601,7 @@ shared_focus = {
 		ai_will_do = {
 			factor = 10
 		}
-		available = { has_completed_focus = NCR_the_first_election}
+		available = { OR = {has_completed_focus = NCR_the_first_election has_war_with = NEV} }
 		cancel_if_invalid = yes
 		available_if_capitulated = no
 
@@ -5829,7 +5876,7 @@ shared_focus = {
 		ai_will_do = {
 			factor = 50
 		}
-		available = { has_completed_focus = NCR_the_first_election}
+		available = { OR = {has_completed_focus = NCR_the_first_election has_war_with = NEV} }
 		cancel_if_invalid = yes
 		available_if_capitulated = no
 
@@ -6880,7 +6927,7 @@ shared_focus = {
 		ai_will_do = {
 			factor = 0
 		}
-		available = {has_completed_focus = NCR_the_first_election}
+		available = { OR = {has_completed_focus = NCR_the_first_election has_war_with = NEV} }
 
 		cancel_if_invalid = yes
 		available_if_capitulated = no

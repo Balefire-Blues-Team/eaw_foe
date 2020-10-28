@@ -39,4 +39,38 @@ on_actions = {
 			}
 		}
 	}
+
+	on_unit_leader_created = {
+		effect = {
+			log = "[GetDateText]: ROOT: [Root.GetName] FROM: [From.GetName] on_unit_leader_created"
+			if = {
+				limit = {
+					is_operative = no
+				}
+				if = {
+					limit = {
+						has_unit_leader_race_trait = no
+					}
+					set_unit_leader_flag = generated
+					if = {
+						limit = { owner = { 
+							original_tag = RED 
+						} }
+						random_list = {
+							34 = {}
+							33 = {
+								set_unit_leader_to_raider = yes
+								add_unit_leader_trait = raider_commander
+							}
+							33 = {
+								set_unit_leader_to_talon = yes
+								add_unit_leader_trait = merc_commander
+							}
+						}
+					}
+				}
+				clr_unit_leader_flag = generated
+			}
+		}
+	}
 }
