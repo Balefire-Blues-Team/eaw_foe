@@ -149,10 +149,16 @@ RED_steel_rangers_cat = {
 		days_re_enable = 60
 
 		ai_will_do = {
-			factor = 10
+			base = 30
+			modifier = {
+				date > 1237.06.01
+				add = 10
+			}
+			modifier = {
+				date > 1238.01.01
+				factor = 200
+			}
 		}
-
-		fire_only_once = no
 
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision RED_attack_fillybanks"
@@ -216,10 +222,16 @@ RED_steel_rangers_cat = {
 		days_re_enable = 60
 
 		ai_will_do = {
-			factor = 10
+			base = 30
+			modifier = {
+				date > 1237.09.01
+				add = 10
+			}
+			modifier = {
+				date > 1238.03.01
+				factor = 200
+			}
 		}
-
-		fire_only_once = no
 
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision RED_attack_southend"
@@ -280,10 +292,16 @@ RED_steel_rangers_cat = {
 		days_re_enable = 60
 
 		ai_will_do = {
-			factor = 10
+			base = 30
+			modifier = {
+				date > 1238.01.01
+				add = 10
+			}
+			modifier = {
+				date > 1238.06.01
+				factor = 200
+			}
 		}
-
-		fire_only_once = no
 
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision RED_attack_downtown"
@@ -335,7 +353,19 @@ RED_steel_rangers_cat = {
 		cost = 50
 
 		ai_will_do = {
-			factor = 20
+			base = 40
+			modifier = {
+				date > 1238.01.01
+				add = 20
+			}
+			modifier = {
+				date > 1238.06.01
+				factor = 10
+			}
+			modifier = {
+                factor = 0.1
+                has_war = yes
+            }
 		}
 
 		fire_only_once = yes
@@ -1173,6 +1203,7 @@ RED_UNI_interactions = {
 		RED_better_attache1 = {
 			icon = GFX_decision_megaphone
 			visible = {
+				has_country_flag = unlock_RED_UNI_decisions_flag
 				NOT = { has_idea = RED_alicorn_attache1 }                     
 				check_variable = {
 	                RED_UNI_trust > 0
@@ -1188,6 +1219,7 @@ RED_UNI_interactions = {
 				always = yes                  
 			}
 			activation = {
+				has_country_flag = unlock_RED_UNI_decisions_flag
 				NOT = { has_idea = RED_alicorn_attache1 }                     
 				check_variable = {
 	                RED_UNI_trust > 0
@@ -1546,7 +1578,6 @@ RED_UNI_interactions = {
 
         cost = 30
 
-        fire_only_once = no
 		complete_effect = {
 			save_current_manpower = yes
 			random_owned_controlled_state = {
@@ -1580,7 +1611,7 @@ RED_UNI_interactions = {
 
         available = {
             has_manpower > 200
-            has_equipment = { infantry_equipment > 199 }
+            has_equipment = { infantry_equipment > 99 }
             has_equipment = { support_equipment > 49 }
         }
 
@@ -1596,6 +1627,12 @@ RED_UNI_interactions = {
         ai_will_do = {
             base = 20
             modifier = {
+                factor = 3
+                NOT = {
+                	has_completed_focus = RED_imp_experiments
+                }
+            }
+            modifier = {
                 factor = 0.1
                 has_war = yes
             }
@@ -1603,25 +1640,24 @@ RED_UNI_interactions = {
 
         cost = 30
 
-        fire_only_once = no
 		complete_effect = {
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
-				amount = -200
+				amount = -100
 			}
 			add_equipment_to_stockpile = {
 				type = support_equipment
 				amount = -50
 			}
 
-			add_manpower = -200
+			add_manpower = -100
 		}
 
         remove_effect = {
 			custom_effect_tooltip = RED_increase_infl_UNI_tt
 			hidden_effect = {
 				add_to_variable = {
-					var = UNI_RED_infl
+					var = RED_UNI_infl
 					value = 1
 				}
 			}
@@ -1636,7 +1672,7 @@ RED_UNI_interactions = {
 			custom_trigger_tooltip = {
                 tooltip = RED_needs_some_trust_tt
                     check_variable = {
-                        UNI_RED_trust > 0
+                        RED_UNI_trust > 0
                     }
             }
         }
@@ -1667,7 +1703,7 @@ RED_UNI_interactions = {
 			custom_trigger_tooltip = {
                 tooltip = RED_needs_med_trust_tt
                     check_variable = {
-                        UNI_RED_trust > 6
+                        RED_UNI_trust > 6
                     }
             }
         }
@@ -1701,7 +1737,7 @@ RED_UNI_interactions = {
 			custom_trigger_tooltip = {
                 tooltip = RED_needs_lotta_trust_tt
                     check_variable = {
-                        UNI_RED_trust > 10
+                        RED_UNI_trust > 10
                     }
             }
         }
