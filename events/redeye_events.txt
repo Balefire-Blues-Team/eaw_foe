@@ -1,7 +1,7 @@
 add_namespace = redeye
 add_namespace = redeye_stablize
 add_namespace = redeye_borderwar
-add_namespace = redeye_stabletec
+add_namespace = redeye_stabletec #Cut
 
 ##Birth Of A Monster
 country_event = {
@@ -317,6 +317,8 @@ country_event = { #Accept/Decline Goddess
 	option = { #Accept
 		name = redeye.8.a
 		ai_chance = { factor = 40}
+
+		add_political_power = 150
 		
 		diplomatic_relation = {
     		country = UNI
@@ -408,10 +410,19 @@ country_event = {
 	option = {
 		name = redeye.11.a
 		ai_chance = { factor = 50}
+
+		if = {
+			limit = { is_ai = yes }
+			set_country_flag = RED_AI_attack_FTP
+		}
 		
 		create_wargoal = {
     		type = annex_everything
     		target = FTP
+		}
+		create_wargoal = {
+    		type = annex_everything
+    		target = FTR
 		}
 	}
 }
@@ -3638,6 +3649,7 @@ country_event = {
 		NOT = {
 			has_completed_focus = RED_new_unity
 		}
+		NOT = { country_exists = NEV }
 	}
  	fire_only_once = yes
 
@@ -3658,7 +3670,9 @@ country_event = {
 
 	trigger = {
 		original_tag = RED
-		RED_has_med_infl_UNI = yes
+		check_variable = {
+            RED_UNI_infl > 4
+        }
 	}
  	fire_only_once = yes
 
@@ -3742,6 +3756,50 @@ country_event = {
 		ai_chance = { factor = 5 }
 
 		RED_remove_alicorn_attache = yes
+	}
+}
+
+country_event = { #MAS Secrets
+ 	id = redeye.133
+ 	title = redeye.133.title
+ 	desc = redeye.133.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = redeye.133.a
+		ai_chance = { factor = 50 }
+
+		add_political_power = -50
+		hidden_effect = {
+			country_event = {
+				id = redeye.134
+				days = 180
+			}
+		}
+	}
+}
+
+
+country_event = { #Discovered IMP
+ 	id = redeye.134
+ 	title = redeye.134.title
+ 	desc = redeye.134.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = redeye.134.a
+		ai_chance = { factor = 50 }
+
+		add_political_power = 50
+		hidden_effect = {
+			set_country_flag = has_IMP_no_goddess_flag
+		}
 	}
 }
 
@@ -4496,8 +4554,8 @@ country_event = {
 	}
 }
 
-##########################
-### Looting Stable-Tec ###
+########################## 
+### Looting Stable-Tec ### Cut from 1.0
 ##########################
 
 country_event = {
