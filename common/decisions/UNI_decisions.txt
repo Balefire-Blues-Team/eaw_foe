@@ -11,7 +11,7 @@ UNI_dunk = {
 		}
 		
 		visible = {
-				has_completed_focus = unity_start_4
+			has_completed_focus = unity_start_4
 		}
 		days_re_enable = 1
 		cost = 25
@@ -22,6 +22,7 @@ UNI_dunk = {
 
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision UNI_dunk_p"
+			save_current_manpower = yes
 			random_controlled_state = {
 					limit = {
 						state_population > 60
@@ -29,6 +30,7 @@ UNI_dunk = {
 					}
 					add_manpower = -60
 				}
+			restore_previous_manpower = yes
 		}
 		
 		remove_effect = {
@@ -211,6 +213,384 @@ UNI_dunk = {
 			}
 		}
     }
+}
+
+UNI_RED_interactions = {
+
+	UNI_RED_get_slaves = {
+		icon = GFX_decision_generic_magic
+		days_remove = 100
+		available = {
+			political_power > 25
+			custom_trigger_tooltip = {
+                tooltip = UNI_needs_some_trust_tt
+                    check_variable = {
+                        UNI_RED_trust > 0
+                    }
+            }
+		}
+		
+		days_re_enable = 20
+		cost = 25
+
+		ai_will_do = {
+			factor = 20
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision UNI_RED_get_slaves"
+			if = {
+				limit = {check_variable = {UNI_RED_trust > 0} check_variable = {UNI_RED_trust < 4}}
+				add_ideas = UNI_slave_trade_min
+			}
+			else_if = {
+				limit = {check_variable = {UNI_RED_trust > 3} check_variable = {UNI_RED_trust < 7}}
+				add_ideas = UNI_slave_trade_low
+			}
+			else_if = {
+				limit = {check_variable = {UNI_RED_trust > 6} check_variable = {UNI_RED_trust < 11}}
+				add_ideas = UNI_slave_trade_med
+			}
+			else_if = {
+				limit = {check_variable = {UNI_RED_trust > 10} check_variable = {UNI_RED_trust < 15}}
+				add_ideas = UNI_slave_trade_high
+			}
+			else_if = {
+				limit = {check_variable = {UNI_RED_trust > 14}}
+				add_ideas = UNI_slave_trade_very
+			}
+		}
+		
+		remove_effect = {
+			custom_effect_tooltip = UNI_remove_slave_trade_tt
+			hidden_effect = {
+			remove_ideas = UNI_slave_trade_min
+			remove_ideas = UNI_slave_trade_low
+			remove_ideas = UNI_slave_trade_med
+			remove_ideas = UNI_slave_trade_high
+			remove_ideas = UNI_slave_trade_very
+			}
+		}
+	}
+	
+	UNI_send_more_alicorns = {
+        icon = border_war
+		days_remove = 20
+		days_re_enable = 80
+
+        available = {
+            has_manpower > 60
+			has_equipment = {
+				alicorn_equipment_0 > 59
+			}
+        }
+
+        visible = {
+            has_completed_focus = goddess_canon_send_alicorns
+        }
+
+        ai_will_do = {
+            base = 20
+            modifier = {
+                factor = 0.1
+                has_war = yes
+            }
+        }
+
+        cost = 20
+
+        fire_only_once = no
+		complete_effect = {
+			add_manpower = -60
+			add_equipment_to_stockpile = {
+				type = alicorn_equipment_0
+				amount = -60
+			}
+		}
+
+        remove_effect = {
+			custom_effect_tooltip = UNI_increase_trust_RED_tt
+			RED = {
+				if = {
+				    limit = { 
+			            NOT = { 
+						    has_template = "Alicorn Defense Wing"
+						}
+					}
+					division_template = {
+	                name = "Alicorn Defense Wing"
+	                is_locked = yes
+	                    regiments = {
+		                    alicorns = { x = 0 y = 0 }
+							alicorns = { x = 0 y = 1 }
+	                    }
+                    }
+					
+				}
+				593 = {
+					create_unit = {
+						division = "name = \"Unity's Alicorns\" division_template = \"Alicorn Defense Wing\" start_experience_factor = 0.03 start_equipment_factor = 1.0"
+						owner = RED
+					}
+				}
+			}
+			hidden_effect = {
+				add_to_variable = {
+					var = UNI_RED_trust
+					value = 1
+				}
+			}
+        }
+    }
+	
+	UNI_send_spies_to_red = {
+        icon = border_war
+		days_remove = 60
+		days_re_enable = 80
+
+        available = {
+            has_manpower > 20
+			has_equipment = {
+				alicorn_equipment_0 > 19
+			}
+			custom_trigger_tooltip = {
+                tooltip = UNI_needs_some_trust_tt
+                    check_variable = {
+                        UNI_RED_trust > 0
+                    }
+            }
+        }
+
+        visible = {
+            has_completed_focus = goddess_canon_send_alicorns
+        }
+
+        ai_will_do = {
+            base = 2
+        }
+
+        cost = 30
+
+        fire_only_once = no
+		complete_effect = {
+			add_manpower = -20
+			add_equipment_to_stockpile = {
+				type = alicorn_equipment_0
+				amount = -20
+			}
+		}
+
+        remove_effect = {
+			custom_effect_tooltip = UNI_increase_infl_RED_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = UNI_RED_infl
+					value = 1
+				}
+			}
+        }
+    }
+	
+	UNI_ask_industry_1 = {
+        icon = slavery
+		days_remove = 60
+		is_good = yes
+        available = {
+			custom_trigger_tooltip = {
+                tooltip = UNI_needs_some_trust_tt
+                    check_variable = {
+                        UNI_RED_trust > 0
+                    }
+            }
+        }
+
+        visible = {
+            has_completed_focus = goddess_canon_industrial_coop
+        }
+
+        ai_will_do = {
+            base = 200
+        }
+
+        cost = 40
+
+        fire_only_once = yes
+
+        remove_effect = {
+			518 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = { type = arms_factory level = 1 instant_build = yes}
+			}
+        }
+    }
+	
+	UNI_ask_industry_2 = {
+        icon = GFX_decision_hammer
+		days_remove = 60
+		is_good = yes
+        available = {
+			custom_trigger_tooltip = {
+                tooltip = UNI_needs_med_trust_tt
+                    check_variable = {
+                        UNI_RED_trust > 6
+                    }
+            }
+        }
+
+        visible = {
+            has_completed_focus = goddess_canon_industrial_coop
+        }
+
+        ai_will_do = {
+            base = 200
+        }
+
+        cost = 40
+
+        fire_only_once = yes
+
+        remove_effect = {
+			518 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = { type = arms_factory level = 1 instant_build = yes}
+			}
+        }
+    }
+	
+	UNI_ask_industry_3 = {
+        icon = GFX_decision_blueprint
+		days_remove = 60
+		is_good = yes
+        available = {
+			custom_trigger_tooltip = {
+                tooltip = UNI_needs_lotta_trust_tt
+                    check_variable = {
+                        UNI_RED_trust > 10
+                    }
+            }
+        }
+
+        visible = {
+            has_completed_focus = goddess_canon_industrial_coop
+        }
+
+        ai_will_do = {
+            base = 200
+        }
+
+        cost = 40
+
+        fire_only_once = yes
+
+        remove_effect = {
+			518 = {
+				add_extra_state_shared_building_slots = 2
+				add_building_construction = { type = arms_factory level = 2 instant_build = yes}
+			}
+        }
+    }
+	
+	UNI_ask_masters = {
+        icon = GFX_decision_enc_propaganda
+		days_remove = 60
+		days_re_enable = 100
+		is_good = yes
+        available = {
+			custom_trigger_tooltip = {
+                tooltip = UNI_needs_med_trust_tt
+                    check_variable = {
+                        UNI_RED_trust > 6
+                    }
+            }
+        }
+
+        visible = {
+            has_completed_focus = goddess_canon_send_alicorns
+        }
+
+        ai_will_do = {
+            base = 200
+        }
+
+        cost = 40
+
+        fire_only_once = no
+
+        remove_effect = {
+			every_owned_state = {
+				limit = { NOT = {is_core_of = UNI}}
+				add_compliance = 15
+			}
+        }
+    }
+	
+	UNI_ask_research = {
+        icon = GFX_decision_generic_research
+		days_remove = 100
+		days_re_enable = 50
+		is_good = yes
+        available = {
+			custom_trigger_tooltip = {
+                tooltip = UNI_needs_med_trust_tt
+                    check_variable = {
+                        UNI_RED_trust > 6
+                    }
+            }
+        }
+
+        visible = {
+            has_completed_focus = goddess_canon_trading_IMP
+        }
+
+        ai_will_do = {
+            base = 20
+        }
+		modifier = {
+			research_speed_factor = 0.15
+		}
+
+        cost = 25
+
+        fire_only_once = no
+
+        remove_effect = {
+        }
+    }
+	
+	UNI_ask_crystals = {
+        icon = GFX_decision_crystals
+		days_remove = 60
+		is_good = yes
+        available = {
+			custom_trigger_tooltip = {
+                tooltip = UNI_needs_lotta_trust_tt
+                    check_variable = {
+                        UNI_RED_trust > 10
+                    }
+            }
+        }
+
+        visible = {
+            has_completed_focus = goddess_canon_trading_IMP
+			RED = { owns_state = 451 }
+        }
+
+        ai_will_do = {
+            base = 200
+        }
+
+        cost = 50
+
+        fire_only_once = yes
+
+        remove_effect = {
+			518 = {
+				add_resource = { type = crystals amount = 5}
+			}
+        }
+    }
+
+
 }
 
 UNI_black_book = {
@@ -538,7 +918,7 @@ UNI_slaver_interractions
     }
 }
 
-UNI_master_harassment
+UNI_master_harassment = {
 	UNI_flying_assault = {
         icon = border_war
 		days_remove = 50
@@ -564,6 +944,65 @@ UNI_master_harassment
         fire_only_once = no
 
         complete_effect = {
+        }
+    }
+}
+
+UNI_borderwars = {
+	UNI_borderwar_WHope = {
+        icon = border_war
+		days_remove = 20
+		days_re_enable = 100
+		
+        available = {
+			has_war = no
+			has_full_control_of_state = 486
+		}
+
+        visible = {
+            #has_completed_focus = goddess_canon_seize_hope
+			NOT = {
+				owns_state = 507
+			}
+        }
+		
+		highlight_states = {
+			state = 507
+		}
+
+        ai_will_do = {
+            base = 200
+        }
+
+        cost = 50
+
+        fire_only_once = no
+		
+		target_array = neighbors
+		target_trigger = {
+			FROM = {
+				owns_state = 507
+			}
+		}
+
+		will_lead_to_war_with = REP
+        remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision UNI_borderwar_WHope target: [From.GetName]"
+			start_border_war = {
+				change_state_after_war = no
+				attacker = {
+					state = 486
+					num_provinces = 3
+					on_win = goddess_redeye.2002
+					on_lose = goddess_redeye.2003
+					on_cancel = add_political_power = -10
+				}
+
+				defender = {
+					state = 507
+					num_provinces = 4
+				}
+			}
         }
     }
 }
