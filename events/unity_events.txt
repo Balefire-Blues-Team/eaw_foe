@@ -290,7 +290,7 @@ country_event = {
 		text = goddess_redeye.3.d
 		trigger = {
 
-}
+		}
 
 	}
 	option = {
@@ -318,7 +318,6 @@ country_event = {
 	option = {
 	name = goddess_redeye.3.c
 
-	}
 		UNI = {
 				country_event = {
 						id = goddess_redeye.22
@@ -329,35 +328,37 @@ country_event = {
 			}
 
 	}
+}
+
 country_event = {
 	id = goddess_redeye.4
 	title = goddess_redeye.4.t
 	picture = GFX_event_test
 	is_triggered_only = yes
-	desc = {
-		text = goddess_redeye.4.d
-		trigger = {
-
-		}
-
-	}
+	desc =  goddess_redeye.4.d
 	option = {
 	name = goddess_redeye.4.a
 	
 		UNI = {
-				create_wargoal = {
-						type = annex_everything
-						target = NEV
-						expire = 0
-					}
+			create_wargoal = {
+				type = annex_everything
+				target = NEV
 			}
+		}
+		add_research_slot = 1
 
 	}
 	
 	option = {
 	name = goddess_redeye.4.b
-		set_global_flag = harbinger_pact
-
+		custom_effect_tooltip = UNI_harbinger_success_tt
+		hidden_effect = { 
+			UNI = {
+			set_country_flag = cauterize_participant
+			add_research_slot = 1
+			}
+			set_global_flag = harbinger_pact
+		}
 	}
 
 }
@@ -795,20 +796,13 @@ country_event = {
 	title = goddess_redeye.21.t
 	picture = GFX_event_test
 	is_triggered_only = yes
-	desc = {
-		text = namespace.count.d.desc_id
-		trigger = {
-
-}
-
-	}
+	desc = goddess_redeye.21.d
+	
 	option = {
 	name = goddess_redeye.21.a
-		RED = {
-				declare_war_on = {
-						target = UNI
-						type = annex_everything
-					}
+		declare_war_on = {
+				target = RED
+				type = annex_everything
 			}
 		set_global_flag = goddess_redeye_war
 
@@ -819,9 +813,11 @@ country_event = {
 	id = goddess_redeye.22
 	title = goddess_redeye.22.t
 	picture = GFX_event_test
+	desc = goddess_redeye.22.d
 	is_triggered_only = yes
 
 	option = {
+	ai_chance = { factor = 50 }
 	name = goddess_redeye.22.a
 		declare_war_on = {
 				target = RED
@@ -831,8 +827,21 @@ country_event = {
 
 	}
 	option = {
+	ai_chance = { factor = 50 }
 	name = goddess_redeye.22.b
-		set_global_flag = goddess_redeye_patience
+		if= {
+			limit = { 
+				RED = { is_in_faction = yes}
+			}
+			RED = { add_to_faction = UNI }
+		}
+		else = {
+			create_faction = "Unity Pact"
+			add_to_faction = RED
+		}
+		hidden_effect = { RED = { add_ai_strategy = { type = alliance id = "UNI" value = 200} add_opinion_modifier = { target = UNI modifier = huge_increase } } }
+		hidden_effect = { UNI = { add_ai_strategy = { type = alliance id = "RED" value = 200} add_opinion_modifier = { target = RED modifier = huge_increase } } }
+		set_global_flag = goddess_redeye_success
 	}
 
 	}
@@ -3930,6 +3939,11 @@ country_event = {
 				OR = {
 					has_war_with = ROOT 
 					is_in_faction_with = ROOT
+					AND = {
+							is_in_faction_with = NEV
+							UNI = {
+								has_country_flag = cauterize_participant
+							}
 				}
 			}
 		}
@@ -3942,6 +3956,12 @@ country_event = {
 					OR = {
 						has_war_with = ROOT
 						is_in_faction_with = ROOT
+						AND = {
+							is_in_faction_with = NEV
+							UNI = {
+								has_country_flag = cauterize_participant
+							}
+						}
 					}
 				}
 			}
