@@ -1,0 +1,120 @@
+scripted_gui = {
+	add_core = {
+		context_type = selected_state_context
+
+		window_name = "add_core_container"
+		parent_window_token = selected_state_view
+
+		visible = {
+			NOT = { is_core_of = ROOT }
+		}
+
+		effects = {
+			add_core_click = {
+				add_core_effect = yes
+			}
+			add_core_tlaloc_click = {
+				add_core_tlaloc_effect = yes
+			}
+		}
+
+		triggers = {
+			add_core_visible = {
+				add_core_visibility_trigger = yes
+			}
+			add_core_click_enabled = {
+				add_core_trigger = yes
+			}
+			
+		}
+
+		ai_test_interval = 336
+		ai_test_variance = 0.2
+		ai_max_weight_taken_per_test = 1
+		# intializes at beginning of game, optimization
+		ai_enabled = {
+			NOT = { has_country_flag = not_allowed_to_core_flag }
+		}
+		# only test for our owned states
+		ai_test_scopes = test_self_owned_states
+
+		ai_check = {
+			has_civil_war = no
+			check_variable = { ai_random > 0.5 }
+		}
+
+		ai_check_scope = {
+			NOT = { is_core_of = ROOT }
+			is_owned_and_controlled_by = ROOT
+
+			OR = {
+				any_neighbor_state = { is_core_of = ROOT }
+				AND = {
+					NOT = { is_in_home_area = yes }
+					is_coastal = yes
+				}
+			}
+		}
+
+		ai_weights = {
+			add_core_click = {
+				ai_will_do = {
+					factor = 1
+				}
+			}
+			add_core_tlaloc_click = {
+				ai_will_do = {
+					factor = 1
+				}
+			}
+		}
+	}
+
+	fallout_coring_tab_window = {
+		context_type = player_context
+
+		window_name = "fallout_coring_tab_window"
+
+		visible = {
+			check_variable = { show_fallout_coring_tab_window > 0 }
+		}
+
+		effects = {
+			close_button_click = {
+				clear_variable = show_fallout_coring_tab_window
+			}
+
+			entry_bg_button_click = {
+				ROOT = {
+					goto_state = PREV
+				}
+			}
+			add_core_click = {
+				add_core_effect = yes
+			}
+			
+		}
+
+		triggers = {
+			no_uncored_states_info_visible = {
+				check_variable = { uncored_states_array^num < 1 }
+			}
+
+			add_core_visible = {
+				NOT = { is_core_of = ROOT }
+				add_core_visibility_trigger = yes
+			}
+			add_core_click_enabled = {
+				add_core_trigger = yes
+			}
+		}
+
+		dynamic_lists = {
+			fallout_uncored_states_gridbox = {
+				array = uncored_states_array
+				entry_container = fallout_uncored_states_entry
+				change_scope = yes
+			}
+		}
+	}
+}
