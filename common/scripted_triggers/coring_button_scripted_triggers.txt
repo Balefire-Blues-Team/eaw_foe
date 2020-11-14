@@ -1,0 +1,316 @@
+@MAX_INT = 2147483
+@BASE_COST = 15
+@STATE_POP_DIVISOR = 0.15
+@CORED_POP_DIVISOR = 2
+@DISTANCE_DIVISOR = 7
+@CLAIM_MULTIPLIER = 0.75
+
+add_core_visibility_trigger = {
+	NOT = { has_variable = block_coring_from@ROOT }
+	ROOT = {
+		NOT = { has_country_flag = coring_button_hidden }
+		NOT = { has_country_flag = use_tlaloc_coring_button }
+		NOT = {
+			tag = TLA
+			tag = ARM
+			tag = MAX
+			tag = MOC
+			tag = ZAP
+			AND = {
+				tag = RRG
+				has_cosmetic_tag = RRG_rosado
+			}
+		}
+	}
+}
+
+add_core_trigger = {
+	is_owned_and_controlled_by = ROOT
+
+	ROOT = {
+		has_civil_war = no
+		NOT = { has_country_flag = not_allowed_to_core_flag }
+	}
+
+	if = {
+		limit = {
+			NOT = { ROOT = { ignore_adjacency_for_coring = yes } }
+		}
+		OR = {
+			any_neighbor_state = { is_core_of = ROOT }
+			AND = {
+				custom_trigger_tooltip = {
+					tooltip = tt_is_not_in_home_area
+					NOT = { is_in_home_area = yes }
+				}
+				is_coastal = yes
+			}
+		}
+	}
+
+	#States without 'any cores' dont have compliance or resistance, so only check those if a country has this state cored.
+	if = {
+		limit = {
+			check_variable = {
+				var = core_countries
+				value = 1
+				compare = greater_than_or_equals
+			}
+			ROOT = { NOT = { ignore_compliance_resistance_for_coring = yes } }
+		}
+		#Now check resistance and compliance if true
+		custom_trigger_tooltip = {
+			tooltip = trigger_less_than_20_resistance
+			check_variable = {
+				var = resistance
+				value = 20
+				compare = less_than
+			}
+		}
+		set_temp_variable = { required_compliance = 95 }
+		set_temp_variable = { required_compliance_modifier = 1 }
+		add_to_temp_variable = { required_compliance_modifier = ROOT.modifier@required_compliance_for_coring_factor }
+		add_to_temp_variable = { required_compliance_modifier = modifier@local_required_compliance_for_coring_factor }
+		add_to_temp_variable = { required_compliance = ROOT.modifier@required_compliance_for_coring }
+		add_to_temp_variable = { required_compliance = modifier@local_required_compliance_for_coring }
+		multiply_temp_variable = { required_compliance = required_compliance_modifier }
+		clamp_temp_variable = {
+			var = required_compliance
+			min = 0
+			max = 100
+		}
+		compliance > required_compliance
+	}
+
+	hidden_trigger = {
+		# States population.
+		set_temp_variable = { coring_var_state_pop = state_population_k }
+		set_temp_variable = { coring_var_state_pop_display = state_population_k } #Save this, mainly so that the `bonus effects` loc can pull it if need be.
+		round_temp_variable = coring_var_state_pop_display
+
+		# Cored ROOT's population.
+		# The code is insane, because it does not work properly in triggers otherwise or spams log with errors when it works.
+		ROOT = {
+			set_temp_variable = { workaround_var = 0 }
+		}
+
+		ROOT = {
+			all_owned_state = {
+				OR = { # Has to use this instead of IF to get rid of the wrong scope error.
+					NOT = { is_core_of = ROOT }
+					AND = {
+						is_core_of = ROOT
+						ROOT = { add_to_temp_variable = { workaround_var = PREV.state_population_k } }
+					}
+				}
+			}
+			set_temp_variable = { PREV.coring_var_cored_pop = workaround_var }
+		}
+
+		# If coring_var_cored_pop overflows assign max int value to it.
+		if = {
+			limit = { check_variable = { coring_var_cored_pop < 0 } }
+			set_temp_variable = { coring_var_cored_pop = @MAX_INT }
+		}
+
+		# Distance from ROOT's capital.
+		set_temp_variable = { coring_var_distance = 0 }
+		capital_scope = {
+			set_temp_variable = { coring_var_distance = THIS.distance_to@PREV }
+		}
+
+		# Cost multipliers.
+		divide_temp_variable = { coring_var_state_pop = @STATE_POP_DIVISOR }
+		divide_temp_variable = { coring_var_cored_pop = @CORED_POP_DIVISOR }
+		divide_temp_variable = { coring_var_distance = @DISTANCE_DIVISOR }
+
+		# Round floats into integers.
+		round_temp_variable = coring_var_state_pop
+		round_temp_variable = coring_var_cored_pop
+		round_temp_variable = coring_var_distance
+
+		# Sum up the coring cost values.
+		set_temp_variable = { BASE_COST = @BASE_COST } # Create variable to show in the tooltip.
+		set_temp_variable = { coring_var_coring_cost = @BASE_COST } # Base value
+		add_to_temp_variable = { coring_var_coring_cost = coring_var_state_pop }
+		add_to_temp_variable = { coring_var_coring_cost = coring_var_cored_pop }
+		add_to_temp_variable = { coring_var_coring_cost = coring_var_distance }
+
+		# Claim multiplier.
+		set_temp_variable = { coring_var_claim = 1 }
+		if = {
+			limit = { is_claimed_by = ROOT }
+			set_temp_variable = { coring_var_claim = @CLAIM_MULTIPLIER }
+			multiply_temp_variable = { coring_var_coring_cost = coring_var_claim }
+			round_temp_variable = coring_var_coring_cost
+		}
+
+		# Coring Cost from Modifiers
+		set_temp_variable = { coring_cost_from_modifiers = 1 }
+		add_to_temp_variable = { coring_cost_from_modifiers = ROOT.modifier@core_creation_cost_factor }
+		add_to_temp_variable = { coring_cost_from_modifiers = local_core_creation_cost_factor }
+		if = {
+			limit = {
+				check_variable = { coring_cost_from_modifiers < 0.05 }
+			}
+			# minimum cost
+			set_temp_variable = { coring_cost_from_modifiers = 0.05 }
+		}
+		multiply_temp_variable = { coring_var_coring_cost = coring_cost_from_modifiers }
+		round_temp_variable = coring_var_coring_cost
+		set_temp_variable = { coring_cost_from_modifiers_for_display = ROOT.modifier@core_creation_cost_factor }
+		add_to_temp_variable = { coring_cost_from_modifiers_for_display = local_core_creation_cost_factor }
+		if = {
+			limit = {
+				check_variable = { coring_cost_from_modifiers_for_display < -0.95 }
+			}
+			set_temp_variable = { coring_cost_from_modifiers_for_display = -0.95 }
+		}
+
+		# Limit the cost to 0-300 range.
+		if = {
+			limit = { check_variable = { coring_var_coring_cost < 0 } }
+			set_temp_variable = { coring_var_coring_cost = 0 }
+		} else_if = {
+			limit = { check_variable = { coring_var_coring_cost > 300 } }
+			set_temp_variable = { coring_var_coring_cost = 300 }
+		}
+
+		coring_efficiency_trigger = yes
+
+		check_variable = {
+			var = ROOT.political_power
+			value = coring_var_coring_cost
+			compare = greater_than_or_equals
+		}
+	}
+}
+
+add_core_tlaloc_visibility_trigger = {
+	ROOT = {
+		NOT = { has_country_flag = coring_button_hidden }
+		OR = {
+			tag = ARM
+			tag = MAX
+			tag = MOC
+			tag = ZAP
+			AND = {
+				tag = RRG
+				has_cosmetic_tag = RRG_rosado
+			}
+			has_country_flag = use_tlaloc_coring_button
+		}
+	}
+}
+
+add_core_tlaloc_trigger = {
+	is_owned_and_controlled_by = ROOT
+	ROOT = {
+		has_civil_war = no
+		NOT = { has_country_flag = not_allowed_to_core_flag }
+	}
+	#States without 'any cores' dont have compliance or resistance, so only check those if a country has this state cored.
+	if = {
+		limit = {
+			check_variable = {
+				var = core_countries
+				value = 1
+				compare = greater_than_or_equals
+			}
+			ROOT = { NOT = { ignore_compliance_resistance_for_coring = yes } }
+		}
+		#Now check resistance and compliance if true
+		custom_trigger_tooltip = {
+			tooltip = trigger_less_than_20_resistance
+			check_variable = {
+				var = resistance
+				value = 20
+				compare = less_than
+			}
+		}
+		set_temp_variable = { required_compliance = 95 }
+		set_temp_variable = { required_compliance_modifier = 1 }
+		add_to_temp_variable = { required_compliance_modifier = ROOT.modifier@required_compliance_for_coring_factor }
+		add_to_temp_variable = { required_compliance_modifier = modifier@local_required_compliance_for_coring_factor }
+		add_to_temp_variable = { required_compliance = ROOT.modifier@required_compliance_for_coring }
+		add_to_temp_variable = { required_compliance = modifier@local_required_compliance_for_coring }
+		multiply_temp_variable = { required_compliance = required_compliance_modifier }
+		clamp_temp_variable = {
+			var = required_compliance
+			min = 0
+			max = 100
+		}
+		compliance > required_compliance
+	}
+	OR = {
+		any_neighbor_state = { is_core_of = ROOT }
+		AND = {
+			custom_trigger_tooltip = {
+				tooltip = tt_is_not_in_home_area
+				NOT = { is_in_home_area = yes }
+			}
+			is_coastal = yes
+		}
+	}
+	hidden_trigger = {
+		set_temp_variable = { coring_var_energy_cost = 10 }
+		if = {
+			limit = {
+				ROOT = {
+					tag = RRG
+					has_cosmetic_tag = RRG_rosado
+				}
+			}
+			add_to_temp_variable = { coring_var_energy_cost = 20 }
+		}
+
+		# Coring Cost from Modifiers
+		set_temp_variable = { coring_cost_from_modifiers = 1 }
+		add_to_temp_variable = { coring_cost_from_modifiers = ROOT.modifier@core_creation_cost_factor }
+		add_to_temp_variable = { coring_cost_from_modifiers = local_core_creation_cost_factor }
+		if = {
+			limit = {
+				check_variable = { coring_cost_from_modifiers < 0.05 }
+			}
+			# minimum cost
+			set_temp_variable = { coring_cost_from_modifiers = 0.05 }
+		}
+		multiply_temp_variable = { coring_var_energy_cost = coring_cost_from_modifiers }
+		round_temp_variable = coring_var_energy_cost
+		set_temp_variable = { coring_cost_from_modifiers_for_display = ROOT.modifier@core_creation_cost_factor }
+		add_to_temp_variable = { coring_cost_from_modifiers_for_display = local_core_creation_cost_factor }
+		if = {
+			limit = {
+				check_variable = { coring_cost_from_modifiers_for_display < -0.95 }
+			}
+			set_temp_variable = { coring_cost_from_modifiers_for_display = -0.95 }
+		}
+
+		# Additional cost from coring, so you core a state and "lose" the amount of energy that you paid
+		add_to_temp_variable = { coring_var_energy_cost = ROOT.coring_var_energy_cost_from_coring }
+
+		set_temp_variable = { free_energy_for_coring = ROOT.resource_produced@energy }
+		subtract_from_temp_variable = { free_energy_for_coring = ROOT.resource_exported@energy }
+		subtract_from_temp_variable = { free_energy_for_coring = ROOT.resource_consumed@energy }
+		subtract_from_temp_variable = { free_energy_for_coring = ROOT.coring_var_energy_cost }
+	}
+	custom_trigger_tooltip = {
+		tooltip = HAS_ENOUGH_ENERGY_TO_CORE_STATE
+		NOT = { check_variable = { coring_var_energy_cost > free_energy_for_coring } }
+	}
+}
+
+ignore_compliance_resistance_for_coring = {
+	OR = {
+		original_tag = TNK
+		has_cosmetic_tag = SHA_cosmetic
+		has_country_flag = ignore_compliance_resistance_for_coring_flag
+	}
+}
+
+ignore_adjacency_for_coring = {
+	OR = {
+		original_tag = TNK
+		has_country_flag = ignore_adjacency_for_coring_flag
+	}
+}
