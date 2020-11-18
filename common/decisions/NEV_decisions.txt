@@ -6,6 +6,7 @@ NEV_war_exhaustion_category = {
 		activation  = {
 			has_country_flag = NEV_deploy_points_unlock
 			has_completed_focus = NEV_des_launch_cauterize
+			has_global_flag = cauterize_in_progress_flag
 		}
 		available = {
 			NOT = {
@@ -114,7 +115,7 @@ NEV_war_exhaustion_category = {
 	NEV_take_new_mango_mission = {
 		icon = GFX_decision_unknown
 		activation  = {
-			has_global_flag = cauterize_in_progress_flag
+			#has_global_flag = cauterize_in_progress_flag
 		}
 		available = {
 			controls_state = 795
@@ -148,7 +149,7 @@ NEV_war_exhaustion_category = {
 	NEV_take_new_mareway_mission = {
 		icon = GFX_decision_unknown
 		activation  = {
-			has_global_flag = cauterize_in_progress_flag
+			#has_global_flag = cauterize_in_progress_flag
 		}
 		available = {
 			controls_state = 549
@@ -182,7 +183,7 @@ NEV_war_exhaustion_category = {
 	NEV_take_junktion_r7_mission = {
 		icon = GFX_decision_unknown
 		activation  = {
-			has_global_flag = cauterize_in_progress_flag
+			#has_global_flag = cauterize_in_progress_flag
 		}
 		available = {
 			controls_state = 808
@@ -216,7 +217,7 @@ NEV_war_exhaustion_category = {
 	NEV_take_cathedral_mission = {
 		icon = GFX_decision_unknown
 		activation  = {
-			has_global_flag = cauterize_in_progress_flag
+			#has_global_flag = cauterize_in_progress_flag
 		}
 		available = {
 			controls_state = 593
@@ -1076,6 +1077,7 @@ NEV_kommiserrats = {
 					}
 				}
 			NAP = {	transfer_state = PREV }
+			NAP = {	add_state_core = PREV }
 				
 			}
 			NAP = {
@@ -1595,26 +1597,22 @@ NEV_warplans = {
 			has_war_with  = RED
 			has_political_power > 99
 		}
+		complete_effect = {
 		if = {
 			limit = { has_country_flag = NEV_des_RED_plan }
-			targeted_modifier = {
-				tag = RED
-				attack_bonus_against  = 0.15
-				defense_bonus_against = -0.15
-			}
+			add_ideas = NEV_des_RED_plan_idea
 		}
 		else_if = {
 			limit = { has_country_flag = NEV_con_RED_plan }
-			targeted_modifier = {
-				tag = RED
-				attack_bonus_against  = -0.15
-				defense_bonus_against = 0.15
-			}
+			add_ideas = NEV_con_RED_plan_idea
+		}
 		}
 		
 		days_remove = 150
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NEV_plan_red"
+			remove_ideas = NEV_des_RED_plan_idea
+			remove_ideas = NEV_con_RED_plan_idea
 			hidden_effect = {
 			clr_country_flag = NEV_des_RED_plan
 			clr_country_flag = NEV_con_RED_plan
@@ -1641,16 +1639,14 @@ NEV_warplans = {
 			has_political_power > 99
 		}
 			
-		targeted_modifier = {
-			tag = SHA
-			attack_bonus_against  = 0.08
-			defense_bonus_against = 0.08
-			army_speed_factor = -0.15
+		complete_effect = {
+			add_ideas = NEV_des_SHA_plan_idea
 		}
 
 		days_remove = 150
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NEV_plan_sha"
+			remove_ideas = NEV_des_SHA_plan_idea
 			hidden_effect = {
 			clr_country_flag = NEV_SHA_plan
 			}
@@ -1676,15 +1672,15 @@ NEV_warplans = {
 			has_political_power > 99
 		}
 			
-		targeted_modifier = {
-			tag = UNI
-			defense_bonus_against = 0.20
+		complete_effect = {
+			add_ideas = NEV_con_UNI_plan_idea
 		}
 			
 		
 		days_remove = 150
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NEV_plan_uni"
+			remove_ideas = NEV_con_UNI_plan_idea
 			hidden_effect = {
 			clr_country_flag = NEV_UNI_plan
 			}
