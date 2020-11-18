@@ -1412,7 +1412,7 @@ shared_focus = {
 		relative_position_id = LIT_propose_to_neighvarro
 		cost = 8.58
 		allow_branch = {
-		has_country_flag = LIT_NEV_acceptance_flag
+			has_country_flag = LIT_NEV_acceptance_flag
 		}
 		available_if_capitulated = yes 
 		prerequisite = { focus = LIT_propose_to_neighvarro }
@@ -1423,6 +1423,325 @@ shared_focus = {
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus LIT_enclave_acceptance"
 			
+		}
+}
+
+#Invite Enclave Military Instructors
+shared_focus = {
+		id = LIT_acceptance_invite_instructors
+		icon = GFX_goal_generic_dangerous_deal_pony_pony
+		x = -2
+		y = 1
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_enclave_acceptance }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_invite_instructors"
+			add_ideas = LIT_enclave_instructors_idea
+		}
+}
+
+#Settle Enclave Pegasi
+shared_focus = {
+		id = LIT_acceptance_settle_pegasi
+		icon = GFX_goal_generic_dangerous_deal_pony_pony
+		x = 0
+		y = 1
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_enclave_acceptance }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_settle_pegasi"
+			every_owned_state = {
+				limit = {
+					is_core_of = LIT
+				}
+				add_manpower = 350
+			}
+		}
+}
+
+#Superior Enclave Infrastructure
+shared_focus = {
+		id = LIT_acceptance_enclave_infrastructure
+		icon = GFX_goal_generic_dangerous_deal_pony_pony
+		x = 2
+		y = 1
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_enclave_acceptance }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_settle_pegasi"
+			LIT_lower_isolation = yes
+		}
+}
+
+#Restructure our Armed Forces
+shared_focus = {
+		id = LIT_acceptance_restructure_army
+		icon = GFX_goal_generic_dangerous_deal_pony_pony
+		x = -2
+		y = 2
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_acceptance_invite_instructors }
+		prerequisite = { focus = LIT_acceptance_settle_pegasi }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_restructure_army"
+			swap_ideas = { remove_idea = LIT_enclave_instructors_idea add_idea = LIT_enclave_instructors_idea2}
+			add_war_support = 0.08
+		}
+}
+
+#Power-Armour for our Soldiers
+shared_focus = {
+		id = LIT_acceptance_power_armor
+		icon = GFX_goal_generic_dangerous_deal_pony_pony
+		x = -3
+		y = 3
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_acceptance_restructure_army }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_power_armor"
+			set_technology = {
+				x01_pa_tech = 1
+				x02_pa_tech = 1
+			}
+			add_equipment_to_stockpile = {
+    			type = power_armor_equipment_x02
+    			amount = 200
+    			producer = NEV
+			}
+		}
+}
+
+#Cloudships for our Airforce
+shared_focus = {
+		id = LIT_acceptance_cloudships
+		icon = GFX_goal_generic_dangerous_deal_pony_pony
+		x = -1
+		y = 3
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_acceptance_restructure_army }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_cloudships"
+			set_technology = {
+				raptor_tech = 1
+			}
+			air_experience = 50
+		}
+}
+
+#Test our New Might
+shared_focus = {
+		id = LIT_acceptance_test_might
+		icon = GFX_goal_generic_dangerous_deal_pony_pony
+		x = -2
+		y = 4
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_acceptance_power_armor }
+		prerequisite = { focus = LIT_acceptance_cloudships }
+		ai_will_do = { 
+		factor = 50
+		} 
+		
+		will_lead_to_war_with = NAP
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_test_might"
+			NAP = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+}
+
+#Adopt Cloud-Economics
+shared_focus = {
+		id = LIT_acceptance_cloud_economics
+		icon = GFX_goal_generic_dangerous_deal_pony_pony
+		x = 2
+		y = 2
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_acceptance_settle_pegasi }
+		prerequisite = { focus = LIT_acceptance_enclave_infrastructure }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_cloud_economics"
+			add_ideas = enclave_economy
+			add_offsite_building = { type = industrial_complex level = 1 }
+			add_offsite_building = { type = arms_factory level = 1 }
+		}
+}
+
+#Hybridize Cloudseeding and Agriculture
+shared_focus = {
+		id = LIT_acceptance_hybridize_farming
+		icon = GFX_goal_generic_dangerous_deal_pony_pony
+		x = 1
+		y = 3
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_acceptance_cloud_economics }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_hybridize_farming"
+			add_ideas = LIT_hybrid_food_idea
+		}
+}
+
+#Educate the Masses
+shared_focus = {
+		id = LIT_acceptance_educate_masses
+		icon = GFX_goal_generic_dangerous_deal_pony_pony
+		x = 3
+		y = 3
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_acceptance_cloud_economics }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_educate_masses"
+			set_technology = {
+				infantry_tech_level_scientific  = 1
+				infantry_tech_level_scientific  = 1
+				power_armour_tech_level_scientific = 1
+				support_tech_level_scientific = 1
+				air_tech_level_scientific = 1
+				tools_tech_level_scientific = 1
+				exploitation_tech_level_scientific = 1
+				electronics_tech_level_scientific = 1
+			}
+		}
+}
+
+#Put the Lesser Races in their Place
+shared_focus = {
+		id = LIT_acceptance_lesser_races
+		icon = GFX_goal_generic_dangerous_deal_pony_pony
+		x = 2
+		y = 4
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_acceptance_educate_masses }
+		prerequisite = { focus = LIT_acceptance_hybridize_farming }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_lesser_races"
+			remove_ideas = LIT_racial_tensions_1_idea
+			remove_ideas = LIT_racial_tensions_2_idea
+			remove_ideas = LIT_racial_tensions_3_idea
+			remove_ideas = LIT_racial_tensions_ultra_idea
+			add_ideas = LIT_pegasi_supremacy_idea
+		}
+}
+
+#The Cloudsdale Mandate
+shared_focus = {
+		id = LIT_acceptance_seize_land
+		icon = GFX_goal_generic_dangerous_deal_pony_pony
+		x = 0
+		y = 5
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_acceptance_lesser_races }
+		prerequisite = { focus = LIT_acceptance_test_might }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		will_lead_to_war_with = OAP
+		will_lead_to_war_with = ROK
+		will_lead_to_war_with = PBN
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_seize_land"
+			OAP = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			ROK = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			PBN = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+}
+
+#The Breadbasket of the Enclave
+shared_focus = {
+		id = LIT_acceptance_breadbasket
+		icon = GFX_goal_generic_dangerous_deal_pony_pony
+		x = 0
+		y = 6
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_acceptance_seize_land }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_breadbasket"
+			swap_ideas = {remove_idea = LIT_hybrid_food_idea add_idea = LIT_hybrid_food_idea2}
 		}
 }
 
@@ -1872,6 +2191,10 @@ shared_focus = {
 		factor = 50
 		} 
 
+		will_lead_to_war_with = MAS
+		will_lead_to_war_with = NAP
+		will_lead_to_war_with = OAP
+		will_lead_to_war_with = ROK
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus LIT_rightfully_ours"
 			If = {
