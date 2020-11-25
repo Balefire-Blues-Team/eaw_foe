@@ -31,7 +31,6 @@ replace_path="history/units"
 replace_path="map/strategicregions"
 replace_path="map/supplyareas"
 replace_path="gfx/loadingscreens"
-replace_path="music"
 tags={
 	"Alternative History"
 	"National Focuses"
