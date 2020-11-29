@@ -546,7 +546,16 @@ country_event = {
 		set_province_name = { id = 4308 name = "New Canterlot"}
 		every_country = {
 				limit = { has_country_flag = agreed_to_join_ncr_flag}
-			SHA = { annex_country = { target = prev transfer_troops = yes }}
+			If = {
+				limit = {SHA = {is_ai = no}}
+			
+				SHA = { annex_country = { target = prev transfer_troops = yes }}
+			}
+			else_if = {
+				limit = {SHA = {is_ai = yes}}
+			
+				SHA = { annex_country = { target = prev transfer_troops = no }}
+			}
 			every_state = {
 					limit = {
 						is_core_of = prev
@@ -563,6 +572,10 @@ country_event = {
 					id = shatteredhoof_ncr.4
 					days = 20
 				}
+			if = {
+				limit = { SHA = {is_ai = yes}}
+				load_oob = "SHA_unification_ai_divisions"
+			}
 		}
 	}
 	
