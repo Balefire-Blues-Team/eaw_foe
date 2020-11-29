@@ -9,6 +9,8 @@ add_namespace = MSR_sl
 ####Defaults####
 ################
 
+## You can hard code rewards into the Foci
+
 ##The Great War
 country_event = {
 	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.1"}
@@ -36,10 +38,7 @@ country_event = {
 				is_historical_focus_on = yes
 			}
 		}
-
-		save_current_manpower = yes
-		538 = { add_manpower = 4000 }
-		restore_previous_manpower = yes
+		add_manpower = 1500
 	}
 	option = {
 		name = MSR.1.c
@@ -80,10 +79,7 @@ country_event = {
 				is_historical_focus_on = yes
 			}
 		}
-
-		save_current_manpower = yes
-		538 = { add_manpower = 4000 }
-		restore_previous_manpower = yes
+		add_manpower = 4000
 	}
 }
 
@@ -126,10 +122,7 @@ country_event = {
 				is_historical_focus_on = yes
 			}
 		}
-
-		save_current_manpower = yes
-		538 = { add_manpower = 4000 }
-		restore_previous_manpower = yes
+		add_manpower = 4000
 	}
 }
 
@@ -155,48 +148,6 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
-
-	option = {
-		name = MSR.6.a
-		ai_chance = { factor = 50}
-		
-		add_equipment_to_stockpile = { type = energy_equipment_2 amount = 500 producer = MSR }
-		add_equipment_to_stockpile = { type = support_equipment amount = 100 producer = MSR }
-		
-	}
-	option = {
-		name = MSR.6.b
-		ai_chance = { factor = 70
-		modifier = {
-				factor = 0
-				is_historical_focus_on = yes
-			}
-		}
-
-		save_current_manpower = yes
-		538 = { add_manpower = 4000 }
-		restore_previous_manpower = yes
-	}
-	option = {
-		name = MSR.6.c
-		custom_effect_tooltip = MSR_Never_Started_tt
-		ai_chance = { factor = 30
-			modifier = {
-				factor = 10
-				is_historical_focus_on = yes
-			}
-		}
-	}
-	option = {
-		name = MSR.6.d
-		custom_effect_tooltip = MSR_Never_Started_tt
-		ai_chance = { factor = 30
-			modifier = {
-				factor = 10
-				is_historical_focus_on = yes
-			}
-		}
-	}
 }
 
 ################
@@ -238,7 +189,26 @@ country_event = {
 	is_triggered_only = yes
  	fire_only_once = yes
 
- 	## Add Stuff
+ 	option = {
+		name = MSR.9.a
+		ai_chance = { factor = 50}
+		hidden_effect = {
+        set_country_flag = MSR_steel_hooves_Unlocked
+        }
+	}
+
+	option = {
+		name = MSR.9.b
+		ai_chance = { factor = 50
+		modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}
+		}
+		hidden_effect = {
+        set_country_flag = MSR_River_Autumn_Unlocked
+        }
+	}
 }
 
 ##Cottage Control
@@ -263,18 +233,22 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
-}
 
-##Cottage Increase Tech
-country_event = {
-	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.12"}
- 	id = MSR.12
- 	title = MSR.12.title
- 	desc = MSR.12.desc
-	picture = GFX_event_test
-
-	is_triggered_only = yes
- 	fire_only_once = yes
+ 	option = {
+ 		name = MSR.11.a
+ 		ai_chance = { factor = 30 }
+ 		add_equipment_to_stockpile = { type = energy_equipment_2 amount = 500 producer = MSR }
+ 	}
+ 	option = {
+ 		name = MSR.11.b
+ 		ai_chance = { factor = 30 }
+ 		add_equipment_to_stockpile = { type = #power_armor amount = 500 producer = MSR }
+ 	}
+ 	option = {
+ 		name = MSR.11.c
+ 		ai_chance = { factor = 30 }
+ 		add_equipment_to_stockpile = { type = energy_equipment_2 amount = 500 producer = MSR }
+ 	}
 }
 
 ##Cottage Defense
@@ -289,7 +263,7 @@ country_event = {
  	fire_only_once = yes
 }
 
-##Cottage Techie
+##Cottage Project
 country_event = {
 	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.14"}
  	id = MSR.14
@@ -299,6 +273,12 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	hidden_effect = {
+ 	set_variable = { MSR_Black_Book = 1 }
+ 	set_country_flag = MSR_Black
+ 	}
+ 	#modify_country_flag = { flag = MSR_black_book set_variable = 1 }
 }
 
 ##Cottage Information
@@ -311,6 +291,28 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = {
+ 		ai_chance = { factor = 50}
+ 		name = MSR.15.a
+ 		hidden_effect = {
+ 			add_to_variable = {
+ 				var = MSR_Black_Book
+ 				value = 3
+ 			}
+ 		}
+ 	}
+
+ 	option = {
+ 		ai_chance = { factor = 50}
+ 		name = MSR.15.b
+ 		hidden_effect = {
+ 			add_to_variable = {
+ 				var = MSR_Black_Book
+ 				value = 3
+ 			}
+ 		}
+ 	}
 }
 
 ##Cottage Leads
@@ -391,32 +393,35 @@ country_event = {
 	is_triggered_only = yes
  	fire_only_once = yes
 
- 	option = {
-		name = MSR.20.a
-		ai_chance = { factor = 50}
-		
-	}
+ 	if = {
+ 		bypass = {
+ 			NOT = { has_global_flag = global_black_book_has_been_found_flag }
+ 			name = MSR.20.a
+ 		}
+ 	random_list = {
+ 	    50 = {
+ 			name = MSR.20.b
+ 			ai_chance = { 
+ 				factor = 70
+				modifier = {
+					factor = 0
+					is_historical_focus_on = yes
+				}
+   			}
+ 		}
 
-	option = {
-		name = MSR.20.b
-		ai_chance = { factor = 70
-		modifier = {
-				factor = 0
-				is_historical_focus_on = yes
+		50 = {
+			name = MSR.20.c
+			custom_effect_tooltip = MSR_Never_Started_tt
+			ai_chance = { factor = 30
+				modifier = {
+					factor = 10
+					is_historical_focus_on = yes
+					}
+				}
 			}
-		}
-	}
-
-	option = {
-		name = MSR.20.c
-		custom_effect_tooltip = MSR_Never_Started_tt
-		ai_chance = { factor = 30
-			modifier = {
-				factor = 10
-				is_historical_focus_on = yes
-			}
-		}
-	}
+    	}
+    }
 }
 
 ##Cottage Becoming One
@@ -430,23 +435,32 @@ country_event = {
 	is_triggered_only = yes
  	fire_only_once = yes
 
- 	option = {
-		name = MSR.21.a
-		ai_chance = { factor = 50}
-		
-		#Look At Decision Doc
-		
-	}
-	option = {
-		name = MSR.21.b
-		ai_chance = { factor = 50
-		modifier = {
-				factor = 0
-				is_historical_focus_on = yes
+ 	random_list = {
+ 		50 = {
+ 			name = MSR.21.a
+ 			ai_chance = { 
+ 				factor = 70
+				modifier = {
+					factor = 0
+					is_historical_focus_on = yes
+				}
 			}
+			set_country_flag = MSR_Success_Tree
+        	#load_focus_tree = ManeSr_Cottage_Success
+ 		}
 
-			#Look At Decision Doc
-		}
+		50 = {
+			name = MSR.21.b
+			custom_effect_tooltip = MSR_Never_Started_tt
+			ai_chance = { factor = 30
+				modifier = {
+					factor = 10
+					is_historical_focus_on = yes
+					}
+				}
+        	set_country_flag = MSR_Failure_Tree
+        	#load_focus_tree = ManeSr_Cottage_Failure
+        }
 	}
 }
 
@@ -630,6 +644,27 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = {
+		name = MSR.36.a
+		add_war_support = 0.15
+		add_named_threat = { threat = 5 name = MSR_aggresion_on_EMP }
+		if = {
+			limit = { country_exists = EMP }
+			hidden_effect = {
+				create_wargoal = { 
+					type = annex_everything
+					target = EMP
+				}
+			}
+			declare_war_on = {
+				target = EMP type = annex_everything
+			}
+		}
+		EMP = {
+			country_event = { days = 1 id = }
+		}
+	}
 }
 
 ##Cottage Summerfield
@@ -642,6 +677,27 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = {
+		name = MSR.37.a
+		add_war_support = 0.15
+		add_named_threat = { threat = 5 name = MSR_aggresion_on_RRA }
+		if = {
+			limit = { country_exists = RRA }
+			hidden_effect = {
+				create_wargoal = { 
+					type = annex_everything
+					target = RRA
+				}
+			}
+			declare_war_on = {
+				target = RRA type = annex_everything
+			}
+		}
+		RRA = {
+			country_event = { days = 1 id = }
+		}
+	}
 }
 
 ##Cottage Roadways
@@ -666,6 +722,60 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = {
+		name = MSR.39.a
+		add_war_support = 0.15
+		add_named_threat = { threat = 5 name = MSR_aggresion_on_TEN }
+		add_named_threat = { threat = 5 name = MSR_aggresion_on_GVE }
+		add_named_threat = { threat = 5 name = MSR_aggresion_on_FSC }
+		if = {
+			limit = { country_exists = TEN }
+			hidden_effect = {
+				create_wargoal = { 
+					type = annex_everything
+					target = TEN
+				}
+			}
+			declare_war_on = {
+				target = TEN type = annex_everything
+			}
+		}
+		TEN = {
+			country_event = { days = 1 id = }
+		}
+		if = {
+			limit = { country_exists = GVE }
+			hidden_effect = {
+				create_wargoal = { 
+					type = annex_everything
+					target = GVE
+				}
+			}
+			declare_war_on = {
+				target = GVE type = annex_everything
+			}
+		}
+		GVE = {
+			country_event = { days = 1 id = }
+		}
+		if = {
+			limit = { country_exists = FSC }
+			hidden_effect = {
+				create_wargoal = { 
+					type = annex_everything
+					target = FSC
+				}
+			}
+			declare_war_on = {
+				target = FSC type = annex_everything
+			}
+		}
+		FSC = {
+			country_event = { days = 1 id = }
+		}
+	}
+
 }
 
 ##Cottage Peninsula
@@ -690,6 +800,42 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = {
+		name = MSR.41.a
+		add_war_support = 0.15
+		add_named_threat = { threat = 5 name = MSR_aggresion_on_Mareford }
+		if = {
+			limit = { country_exists = Mareford }
+			hidden_effect = {
+				create_wargoal = { 
+					type = annex_everything
+					target = Mareford
+				}
+			}
+			declare_war_on = {
+				target = Mareford type = annex_everything
+			}
+		}
+		Mareford = {
+			country_event = { days = 1 id = }
+		}
+		if = {
+			limit = { country_exists = ManeRaiders }
+			hidden_effect = {
+				create_wargoal = { 
+					type = annex_everything
+					target = ManeRaiders
+				}
+			}
+			declare_war_on = {
+				target = ManeRaiders type = annex_everything
+			}
+		}
+		ManeRaiders = {
+			country_event = { days = 1 id = }
+		}
+	}
 }
 
 ##Cottage Tenpony
@@ -702,6 +848,9 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option
+ 	set_country_flag = can_use_celestia_one_flag
 }
 
 ##Cottage East
@@ -726,6 +875,27 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = {
+		name = MSR.44.a
+		add_war_support = 0.15
+		add_named_threat = { threat = 5 name = MSR_aggresion_on_Arbu }
+		if = {
+			limit = { country_exists = Arbu }
+			hidden_effect = {
+				create_wargoal = { 
+					type = annex_everything
+					target = Arbu
+				}
+			}
+			declare_war_on = {
+				target = Arbu type = annex_everything
+			}
+		}
+		Arbu = {
+			country_event = { days = 1 id = }
+		}
+	}
 }
 
 ##Cottage Cannibals
@@ -738,6 +908,14 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = {
+ 		name = MSR.45.a
+ 	}
+
+ 	option = {
+ 		name = MSR.45.b
+ 	}
 }
 
 ##Cottage Ports
@@ -750,6 +928,23 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	if = {
+			limit = { country_exists = Ports }
+			hidden_effect = {
+				create_wargoal = { 
+					type = annex_everything
+					target = Ports
+				}
+			}
+			declare_war_on = {
+				target = Ports type = annex_everything
+			}
+		}
+		Ports = {
+			country_event = { days = 1 id = }
+		}
+	}
 }
 
 ##Cottage Dockyards
@@ -786,6 +981,8 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	add_research_slot = 1
 }
 
 ## Failure Line ##
