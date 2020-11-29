@@ -725,157 +725,26 @@ UNI_RED_interactions = {
 			}
         }
     }
-
-
-}
+	}
 
 UNI_black_book = {
-
-	UNI_whitetail_raid = {
-        icon = border_war
-		days_remove = 50
-
-        available = {
-            FROM = {
-                owns_state = 797
-            }
-            owns_state = 486
-        }
-
-        visible = {
-            has_completed_focus = unity_pop_bb_2
-			NOT = {
-				owns_state = 797
-			}
-        }
-        target_array = neighbors
-        target_trigger = {
-            FROM = {
-                owns_state = 797
-            }
-        }
-
-        highlight_states = {
-            state = 797
-        }
-
-        ai_will_do = {
-            base = 200
-            modifier = {
-                factor = 0
-                has_war = yes
-            }
-        }
-
-        cost = 50
-
-        fire_only_once = no
-
-        days_re_enable = 100
-
-        complete_effect = {
-			add_manpower = -100
-        }
-		
-		remove_effect = {
-			start_border_war = {
-                change_state_after_war = yes
-                attacker = {
-                    state = 486
-                    num_provinces = 2
-                    on_win = add_manpower = -1
-                    on_lose = add_manpower = -20
-                    on_cancel = add_manpower = -10
-                }
-
-                defender = {
-                    state = 797
-                    num_provinces = 1
-                }
-            }
-		}
-
-    }
-	
-	UNI_ponyville_raid = {
-        icon = border_war
-		days_remove = 50
-
-        available = {
-            NOT = {
-                owns_state = 476
-            }
-            owns_state = 797
-        }
-
-        visible = {
-            has_completed_focus = unity_pop_bb_2
-			NOT = {
-				owns_state = 476
-			}
-        }
-        target_array = neighbors
-        target_trigger = {
-            FROM = {
-                owns_state = 476
-            }
-        }
-
-        highlight_states = {
-            state = 476
-        }
-
-        ai_will_do = {
-            base = 200
-            modifier = {
-                factor = 0
-                has_war = yes
-            }
-        }
-
-        cost = 50
-
-        fire_only_once = no
-
-        days_re_enable = 100
-
-        complete_effect = {
-			add_manpower = -100
-        }
-		
-		remove_effect = {
-			start_border_war = {
-                change_state_after_war = yes
-                attacker = {
-                    state = 797
-                    num_provinces = 2
-                    on_win = add_manpower = -1
-                    on_lose = add_manpower = -20
-                    on_cancel = add_manpower = -10
-                }
-
-                defender = {
-                    state = 476
-                    num_provinces = 1
-                }
-            }
-		}
-
-    }
-	
-	UNI_canterlot_raid = {
+		UNI_canterlot_raid = {
         icon = border_war
 		days_remove = 25
 
         available = {
             NOT = {
                 owns_state = 234
+				has_global_flag = global_black_book_has_been_found_flag
             }
             owns_state = 801
         }
 
         visible = {
             has_completed_focus = unity_pop_bb_4
+			NOT = {
+				has_global_flag = global_black_book_has_been_found_flag
+				}
         }
         target_array = neighbors
         target_trigger = {
@@ -890,7 +759,7 @@ UNI_black_book = {
 
         ai_will_do = {
             base = 200
-            modifier = 2
+            modifier = {
                 factor = 0
                 has_war = yes
             }
@@ -909,8 +778,6 @@ UNI_black_book = {
 				amount = -100
 				producer = UNI
 			}
-			hidden_effect = {
-			modify_country_flag = { flag = black_book_raid_meter value = 1 }
 		}
         }
 		
@@ -918,25 +785,42 @@ UNI_black_book = {
 			start_border_war = {
                 change_state_after_war = no
                 attacker = {
-                    state = 801
-                    num_provinces = 2
-                    on_win = unity_pop_bb.6
-                    on_lose = add_manpower = -20
-                    on_cancel = add_manpower = -10
+                    state = 415
+                    num_provinces = 4
+                    on_win = {
+					random_list = {
+					40 = {
+						country_event = { unity_pop.bb.4 }
+							}
+					40 = {
+						country_event = { unity_pop_bb.2 }
+							}
+					20 = {
+						modifier = {
+						factor = 0
+						has_global_flag = global_black_book_has_been_found_flag
+						}
+						country_event = { unity_pop_bb.3 }
+						}
+						
+					}
+					
+						}
+					}
+                    on_lose = { 
+					country_event = { unity_pop_bb.5 }
+						}
+                    on_cancel = { add_manpower = -10 }
                 }
 
                 defender = {
                     state = 234
-                    num_provinces = 1
+                    num_provinces = 2
                 }
             }
 		}
-
-    }
-	
-}
-
-UNI_slaver_interractions
+		
+UNI_slaver_interractions = {
 	UNI_offer_again = {
         icon = border_war
 		days_remove = 50
@@ -994,7 +878,6 @@ UNI_slaver_interractions
 			}
         }
     }
-	
 	UNI_puppet_new = {
         icon = border_war
 		days_remove = 50
@@ -1096,7 +979,7 @@ UNI_borderwars = {
 		}
 
         visible = {
-            #has_completed_focus = goddess_canon_seize_hope
+            has_completed_focus = goddess_canon_seize_hope
 			NOT = {
 				owns_state = 507
 			}
