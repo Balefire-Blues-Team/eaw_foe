@@ -1,0 +1,55 @@
+add_core_effect = {
+	if = {
+		limit = {
+			add_core_trigger = yes
+		}
+		set_temp_variable = { coring_var_coring_cost_negative = coring_var_coring_cost }
+		subtract_from_temp_variable = { coring_var_coring_cost_negative = coring_var_coring_cost }
+		subtract_from_temp_variable = { coring_var_coring_cost_negative = coring_var_coring_cost }
+
+		ROOT = {
+			add_political_power = coring_var_coring_cost_negative
+		}
+		add_core_of = ROOT
+		ROOT = {
+			add_ideas = coring_manpower_fix
+			country_event = fix_coring_manpower.1
+		}
+		on_core = yes
+
+		if = {
+			limit = { has_global_flag = debug_coring_gui }
+			log = "([GetDateText]) Cored for [?coring_var_coring_cost] PP (state_pop:[?coring_var_state_pop] + total_pop:[?coring_var_cored_pop] + dist:[?coring_var_distance])"
+		}
+		if = {
+			limit = {
+				is_in_array = { ROOT.uncored_states_array = THIS.id }
+			}
+			remove_from_array = { ROOT.uncored_states_array = THIS.id }
+		}
+	}
+}
+
+add_core_tlaloc_effect = {
+	if = {
+		limit = {
+			add_core_tlaloc_trigger = yes
+		}
+		ROOT = {
+			add_to_variable = { coring_var_energy_cost_from_coring = coring_var_energy_cost }
+		}
+		add_core_of = ROOT
+		ROOT = {
+			add_ideas = coring_manpower_fix
+			country_event = fix_coring_manpower.1
+		}
+		on_core = yes
+
+		if = {
+			limit = {
+				is_in_array = { ROOT.uncored_states_array = THIS.id }
+			}
+			remove_from_array = { ROOT.uncored_states_array = THIS.id }
+		}
+	}
+}
