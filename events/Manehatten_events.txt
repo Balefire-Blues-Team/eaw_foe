@@ -164,6 +164,17 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+	
+	option = {
+		name = MSR.7.a
+		ai_chance = { factor = 70
+		modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}
+		}
+		
+	}
 }
 
 ##Cottage Council
@@ -176,6 +187,30 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+	
+	option = {
+		name = MSR.8.a
+		ai_chance = { factor = 70
+		modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}
+		}
+		add_stability = 0.1
+		add_political_power = -150
+	}
+	
+	option = {
+		name = MSR.8.b
+		ai_chance = { factor = 70
+		modifier = {
+				factor = 2
+				is_historical_focus_on = yes
+			}
+		}
+		add_stability = -0.1
+		add_political_power = 150
+	}
 }
 
 ##Cottage Loyalty
@@ -211,17 +246,6 @@ country_event = {
 	}
 }
 
-##Cottage Control
-country_event = {
-	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.10"}
- 	id = MSR.10
- 	title = MSR.10.title
- 	desc = MSR.10.desc
-	picture = GFX_event_test
-
-	is_triggered_only = yes
- 	fire_only_once = yes
-}
 
 ##Cottage Efforts
 country_event = {
@@ -237,17 +261,12 @@ country_event = {
  	option = {
  		name = MSR.11.a
  		ai_chance = { factor = 30 }
- 		add_equipment_to_stockpile = { type = energy_equipment_2 amount = 500 producer = MSR }
+ 		add_equipment_to_stockpile = { type = energy_equipment_2 amount = 200 producer = OWE }
  	}
  	option = {
  		name = MSR.11.b
  		ai_chance = { factor = 30 }
- 		add_equipment_to_stockpile = { type = #power_armor amount = 500 producer = MSR }
- 	}
- 	option = {
- 		name = MSR.11.c
- 		ai_chance = { factor = 30 }
- 		add_equipment_to_stockpile = { type = energy_equipment_2 amount = 500 producer = MSR }
+ 		add_equipment_to_stockpile = { type = power_armor_equipment_3 amount = 60 producer = OWE }
  	}
 }
 
@@ -274,11 +293,28 @@ country_event = {
 	is_triggered_only = yes
  	fire_only_once = yes
 
- 	hidden_effect = {
- 	set_variable = { MSR_Black_Book = 1 }
- 	set_country_flag = MSR_Black
+	option = {
+ 		name = MSR.14.a
+ 		ai_chance = { factor = 30 
+			modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}
+		}
+ 		add_ideas = MSR_suspicious_scribes_idea
+		custom_effect_tooltip = MSR_gain_progress_tt
+		hidden_effect = {
+			add_to_variable = {
+				var = black_success
+				value = 1
+			}
+		}
  	}
- 	#modify_country_flag = { flag = MSR_black_book set_variable = 1 }
+ 	option = {
+ 		name = MSR.14.b
+ 		ai_chance = { factor = 30 }
+ 		custom_effect_tooltip = MSR_work_alone_tt
+ 	}
 }
 
 ##Cottage Information
@@ -297,11 +333,12 @@ country_event = {
  		name = MSR.15.a
  		hidden_effect = {
  			add_to_variable = {
- 				var = MSR_Black_Book
- 				value = 5
- 			}
- 			add_timed_idea = { idea = MSR_Project days = 180 }
+				var = black_success
+				value = 1
+			}
  		}
+		custom_effect_tooltip = MSR_gain_progress_tt
+		add_timed_idea = { idea = MSR_Project days = 180 }
  	}
 
  	option = {
@@ -309,24 +346,41 @@ country_event = {
  		name = MSR.15.b
  		hidden_effect = {
  			add_to_variable = {
- 				var = MSR_Black_Book
- 				value = 3
- 			}
- 			add_timed_idea = { idea = MSR_Project days = 100 }
+				var = black_success
+				value = 1
+			}
  		}
+		custom_effect_tooltip = MSR_gain_progress_tt
+		add_timed_idea = { idea = MSR_Project days = 60 }
+		add_manpower = -200
  	}
 }
 
-##Cottage Mainframe
+##Cottage Information
 country_event = {
-	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.17"}
- 	id = MSR.17
- 	title = MSR.17.title
- 	desc = MSR.17.desc
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.16"}
+ 	id = MSR.16
+ 	title = MSR.16.title
+ 	desc = MSR.16.desc
 	picture = GFX_event_test
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = {
+ 		ai_chance = { factor = 50}
+ 		name = MSR.16.a
+ 		hidden_effect = {
+ 			add_to_variable = {
+				var = black_success
+				value = 2
+			}
+ 		}
+		custom_effect_tooltip = MSR_gain_progress_tt
+		add_manpower = -50
+		MRA = {add_manpower = -100}
+ 	}
+
 }
 
 ##Cottage Problem
@@ -339,6 +393,35 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+	option = {
+ 		ai_chance = { factor = 50}
+ 		name = MSR.18.a
+ 		hidden_effect = {
+ 			add_to_variable = {
+				var = black_success
+				value = 1
+			}
+ 		}
+		custom_effect_tooltip = MSR_gain_progress_tt
+		add_timed_idea = { idea = MSR_Project days = 180 }
+		add_manpower = -150
+		add_stability = -0.05
+ 	}
+
+ 	option = {
+ 		ai_chance = { factor = 50}
+ 		name = MSR.18.b
+ 		hidden_effect = {
+ 			add_to_variable = {
+				var = black_success
+				value = 1
+			}
+ 		}
+		custom_effect_tooltip = MSR_gain_progress_tt
+		add_timed_idea = { idea = MSR_Project days = 60 }
+		add_manpower = -300
+		add_stability = -0.1
+ 	}
 }
 
 ##Cottage Magic
@@ -351,6 +434,18 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+	
+	option = {
+ 		ai_chance = { factor = 50}
+ 		name = MSR.19.a
+ 		add_political_power = -100
+		add_tech_bonus = {
+			name = race_tech_bonus
+			bonus = 1.0
+			uses = 2
+			category = race_tech
+			}
+ 	}
 }
 
 ##Cottage Book
@@ -360,56 +455,120 @@ country_event = {
  	title = MSR.20.title
  	desc = MSR.20.desc
 	picture = GFX_event_test
-
+	fixed_random_seed = no
 	is_triggered_only = yes
  	fire_only_once = yes
 
- 	if = {
- 		bypass = {
- 			NOT = { has_global_flag = global_black_book_has_been_found_flag }
- 			name = MSR.20.a
- 		}
-
- 	random_list = {
- 	    33 = {
- 	    	option = {
- 			name = MSR.20.b
- 			ai_chance = { 
- 				factor = 70
-				modifier = {
-					factor = 0
-					is_historical_focus_on = yes
+	option = {
+ 		name = MSR.20.a
+		custom_effect_tooltip = MSR_send_bb_searching_tt
+		hidden_effect = {
+		if = {
+			limit = {
+				NOT = { has_global_flag = global_black_book_has_been_found_flag }
+			}
+			
+			random_list = {
+				30 = {
+					country_event = { id = MSR.201 days = 20 }
 				}
-   			}
- 		}
- 	}
-
-		33 = {
-			option = {
-			name = MSR.20.c
-			custom_effect_tooltip = MSR_Never_Started_tt
-			ai_chance = { 
-				factor = 30
-				modifier = {
-					factor = 10
-					is_historical_focus_on = yes
-						}
-					}
+				70 = {
+					country_event = { id = MSR.202 days = 20 }
 				}
-    		}
-    	33 = {
-    		option = {
-    		name = MSR.20.d
-    		ai_chance = {
-    			factor = 50
-    			modifier = {
-    				factor = 10
-    				is_historical_focus_on = yes
-    				}
-    			}
-    		}
-    	}
-    }
+			}
+		
+		}
+		else = {country_event = { id = MSR.203 days = 20 }}
+		}
+
+	}
+}
+
+##Cottage Book success
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.201"}
+ 	id = MSR.201
+ 	title = MSR.201.title
+ 	desc = MSR.201.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	immediate = {add_manpower = 60}
+	option = {
+ 		name = MSR.20.a
+		
+		hidden_effect = {
+ 			add_to_variable = {
+				var = black_success
+				value = 3
+			}
+ 		}
+		custom_effect_tooltip = MSR_gain_progress_tt
+
+	}
+}
+
+##Cottage Book failiure
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.202"}
+ 	id = MSR.202
+ 	title = MSR.202.title
+ 	desc = MSR.202.desc
+	picture = GFX_event_test
+	fixed_random_seed = no
+	is_triggered_only = yes
+ 	fire_only_once = no
+
+	immediate = {add_manpower = -70}
+	option = {
+ 		name = MSR.202.a
+		custom_effect_tooltip = MSR_send_bb_searching_tt
+		hidden_effect = {
+		if = {
+			limit = {
+				NOT = { has_global_flag = global_black_book_has_been_found_flag }
+			}
+			
+			random_list = {
+				30 = {
+					country_event = { id = MSR.201 days = 20 }
+				}
+				70 = {
+					country_event = { id = MSR.202 days = 20 }
+				}
+			}
+		
+		}
+		else = {country_event = { id = MSR.203 days = 20 }}
+		}
+
+	}
+	
+	option = {
+ 		name = MSR.202.b
+		custom_effect_tooltip = MSR_no_longer_bb_searching_tt
+
+	}
+}
+
+##Cottage Book missing
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.203"}
+ 	id = MSR.203
+ 	title = MSR.203.title
+ 	desc = MSR.203.desc
+	picture = GFX_event_test
+	fixed_random_seed = no
+	is_triggered_only = yes
+ 	fire_only_once = no
+
+	immediate = {add_manpower = 60}
+	option = {
+ 		name = MSR.203.b
+		custom_effect_tooltip = BB_seized_tt
+
+	}
 }
 
 ##Cottage Becoming One
@@ -422,33 +581,185 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+	fixed_random_seed = no
 
- 	random_list = {
- 		50 = {
- 			name = MSR.21.a
- 			ai_chance = { 
- 				factor = 70
-				modifier = {
-					factor = 0
-					is_historical_focus_on = yes
-				}
+	option = {
+		trigger = {
+			NOT = { has_country_flag = cottage_beats_pip_flag }
+		}
+		ai_chance = { factor = 30 
+			modifier = {
+				factor = 5
+				is_historical_focus_on = yes
 			}
+		}
+ 		name = MSR.21.a
+		custom_effect_tooltip = MSR_LP_stops_tt
+		hidden_effect = {
+			set_politics = {
+				ruling_party = visionary
+			}
+			add_popularity = {
+				ideology = visionary
+				popularity = 0.5
+			}
+		}
+
+	}
+	
+	option = {
+		trigger = {
+			has_country_flag = cottage_beats_pip_flag
+		}
+		ai_chance = { factor = 30 
+			modifier = {
+				factor = 1
+				is_historical_focus_on = no
+			}
+		}
+ 		name = MSR.21.b
+		custom_effect_tooltip = MSR_LP_no_stops_tt
+		
+	random_list = {
+ 		0 = {
+ 			modifier = {
+					add = 10
+					check_variable = {
+                        black_success > 0
+                    }
+				}
+			modifier = {
+					add = 10
+					check_variable = {
+                        black_success > 1
+                    }
+				}
+			modifier = {
+					add = 10
+					check_variable = {
+                        black_success > 2
+                    }
+				}
+			modifier = {
+					add = 10
+					check_variable = {
+                        black_success > 3
+                    }
+				}
+			modifier = {
+					add = 10
+					check_variable = {
+                        black_success > 4
+                    }
+				}
+			modifier = {
+					add = 10
+					check_variable = {
+                        black_success > 5
+                    }
+				}
+			modifier = {
+					add = 10
+					check_variable = {
+                        black_success > 6
+                    }
+				}
+			modifier = {
+					add = 10
+					check_variable = {
+                        black_success > 7
+                    }
+				}
+			modifier = {
+					add = 10
+					check_variable = {
+                        black_success > 8
+                    }
+				}
+			modifier = {
+					add = 10
+					check_variable = {
+                        black_success > 9
+                    }
+				}
 			set_country_flag = MSR_Success_Tree
-        	#load_focus_tree = ManeSr_Cottage_Success
+			custom_effect_tooltip = MSR_Upload_success_tt
+			hidden_effect = {
+				load_focus_tree = ManeSr_Cottage_Success
+				bypass_focus = MSR_Success
+			}
  		}
 
-		50 = {
-			name = MSR.21.b
-			custom_effect_tooltip = MSR_Never_Started_tt
-			ai_chance = { factor = 30
-				modifier = {
-					factor = 10
-					is_historical_focus_on = yes
-					}
+		100 = {
+			modifier = {
+					add = -10
+					check_variable = {
+                        black_success > 0
+                    }
+				}
+			modifier = {
+					add = -10
+					check_variable = {
+                        black_success > 1
+                    }
+				}
+			modifier = {
+					add = -10
+					check_variable = {
+                        black_success > 2
+                    }
+				}
+			modifier = {
+					add = -10
+					check_variable = {
+                        black_success > 3
+                    }
+				}
+			modifier = {
+					add = -10
+					check_variable = {
+                        black_success > 4
+                    }
+				}
+			modifier = {
+					add = -10
+					check_variable = {
+                        black_success > 5
+                    }
+				}
+			modifier = {
+					add = -10
+					check_variable = {
+                        black_success > 6
+                    }
+				}
+			modifier = {
+					add = -10
+					check_variable = {
+                        black_success > 7
+                    }
+				}
+			modifier = {
+					add = -10
+					check_variable = {
+                        black_success > 8
+                    }
+				}
+			modifier = {
+					add = -10
+					check_variable = {
+                        black_success > 9
+                    }
 				}
         	set_country_flag = MSR_Failure_Tree
-        	#load_focus_tree = ManeSr_Cottage_Failure
+			custom_effect_tooltip = MSR_Upload_failiure_tt
+			hidden_effect = {
+				load_focus_tree = ManeSr_Cottage_Failure
+				bypass_focus = MSR_Failure
+			}
         }
+	}
+
 	}
 }
 
@@ -462,6 +773,29 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+	
+	option = {
+ 		name = MSR.22.a
+		set_country_flag = MSR_Success_Tree
+			custom_effect_tooltip = MSR_Upload_success_tt
+			hidden_effect = {
+				load_focus_tree = ManeSr_Cottage_Success
+				bypass_focus = MSR_Success
+			}
+
+	}
+	
+	option = {
+ 		name = MSR.22.b
+		set_country_flag = MSR_Failure_Tree
+			custom_effect_tooltip = MSR_Upload_failiure_tt
+			hidden_effect = {
+				load_focus_tree = ManeSr_Cottage_Failure
+				bypass_focus = MSR_Failure
+			}
+
+	}
+	
 }
 
 ##Cottage !Success
@@ -488,6 +822,12 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+	
+	option = {
+ 		name = MSR.24.a
+		add_political_power = -25
+
+	}
 }
 
 ##Cottage New Era
@@ -728,6 +1068,20 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+	
+	option = {
+ 		name = MSR.44.a
+		core_original_ARB = yes
+		642 = {add_manpower = -500}
+		15 = {add_manpower = -500}
+		add_stability = 0.05
+
+	}
+	option = {
+ 		name = MSR.44.b
+		core_original_ARB = yes
+		add_stability = -0.1
+	}
 }
 
 ##Cottage Cannibals
@@ -810,6 +1164,19 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+	
+	option = {
+ 		name = MSR.50.a
+		kill_country_leader = yes
+		create_country_leader = {
+		name = "Utter Chaos"
+		desc = ""
+		picture = ""
+		expire = "1965.1.1"
+		ideology = despotism
+		traits = {}
+		}
+	}
 }
 
 ##Cottage Crash
@@ -822,6 +1189,12 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+	
+	option = {
+ 		name = MSR.51.a
+		add_stability = -0.3
+		add_political_power = -200
+	}
 }
 
 ##Cottage Situation
@@ -834,6 +1207,11 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+	
+	option = {
+ 		name = MSR.52.a
+		add_stability = 0.15
+	}
 }
 
 ##Cottage Provisional Council
