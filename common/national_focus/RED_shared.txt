@@ -753,7 +753,10 @@ shared_focus = {
 		controls_state = 538
 	}
 	prerequisite = { focus = RED_remove_parasprites } 
-	prerequisite = { focus = RED_filly_automotive } 
+	prerequisite = { focus = RED_filly_automotive }
+	bypass = {
+		has_completed_focus = RED_prototype_stable
+	}
 	ai_will_do = { 
 		factor = 45
 	} 
@@ -5375,6 +5378,14 @@ shared_focus = {
 	cost = 7
 
  	prerequisite = { focus = RED_wretched_hive }
+ 	bypass = {
+ 		OR = {
+        	NOT = { country_exists = FSR }
+        	FSR = {
+        		is_subject_of = RED
+        	}
+        }
+    }
 	ai_will_do = { 
 		factor = 120
 	}
@@ -5382,7 +5393,7 @@ shared_focus = {
 	will_lead_to_war_with = FSR
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_end_the_rangers"
-		create_wargoal = { 
+		create_wargoal = {
 			type = annex_everything 
 			target = FSR
 		}
@@ -5400,12 +5411,19 @@ shared_focus = {
 
 	available = {
 		OR = {
-			controls_state = 536
-			controls_state = 538
-		}
-		FSR = {
-			exists = no
-		}
+			AND = {
+				OR = {
+					controls_state = 536
+					controls_state = 538
+				}
+				FSR = {
+					exists = no
+				}
+			}
+			FSR = {
+        		is_subject_of = RED
+        	}
+       	}
 	}
  	prerequisite = { focus = RED_end_the_rangers }
 	ai_will_do = { 
@@ -5416,6 +5434,13 @@ shared_focus = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_enslave_downtown"
 		custom_effect_tooltip = RED_15_gain_slave_tt
 
+		if = {
+			limit = { FSR = { is_subject_of = RED } }
+			transfer_state = 538
+			transfer_state = 536
+			transfer_state = 542
+			transfer_state = 545
+		}
 		add_state_core = 538
 		add_state_core = 536
 		add_state_core = 542
@@ -5519,6 +5544,7 @@ shared_focus = {
 	cost = 7
 
  	prerequisite = { focus = RED_stern_nova_rage }
+ 	available = { has_completed_focus = RED_request_knights }
 	ai_will_do = { 
 		factor = 90
 	}
@@ -5652,11 +5678,31 @@ shared_focus = {
 	will_lead_to_war_with = WNF
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_subjugate_tribals"
-		create_wargoal = { type = annex_everything target = FTR }
-		create_wargoal = { type = annex_everything target = FTP }
-		create_wargoal = { type = annex_everything target = HIT }
-		create_wargoal = { type = annex_everything target = GRV }
-		create_wargoal = { type = annex_everything target = WNF }
+		FTR = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		FTP = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		HIT = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		GRV = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		WMF = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 
 }
@@ -5764,6 +5810,14 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 100
 	}
+	bypass = {
+ 		NCG = {
+ 			OR = {
+ 				is_subject_of = RED
+ 				exists = no
+ 			}
+ 		}
+ 	}
 
 	will_lead_to_war_with = NCG
 	completion_reward = {
@@ -5912,6 +5966,11 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 100
 	}
+	bypass = {
+ 		ERA = {
+ 			exists = no
+ 		}
+ 	}
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_blood_mane"
@@ -6069,6 +6128,9 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 100
 	}
+	bypass = {
+        NOT = { country_exists = EVR }
+    }
 
 	will_lead_to_war_with = EVR
 	completion_reward = {
@@ -6087,6 +6149,10 @@ shared_focus = {
 	cost = 7
 
  	prerequisite = { focus = RED_everfree_dogs }
+ 	bypass = {
+        NOT = { country_exists = BOG }
+        NOT = { country_exists = RAF }
+    }
  	available = {
  		EVR = {
  			exists = no
@@ -6129,6 +6195,12 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 100
 	}
+	bypass = {
+        NOT = { country_exists = GUN }
+        NOT = { country_exists = LGH }
+        NOT = { country_exists = APR }
+        NOT = { country_exists = FRT }
+    }
 
 	will_lead_to_war_with = GUN
 	will_lead_to_war_with = LGH
@@ -6296,7 +6368,11 @@ shared_focus = {
 	will_lead_to_war_with = SHA
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_reclaim_escaped_slaves"
-		create_wargoal = { type = annex_everything target = SHA }
+		SHA = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 
 }
@@ -6412,12 +6488,12 @@ shared_focus = {
 	y = 0
 	cost = 7
 
-	allow_branch = {
-		#has_completed_focus = RED_careful_balence
-	}
-
 	available = {
 		has_completed_focus = RED_kill_all_rangers
+	}
+
+	bypass = {
+		has_completed_focus = RED_loot_stabletec
 	}
 
 	ai_will_do = { 
@@ -6785,7 +6861,13 @@ shared_focus = {
 	prerequisite = { focus = RED_talon_queen }
 	ai_will_do = { 
 		factor = 100
-	} 
+	}
+	bypass = {
+        NOT = { country_exists = GUN }
+        NOT = { country_exists = LGH }
+        NOT = { country_exists = APR }
+        NOT = { country_exists = FRT }
+    }
 
 	will_lead_to_war_with = GUN
 	will_lead_to_war_with = LGH
