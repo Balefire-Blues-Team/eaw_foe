@@ -127,8 +127,12 @@ country_event = {
 		name = MSR.4.a
 		ai_chance = { factor = 50}
 		
-		add_equipment_to_stockpile = { type = energy_equipment_2 amount = 500 producer = MSR }
-		add_equipment_to_stockpile = { type = support_equipment amount = 100 producer = MSR }
+		add_tech_bonus = {
+			name = industry_bonus
+			bonus = 0.5
+			uses = 1
+			category = industry
+		}
 		
 	}
 	option = {
@@ -139,7 +143,13 @@ country_event = {
 				is_historical_focus_on = yes
 			}
 		}
-		add_manpower = 4000
+		
+		add_tech_bonus = {
+			name = industry_bonus
+			bonus = 0.5
+			uses = 1
+			category = land_doctrine
+		}
 	}
 }
 
@@ -439,6 +449,7 @@ country_event = {
 		add_timed_idea = { idea = MSR_Project days = 180 }
 		add_manpower = -150
 		add_stability = -0.05
+		clr_country_flag = cant_do_dark_magic_flag
  	}
 
  	option = {
@@ -454,6 +465,7 @@ country_event = {
 		add_timed_idea = { idea = MSR_Project days = 60 }
 		add_manpower = -300
 		add_stability = -0.1
+		clr_country_flag = cant_do_dark_magic_flag
  	}
 }
 
@@ -529,7 +541,7 @@ country_event = {
  	fire_only_once = yes
 	immediate = {add_manpower = 60}
 	option = {
- 		name = MSR.20.a
+ 		name = MSR.201.a
 		
 		hidden_effect = {
  			add_to_variable = {
@@ -538,6 +550,7 @@ country_event = {
 			}
  		}
 		custom_effect_tooltip = MSR_gain_progress_tt
+		set_country_flag = MSR_found_black_book
 
 	}
 }
@@ -555,14 +568,29 @@ country_event = {
 
 	immediate = {add_manpower = -70}
 	option = {
+		trigger = {
+			NOT = { 
+				check_variable = {
+                  	black_fail = 5
+               	}
+            }
+		}
  		name = MSR.202.a
 		custom_effect_tooltip = MSR_send_bb_searching_tt
 		hidden_effect = {
 		if = {
 			limit = {
-				NOT = { has_global_flag = global_black_book_has_been_found_flag }
+				OR = {
+					NOT = { has_global_flag = global_black_book_has_been_found_flag }
+					
+                }
 			}
-			
+
+			add_to_variable = {
+				var = black_fail
+				value = 1
+			}
+
 			random_list = {
 				30 = {
 					country_event = { id = MSR.201 days = 20 }
@@ -573,7 +601,8 @@ country_event = {
 			}
 		
 		}
-		else = {country_event = { id = MSR.203 days = 20 }}
+		else = {
+			country_event = { id = MSR.203 days = 20 }}
 		}
 
 	}
@@ -581,6 +610,7 @@ country_event = {
 	option = {
  		name = MSR.202.b
 		custom_effect_tooltip = MSR_no_longer_bb_searching_tt
+		set_country_flag = MSR_given_up_search_for_black_book
 
 	}
 }
@@ -598,7 +628,7 @@ country_event = {
 
 	immediate = {add_manpower = 60}
 	option = {
- 		name = MSR.203.b
+ 		name = MSR.203.a
 		custom_effect_tooltip = BB_seized_tt
 
 	}
@@ -618,7 +648,7 @@ country_event = {
 
 	option = {
 		trigger = {
-			NOT = { has_country_flag = cottage_beats_pip_flag }
+			has_country_flag = pip_beats_cottage_flag
 		}
 		ai_chance = { factor = 30 
 			modifier = {
@@ -641,9 +671,8 @@ country_event = {
 	}
 	
 	option = {
-		trigger = {
-			has_country_flag = cottage_beats_pip_flag
-		}
+		#trigger = {
+		#}
 		ai_chance = { factor = 30 
 			modifier = {
 				factor = 1
