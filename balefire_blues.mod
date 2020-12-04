@@ -43,4 +43,5 @@ dependencies={
 }
 picture="thumbnail.png"
 supported_version="1.10.*"
-path="mod/eaw_foe"
+path="C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/eaw_foe"
+remote_file_id="2307988796"

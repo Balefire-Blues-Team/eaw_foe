@@ -41,5 +41,5 @@ dependencies={
 	"Old World Blues"
 	"Equestria at War"
 }
+picture="thumbnail.png"
 supported_version="1.10.*"
-remote_file_id="1922951559"
