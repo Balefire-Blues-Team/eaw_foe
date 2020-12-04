@@ -8299,11 +8299,6 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 100
 	}
-	bypass = {
-        NOT = { country_exists = EVR }
-        NOT = { country_exists = BOG }
-        NOT = { country_exists = RAF }
-    }
 
 	will_lead_to_war_with = EVR
 	will_lead_to_war_with = BOG
@@ -8311,17 +8306,34 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_march_to_greenline"
 
-		declare_war_on = {
-    		target = EVR
-    		type = annex_everything
-		}
-		declare_war_on = {
-    		target = BOG
-    		type = annex_everything
-		}
-		declare_war_on = {
-    		target = RAF
-    		type = annex_everything
+		custom_effect_tooltip = red_evr_annex_tt
+		custom_effect_tooltip = red_bog_annex_tt
+		custom_effect_tooltip = red_raf_annex_tt
+		hidden_effect = { 
+			every_other_country = {
+				limit = {
+					has_full_control_of_state = 528 #Everfree Approach
+				}
+				RED = {
+					create_wargoal = { type = annex_everything target = PREV }
+				}
+			}
+			every_other_country = {
+				limit = {
+					has_full_control_of_state = 544 #NE Bog
+				}
+				RED = {
+					create_wargoal = { type = annex_everything target = PREV }
+				}
+			}
+			every_other_country = {
+				limit = {
+					has_full_control_of_state = 42 #Greenline
+				}
+				RED = {
+					create_wargoal = { type = annex_everything target = PREV }
+				}
+			}
 		}
 	}
 
@@ -8338,6 +8350,12 @@ shared_focus = {
 	prerequisite = { focus = RED_march_to_greenline }
 	ai_will_do = { 
 		factor = 100
+	}
+	bypass = {
+		has_war_with = SHA
+	}
+	available = {
+		is_neighbor_of = SHA
 	}
 
 	will_lead_to_war_with = SHA
@@ -8659,7 +8677,26 @@ shared_focus = {
 	prerequisite = { focus = RED_trade_with_raiders }
 	ai_will_do = { 
 		factor = 100
-	} 
+	}
+	available = {
+		controls_state = 42
+		controls_state = 610
+		OR = {
+			ERA = {
+ 				is_subject_of = RED
+ 			}
+ 			AND = {
+ 				controls_state = 69
+ 				controls_state = 549
+ 			}
+		}
+		OR = {
+			NCG = {
+ 				is_subject_of = RED
+ 			}
+ 			controls_state = 747
+		}
+	}
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_slaver_new_order"
