@@ -3244,9 +3244,15 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_bring_hell_to_sky"
 
-		NEV = {
-			ROOT = {
-				grant_wargoals_on_core_states_of_prev = yes
+		custom_effect_tooltip = red_nev_annex_tt
+		hidden_effect = { 
+			every_other_country = {
+				limit = {
+					has_full_control_of_state = 696 #Neighvarro
+				}
+				RED = {
+					create_wargoal = { type = annex_everything target = PREV }
+				}
 			}
 		}
 	}
@@ -5378,14 +5384,6 @@ shared_focus = {
 	cost = 7
 
  	prerequisite = { focus = RED_wretched_hive }
- 	bypass = {
- 		OR = {
-        	NOT = { country_exists = FSR }
-        	FSR = {
-        		is_subject_of = RED
-        	}
-        }
-    }
 	ai_will_do = { 
 		factor = 120
 	}
@@ -5393,9 +5391,16 @@ shared_focus = {
 	will_lead_to_war_with = FSR
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_end_the_rangers"
-		create_wargoal = {
-			type = annex_everything 
-			target = FSR
+		custom_effect_tooltip = red_fsr_annex_tt
+		hidden_effect = { 
+			every_other_country = {
+				limit = {
+					has_full_control_of_state = 538 #Downtown Filly
+				}
+				RED = {
+					create_wargoal = { type = annex_everything target = PREV }
+				}
+			}
 		}
 	}
 
@@ -6368,9 +6373,15 @@ shared_focus = {
 	will_lead_to_war_with = SHA
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_reclaim_escaped_slaves"
-		SHA = {
-			ROOT = {
-				grant_wargoals_on_core_states_of_prev = yes
+		custom_effect_tooltip = red_sha_annex_tt
+		hidden_effect = { 
+			every_other_country = {
+				limit = {
+					has_full_control_of_state = 610 #Shattered Hoof
+				}
+				RED = {
+					create_wargoal = { type = annex_everything target = PREV }
+				}
 			}
 		}
 	}
@@ -7493,13 +7504,23 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 100
 	}
+	bypass = {
+        NOT = { country_exists = FSR }
+    }
 
 	will_lead_to_war_with = FSR
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_no_mercy_for_rangers"
-		create_wargoal = { 
-			type = annex_everything 
-			target = FSR
+		custom_effect_tooltip = red_fsr_annex_tt
+		hidden_effect = { 
+			every_other_country = {
+				limit = {
+					has_full_control_of_state = 538 #Downtown Filly
+				}
+				RED = {
+					create_wargoal = { type = annex_everything target = PREV }
+				}
+			}
 		}
 	}
 
@@ -7555,7 +7576,14 @@ shared_focus = {
 	prerequisite = { focus = RED_no_mercy_for_rangers }
 	ai_will_do = { 
 		factor = 100
-	} 
+	}
+
+	bypass = {
+        NOT = { country_exists = GUN }
+        NOT = { country_exists = LGH }
+        NOT = { country_exists = APR }
+        NOT = { country_exists = FRT }
+    }
 
 	will_lead_to_war_with = GUN
 	will_lead_to_war_with = LGH
@@ -8068,7 +8096,12 @@ shared_focus = {
 	prerequisite = { focus = RED_army_of_slaves }
 	ai_will_do = { 
 		factor = 100
-	} 
+	}
+	bypass = {
+        NOT = { country_exists = EVR }
+        NOT = { country_exists = BOG }
+        NOT = { country_exists = RAF }
+    }
 
 	will_lead_to_war_with = EVR
 	will_lead_to_war_with = BOG
@@ -8103,14 +8136,21 @@ shared_focus = {
 	prerequisite = { focus = RED_march_to_greenline }
 	ai_will_do = { 
 		factor = 100
-	} 
+	}
 
 	will_lead_to_war_with = SHA
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_land_of_freedom"
-		create_wargoal = {
-			type = annex_everything
-			target = SHA
+		custom_effect_tooltip = red_sha_annex_tt
+		hidden_effect = { 
+			every_other_country = {
+				limit = {
+					has_full_control_of_state = 610 #Shattered Hoof
+				}
+				RED = {
+					create_wargoal = { type = annex_everything target = PREV }
+				}
+			}
 		}
 	}
 
@@ -8261,12 +8301,63 @@ shared_focus = {
 	prerequisite = { focus = RED_more_pits }
 	ai_will_do = { 
 		factor = 100
-	} 
+	}
+
+	bypass = {
+		OR = {
+			AND = {
+ 				ERA = {
+ 					OR = {
+ 						is_subject_of = RED
+ 						exists = no
+ 					}
+ 				}
+ 				MWY = {
+ 					OR = {
+ 						is_subject_of = RED
+ 						exists = no
+ 					}
+ 				}
+ 			}
+ 			ERA = {
+ 				has_full_control_of_state = 549
+ 			}
+ 		}
+ 	}
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus  RED_new_deal_with_era"
-		ERA = {
-			country_event = redeye.92
+		if = {
+			limit = { 
+				ERA = { exists = yes }
+ 			}
+			ERA = {
+				country_event = redeye.92
+			}
+		}
+		else = {
+			custom_effect_tooltip = red_era_annex_tt
+			hidden_effect = { 
+				every_other_country = {
+					limit = {
+						has_full_control_of_state = 69 #Maredia Ruins
+					}
+					RED = {
+						create_wargoal = { type = annex_everything target = PREV }
+					}
+				}
+			}
+			custom_effect_tooltip = red_mwy_annex_tt
+			hidden_effect = { 
+				every_other_country = {
+					limit = {
+						has_full_control_of_state = 549 #New Mareway
+					}
+					RED = {
+						create_wargoal = { type = annex_everything target = PREV }
+					}
+				}
+			}
 		}
 	}
 
@@ -8284,6 +8375,14 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 100
 	} 
+	bypass = {
+ 		NCG = {
+ 			OR = {
+ 				is_subject_of = RED
+ 				exists = no
+ 			}
+ 		}
+ 	}
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_deal_with_ncg"
@@ -8313,6 +8412,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RED_trade_with_raiders"
+		custom_effect_tooltip = RED_unlock_raider_trade_tt
 	}
 
 }
