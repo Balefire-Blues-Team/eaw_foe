@@ -22,7 +22,8 @@ shared_focus = {
 shared_focus = {
 	id = MSR_Continue_1
 	icon = GFX_goal_FSR_stabletec
-	x = 4
+	relative_position_id = MSR_Starting_Focus
+	x = 0
 	y = 1
 	cost = 1.5
 	available_if_capitulated = yes 
@@ -43,8 +44,9 @@ shared_focus = {
 shared_focus {
 	id = MSR_from_the_Waste
 	icon = GFX_goal_generic_BOS_focus_t51b_production
-	x = 6
-	y = 2
+	relative_position_id = MSR_Continue_1
+	x = 2
+	y = 1
 	cost = 1.5
 
 	available_if_capitulated = yes 
@@ -63,8 +65,9 @@ shared_focus {
 shared_focus {
 	id = MSR_Reorganizing_The_Rangers
 	icon = GFX_goal_solar_military_factory
-	x = 4
-	y = 2
+	relative_position_id = MSR_Continue_1
+	x = 0
+	y = 1
 	cost = 1.5
 
 	available_if_capitulated = yes 
@@ -83,8 +86,9 @@ shared_focus {
 shared_focus {
 	id = MSR_Strengthing_Control
 	icon = GFX_goal_generic_dangerous_deal_pony_pony
-	x = 2
-	y = 2
+	relative_position_id = MSR_Continue_1
+	x = -2
+	y = 1
 	cost = 1.5
 
 	available_if_capitulated = yes 
@@ -802,24 +806,55 @@ shared_focus = {
 }
 
 shared_focus = { 
-		id = MSR_The_Mainframe
-		icon = GFX_goal_The_Mainframe_
+		id = MSR_A_New_Objective
+		icon = GFX_goal_unknown
 		relative_position_id = MSR_Securing_Info
 		x = 0
 		y = 1
 		cost = 8.58
 
 		available_if_capitulated = yes 
-		available = { NOT = { has_idea = MSR_Project }}
 		ai_will_do = { 
 			factor = 1
 		}
-
+		
+		will_lead_to_war_with = MRA
+		
 		prerequisite = { Focus = MSR_Securing_Info }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_The_Mainframe"
+			declare_war_on = {
+				target = MRA
+				type = annex_everything
+			}
+			add_state_claim = 55
+		}
+}
+
+shared_focus = { 
+		id = MSR_The_Mainframe
+		icon = GFX_goal_The_Mainframe_
+		relative_position_id = MSR_A_New_Objective
+		x = 0
+		y = 1
+		cost = 8.58
+
+		available_if_capitulated = yes 
+		available = {
+		owns_state = 55
+		NOT = { has_idea = MSR_Project }
+		}
+		ai_will_do = { 
+			factor = 1
+		}
+
+		prerequisite = { Focus = MSR_A_New_Objective }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_The_Mainframe"
 			country_event = { id = MSR.16 }
+			add_state_core = 55
 		}
 }
 
@@ -1394,7 +1429,6 @@ shared_focus = {
 		will_lead_to_war_with = TEN
 		will_lead_to_war_with = GUT
 		will_lead_to_war_with = FRI
-		will_lead_to_war_with = MRA
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Moving_South"
 			declare_war_on = {
@@ -1411,10 +1445,6 @@ shared_focus = {
 			}
 			declare_war_on = {
 				target = FRI
-				type = annex_everything
-			}
-			declare_war_on = {
-				target = MRA
 				type = annex_everything
 			}
 			hidden_effect = {
@@ -1435,11 +1465,6 @@ shared_focus = {
 					}
 				}
 				FRI = {
-					ROOT = {
-						grant_wargoals_on_core_states_of_prev = yes
-					}
-				}
-				MRA = {
 					ROOT = {
 						grant_wargoals_on_core_states_of_prev = yes
 					}
@@ -1469,11 +1494,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Breaking_Peninsula"
-			core_original_TEN = yes
-			core_original_FIR = yes
+			core_original_FRI = yes
 			core_original_GUT = yes
-			
-
 		}
 }
 
@@ -1498,9 +1520,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Getting_Rid_Raiders"
-			core_original_MRA = yes
 			core_original_MAR = yes
-		
+			core_original_MRA = yes
 		}
 }
 
@@ -1524,6 +1545,7 @@ shared_focus = {
 			custom_effect_tooltip = MSR_reclaim_celestia_one_tt
 			19 = {add_resource = { type = energy amount = -10 }}
 			set_country_flag = can_use_celestia_one_flag
+			core_original_TEN = yes
 		}
 }
 
