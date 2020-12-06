@@ -1,4 +1,4 @@
-F# DO NOT TOUCH WITHOUT MY KNOWLEGE
+# DO NOT TOUCH WITHOUT MY KNOWLEGE
 # IF YOU TOUCH THE TIMINGS, YOU'RE GETTING SENT TO THE PIT
 # -Laundry
 
@@ -20,7 +20,7 @@ news_event = {
 	}
 
 	option = {
-		name = lightbringer.1.a
+		name = lpspecial.1.a
 		ai_chance = { base = 50 }
 		set_global_flag = lightbringer_dead_flag
 	}
@@ -1777,11 +1777,44 @@ country_event = {
 		name = lightbringer.25.a
 		ai_chance = { base = 50}
 
-		hidden_effect = {
-			country_event = {
-    			id = lpoffshoot.7
+		if = {
+			limit = { 
+				RED = {
+					has_country_leader = {
+					    name = "Red Eye"
+					    ruling_only = yes
+					}
+				}
+			}
+			hidden_effect = {
+				country_event = {
+    				id = lpoffshoot.7
+				}
 			}
 		}
+		else = {
+			if = {
+				limit = { has_global_flag = player_lightbringer}
+	
+				hidden_effect = {
+					country_event = {
+	    				id = lightbringer.26
+	    				days = 10
+					}
+				}
+			}
+	
+			else = {
+				hidden_effect = {
+					RED = {
+						country_event = {
+	    					id = lightbringer.26
+	    					days = 10
+	    				}
+					}
+				}
+			}
+		{}
 	}
 }
 
@@ -2449,11 +2482,17 @@ country_event = {
 
  	immediate = {
  		log = "[GetDateText]: [Root.GetName]: Event lightbringer.33 (Crusaders)"
+ 		MSR = { set_country_flag = lightbringer_met_cottage_flag }
  	}	
 
 	option = {
 		name = lightbringer.33.a
 		ai_chance = { base = 0 }
+
+		MSR = { 
+			set_country_flag = pip_beats_cottage_flag
+			add_political_power = -50
+		}
 
 		if = {
 			limit = { has_global_flag = player_lightbringer}
@@ -3089,7 +3128,9 @@ country_event = {
 			}
 		}
 
-		set_global_flag = lightbringer_new_unity_flag
+		RED = {
+			set_country_flag = lightbringer_new_unity_flag
+		}
 
 	}
 }
