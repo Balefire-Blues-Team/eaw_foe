@@ -1552,15 +1552,69 @@ NEV_warplans = {
 	}
 
 
+}
+
+NEV_autumn_settlement = {
 
 
-
-
-
-
-
-
-
+	NEV_des_settlement = {
+		icon = eng_install_government
+		ai_will_do = {
+			factor = 100
+			
+		}
+		fire_only_once = no
+		is_good = yes
+		
+		visible = {
+			from = {
+				NOT = { 
+                    has_dynamic_modifier = { 
+                        modifier = NEV_surface_outpost_modifier 
+                    } 
+                    has_state_flag = NEV_outpost_created_flag
+                }
+				is_controlled_by = NEV
+			}
+		}
+		available = {
+			FROM = {
+                compliance > 1
+                NOT = { 
+                    has_dynamic_modifier = { 
+                        modifier = NEV_surface_outpost_modifier 
+                    } 
+                    has_state_flag = NEV_outpost_created_flag
+                }
+            }
+		}
+		target_root_trigger = {
+			always = yes
+			#has_completed_focus = NEV_new_government
+			#has_government = destruction
+        }
+        state_target = yes
+        targets = { 574 747 504 612 449 608 42 526 487 792 }
+        on_map_mode = map_only 
+		
+		cost = 20
+		days_remove = 8
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEV_des_settlement"
+			custom_effect_tooltip = NEV_create_outpost_tt
+            hidden_effect = {
+                FROM = {
+                    add_dynamic_modifier = { 
+                        modifier = NEV_surface_outpost_modifier
+                    }
+                    set_state_flag = NEV_outpost_created_flag
+					add_manpower = 250
+                }
+            }
+			
+		}
+	}
+	
 }
 
 

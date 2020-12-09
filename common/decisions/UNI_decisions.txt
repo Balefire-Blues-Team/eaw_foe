@@ -1,3 +1,65 @@
+UNI_borderwars = {
+	UNI_borderwar_WHope = {
+        icon = border_war
+		days_remove = 20
+		days_re_enable = 100
+		
+        available = {
+			has_war = no
+			has_full_control_of_state = 486
+		}
+
+        visible = {
+            has_completed_focus = goddess_canon_seize_hope
+			NOT = {
+				owns_state = 507
+			}
+        }
+		
+		highlight_states = {
+			state = 507
+		}
+
+        ai_will_do = {
+            base = 200
+        }
+
+        cost = 50
+
+        fire_only_once = no
+		
+		target_array = neighbors
+		target_trigger = {
+			FROM = {
+				owns_state = 507
+			}
+		}
+
+		#will_lead_to_war_with = REP
+       	remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision UNI_borderwar_WHope"
+			start_border_war = {
+				change_state_after_war = no
+				attacker = {
+					state = 486
+					num_provinces = 3
+					on_win = goddess_redeye.2002
+					on_lose = goddess_redeye.2003
+					on_cancel = goddess_redeye.2003
+				}
+
+				defender = {
+					state = 507
+					num_provinces = 4
+					on_win = raiding.6
+					on_lose = raiding.4
+					on_cancel = raiding.5
+				}
+			}
+		}
+    }
+}
+
 UNI_dunk = {
 	UNI_dunk_peacetime = {
 		icon = GFX_decision_generic_ignite_civil_war
@@ -728,7 +790,7 @@ UNI_RED_interactions = {
 	}
 
 UNI_black_book = {
-		UNI_canterlot_raid = {
+	UNI_canterlot_raid = {
         icon = border_war
 		days_remove = 25
 
@@ -737,14 +799,14 @@ UNI_black_book = {
                 owns_state = 234
 				has_global_flag = global_black_book_has_been_found_flag
             }
-            owns_state = 801
+            owns_state = 415
         }
 
         visible = {
             has_completed_focus = unity_pop_bb_4
 			NOT = {
 				has_global_flag = global_black_book_has_been_found_flag
-				}
+			}
         }
         target_array = neighbors
         target_trigger = {
@@ -782,40 +844,27 @@ UNI_black_book = {
 		
 		remove_effect = {
 			start_border_war = {
-                change_state_after_war = no
-                attacker = {
-                    state = 415
-                    num_provinces = 4
-                    on_win = {
-					random_list = {
-					40 = {
-						country_event = { unity_pop.bb.4 }
-							}
-					40 = {
-						country_event = { unity_pop_bb.2 }
-							}
-					20 = {
-						country_event = { unity_pop_bb.3 }
-						}
-						
-					}
-					
-						}
-					
-                    on_lose = { 
-					country_event = { unity_pop_bb.5 }
-						}
-                    on_cancel = { add_manpower = -10 }
-					}
+				change_state_after_war = no
+				attacker = {
+					state = 415
+					num_provinces = 4
+					on_win = unity_pop_bb.2
+					on_lose = unity_pop_bb.5
+					on_cancel = unity_pop_bb.5
+				}
 
-					defender = {
-                    state = 234
-                    num_provinces = 2
-                }
-            }
+				defender = {
+					state = 234
+					num_provinces = 2
+					on_win = raiding.6
+					on_lose = raiding.4
+					on_cancel = raiding.5
+				}
+			}
 		}
 	}
-	}
+}
+
 UNI_slaver_interractions = {
 	UNI_offer_again = {
         icon = border_war
@@ -959,65 +1008,8 @@ UNI_master_harassment = {
         fire_only_once = no
 
         complete_effect = {
+        	add_political_power = 10
         }
     }
 }
 
-UNI_borderwars = {
-	UNI_borderwar_WHope = {
-        icon = border_war
-		days_remove = 20
-		days_re_enable = 100
-		
-        available = {
-			has_war = no
-			has_full_control_of_state = 486
-		}
-
-        visible = {
-            has_completed_focus = goddess_canon_seize_hope
-			NOT = {
-				owns_state = 507
-			}
-        }
-		
-		highlight_states = {
-			state = 507
-		}
-
-        ai_will_do = {
-            base = 200
-        }
-
-        cost = 50
-
-        fire_only_once = no
-		
-		target_array = neighbors
-		target_trigger = {
-			FROM = {
-				owns_state = 507
-			}
-		}
-
-		will_lead_to_war_with = REP
-        remove_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision UNI_borderwar_WHope target: [From.GetName]"
-			start_border_war = {
-				change_state_after_war = no
-				attacker = {
-					state = 486
-					num_provinces = 3
-					on_win = goddess_redeye.2002
-					on_lose = goddess_redeye.2003
-					on_cancel = add_political_power = -10
-				}
-
-				defender = {
-					state = 507
-					num_provinces = 4
-				}
-			}
-        }
-    }
-}
