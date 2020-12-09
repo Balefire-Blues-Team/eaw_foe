@@ -1344,8 +1344,10 @@ country_event = { #The Villain Of The Piece 1
 			}
 			modifier = {
 				add = 45
-				check_variable = {
-					lp_apathy > 2
+				OWE = {
+					check_variable = {
+    					lp_apathy > 2
+					}
 				}
 			}
 			modifier = {
@@ -1359,7 +1361,7 @@ country_event = { #The Villain Of The Piece 1
 			OWE = {
 				add_to_variable = {
     				var = lp_apathy
-    				value = 2
+    				value = 1
 				}
 			}
 			set_global_flag = GUT_destroyed
@@ -1722,11 +1724,22 @@ country_event = {
 				save_event_target_as = DowntownFilly
 			}
  		}
- 		hidden_effect = {
- 			OWE = {
- 				add_to_variable = { lightbringer_status_var = 1 } 
+ 		if = {
+ 			limit = { has_global_flag = lp_no_watcher }
+ 			hidden_effect = {
+ 				OWE = {
+ 					add_to_variable = { lightbringer_status_var = 2 } 
+ 				}
  			}
  		}
+ 		else {
+ 			hidden_effect = {
+ 				OWE = {
+ 					add_to_variable = { lightbringer_status_var = 1 } 
+ 				}
+ 			}
+ 		}
+ 		
  	}
 
 	option = {
@@ -2947,21 +2960,22 @@ country_event = {
 	option = {
 		name = lightbringer.38.a
 		ai_chance = { base = 50}
-
-		UNI = {
-			UNI_release_all_effect = yes
-			delete_unit = { 
-            	state = 518
-				disband = no
-            }
+		if = {
+			limit = { country_exists = UNI }
+			UNI = {
+				UNI_release_all_effect = yes
+				delete_unit = { 
+        	    	state = 518
+					disband = no
+        	    }
+			}
+			SPV = {
+				transfer_state = 518
+			}
+			518 = {
+				remove_core_of = UNI
+			}
 		}
-		SPV = {
-			transfer_state = 518
-		}
-		518 = {
-			remove_core_of = UNI
-		}
-
 
 		if = {
 			limit = { has_global_flag = player_lightbringer}
@@ -3324,8 +3338,10 @@ country_event = {
 			}
 			modifier = {
 				factor = 3
-				check_variable = {
-    				lp_apathy > 5
+				OWE = {
+					check_variable = {
+    					lp_apathy > 5
+					}
 				}
 			}
 			modifier = {
@@ -3339,11 +3355,16 @@ country_event = {
 			OR = {
 				AND = {
 					has_global_flag = lp_no_gardens
-					check_variable = {
-    					lp_apathy > 4
+					OWE = {
+						check_variable = {
+    						lp_apathy > 4
+						}
 					}
 				}
-				has_global_flag = lightbringer_ai_path_evil
+				AND = {
+					is_ai = yes
+					has_global_flag = lightbringer_ai_path_evil
+				}
 			}
 		}
 
