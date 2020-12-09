@@ -1,19 +1,64 @@
 add_namespace = roaming_ghouls
 
-country_event = {
+country_event = { #Safe Roaming
  	id = roaming_ghouls.1
  	title = roaming_ghouls.1.title
  	desc = roaming_ghouls.1.desc
 	picture = GFX_event_test
 
 	is_triggered_only = yes
- 	fire_only_once = yes
+ 	#fire_only_once = yes
 
 	option = {
 		name = roaming_ghouls.1.a
 		ai_chance = { factor = 50}
 
 		ghouls_move_random_adjacent_798 = yes
+
+		hidden_effect = {
+			random_list = {
+				50 = {
+					country_event = {
+						id = roaming_ghouls.1
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+				15 = {
+					country_event = {
+						id = roaming_ghouls.4
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+				15 = {
+					country_event = {
+						id = roaming_ghouls.5
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+				15 = {
+					country_event = {
+						id = roaming_ghouls.6
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+				5 = {
+					country_event = {
+						id = roaming_ghouls.3
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -29,7 +74,7 @@ country_event = {
  	hidden = yes
 
  	immediate = {
- 		LGH = {
+ 		OWE = {
  			set_variable = {
 				var = 798_ghoul_horde_pos_var
 				value = 1
@@ -39,5 +84,345 @@ country_event = {
 	option = {
 		name = roaming_ghouls.2.a
 		ai_chance = { factor = 50}
+	}
+}
+
+country_event = { #kills sleeping army
+ 	id = roaming_ghouls.3
+ 	title = roaming_ghouls.3.title
+ 	desc = roaming_ghouls.3.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	#fire_only_once = yes
+
+	option = {
+		name = roaming_ghouls.3.a
+		ai_chance = { factor = 50}
+
+		add_manpower = -200
+		add_war_support = -0.05
+
+		ghouls_move_random_adjacent_798 = yes
+
+		hidden_effect = {
+			random_list = {
+				50 = {
+					country_event = {
+						id = roaming_ghouls.1
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+				15 = {
+					country_event = {
+						id = roaming_ghouls.4
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+				15 = {
+					country_event = {
+						id = roaming_ghouls.5
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+				15 = {
+					country_event = {
+						id = roaming_ghouls.6
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+				5 = {
+					country_event = {
+						id = roaming_ghouls.3
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = { #Destroyed Workshops
+ 	id = roaming_ghouls.4
+ 	title = roaming_ghouls.4.title
+ 	desc = roaming_ghouls.4.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	#fire_only_once = yes
+
+	option = {
+		name = roaming_ghouls.4.a
+		ai_chance = { factor = 50}
+
+		save_current_manpower = yes
+		798 = {
+			add_manpower = -50
+		}
+		restore_previous_manpower = yes
+
+		if = {
+			limit = {
+				798 = {
+					industrial_complex > 0
+				}
+			}
+			798 = {
+				damage_building = { type = industrial_complex damage = 0.30 }
+			}
+		}
+		else_if = {
+			limit = {
+				798 = {
+					any_neighbor_state = {
+						industrial_complex > 0
+					}
+				}
+			}
+			798 = {
+				limit = { 
+					industrial_complex > 0 
+					any_neighbor_state = {
+						state = 798
+					}
+				}
+				damage_building = { type = industrial_complex damage = 0.25 }
+			}
+		}
+		else = {
+			random_owned_controlled_state = {
+				limit = { industrial_complex > 0 }
+				damage_building = { type = industrial_complex damage = 0.20 }
+			}
+		}
+
+		ghouls_move_random_adjacent_798 = yes
+
+		hidden_effect = {
+			random_list = {
+				50 = {
+					country_event = {
+						id = roaming_ghouls.1
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+				15 = {
+					country_event = {
+						id = roaming_ghouls.4
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+				15 = {
+					country_event = {
+						id = roaming_ghouls.5
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+				15 = {
+					country_event = {
+						id = roaming_ghouls.6
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+				5 = {
+					country_event = {
+						id = roaming_ghouls.3
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = { #Destroyed Arms Workshop
+ 	id = roaming_ghouls.5
+ 	title = roaming_ghouls.5.title
+ 	desc = roaming_ghouls.5.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	#fire_only_once = yes
+
+	option = {
+		name = roaming_ghouls.5.a
+		ai_chance = { factor = 50}
+
+		save_current_manpower = yes
+		798 = {
+			add_manpower = -50
+		}
+		restore_previous_manpower = yes
+		
+		if = {
+			limit = {
+				798 = {
+					arms_factory > 0
+				}
+			}
+			798 = {
+				damage_building = { type = arms_factory damage = 0.30 }
+			}
+		}
+		else_if = {
+			limit = {
+				798 = {
+					any_neighbor_state = {
+						arms_factory > 0
+					}
+				}
+			}
+			798 = {
+				limit = { 
+					arms_factory > 0 
+					any_neighbor_state = {
+						state = 798
+					}
+				}
+				damage_building = { type = arms_factory damage = 0.25 }
+			}
+		}
+		else = {
+			random_owned_controlled_state = {
+				limit = { arms_factory > 0 }
+				damage_building = { type = arms_factory damage = 0.20 }
+			}
+		}
+
+		ghouls_move_random_adjacent_798 = yes
+
+		hidden_effect = {
+			random_list = {
+				50 = {
+					country_event = {
+						id = roaming_ghouls.1
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+				15 = {
+					country_event = {
+						id = roaming_ghouls.4
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+				15 = {
+					country_event = {
+						id = roaming_ghouls.5
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+				15 = {
+					country_event = {
+						id = roaming_ghouls.6
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+				5 = {
+					country_event = {
+						id = roaming_ghouls.3
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = { #Killed Settlers
+ 	id = roaming_ghouls.6
+ 	title = roaming_ghouls.6.title
+ 	desc = roaming_ghouls.6.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	#fire_only_once = yes
+
+	option = {
+		name = roaming_ghouls.6.a
+		ai_chance = { factor = 50}
+
+		save_current_manpower = yes
+		798 = {
+			add_manpower = -150
+		}
+		restore_previous_manpower = yes
+		add_stability = -0.01
+
+		ghouls_move_random_adjacent_798 = yes
+
+		hidden_effect = {
+			random_list = {
+				50 = {
+					country_event = {
+						id = roaming_ghouls.1
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+				15 = {
+					country_event = {
+						id = roaming_ghouls.4
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+				15 = {
+					country_event = {
+						id = roaming_ghouls.5
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+				15 = {
+					country_event = {
+						id = roaming_ghouls.6
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+				5 = {
+					country_event = {
+						id = roaming_ghouls.3
+						days = 180
+						random_days = 50
+						random = 48
+					}
+				}
+			}
+		}
 	}
 }
