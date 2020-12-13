@@ -11,3 +11,4 @@ Social Network:
  - [VK](https://vk.com/balefire_blues)
  - [Wiki](https://equestria-at-war.fandom.com/ru/wiki/EaW/OWB:_Balefire_Blues)
  - [Discord](https://discord.com/invite/ewnUc6eAzw)
+ - [Reddit](https://www.reddit.com/r/BalefireBlues/)
