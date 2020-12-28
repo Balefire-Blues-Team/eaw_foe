@@ -16,9 +16,7 @@ shared_focus = {
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_opening_1"
 			country_event = oldapplestart.1
-			OAP_lower_inflation = yes
-			OAP_lower_filly_influence = yes
-			OAP_lower_ranger_defiance = yes
+			
 		}
 }
 
@@ -41,9 +39,7 @@ shared_focus = {
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_opening_2"
 			country_event = oldapplestart.2
-			OAP_raise_inflation = yes
-			OAP_raise_filly_influence = yes
-			OAP_raise_ranger_defiance = yes
+			
 		}
 }
 
@@ -65,7 +61,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_opening_3"
-			
+			country_event = oldapplestart.3
 		}
 }
 
@@ -75,7 +71,7 @@ shared_focus = {
 		icon = GFX_goal_coffee_boom
 		x = -7
 		y = 1
-		cost = 1
+		cost = 2.86
 		relative_position_id = OAP_opening_3
 		
 		available_if_capitulated = yes 
@@ -87,7 +83,12 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_economic_reshuffle"
-			
+			add_tech_bonus = {
+				name = industry_bonus
+				bonus = 0.75
+				uses = 1
+				category = industry
+			}
 		}
 }
 
@@ -97,7 +98,7 @@ shared_focus = {
 		icon = GFX_goal_coffee_boom
 		x = -2
 		y = 1
-		cost = 1
+		cost = 2.86
 		relative_position_id = OAP_economic_reshuffle
 		mutually_exclusive = { focus =  OAP_homegrown_industry }
 		available_if_capitulated = yes 
@@ -109,7 +110,12 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_investements_from_RED"
-			
+			custom_effect_tooltip = OAP_raise_ranger_anger_tt
+			add_to_variable = {
+				var = ranger_anger
+				value = 1
+			}
+			OAP_raise_filly_influence = yes
 		}
 }
 
@@ -119,7 +125,7 @@ shared_focus = {
 		icon = GFX_goal_coffee_boom
 		x = -2
 		y = 2
-		cost = 1
+		cost = 2.86
 		relative_position_id = OAP_economic_reshuffle
 		available_if_capitulated = yes 
 		prerequisite = { focus = OAP_investements_from_RED }
@@ -130,7 +136,14 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_import_heavy_industry"
-			
+			OAP_raise_inflation = yes
+			add_extra_state_shared_building_slots = 1 add_building_construction = { type = arms_factory instant_build = yes level = 1}
+			add_tech_bonus = {
+				name = industry_bonus
+				bonus = 0.60
+				uses = 1
+				category = industry
+			}
 		}
 }
 
@@ -140,7 +153,7 @@ shared_focus = {
 		icon = GFX_goal_coffee_boom
 		x = 2
 		y = 1
-		cost = 1
+		cost = 2.86
 		relative_position_id = OAP_economic_reshuffle
 		mutually_exclusive = { focus = OAP_investements_from_RED }
 		available_if_capitulated = yes 
@@ -152,7 +165,23 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_homegrown_industry"
-			
+			custom_effect_tooltip = OAP_lower_ranger_anger_tt
+			subtract_from_variable = {
+				var = ranger_anger
+				value = 1
+			}
+			596 = {
+				remove_building = {
+   				type = arms_factory
+    			level = 1
+				}
+				add_building_construction = { 
+				type = industrial_complex 
+				instant_build = yes 
+				level = 1
+				}
+			}
+			add_popularity = { ideology = continuation popularity = 0.05 }
 		}
 }
 
@@ -162,7 +191,7 @@ shared_focus = {
 		icon = GFX_goal_coffee_boom
 		x = 2
 		y = 2
-		cost = 1
+		cost = 2.86
 		relative_position_id = OAP_economic_reshuffle
 		available_if_capitulated = yes 
 		prerequisite = { focus = OAP_homegrown_industry }
@@ -173,7 +202,9 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_subsidize_merchants"
-			
+			add_stability = 0.08
+			add_political_power = 40
+			add_popularity = { ideology = continuation popularity = 0.05 }
 		}
 }
 
@@ -183,7 +214,7 @@ shared_focus = {
 		icon = GFX_goal_coffee_boom
 		x = 0
 		y = 2
-		cost = 1
+		cost = 2.86
 		relative_position_id = OAP_economic_reshuffle
 		available_if_capitulated = yes 
 		prerequisite = { focus = OAP_homegrown_industry focus = OAP_investements_from_RED}
@@ -194,17 +225,20 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_farming_desert"
-			
+			67 = {
+				add_manpower = 600
+				add_extra_state_shared_building_slots = 2
+			}
 		}
 }
 
 #The Fillydelphian Model
 shared_focus = {
 		id = OAP_fillydelphian_model
-		icon = GFX_goal_coffee_boom
+		icon = GFX_goal_RED_pony_worker
 		x = -1
 		y = 3
-		cost = 1
+		cost = 2.86
 		relative_position_id = OAP_economic_reshuffle
 		mutually_exclusive = { focus = OAP_like_old_times }
 		available_if_capitulated = yes 
@@ -217,17 +251,22 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_fillydelphian_model"
-			
+			custom_effect_tooltip = OAP_raise_ranger_anger_tt
+			add_to_variable = {
+				var = ranger_anger
+				value = 1
+			}
+			add_ideas = OAP_filly_model_idea
 		}
 }
 
 #Like Old Times
 shared_focus = {
 		id = OAP_like_old_times
-		icon = GFX_goal_coffee_boom
+		icon = GFX_goal_apple_icon
 		x = 1
 		y = 3
-		cost = 1
+		cost = 2.86
 		relative_position_id = OAP_economic_reshuffle
 		mutually_exclusive = { focus = OAP_fillydelphian_model }
 		available_if_capitulated = yes 
@@ -240,7 +279,13 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_like_old_times"
-			
+			custom_effect_tooltip = OAP_lower_ranger_anger_tt
+			subtract_from_variable = {
+				var = ranger_anger
+				value = 1
+			}
+			add_ideas = OAP_old_model_idea
+			add_popularity = { ideology = continuation popularity = 0.1 }
 		}
 }
 
@@ -250,7 +295,7 @@ shared_focus = {
 		icon = GFX_goal_coffee_boom
 		x = -2
 		y = 1
-		cost = 1
+		cost = 2.86
 		relative_position_id = OAP_opening_3
 		
 		available_if_capitulated = yes 
@@ -262,7 +307,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_currency_control_issue"
-			
+			OAP_lower_inflation = yes
+			add_timed_idea = { idea = OAP_temporary_measures_idea days = 100 }
 		}
 }
 
@@ -272,7 +318,7 @@ shared_focus = {
 		icon = GFX_goal_coffee_boom
 		x = -2
 		y = 2
-		cost = 1
+		cost = 2.86
 		relative_position_id = OAP_opening_3
 		mutually_exclusive = {focus = OAP_safe_reforms}
 		available_if_capitulated = yes 
@@ -285,7 +331,15 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_fasttrack_reform"
-			
+			custom_effect_tooltip = OAP_raise_ranger_anger_tt
+			add_to_variable = {
+				var = ranger_anger
+				value = 1
+			}
+			add_stability = -0.05
+			OAP_raise_ranger_defiance = yes
+			one_random_arms_factory = yes
+			one_random_industrial_complex = yes
 		}
 }
 
@@ -295,7 +349,7 @@ shared_focus = {
 		icon = GFX_goal_coffee_boom
 		x = 0
 		y = 1
-		cost = 1
+		cost = 2.86
 		relative_position_id = OAP_opening_3
 		
 		available_if_capitulated = yes 
@@ -307,7 +361,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_charmings_proposal"
-			
+			country_event = oldapplestart.4
 		}
 }
 
@@ -317,7 +371,7 @@ shared_focus = {
 		icon = GFX_goal_coffee_boom
 		x = 2
 		y = 1
-		cost = 1
+		cost = 2.86
 		relative_position_id = OAP_opening_3
 		
 		available_if_capitulated = yes 
@@ -329,7 +383,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_bandaid_braindrain"
-			
+			swap_ideas = { remove_idea = OAP_braindrain add_idea = OAP_braindrain2 }
 		}
 }
 
@@ -339,7 +393,7 @@ shared_focus = {
 		icon = GFX_goal_coffee_boom
 		x = 2
 		y = 2
-		cost = 1
+		cost = 2.86
 		relative_position_id = OAP_opening_3
 		mutually_exclusive = {focus = OAP_fasttrack_reform}
 		available_if_capitulated = yes 
@@ -352,7 +406,13 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_safe_reforms"
-			
+			custom_effect_tooltip = OAP_lower_ranger_anger_tt
+			subtract_from_variable = {
+				var = ranger_anger
+				value = 1
+			}
+			OAP_lower_inflation = yes
+			add_popularity = { ideology = continuation popularity = 0.1 }
 		}
 }
 
@@ -362,7 +422,7 @@ shared_focus = {
 		icon = GFX_goal_coffee_boom
 		x = -2
 		y = 3
-		cost = 1
+		cost = 2.86
 		relative_position_id = OAP_opening_3
 		available_if_capitulated = yes 
 		prerequisite = { focus = OAP_fasttrack_reform }
@@ -373,7 +433,18 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_ask_RED_help"
-			
+			OAP_raise_filly_influence = yes
+			create_corps_commander = {
+			name = "Consequtia"
+			picture = "Consequtia.tga"
+			traits = { strong_trait enduring_trait }
+			skill = 2
+			attack_skill = 3
+			defense_skill = 1
+			planning_skill = 1
+			logistics_skill = 1
+			id = 59602
+			}
 		}
 }
 
@@ -383,7 +454,7 @@ shared_focus = {
 		icon = GFX_goal_coffee_boom
 		x = 2
 		y = 3
-		cost = 1
+		cost = 2.86
 		relative_position_id = OAP_opening_3
 		available_if_capitulated = yes 
 		prerequisite = { focus = OAP_safe_reforms }
@@ -394,7 +465,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_learn_from_azuria"
-			
+			OAP_lower_inflation = yes
+			OAP_lower_filly_influence = yes
 		}
 }
 
@@ -404,18 +476,18 @@ shared_focus = {
 		icon = GFX_goal_coffee_boom
 		x = 0
 		y = 3
-		cost = 1
+		cost = 2.86
 		relative_position_id = OAP_opening_3
 		available_if_capitulated = yes 
 		prerequisite = { focus = OAP_fasttrack_reform focus = OAP_safe_reforms }
-		
+		available = { OR = {has_completed_focus = OAP_fillydelphian_model has_completed_focus = OAP_like_old_times}OR = {has_completed_focus = OAP_buy_big_guns has_completed_focus = OAP_buy_many_guns}}
 		ai_will_do = { 
 		factor = 300
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_deal_with_farsight"
-			
+			country_event = oldapplestart.5
 		}
 }
 
@@ -425,19 +497,25 @@ shared_focus = {
 		icon = GFX_goal_coffee_boom
 		x = -1
 		y = 4
-		cost = 1
+		cost = 2.86
 		relative_position_id = OAP_opening_3
 		mutually_exclusive = {focus = OAP_return_to_tradition}
 		available_if_capitulated = yes 
 		prerequisite = { focus = OAP_ask_RED_help focus = OAP_learn_from_azuria }
 		prerequisite = { focus = OAP_deal_with_farsight}
+		available = { destruction > 0.5}
 		ai_will_do = { 
 		factor = 300
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_most_loyal_servant"
-			
+			add_popularity = {
+				ideology = destruction
+				popularity = 0.15
+			}
+			custom_effect_tooltip = OAP_load_more_foci_tt
+			hidden_effect = { set_country_flag = OAP_destruction_tree_flag load_focus_tree = OAP_Shackles_tree }
 		}
 }
 
@@ -447,19 +525,26 @@ shared_focus = {
 		icon = GFX_goal_coffee_boom
 		x = 1
 		y = 4
-		cost = 1
+		cost = 4.29
 		relative_position_id = OAP_opening_3
 		mutually_exclusive = {focus = OAP_most_loyal_servant}
 		available_if_capitulated = yes 
 		prerequisite = { focus = OAP_ask_RED_help focus = OAP_learn_from_azuria }
 		prerequisite = { focus = OAP_deal_with_farsight}
+		available = { destruction < 0.5}
 		ai_will_do = { 
 		factor = 300
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_return_to_tradition"
-			
+			set_politics = { ruling_party = continuation elections_allowed = no }
+			add_popularity = {
+				ideology = continuation
+				popularity = 0.15
+			}
+			custom_effect_tooltip = OAP_load_more_foci_tt
+			hidden_effect = { set_country_flag = OAP_continuation_tree_flag load_focus_tree = OAP_Charming_tree }
 		}
 }
 
@@ -469,7 +554,7 @@ shared_focus = {
 		icon = GFX_goal_coffee_boom
 		x = 5
 		y = 1
-		cost = 1
+		cost = 2.86
 		relative_position_id = OAP_opening_3
 		mutually_exclusive = {focus = OAP_ranger_army}
 		available_if_capitulated = yes 
@@ -480,7 +565,13 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_appleloosan_army"
-			
+			custom_effect_tooltip = OAP_raise_ranger_anger_tt
+			add_to_variable = {
+				var = ranger_anger
+				value = 1
+			}
+			add_ideas = limited_conscription
+			OAP_lower_ranger_defiance = yes
 		}
 }
 
@@ -490,7 +581,7 @@ shared_focus = {
 		icon = GFX_goal_coffee_boom
 		x = 7
 		y = 1
-		cost = 1
+		cost = 2.86
 		relative_position_id = OAP_opening_3
 		mutually_exclusive = {focus = OAP_appleloosan_army}
 		available_if_capitulated = yes 
@@ -501,7 +592,13 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_ranger_army"
-			
+			custom_effect_tooltip = OAP_lower_ranger_anger_tt
+			subtract_from_variable = {
+				var = ranger_anger
+				value = 1
+			}
+			OAP_raise_ranger_defiance = yes
+			army_experience = 25
 		}
 }
 
@@ -511,7 +608,7 @@ shared_focus = {
 		icon = GFX_goal_coffee_boom
 		x = 6
 		y = 2
-		cost = 1
+		cost = 2.86
 		relative_position_id = OAP_opening_3
 		available_if_capitulated = yes 
 		prerequisite = { focus = OAP_appleloosan_army focus = OAP_ranger_army}
@@ -521,17 +618,22 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_doctrinal_thought"
-			
+			add_tech_bonus = {
+				name = land_doctrine
+				bonus = 0.6
+				uses = 2
+				category = land_doctrine
+			}
 		}
 }
 
-#Let the Rangers keep their positions
+#Special Forces Programm
 shared_focus = {
 		id = OAP_expand_spec_ops
 		icon = GFX_goal_coffee_boom
 		x = 7
 		y = 3
-		cost = 1
+		cost = 2.86
 		relative_position_id = OAP_opening_3
 		mutually_exclusive = {focus = OAP_train_up_masses}
 		available_if_capitulated = yes 
@@ -542,7 +644,18 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_expand_spec_ops"
-			
+			custom_effect_tooltip = OAP_lower_ranger_anger_tt
+			subtract_from_variable = {
+				var = ranger_anger
+				value = 1
+			}
+			OAP_raise_ranger_defiance = yes
+			add_tech_bonus = {
+			name = special_forces_bonus
+			bonus = 1.0
+			uses = 2
+			category = special_force_tech
+			}
 		}
 }
 
@@ -552,7 +665,7 @@ shared_focus = {
 		icon = GFX_goal_coffee_boom
 		x = 7
 		y = 4
-		cost = 1
+		cost = 2.86
 		relative_position_id = OAP_opening_3
 		available_if_capitulated = yes 
 		prerequisite = { focus = OAP_expand_spec_ops}
@@ -562,7 +675,12 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_buy_big_guns"
-			
+			add_tech_bonus = {
+			name = infantry_bonus
+			bonus = 1.0
+			uses = 1
+			category = ballistic_weapon_tech
+			}
 		}
 }
 
@@ -572,7 +690,7 @@ shared_focus = {
 		icon = GFX_goal_coffee_boom
 		x = 5
 		y = 3
-		cost = 1
+		cost = 2.86
 		relative_position_id = OAP_opening_3
 		mutually_exclusive = {focus = OAP_expand_spec_ops}
 		available_if_capitulated = yes 
@@ -583,7 +701,14 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_train_up_masses"
-			
+			custom_effect_tooltip = OAP_raise_ranger_anger_tt
+			add_to_variable = {
+				var = ranger_anger
+				value = 1
+			}
+			add_ideas = training_law_veterans
+			add_manpower = 200
+			OAP_lower_ranger_defiance = yes
 		}
 }
 
@@ -593,7 +718,7 @@ shared_focus = {
 		icon = GFX_goal_coffee_boom
 		x = 5
 		y = 4
-		cost = 1
+		cost = 2.86
 		relative_position_id = OAP_opening_3
 		available_if_capitulated = yes 
 		prerequisite = { focus = OAP_doctrinal_thought}
@@ -603,10 +728,240 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_buy_many_guns"
+			add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 300 producer = OWE }
+		}
+}
+
+##############
+###Shackles###
+##############
+
+#Power Cemented
+shared_focus = {
+		id = OAP_power_cemented
+		icon = GFX_goal_coffee_boom
+		x = 12
+		y = 2
+		cost = 1
+		
+		available_if_capitulated = yes 
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus OAP_power_cemented"
+			
 			
 		}
 }
 
+##############
+###Charming###
+##############
+
+#Ousting the Traitors
+shared_focus = {
+		id = OAP_ousting_traitors
+		icon = GFX_goal_coffee_boom
+		x = 12
+		y = 2
+		cost = 1
+		
+		available_if_capitulated = yes 
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus OAP_ousting_traitors"
+			
+		}
+}
+
+##############
+###Farsight###
+##############
+
+#Call up the Rangers
+shared_focus = {
+		id = OAP_call_up_rangers
+		icon = GFX_goal_coffee_boom
+		x = 12
+		y = 0
+		cost = 1.43
+		
+		available_if_capitulated = yes 
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus OAP_call_up_rangers"
+			add_manpower = 128
+			hidden_effect = {clr_country_flag = slavery_allowed}
+		}
+}
+
+#Azurian Volunteers
+shared_focus = {
+		id = OAP_azurian_volunteers
+		icon = GFX_goal_coffee_boom
+		x = -2
+		y = 1
+		cost = 1.43
+		relative_position_id = OAP_call_up_rangers
+		prerequisite = { focus = OAP_call_up_rangers}
+		available_if_capitulated = yes 
+		
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus OAP_azurian_volunteers"
+			add_equipment_to_stockpile = { type = support_equipment amount = 51 producer = OWE }
+			add_equipment_to_stockpile = { type = ballistic_equipment_3 amount = 46 producer = OWE }
+			add_equipment_to_stockpile = { type = spec_ops_equipment_1 amount = 82 producer = OWE }
+		}
+}
+
+#Free Slaves in the Army
+shared_focus = {
+		id = OAP_slave_conscripts
+		icon = GFX_goal_coffee_boom
+		x = 0
+		y = 1
+		cost = 1.43
+		relative_position_id = OAP_call_up_rangers
+		prerequisite = { focus = OAP_call_up_rangers}
+		available_if_capitulated = yes 
+		
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus OAP_slave_conscripts"
+			division_template = {
+	            name = "Freed Slaves"
+	                is_locked = no
+	                    regiments = {
+		                    militia = { x = 0 y = 0 }
+							militia = { x = 0 y = 1 }
+							militia = { x = 1 y = 0 }
+							militia = { x = 1 y = 1 }
+	                    }
+                    }
+			599 = { 
+				    create_unit = {
+						division = "name = \"Sporktacus Brigade\" division_template = \"Freed Slaves\" start_experience_factor = 0.05 start_equipment_factor = 0.9"
+						owner = ROOT
+					}
+					create_unit = {
+						division = "name = \"Hovel Brigade\" division_template = \"Freed Slaves\" start_experience_factor = 0.05 start_equipment_factor = 0.9"
+						owner = ROOT
+					}
+				}
+		}
+}
+
+#The Armories of Desert's Gate
+shared_focus = {
+		id = OAP_desert_gate_armories
+		icon = GFX_goal_coffee_boom
+		x = 2
+		y = 1
+		cost = 1.43
+		relative_position_id = OAP_call_up_rangers
+		prerequisite = { focus = OAP_call_up_rangers}
+		available_if_capitulated = yes 
+		
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus OAP_desert_gate_armories"
+			599 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = arms_factory
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+}
+
+#The Lichentown Gamble
+shared_focus = {
+		id = OAP_lichentown_gamble
+		icon = GFX_goal_coffee_boom
+		x = 1
+		y = 2
+		cost = 1.43
+		relative_position_id = OAP_call_up_rangers
+		prerequisite = { focus = OAP_call_up_rangers}
+		available_if_capitulated = yes 
+		
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus OAP_lichentown_gamble"
+			213 = { 
+				    create_unit = {
+						division = "name = \"Sporktacus Brigade\" division_template = \"Rangers\" start_experience_factor = 0.8 start_equipment_factor = 0.9"
+						owner = ROOT
+					}
+					
+				}
+		}
+}
+
+#Collect the Ponies' Guns
+shared_focus = {
+		id = OAP_ranger_pony_guns
+		icon = GFX_goal_coffee_boom
+		x = -1
+		y = 2
+		cost = 1.43
+		relative_position_id = OAP_call_up_rangers
+		prerequisite = { focus = OAP_call_up_rangers}
+		available_if_capitulated = yes 
+		
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus OAP_ranger_pony_guns"
+			add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 189 producer = OWE }
+		}
+}
+
+#The Rangers Reign Supreme
+shared_focus = {
+		id = OAP_rangers_supreme
+		icon = GFX_goal_coffee_boom
+		x = 0
+		y = 3
+		cost = 4.29
+		relative_position_id = OAP_call_up_rangers
+		prerequisite = { focus = OAP_ranger_pony_guns focus = OAP_lichentown_gamble focus = OAP_slave_conscripts focus = OAP_azurian_volunteers focus = OAP_desert_gate_armories}
+		available_if_capitulated = yes 
+		
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus OAP_ranger_pony_guns"
+			
+		}
+}
 
 
 

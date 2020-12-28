@@ -1,5 +1,7 @@
 ﻿add_namespace = oldappleloosa
 add_namespace = oldapplestart
+add_namespace = oldappleranger
+add_namespace = oldapplered
 
 country_event = {
  	id = oldappleloosa.1
@@ -155,4 +157,445 @@ country_event = {
 		add_stability = 0.15
 	}
 	
+}
+
+country_event = {
+ 	id = oldapplestart.3
+ 	title = oldapplestart.3.t
+ 	desc = oldapplestart.3.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = oldapplestart.3.a
+		ai_chance = { 
+			factor = 50		
+		}
+		596 = {
+			add_extra_state_shared_building_slots = 1 add_building_construction = { type = industrial_complex instant_build = yes level = 1}
+		}
+	}
+	option = {
+		name = oldapplestart.3.b
+		ai_chance = { 
+			factor = 50		
+		}
+		add_ideas = training_law_mercenaries
+	}
+	
+	
+}
+
+country_event = {
+ 	id = oldapplestart.4
+ 	title = oldapplestart.4.t
+ 	desc = oldapplestart.4.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = oldapplestart.4.a
+		ai_chance = { 
+			factor = 50		
+		}
+	}
+	option = {
+		name = oldapplestart.4.b
+		ai_chance = { 
+			factor = 50		
+		}
+		OAP_lower_filly_influence = yes
+		custom_effect_tooltip = OAP_lower_ranger_anger_tt
+			subtract_from_variable = {
+				var = ranger_anger
+				value = 1
+			}
+		add_popularity = { ideology = continuation popularity = 0.05 }
+	}
+	
+	
+}
+
+country_event = {
+ 	id = oldapplestart.5
+ 	title = oldapplestart.5.t
+ 	desc = oldapplestart.5.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		trigger = {
+			check_variable = {
+                        ranger_anger < 1
+                    }
+			continuation > 0.40
+		}
+		name = oldapplestart.5.a
+		ai_chance = { 
+			factor = 500000		
+		}
+		custom_effect_tooltip = OAP_rangers_like_you_tt
+		country_event = oldapplestart.6
+	}
+	option = {
+		name = oldapplestart.5.b
+		ai_chance = { 
+			factor = 5		
+		}
+		hidden_effect = {
+			country_event = { 
+			    id = oldapplestart.7
+				days = 10 
+			}
+		}
+	}
+	
+	
+}
+
+country_event = {
+ 	id = oldapplestart.6
+ 	title = oldapplestart.6.t
+ 	desc = oldapplestart.6.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = oldapplestart.6.a
+		ai_chance = { 
+			factor = 50	
+		}
+		custom_effect_tooltip = OAP_rangers_allow_integration_tt
+		add_popularity = { ideology = continuation popularity = 0.08 }
+		add_popularity = { ideology = visionary popularity = 0.08 }
+		set_country_flag = OAP_ranger_integration_allowed
+	}
+}
+
+country_event = {
+ 	id = oldapplestart.7
+ 	title = oldapplestart.7.t
+ 	desc = oldapplestart.7.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = oldapplestart.7.a
+		ai_chance = { 
+			factor = 50	
+		}
+		hidden_effect = {
+			country_event = { 
+			    id = oldapplestart.8
+				days = 4
+			}
+		}
+	}
+}
+
+country_event = {
+ 	id = oldapplestart.8
+ 	title = oldapplestart.8.t
+ 	desc = oldapplestart.8.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = oldapplestart.8.a
+		ai_chance = { 
+			factor = 50	
+		}
+		
+		start_civil_war = {
+				ruling_party = destruction
+				ideology = Visionary
+				size = 0.2
+				capital = 599
+				states = { 111 599 }
+				keep_political_leader = yes
+			}
+		hidden_effect = {
+			random_other_country = {
+			limit = { 
+			    original_tag = OAP
+				has_government = visionary
+			}
+				retire_country_leader = yes
+				create_country_leader = {
+				name = "Ranger-General Farsight"
+				picture = "Farsight.tga"
+				expire = "1965.1.1"
+				ideology = justice
+				traits = {}
+				}
+			}
+		}
+		
+	}
+	option = {
+		name = oldapplestart.8.b
+		ai_chance = { 
+			factor = 50	
+		}
+		hidden_effect = {set_capital = 599}
+		start_civil_war = {
+				ruling_party = visionary
+				ideology = Destruction
+				size = 0.9
+				capital = 596
+				states = { 67 596 213 205 587 }
+				keep_political_leader = yes
+			}
+		hidden_effect = {
+			random_other_country = {
+			limit = { 
+			    original_tag = OAP
+				has_government = destruction
+			}
+				retire_country_leader = yes
+				create_country_leader = {
+				name = "Steel Shackles"
+				picture = "Steel_Shackles.tga"
+				expire = "1965.1.1"
+				ideology = slaver
+				traits = {}
+				}
+				
+			}
+			load_focus_tree = OAP_ranger_tree
+		}
+		
+	}
+}
+
+country_event = {
+ 	id = oldapplered.1
+ 	title = oldapplered.1.t
+ 	desc = oldapplered.1.d
+	picture = GFX_event_test
+
+	trigger = {
+		has_civil_war = yes
+		original_tag = OAP
+		government = destruction
+		is_ai = yes
+	}
+ 	fire_only_once = yes
+
+	option = {
+		name = oldapplered.1.a
+		ai_chance = { 
+			factor = 50	
+		}
+		division_template = {
+	            name = "Reserves"
+	                is_locked = no
+	                    regiments = {
+		                    militia = { x = 0 y = 0 }
+							militia = { x = 0 y = 1 }
+							militia = { x = 1 y = 0 }
+							militia = { x = 1 y = 1 }
+	                    }
+                    }
+			597 = { 
+				    create_unit = {
+						division = "name = \"Reserves\" division_template = \"Reserves\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+					create_unit = {
+						division = "name = \"Reserves\" division_template = \"Reserves\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+					create_unit = {
+						division = "name = \"Reserves\" division_template = \"Reserves\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+					create_unit = {
+						division = "name = \"Reserves\" division_template = \"Reserves\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+					create_unit = {
+						division = "name = \"Reserves\" division_template = \"Reserves\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+					create_unit = {
+						division = "name = \"Reserves\" division_template = \"Reserves\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+				}
+	}
+}
+
+country_event = {
+ 	id = oldappleranger.1
+ 	title = oldappleranger.1.t
+ 	desc = oldappleranger.1.d
+	picture = GFX_event_test
+
+	trigger = {
+		has_civil_war = yes
+		original_tag = OAP
+		government = visionary
+	}
+
+	option = {
+		name = oldappleranger.1.a
+		ai_chance = { 
+			factor = 50	
+		}
+		custom_effect_tooltip = OAP_rangers_civil_war_start_tt
+		hidden_effect = {
+			IF = {
+				limit = {is_ai = yes}
+			division_template = {
+	            name = "Reserves"
+	                is_locked = no
+	                    regiments = {
+		                    militia = { x = 0 y = 0 }
+							militia = { x = 0 y = 1 }
+							militia = { x = 1 y = 0 }
+							militia = { x = 1 y = 1 }
+	                    }
+                    }
+			111 = { 
+				    create_unit = {
+						division = "name = \"Dead Orchard Reserves\" division_template = \"Reserves\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+					create_unit = {
+						division = "name = \"2nd Dead Orchard Reserves\" division_template = \"Reserves\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+				}
+			}
+			division_template = {
+	            name = "Rangers"
+	            is_locked = no
+	                regiments = {
+		                spec_ops = { x = 0 y = 0 }
+						spec_ops = { x = 0 y = 1 }
+						spec_ops = { x = 1 y = 0 }
+						spec_ops = { x = 1 y = 1 }
+						spec_ops = { x = 0 y = 2 }
+	                }
+            }
+			IF = {
+				limit = {
+					check_variable = {
+                    ranger_military = 1
+					}
+				}
+				599 = {
+					create_unit = {
+						division = "name = \"1st Ranger-Team\" division_template = \"Rangers\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+                    ranger_military = 2
+					}
+				}
+				599 = {
+					create_unit = {
+						division = "name = \"1st Ranger-Team\" division_template = \"Rangers\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+					create_unit = {
+						division = "name = \"2nd Ranger-Team\" division_template = \"Rangers\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+                    ranger_military = 3
+					}
+				}
+				599 = {
+					create_unit = {
+						division = "name = \"1st Ranger-Team\" division_template = \"Rangers\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+					create_unit = {
+						division = "name = \"2nd Ranger-Team\" division_template = \"Rangers\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+					create_unit = {
+						division = "name = \"3rd Ranger-Team\" division_template = \"Rangers\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+                    ranger_military = 4
+					}
+				}
+				599 = {
+					create_unit = {
+						division = "name = \"1st Ranger-Team\" division_template = \"Rangers\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+					create_unit = {
+						division = "name = \"2nd Ranger-Team\" division_template = \"Rangers\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+					create_unit = {
+						division = "name = \"3rd Ranger-Team\" division_template = \"Rangers\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+					create_unit = {
+						division = "name = \"4th Ranger-Team\" division_template = \"Rangers\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					check_variable = {
+                    ranger_military > 4
+					}
+				}
+				599 = {
+					create_unit = {
+						division = "name = \"1st Ranger-Team\" division_template = \"Rangers\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+					create_unit = {
+						division = "name = \"2nd Ranger-Team\" division_template = \"Rangers\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+					create_unit = {
+						division = "name = \"3rd Ranger-Team\" division_template = \"Rangers\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+					create_unit = {
+						division = "name = \"4th Ranger-Team\" division_template = \"Rangers\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+					create_unit = {
+						division = "name = \"5th Ranger-Team\" division_template = \"Rangers\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+				}
+			}
+		}
+	}
 }
