@@ -2,7 +2,7 @@
 shared_focus = { 
 		id = MSR_Starting_Focus
 		icon = GFX_goal_stg_nukes
-		x = 4
+		x = 10
 		y = 0
 		cost = 1.5
 
@@ -105,444 +105,28 @@ shared_focus {
 }
 
 # REMOVE #s WHEN RE-ENABLING THE OTHER PATHS
-##Finishing the Tree
-#shared_focus {
-#	id = MSR_Finished
-#	#icon = GFX_KHA_focus_backstab
-#	icon = GFX_goal_final_decision
-#	x = 4
-#	y = 3
-#	cost = 1.5
-#
-#	available_if_capitulated = yes 
-#	prerequisite = { focus = MSR_from_the_Waste }
-#	prerequisite = { focus = MSR_Reorganizing_The_Rangers}
-#	prerequisite = { focus = MSR_Strengthing_Control }
-#	ai_will_do = { 
-#		factor = 300
-#	} 
-#
-#	completion_reward = {
-#		log = "[GetDateText]: [Root.GetName]: Focus MSR_Finished"
-#	}
-#}
-
-
-##### Army Tree ######
-
-# Manehatten raiders need to be targeted 
-# Have focus for Empire
-
-shared_focus = { 
-		id = MSR_Army_Reorganization
-		icon = GFX_goal_army_reorganization
-		x = 27
-		y = 10
-		cost = 8.58
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 1
-		}
-
-		#prerequisite = { Focus = MSR_Finished }
-		#mutually_exclusive = { focus = MSR_River }
-		#mutually_exclusive = { focus = MSR_Crossroads }
-		#mutually_exclusive = { focus = MSR_Hooves }
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus MSR_Army_Reorganization"
-			army_experience = 25
-		}
-}
-
-### Left Branch ###
-
-shared_focus = { 
-		id = MSR_Combat_Log
-		icon = GFX_goal_generic_data_focus
-		relative_position_id = MSR_Army_Reorganization
-		x = -8
-		y = 1
-		cost = 8.58
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 1
-		}
-
-		prerequisite = { Focus = MSR_Army_Reorganization }
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus MSR_Combat_Log"
-			add_tech_bonus = {
-			name = doctrine_bonus
-			bonus = 0.8
-			uses = 2
-			category = land_doctrine
-			}
-		}
-}
-
-shared_focus = { 
-		id = MSR_Raider_Wars
-		icon = GFX_goal_raider_war
-		relative_position_id = MSR_Combat_Log
-		x = 0
-		y = 1
-		cost = 8.58
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 1
-		}
-
-		prerequisite = { Focus = MSR_Combat_Log }
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus MSR_Raider_Wars"
-			add_tech_bonus = {
-			name = doctrine_bonus
-			bonus = 0.8
-			uses = 2
-			category = land_doctrine
-			}
-		}
-}
-
-shared_focus = { 
-		id = MSR_Combat_Simulation
-		icon = GFX_goal_BOS_generic_research
-		relative_position_id = MSR_Raider_Wars
-		x = 0
-		y = 1
-		cost = 8.58
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 1
-		}
-
-		prerequisite = { Focus = MSR_Raider_Wars }
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus MSR_Combat_Simulation"
-			add_tech_bonus = {
-			name = doctrine_bonus
-			bonus = 0.8
-			uses = 2
-			category = land_doctrine
-			}
-		}
-}
-
-### Left Inner Branch ###
-
-shared_focus = { 
-		id = MSR_Reverse_Engineering
-		icon = GFX_goal_generic_laser_pistol
-		relative_position_id = MSR_Army_Reorganization
-		x = -5
-		y = 1
-		cost = 8.58
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 1
-		}
-
-		prerequisite = { Focus = MSR_Army_Reorganization }
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus MSR_Reverse_Engineering"
-			add_ideas = MSR_inf_eq_red_idea
-		}
-}
-
-shared_focus = { 
-		id = MSR_Old_World
-		icon = GFX_goal_generic_laser_rifle_1
-		relative_position_id = MSR_Reverse_Engineering
-		x = -1
-		y = 1
-		cost = 8.58
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 1
-		}
-
-		prerequisite = { Focus = MSR_Reverse_Engineering }
-		mutually_exclusive = { focus = MSR_New_World }
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus MSR_Old_World"
-			swap_ideas = { remove_idea = MSR_inf_eq_red_idea add_idea = MSR_inf_eq_red_idea1}
-		}
-}
-
-shared_focus = { 
-		id = MSR_New_World
-		icon = GFX_goal_generic_laser_ins_rifle_1
-		relative_position_id = MSR_Reverse_Engineering
-		x = 1
-		y = 1
-		cost = 8.58
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 1
-		}
-
-		prerequisite = { Focus = MSR_Reverse_Engineering }
-		mutually_exclusive = { focus = MSR_Old_World }
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus MSR_New_World"
-			swap_ideas = { remove_idea = MSR_inf_eq_red_idea add_idea = MSR_inf_eq_red_idea2}
-		}
-}
-
-### Center Branch ###
-
-shared_focus = { 
-		id = MSR_Routine_Maintenance
-		icon = GFX_goal_generic_BOS_focus_t45d_production
-		relative_position_id = MSR_Army_Reorganization
-		x = 0
-		y = 1
-		cost = 8.58
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 1
-		}
-
-		prerequisite = { Focus = MSR_Army_Reorganization }
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus MSR_Routine_Maintenance"
-			add_ideas = MSR_power_armor_red_idea
-		}
-}
-
-shared_focus = { 
-		id = MSR_Streamlined_Parts
-		icon = GFX_goal_streamlined_parts
-		relative_position_id = MSR_Routine_Maintenance
-		x = -1
-		y = 1
-		cost = 8.58
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 1
-		}
-
-		prerequisite = { Focus = MSR_Routine_Maintenance }
-		mutually_exclusive = { focus = MSR_Reinforced_Alloys }
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus MSR_Streamlined_Parts"
-			swap_ideas = { remove_idea = MSR_power_armor_red_idea add_idea = MSR_power_armor_red_idea1}
-		}
-}
-
-shared_focus = { 
-		id = MSR_Reinforced_Alloys
-		icon = GFX_goal_reinforced_alloys
-		relative_position_id = MSR_Routine_Maintenance
-		x = 1
-		y = 1
-		cost = 8.58
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 1
-		}
-
-		prerequisite = { Focus = MSR_Routine_Maintenance }
-		mutually_exclusive = { focus = MSR_Streamlined_Parts }
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus MSR_Reinforced_Alloys"
-			swap_ideas = { remove_idea = MSR_power_armor_red_idea add_idea = MSR_power_armor_red_idea2}
-		}
-}
-
-### Right Inner Branch ###
-
-shared_focus = { 
-		id = MSR_PBF
-		icon = GFX_goal_generic_robots_focus
-		relative_position_id = 	MSR_Army_Reorganization
-		x = 5
-		y = 1
-		cost = 8.58
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 1
-		}
-
-		prerequisite = { Focus = MSR_Army_Reorganization }
-		#mutually_exclusive = { focus = MSR_River }
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus MSR_PBF"
-			add_tech_bonus = {
-			name = robotics_tech
-			bonus = 1.0
-			uses = 2
-			category = robotics_tech
-			}
-		}
-}
-
-shared_focus = { 
-		id = MSR_Legion_Of_Steel
-		icon = GFX_goal_legions_of_steel
-		relative_position_id = MSR_PBF
-		x = -1
-		y = 1
-		cost = 8.58
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 1
-		}
-
-		prerequisite = { Focus = MSR_PBF }
-		mutually_exclusive = { focus = MSR_Mobile_Weapon_System }
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus MSR_Legion_Of_Steel"
-			add_tech_bonus = {
-			name = robotics_tech
-			bonus = 1.5
-			uses = 1
-			category = light_robotics_tech
-			}
-			add_ideas = MSR_robot_support_idea
-		}
-}
-
-shared_focus = { 
-		id = MSR_Mobile_Weapon_System
-		icon = GFX_goal_generic_bot_sentry
-		relative_position_id = MSR_PBF
-		x = 1
-		y = 1
-		cost = 8.58
-
-		available_if_capitulated = yes
-		ai_will_do = { 
-			factor = 1
-		}
-
-		prerequisite = { Focus = MSR_PBF }
-		mutually_exclusive = { focus = MSR_Legion_Of_Steel }
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus MSR_Mobile_Weapon_System"
-			add_tech_bonus = {
-			name = robotics_tech
-			bonus = 1.5
-			uses = 1
-			category = heavy_robotics_tech
-			}
-			add_ideas = MSR_robot_heavy_idea
-		}
-}
-
-### Right Branch ###
-
-shared_focus = { 
-		id = MSR_Promoting_Initiates
-		icon = GFX_goal_promote_initiates
-		relative_position_id = MSR_Army_Reorganization
-		x = 8
-		y = 1
-		cost = 8.58
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 1
-		}
-
-		prerequisite = { Focus = MSR_Army_Reorganization }
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus MSR_Promoting_Initiates"
-			add_manpower = 350
-		}
-}
-
-shared_focus = { 
-		id = MSR_Wasteland_Conscription
-		icon = GFX_goal_conscription
-		relative_position_id = MSR_Promoting_Initiates
-		x = 0
-		y = 1
-		cost = 8.58
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 1
-		}
-
-		prerequisite = { Focus = MSR_Promoting_Initiates }
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus MSR_Wasteland_Conscription"
-			add_manpower = 400
-		}
-}
-
-shared_focus = { 
-		id = MSR_Multirole_Training
-		icon = GFX_goal_multi_role_training
-		relative_position_id = MSR_Wasteland_Conscription
-		x = 0
-		y = 1
-		cost = 8.58
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 1
-		}
-
-		prerequisite = { Focus = MSR_Wasteland_Conscription }
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus MSR_Multirole_Training"
-			add_manpower = 450
-		}
-}
-
-### Converge Branch ###
-
-shared_focus = { 
-		id = MSR_Rangers_Lead_The_Way
-		icon = GFX_goal_rangers_lead_the_way
-		relative_position_id = MSR_Routine_Maintenance
-		x = 0
-		y = 3
-		cost = 8.58
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 1
-		}
-
-		prerequisite = { Focus = MSR_Streamlined_Parts OR = MSR_Reinforced_Alloys }
-		prerequisite = { Focus = MSR_Old_World OR = MSR_New_World }
-		prerequisite = { Focus = MSR_Legion_Of_Steel OR = MSR_Mobile_Weapon_System }
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus MSR_Rangers_Lead_The_Way"
-			add_ideas = MSR_ad_victoriam_idea
-		}
+#Finishing the Tree
+shared_focus {
+	id = MSR_Finished
+	#icon = GFX_KHA_focus_backstab
+	icon = GFX_goal_final_decision
+	relative_position_id = MSR_Reorganizing_The_Rangers
+	x = 0
+	y = 1
+	cost = 1.5
+
+	available_if_capitulated = yes 
+	prerequisite = { focus = MSR_from_the_Waste }
+	prerequisite = { focus = MSR_Reorganizing_The_Rangers}
+	prerequisite = { focus = MSR_Strengthing_Control }
+	ai_will_do = { 
+		factor = 300
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus MSR_Finished"
+		country_event = MSR.6
+	}
 }
 
 #####Leader Branch ######
@@ -552,25 +136,23 @@ shared_focus = {
 
 shared_focus = { 
 		id = MSR_Cottage
-		icon = GFX_goal_Cottage_Cheese_Stays_Elder_
+		icon = GFX_goal_MSR_rangers_cottage_cheese
 
-		relative_position_id = MSR_Reorganizing_The_Rangers ### CHANGE THIS TO:   relative_position_id = MSR_Finished ###
-		x = 0 #FIX THE POSITIONS, OR GO GET LAUNDRY TO DO IT FOR YOU
+		relative_position_id = MSR_Finished ### CHANGE THIS TO:   relative_position_id = MSR_Finished ###
+		x = -6 #FIX THE POSITIONS, OR GO GET LAUNDRY TO DO IT FOR YOU
 		y = 1
 		cost = 2.9
 
-		available_if_capitulated = yes 
+		available_if_capitulated = yes
+		available = {
+			has_country_flag = cottage_cheese_wins_MSR
+		}
 		ai_will_do = { 
 			factor = 1
 		}
 
-		### REMOVE THESE THREE LINES WHEN RE-ENABLING ###
-		prerequisite = { focus = MSR_from_the_Waste }
-		prerequisite = { focus = MSR_Reorganizing_The_Rangers}
-		prerequisite = { focus = MSR_Strengthing_Control }
-
 		### REMOVE #s FROM THESE vvvvv ###
-		#prerequisite = { Focus = MSR_Finished }
+		prerequisite = { Focus = MSR_Finished }
 		#mutually_exclusive = { focus = MSR_River }
 		#mutually_exclusive = { focus = MSR_Crossroads }
 		#mutually_exclusive = { focus = MSR_Hooves }
@@ -583,9 +165,10 @@ shared_focus = {
 
 shared_focus = { 
 		id = MSR_River
-		icon = GFX_goal_RA_becomes_an_elder
-		x = 10
-		y = 4
+		icon = GFX_goal_MSR_rangers_river_autumn
+		relative_position_id = MSR_Finished ### CHANGE THIS TO:   relative_position_id = MSR_Finished ###
+		x = 0 #FIX THE POSITIONS, OR GO GET LAUNDRY TO DO IT FOR YOU
+		y = 1
 		cost = 1.5
 
 		available_if_capitulated = yes 
@@ -594,13 +177,13 @@ shared_focus = {
 		}
 
 		### REMOVE #s FROM THESE vvvvv ###
-		#prerequisite = { Focus = MSR_Finished }
+		prerequisite = { Focus = MSR_Finished }
 		#mutually_exclusive = { focus = MSR_Crossroads }
 		#mutually_exclusive = { focus = MSR_Hooves }
 		#mutually_exclusive = { focus = MSR_Cottage }
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: MSR_River "
+			log = "[GetDateText]: [Root.GetName]: MSR_River"
 			#country_event = {  }
 
 		}
@@ -608,25 +191,29 @@ shared_focus = {
 
 shared_focus = { 
 		id = MSR_Hooves
-		icon = GFX_goal_Steel_Hooves_Becomes_Elder
-		x = 16
-		y = 4
+		icon = GFX_goal_MSR_rangers_steelhooves
+		relative_position_id = MSR_Finished ### CHANGE THIS TO:   relative_position_id = MSR_Finished ###
+		x = 6 #FIX THE POSITIONS, OR GO GET LAUNDRY TO DO IT FOR YOU
+		y = 1
 		cost = 1.5
 
 		available_if_capitulated = yes
+		available = {
+			has_country_flag = steel_hooves_wins_MSR
+		}
 		ai_will_do = { 
 			factor = 1
 		}
 
 		### REMOVE #s FROM THESE vvvvv ###
-		#prerequisite = { Focus = MSR_Finished }
+		prerequisite = { Focus = MSR_Finished }
 		#mutually_exclusive = { focus = MSR_River }
 		#mutually_exclusive = { focus = MSR_Crossroads }
 		#mutually_exclusive = { focus = MSR_Cottage }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Hooves"
-			#country_event = {  }
+			add_political_power = 100
 
 		}
 }
@@ -985,8 +572,11 @@ shared_focus = {
 		prerequisite = { Focus = MSR_Becoming_One }
 		mutually_exclusive = { focus = MSR_Failure }
 
+		
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Success"
+			custom_effect_tooltip = RED_new_focus_tree_tt
+
 			hidden_effect = {
 				retire_country_leader = yes
 				create_country_leader = {
@@ -1023,6 +613,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Failure"
+			custom_effect_tooltip = RED_new_focus_tree_tt
+			
 			hidden_effect = {
 				retire_country_leader = yes
 				create_country_leader = {
@@ -2069,9 +1661,10 @@ shared_focus = {
 
 shared_focus = { 
 		id = MSR_The_New_Dev
-		icon = GFX_goal_The_New_Elder_
-		x = 10
-		y = 5
+		icon = GFX_goal_RA_becomes_an_elder
+		relative_position_id = MSR_River
+		x = 0
+		y = 1
 		cost = 1.5
 
 		available_if_capitulated = yes 
@@ -2093,8 +1686,9 @@ shared_focus = {
 shared_focus = { 
 		id = MSR_Secure_Our_Tech
 		icon = GFX_goal_steel_rangers
-		x = 9
-		y = 7
+		relative_position_id = MSR_The_New_Dev
+		x = -1
+		y = 1
 		cost = 1.5
 
 		available_if_capitulated = yes 
@@ -2114,8 +1708,9 @@ shared_focus = {
 shared_focus = { 
 		id = MSR_Seize_The_Memes
 		icon = GFX_goal_steel_rangers
-		x = 9
-		y = 8
+		relative_position_id = MSR_Secure_Our_Tech
+		x = 0
+		y = 1
 		cost = 1.5
 
 		available_if_capitulated = yes 
@@ -2135,8 +1730,9 @@ shared_focus = {
 shared_focus = { 
 		id = MSR_Scribe_Support
 		icon = GFX_goal_steel_rangers
-		x = 9
-		y = 10
+		relative_position_id = MSR_Seize_The_Memes
+		x = 0
+		y = 1
 		cost = 1.5
 
 		available_if_capitulated = yes 
@@ -2156,8 +1752,9 @@ shared_focus = {
 shared_focus = { 
 		id = MSR_Storm_The_Armory
 		icon = GFX_goal_steel_rangers
-		x = 9
-		y = 11
+		relative_position_id = MSR_Scribe_Support
+		x = 0
+		y = 1
 		cost = 1.5
 
 		available_if_capitulated = yes 
@@ -2179,8 +1776,9 @@ shared_focus = {
 shared_focus = { 
 		id = MSR_Gather_The_Rangers
 		icon = GFX_goal_steel_rangers
-		x = 11
-		y = 7
+		relative_position_id = MSR_The_New_Dev
+		x = 1
+		y = 1
 		cost = 1.5
 
 		available_if_capitulated = yes 
@@ -2200,8 +1798,9 @@ shared_focus = {
 shared_focus = { 
 		id = MSR_Secure_Loyalty
 		icon = GFX_goal_steel_rangers
-		x = 11
-		y = 8
+		relative_position_id = MSR_Gather_The_Rangers
+		x = 0
+		y = 1
 		cost = 1.5
 
 		available_if_capitulated = yes 
@@ -2212,7 +1811,7 @@ shared_focus = {
 		prerequisite = { Focus = MSR_Gather_The_Rangers }
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus MSR_Secure_Loyalty "
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_Secure_Loyalty"
 			#country_event = {  }
 
 		}
@@ -2221,8 +1820,9 @@ shared_focus = {
 shared_focus = { 
 		id = MSR_Dissent
 		icon = GFX_goal_steel_rangers
-		x = 11
-		y = 10
+		relative_position_id = MSR_Secure_Loyalty
+		x = 0
+		y = 1
 		cost = 1.5
 
 		available_if_capitulated = yes 
@@ -2242,8 +1842,9 @@ shared_focus = {
 shared_focus = { 
 		id = MSR_Night_Of_Long_Knives
 		icon = GFX_goal_steel_rangers
-		x = 11
-		y = 11
+		relative_position_id = MSR_Dissent
+		x = 0
+		y = 1
 		cost = 1.5
 
 		available_if_capitulated = yes 
@@ -2265,8 +1866,9 @@ shared_focus = {
 shared_focus = { 
 		id = MSR_Thorn_In_My_Side
 		icon = GFX_goal_steel_rangers
-		x = 10
-		y = 13
+		relative_position_id = MSR_The_New_Dev
+		x = 0
+		y = 5
 		cost = 1.5
 
 		available_if_capitulated = yes 
@@ -2287,8 +1889,9 @@ shared_focus = {
 shared_focus = { 
 		id = MSR_Crushing_The_Rebellion
 		icon = GFX_goal_steel_rangers
-		x = 10
-		y = 14
+		relative_position_id = MSR_Thorn_In_My_Side
+		x = 0
+		y = 1
 		cost = 1.5
 
 		available_if_capitulated = yes 
@@ -2308,8 +1911,9 @@ shared_focus = {
 shared_focus = { 
 		id = MSR_Cementing_Controls
 		icon = GFX_goal_steel_rangers
-		x = 10
-		y = 17
+		relative_position_id = MSR_Crushing_The_Rebellion
+		x = 0
+		y = 1
 		cost = 1.5
 
 		available_if_capitulated = yes 
@@ -3475,8 +3079,9 @@ shared_focus = {
 shared_focus = { 
 		id = MSR_Hold_Speech
 		icon = GFX_goal_steel_rangers
-		x = 16
-		y = 5
+		relative_position_id = MSR_Hooves
+		x = 0
+		y = 1
 		cost = 1.5
 
 		available_if_capitulated = yes 
@@ -3488,7 +3093,9 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Hold_Speech"
-			#country_event = {  }
+			country_event = {
+				id = MSR.69
+			}
 
 		}
 }
@@ -3496,8 +3103,9 @@ shared_focus = {
 shared_focus = { 
 		id = MSR_Talk_With_Paladins
 		icon = GFX_goal_steel_rangers
-		x = 13
-		y = 5
+		relative_position_id = MSR_Hooves
+		x = -3
+		y = 1
 		cost = 1.5
 
 		available_if_capitulated = yes 
@@ -3509,16 +3117,18 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Talk_With_Paladins"
-			#country_event = {  }
-
+			country_event = {
+				id = MSR.70
+			}
 		}
 }
 
 shared_focus = { 
 		id = MSR_Meet_With_Scribes
 		icon = GFX_goal_steel_rangers
-		x = 19
-		y = 5
+		relative_position_id = MSR_Hooves
+		x = 3
+		y = 1
 		cost = 1.5
 
 		available_if_capitulated = yes 
@@ -3530,7 +3140,9 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Meet_With_Scribes"
-			#country_event = {  }
+			country_event = {
+				id = MSR.71
+			}
 
 		}
 }
@@ -3538,8 +3150,9 @@ shared_focus = {
 shared_focus = { 
 		id = MSR_Exile_Extremists
 		icon = GFX_goal_steel_rangers
-		x = 14
-		y = 7
+		relative_position_id = MSR_Hold_Speech
+		x = -2
+		y = 1
 		cost = 1.5
 
 		available_if_capitulated = yes 
@@ -3553,7 +3166,9 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Exile_Extremists"
-			#country_event = {  }
+			custom_effect_tooltip = MSR_river_lock_tt
+        	set_country_flag = river_autumn_not_allowed
+        	add_manpower = -500
 
 		}
 }
@@ -3561,8 +3176,9 @@ shared_focus = {
 shared_focus = { 
 		id = MSR_Rid_The_Old_Ways
 		icon = GFX_goal_steel_rangers
-		x = 18
-		y = 7
+		relative_position_id = MSR_Hold_Speech
+		x = 2
+		y = 1
 		cost = 1.5
 
 		available_if_capitulated = yes 
@@ -3576,16 +3192,24 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Rid_The_Old_Ways"
-			#country_event = {  }
-
+			add_popularity = {
+			    ideology = continuation
+			    popularity = -0.15
+			}
+			swap_ideas = {
+				remove_idea = selective_recruitment
+				add_idea = steelhooves_recruitment
+			}
+		
 		}
 }
 
 shared_focus = { 
 		id = MSR_Rally_The_Rangers
 		icon = GFX_goal_steel_rangers
-		x = 16
-		y = 8
+		relative_position_id = MSR_Hold_Speech
+		x = 0
+		y = 2
 		cost = 1.5
 
 		available_if_capitulated = yes 
@@ -3598,29 +3222,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Rally_The_Rangers"
-			#country_event = {  }
-
-		}
-}
-
-shared_focus = { 
-		id = MSR_Rally_The_Rangers
-		icon = GFX_goal_steel_rangers
-		x = 16
-		y = 10
-		cost = 1.5
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 1
-		}
-
-		prerequisite = { Focus = MSR_Exile_Extremists }
-		prerequisite = { Focus = MSR_Rid_The_Old_Ways }
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]:Focus MSR_Rally_The_Rangers"
-			#country_event = {  }
+			add_ideas = MSR_rally_rangers_idea
 
 		}
 }
@@ -3628,8 +3230,9 @@ shared_focus = {
 shared_focus = { 
 		id = MSR_Break_The_Chains
 		icon = GFX_goal_steel_rangers
-		x = 16
-		y = 13
+		relative_position_id = MSR_Rally_The_Rangers
+		x = 0
+		y = 1
 		cost = 1.5
 
 		available_if_capitulated = yes 
@@ -3641,7 +3244,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Break_The_Chains"
-			#country_event = {  }
+			add_ideas = MSR_no_chains
 
 		}
 }
@@ -3649,8 +3252,9 @@ shared_focus = {
 shared_focus = { 
 		id = MSR_Change_Our_Approach
 		icon = GFX_goal_steel_rangers
-		x = 16
-		y = 14
+		relative_position_id = MSR_Break_The_Chains
+		x = 0
+		y = 1
 		cost = 1.5
 
 		available_if_capitulated = yes 
@@ -3662,6 +3266,51 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Change_Our_Approach"
+			add_ideas = export_focus
+			ARB = {
+				country_event = {
+					id = MSR_steelhooves.1
+					days = 3
+					random = 6
+				}
+			}
+			reverse_add_opinion_modifier = {
+			    target = ARB
+			    modifier = nice_rangers
+			}
+			FRI = {
+				country_event = {
+					id = MSR_steelhooves.1
+					days = 3
+					random = 6
+				}
+			}
+			reverse_add_opinion_modifier = {
+			    target = FRI
+			    modifier = nice_rangers
+			}
+			MAR = {
+				country_event = {
+					id = MSR_steelhooves.1
+					days = 3
+					random = 6
+				}
+			}
+			reverse_add_opinion_modifier = {
+			    target = MAR
+			    modifier = nice_rangers
+			}
+			ABT = {
+				country_event = {
+					id = MSR_steelhooves.1
+					days = 3
+					random = 6
+				}
+			}
+			reverse_add_opinion_modifier = {
+			    target = ABT
+			    modifier = nice_rangers
+			}
 			#country_event = {  }
 
 		}
@@ -3670,8 +3319,9 @@ shared_focus = {
 shared_focus = { 
 		id = MSR_Our_Original_Mission
 		icon = GFX_goal_steel_rangers
-		x = 16
-		y = 17
+		relative_position_id = MSR_Change_Our_Approach
+		x = 0
+		y = 1
 		cost = 1.5
 
 		available_if_capitulated = yes 
@@ -3683,8 +3333,16 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Our_Original_Mission"
-			#country_event = {  }
+			#create_faction = MSR_STEELHOOVES_FACTION
+			add_war_support = 0.1
 
+			custom_effect_tooltip = RED_new_focus_tree_tt
+			hidden_effect = {
+				load_focus_tree = {
+					tree = ManeSr_steelhoves
+					keep_completed = yes 
+				}
+			}
 		}
 }
 
@@ -3706,7 +3364,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Steel_Rangers_Reborn"
-			#country_event = {  }
+			MSR = { set_cosmetic_tag = MSR_applejack_rangers }
 
 		}
 }
@@ -3727,7 +3385,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Allow_More_Outsiders"
-			#country_event = {  }
+			add_ideas = outsider_law_batallions
+			set_country_flag = MSR_see_outsider_laws
 
 		}
 }
@@ -3748,7 +3407,27 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Open_Up_Outside_Relations"
-			#country_event = {  }
+			add_ideas = open_borders
+			diplomatic_relation = {
+			    country = ARB
+			    relation = non_aggression_pact
+			    active = yes
+			}
+			diplomatic_relation = {
+			    country = FRI
+			    relation = non_aggression_pact
+			    active = yes
+			}
+			diplomatic_relation = {
+			    country = MAR
+			    relation = non_aggression_pact
+			    active = yes
+			}
+			diplomatic_relation = {
+			    country = ABT
+			    relation = non_aggression_pact
+			    active = yes
+			}
 
 		}
 }
@@ -3769,7 +3448,10 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Increase_Patrols"
-			#country_event = {  }
+			swap_ideas = {
+				remove_idea = MSR_rally_rangers_idea
+				add_idea = MSR_rally_rangers_idea_2
+			}
 
 		}
 }
@@ -3792,7 +3474,26 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Protecting_Wastelanders"
-			#country_event = {  }
+			diplomatic_relation = {
+			    country = ARB
+			    relation = guarantee
+			    active = yes
+			}
+			diplomatic_relation = {
+			    country = FRI
+			    relation = guarantee
+			    active = yes
+			}
+			diplomatic_relation = {
+			    country = MAR
+			    relation = guarantee
+			    active = yes
+			}
+			diplomatic_relation = {
+			    country = ABT
+			    relation = guarantee
+			    active = yes
+			}
 
 		}
 }
@@ -3813,7 +3514,74 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Support_Local_Settlement"
-			#country_event = {  }
+			642 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+				add_building_construction = {
+    				type = infrastructure
+    				level = 1
+    				instant_build = yes
+				}
+			}
+			reverse_add_opinion_modifier = {
+			    target = ARB
+			    modifier = ranger_material_support
+			}
+			601 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+				add_building_construction = {
+    				type = infrastructure
+    				level = 1
+    				instant_build = yes
+				}
+			}
+			reverse_add_opinion_modifier = {
+			    target = ABT
+			    modifier = ranger_material_support
+			}
+			18 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+				add_building_construction = {
+    				type = infrastructure
+    				level = 1
+    				instant_build = yes
+				}
+			}
+			reverse_add_opinion_modifier = {
+			    target = MAR
+			    modifier = ranger_material_support
+			}
+			39 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+				add_building_construction = {
+    				type = infrastructure
+    				level = 1
+    				instant_build = yes
+				}
+			}
+			reverse_add_opinion_modifier = {
+			    target = FRI
+			    modifier = ranger_material_support
+			}
 
 		}
 }
@@ -3836,7 +3604,10 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Incentivize_Trade"
-			#country_event = {  }
+			swap_ideas = {
+				remove_idea = MSR_rally_rangers_idea_2
+				add_idea = MSR_rally_rangers_idea_3
+			}
 
 		}
 }
@@ -3857,7 +3628,24 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Support_Local_Caravans"
-			#country_event = {  }
+			swap_ideas = {
+				remove_idea = MSR_rally_rangers_idea_3
+				add_idea = MSR_rally_rangers_idea_4
+			}
+			set_province_name = {
+			    id = 8666
+			    name = "BUCKLYN_MARKET_NAME"
+			}
+			add_victory_points = {
+			    province = 8666
+			    value = 5  
+			}
+			add_building_construction = {
+			    type = bunker
+			    level = 2
+			    instant_build = yes
+			    province = 8666
+			}
 
 		}
 }
@@ -3879,7 +3667,10 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Become_A_Force_For_Good"
-			#country_event = {  }
+			swap_ideas = {
+				remove_idea = MSR_rally_rangers_idea_4
+				add_idea = MSR_rally_rangers_idea_5
+			}
 
 		}
 }
@@ -4617,8 +4408,8 @@ shared_focus = {
 shared_focus = { 
 		id = MSR_A_City_In_Ruins
 		icon = GFX_goal_generic_scavenging_2
-		x = 23
-		y = 4
+		x = 28
+		y = 0
 		cost = 8.58
 
 		available_if_capitulated = yes 
@@ -5120,8 +4911,8 @@ shared_focus = {
 shared_focus = { 
 		id = MSR_Taking_To_The_Skies
 		icon = GFX_goal_generic_airplane
-		x = 35
-		y = 3
+		x = 40
+		y = 0
 		cost = 8.58
 
 		available_if_capitulated = yes 
@@ -5404,6 +5195,423 @@ shared_focus = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_birds_of_steel"
 			add_ideas = MSR_birds_of_steel_idea
 
+		}
+}
+
+##### Army Tree ######
+
+# Manehatten raiders need to be targeted 
+# Have focus for Empire
+
+shared_focus = { 
+		id = MSR_Army_Reorganization
+		icon = GFX_goal_army_reorganization
+		x = 33
+		y = 7
+		cost = 8.58
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 1
+		}
+
+		#prerequisite = { Focus = MSR_Finished }
+		#mutually_exclusive = { focus = MSR_River }
+		#mutually_exclusive = { focus = MSR_Crossroads }
+		#mutually_exclusive = { focus = MSR_Hooves }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_Army_Reorganization"
+			army_experience = 25
+		}
+}
+
+### Left Branch ###
+
+shared_focus = { 
+		id = MSR_Combat_Log
+		icon = GFX_goal_generic_data_focus
+		relative_position_id = MSR_Army_Reorganization
+		x = -8
+		y = 1
+		cost = 8.58
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 1
+		}
+
+		prerequisite = { Focus = MSR_Army_Reorganization }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_Combat_Log"
+			add_tech_bonus = {
+			name = doctrine_bonus
+			bonus = 0.8
+			uses = 2
+			category = land_doctrine
+			}
+		}
+}
+
+shared_focus = { 
+		id = MSR_Raider_Wars
+		icon = GFX_goal_raider_war
+		relative_position_id = MSR_Combat_Log
+		x = 0
+		y = 1
+		cost = 8.58
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 1
+		}
+
+		prerequisite = { Focus = MSR_Combat_Log }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_Raider_Wars"
+			add_tech_bonus = {
+			name = doctrine_bonus
+			bonus = 0.8
+			uses = 2
+			category = land_doctrine
+			}
+		}
+}
+
+shared_focus = { 
+		id = MSR_Combat_Simulation
+		icon = GFX_goal_BOS_generic_research
+		relative_position_id = MSR_Raider_Wars
+		x = 0
+		y = 1
+		cost = 8.58
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 1
+		}
+
+		prerequisite = { Focus = MSR_Raider_Wars }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_Combat_Simulation"
+			add_tech_bonus = {
+			name = doctrine_bonus
+			bonus = 0.8
+			uses = 2
+			category = land_doctrine
+			}
+		}
+}
+
+### Left Inner Branch ###
+
+shared_focus = { 
+		id = MSR_Reverse_Engineering
+		icon = GFX_goal_generic_laser_pistol
+		relative_position_id = MSR_Army_Reorganization
+		x = -5
+		y = 1
+		cost = 8.58
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 1
+		}
+
+		prerequisite = { Focus = MSR_Army_Reorganization }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_Reverse_Engineering"
+			add_ideas = MSR_inf_eq_red_idea
+		}
+}
+
+shared_focus = { 
+		id = MSR_Old_World
+		icon = GFX_goal_generic_laser_rifle_1
+		relative_position_id = MSR_Reverse_Engineering
+		x = -1
+		y = 1
+		cost = 8.58
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 1
+		}
+
+		prerequisite = { Focus = MSR_Reverse_Engineering }
+		mutually_exclusive = { focus = MSR_New_World }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_Old_World"
+			swap_ideas = { remove_idea = MSR_inf_eq_red_idea add_idea = MSR_inf_eq_red_idea1}
+		}
+}
+
+shared_focus = { 
+		id = MSR_New_World
+		icon = GFX_goal_generic_laser_ins_rifle_1
+		relative_position_id = MSR_Reverse_Engineering
+		x = 1
+		y = 1
+		cost = 8.58
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 1
+		}
+
+		prerequisite = { Focus = MSR_Reverse_Engineering }
+		mutually_exclusive = { focus = MSR_Old_World }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_New_World"
+			swap_ideas = { remove_idea = MSR_inf_eq_red_idea add_idea = MSR_inf_eq_red_idea2}
+		}
+}
+
+### Center Branch ###
+
+shared_focus = { 
+		id = MSR_Routine_Maintenance
+		icon = GFX_goal_generic_BOS_focus_t45d_production
+		relative_position_id = MSR_Army_Reorganization
+		x = 0
+		y = 1
+		cost = 8.58
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 1
+		}
+
+		prerequisite = { Focus = MSR_Army_Reorganization }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_Routine_Maintenance"
+			add_ideas = MSR_power_armor_red_idea
+		}
+}
+
+shared_focus = { 
+		id = MSR_Streamlined_Parts
+		icon = GFX_goal_streamlined_parts
+		relative_position_id = MSR_Routine_Maintenance
+		x = -1
+		y = 1
+		cost = 8.58
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 1
+		}
+
+		prerequisite = { Focus = MSR_Routine_Maintenance }
+		mutually_exclusive = { focus = MSR_Reinforced_Alloys }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_Streamlined_Parts"
+			swap_ideas = { remove_idea = MSR_power_armor_red_idea add_idea = MSR_power_armor_red_idea1}
+		}
+}
+
+shared_focus = { 
+		id = MSR_Reinforced_Alloys
+		icon = GFX_goal_reinforced_alloys
+		relative_position_id = MSR_Routine_Maintenance
+		x = 1
+		y = 1
+		cost = 8.58
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 1
+		}
+
+		prerequisite = { Focus = MSR_Routine_Maintenance }
+		mutually_exclusive = { focus = MSR_Streamlined_Parts }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_Reinforced_Alloys"
+			swap_ideas = { remove_idea = MSR_power_armor_red_idea add_idea = MSR_power_armor_red_idea2}
+		}
+}
+
+### Right Inner Branch ###
+
+shared_focus = { 
+		id = MSR_PBF
+		icon = GFX_goal_generic_robots_focus
+		relative_position_id = 	MSR_Army_Reorganization
+		x = 5
+		y = 1
+		cost = 8.58
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 1
+		}
+
+		prerequisite = { Focus = MSR_Army_Reorganization }
+		#mutually_exclusive = { focus = MSR_River }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_PBF"
+			add_tech_bonus = {
+			name = robotics_tech
+			bonus = 1.0
+			uses = 2
+			category = robotics_tech
+			}
+		}
+}
+
+shared_focus = { 
+		id = MSR_Legion_Of_Steel
+		icon = GFX_goal_legions_of_steel
+		relative_position_id = MSR_PBF
+		x = -1
+		y = 1
+		cost = 8.58
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 1
+		}
+
+		prerequisite = { Focus = MSR_PBF }
+		mutually_exclusive = { focus = MSR_Mobile_Weapon_System }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_Legion_Of_Steel"
+			add_tech_bonus = {
+			name = robotics_tech
+			bonus = 1.5
+			uses = 1
+			category = light_robotics_tech
+			}
+			add_ideas = MSR_robot_support_idea
+		}
+}
+
+shared_focus = { 
+		id = MSR_Mobile_Weapon_System
+		icon = GFX_goal_generic_bot_sentry
+		relative_position_id = MSR_PBF
+		x = 1
+		y = 1
+		cost = 8.58
+
+		available_if_capitulated = yes
+		ai_will_do = { 
+			factor = 1
+		}
+
+		prerequisite = { Focus = MSR_PBF }
+		mutually_exclusive = { focus = MSR_Legion_Of_Steel }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_Mobile_Weapon_System"
+			add_tech_bonus = {
+			name = robotics_tech
+			bonus = 1.5
+			uses = 1
+			category = heavy_robotics_tech
+			}
+			add_ideas = MSR_robot_heavy_idea
+		}
+}
+
+### Right Branch ###
+
+shared_focus = { 
+		id = MSR_Promoting_Initiates
+		icon = GFX_goal_promote_initiates
+		relative_position_id = MSR_Army_Reorganization
+		x = 8
+		y = 1
+		cost = 8.58
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 1
+		}
+
+		prerequisite = { Focus = MSR_Army_Reorganization }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_Promoting_Initiates"
+			add_manpower = 350
+		}
+}
+
+shared_focus = { 
+		id = MSR_Wasteland_Conscription
+		icon = GFX_goal_conscription
+		relative_position_id = MSR_Promoting_Initiates
+		x = 0
+		y = 1
+		cost = 8.58
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 1
+		}
+
+		prerequisite = { Focus = MSR_Promoting_Initiates }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_Wasteland_Conscription"
+			add_manpower = 400
+		}
+}
+
+shared_focus = { 
+		id = MSR_Multirole_Training
+		icon = GFX_goal_multi_role_training
+		relative_position_id = MSR_Wasteland_Conscription
+		x = 0
+		y = 1
+		cost = 8.58
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 1
+		}
+
+		prerequisite = { Focus = MSR_Wasteland_Conscription }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_Multirole_Training"
+			add_manpower = 450
+		}
+}
+
+### Converge Branch ###
+
+shared_focus = { 
+		id = MSR_Rangers_Lead_The_Way
+		icon = GFX_goal_rangers_lead_the_way
+		relative_position_id = MSR_Routine_Maintenance
+		x = 0
+		y = 3
+		cost = 8.58
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 1
+		}
+
+		prerequisite = { Focus = MSR_Streamlined_Parts OR = MSR_Reinforced_Alloys }
+		prerequisite = { Focus = MSR_Old_World OR = MSR_New_World }
+		prerequisite = { Focus = MSR_Legion_Of_Steel OR = MSR_Mobile_Weapon_System }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_Rangers_Lead_The_Way"
+			add_ideas = MSR_ad_victoriam_idea
 		}
 }
 
