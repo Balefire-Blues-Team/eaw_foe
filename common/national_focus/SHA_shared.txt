@@ -1795,9 +1795,10 @@ shared_focus = {
 
 		completion_reward = {
 			every_country = {
-				limit = {is_in_faction_with = SHA not = {original_tag = SHA}}
+				limit = {is_in_faction_with = SHA not = { OR = {original_tag = SHA original_tag = OAP}}}
 				country_event = shatteredhoof_ncr.1
 			}
+			if = {limit = {OAP = {is_in_faction_with = SHA}} OAP = {country_event = { id = oldappleranger.7 }}}
 			hidden_effect = {
 				country_event = {
 					id = shatteredhoof_ncr.2
@@ -2322,7 +2323,14 @@ shared_focus = {
 			}
 		}
 		will_lead_to_war_with = NAP
-		will_lead_to_war_with = OAP
+		if = {
+			limit = {
+				NOT = {
+					OAP = { is_in_faction_with = SHA}
+				}
+			}
+			will_lead_to_war_with = OAP
+		}
 		completion_reward = {
 			NAP = {
 				ROOT = {
@@ -2332,7 +2340,7 @@ shared_focus = {
 			if = {
 				limit = {
 					NOT = {
-						OAP = { is_puppet_of = SHA}
+						OAP = { is_in_faction_with = SHA}
 					}
 				}
 			country_event = {
