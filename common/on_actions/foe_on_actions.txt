@@ -208,4 +208,36 @@ on_actions = {
 			}
 		}
 	}
+
+	#FROM is war target
+	on_declare_war = {
+		effect = {
+			if = {#MATO Mutual Defense
+				limit = {
+					has_global_flag = MATO_mutal_defense_flag
+					FROM = {
+						is_in_faction_with = MSR
+						is_MATO_member = yes
+						NOT = { original_tag = ROOT }
+					}
+				}
+				log = "[GetDateText]: ROOT: [Root.GetName] FROM: [From.GetName] on_declare_war MATO Defense Pact"
+				FROM = { save_event_target_as = defender }
+				every_country = {
+					limit = {
+						NOT = { tag = FROM }
+						is_in_faction_with = FROM
+						is_subject = no
+					}
+					custom_effect_tooltip = MATO_defense_join_tt
+					hidden_effect = {
+						country_event = {
+							id = MSR_steelhooves.15
+							days = 1
+						}
+					}
+				}
+			}
+		}
+	}
 }
