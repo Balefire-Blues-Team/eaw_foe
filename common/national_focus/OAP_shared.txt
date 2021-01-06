@@ -777,7 +777,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_southwest_trade"
-			
+			add_stability = 0.04
+			custom_effect_tooltip = OAP_unlock_slave_deal_tt
 			
 		}
 }
@@ -800,8 +801,12 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_seize_slaves"
-			
-			
+			add_stability = -0.08
+			custom_effect_tooltip = foe_6_gain_slave_tt
+			add_to_variable = {
+				var = foe_slaves_var
+				value = 6
+			}
 		}
 }
 
@@ -822,8 +827,28 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_increase_imports"
-			
-			
+			custom_effect_tooltip = OAP_spend_caps_tt
+			random_list = {
+				25 = {
+					596 = {add_resource = {type = metal amount = 8}}
+				}
+				25 = {
+					596 = {add_resource = {type = energy amount = 8}}
+				}
+				15 = {
+					596 = {add_resource = {type = water amount = 6}}
+				}
+				15 = {
+					596 = {add_resource = {type = composites amount = 6}}
+				}
+				10 = {
+					596 = {add_resource = {type = circuitry amount = 4}}
+				}
+				10 = {
+					596 = {add_resource = {type = advanced amount = 4}}
+				}
+				
+			}
 		}
 }
 
@@ -837,6 +862,14 @@ shared_focus = {
 		
 		relative_position_id = OAP_power_cemented
 		available_if_capitulated = yes 
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = foe_2_cost_slave_tt
+				check_variable = {
+					foe_slaves_var > 1
+				}
+			}
+		}
 		prerequisite = { focus = OAP_seize_slaves}
 		prerequisite = { focus = OAP_increase_imports}
 		ai_will_do = { 
@@ -845,8 +878,12 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_slaves_research"
-			
-			
+			add_research_slot = 1
+			custom_effect_tooltip = foe_2_lose_slave_tt
+			subtract_from_variable = {
+				var = foe_slaves_var
+				value = 2
+			}
 		}
 }
 
@@ -868,8 +905,10 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_slaves_factory"
-			
-			
+			one_random_arms_factory = yes
+			one_random_industrial_complex = yes
+			OAP_raise_inflation = yes
+			add_political_power = -30
 		}
 }
 
@@ -891,7 +930,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_stop_braindrain"
-			
+			remove_ideas = OAP_braindrain2
 			
 		}
 }
@@ -914,7 +953,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_meet_red"
-			
+			country_event = oldapplered.3
 			
 		}
 }
@@ -937,8 +976,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_research_cathedral"
-			
-			
+			add_research_slot = 1
+			set_technology = { habitation_tech_level_settler = 1}
 		}
 }
 
@@ -959,7 +998,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_slaver_exchange_program"
-			
+			add_ideas = OAP_slaver_xp_idea
 			
 		}
 }
@@ -973,7 +1012,8 @@ shared_focus = {
 		cost = 1
 		
 		relative_position_id = OAP_power_cemented
-		available_if_capitulated = yes 
+		available_if_capitulated = no
+		available = {RED = {has_completed_focus = RED_new_appleloosa} owns_state = 811}
 		prerequisite = { focus = OAP_slaver_exchange_program focus = OAP_research_cathedral}
 		prerequisite = { focus = OAP_gateway}
 		ai_will_do = { 
@@ -982,7 +1022,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_ask_NAP"
-			
+			OAP = { country_event = { id = oldapplered.4 }}
 			
 		}
 }
@@ -1005,7 +1045,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_united_NAP"
-			
+			Core_original_NAP = yes
 			
 		}
 }
@@ -1028,8 +1068,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_sister_NAP"
-			
-			
+			add_offsite_building = { type = arms_factory level = 1 }
+			NAP = {add_offsite_building = { type = arms_factory level = 1 }}
 		}
 }
 
@@ -1050,8 +1090,9 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_couple_eco"
-			
-			
+			OAP_lower_filly_influence = yes
+			one_random_industrial_complex = yes
+			one_random_arms_factory = yes
 		}
 }
 
@@ -1072,7 +1113,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_payouts_to_supporters"
-			
+			OAP_lower_inflation = yes
+			add_political_power = 50
 			
 		}
 }
@@ -1094,8 +1136,15 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_arrest_charming"
-			
-			
+			add_stability = -0.08
+			create_country_leader = {
+			name = "Some Random Pony"
+			picture = ""
+			expire = "1965.1.1"
+			ideology = despotism
+			traits = {  }	
+			}
+			add_popularity = { ideology = continuation popularity = -0.15 }
 		}
 }
 
@@ -1117,7 +1166,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_stabilize"
-			
+			add_stability = 0.1
+			add_war_support = 0.05
 			
 		}
 }
@@ -1139,7 +1189,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_reorganize_industry"
-			
+			add_ideas = OAP_reorganized_industry
 			
 		}
 }
@@ -1161,7 +1211,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_urbanize_pops"
-			
+			add_timed_idea = {idea = OAP_urbanization_idea days = 400}
 			
 		}
 }
@@ -1183,7 +1233,10 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_smelting_iron"
-			
+			596 = {
+				add_resource = { type = metal amount = 14}
+				add_resource = { type = energy amount = 10}
+			}
 			
 		}
 }
@@ -1205,7 +1258,10 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_purify_water"
-			
+			205 = {
+				add_resource = { type = water amount = 10}
+				add_manpower = 1000
+			}
 			
 		}
 }
@@ -1226,9 +1282,14 @@ shared_focus = {
 		factor = 50
 		} 
 
+		will_lead_to_war_with = LIT
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_gateway"
-			
+			LIT = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 			
 		}
 }
@@ -1250,7 +1311,16 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_expand_rails"
-			
+			every_owned_state = {
+				limit = {
+					is_core_of = OAP
+				}
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
 			
 		}
 }
@@ -1265,6 +1335,16 @@ shared_focus = {
 		
 		relative_position_id = OAP_power_cemented
 		available_if_capitulated = yes 
+		available = {
+			owns_state = 811
+			owns_state = 798
+			owns_state = 32
+			owns_state = 565
+			owns_state = 551
+			owns_state = 550
+			owns_state = 34
+			owns_state = 33
+		}
 		prerequisite = { focus = OAP_expand_rails}
 		ai_will_do = {
 		factor = 50
@@ -1272,7 +1352,16 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_tradepost_cloudsdale"
-			
+			every_owned_state = {
+				limit = {
+					is_core_of = LIT
+				}
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
 			
 		}
 }
@@ -1294,7 +1383,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_integrate_LIT"
-			
+			Core_original_LIT = yes
 			
 		}
 }
@@ -1317,8 +1406,16 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_final_confron"
-			
-			
+			add_ideas = OAP_grandeur_idea
+			add_manpower = 250
+			add_state_claim = 803
+			add_state_claim = 184
+			add_state_claim = 564
+			add_state_claim = 589
+			add_state_claim = 36
+			add_state_claim = 588
+			add_state_claim = 572
+			add_state_claim = 802
 		}
 }
 
@@ -1332,15 +1429,17 @@ shared_focus = {
 		
 		relative_position_id = OAP_power_cemented
 		available_if_capitulated = yes 
+		available = {has_war_with = SHA}
 		prerequisite = { focus = OAP_final_confron}
 		mutually_exclusive = {focus = OAP_push_azure}
+		bypass = {SHA = {exists = no}}
 		ai_will_do = {
 		factor = 50
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_hold_line"
-			
+			add_timed_idea = {idea = OAP_hold_line_idea days = 300}
 			
 		}
 }
@@ -1355,16 +1454,17 @@ shared_focus = {
 		
 		relative_position_id = OAP_power_cemented
 		available_if_capitulated = yes 
+		available = {has_war_with = SHA}
 		prerequisite = { focus = OAP_final_confron}
 		mutually_exclusive = {focus = OAP_hold_line}
+		bypass = {SHA = {exists = no}}
 		ai_will_do = {
 		factor = 500
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_push_azure"
-			
-			
+			add_timed_idea = {idea = OAP_push_azure_idea days = 300}
 		}
 }
 
@@ -1385,7 +1485,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_call_reserve"
-			
+			add_manpower = 500
 			
 		}
 }
@@ -1407,8 +1507,11 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_cpacify_locals"
-			
-			
+			add_ideas = OAP_pacification_idea
+			every_controlled_state = {
+				limit = {NOT = {is_core_of = OAP}}
+				add_compliance = 30
+			}
 		}
 }
 
@@ -1423,13 +1526,49 @@ shared_focus = {
 		relative_position_id = OAP_power_cemented
 		available_if_capitulated = yes 
 		prerequisite = { focus = OAP_call_reserve focus = OAP_cpacify_locals}
+		available = {
+			OR = {SHA = {exists = no} SHA = {is_subject_of = RED}}
+			OR = {ROK = {exists = no} ROK = {is_subject_of = RED}}
+		}
 		ai_will_do = {
 		factor = 500
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_our_reward"
-			
+			custom_effect_tooltip = OAP_get_reward_tt
+			if = {
+				limit = {OR = {589 = {is_owned_by = RED} AND = {589 = {is_owned_by = ROK} ROK = {is_subject_of = RED}}}}
+				transfer_state = 589
+			}
+			if = {
+				limit = {OR = {803 = {is_owned_by = RED} AND = {803 = {is_owned_by = ROK} ROK = {is_subject_of = RED}}}}
+				transfer_state = 803
+			}
+			if = {
+				limit = {OR = {184 = {is_owned_by = RED} AND = {184 = {is_owned_by = ROK} ROK = {is_subject_of = RED}}}}
+				transfer_state = 184
+			}
+			if = {
+				limit = {OR = {564 = {is_owned_by = RED} AND = {564 = {is_owned_by = ROK} ROK = {is_subject_of = RED}}}}
+				transfer_state = 564
+			}
+			if = {
+				limit = {OR = {36 = {is_owned_by = RED} AND = {36 = {is_owned_by = ROK} ROK = {is_subject_of = RED}}}}
+				transfer_state = 36
+			}
+			if = {
+				limit = {OR = {588 = {is_owned_by = RED} AND = {588 = {is_owned_by = SHA} SHA = {is_subject_of = RED}}}}
+				transfer_state = 588
+			}
+			if = {
+				limit = {OR = {572 = {is_owned_by = RED} AND = {572 = {is_owned_by = SHA} SHA = {is_subject_of = SHA}}}}
+				transfer_state = 572
+			}
+			if = {
+				limit = {OR = {802 = {is_owned_by = RED} AND = {802 = {is_owned_by = FTA} FTA = {is_subject_of = RED}}}}
+				transfer_state = 802
+			}
 			
 		}
 }
@@ -1451,7 +1590,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_loyalty"
-			
+			country_event = oldapplered.7
 			
 		}
 }
@@ -1474,8 +1613,9 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_war_for_heartlands"
-			
-			
+			add_war_support = 0.2
+			add_political_power = 100
+			add_stability = 0.1
 		}
 }
 
@@ -1496,8 +1636,66 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_azurian_legions"
-			
-			
+			custom_effect_tooltip = OAP_raise_azurian_militias_tt
+			hidden_effect = {
+			division_template = {
+			name = "Azurian Troopers"
+			priority = 1
+			is_locked = no
+			regiments = {
+			infantry = { x = 0 y = 0 }
+			infantry = { x = 0 y = 1 }
+			infantry = { x = 0 y = 2 }
+			infantry = { x = 0 y = 3 }
+			infantry = { x = 0 y = 4 }
+			infantry = { x = 1 y = 0 }
+			infantry = { x = 1 y = 1 }
+			infantry = { x = 1 y = 2 }
+			infantry = { x = 1 y = 3 }
+			infantry = { x = 1 y = 4 }
+			}
+			}
+			596 = {
+				create_unit = {
+					division = "name = \"1. Azurian Troopers\" division_template = \"Azurian Troopers\" start_experience_factor = 0.3" 
+					owner = SHA
+				}
+				create_unit = {
+					division = "name = \"2. Azurian Troopers\" division_template = \"Azurian Troopers\" start_experience_factor = 0.3" 
+					owner = SHA
+				}
+			}
+			599 = {
+				create_unit = {
+					division = "name = \"3. Azurian Troopers\" division_template = \"Azurian Troopers\" start_experience_factor = 0.3" 
+					owner = SHA
+				}
+				create_unit = {
+					division = "name = \"4. Azurian Troopers\" division_template = \"Azurian Troopers\" start_experience_factor = 0.3" 
+					owner = SHA
+				}
+			}
+			798 = {
+				create_unit = {
+					division = "name = \"5. Azurian Troopers\" division_template = \"Azurian Troopers\" start_experience_factor = 0.3" 
+					owner = SHA
+				}
+				create_unit = {
+					division = "name = \"6. Azurian Troopers\" division_template = \"Azurian Troopers\" start_experience_factor = 0.3" 
+					owner = SHA
+				}
+			}
+			36 = {
+				create_unit = {
+					division = "name = \"7. Azurian Troopers\" division_template = \"Azurian Troopers\" start_experience_factor = 0.3" 
+					owner = SHA
+				}
+				create_unit = {
+					division = "name = \"8. Azurian Troopers\" division_template = \"Azurian Troopers\" start_experience_factor = 0.3" 
+					owner = SHA
+				}
+			}
+			}
 		}
 }
 
@@ -1518,7 +1716,9 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_get_gunds"
-			
+			add_equipment_to_stockpile = { type = energy_equipment_3 amount = 390 producer = OWE }
+			add_equipment_to_stockpile = { type = melee_equipment_3 amount = 260 producer = OWE }
+			add_equipment_to_stockpile = { type = ballistic_equipment_3 amount = 230 producer = OWE }
 			
 		}
 }
@@ -1540,7 +1740,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_nationalize_all_gun_workshops"
-			
+			add_offsite_building = { type = arms_factory level = 4 }
 			
 		}
 }
@@ -1562,7 +1762,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_incite_uprisings"
-			
+			RED = {add_timed_idea = {idea = OAP_punch_red_idea days = 200}}
 			
 		}
 }
@@ -1584,8 +1784,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_plantation_army"
-			
-			
+			add_manpower = 2800
+			add_political_power = -150
 		}
 }
 
@@ -1599,6 +1799,7 @@ shared_focus = {
 		
 		relative_position_id = OAP_power_cemented
 		available_if_capitulated = yes 
+		available = {RED = {exists = no} owns_state = 593 owns_state = 532}
 		prerequisite = { focus = OAP_plantation_army focus = OAP_incite_uprisings focus = OAP_azurian_legions focus = OAP_get_gunds focus = OAP_nationalize_all_gun_workshops}
 		ai_will_do = {
 		factor = 500
@@ -1606,7 +1807,12 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_red_victory"
-			
+			country_event = oldapplered.8
+			add_state_core = 593
+			add_state_core = 513
+			add_state_core = 532
+			add_state_core = 45
+			add_state_core = 48
 			
 		}
 }
@@ -1628,7 +1834,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_red_schools"
-			
+			add_research_slot = 1
 			
 		}
 }

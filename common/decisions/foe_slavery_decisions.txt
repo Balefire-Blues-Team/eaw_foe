@@ -42,7 +42,7 @@ foe_slaving_cat = {
 			custom_trigger_tooltip = {
 				tooltip = foe_4_cost_slave_tt
 				check_variable = {
-					foe_slaves_var > 2
+					foe_slaves_var > 3
 				}
 			}
 		}
@@ -179,7 +179,54 @@ foe_slaving_cat = {
 		cost = 80
 
 		visible = {
-			tag = OAP
+			original_tag = OAP
+			NOT = {has_completed_focus = OAP_southwest_trade}
+		}
+
+		days_remove = 50
+		modifier = {
+			consumer_goods_factor = 0.05
+			political_power_gain = -0.1
+		}
+		days_re_enable = 80
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_western_slave"
+
+			custom_effect_tooltip = foe_2_gain_slave_tt
+			add_to_variable = {
+				var = foe_slaves_var
+				value = 2
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = {
+					var = foe_slaves_var
+					value = 5
+					compare = less_than_or_equals
+				}
+			}
+			modifier = {
+				add = 10
+				check_variable = {
+					var = foe_slaves_var
+					value = 10
+					compare = less_than_or_equals
+				}
+			}
+		}
+	}
+	
+	OAP_western_slaves_2 = {
+		icon = slavery
+		cost = 40
+
+		visible = {
+			original_tag = OAP
+			has_completed_focus = OAP_southwest_trade
 		}
 
 		days_remove = 50
