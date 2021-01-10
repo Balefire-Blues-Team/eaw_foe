@@ -4209,7 +4209,7 @@ shared_focus = {
 		}
 
 		available = {
-			has_border_war_with = RAR
+			is_neighbor_of = RAR
 		}
 
 		prerequisite = { 
@@ -4385,7 +4385,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_A_Reasonable_View"
-			#country_event = {  }
+			add_ideas = reasonable_view_idea
 
 		}
 }
@@ -4497,7 +4497,25 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Offer_Military_Protection"
-			#country_event = {  }
+			if = {
+				limit = {
+					num_faction_members < 2
+				}
+				custom_effect_tooltip = no_effect_yet_tt
+			}
+			every_country = {
+				limit = {
+					is_in_faction_with = MSR
+					NOT = { 
+						tag = MSR
+					}
+					NOT = {
+						is_subject_of = MSR
+					}
+
+				}
+				country_event = MSR_crossroads.15
+			}
 
 		}
 }
@@ -4516,10 +4534,32 @@ shared_focus = {
 		}
 
 		prerequisite = { Focus = MSR_Offer_Military_Protection }
+		available = {
+			num_subjects > 0
+		}
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Create_A_Technology_Tax"
-			#country_event = {  }
+			if = {
+				limit = {
+					num_subjects < 1
+				}
+				custom_effect_tooltip = no_effect_yet_tt
+			}
+			if = {
+				limit = {
+					num_subjects > 0
+				}
+				every_country = {
+					limit = {
+						is_subject_of = MSR
+					}
+					add_ideas = msr_tech_tax_idea
+					add_to_tech_sharing_group = crossroads_research
+				}
+				add_ideas = msr_tech_tax_buff_idea
+				add_to_tech_sharing_group = crossroads_research
+			}
 
 		}
 }
@@ -4538,10 +4578,41 @@ shared_focus = {
 		}
 
 		prerequisite = { Focus = MSR_Create_A_Technology_Tax }
+		available = {
+			OR = {
+				owns_state = 21
+				TEN = {
+					is_subject_of = MSR
+				}
+			}
+			OR = {
+				owns_state = 478
+				GUT = {
+					is_subject_of = MSR
+				}
+			}
+		}
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Seize_Illegal_Technology"
-			#country_event = {  }
+			21 = {
+				add_resource = {
+				    type = advanced
+				    amount = -15
+				}
+			}
+			478 = {
+				add_resource = {
+				    type = advanced
+				    amount = -11
+				}
+			}
+			19 = {
+				add_resource = {
+				    type = advanced
+				    amount = 26
+				}
+			}
 
 		}
 }
@@ -4563,7 +4634,15 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Occupy_Strategic_Locations"
-			#country_event = {  }
+			ARB = {
+				country_event = MSR_crossroads.28
+			}
+			ABT = {
+				country_event = MSR_crossroads.31
+			}
+			TEN = {
+				country_event = MSR_crossroads.34
+			}
 
 		}
 }
