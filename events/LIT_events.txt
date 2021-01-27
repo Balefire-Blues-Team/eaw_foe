@@ -754,7 +754,7 @@ country_event = {
 	#yes
 	option = {
 		name = LIT_event.21.a
-		ai_chance = { factor = 50
+		ai_chance = { factor = 1
 			modifier = {
 				factor = 0
 				has_country_flag = NEV_des_ai
@@ -770,7 +770,7 @@ country_event = {
 	#no
 	option = {
 		name = LIT_event.21.b
-		ai_chance = { factor = 50
+		ai_chance = { factor = 99
 			modifier = {
 				factor = 0
 				has_country_flag = NEV_vis_ai
@@ -858,7 +858,7 @@ country_event = {
  	id = LIT_event.25
  	title = LIT_event.25.t
  	desc = LIT_event.25.d
-	picture = GFX_event_test
+	picture = GFX_news_pegasi_city
 
 	trigger = {
 		tag = LIT
@@ -883,6 +883,81 @@ country_event = {
 			traits = { }	
 		}
 		add_state_core = 696
+	}
+	
+}
+
+##Volunteers from other Enclave cities
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_event.26"}
+ 	id = LIT_event.26
+ 	title = LIT_event.26.t
+ 	desc = LIT_event.26.d
+	picture = GFX_event_vertibuck
+
+	trigger = {
+		tag = LIT
+		has_completed_focus = LIT_denial_rally_troops
+		owns_state = 798
+	}
+ 	fire_only_once = yes
+
+	option = {
+		name = LIT_event.26.a
+		ai_chance = { factor = 90}
+		custom_effect_tooltip = LIT_enclave_vol_tt
+		hidden_effect = {
+			set_technology = {scav_pa_tech = 1 x01_pa_tech = 1 }
+				division_template = {
+				name = "Enclave Volunteers"
+				priority = 2
+				is_locked = no
+				regiments = {
+					power_armour = { x = 0 y = 0 }
+					power_armour = { x = 0 y = 1 }
+					power_armour = { x = 1 y = 0 }
+					power_armour = { x = 1 y = 1 }
+					power_armour = { x = 0 y = 2 }
+				}
+				support = {
+					demolitions_support = { x = 0 y = 0 }
+					fireteam_support = { x = 0 y = 2 }
+					medical_chem_company = { x = 0 y = 1 }
+				}
+				}
+		798 = {
+			create_unit = {
+					division = "name = \"Enclave Liberation Volunteers\" division_template = \"Enclave Volunteers\" start_experience_factor = 0.9" 
+					owner = LIT
+				}
+		}
+		}
+	}
+	
+}
+
+##LIT is looking for a patron
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_event.27"}
+ 	id = LIT_event.27
+ 	title = LIT_event.27.t
+ 	desc = LIT_event.27.d
+	picture = GFX_event_generic_pony_diplomacy
+
+	trigger = {
+		tag = SHA
+		LIT = {
+			has_completed_focus = LIT_look_for_new_patron
+		}
+		owns_state = 184
+	}
+ 	fire_only_once = yes
+
+	option = {
+		name = LIT_event.27.a
+		ai_chance = { factor = 90}
+		SHA = { annex_country = { target = LIT transfer_troops = no }}
+		Core_original_LIT = yes
 	}
 	
 }
