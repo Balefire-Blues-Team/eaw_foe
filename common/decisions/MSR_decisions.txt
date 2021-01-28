@@ -94,3 +94,123 @@ MSR_marshall_plan_cat = {
 		}
 	}
 }
+
+MSR_stirring_up_trouble_cat = {
+	MSR_arm_slave_rebels = {
+		icon = GFX_decision_rifles
+
+		available = {
+			country_exists = RED
+			NOT = { has_war_with = RED }
+			has_equipment = {
+    			infantry_equipment > 300
+			}
+
+			custom_trigger_tooltip = {
+    			tooltip = not_arm_slaves_cooldown_tt		
+    			hidden_trigger = {
+    				NOT = { 
+					    has_country_flag = MSR_arm_slaves_cooldown
+            		}
+				}
+			}
+
+			custom_trigger_tooltip = {
+    			tooltip = MSR_arm_slaves_5_tt		
+    			#hidden_trigger = {
+    				NOT = { 
+					   check_variable = { MSR_RED_unrest_var > 4 }
+            		}
+				#}
+			}
+		}
+
+		visible = {
+			has_completed_focus = MSR_Stirring_Up_Trouble
+		}
+
+		highlight_states = {
+			state = 532
+		}
+
+		cost = 75
+		days_remove = 60
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove MSR_arm_slave_rebels"
+
+			custom_effect_tooltip = msr_arm_slaves_tt
+			hidden_effect = {
+				add_to_variable = { MSR_RED_unrest_var = 0 } 
+				send_equipment = {
+    				equipment = infantry_equipment
+   					amount = 300
+    				target = OWE
+				}
+				set_country_flag = MSR_arm_slaves_cooldown
+				country_event = {
+					id = MSR.133
+					days = 30
+					random = 48
+				}
+			}
+		}
+	}
+
+	MSR_set_arm_slaves_0 = {
+		icon = GFX_decision_generic_ignite_civil_war
+		cost = 0
+		#fire_only_once = yes
+		is_good = yes
+		available = {
+			#is_debug = yes
+		}
+		visible = {
+			is_debug = yes
+		}
+		modifier = {
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove MSR_set_arm_slaves_0"
+			set_variable = { MSR_RED_unrest_var = 0 }
+		}
+	}
+
+	MSR_set_arm_slaves_1 = {
+		icon = GFX_decision_generic_ignite_civil_war
+		cost = 0
+		#fire_only_once = yes
+		is_good = yes
+		available = {
+			#is_debug = yes
+		}
+		visible = {
+			is_debug = yes
+		}
+		modifier = {
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove MSR_set_arm_slaves_1"
+			set_variable = { MSR_RED_unrest_var = 1 }
+		}
+	}
+
+	MSR_set_arm_slaves_5 = {
+		icon = GFX_decision_generic_ignite_civil_war
+		cost = 0
+		#fire_only_once = yes
+		is_good = yes
+		available = {
+			#is_debug = yes
+		}
+		visible = {
+			is_debug = yes
+		}
+		modifier = {
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove MSR_set_arm_slaves_5"
+			set_variable = { MSR_RED_unrest_var = 5 }
+		}
+	}
+}

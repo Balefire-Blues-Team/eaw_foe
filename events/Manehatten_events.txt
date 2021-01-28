@@ -3125,6 +3125,97 @@ country_event = {
  	}
 }
 
+##RA ready to arm slaves
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.133"}
+ 	id = MSR.133
+ 	title = MSR.133.title
+ 	desc = MSR.133.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = {
+ 		name = MSR.133.a
+ 		clr_country_flag = MSR_arm_slaves_cooldown
+ 	}
+}
+
+##RA RED Slave Revolt
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.134"}
+ 	id = MSR.134
+ 	title = MSR.134.title
+ 	desc = MSR.134.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = {
+ 		name = MSR.134.a
+ 		FFD = {
+			#change_tag_from = RED 
+			transfer_state = 45
+			transfer_state = 48
+			transfer_state = 532
+			transfer_state = 525
+			
+			declare_war_on = {
+				target = RED
+				type = annex_everything
+			}
+		}
+		hidden_effect = {
+			FFD = {
+				load_oob = FFD_RA_1 
+				delete_unit_template_and_units = {
+					division_template = "Talon Company"
+				}
+				add_manpower = 600
+				inherit_technology = RED
+			}
+			45 = {
+				teleport_armies = {
+					limit = { tag = RED }
+				}
+			}
+			48 = {
+				teleport_armies = {
+					limit = { tag = RED }
+				}
+			}
+			532 = {
+				teleport_armies = {
+					limit = { tag = RED }
+				}
+			}
+			525 = {
+				teleport_armies = {
+					limit = { tag = RED }
+				}
+			}
+			if = {
+				limit = { MSR = { check_variable = { MSR_RED_unrest_var > 1 } } }
+				FFD = { load_oob = FFD_RA_2 }
+			}
+			if = {
+				limit = { MSR = { check_variable = { MSR_RED_unrest_var > 2 } } }
+				FFD = { load_oob = FFD_RA_3 }
+			}
+			if = {
+				limit = { MSR = { check_variable = { MSR_RED_unrest_var > 3 } } }
+				FFD = { load_oob = FFD_RA_4 }
+			}
+			if = {
+				limit = { MSR = { check_variable = { MSR_RED_unrest_var > 4 } } }
+				FFD = { load_oob = FFD_RA_5 }
+			}
+		}
+ 	}
+}
+
 ##RA Taking Stable 29
 country_event = {
 	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.75"}
