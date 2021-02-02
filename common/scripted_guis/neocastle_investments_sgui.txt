@@ -1,0 +1,110 @@
+scripted_gui = {
+	ncg_invest_gui = {
+        window_name = "ncg_invest_window"
+        context_type = player_context
+    
+        visible = {
+            check_variable = { ncg_gui_var = 1 }
+        }
+    
+        effects = {
+            close_button_click = {
+                set_variable = { ncg_gui_var = 0 }
+            }
+			ncg_mil_invest_button1_click = {
+                add_to_variable = {
+				var = NCG_mil_invest
+				value = 1
+				}
+            }
+        }
+    
+        triggers = {
+
+        }
+    
+        dynamic_lists = {
+        }
+    
+        properties = {
+        }
+    
+        ai_enabled = {
+            always = no
+        }
+    
+        ai_test_interval = 290  # The higher, the long it takes the ai to do actions
+        ai_test_variance = 0.5
+    
+        ai_check = {
+        }
+    
+        ai_check_scope = {
+        }
+    
+        ai_weights = {
+        }
+    }
+	
+	ncg_investment_opener = {
+        window_name = "ncg_invest_button_window"
+        context_type = player_context
+        parent_window_token = politics_tab
+    
+        visible = {
+            tag = NCG
+        }
+    
+        effects = {
+           ncg_invest_button_click = {
+                if = {
+                    limit = { check_variable = { ncg_gui_var = 1 } }
+                    ROOT = {
+                        set_variable = { ncg_gui_var = 0 }
+                    }
+                }
+                else_if = {
+                    limit = { 
+                        NOT { check_variable = { ncg_gui_var = 1 } }
+                        check_variable = { ncg_gui_var > 0 } 
+                    }
+                    ROOT = {
+                        set_variable = { ncg_gui_var = 1 }
+                    }
+                }
+                else = {
+                    ROOT = {
+                        set_variable = { ncg_gui_var = 1 }
+                    }
+                } 
+            }
+
+        }
+
+        triggers = {
+            
+        }
+    
+        dynamic_lists = {
+        }
+    
+        properties = {
+        }
+    
+        ai_enabled = {
+            always = no
+        }
+    
+        #ai_test_interval = 290  # The higher, the long it takes the ai to do actions
+        #ai_test_variance = 0.5
+    
+        ai_check = {
+        }
+    
+        ai_check_scope = {
+        }
+    
+        ai_weights = {
+        }
+    }
+}
