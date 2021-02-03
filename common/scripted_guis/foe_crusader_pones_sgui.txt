@@ -11,6 +11,7 @@ scripted_gui = {
             close_button_click = {
                 set_variable = { mwy_ck2_menu_var = 0 }
                 set_variable = { mwy_chan_relations_menu_var = 0 }
+                set_variable = { mwy_chan_compliance_menu_var = 0 }
             }
 
             mwy_chancellor_action_button_1_click = {
@@ -18,8 +19,9 @@ scripted_gui = {
                     limit = { has_country_flag = chancellor_improving_relations_flag }
                     every_country = {
                         limit = {
-                           set_country_flag = has_mwy_chancellor_flag
+                           has_country_flag = has_mwy_chancellor_flag
                         }
+                        clr_country_flag = has_mwy_chancellor_flag
                         remove_opinion_modifier = {
                             target = MWY
                             modifier = sent_chancellor
@@ -43,6 +45,8 @@ scripted_gui = {
                         }
                     }
                     
+                    set_variable = { mwy_chan_compliance_menu_var = 0 }
+
                     if = {
                         limit = { check_variable = { mwy_chan_relations_menu_var = 1 } }
                         ROOT = {
@@ -56,27 +60,105 @@ scripted_gui = {
                     }
                 }
             }
+
+            mwy_chancellor_action_button_2_click = {
+                if = {
+                    limit = { has_country_flag = chancellor_appeasing_nobles_flag }
+                    
+                    ROOT = {
+                        clr_country_flag = chancellor_appeasing_nobles_flag
+                    }
+                }
+                else = {
+                    clear_array = global.mwy_feudal_realms_states_array
+                    every_state = {
+                        limit = {
+                            has_state_flag = mwy_feudal_realm_state_flag
+                        }
+                        add_to_array = {
+                            array = global.mwy_feudal_realms_states_array
+                            value = THIS.id
+                        }
+                    }
+                    
+                    set_variable = { mwy_chan_relations_menu_var = 0 }
+
+                    if = {
+                        limit = { check_variable = { mwy_chan_compliance_menu_var = 1 } }
+                        ROOT = {
+                            set_variable = { mwy_chan_compliance_menu_var = 0 }
+                        }
+                    }
+                    else = {
+                        ROOT = {
+                            set_variable = { mwy_chan_compliance_menu_var = 1 }
+                        }
+                    }
+                }
+            }
+
+            mwy_chancellor_action_button_3_click = {
+                if = { 
+                    limit = { has_country_flag = chancellor_governance_flag }
+                    ROOT = {
+                        remove_ideas = MWY_chan_governance_idea
+                        clr_country_flag = chancellor_governance_flag
+                    }
+                }
+                else = {
+                    set_country_flag = chancellor_governance_flag
+                    add_ideas = MWY_chan_governance_idea
+                }
+            }
+
+            mwy_chancellor_action_button_4_click = {
+                if = {
+                    limit = { has_country_flag = chancellor_improving_compliance_flag }
+                    ROOT = {
+                        remove_ideas = MWY_chan_compliance_idea
+                        clr_country_flag = chancellor_improving_compliance_flag
+                    }
+                }
+                else = {
+                    set_country_flag = chancellor_improving_compliance_flag
+                    add_ideas = MWY_chan_compliance_idea
+                }
+            }
         }
     
         triggers = {
-            #mwy_chancellor_action_button_1_click_enabled = {
-            #    ROOT = {
-            #        NOT = { has_country_flag = chancellor_improving_relations_flag }
-            #    }
-            #}
+            mwy_chancellor_action_button_1_click_enabled = {
+                ROOT = {
+                    NOT = {
+                        has_country_flag = chancellor_improving_compliance_flag
+                        has_country_flag = chancellor_governance_flag
+                    }
+                }
+            }
             mwy_chancellor_action_button_2_click_enabled = {
                 ROOT = {
-                    NOT = { has_country_flag = chancellor_improving_relations_flag }
+                    NOT = {
+                        has_country_flag = chancellor_improving_relations_flag
+                        has_country_flag = chancellor_improving_compliance_flag
+                        has_country_flag = chancellor_governance_flag
+                    }
                 }
             }
             mwy_chancellor_action_button_3_click_enabled = {
                 ROOT = {
-                    NOT = { has_country_flag = chancellor_improving_relations_flag }
+                    NOT = {
+                        has_country_flag = chancellor_improving_relations_flag
+                        has_country_flag = chancellor_improving_compliance_flag
+
+                    }
                 }
             }
             mwy_chancellor_action_button_4_click_enabled = {
                 ROOT = {
-                    NOT = { has_country_flag = chancellor_improving_relations_flag }
+                    NOT = {
+                        has_country_flag = chancellor_improving_relations_flag
+                        has_country_flag = chancellor_governance_flag
+                    }
                     any_owned_state = {
                         NOT = { is_core_of = PREV }
                         compliance < 100
@@ -157,6 +239,71 @@ scripted_gui = {
             entry_flag = {
                 image = "[This.GetFlag]"
             }
+        }
+    
+        ai_enabled = {
+            always = no
+        }
+    
+        #ai_test_interval = 290  # The higher, the long it takes the ai to do actions
+        #ai_test_variance = 0.5
+    
+        ai_check = {
+        }
+    
+        ai_check_scope = {
+        }
+    
+        ai_weights = {
+        }
+    }
+
+    mwy_chancellor_noble_window = {
+        window_name = "mwy_chancellor_noble_window"
+        context_type = player_context
+        parent_window_token = mwy_council_window
+    
+        visible = {
+            check_variable = { mwy_chan_compliance_menu_var > 0 }
+            check_variable = { mwy_ck2_menu_var = 1 }
+        }
+    
+        effects = {
+            close_button_click = {
+                set_variable = { mwy_chan_relations_menu_var = 0 }
+            }
+
+            entry_button_click = {
+                ROOT = { add_to_variable = { mwy_grainlands_opinion = 1 } }
+
+                ROOT = {
+                #    set_country_flag = chancellor_appeasing_nobles_flag
+                    set_variable = { mwy_chan_compliance_menu_var = 0 }
+                }
+                
+            }
+
+        }
+
+        triggers = {
+            maredia_button_click_enabled = {
+                69 = { has_state_flag = mwy_feudal_realm_state_flag }
+            }
+
+            belle_button_click_enabled = {
+                805 = { has_state_flag = mwy_feudal_realm_state_flag }
+            }
+        }
+    
+        dynamic_lists = {
+        #    chancellor_noble_gridbox = {
+        #        array = global.mwy_feudal_realms_states_array
+        #        entry_container = chancellor_noble_entry
+        #        change_scope = yes
+        #    }
+        }
+    
+        properties = {
         }
     
         ai_enabled = {
@@ -312,7 +459,10 @@ scripted_gui = {
                     ROOT = {
                         set_variable = { mwy_ck2_menu_var = 1 }
                     }
-                } 
+                }
+
+                set_variable = { mwy_chan_relations_menu_var = 0 }
+                set_variable = { mwy_chan_compliance_menu_var = 0 }
             }
 
             mwy_realms_button_click = {
