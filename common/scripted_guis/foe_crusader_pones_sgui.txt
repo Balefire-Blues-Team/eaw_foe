@@ -10,14 +10,83 @@ scripted_gui = {
         effects = {
             close_button_click = {
                 set_variable = { mwy_ck2_menu_var = 0 }
+                set_variable = { mwy_chan_relations_menu_var = 0 }
+            }
+
+            mwy_chancellor_action_button_1_click = {
+                if = { 
+                    limit = { has_country_flag = chancellor_improving_relations_flag }
+                    every_country = {
+                        limit = {
+                           set_country_flag = has_mwy_chancellor_flag
+                        }
+                        remove_opinion_modifier = {
+                            target = MWY
+                            modifier = sent_chancellor
+                        }
+                    }
+                    ROOT = {
+                        clr_country_flag = chancellor_improving_relations_flag
+                    }
+                }
+                else = {
+                    clear_array = global.chancellor_neighbor_countries_array
+                    every_neighbor_country = {
+                        limit = {
+                            NOT = {
+                                tag = ERA
+                            }
+                        }
+                        add_to_array = {
+                            array = global.chancellor_neighbor_countries_array
+                            value = THIS.id
+                        }
+                    }
+                    
+                    if = {
+                        limit = { check_variable = { mwy_chan_relations_menu_var = 1 } }
+                        ROOT = {
+                            set_variable = { mwy_chan_relations_menu_var = 0 }
+                        }
+                    }
+                    else = {
+                        ROOT = {
+                            set_variable = { mwy_chan_relations_menu_var = 1 }
+                        }
+                    }
+                }
             }
         }
     
         triggers = {
-
+            #mwy_chancellor_action_button_1_click_enabled = {
+            #    ROOT = {
+            #        NOT = { has_country_flag = chancellor_improving_relations_flag }
+            #    }
+            #}
+            mwy_chancellor_action_button_2_click_enabled = {
+                ROOT = {
+                    NOT = { has_country_flag = chancellor_improving_relations_flag }
+                }
+            }
+            mwy_chancellor_action_button_3_click_enabled = {
+                ROOT = {
+                    NOT = { has_country_flag = chancellor_improving_relations_flag }
+                }
+            }
+            mwy_chancellor_action_button_4_click_enabled = {
+                ROOT = {
+                    NOT = { has_country_flag = chancellor_improving_relations_flag }
+                    any_owned_state = {
+                        NOT = { is_core_of = PREV }
+                        compliance < 100
+                    }
+                }
+            }
         }
     
         dynamic_lists = {
+            
         }
     
         properties = {
@@ -29,6 +98,73 @@ scripted_gui = {
     
         ai_test_interval = 290  # The higher, the long it takes the ai to do actions
         ai_test_variance = 0.5
+    
+        ai_check = {
+        }
+    
+        ai_check_scope = {
+        }
+    
+        ai_weights = {
+        }
+    }
+
+    mwy_chancellor_improve_relation_window = {
+        window_name = "mwy_chancellor_improve_relation_window"
+        context_type = player_context
+        parent_window_token = mwy_council_window
+    
+        visible = {
+            check_variable = { mwy_chan_relations_menu_var > 0 }
+            check_variable = { mwy_ck2_menu_var = 1 }
+        }
+    
+        effects = {
+            close_button_click = {
+                set_variable = { mwy_chan_relations_menu_var = 0 }
+            }
+
+            entry_button_click = {
+                THIS = { 
+                    set_country_flag = has_mwy_chancellor_flag
+                    add_opinion_modifier = {
+                        target = MWY
+                        modifier = sent_chancellor
+                    }
+                }
+                ROOT = {
+                    set_country_flag = chancellor_improving_relations_flag
+                    set_variable = { mwy_chan_relations_menu_var = 0 }
+                }
+                
+            }
+
+        }
+
+        triggers = {
+            
+        }
+    
+        dynamic_lists = {
+            chancellor_neighbor_countries_gridbox = {
+                array = global.chancellor_neighbor_countries_array
+                entry_container = chancellor_neighbor_countries_list_entry
+                change_scope = yes
+            }
+        }
+    
+        properties = {
+            entry_flag = {
+                image = "[This.GetFlag]"
+            }
+        }
+    
+        ai_enabled = {
+            always = no
+        }
+    
+        #ai_test_interval = 290  # The higher, the long it takes the ai to do actions
+        #ai_test_variance = 0.5
     
         ai_check = {
         }
@@ -144,6 +280,8 @@ scripted_gui = {
         }
     }
 
+
+
     mwy_ck2_politics_buttons = {
         window_name = "mwy_ck2_politics_buttons_window"
         context_type = player_context
@@ -232,6 +370,7 @@ scripted_gui = {
         }
     
         properties = {
+
         }
     
         ai_enabled = {
