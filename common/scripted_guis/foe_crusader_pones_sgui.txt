@@ -14,173 +14,290 @@ scripted_gui = {
                 set_variable = { mwy_chan_compliance_menu_var = 0 }
             }
 
-            mwy_chancellor_action_button_1_click = {
-                if = { 
-                    limit = { has_country_flag = chancellor_improving_relations_flag }
-                    every_country = {
-                        limit = {
-                           has_country_flag = has_mwy_chancellor_flag
-                        }
-                        clr_country_flag = has_mwy_chancellor_flag
-                        remove_opinion_modifier = {
-                            target = MWY
-                            modifier = sent_chancellor
-                        }
-                    }
-                    ROOT = {
-                        clr_country_flag = chancellor_improving_relations_flag
-                    }
-                }
-                else = {
-                    clear_array = global.chancellor_neighbor_countries_array
-                    every_neighbor_country = {
-                        limit = {
-                            NOT = {
-                                tag = ERA
+            #Chancellor Actions
+                mwy_chancellor_action_button_1_click = {
+                    if = { 
+                        limit = { has_country_flag = chancellor_improving_relations_flag }
+                        every_country = {
+                            limit = {
+                               has_country_flag = has_mwy_chancellor_flag
+                            }
+                            clr_country_flag = has_mwy_chancellor_flag
+                            remove_opinion_modifier = {
+                                target = MWY
+                                modifier = sent_chancellor
                             }
                         }
-                        add_to_array = {
-                            array = global.chancellor_neighbor_countries_array
-                            value = THIS.id
-                        }
-                    }
-                    
-                    set_variable = { mwy_chan_compliance_menu_var = 0 }
-
-                    if = {
-                        limit = { check_variable = { mwy_chan_relations_menu_var = 1 } }
                         ROOT = {
-                            set_variable = { mwy_chan_relations_menu_var = 0 }
+                            clr_country_flag = chancellor_improving_relations_flag
                         }
                     }
                     else = {
-                        ROOT = {
-                            set_variable = { mwy_chan_relations_menu_var = 1 }
+                        clear_array = global.chancellor_neighbor_countries_array
+                        every_neighbor_country = {
+                            limit = {
+                                NOT = {
+                                    tag = ERA
+                                }
+                            }
+                            add_to_array = {
+                                array = global.chancellor_neighbor_countries_array
+                                value = THIS.id
+                            }
+                        }
+                        
+                        set_variable = { mwy_chan_compliance_menu_var = 0 }
+                        set_variable = { mwy_mar_levy_menu_var = 0 }
+
+                        if = {
+                            limit = { check_variable = { mwy_chan_relations_menu_var = 1 } }
+                            ROOT = {
+                                set_variable = { mwy_chan_relations_menu_var = 0 }
+                            }
+                        }
+                        else = {
+                            ROOT = {
+                                set_variable = { mwy_chan_relations_menu_var = 1 }
+                            }
                         }
                     }
                 }
-            }
 
-            mwy_chancellor_action_button_2_click = {
-                if = {
-                    limit = { has_country_flag = chancellor_appeasing_nobles_base_flag }
-                    
-                    ROOT = {
-                        clr_country_flag = chancellor_appeasing_nobles_base_flag
-
-                        clr_country_flag = chancellor_appeasing_nobles_grainlands_flag
-                        clr_country_flag = chancellor_appeasing_nobles_amethyst_flag
-                        clr_country_flag = chancellor_appeasing_nobles_radigator_flag
-                        clr_country_flag = chancellor_appeasing_nobles_swampy_flag
-                        clr_country_flag = chancellor_appeasing_nobles_peninsula_flag
-                        clr_country_flag = chancellor_appeasing_nobles_maredia_flag
-                        clr_country_flag = chancellor_appeasing_nobles_belle_flag
-                    }
-                }
-                else = {
-                    clear_array = global.mwy_feudal_realms_states_array
-                    every_state = {
-                        limit = {
-                            has_state_flag = mwy_feudal_realm_state_flag
-                        }
-                        add_to_array = {
-                            array = global.mwy_feudal_realms_states_array
-                            value = THIS.id
-                        }
-                    }
-                    
-                    set_variable = { mwy_chan_relations_menu_var = 0 }
-
+                mwy_chancellor_action_button_2_click = {
                     if = {
-                        limit = { check_variable = { mwy_chan_compliance_menu_var = 1 } }
+                        limit = { has_country_flag = chancellor_appeasing_nobles_base_flag }
+                        
                         ROOT = {
-                            set_variable = { mwy_chan_compliance_menu_var = 0 }
+                            clr_country_flag = chancellor_appeasing_nobles_base_flag
+
+                            clr_country_flag = chancellor_appeasing_nobles_grainlands_flag
+                            clr_country_flag = chancellor_appeasing_nobles_amethyst_flag
+                            clr_country_flag = chancellor_appeasing_nobles_radigator_flag
+                            clr_country_flag = chancellor_appeasing_nobles_swampy_flag
+                            clr_country_flag = chancellor_appeasing_nobles_peninsula_flag
+                            clr_country_flag = chancellor_appeasing_nobles_maredia_flag
+                            clr_country_flag = chancellor_appeasing_nobles_belle_flag
                         }
                     }
                     else = {
-                        ROOT = {
-                            set_variable = { mwy_chan_compliance_menu_var = 1 }
+                        
+                        set_variable = { mwy_chan_relations_menu_var = 0 }
+                        set_variable = { mwy_mar_levy_menu_var = 0 }
+
+                        if = {
+                            limit = { check_variable = { mwy_chan_compliance_menu_var = 1 } }
+                            ROOT = {
+                                set_variable = { mwy_chan_compliance_menu_var = 0 }
+                            }
+                        }
+                        else = {
+                            ROOT = {
+                                set_variable = { mwy_chan_compliance_menu_var = 1 }
+                            }
                         }
                     }
                 }
-            }
 
-            mwy_chancellor_action_button_3_click = {
-                if = { 
-                    limit = { has_country_flag = chancellor_governance_flag }
-                    ROOT = {
-                        remove_ideas = MWY_chan_governance_idea
-                        clr_country_flag = chancellor_governance_flag
+                mwy_chancellor_action_button_3_click = {
+                    if = { 
+                        limit = { has_country_flag = chancellor_governance_flag }
+                        ROOT = {
+                            remove_ideas = MWY_chan_governance_idea
+                            clr_country_flag = chancellor_governance_flag
+                        }
+                    }
+                    else = {
+                        set_country_flag = chancellor_governance_flag
+                        add_ideas = MWY_chan_governance_idea
                     }
                 }
-                else = {
-                    set_country_flag = chancellor_governance_flag
-                    add_ideas = MWY_chan_governance_idea
-                }
-            }
 
-            mwy_chancellor_action_button_4_click = {
-                if = {
-                    limit = { has_country_flag = chancellor_improving_compliance_flag }
-                    ROOT = {
-                        remove_ideas = MWY_chan_compliance_idea
-                        clr_country_flag = chancellor_improving_compliance_flag
+                mwy_chancellor_action_button_4_click = {
+                    if = {
+                        limit = { has_country_flag = chancellor_improving_compliance_flag }
+                        ROOT = {
+                            remove_ideas = MWY_chan_compliance_idea
+                            clr_country_flag = chancellor_improving_compliance_flag
+                        }
+                    }
+                    else = {
+                        set_country_flag = chancellor_improving_compliance_flag
+                        add_ideas = MWY_chan_compliance_idea
                     }
                 }
-                else = {
-                    set_country_flag = chancellor_improving_compliance_flag
-                    add_ideas = MWY_chan_compliance_idea
+
+            #Marshal Actions
+                mwy_marshal_action_button_1_click = {
+                    if = { 
+                        limit = { has_country_flag = marshal_raise_troops_flag }
+                        ROOT = {
+                            clr_country_flag = marshal_raise_troops_flag
+                        }
+                    }
+                    else = {
+                        set_country_flag = marshal_raise_troops_flag
+                        country_event = {
+                            id = newmareway.3
+                            days = 150
+                            random = 48
+                            random_days = 15
+                        }
+                    }
                 }
-            }
+                mwy_marshal_action_button_2_click = {
+                    if = { 
+                        limit = { has_country_flag = marshal_train_flag }
+                        ROOT = {
+                            clr_country_flag = marshal_train_flag
+                        }
+                    }
+                    else = {
+                        set_country_flag = marshal_train_flag
+                        country_event = {
+                            id = newmareway.5
+                            days = 55
+                            random = 48
+                            random_days = 10
+                        }
+                    }
+                }
+                mwy_marshal_action_button_3_click = {
+                    if = { 
+                        limit = { has_country_flag = marshal_supress_flag }
+                        ROOT = {
+                            clr_country_flag = marshal_supress_flag
+                            remove_ideas = MWY_mar_supress_idea
+                        }
+                    }
+                    else = {
+                        set_country_flag = marshal_supress_flag
+                        add_ideas = MWY_mar_supress_idea
+                    }
+                }
+
+                mwy_marshal_action_button_4_click = {
+                    if = {
+                        limit = { has_country_flag = marshal_train_levies_base_flag }
+                        
+                        ROOT = {
+                            clr_country_flag = marshal_train_levies_base_flag
+
+                            clr_country_flag = marshal_train_levies_grainlands_flag
+                            clr_country_flag = marshal_train_levies_amethyst_flag
+                            clr_country_flag = marshal_train_levies_radigator_flag
+                            clr_country_flag = marshal_train_levies_swampy_flag
+                            clr_country_flag = marshal_train_levies_peninsula_flag
+                            clr_country_flag = marshal_train_levies_maredia_flag
+                            clr_country_flag = marshal_train_levies_belle_flag
+                        }
+                    }
+                    else = {
+                        
+                        set_variable = { mwy_chan_relations_menu_var = 0 }
+                        set_variable = { mwy_chan_compliance_menu_var = 0 }
+
+                        if = {
+                            limit = { check_variable = { mwy_mar_levy_menu_var = 1 } }
+                            ROOT = {
+                                set_variable = { mwy_mar_levy_menu_var = 0 }
+                            }
+                        }
+                        else = {
+                            ROOT = {
+                                set_variable = { mwy_mar_levy_menu_var = 1 }
+                            }
+                        }
+                    }
+                }
         }
     
         triggers = {
-            mwy_chancellor_action_button_1_click_enabled = {
-                ROOT = {
-                    NOT = {
-                        has_country_flag = chancellor_improving_compliance_flag
-                        has_country_flag = chancellor_governance_flag
-                        has_country_flag = chancellor_appeasing_nobles_base_flag
+            #Chancellor Buttons
+                mwy_chancellor_action_button_1_click_enabled = {
+                    ROOT = {
+                        NOT = {
+                            has_country_flag = chancellor_improving_compliance_flag
+                            has_country_flag = chancellor_governance_flag
+                            has_country_flag = chancellor_appeasing_nobles_base_flag
+                        }
                     }
                 }
-            }
-            mwy_chancellor_action_button_2_click_enabled = {
-                ROOT = {
-                    NOT = {
-                        has_country_flag = chancellor_improving_relations_flag
-                        has_country_flag = chancellor_improving_compliance_flag
-                        has_country_flag = chancellor_governance_flag
+                mwy_chancellor_action_button_2_click_enabled = {
+                    ROOT = {
+                        NOT = {
+                            has_country_flag = chancellor_improving_relations_flag
+                            has_country_flag = chancellor_improving_compliance_flag
+                            has_country_flag = chancellor_governance_flag
+                        }
                     }
                 }
-            }
-            mwy_chancellor_action_button_3_click_enabled = {
-                ROOT = {
-                    NOT = {
-                        has_country_flag = chancellor_improving_relations_flag
-                        has_country_flag = chancellor_improving_compliance_flag
-                        has_country_flag = chancellor_appeasing_nobles_base_flag
+                mwy_chancellor_action_button_3_click_enabled = {
+                    ROOT = {
+                        NOT = {
+                            has_country_flag = chancellor_improving_relations_flag
+                            has_country_flag = chancellor_improving_compliance_flag
+                            has_country_flag = chancellor_appeasing_nobles_base_flag
+                        }
                     }
                 }
-            }
-            mwy_chancellor_action_button_4_click_enabled = {
-                ROOT = {
-                    NOT = {
-                        has_country_flag = chancellor_improving_relations_flag
-                        has_country_flag = chancellor_governance_flag
-                        has_country_flag = chancellor_appeasing_nobles_base_flag
-                    }
-                    any_owned_state = {
-                        NOT = { is_core_of = PREV }
-                        compliance < 100
+                mwy_chancellor_action_button_4_click_enabled = {
+                    ROOT = {
+                        NOT = {
+                            has_country_flag = chancellor_improving_relations_flag
+                            has_country_flag = chancellor_governance_flag
+                            has_country_flag = chancellor_appeasing_nobles_base_flag
+                        }
+                        any_owned_state = {
+                            NOT = { is_core_of = PREV }
+                            compliance < 100
+                        }
                     }
                 }
-            }
 
-            mwy_spymaster_action_button_4_click_enabled = {
-                ROOT = {
-                    has_war = yes
+            #Marshal Buttons
+                mwy_marshal_action_button_1_click_enabled = {
+                    ROOT = {
+                        NOT = {
+                            has_country_flag = marshal_train_flag
+                            has_country_flag = marshal_supress_flag
+                            has_country_flag = marshal_train_levies_base_flag
+                        }
+                    }
                 }
-            }
+                mwy_marshal_action_button_2_click_enabled = {
+                    ROOT = {
+                        NOT = {
+                            has_country_flag = marshal_raise_troops_flag
+                            has_country_flag = marshal_supress_flag
+                            has_country_flag = marshal_train_levies_base_flag
+                        }
+                    }
+                }
+                mwy_marshal_action_button_3_click_enabled = {
+                    ROOT = {
+                        NOT = {
+                            has_country_flag = marshal_raise_troops_flag
+                            has_country_flag = marshal_train_flag
+                            has_country_flag = marshal_train_levies_base_flag
+                        }
+                    }
+                }
+                mwy_marshal_action_button_4_click_enabled = {
+                    ROOT = {
+                        NOT = {
+                            has_country_flag = marshal_raise_troops_flag
+                            has_country_flag = marshal_train_flag
+                            has_country_flag = marshal_supress_flag
+                        }
+                    }
+                }
+
+            #Spymaster Buttons
+                mwy_spymaster_action_button_4_click_enabled = {
+                    ROOT = {
+                        has_war = yes
+                    }
+                }
         }
     
         dynamic_lists = {
@@ -297,7 +414,7 @@ scripted_gui = {
 
                     country_event = {
                         id = newmareway.1
-                        days = 120
+                        days = 105
                         random = 48
                         random_days = 30
                     }
@@ -312,7 +429,7 @@ scripted_gui = {
 
                     country_event = {
                         id = newmareway.1
-                        days = 120
+                        days = 105
                         random = 48
                         random_days = 30
                     }
@@ -327,7 +444,7 @@ scripted_gui = {
 
                     country_event = {
                         id = newmareway.1
-                        days = 120
+                        days = 105
                         random = 48
                         random_days = 30
                     }
@@ -342,7 +459,7 @@ scripted_gui = {
 
                     country_event = {
                         id = newmareway.1
-                        days = 120
+                        days = 105
                         random = 48
                         random_days = 30
                     }
@@ -357,7 +474,7 @@ scripted_gui = {
 
                     country_event = {
                         id = newmareway.1
-                        days = 120
+                        days = 105
                         random = 48
                         random_days = 30
                     }
@@ -372,7 +489,7 @@ scripted_gui = {
 
                     country_event = {
                         id = newmareway.1
-                        days = 120
+                        days = 105
                         random = 48
                         random_days = 30
                     }
@@ -387,7 +504,7 @@ scripted_gui = {
 
                     country_event = {
                         id = newmareway.1
-                        days = 120
+                        days = 105
                         random = 48
                         random_days = 30
                     }
@@ -449,6 +566,122 @@ scripted_gui = {
                     tooltip = MWY_realm_not_max_opinion_tt
                     check_variable = { mwy_belle_opinion < 3 }
                 }
+                custom_trigger_tooltip = {
+                    tooltip = MWY_realm_maredia_belle_returned_tt
+                   805 = { has_state_flag = mwy_feudal_realm_state_flag }
+                }
+            }
+        }
+    
+        dynamic_lists = {
+        #    chancellor_noble_gridbox = {
+        #        array = global.mwy_feudal_realms_states_array
+        #        entry_container = chancellor_noble_entry
+        #        change_scope = yes
+        #    }
+        }
+    
+        properties = {
+        }
+    
+        ai_enabled = {
+            always = no
+        }
+    
+        #ai_test_interval = 290  # The higher, the long it takes the ai to do actions
+        #ai_test_variance = 0.5
+    
+        ai_check = {
+        }
+    
+        ai_check_scope = {
+        }
+    
+        ai_weights = {
+        }
+    }
+
+    mwy_marshal_levy_window = {
+        window_name = "mwy_marshal_levy_window"
+        context_type = player_context
+        parent_window_token = mwy_council_window
+    
+        visible = {
+            check_variable = { mwy_mar_levy_menu_var > 0 }
+            check_variable = { mwy_ck2_menu_var = 1 }
+        }
+    
+        effects = {
+            close_button_click = {
+                set_variable = { mwy_mar_levy_menu_var = 0 }
+            }
+
+            grainlands_button_click = {
+                ROOT = {
+                    set_country_flag = marshal_train_levies_base_flag
+                    set_country_flag = marshal_train_levies_grainlands_flag
+                    set_variable = { mwy_mar_levy_menu_var = 0 }
+                }   
+            }
+
+            amethyst_button_click = {
+                ROOT = {
+                    set_country_flag = marshal_train_levies_base_flag
+                    set_country_flag = marshal_train_levies_amethyst_flag
+                    set_variable = { mwy_mar_levy_menu_var = 0 }
+                }   
+            }
+
+            radigator_button_click = {
+                ROOT = {
+                    set_country_flag = marshal_train_levies_base_flag
+                    set_country_flag = marshal_train_levies_radigator_flag
+                    set_variable = { mwy_mar_levy_menu_var = 0 }
+                }   
+            }
+
+            swampy_button_click = {
+                ROOT = {
+                    set_country_flag = marshal_train_levies_base_flag
+                    set_country_flag = marshal_train_levies_swampy_flag
+                    set_variable = { mwy_mar_levy_menu_var = 0 }
+                }   
+            }
+
+            peninsula_button_click = {
+                ROOT = {
+                    set_country_flag = marshal_train_levies_base_flag
+                    set_country_flag = marshal_train_levies_peninsula_flag
+                    set_variable = { mwy_mar_levy_menu_var = 0 }
+                }   
+            }
+
+            maredia_button_click = {
+                ROOT = {
+                    set_country_flag = marshal_train_levies_base_flag
+                    set_country_flag = marshal_train_levies_maredia_flag
+                    set_variable = { mwy_mar_levy_menu_var = 0 }
+                }   
+            }
+
+            belle_button_click = {
+                ROOT = {
+                    set_country_flag = marshal_train_levies_base_flag
+                    set_country_flag = marshal_train_levies_belle_flag
+                    set_variable = { mwy_mar_levy_menu_var = 0 }
+                }   
+            }
+
+        }
+
+        triggers = {
+            maredia_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = MWY_realm_maredia_belle_returned_tt
+                    69 = { has_state_flag = mwy_feudal_realm_state_flag }
+                }                
+            }
+            belle_button_click_enabled = {
                 custom_trigger_tooltip = {
                     tooltip = MWY_realm_maredia_belle_returned_tt
                    805 = { has_state_flag = mwy_feudal_realm_state_flag }
@@ -624,6 +857,7 @@ scripted_gui = {
 
                 set_variable = { mwy_chan_relations_menu_var = 0 }
                 set_variable = { mwy_chan_compliance_menu_var = 0 }
+                set_variable = { mwy_mar_levy_menu_var = 0 }
             }
 
             mwy_realms_button_click = {
