@@ -80,7 +80,7 @@ country_event = { ###Marshal Drill Troops - Check
  	hidden = yes
 
 	option = { #Check
-		name = newmareway.3.a
+		name = newmareway.5.a
 		if = {
 			limit = { has_country_flag = marshal_raise_troops_flag }
 			country_event = newmareway.5
@@ -100,5 +100,95 @@ country_event = { ###Marshal Drill Troops
 	option = { #Recall Marshal
 		name = newmareway.6.a
 		army_experience = 5
+	}
+}
+
+country_event = { ###Steward Tech - Check
+ 	id = newmareway.7
+ 	title = newmareway.7.title 
+ 	desc = newmareway.7.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	hidden = yes
+
+	option = { #Check
+		name = newmareway.7.a
+		if = {
+			limit = { has_country_flag = marshal_raise_troops_flag }
+			country_event = newmareway.8
+
+			if = {
+				limit = { has_war = yes }
+				random_list = {
+				    50 = {
+				        set_country_flag = MWY_stew_tech_inf
+				    }
+				    50 = {
+				        set_country_flag = MWY_stew_tech_sup
+				    }
+				}
+			}
+			else = {
+				random_list = {
+				    50 = {
+				        set_country_flag = MWY_stew_tech_ind
+				    }
+				    50 = {
+				        set_country_flag = MWY_stew_tech_ele
+				    }
+				}
+			}
+		}
+	}
+}
+
+country_event = { ###Marshal Drill Troops 
+ 	id = newmareway.8
+ 	title = newmareway.8.title
+ 	desc = newmareway.8.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	#fire_only_once = yes
+
+	option = { #Recall Marshal
+		name = newmareway.8.a
+		if = {
+			limit = { has_country_flag = MWY_stew_tech_inf }
+			add_tech_bonus = {
+				name = infantry_tech
+				bonus = 0.75
+				uses = 1
+				category = infantry_tech
+			}
+		}
+		else_if = {
+			limit = { has_country_flag = MWY_stew_tech_sup }
+			add_tech_bonus = {
+				name = support_tech
+				bonus = 0.75
+				uses = 1
+				category = support_tech
+			}
+		}
+		else_if = {
+			limit = { has_country_flag = MWY_stew_tech_ind }
+			add_tech_bonus = {
+				name = industry
+				bonus = 0.75
+				uses = 1
+				category = industry
+			}
+		}
+		else_if = {
+			limit = { has_country_flag = MWY_stew_tech_ele }
+			add_tech_bonus = {
+				name = electronics
+				bonus = 0.75
+				uses = 1
+				category = electronics
+			}
+		}
 	}
 }
