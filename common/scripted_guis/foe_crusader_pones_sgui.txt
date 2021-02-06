@@ -10,8 +10,45 @@ scripted_gui = {
         effects = {
             close_button_click = {
                 set_variable = { mwy_ck2_menu_var = 0 }
+                MWY_close_all_council_submenu = yes
+            }
+
+            chancellor_pick_button_click = {
+                set_variable = { mwy_mar_pick_menu_var = 0 }
                 set_variable = { mwy_chan_relations_menu_var = 0 }
                 set_variable = { mwy_chan_compliance_menu_var = 0 }
+                set_variable = { mwy_mar_levy_menu_var = 0 }
+
+                if = {
+                    limit = { check_variable = { mwy_chan_pick_menu_var = 1 } }
+                    ROOT = {
+                        set_variable = { mwy_chan_pick_menu_var = 0 }
+                    }
+                }
+                else = {
+                    ROOT = {
+                        set_variable = { mwy_chan_pick_menu_var = 1 }
+                    }
+                }
+            }
+
+            marshal_pick_button_click = {
+                set_variable = { mwy_chan_pick_menu_var = 0 }
+                set_variable = { mwy_chan_relations_menu_var = 0 }
+                set_variable = { mwy_chan_compliance_menu_var = 0 }
+                set_variable = { mwy_mar_levy_menu_var = 0 }
+
+                if = {
+                    limit = { check_variable = { mwy_mar_pick_menu_var = 1 } }
+                    ROOT = {
+                        set_variable = { mwy_mar_pick_menu_var = 0 }
+                    }
+                }
+                else = {
+                    ROOT = {
+                        set_variable = { mwy_mar_pick_menu_var = 1 }
+                    }
+                }
             }
 
             #Chancellor Actions
@@ -46,8 +83,12 @@ scripted_gui = {
                             }
                         }
                         
+                        set_variable = { mwy_chan_pick_menu_var = 0 }
+                        set_variable = { mwy_mar_pick_menu_var = 0 }
+                        set_variable = { mwy_chan_relations_menu_var = 0 }
                         set_variable = { mwy_chan_compliance_menu_var = 0 }
                         set_variable = { mwy_mar_levy_menu_var = 0 }
+
 
                         if = {
                             limit = { check_variable = { mwy_chan_relations_menu_var = 1 } }
@@ -81,6 +122,8 @@ scripted_gui = {
                     }
                     else = {
                         
+                        set_variable = { mwy_chan_pick_menu_var = 0 }
+                        set_variable = { mwy_mar_pick_menu_var = 0 }
                         set_variable = { mwy_chan_relations_menu_var = 0 }
                         set_variable = { mwy_mar_levy_menu_var = 0 }
 
@@ -193,6 +236,8 @@ scripted_gui = {
                     }
                     else = {
                         
+                        set_variable = { mwy_chan_pick_menu_var = 0 }
+                        set_variable = { mwy_mar_pick_menu_var = 0 }
                         set_variable = { mwy_chan_relations_menu_var = 0 }
                         set_variable = { mwy_chan_compliance_menu_var = 0 }
 
@@ -852,6 +897,146 @@ scripted_gui = {
         }
     }
 
+    mwy_pick_chancellor_window = {
+        window_name = "mwy_pick_chancellor_window"
+        context_type = player_context
+        parent_window_token = mwy_council_window
+    
+        visible = {
+            check_variable = { mwy_chan_pick_menu_var > 0 }
+            check_variable = { mwy_ck2_menu_var = 1 }
+        }
+    
+        effects = {
+            close_button_click = {
+                set_variable = { mwy_chan_pick_menu_var = 0 }
+            }
+
+            #grainlands_button_click = {
+            #    ROOT = {
+            #        set_country_flag = marshal_train_levies_base_flag
+            #        set_country_flag = marshal_train_levies_grainlands_flag
+            #        set_variable = { mwy_chan_pick_menu_var = 0 }
+            #    }   
+            #}
+
+            #amethyst_button_click = {
+            #    ROOT = {
+            #        set_country_flag = marshal_train_levies_base_flag
+            #        set_country_flag = marshal_train_levies_amethyst_flag
+            #        set_variable = { mwy_chan_pick_menu_var = 0 }
+            #    }   
+            #}
+        }
+
+        triggers = {
+            #maredia_button_click_enabled = {
+            #    custom_trigger_tooltip = {
+            #        tooltip = MWY_realm_maredia_belle_returned_tt
+            #        69 = { has_state_flag = mwy_feudal_realm_state_flag }
+            #    }                
+            #}
+            #belle_button_click_enabled = {
+            #    custom_trigger_tooltip = {
+            #        tooltip = MWY_realm_maredia_belle_returned_tt
+            #       805 = { has_state_flag = mwy_feudal_realm_state_flag }
+            #    }
+            #}
+        }
+    
+        dynamic_lists = {
+        }
+    
+        properties = {
+        }
+    
+        ai_enabled = {
+            always = no
+        }
+    
+        #ai_test_interval = 290  # The higher, the long it takes the ai to do actions
+        #ai_test_variance = 0.5
+    
+        ai_check = {
+        }
+    
+        ai_check_scope = {
+        }
+    
+        ai_weights = {
+        }
+    }
+
+    mwy_pick_marshal_window = {
+        window_name = "mwy_pick_marshal_window"
+        context_type = player_context
+        parent_window_token = mwy_council_window
+    
+        visible = {
+            check_variable = { mwy_mar_pick_menu_var > 0 }
+            check_variable = { mwy_ck2_menu_var = 1 }
+        }
+    
+        effects = {
+            close_button_click = {
+                set_variable = { mwy_mar_pick_menu_var = 0 }
+            }
+
+            #grainlands_button_click = {
+            #    ROOT = {
+            #        set_country_flag = marshal_train_levies_base_flag
+            #        set_country_flag = marshal_train_levies_grainlands_flag
+            #        set_variable = { mwy_chan_pick_menu_var = 0 }
+            #    }   
+            #}
+
+            #amethyst_button_click = {
+            #    ROOT = {
+            #        set_country_flag = marshal_train_levies_base_flag
+            #        set_country_flag = marshal_train_levies_amethyst_flag
+            #        set_variable = { mwy_chan_pick_menu_var = 0 }
+            #    }   
+            #}
+        }
+
+        triggers = {
+            #maredia_button_click_enabled = {
+            #    custom_trigger_tooltip = {
+            #        tooltip = MWY_realm_maredia_belle_returned_tt
+            #        69 = { has_state_flag = mwy_feudal_realm_state_flag }
+            #    }                
+            #}
+            #belle_button_click_enabled = {
+            #    custom_trigger_tooltip = {
+            #        tooltip = MWY_realm_maredia_belle_returned_tt
+            #       805 = { has_state_flag = mwy_feudal_realm_state_flag }
+            #    }
+            #}
+        }
+    
+        dynamic_lists = {
+        }
+    
+        properties = {
+        }
+    
+        ai_enabled = {
+            always = no
+        }
+    
+        #ai_test_interval = 290  # The higher, the long it takes the ai to do actions
+        #ai_test_variance = 0.5
+    
+        ai_check = {
+        }
+    
+        ai_check_scope = {
+        }
+    
+        ai_weights = {
+        }
+    }
+
     mwy_realms_gui = {
         window_name = "mwy_realms_window"
         context_type = player_context
@@ -971,6 +1156,7 @@ scripted_gui = {
 
             #Centralization Buttons
                 centralization_laws_button_1_click = {
+                    add_manpower = 100
                     if = {
                         limit = { NOT = { check_variable = { centralization_laws_var = 1 } } }
                         MWY_reset_centralization_laws_frames = yes
@@ -1260,6 +1446,218 @@ scripted_gui = {
                 army_laws_button_5 = {
                     frame = army_laws_button_5_frame_var
                 }
+
+            #Council Approval
+                #Serf Laws
+                    serf_laws_button_1_chan = {
+                        frame = serf_laws_button_1_chan_var
+                    }
+                    serf_laws_button_1_mar = {
+                        frame = serf_laws_button_1_mar_var
+                    }
+                    serf_laws_button_1_stew = {
+                        frame = serf_laws_button_1_stew_var
+                    }
+                    serf_laws_button_1_spy = {
+                        frame = serf_laws_button_1_spy_var
+                    }
+
+
+                    serf_laws_button_2_chan = {
+                        frame = serf_laws_button_2_chan_var
+                    }
+                    serf_laws_button_2_mar = {
+                        frame = serf_laws_button_2_mar_var
+                    }
+                    serf_laws_button_2_stew = {
+                        frame = serf_laws_button_2_stew_var
+                    }
+                    serf_laws_button_2_spy = {
+                        frame = serf_laws_button_2_spy_var
+                    }
+
+
+                    serf_laws_button_3_chan = {
+                        frame = serf_laws_button_3_chan_var
+                    }
+                    serf_laws_button_3_mar = {
+                        frame = serf_laws_button_3_mar_var
+                    }
+                    serf_laws_button_3_stew = {
+                        frame = serf_laws_button_3_stew_var
+                    }
+                    serf_laws_button_3_spy = {
+                        frame = serf_laws_button_3_spy_var
+                    }
+
+
+                    serf_laws_button_4_chan = {
+                        frame = serf_laws_button_4_chan_var
+                    }
+                    serf_laws_button_4_mar = {
+                        frame = serf_laws_button_4_mar_var
+                    }
+                    serf_laws_button_4_stew = {
+                        frame = serf_laws_button_4_stew_var
+                    }
+                    serf_laws_button_4_spy = {
+                        frame = serf_laws_button_4_spy_var
+                    }
+
+
+                    serf_laws_button_5_chan = {
+                        frame = serf_laws_button_5_chan_var
+                    }
+                    serf_laws_button_5_mar = {
+                        frame = serf_laws_button_5_mar_var
+                    }
+                    serf_laws_button_5_stew = {
+                        frame = serf_laws_button_5_stew_var
+                    }
+                    serf_laws_button_5_spy = {
+                        frame = serf_laws_button_5_spy_var
+                    }
+
+
+                #Centralization Laws
+                    centralization_laws_button_1_chan = {
+                        frame = centralization_laws_button_1_chan_var
+                    }
+                    centralization_laws_button_1_mar = {
+                        frame = centralization_laws_button_1_mar_var
+                    }
+                    centralization_laws_button_1_stew = {
+                        frame = centralization_laws_button_1_stew_var
+                    }
+                    centralization_laws_button_1_spy = {
+                        frame = centralization_laws_button_1_spy_var
+                    }
+
+
+                    centralization_laws_button_2_chan = {
+                        frame = centralization_laws_button_2_chan_var
+                    }
+                    centralization_laws_button_2_mar = {
+                        frame = centralization_laws_button_2_mar_var
+                    }
+                    centralization_laws_button_2_stew = {
+                        frame = centralization_laws_button_2_stew_var
+                    }
+                    centralization_laws_button_2_spy = {
+                        frame = centralization_laws_button_2_spy_var
+                    }
+
+
+                    centralization_laws_button_3_chan = {
+                        frame = centralization_laws_button_3_chan_var
+                    }
+                    centralization_laws_button_3_mar = {
+                        frame = centralization_laws_button_3_mar_var
+                    }
+                    centralization_laws_button_3_stew = {
+                        frame = centralization_laws_button_3_stew_var
+                    }
+                    centralization_laws_button_3_spy = {
+                        frame = centralization_laws_button_3_spy_var
+                    }
+
+
+                    centralization_laws_button_4_chan = {
+                        frame = centralization_laws_button_4_chan_var
+                    }
+                    centralization_laws_button_4_mar = {
+                        frame = centralization_laws_button_4_mar_var
+                    }
+                    centralization_laws_button_4_stew = {
+                        frame = centralization_laws_button_4_stew_var
+                    }
+                    centralization_laws_button_4_spy = {
+                        frame = centralization_laws_button_4_spy_var
+                    }
+
+
+                    centralization_laws_button_5_chan = {
+                        frame = centralization_laws_button_5_chan_var
+                    }
+                    centralization_laws_button_5_mar = {
+                        frame = centralization_laws_button_5_mar_var
+                    }
+                    centralization_laws_button_5_stew = {
+                        frame = centralization_laws_button_5_stew_var
+                    }
+                    centralization_laws_button_5_spy = {
+                        frame = centralization_laws_button_5_spy_var
+                    }
+
+                #Army Laws
+                    army_laws_button_1_chan = {
+                        frame = army_laws_button_1_chan_var
+                    }
+                    army_laws_button_1_mar = {
+                        frame = army_laws_button_1_mar_var
+                    }
+                    army_laws_button_1_stew = {
+                        frame = army_laws_button_1_stew_var
+                    }
+                    army_laws_button_1_spy = {
+                        frame = army_laws_button_1_spy_var
+                    }
+
+
+                    army_laws_button_2_chan = {
+                        frame = army_laws_button_2_chan_var
+                    }
+                    army_laws_button_2_mar = {
+                        frame = army_laws_button_2_mar_var
+                    }
+                    army_laws_button_2_stew = {
+                        frame = army_laws_button_2_stew_var
+                    }
+                    army_laws_button_2_spy = {
+                        frame = army_laws_button_2_spy_var
+                    }
+
+
+                    army_laws_button_3_chan = {
+                        frame = army_laws_button_3_chan_var
+                    }
+                    army_laws_button_3_mar = {
+                        frame = army_laws_button_3_mar_var
+                    }
+                    army_laws_button_3_stew = {
+                        frame = army_laws_button_3_stew_var
+                    }
+                    army_laws_button_3_spy = {
+                        frame = army_laws_button_3_spy_var
+                    }
+
+
+                    army_laws_button_4_chan = {
+                        frame = army_laws_button_4_chan_var
+                    }
+                    army_laws_button_4_mar = {
+                        frame = army_laws_button_4_mar_var
+                    }
+                    army_laws_button_4_stew = {
+                        frame = army_laws_button_4_stew_var
+                    }
+                    army_laws_button_4_spy = {
+                        frame = army_laws_button_4_spy_var
+                    }
+
+
+                    army_laws_button_5_chan = {
+                        frame = army_laws_button_5_chan_var
+                    }
+                    army_laws_button_5_mar = {
+                        frame = army_laws_button_5_mar_var
+                    }
+                    army_laws_button_5_stew = {
+                        frame = army_laws_button_5_stew_var
+                    }
+                    army_laws_button_5_spy = {
+                        frame = army_laws_button_5_spy_var
+                    }
         }
     
         ai_enabled = {
