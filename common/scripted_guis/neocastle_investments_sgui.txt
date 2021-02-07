@@ -16,7 +16,11 @@ scripted_gui = {
 				var = NCG_mil_invest
 				value = 1
 				}
-				add_manpower = [?NCG_mil_merc_count]
+				add_manpower = NCG_mil_merc_count
+				subtract_from_variable = {
+				var = NCG_free_invest
+				value = 1
+				}
             }
 			ncg_mil_invest_button2_click = {
                 add_to_variable = {
@@ -24,6 +28,10 @@ scripted_gui = {
 				value = 1
 				}
 				add_equipment_to_stockpile = { type = infantry_equipment_4 amount = 300 producer = OWE }
+				subtract_from_variable = {
+				var = NCG_free_invest
+				value = 1
+				}
             }
 			ncg_mil_invest_button3_click = {
                 add_to_variable = {
@@ -31,16 +39,36 @@ scripted_gui = {
 				value = 1
 				}
 				add_offsite_building = { type = arms_factory level = 1 }
+				subtract_from_variable = {
+				var = NCG_free_invest
+				value = 1
+				}
             }
 			ncg_mil_invest_button4_click = {
                 add_to_variable = {
 				var = NCG_mil_invest
 				value = 1
 				}
-				###add_idea = XXX
+				IF = {
+					limit = {
+						NOT = {has_dynamic_modifier = { modifier = NCG_mil_training_modifier } }
+					}
+						add_dynamic_modifier = {
+							modifier = NCG_mil_training_modifier
+						}
+				}
+				add_to_variable = {
+				var = NCG_mil_training
+				value = 0.02
+				}
+				force_update_dynamic_modifier = yes
+				subtract_from_variable = {
+				var = NCG_free_invest
+				value = 1
+				}
             }
 			ncg_mil_invest_button5_click = {
-                ###add_idea = XXX
+                add_ideas = NCG_mil_invest_5
             }
 			ncg_civ_invest_button1_click = {
                 add_to_variable = {
@@ -57,6 +85,10 @@ scripted_gui = {
 					14 = { 747 = {add_resource = {type = circuitry amount = 4}} }
 					14 = { 747 = {add_resource = {type = advanced amount = 4}} }
 					14 = { 747 = {add_resource = {type = crystals amount = 4}} }
+				}
+				subtract_from_variable = {
+				var = NCG_free_invest
+				value = 1
 				}
             }
 			ncg_civ_invest_button2_click = {
@@ -79,6 +111,10 @@ scripted_gui = {
 					}
 					add_extra_state_shared_building_slots = 4
 				}
+				subtract_from_variable = {
+				var = NCG_free_invest
+				value = 1
+				}
             }
 			ncg_civ_invest_button3_click = {
                 add_to_variable = {
@@ -86,36 +122,247 @@ scripted_gui = {
 				value = 1
 				}
 				add_offsite_building = { type = industrial_complex level = 1 }
+				add_timed_idea = {days = 50 idea = NCG_civ_invest_debuff_idea}
+				subtract_from_variable = {
+				var = NCG_free_invest
+				value = 1
+				}
             }
 			ncg_civ_invest_button4_click = {
                 add_to_variable = {
 				var = NCG_civ_invest
 				value = 1
 				}
-				###add_idea = XXX
+				IF = {
+					limit = {
+						NOT = {has_dynamic_modifier = { modifier = NCG_civ_market_modifier } }
+					}
+						add_dynamic_modifier = {
+							modifier = NCG_civ_market_modifier
+						}
+				}
+				add_to_variable = {
+				var = NCG_civ_market
+				value = 0.05
+				}
+				subtract_from_variable = {
+				var = NCG_civ_market2
+				value = 0.05
+				}
+				force_update_dynamic_modifier = yes
+				subtract_from_variable = {
+				var = NCG_free_invest
+				value = 1
+				}
             }
 			ncg_civ_invest_button5_click = {
-                ###add_idea = XXX
+                add_ideas = NCG_civ_invest_5
             }
 			ncg_rnd_invest_button1_click = {
-                add_tech_bonus = {
+                add_to_variable = {
+				var = NCG_rnd_invest
+				value = 1
+				}
+				add_tech_bonus = {
 					name = robotics_tech
 					bonus = 1.0
 					uses = 1
 					category = robotics_tech
 					}
+				subtract_from_variable = {
+				var = NCG_free_invest
+				value = 1
+				}
             }
 			ncg_rnd_invest_button2_click = {
-                ###random high-tech equipment
+				add_to_variable = {
+				var = NCG_rnd_invest
+				value = 1
+				}
+				fixed_random_seed = no
+                random_list = {
+				
+					12 = {
+						add_equipment_to_stockpile = {
+							type = cas_equipment_4
+							amount = 20
+							producer = OWE
+						}
+					}
+					12 = {
+						add_equipment_to_stockpile = {
+							type = fighter_equipment_5
+							amount = 20
+							producer = OWE
+						}
+					}
+					12 = {
+						add_equipment_to_stockpile = {
+							type = explosive_demolitions_equipment_4
+							amount = 100
+							producer = OWE
+						}
+					}
+					12 = {
+						add_equipment_to_stockpile = {
+							type = flamer_demolitions_equipment_4
+							amount = 100
+							producer = OWE
+						}
+					}
+					12 = {
+						add_equipment_to_stockpile = {
+							type = light_robot_gutsy_equipment
+							amount = 100
+							producer = OWE
+						}
+					}
+					16 = {
+						add_equipment_to_stockpile = {
+							type = ballistic_fireteam_equipment_4
+							amount = 100
+							producer = OWE
+						}
+					}
+					12 = {
+						add_equipment_to_stockpile = {
+							type = energy_equipment_4
+							amount = 200
+							producer = OWE
+						}
+					}
+					12 = {
+						add_equipment_to_stockpile = {
+							type = power_armor_equipment_4
+							amount = 100
+							producer = OWE
+						}
+					}
+				}
+				subtract_from_variable = {
+				var = NCG_free_invest
+				value = 1
+				}
             }
 			ncg_rnd_invest_button3_click = {
-                ###random niche-event
+				add_to_variable = {
+				var = NCG_rnd_invest
+				value = 1
+				}
+                fixed_random_seed = no
+                random_list = {
+					10 = {
+						modifier = {
+							factor = 0
+							has_country_flag = NCG_rand_event_1_flag
+						}
+						country_event = { id = neocastlegui.1 }
+						set_country_flag = NCG_rand_event_1_flag
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							has_country_flag = NCG_rand_event_2_flag
+						}
+						country_event = { id = neocastlegui.2 }
+						set_country_flag = NCG_rand_event_2_flag
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							has_country_flag = NCG_rand_event_3_flag
+						}
+						country_event = { id = neocastlegui.3 }
+						set_country_flag = NCG_rand_event_3_flag
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							has_country_flag = NCG_rand_event_4_flag
+						}
+						country_event = { id = neocastlegui.4 }
+						set_country_flag = NCG_rand_event_4_flag
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							has_country_flag = NCG_rand_event_5_flag
+						}
+						country_event = { id = neocastlegui.5 }
+						set_country_flag = NCG_rand_event_5_flag
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							has_country_flag = NCG_rand_event_6_flag
+						}
+						country_event = { id = neocastlegui.6 }
+						set_country_flag = NCG_rand_event_6_flag
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							has_country_flag = NCG_rand_event_7_flag
+						}
+						country_event = { id = neocastlegui.7 }
+						set_country_flag = NCG_rand_event_7_flag
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							has_country_flag = NCG_rand_event_8_flag
+						}
+						country_event = { id = neocastlegui.8 }
+						set_country_flag = NCG_rand_event_8_flag
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							has_country_flag = NCG_rand_event_9_flag
+						}
+						country_event = { id = neocastlegui.9 }
+						set_country_flag = NCG_rand_event_9_flag
+					}
+					10 = {
+						modifier = {
+							factor = 0
+							has_country_flag = NCG_rand_event_10_flag
+						}
+						country_event = { id = neocastlegui.10 }
+						set_country_flag = NCG_rand_event_10_flag
+					}
+				
+				}
+				subtract_from_variable = {
+				var = NCG_free_invest
+				value = 1
+				}
             }
 			ncg_rnd_invest_button4_click = {
-                ###add_idea = XXX
+				add_to_variable = {
+				var = NCG_rnd_invest
+				value = 1
+				}
+                IF = {
+					limit = {
+						NOT = {has_dynamic_modifier = { modifier = NCG_rnd_budget_modifier } }
+					}
+						add_dynamic_modifier = {
+							modifier = NCG_rnd_budget_modifier
+						}
+				}
+				add_to_variable = {
+				var = NCG_rnd_budget
+				value = 0.03
+				}
+				force_update_dynamic_modifier = yes
+				subtract_from_variable = {
+				var = NCG_free_invest
+				value = 1
+				}
             }
 			ncg_rnd_invest_button5_click = {
-                ###add_idea = XXX
+                add_ideas = NCG_rng_invest_5
             }
 			
         }
@@ -123,60 +370,68 @@ scripted_gui = {
         triggers = {
 			ncg_mil_invest_button1_click_enabled = {
 				check_variable = { NCG_free_invest > 0 }
-				check_variable = { NCG_mil_invest < 10 }
 			}
 			ncg_mil_invest_button2_click_enabled = {
 				check_variable = { NCG_free_invest > 0 }
-				check_variable = { NCG_mil_invest < 10 }
 			}
 			ncg_mil_invest_button3_click_enabled = {
 				check_variable = { NCG_free_invest > 0 }
-				check_variable = { NCG_mil_invest < 10 }
 			}
 			ncg_mil_invest_button4_click_enabled = {
 				check_variable = { NCG_free_invest > 0 }
-				check_variable = { NCG_mil_invest < 10 }
+				check_variable = { NCG_mil_training < 0.1 }
 			}
 			ncg_mil_invest_button5_click_enabled = {
 				check_variable = { NCG_mil_invest = 10 }
+				NOT = {has_idea = NCG_mil_invest_5}
 			}
 			ncg_civ_invest_button1_click_enabled = {
 				check_variable = { NCG_free_invest > 0 }
-				check_variable = { NCG_civ_invest < 10 }
 			}
 			ncg_civ_invest_button2_click_enabled = {
 				check_variable = { NCG_free_invest > 0 }
-				check_variable = { NCG_civ_invest < 10 }
 			}
 			ncg_civ_invest_button3_click_enabled = {
 				check_variable = { NCG_free_invest > 0 }
-				check_variable = { NCG_civ_invest < 10 }
 			}
 			ncg_civ_invest_button4_click_enabled = {
 				check_variable = { NCG_free_invest > 0 }
-				check_variable = { NCG_civ_invest < 10 }
+				check_variable = { NCG_civ_market < 0.25 }
 			}
 			ncg_civ_invest_button5_click_enabled = {
 				check_variable = { NCG_civ_invest = 10 }
+				NOT = {has_idea = NCG_civ_invest_5}
 			}
 			ncg_rnd_invest_button1_click_enabled = {
 				check_variable = { NCG_free_invest > 0 }
-				check_variable = { NCG_rnd_invest < 10 }
 			}
 			ncg_rnd_invest_button2_click_enabled = {
 				check_variable = { NCG_free_invest > 0 }
-				check_variable = { NCG_rnd_invest < 10 }
 			}
 			ncg_rnd_invest_button3_click_enabled = {
 				check_variable = { NCG_free_invest > 0 }
-				check_variable = { NCG_rnd_invest < 10 }
+				NOT = {
+					AND = {
+					has_country_flag = NCG_rand_event_1_flag
+					has_country_flag = NCG_rand_event_2_flag
+					has_country_flag = NCG_rand_event_3_flag
+					has_country_flag = NCG_rand_event_4_flag
+					has_country_flag = NCG_rand_event_5_flag
+					has_country_flag = NCG_rand_event_6_flag
+					has_country_flag = NCG_rand_event_7_flag
+					has_country_flag = NCG_rand_event_8_flag
+					has_country_flag = NCG_rand_event_9_flag
+					has_country_flag = NCG_rand_event_10_flag
+					}
+				}
 			}
 			ncg_rnd_invest_button4_click_enabled = {
 				check_variable = { NCG_free_invest > 0 }
-				check_variable = { NCG_rnd_invest < 10 }
+				check_variable = { NCG_rnd_budget < 0.15 }
 			}
 			ncg_rnd_invest_button5_click_enabled = {
 				check_variable = { NCG_rnd_invest = 10 }
+				NOT = {has_idea = NCG_rng_invest_5}
 			}
         }
     
