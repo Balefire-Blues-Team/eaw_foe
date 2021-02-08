@@ -961,36 +961,66 @@ scripted_gui = {
                 set_variable = { mwy_chan_pick_menu_var = 0 }
             }
 
-            #grainlands_button_click = {
-            #    ROOT = {
-            #        set_country_flag = marshal_train_levies_base_flag
-            #        set_country_flag = marshal_train_levies_grainlands_flag
-            #        set_variable = { mwy_chan_pick_menu_var = 0 }
-            #    }   
-            #}
+            s_littleward_button_click = {
+                ROOT = {
+                    if = {
+                        limit = { has_country_flag = MWY_chancellor_flag_glow }
+                        MWY_lower_grainlands_opinion = yes
+                    }
+                    MWY_clear_current_chancellor = yes
+                    set_country_flag = MWY_chancellor_flag_littleward
+                    MWY_set_chan_littleward_law_approval = yes
+                    MWY_raise_grainlands_opinion = yes
+                    MWY_chan_pick_cooldown_effect = yes
+                    set_variable = { mwy_chan_pick_menu_var = 0 }
+                }   
+            }
 
-            #amethyst_button_click = {
-            #    ROOT = {
-            #        set_country_flag = marshal_train_levies_base_flag
-            #        set_country_flag = marshal_train_levies_amethyst_flag
-            #        set_variable = { mwy_chan_pick_menu_var = 0 }
-            #    }   
-            #}
+            glow_button_click = {
+                ROOT = {
+                    if = {
+                        limit = { has_country_flag = MWY_chancellor_flag_littleward }
+                        MWY_lower_grainlands_opinion = yes
+                    }
+                    MWY_clear_current_chancellor = yes
+                    set_country_flag = MWY_chancellor_flag_glow
+                    MWY_set_stew_sunflower_law_approval = yes
+                    MWY_raise_grainlands_opinion = yes
+                    MWY_chan_pick_cooldown_effect = yes
+                    set_variable = { mwy_chan_pick_menu_var = 0 }
+                }   
+            }
         }
 
         triggers = {
-            #maredia_button_click_enabled = {
-            #    custom_trigger_tooltip = {
-            #        tooltip = MWY_realm_maredia_belle_returned_tt
-            #        69 = { has_state_flag = mwy_feudal_realm_state_flag }
-            #    }                
-            #}
-            #belle_button_click_enabled = {
-            #    custom_trigger_tooltip = {
-            #        tooltip = MWY_realm_maredia_belle_returned_tt
-            #       805 = { has_state_flag = mwy_feudal_realm_state_flag }
-            #    }
-            #}
+            s_littleward_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = MWY_chancellor_pick_not_littleward
+                    NOT = { has_country_flag = MWY_chancellor_flag_littleward }
+                }
+                custom_trigger_tooltip = {
+                    tooltip = MWY_chancellor_cooldown_tt
+                    NOT = { has_country_flag = MWY_chan_pick_cooldown_flag }
+                }
+                custom_trigger_tooltip = {
+                    tooltip = MWY_chancellor_pick_littleward_alive_tt
+                    NOT = { has_country_flag = MWY_littleward_dead_flag }
+                }
+            }
+            glow_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = MWY_chancellor_pick_not_glow
+                    NOT = { has_country_flag = MWY_chancellor_flag_glow }
+                }
+                custom_trigger_tooltip = {
+                    tooltip = MWY_chancellor_cooldown_tt
+                    NOT = { has_country_flag = MWY_chan_pick_cooldown_flag }
+                }            
+                custom_trigger_tooltip = {
+                    tooltip = MWY_chancellor_pick_duke_glow_tt
+                    has_country_flag = MWY_grainlands_glow_flag
+                }
+            }
         }
     
         dynamic_lists = {
