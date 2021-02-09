@@ -37,6 +37,7 @@ MWY_realms_debug_cat = {
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision foe_stability_dec"
 			set_variable = { mwy_grainlands_opinion = 3 }
+			MWY_calc_realm_poor_opinion = yes
 		}
 	}
 	mwy_grainlands_neutral = {
@@ -56,6 +57,7 @@ MWY_realms_debug_cat = {
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision foe_stability_dec"
 			set_variable = { mwy_grainlands_opinion = 2 }
+			MWY_calc_realm_poor_opinion = yes
 		}
 	}
 	mwy_grainlands_poor = {
@@ -75,10 +77,11 @@ MWY_realms_debug_cat = {
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision foe_stability_dec"
 			set_variable = { mwy_grainlands_opinion = 1 }
+			MWY_calc_realm_poor_opinion = yes
 		}
 	}
 
-	mwy_add_era_array = {
+	mwy_debug_activate_noble_revolt = {
 		icon = GFX_decision_stable_door
 		ai_will_do = {
 			base = 0
@@ -90,7 +93,7 @@ MWY_realms_debug_cat = {
 
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision foe_stability_dec"
-			
+			activate_decision = MWY_noble_revolt_mission
 		}
 	}
 
@@ -176,6 +179,40 @@ MWY_realms_debug_cat = {
 }
 
 MWY_levy_cat = {
+	MWY_noble_revolt_mission = {
+		icon = GFX_decision_megaphone
+
+		allowed = {
+			original_tag = MWY
+		}
+
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+                tooltip = MWY_less_than_3_angry_realms
+                check_variable = { realm_poor_opinion_count_var < 3 } 
+            } 
+		}
+		available = {
+			hidden_trigger = {
+				always = no
+			}                                    
+		}
+		activation = {                         
+			check_variable = { realm_poor_opinion_count_var > 2 }                   
+		}
+
+		days_mission_timeout = 160
+		timeout_effect = {
+			if = {
+				limit = { check_variable = { realm_poor_opinion_count_var = 5 } }
+				country_event = newmareway.22
+			}
+			else = {
+				country_event = newmareway.23
+			}
+		}
+	}
+
 	mwy_raise_all_levies = {
 		icon = GFX_decision_stable_door
 		ai_will_do = {
