@@ -1312,7 +1312,7 @@ shared_focus = {
 
 #'Aquire' Logging Land
 shared_focus = {
-		id = NCG_eat_EVR
+		id = NCG_trade_manehattan
 		icon = GFX_goal_GRF_beak_mines
 		x = 1
 		y = 7
@@ -1326,7 +1326,7 @@ shared_focus = {
 		} 
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus NCG_eat_EVR"
+			log = "[GetDateText]: [Root.GetName]: Focus NCG_trade_manehattan"
 			
 			
 		}
@@ -1387,7 +1387,7 @@ shared_focus = {
 		available_if_capitulated = yes 
 		relative_position_id = NCG_new_ceo
 		prerequisite = { focus = NCG_everfree_integrate }
-		prerequisite = { focus = NCG_eat_EVR }
+		prerequisite = { focus = NCG_trade_manehattan }
 		ai_will_do = {
 		factor = 50
 		} 
@@ -1477,7 +1477,7 @@ shared_focus = {
 		available_if_capitulated = yes 
 		relative_position_id = NCG_new_ceo
 		prerequisite = { focus = NCG_everfree_integrate }
-		prerequisite = { focus = NCG_eat_EVR }
+		prerequisite = { focus = NCG_trade_manehattan }
 		ai_will_do = {
 		factor = 50
 		} 
@@ -1579,7 +1579,12 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_wasteland_economics"
-			
+			add_tech_bonus = {
+			name = industry
+			bonus = 0.6
+			uses = 2
+			category = industry
+			}
 			
 		}
 }
@@ -1601,7 +1606,10 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_toll_roads"
-			
+			every_state = {
+				limit = {  is_core_of = NCG }
+				add_building_construction = { type = infrastructure instant_build = yes level = 1}
+			}
 			
 		}
 }
@@ -1649,7 +1657,11 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_appleseed_factory"
-			
+			747 = {
+				add_resource = {type = metal amount = 6}
+				add_resource = {type = water amount = 6}
+				add_resource = {type = energy amount = 6}
+			}
 		}
 }
 
@@ -1663,16 +1675,17 @@ shared_focus = {
 		
 		available_if_capitulated = yes 
 		relative_position_id = NCG_wasteland_economics
-		prerequisite = { focus = NCG_toll_roads }
-		prerequisite = { focus = NCG_squeeze_profits }
-		prerequisite = { focus = NCG_appleseed_factory }
+		prerequisite = { focus = NCG_toll_roads focus = NCG_squeeze_profits focus = NCG_appleseed_factory}
 		ai_will_do = {
 		factor = 30
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_clear_out_slums"
-			
+			every_state = {
+				limit = {  is_core_of = NCG }
+				add_extra_state_shared_building_slots = 2
+			}
 		}
 }
 
@@ -1693,7 +1706,10 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_connect_rapids"
-			
+			597 = {
+				add_building_construction = { type = infrastructure instant_build = yes level = 2}
+				add_building_construction = { type = industrial_complex instant_build = yes level = 1}
+			}
 		}
 }
 
@@ -1714,6 +1730,13 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_river_industry"
+			navy_experience = 10
+			597 = {
+				add_building_construction = {type = dockyard level = 1 instant_build = yes}
+			}
+			747 = {
+				add_building_construction = {type = dockyard level = 1 instant_build = yes}
+			}
 			
 		}
 }
@@ -1735,11 +1758,15 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_open_lemondrop_factory"
-			
+			747 = {
+				add_resource = {type = composites amount = 6}
+				add_resource = {type = circuitry amount = 6}
+				add_resource = {type = advanced amount = 6}
+			}
 		}
 }
 
-#Cavern-Factories
+#Mandatory Urbanization
 shared_focus = {
 		id = NCG_underground_factories
 		icon = GFX_goal_charge_for_the_privilege_of_being_employed
@@ -1749,16 +1776,18 @@ shared_focus = {
 		
 		available_if_capitulated = yes 
 		relative_position_id = NCG_wasteland_economics
-		prerequisite = { focus = NCG_connect_rapids }
-		prerequisite = { focus = NCG_river_industry }
-		prerequisite = { focus = NCG_open_lemondrop_factory }
+		prerequisite = { focus = NCG_connect_rapids focus = NCG_river_industry focus = NCG_open_lemondrop_factory}
 		ai_will_do = {
 		factor = 30
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_underground_factories"
-			
+			every_state = {
+				limit = {  is_core_of = NCG }
+				add_extra_state_shared_building_slots = 1
+			}
+			747 = { add_manpower = 2500 }
 		}
 }
 
@@ -1779,7 +1808,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_underground_rail"
-			
+			add_ideas = NCG_underground_construction_idea
 		}
 }
 
@@ -1800,7 +1829,12 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_offshore_salvage"
-			
+			custom_effect_tooltip = NCG_peak_capitalism_tt
+			custom_effect_tooltip = NCG_increase_profit_large_tt
+			add_to_variable = {
+				var = NCG_free_invest
+				value = 2
+			}
 		}
 }
 
@@ -1821,7 +1855,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_open_sylhpon_factory"
-			
+			add_research_slot = 1
 		}
 }
 
@@ -1835,16 +1869,15 @@ shared_focus = {
 		
 		available_if_capitulated = yes 
 		relative_position_id = NCG_wasteland_economics
-		prerequisite = { focus = NCG_underground_rail }
-		prerequisite = { focus = NCG_offshore_salvage }
-		prerequisite = { focus = NCG_open_sylhpon_factory }
+		prerequisite = { focus = NCG_underground_rail focus = NCG_offshore_salvage focus = NCG_open_sylhpon_factory }
 		ai_will_do = {
 		factor = 30
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_capitalist_paradise"
-			
+			add_stability = 0.05
+			add_ideas = wasteland_society2
 		}
 }
 
@@ -1865,7 +1898,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_war_profiteering"
-			
+			add_war_support = 0.08
+			747 = {add_extra_state_shared_building_slots = 1 add_building_construction = { type = arms_factory instant_build = yes level = 1}}
 		}
 }
 
@@ -1887,7 +1921,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_amethyst_plan"
-			
+			747 = {add_extra_state_shared_building_slots = 2 add_building_construction = { type = industrial_complex instant_build = yes level = 2}}
 		}
 }
 
@@ -1909,7 +1943,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_apiary_plan"
-			
+			747 = {add_extra_state_shared_building_slots = 3 add_building_construction = { type = arms_factory instant_build = yes level = 3}}
 		}
 }
 
@@ -1930,7 +1964,22 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_neighbour_weapons"
-			
+			custom_effect_tooltip = NCG_death_merchant_tt
+			add_dynamic_modifier = {
+				modifier = NCG_death_merchant_modifier
+			}
+			hidden_effect = {
+				RED = {country_event = neocastle.998}
+				SHA = {country_event = neocastle.998}
+				OAP = {country_event = neocastle.998}
+				TEN = {country_event = neocastle.998}
+				MWY = {country_event = neocastle.998}
+				ERA = {country_event = neocastle.998}
+				LIT = {country_event = neocastle.998}
+				WNF = {country_event = neocastle.998}
+				LGH = {country_event = neocastle.998}
+				GUN = {country_event = neocastle.998}
+			}
 		}
 }
 
@@ -1951,7 +2000,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_poach_researchers"
-			
+			add_research_slot = 1
 		}
 }
 
@@ -1972,7 +2021,9 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_predatory_lending"
-			
+			add_political_power = -20
+			add_offsite_building = { type = arms_factory level = 1 }
+			add_offsite_building = { type = industrial_complex level = 1 }
 		}
 }
 
@@ -1994,7 +2045,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_capitalism_marches_on"
-			
+			custom_effect_tooltip = NCG_reach_peak_tt
+			add_ideas = NCG_final_capitalism_idea
 		}
 }
 
