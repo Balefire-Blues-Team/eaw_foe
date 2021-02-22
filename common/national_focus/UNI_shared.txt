@@ -272,6 +272,9 @@ shared_focus = {
 		518 = { 
 			add_extra_state_shared_building_slots = 1
 		}
+		add_state_core = 458 
+		add_state_core = 134
+
 	}
 }
 
@@ -932,18 +935,16 @@ shared_focus = {
 	}	
 
 	completion_reward = {
-		create_wargoal = {
-			type = annex_everything
+		declare_war_on = {
+			type = annex_everything 
 			target = REP
 		}
-
-		create_wargoal = {
-			type = annex_everything
+		declare_war_on = {
+			type = annex_everything 
 			target = GOR
 		}
-
-		create_wargoal = {
-			type = annex_everything
+		declare_war_on = {
+			type = annex_everything 
 			target = PRA
 		}
 	}
@@ -962,6 +963,14 @@ shared_focus = {
 
 	mutually_exclusive = { focus = goddess_canon_stick_redeye }
 	mutually_exclusive = {focus = goddess_canon_harbinger}
+
+	available = {
+		NOT = {
+			country_exists = PRA
+			country_exists = REP
+			country_exists = GOR
+		}	
+	}
 
 	available_if_capitulated = no
 	ai_will_do = {
@@ -991,6 +1000,14 @@ shared_focus = {
 	mutually_exclusive = { focus = goddess_canon_stick_redeye }
 
 	available = {
+		NOT = {
+			country_exists = PRA
+			country_exists = REP
+			country_exists = GOR
+		}	
+	}
+
+	available = {
 		country_exists = NEV
 	}
 
@@ -1014,6 +1031,10 @@ shared_focus = {
 	}
 }
 
+
+
+### Unity / Red Eye path ###
+
 #Stick with Red Eye
 shared_focus = {
 	id = goddess_canon_stick_redeye
@@ -1032,6 +1053,11 @@ shared_focus = {
 				ruling_only = yes
 			}
 		}
+		NOT = {
+			country_exists = PRA
+			country_exists = REP
+			country_exists = GOR
+		}	
 	}
 
 	mutually_exclusive = {focus = goddess_canon_harbinger}
@@ -1054,7 +1080,7 @@ shared_focus = {
 		hidden_effect = {
 			add_to_variable = {
 				var = UNI_RED_trust
-				value = 2
+				value = 4
 			}
 			set_country_flag = UNI_redeyetree
 			load_focus_tree = Unity_RedEye
@@ -1062,7 +1088,1164 @@ shared_focus = {
 	}
 }
 
+#Our Friends in Fillydelphia
+shared_focus = {
+	id = UNI_friends_in_Filly
+	icon = GFX_goal_unknown
+	
+	relative_position_id = goddess_canon_stick_redeye
+	x = 0
+	y = 1
+	cost = 5
 
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		
+		custom_effect_tooltip = UNI_increase_trust_RED_tt
+		hidden_effect = {
+			add_to_variable = {
+				var = UNI_RED_trust
+				value = 2
+			}
+		}
+	}
+}
+
+#More Slaves for Unity
+shared_focus = {
+	id = UNI_more_slaves_unity
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_friends_in_Filly }
+	
+	relative_position_id = UNI_friends_in_Filly
+	x = 0
+	y = 1
+	cost = 5
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		add_manpower = 500
+		add_ideas = UNI_slave_idea2
+	}
+}
+
+#Lessons in Industry
+shared_focus = {
+	id = UNI_lessons_industry
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_more_slaves_unity }
+	
+	relative_position_id = UNI_more_slaves_unity 
+	x = 0
+	y = 1
+	cost = 5 
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		
+		add_tech_bonus = {
+				name = industry
+				bonus = 0.5
+				uses = 2
+				category = industry
+		}
+
+		518 = {
+			add_extra_state_shared_building_slots = 3
+			add_building_construction = {
+				type = industrial_complex
+				level = 2
+				instant_build = yes
+			}
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+			}
+		}
+	}
+}
+
+#Threats to our Alliance
+shared_focus = {
+	id = UNI_threats_to_Alliance
+	icon = GFX_goal_unknown 
+	prerequisite = { focus = UNI_lessons_industry }
+	
+	relative_position_id = UNI_lessons_industry
+	x = 0
+	y = 1
+	cost = 5
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		custom_effect_tooltip = UNI_increase_trust_RED_tt
+		hidden_effect = {
+			add_to_variable = {
+				var = UNI_RED_trust
+				value = 2
+			}
+		}
+		add_political_power = 75
+	}
+}
+
+#The Relics
+shared_focus = {
+	id = UNI_the_relics
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_threats_to_Alliance }
+	
+	relative_position_id = UNI_threats_to_Alliance
+	x = -2
+	y = 1
+	cost = 5 
+
+	bypass = {
+		NOT = {
+			country_exists = FSR
+		}
+	}
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		create_wargoal = {
+			type = annex_everything
+			target = FSR
+		}
+	}
+}
+
+#The Republicans
+shared_focus = {
+	id = UNI_the_republicans
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_threats_to_Alliance }
+	
+	relative_position_id = UNI_threats_to_Alliance
+	x = 0
+	y = 1
+	cost = 5
+
+	bypass = {
+		NOT = {
+			country_exists = SHA
+		}
+	}
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		create_wargoal = {
+			type = annex_everything
+			target = SHA
+		}
+	}
+}
+
+#The Enclave
+shared_focus = {
+	id = UNI_the_enclave
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_threats_to_Alliance }
+	
+	relative_position_id = UNI_threats_to_Alliance
+	x = 2
+	y = 1
+	cost = 5
+
+	bypass = {
+		NOT = {
+			country_exists = NEV
+		}
+	}
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		create_wargoal = {
+			type = annex_everything
+			target = NEV
+		}
+	}
+}
+
+#A Bright Future
+shared_focus = {
+	id = UNI_bright_future
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_the_republicans }
+	prerequisite = { focus = UNI_the_enclave }
+	prerequisite = { focus = UNI_the_relics }
+	
+	relative_position_id = UNI_the_republicans
+	x = 0
+	y = 1
+	cost = 5
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		country_event = UNI.4
+	}
+}
+
+#The New Unity
+shared_focus = {
+	id = UNI_new_unity
+	icon = GFX_goal_unknown
+	
+	relative_position_id = UNI_bright_future
+	x = 0
+	y = 1
+	cost = 5 
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		
+	}
+}
+
+#There Can Be Only One
+shared_focus = {
+	id = UNI_there_can_only_one 
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_new_unity }
+	
+	mutually_exclusive = {focus = UNI_friendship_in_unity }
+
+	relative_position_id = UNI_new_unity 
+	x = -1
+	y = 1
+	cost = 5
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		declare_war_on = {
+			target = RED
+			type = annex_everything
+		}
+	}
+}
+
+#A Threat to Our Existence
+shared_focus = {
+	id = UNI_threat_to_Existence
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_there_can_only_one }
+	
+	relative_position_id = UNI_there_can_only_one
+	x = 0
+	y = 1
+	cost = 5
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		add_ideas = UNI_Redeye_war
+	}
+}
+
+#Destroy the Cathedral
+shared_focus = {
+	id = UNI_destroy_cathedral
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_threat_to_Existence }
+	
+	relative_position_id = UNI_threat_to_Existence
+	x = 0
+	y = 1
+	cost = 5
+
+	available = {
+		UNI = {
+			controls_state = 593
+		}
+	}
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		country_event = { id = UNI.5 }
+	}
+}
+
+#Destroy the Vision
+shared_focus = {
+	id = UNI_destroy_vision
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_destroy_cathedral }
+	
+	relative_position_id = UNI_destroy_cathedral 
+	x = 0
+	y = 1
+	cost = 5
+
+	available = {
+		NOT = {
+			country_exists = RED
+		}
+		owns_state = 532
+		owns_state = 45
+	}
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		country_event = { id = UNI.6 }
+	}
+}
+
+#One Unity, One Future
+shared_focus = {
+	id = UNI_one_unity_one_future
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_destroy_vision }
+	
+	relative_position_id = UNI_destroy_vision
+	x = 0
+	y = 1
+	cost = 5
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		country_event = { id = UNI.7 }
+	}
+}
+
+#All Threats to Our Rule
+shared_focus = {
+	id = UNI_all_threats
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_one_unity_one_future }
+	
+	relative_position_id = UNI_one_unity_one_future
+	x = 0
+	y = 1
+	cost = 5 
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		custom_effect_tooltip = UNI_attack_everyone_tt
+		hidden_effect = {
+			every_neighbor_country = {
+				limit = {
+					NOT = { has_war_with = ROOT }
+				}
+				ROOT = {
+					declare_war_on = { target = PREV type = annex_everything }
+				}
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = SHA 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = TEN 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = FSR 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = MAN 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = LRA 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = NAP 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = NCG 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = REP 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = LGH 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = EVR 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = GUN 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = APR 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = FRT 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = RWK 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = MUD 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = STT 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = FER 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = RTA 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = MRA 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = RAR 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = ABT 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = MAR 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = GUT 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = FRI 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = FTP
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = CCD
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = GLY
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = PRA
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = STA
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = CAL
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = SCI
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = HIT
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = GRV
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = FTR 
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = ERA
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = SSC
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = SSR
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = SSS
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = CAT
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = FLT
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = EMP
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = BOG
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = GOR
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = FTA
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = MAS
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = PBN
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = RED
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = OAP
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = LIT
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = MSR
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = ARB
+			}	
+			declare_war_on = { 
+				type = annex_everything 
+				target = NEV
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = NEN
+			}		
+			declare_war_on = { 
+				type = annex_everything 
+				target = NEC
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = WNF
+			}
+			declare_war_on = { 
+				type = annex_everything 
+				target = MWY
+			}			
+			declare_war_on = { 
+				type = annex_everything 
+				target = HSW
+			}	
+			declare_war_on = { 
+				type = annex_everything 
+				target = HSC
+			}	
+			declare_war_on = { 
+				type = annex_everything 
+				target = RAF
+			}	
+			declare_war_on = { 
+				type = annex_everything 
+				target = ROK
+			}	
+		}
+	}
+}
+
+#To Cleanse Ponykind
+shared_focus = {
+	id = UNI_cleanse_ponykind
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_all_threats }
+	
+	relative_position_id = UNI_all_threats 
+	x = 0
+	y = 1
+	cost = 5 
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		country_event = { id = UNI.8 }
+	}
+}
+
+#No One to Oppose Us
+shared_focus = {
+	id = UNI_no_one_oppose_us
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_cleanse_ponykind }
+	
+	relative_position_id = UNI_cleanse_ponykind
+	x = 0
+	y = 1
+	cost = 5
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		country_event = { id = UNI.9 }
+	}
+}
+
+#Friendship in Unity
+shared_focus = {
+	id = UNI_friendship_in_unity
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_new_unity }
+	
+	mutually_exclusive = {focus = UNI_there_can_only_one }
+
+	relative_position_id = UNI_new_unity 
+	x = 1
+	y = 1
+	cost = 5
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		create_faction = "Unity Pact"
+
+		RED = {
+			country_event = { id = UNI.10 }
+		}
+	}
+}
+
+#Learn From One Another
+shared_focus = {
+	id = UNI_learn_from_one_another
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_friendship_in_unity }
+	
+	relative_position_id = UNI_friendship_in_unity
+	x = 0
+	y = 1
+	cost = 5 
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		add_ideas = UNI_RED_research
+		RED = { add_ideas = UNI_RED_research }
+	}
+}
+
+#The Cathedral-Maripony Line
+shared_focus = {
+	id = UNI_catherdral_maripony_line
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_learn_from_one_another }
+	
+	relative_position_id = UNI_learn_from_one_another
+	x = 0
+	y = 1
+	cost = 5
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		
+		518 = {
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+				instant_build = yes
+			}
+		}
+
+		134 = {
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+				instant_build = yes
+			}
+		}
+
+		486 = {
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+				instant_build = yes
+			}
+		}
+
+		507 = {
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+				instant_build = yes
+			}
+		}
+
+		799 = {
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+				instant_build = yes
+			}
+		}
+
+		492 = {
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+				instant_build = yes
+			}
+		}
+
+		513 = {
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+				instant_build = yes
+			}
+		}
+
+		593 = {
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+				instant_build = yes
+			}
+		}
+	}
+}
+
+#To Raise the Moon
+shared_focus = {
+	id = UNI_raise_moon
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_catherdral_maripony_line }
+	
+	relative_position_id = UNI_catherdral_maripony_line
+	x = 0
+	y = 1
+	cost = 5 
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		country_event = { id = UNI.11 }
+	}
+}
+
+#A Shared Future
+shared_focus = {
+	id = UNI_shared_future
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_raise_moon }
+	
+	relative_position_id = UNI_raise_moon
+	x = 0
+	y = 1
+	cost = 5
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		country_event = { id = UNI.12 }
+	}
+}
+
+#The Fall of Red Eye
+shared_focus = {
+	id = UNI_fall_of_redeye
+	icon = GFX_goal_unknown
+	
+	relative_position_id = UNI_new_unity
+	x = 5
+	y = 0
+	cost = 5
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		
+	}
+}
+
+#Take Advantage of the Chaos
+shared_focus = {
+	id = UNI_advantage_of_chaos
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_fall_of_redeye }
+	
+	relative_position_id = UNI_fall_of_redeye
+	x = 0
+	y = 1
+	cost = 5
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		
+	}
+}
+
+#Red Eye's Experiments
+shared_focus = {
+	id = UNI_redeye_experiments
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_advantage_of_chaos }
+	
+	relative_position_id = UNI_advantage_of_chaos
+	x = -1
+	y = 1
+	cost = 5
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		
+	}
+}
+
+#Put the Slaves to Use
+shared_focus = {
+	id = UNI_put_slaves_to_use
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_advantage_of_chaos }
+	
+	relative_position_id = UNI_advantage_of_chaos
+	x = 1
+	y = 1
+	cost = 5
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		
+	}
+}
+
+#Crush The Resistance
+shared_focus = {
+	id = UNI_crush_resistance
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_put_slaves_to_use }
+	prerequisite = { focus = UNI_redeye_experiments }
+
+	relative_position_id = UNI_redeye_experiments
+	x = 1
+	y = 1
+	cost = 5
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		
+	}
+}
+
+#Two Visions, One Dream
+shared_focus = {
+	id = UNI_two_visions_one_dream
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_crush_resistance }
+	
+	relative_position_id = UNI_crush_resistance
+	x = 0
+	y = 1
+	cost = 5
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		
+	}
+}
+
+#Deal with Those Who Remain
+shared_focus = {
+	id = UNI_deal_with_remain
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_two_visions_one_dream }
+	
+	relative_position_id = UNI_two_visions_one_dream
+	x = 0
+	y = 1
+	cost = 5
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		
+	}
+}
+
+#Memorialize Our Friend
+shared_focus = {
+	id = UNI_memorialize_our_friend
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_deal_with_remain }
+	
+	relative_position_id = UNI_deal_with_remain
+	x = 0
+	y = 1
+	cost = 5
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		
+	}
+}
+
+#A Faithful Workforce
+shared_focus = {
+	id = UNI_faithful_workforce
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_memorialize_our_friend }
+	
+	relative_position_id = UNI_memorialize_our_friend
+	x = 0
+	y = 1
+	cost = 5
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		
+	}
+}
+
+#To Rebuild Equestria
+shared_focus = {
+	id = UNI_rebuild_equestria
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_faithful_workforce }
+	
+	relative_position_id = UNI_faithful_workforce
+	x = 0
+	y = 1
+	cost = 5
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		
+	}
+}
+
+#Rebuilding Manehattan
+shared_focus = {
+	id = UNI_Rebuilding_Manehattan
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_rebuild_equestria }
+	
+	relative_position_id = UNI_rebuild_equestria
+	x = -2
+	y = 1
+	cost = 5
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		
+	}
+}
+
+#Rebuilding Canterlot
+shared_focus = {
+	id = UNI_rebuilding_canterlot
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_rebuild_equestria }
+	
+	relative_position_id = UNI_rebuild_equestria
+	x = 0
+	y = 1
+	cost = 5
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		
+	}
+}
+
+#Rebuilding Appleloosa
+shared_focus = {
+	id = UNI_rebuilding_appleloosa
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_rebuild_equestria }
+	
+	relative_position_id = UNI_rebuild_equestria
+	x = 2
+	y = 1
+	cost = 5
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		
+	}
+}
+
+#A Dream Realized
+shared_focus = {
+	id = UNI_dream_realized
+	icon = GFX_goal_unknown
+	prerequisite = { focus = UNI_Rebuilding_Manehattan }
+	prerequisite = { focus = UNI_rebuilding_canterlot }
+	prerequisite = { focus = UNI_rebuilding_appleloosa }
+	
+	relative_position_id = UNI_rebuilding_canterlot
+	x = 0
+	y = 1
+	cost = 5
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 10
+	}	
+
+	completion_reward = {
+		
+	}
+}
 
 ###INDUSTRY###
 
@@ -2784,7 +3967,7 @@ shared_focus = {
 shared_focus = {
 	id = goddess_master_16
 	icon = GFX_goal_unknown
-	prerequisite = { focus = focus = goddess_master_12 }
+	prerequisite = { focus = goddess_master_12 }
 	
 	x = 48
 	y = 14
@@ -4004,7 +5187,7 @@ shared_focus = {
 
 	completion_reward = {
 		589 = {
-			add_resour ce = {
+			add_resource = {
 				type = crystals
 				amount = 3
 			}
@@ -4794,7 +5977,6 @@ shared_focus = {
 		focus = goddess_master_80
 	}
 	
-	relative_position_id = 
 	x = 58
 	y = 19
 	cost = 10
@@ -4908,7 +6090,7 @@ shared_focus = {
 	}
 }
 
-Raise the Faithful
+#Raise the Faithful
 shared_focus = {
 	id = goddess_master_86
 	icon = GFX_goal_unknown
@@ -4941,7 +6123,6 @@ shared_focus = {
 		focus = goddess_master_86
 	}
 	
-	relative_position_id = 
 	x = 61
 	y = 21
 	cost = 10
@@ -4987,7 +6168,6 @@ shared_focus = {
 		focus = goddess_master_84
 	}
 	
-	relative_position_id = 
 	x = 63
 	y = 21
 	cost = 10
