@@ -198,7 +198,8 @@ MWY_levy_cat = {
 			}                                    
 		}
 		activation = {                         
-			#check_variable = { realm_poor_opinion_count_var > 2 }                   
+			check_variable = { realm_poor_opinion_count_var > 2 }
+			always = no                
 		}
 
 		selectable_mission = yes
@@ -212,6 +213,40 @@ MWY_levy_cat = {
 			else = {
 				country_event = newmareway.23
 				
+			}
+		}
+	}
+
+	MWY_famine_crisis = {
+		icon = GFX_decision_megaphone
+
+		allowed = {
+			original_tag = MWY
+		}
+
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+                tooltip = MWY_has_solved_food_store_crisis
+                NOT = { has_idea = MWY_low_winter_stores }
+            } 
+		}
+		available = {
+			#hidden_trigger = {
+			#	always = yes
+			#}                                    
+		}
+		activation = {                         
+			has_idea = MWY_low_winter_stores                  
+		}
+
+		#selectable_mission = yes
+
+		days_mission_timeout = 80
+		timeout_effect = {
+			country_event = newmareway.38
+			swap_ideas = {
+				remove_idea = MWY_low_winter_stores
+				add_idea = MWY_serf_famine
 			}
 		}
 	}

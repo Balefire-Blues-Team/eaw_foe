@@ -73,6 +73,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus MWY_alarms_raised"
+		country_event = newmareway.31
 	}
 }
 
@@ -93,6 +94,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus MWY_feast_aftermath"
+		country_event = newmareway.35
 	}
 }
 
@@ -112,6 +114,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus MWY_serfs_hungry"
+		country_event = newmareway.39
 	}
 }
 
@@ -131,6 +134,24 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus MWY_winter_prep"
+		add_stability = 0.01
+		if = {
+			limit = { has_country_flag = MWY_queen_status_quo_flag }
+			add_popularity = {
+			    ideology = continuation
+			    popularity = 0.05
+			}
+		}
+		else = {
+			add_popularity = {
+			    ideology = visionary
+			    popularity = 0.05
+			}
+		}
+		add_days_mission_timeout = {
+			mission = MWY_famine_crisis
+			days = 30
+		}
 	}
 }
 
@@ -151,6 +172,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus MWY_privy_council"
+		country_event = newmareway.43
 	}
 }
 
@@ -176,6 +198,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus MWY_new_management"
+		country_event = newmareway.34
 	}
 }
 
@@ -196,11 +219,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus MWY_let_them_eat_cake"
+		country_event = newmareway.40
 	}
 }
 
 shared_focus = {
-	id = MWY_not_a_child
+	id = MWY_friends_and_foes
 	icon = GFX_goal_griffon_crown
 	relative_position_id = MWY_privy_council
 	x = 2
@@ -208,21 +232,28 @@ shared_focus = {
 	cost = 3
 
 	available_if_capitulated = yes 
-	prerequisite = { 
-		focus = MWY_privy_council
-		focus = MWY_new_management 
-	}
+	prerequisite = { focus = MWY_privy_council }
+	prerequisite = { focus = MWY_new_management }
 	ai_will_do = { 
 	factor = 100
 	} 
 
 	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus MWY_not_a_child"
+		log = "[GetDateText]: [Root.GetName]: Focus MWY_friends_and_foes"
+		if = {
+			limit = {
+				has_idea = MWY_spymaster_pale_light
+			}
+			country_event = newmareway.41
+		}
+		else = {
+			country_event = newmareway.42
+		}
 	}
 }
 
 shared_focus = {
-	id = MWY_friends_and_foes
+	id = MWY_not_a_child 
 	icon = GFX_goal_griffon_crown
 	relative_position_id = MWY_new_management
 	x = 2
@@ -230,16 +261,15 @@ shared_focus = {
 	cost = 3
 
 	available_if_capitulated = yes 
-	prerequisite = { 
-		focus = MWY_let_them_eat_cake
-		focus = MWY_new_management 
-	}
+	prerequisite = { focus = MWY_let_them_eat_cake }
+	prerequisite = { focus = MWY_new_management }
 	ai_will_do = { 
 	factor = 100
 	} 
 
 	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus MWY_friends_and_foes"
+		log = "[GetDateText]: [Root.GetName]: Focus MWY_not_a_child"
+		country_event = newmareway.44
 	}
 }
 
@@ -260,6 +290,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus MWY_backroom_squabbles"
+		country_event = newmareway.45
 	}
 }
 
@@ -284,6 +315,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: MWY_stay_the_course MWY_backroom_squabbles"
+		custom_effect_tooltip = load_new_focus_tree_tt
 	}
 }
 
@@ -297,6 +329,12 @@ shared_focus = {
 
 	available_if_capitulated = yes
 	prerequisite = { focus = MWY_backroom_squabbles }
+	available = {
+		custom_trigger_tooltip = {
+			tooltip = MWY_over_30_visonary_tt
+			visionary > 0.29
+		}
+	}
 
 	mutually_exclusive = {
         focus = MWY_stay_the_course
@@ -308,5 +346,6 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus MWY_queens_way"
+		custom_effect_tooltip = load_new_focus_tree_tt
 	}
 }
