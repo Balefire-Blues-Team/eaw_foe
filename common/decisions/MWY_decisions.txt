@@ -1,0 +1,315 @@
+MWY_realms_debug_cat = {
+	mwy_reset_levies_dec = {
+		icon = GFX_decision_stable_door
+		ai_will_do = {
+			base = 0
+		}
+		visible = {
+			#has_ideas = closed_stable_society
+			tag = MWY
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision foe_stability_dec"
+			set_variable = { mwy_grainlands_levy_var = 5 }
+			set_variable = { mwy_amethyst_levy_var = 3 }
+			set_variable = { mwy_radigator_levy_var = 1 }
+			set_variable = { mwy_swampy_levy_var = 2 }
+			set_variable = { mwy_peninsula_levy_var = 3 }
+			set_variable = { mwy_belle_levy_var = 1 }
+			set_variable = { mwy_maredia_levy_var = 1 }
+		}
+	}
+
+	mwy_grainlands_good = {
+		icon = GFX_decision_stable_door
+		ai_will_do = {
+			base = 0
+		}
+		visible = {
+			#has_ideas = closed_stable_society
+			tag = MWY
+		}
+		highlight_states = {
+			state = 553
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision foe_stability_dec"
+			set_variable = { mwy_grainlands_opinion = 3 }
+			MWY_calc_realm_poor_opinion = yes
+		}
+	}
+	mwy_grainlands_neutral = {
+		icon = GFX_decision_stable_door
+		ai_will_do = {
+			base = 0
+		}
+		visible = {
+			#has_ideas = closed_stable_society
+			tag = MWY
+		}
+
+		highlight_states = {
+			state = 553
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision foe_stability_dec"
+			set_variable = { mwy_grainlands_opinion = 2 }
+			MWY_calc_realm_poor_opinion = yes
+		}
+	}
+	mwy_grainlands_poor = {
+		icon = GFX_decision_stable_door
+		ai_will_do = {
+			base = 0
+		}
+		visible = {
+			#has_ideas = closed_stable_society
+			tag = MWY
+		}
+
+		highlight_states = {
+			state = 553
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision foe_stability_dec"
+			set_variable = { mwy_grainlands_opinion = 1 }
+			MWY_calc_realm_poor_opinion = yes
+		}
+	}
+
+	mwy_debug_activate_noble_revolt = {
+		icon = GFX_decision_stable_door
+		ai_will_do = {
+			base = 0
+		}
+		visible = {
+			#has_ideas = closed_stable_society
+			tag = MWY
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision foe_stability_dec"
+			activate_decision = MWY_noble_revolt_mission
+		}
+	}
+
+	mwy_add_appease_nobles = {
+		icon = GFX_decision_stable_door
+		ai_will_do = {
+			base = 0
+		}
+		visible = {
+			#has_ideas = closed_stable_society
+			tag = MWY
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision foe_stability_dec"
+			has_country_flag = chancellor_appeasing_nobles_base_flag
+		}
+	}
+
+	mwy_reset_laws_dec = {
+		icon = GFX_decision_stable_door
+		ai_will_do = {
+			base = 0
+		}
+		visible = {
+			#has_ideas = closed_stable_society
+			tag = MWY
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision foe_stability_dec"
+			MWY_reset_serf_laws_frames = yes
+			set_variable = { serf_laws_var = 1 }
+			set_variable = { serf_laws_button_1_frame_var = 2 }
+
+			MWY_reset_centralization_laws_frames = yes
+			set_variable = { centralization_laws_var = 1 }
+			set_variable = { centralization_laws_button_1_frame_var = 2 }
+
+			MWY_reset_army_laws_frames = yes
+			set_variable = { army_laws_var = 2 }
+			set_variable = { army_laws_button_2_frame_var = 2 }
+			
+		}
+	}
+
+	mwy_reset_council_approval_dec = {
+		icon = GFX_decision_stable_door
+		ai_will_do = {
+			base = 0
+		}
+		visible = {
+			#has_ideas = closed_stable_society
+			tag = MWY
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision foe_stability_dec"
+			MWY_set_chan_littleward_law_approval = yes
+			MWY_set_mar_strongwing_law_approval = yes
+			MWY_set_stew_waters_law_approval = yes
+			MWY_set_spy_widow_law_approval = yes
+			
+		}
+	}
+
+	mwy_calculate_laws_approval_dec = {
+		icon = GFX_decision_stable_door
+		ai_will_do = {
+			base = 0
+		}
+		visible = {
+			#has_ideas = closed_stable_society
+			tag = MWY
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision foe_stability_dec"
+			MWY_calc_all_laws_approval = yes
+			
+		}
+	}
+}
+
+MWY_levy_cat = {
+	MWY_noble_revolt_mission = {
+		icon = GFX_decision_megaphone
+
+		allowed = {
+			original_tag = MWY
+		}
+
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+                tooltip = MWY_less_than_3_angry_realms
+                check_variable = { realm_poor_opinion_count_var < 3 } 
+            } 
+		}
+		available = {
+			hidden_trigger = {
+				always = yes
+			}                                    
+		}
+		activation = {                         
+			check_variable = { realm_poor_opinion_count_var > 2 }
+			always = no                
+		}
+
+		selectable_mission = yes
+
+		days_mission_timeout = 160
+		timeout_effect = {
+			if = {
+				limit = { check_variable = { realm_poor_opinion_count_var = 5 } }
+				country_event = newmareway.22
+			}
+			else = {
+				country_event = newmareway.23
+				
+			}
+		}
+	}
+
+	MWY_famine_crisis = {
+		icon = GFX_decision_megaphone
+
+		allowed = {
+			original_tag = MWY
+		}
+
+		cancel_trigger = {
+			custom_trigger_tooltip = {
+                tooltip = MWY_has_solved_food_store_crisis
+                NOT = { has_idea = MWY_low_winter_stores }
+            } 
+		}
+		available = {
+			#hidden_trigger = {
+			#	always = yes
+			#}                                    
+		}
+		activation = {                         
+			has_idea = MWY_low_winter_stores                  
+		}
+
+		#selectable_mission = yes
+
+		days_mission_timeout = 80
+		timeout_effect = {
+			country_event = newmareway.38
+			swap_ideas = {
+				remove_idea = MWY_low_winter_stores
+				add_idea = MWY_serf_famine
+			}
+		}
+	}
+
+	mwy_raise_all_levies = {
+		icon = GFX_decision_stable_door
+		ai_will_do = {
+			base = 0
+		}
+
+		available = {
+			has_war = yes
+		}
+
+		visible = {
+			#has_ideas = closed_stable_society
+			tag = MWY
+		}
+		#fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision foe_stability_dec"
+			MWY_raise_all_levies_effect = yes
+			set_country_flag = MWY_raised_levies_flag
+		}
+	}
+
+	mwy_disband_all_levies = {
+		icon = GFX_decision_stable_door
+		ai_will_do = {
+			base = 0
+		}
+
+		available = {
+			has_country_flag = MWY_raised_levies_flag
+		}
+
+		visible = {
+			#has_ideas = closed_stable_society
+			tag = MWY
+		}
+		#fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision foe_stability_dec"
+			delete_unit_template_and_units = {
+			    division_template = "Commoner Levies"
+			}
+			division_template = {
+			    name = "Commoner Levies"
+			    is_locked = yes
+			    regiments = {
+					infantry = { x = 0 y = 0 }
+					infantry = { x = 1 y = 0 }
+					militia = { x = 0 y = 1 }
+					militia = { x = 1 y = 1 }
+					militia = { x = 0 y = 2 }
+					militia = { x = 1 y = 2 }
+					militia = { x = 0 y = 3 }
+					militia = { x = 1 y = 3 }
+				}
+			}
+			clr_country_flag = MWY_raised_levies_flag
+		}
+	}
+}

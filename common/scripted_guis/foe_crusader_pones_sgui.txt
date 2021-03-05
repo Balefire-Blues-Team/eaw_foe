@@ -1,0 +1,2583 @@
+scripted_gui = {
+    mwy_council_gui = {
+        window_name = "mwy_council_window"
+        context_type = player_context
+    
+        visible = {
+            check_variable = { mwy_ck2_menu_var = 1 }
+        }
+    
+        effects = {
+            close_button_click = {
+                set_variable = { mwy_ck2_menu_var = 0 }
+                MWY_close_all_council_submenu = yes
+            }
+
+            chancellor_pick_button_click = {
+                set_variable = { mwy_mar_pick_menu_var = 0 }
+                set_variable = { mwy_stew_pick_menu_var = 0 }
+                set_variable = { mwy_spy_pick_menu_var = 0 }
+                set_variable = { mwy_chan_relations_menu_var = 0 }
+                set_variable = { mwy_chan_compliance_menu_var = 0 }
+                set_variable = { mwy_mar_levy_menu_var = 0 }
+
+                if = {
+                    limit = { check_variable = { mwy_chan_pick_menu_var = 1 } }
+                    ROOT = {
+                        set_variable = { mwy_chan_pick_menu_var = 0 }
+                    }
+                }
+                else = {
+                    ROOT = {
+                        set_variable = { mwy_chan_pick_menu_var = 1 }
+                    }
+                }
+            }
+
+            marshal_pick_button_click = {
+                set_variable = { mwy_chan_pick_menu_var = 0 }
+                set_variable = { mwy_stew_pick_menu_var = 0 }
+                set_variable = { mwy_spy_pick_menu_var = 0 }
+                set_variable = { mwy_chan_relations_menu_var = 0 }
+                set_variable = { mwy_chan_compliance_menu_var = 0 }
+                set_variable = { mwy_mar_levy_menu_var = 0 }
+
+                if = {
+                    limit = { check_variable = { mwy_mar_pick_menu_var = 1 } }
+                    ROOT = {
+                        set_variable = { mwy_mar_pick_menu_var = 0 }
+                    }
+                }
+                else = {
+                    ROOT = {
+                        set_variable = { mwy_mar_pick_menu_var = 1 }
+                    }
+                }
+            }
+
+            steward_pick_button_click = {
+                set_variable = { mwy_chan_pick_menu_var = 0 }
+                set_variable = { mwy_mar_pick_menu_var = 0 }
+                set_variable = { mwy_spy_pick_menu_var = 0 }
+                set_variable = { mwy_chan_relations_menu_var = 0 }
+                set_variable = { mwy_chan_compliance_menu_var = 0 }
+                set_variable = { mwy_mar_levy_menu_var = 0 }
+
+                if = {
+                    limit = { check_variable = { mwy_stew_pick_menu_var = 1 } }
+                    ROOT = {
+                        set_variable = { mwy_stew_pick_menu_var = 0 }
+                    }
+                }
+                else = {
+                    ROOT = {
+                        set_variable = { mwy_stew_pick_menu_var = 1 }
+                    }
+                }
+            }
+
+            spymaster_pick_button_click = {
+                set_variable = { mwy_chan_pick_menu_var = 0 }
+                set_variable = { mwy_mar_pick_menu_var = 0 }
+                set_variable = { mwy_stew_pick_menu_var = 0 }
+                set_variable = { mwy_chan_relations_menu_var = 0 }
+                set_variable = { mwy_chan_compliance_menu_var = 0 }
+                set_variable = { mwy_mar_levy_menu_var = 0 }
+
+                if = {
+                    limit = { check_variable = { mwy_spy_pick_menu_var = 1 } }
+                    ROOT = {
+                        set_variable = { mwy_spy_pick_menu_var = 0 }
+                    }
+                }
+                else = {
+                    ROOT = {
+                        set_variable = { mwy_spy_pick_menu_var = 1 }
+                    }
+                }
+            }
+
+            #Chancellor Actions
+                mwy_chancellor_action_button_1_click = {
+                    if = { 
+                        limit = { has_country_flag = chancellor_improving_relations_flag }
+                        every_country = {
+                            limit = {
+                               has_country_flag = has_mwy_chancellor_flag
+                            }
+                            clr_country_flag = has_mwy_chancellor_flag
+                            remove_opinion_modifier = {
+                                target = MWY
+                                modifier = sent_chancellor
+                            }
+                        }
+                        ROOT = {
+                            clr_country_flag = chancellor_improving_relations_flag
+                        }
+                    }
+                    else = {
+                        clear_array = global.chancellor_neighbor_countries_array
+                        every_neighbor_country = {
+                            limit = {
+                                NOT = {
+                                    tag = ERA
+                                }
+                            }
+                            add_to_array = {
+                                array = global.chancellor_neighbor_countries_array
+                                value = THIS.id
+                            }
+                        }
+                        
+                        set_variable = { mwy_chan_pick_menu_var = 0 }
+                        set_variable = { mwy_mar_pick_menu_var = 0 }
+                        set_variable = { mwy_stew_pick_menu_var = 0 }
+                        set_variable = { mwy_spy_pick_menu_var = 0 }
+                        set_variable = { mwy_chan_compliance_menu_var = 0 }
+                        set_variable = { mwy_mar_levy_menu_var = 0 }
+
+
+                        if = {
+                            limit = { check_variable = { mwy_chan_relations_menu_var = 1 } }
+                            ROOT = {
+                                set_variable = { mwy_chan_relations_menu_var = 0 }
+                            }
+                        }
+                        else = {
+                            ROOT = {
+                                set_variable = { mwy_chan_relations_menu_var = 1 }
+                            }
+                        }
+                    }
+                }
+
+                mwy_chancellor_action_button_2_click = {
+                    if = {
+                        limit = { has_country_flag = chancellor_appeasing_nobles_base_flag }
+                        
+                        ROOT = {
+                            clr_country_flag = chancellor_appeasing_nobles_base_flag
+
+                            clr_country_flag = chancellor_appeasing_nobles_grainlands_flag
+                            clr_country_flag = chancellor_appeasing_nobles_amethyst_flag
+                            clr_country_flag = chancellor_appeasing_nobles_radigator_flag
+                            clr_country_flag = chancellor_appeasing_nobles_swampy_flag
+                            clr_country_flag = chancellor_appeasing_nobles_peninsula_flag
+                            clr_country_flag = chancellor_appeasing_nobles_maredia_flag
+                            clr_country_flag = chancellor_appeasing_nobles_belle_flag
+                        }
+                    }
+                    else = {
+                        
+                        set_variable = { mwy_chan_pick_menu_var = 0 }
+                        set_variable = { mwy_mar_pick_menu_var = 0 }
+                        set_variable = { mwy_stew_pick_menu_var = 0 }
+                        set_variable = { mwy_spy_pick_menu_var = 0 }
+                        set_variable = { mwy_chan_relations_menu_var = 0 }
+                        set_variable = { mwy_mar_levy_menu_var = 0 }
+
+                        if = {
+                            limit = { check_variable = { mwy_chan_compliance_menu_var = 1 } }
+                            ROOT = {
+                                set_variable = { mwy_chan_compliance_menu_var = 0 }
+                            }
+                        }
+                        else = {
+                            ROOT = {
+                                set_variable = { mwy_chan_compliance_menu_var = 1 }
+                            }
+                        }
+                    }
+                }
+
+                mwy_chancellor_action_button_3_click = {
+                    if = { 
+                        limit = { has_country_flag = chancellor_governance_flag }
+                        ROOT = {
+                            remove_ideas = MWY_chan_governance_idea
+                            clr_country_flag = chancellor_governance_flag
+                        }
+                    }
+                    else = {
+                        MWY_chan_action_cooldown_effect = yes
+                        set_country_flag = chancellor_governance_flag
+                        add_ideas = MWY_chan_governance_idea
+                    }
+                }
+
+                mwy_chancellor_action_button_4_click = {
+                    if = {
+                        limit = { has_country_flag = chancellor_improving_compliance_flag }
+                        ROOT = {
+                            remove_ideas = MWY_chan_compliance_idea
+                            clr_country_flag = chancellor_improving_compliance_flag
+                        }
+                    }
+                    else = {
+                        MWY_chan_action_cooldown_effect = yes
+                        set_country_flag = chancellor_improving_compliance_flag
+                        add_ideas = MWY_chan_compliance_idea
+                    }
+                }
+
+            #Marshal Actions
+                mwy_marshal_action_button_1_click = {
+                    if = { 
+                        limit = { has_country_flag = marshal_raise_troops_flag }
+                        ROOT = {
+                            clr_country_flag = marshal_raise_troops_flag
+                        }
+                    }
+                    else = {
+                        set_country_flag = marshal_raise_troops_flag
+                        MWY_mar_action_cooldown_effect = yes
+                        country_event = {
+                            id = council_success.3
+                            days = 30
+                        }
+                    }
+                }
+                mwy_marshal_action_button_2_click = {
+                    if = { 
+                        limit = { has_country_flag = marshal_train_flag }
+                        ROOT = {
+                            clr_country_flag = marshal_train_flag
+                        }
+                    }
+                    else = {
+                        set_country_flag = marshal_train_flag
+                        MWY_mar_action_cooldown_effect = yes
+                        country_event = {
+                            id = council_success.5
+                            days = 30
+                        }
+                    }
+                }
+                mwy_marshal_action_button_3_click = {
+                    if = { 
+                        limit = { has_country_flag = marshal_supress_flag }
+                        ROOT = {
+                            clr_country_flag = marshal_supress_flag
+                            remove_ideas = MWY_mar_supress_idea
+                        }
+                    }
+                    else = {
+                        MWY_mar_action_cooldown_effect = yes
+                        set_country_flag = marshal_supress_flag
+                        add_ideas = MWY_mar_supress_idea
+                    }
+                }
+
+                mwy_marshal_action_button_4_click = {
+                    if = {
+                        limit = { has_country_flag = marshal_train_levies_base_flag }
+                        
+                        ROOT = {
+                            clr_country_flag = marshal_train_levies_base_flag
+
+                            clr_country_flag = marshal_train_levies_grainlands_flag
+                            clr_country_flag = marshal_train_levies_amethyst_flag
+                            clr_country_flag = marshal_train_levies_radigator_flag
+                            clr_country_flag = marshal_train_levies_swampy_flag
+                            clr_country_flag = marshal_train_levies_peninsula_flag
+                            clr_country_flag = marshal_train_levies_maredia_flag
+                            clr_country_flag = marshal_train_levies_belle_flag
+                        }
+                    }
+                    else = {
+                        
+                        set_variable = { mwy_chan_pick_menu_var = 0 }
+                        set_variable = { mwy_mar_pick_menu_var = 0 }
+                        set_variable = { mwy_stew_pick_menu_var = 0 }
+                        set_variable = { mwy_spy_pick_menu_var = 0 }
+                        set_variable = { mwy_chan_relations_menu_var = 0 }
+                        set_variable = { mwy_chan_compliance_menu_var = 0 }
+
+                        if = {
+                            limit = { check_variable = { mwy_mar_levy_menu_var = 1 } }
+                            ROOT = {
+                                set_variable = { mwy_mar_levy_menu_var = 0 }
+                            }
+                        }
+                        else = {
+                            ROOT = {
+                                set_variable = { mwy_mar_levy_menu_var = 1 }
+                            }
+                        }
+                    }
+                }
+            
+            #Steward Actions
+                mwy_steward_action_button_1_click = {
+                    if = { 
+                        limit = { has_country_flag = steward_tax_flag }
+                        ROOT = {
+                            clr_country_flag = steward_tax_flag
+                            remove_ideas = MWY_stew_tax_idea
+                        }
+                    }
+                    else = {
+                        MWY_stew_action_cooldown_effect = yes
+                        set_country_flag = steward_tax_flag
+                        add_ideas = MWY_stew_tax_idea
+                    }
+                }
+                mwy_steward_action_button_2_click = {
+                    if = { 
+                        limit = { has_country_flag = steward_construction_flag }
+                        ROOT = {
+                            clr_country_flag = steward_construction_flag
+                            remove_ideas = MWY_stew_construction_idea
+                        }
+                    }
+                    else = {
+                        MWY_stew_action_cooldown_effect = yes
+                        set_country_flag = steward_construction_flag
+                        add_ideas = MWY_stew_construction_idea
+                    }
+                }
+                mwy_steward_action_button_3_click = {
+                    if = { 
+                        limit = { has_country_flag = steward_resource_flag }
+                        ROOT = {
+                            clr_country_flag = steward_resource_flag
+                            remove_ideas = MWY_stew_resource_idea
+                        }
+                    }
+                    else = {
+                        MWY_stew_action_cooldown_effect = yes
+                        set_country_flag = steward_resource_flag
+                        add_ideas = MWY_stew_resource_idea
+                    }
+                }
+                mwy_steward_action_button_4_click = {
+                    if = { 
+                        limit = { has_country_flag = steward_tech_flag }
+                        ROOT = {
+                            clr_country_flag = steward_tech_flag
+                        }
+                    }
+                    else = {
+                        MWY_stew_action_cooldown_effect = yes
+                        set_country_flag = steward_tech_flag
+                        country_event = {
+                            id = council_success.7
+                            days = 30
+                        }
+                    }
+                }
+
+            #Spymaster Actions
+                mwy_spymaster_action_button_4_click = {
+                    if = { 
+                        limit = { has_country_flag = spymaster_poison_flag }
+                        ROOT = {
+                            clr_country_flag = spymaster_poison_flag
+                        }
+                    }
+                    else = {
+                        clear_array = global.spymaster_at_war_array
+                        every_neighbor_country = {
+                            limit = {
+                                has_war_with = MWY
+                            }
+                            add_to_array = {
+                                array = global.spymaster_at_war_array
+                                value = THIS.id
+                            }
+                        }
+                        
+                        set_variable = { mwy_chan_pick_menu_var = 0 }
+                        set_variable = { mwy_mar_pick_menu_var = 0 }
+                        set_variable = { mwy_stew_pick_menu_var = 0 }
+                        set_variable = { mwy_spy_pick_menu_var = 0 }
+                        set_variable = { mwy_chan_relations_menu_var = 0 }
+                        set_variable = { mwy_chan_compliance_menu_var = 0 }
+                        set_variable = { mwy_mar_levy_menu_var = 0 }
+
+
+                        if = {
+                            limit = { check_variable = { mwy_spy_poison_menu_var = 1 } }
+                            ROOT = {
+                                set_variable = { mwy_spy_poison_menu_var = 0 }
+                            }
+                        }
+                        else = {
+                            ROOT = {
+                                set_variable = { mwy_spy_poison_menu_var = 1 }
+                            }
+                        }
+                    }
+                }
+        }
+    
+        triggers = {
+            #Chancellor Buttons
+                mwy_chancellor_action_button_1_click_enabled = {
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_chancellor_available_tt
+                        ROOT = {
+                            NOT = {
+                                has_country_flag = chancellor_improving_compliance_flag
+                                has_country_flag = chancellor_governance_flag
+                                has_country_flag = chancellor_appeasing_nobles_base_flag
+                            }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_chan_action_cooldown_tt
+                        NOT = { has_country_flag = MWY_chan_action_flag }
+                    }
+                }
+                mwy_chancellor_action_button_2_click_enabled = {
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_chancellor_available_tt
+                        ROOT = {
+                            NOT = {
+                                has_country_flag = chancellor_improving_relations_flag
+                                has_country_flag = chancellor_improving_compliance_flag
+                                has_country_flag = chancellor_governance_flag
+                            }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_chan_action_cooldown_tt
+                        NOT = { has_country_flag = MWY_chan_action_flag }
+                    }
+                }
+                mwy_chancellor_action_button_3_click_enabled = {
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_chancellor_available_tt
+                        ROOT = {
+                            NOT = {
+                                has_country_flag = chancellor_improving_relations_flag
+                                has_country_flag = chancellor_improving_compliance_flag
+                                has_country_flag = chancellor_appeasing_nobles_base_flag
+                            }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_chan_action_cooldown_tt
+                        NOT = { has_country_flag = MWY_chan_action_flag }
+                    }
+                }
+                mwy_chancellor_action_button_4_click_enabled = {
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_chancellor_available_tt
+                        ROOT = {
+                            NOT = {
+                                has_country_flag = chancellor_improving_relations_flag
+                                has_country_flag = chancellor_governance_flag
+                                has_country_flag = chancellor_appeasing_nobles_base_flag
+                            }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_chan_action_cooldown_tt
+                        NOT = { has_country_flag = MWY_chan_action_flag }
+                    }
+                    #ROOT = {
+                        any_owned_state = {
+                            NOT = { is_core_of = PREV }
+                            compliance < 100
+                        }
+                    #}
+                }
+
+            #Marshal Buttons
+                mwy_marshal_action_button_1_click_enabled = {
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_marshal_available_tt
+                        ROOT = {
+                            NOT = {
+                                has_country_flag = marshal_train_flag
+                                has_country_flag = marshal_supress_flag
+                                has_country_flag = marshal_train_levies_base_flag
+                            }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_mar_action_cooldown_tt
+                        NOT = { has_country_flag = MWY_mar_action_flag }
+                    }
+                }
+                mwy_marshal_action_button_2_click_enabled = {
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_marshal_available_tt
+                        ROOT = {
+                            NOT = {
+                                has_country_flag = marshal_raise_troops_flag
+                                has_country_flag = marshal_supress_flag
+                                has_country_flag = marshal_train_levies_base_flag
+                            }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_mar_action_cooldown_tt
+                        NOT = { has_country_flag = MWY_mar_action_flag }
+                    }
+                }
+                mwy_marshal_action_button_3_click_enabled = {
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_marshal_available_tt
+                        ROOT = {
+                            NOT = {
+                                has_country_flag = marshal_raise_troops_flag
+                                has_country_flag = marshal_train_flag
+                                has_country_flag = marshal_train_levies_base_flag
+                            }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_mar_action_cooldown_tt
+                        NOT = { has_country_flag = MWY_mar_action_flag }
+                    }
+                }
+                mwy_marshal_action_button_4_click_enabled = {
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_marshal_available_tt
+                        ROOT = {
+                            NOT = {
+                                has_country_flag = marshal_raise_troops_flag
+                                has_country_flag = marshal_train_flag
+                                has_country_flag = marshal_supress_flag
+                            }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_mar_action_cooldown_tt
+                        NOT = { has_country_flag = MWY_mar_action_flag }
+                    }
+                }
+
+            #Steward Buttons
+                mwy_steward_action_button_1_click_enabled = {
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_steward_available_tt
+                        ROOT = {
+                            NOT = {
+                                has_country_flag = steward_construction_flag
+                                has_country_flag = steward_resource_flag
+                                has_country_flag = steward_tech_flag
+                            }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_stew_action_cooldown_tt
+                        NOT = { has_country_flag = MWY_stew_action_flag }
+                    }
+                }
+                mwy_steward_action_button_2_click_enabled = {
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_steward_available_tt
+                        ROOT = {
+                            NOT = {
+                                has_country_flag = steward_tax_flag
+                                has_country_flag = steward_resource_flag
+                                has_country_flag = steward_tech_flag
+                            }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_stew_action_cooldown_tt
+                        NOT = { has_country_flag = MWY_stew_action_flag }
+                    }
+                }
+                mwy_steward_action_button_3_click_enabled = {
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_steward_available_tt
+                        ROOT = {
+                            NOT = {
+                                has_country_flag = steward_tax_flag
+                                has_country_flag = steward_construction_flag
+                                has_country_flag = steward_tech_flag
+                            }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_stew_action_cooldown_tt
+                        NOT = { has_country_flag = MWY_stew_action_flag }
+                    }
+                }
+                mwy_steward_action_button_4_click_enabled = {
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_steward_available_tt
+                        ROOT = {
+                            NOT = {
+                                has_country_flag = steward_tax_flag
+                                has_country_flag = steward_construction_flag
+                                has_country_flag = steward_resource_flag
+                            }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_stew_action_cooldown_tt
+                        NOT = { has_country_flag = MWY_stew_action_flag }
+                    }
+                }
+
+
+            #Spymaster Buttons
+                mwy_spymaster_action_button_1_click_enabled = {
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_spy_action_cooldown_tt
+                        NOT = { has_country_flag = MWY_spy_action_flag }
+                    }
+                }
+                mwy_spymaster_action_button_2_click_enabled = {
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_spy_action_cooldown_tt
+                        NOT = { has_country_flag = MWY_spy_action_flag }
+                    }
+                }
+                mwy_spymaster_action_button_3_click_enabled = {
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_spy_action_cooldown_tt
+                        NOT = { has_country_flag = MWY_spy_action_flag }
+                    }
+                }
+                mwy_spymaster_action_button_4_click_enabled = {
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_spy_action_cooldown_tt
+                        NOT = { has_country_flag = MWY_spy_action_flag }
+                    }
+                    ROOT = {
+                        has_war = yes
+                    }
+                }
+        }
+    
+        dynamic_lists = {
+            
+        }
+    
+        properties = {
+            spymaster_pick_button = {
+                image = "[ROOT.GetSpymasterIcon]"
+            }
+        }
+    
+        ai_enabled = {
+            always = no
+        }
+    
+        ai_test_interval = 290  # The higher, the long it takes the ai to do actions
+        ai_test_variance = 0.5
+    
+        ai_check = {
+        }
+    
+        ai_check_scope = {
+        }
+    
+        ai_weights = {
+        }
+    }
+
+    mwy_chancellor_improve_relation_window = {
+        window_name = "mwy_chancellor_improve_relation_window"
+        context_type = player_context
+        parent_window_token = mwy_council_window
+    
+        visible = {
+            check_variable = { mwy_chan_relations_menu_var > 0 }
+            check_variable = { mwy_ck2_menu_var = 1 }
+        }
+    
+        effects = {
+            close_button_click = {
+                set_variable = { mwy_chan_relations_menu_var = 0 }
+            }
+
+            entry_button_click = {
+                THIS = { 
+                    set_country_flag = has_mwy_chancellor_flag
+                    add_opinion_modifier = {
+                        target = MWY
+                        modifier = sent_chancellor
+                    }
+                }
+                ROOT = {
+                    MWY_chan_action_cooldown_effect = yes
+                    set_country_flag = chancellor_improving_relations_flag
+                    set_variable = { mwy_chan_relations_menu_var = 0 }
+                }
+                
+            }
+
+        }
+
+        triggers = {
+            
+        }
+    
+        dynamic_lists = {
+            chancellor_neighbor_countries_gridbox = {
+                array = global.chancellor_neighbor_countries_array
+                entry_container = chancellor_neighbor_countries_list_entry
+                change_scope = yes
+            }
+        }
+    
+        properties = {
+            entry_flag = {
+                image = "[This.GetFlag]"
+            }
+        }
+    
+        ai_enabled = {
+            always = no
+        }
+    
+        #ai_test_interval = 290  # The higher, the long it takes the ai to do actions
+        #ai_test_variance = 0.5
+    
+        ai_check = {
+        }
+    
+        ai_check_scope = {
+        }
+    
+        ai_weights = {
+        }
+    }
+
+    mwy_chancellor_noble_window = {
+        window_name = "mwy_chancellor_noble_window"
+        context_type = player_context
+        parent_window_token = mwy_council_window
+    
+        visible = {
+            check_variable = { mwy_chan_compliance_menu_var > 0 }
+            check_variable = { mwy_ck2_menu_var = 1 }
+        }
+    
+        effects = {
+            close_button_click = {
+                set_variable = { mwy_chan_relations_menu_var = 0 }
+            }
+
+            grainlands_button_click = {
+                ROOT = {
+                    set_country_flag = chancellor_appeasing_nobles_base_flag
+                    set_country_flag = chancellor_appeasing_nobles_grainlands_flag
+                    set_variable = { mwy_chan_compliance_menu_var = 0 }
+                    MWY_chan_action_cooldown_effect = yes
+
+                    country_event = {
+                        id = council_success.1
+                        days = 30
+                    }
+                }   
+            }
+
+            amethyst_button_click = {
+                ROOT = {
+                    set_country_flag = chancellor_appeasing_nobles_base_flag
+                    set_country_flag = chancellor_appeasing_nobles_amethyst_flag
+                    set_variable = { mwy_chan_compliance_menu_var = 0 }
+                    MWY_chan_action_cooldown_effect = yes
+
+                    country_event = {
+                        id = council_success.1
+                        days = 30
+                    }
+                }   
+            }
+
+            radigator_button_click = {
+                ROOT = {
+                    set_country_flag = chancellor_appeasing_nobles_base_flag
+                    set_country_flag = chancellor_appeasing_nobles_radigator_flag
+                    set_variable = { mwy_chan_compliance_menu_var = 0 }
+                    MWY_chan_action_cooldown_effect = yes
+
+                    country_event = {
+                        id = council_success.1
+                        days = 30
+                    }
+                }   
+            }
+
+            swampy_button_click = {
+                ROOT = {
+                    set_country_flag = chancellor_appeasing_nobles_base_flag
+                    set_country_flag = chancellor_appeasing_nobles_swampy_flag
+                    set_variable = { mwy_chan_compliance_menu_var = 0 }
+                    MWY_chan_action_cooldown_effect = yes
+
+                    country_event = {
+                        id = council_success.1
+                        days = 30
+                    }
+                }   
+            }
+
+            peninsula_button_click = {
+                ROOT = {
+                    set_country_flag = chancellor_appeasing_nobles_base_flag
+                    set_country_flag = chancellor_appeasing_nobles_peninsula_flag
+                    set_variable = { mwy_chan_compliance_menu_var = 0 }
+                    MWY_chan_action_cooldown_effect = yes
+
+                    country_event = {
+                        id = council_success.1
+                        days = 30
+                    }
+                }   
+            }
+
+            maredia_button_click = {
+                ROOT = {
+                    set_country_flag = chancellor_appeasing_nobles_base_flag
+                    set_country_flag = chancellor_appeasing_nobles_maredia_flag
+                    set_variable = { mwy_chan_compliance_menu_var = 0 }
+                    MWY_chan_action_cooldown_effect = yes
+
+                    country_event = {
+                        id = council_success.1
+                        days = 30
+                    }
+                }   
+            }
+
+            belle_button_click = {
+                ROOT = {
+                    set_country_flag = chancellor_appeasing_nobles_base_flag
+                    set_country_flag = chancellor_appeasing_nobles_belle_flag
+                    set_variable = { mwy_chan_compliance_menu_var = 0 }
+                    MWY_chan_action_cooldown_effect = yes
+
+                    country_event = {
+                        id = council_success.1
+                        days = 30
+                    }
+                }   
+            }
+
+        }
+
+        triggers = {
+            grainlands_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = MWY_realm_not_max_opinion_tt
+                    check_variable = { mwy_grainlands_opinion < 3 }
+                }
+            }
+
+            amethyst_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = MWY_realm_not_max_opinion_tt
+                    check_variable = { mwy_amethyst_opinion < 3 }
+                }
+            }
+
+            radigator_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = MWY_realm_not_max_opinion_tt
+                    check_variable = { mwy_radigator_opinion < 3 }
+                }
+                check_variable = { mwy_radigator_opinion < 3 }
+            }
+
+            swampy_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = MWY_realm_not_max_opinion_tt
+                    check_variable = { mwy_swampy_opinion < 3 }
+                }
+            }
+
+            peninsula_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = MWY_realm_not_max_opinion_tt
+                    check_variable = { mwy_peninsula_opinion < 3 }
+                }
+            }
+
+            maredia_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = MWY_realm_not_max_opinion_tt
+                    check_variable = { mwy_belle_opinion < 3 }
+                }
+                custom_trigger_tooltip = {
+                    tooltip = MWY_realm_maredia_belle_returned_tt
+                    69 = { has_state_flag = mwy_feudal_realm_state_flag }
+                }                
+            }
+
+            belle_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = MWY_realm_not_max_opinion_tt
+                    check_variable = { mwy_belle_opinion < 3 }
+                }
+                custom_trigger_tooltip = {
+                    tooltip = MWY_realm_maredia_belle_returned_tt
+                   805 = { has_state_flag = mwy_feudal_realm_state_flag }
+                }
+            }
+        }
+    
+        dynamic_lists = {
+        #    chancellor_noble_gridbox = {
+        #        array = global.mwy_feudal_realms_states_array
+        #        entry_container = chancellor_noble_entry
+        #        change_scope = yes
+        #    }
+        }
+    
+        properties = {
+        }
+    
+        ai_enabled = {
+            always = no
+        }
+    
+        #ai_test_interval = 290  # The higher, the long it takes the ai to do actions
+        #ai_test_variance = 0.5
+    
+        ai_check = {
+        }
+    
+        ai_check_scope = {
+        }
+    
+        ai_weights = {
+        }
+    }
+
+    mwy_marshal_levy_window = {
+        window_name = "mwy_marshal_levy_window"
+        context_type = player_context
+        parent_window_token = mwy_council_window
+    
+        visible = {
+            check_variable = { mwy_mar_levy_menu_var > 0 }
+            check_variable = { mwy_ck2_menu_var = 1 }
+        }
+    
+        effects = {
+            close_button_click = {
+                set_variable = { mwy_mar_levy_menu_var = 0 }
+            }
+
+            grainlands_button_click = {
+                ROOT = {
+                    set_country_flag = marshal_train_levies_base_flag
+                    set_country_flag = marshal_train_levies_grainlands_flag
+                    set_variable = { mwy_mar_levy_menu_var = 0 }
+                    MWY_mar_action_cooldown_effect = yes
+                }   
+            }
+
+            amethyst_button_click = {
+                ROOT = {
+                    set_country_flag = marshal_train_levies_base_flag
+                    set_country_flag = marshal_train_levies_amethyst_flag
+                    set_variable = { mwy_mar_levy_menu_var = 0 }
+                    MWY_mar_action_cooldown_effect = yes
+                }   
+            }
+
+            radigator_button_click = {
+                ROOT = {
+                    set_country_flag = marshal_train_levies_base_flag
+                    set_country_flag = marshal_train_levies_radigator_flag
+                    set_variable = { mwy_mar_levy_menu_var = 0 }
+                    MWY_mar_action_cooldown_effect = yes
+                }   
+            }
+
+            swampy_button_click = {
+                ROOT = {
+                    set_country_flag = marshal_train_levies_base_flag
+                    set_country_flag = marshal_train_levies_swampy_flag
+                    set_variable = { mwy_mar_levy_menu_var = 0 }
+                    MWY_mar_action_cooldown_effect = yes
+                }   
+            }
+
+            peninsula_button_click = {
+                ROOT = {
+                    set_country_flag = marshal_train_levies_base_flag
+                    set_country_flag = marshal_train_levies_peninsula_flag
+                    set_variable = { mwy_mar_levy_menu_var = 0 }
+                    MWY_mar_action_cooldown_effect = yes
+                }   
+            }
+
+            maredia_button_click = {
+                ROOT = {
+                    set_country_flag = marshal_train_levies_base_flag
+                    set_country_flag = marshal_train_levies_maredia_flag
+                    set_variable = { mwy_mar_levy_menu_var = 0 }
+                    MWY_mar_action_cooldown_effect = yes
+                }   
+            }
+
+            belle_button_click = {
+                ROOT = {
+                    set_country_flag = marshal_train_levies_base_flag
+                    set_country_flag = marshal_train_levies_belle_flag
+                    set_variable = { mwy_mar_levy_menu_var = 0 }
+                    MWY_mar_action_cooldown_effect = yes
+                }   
+            }
+
+        }
+
+        triggers = {
+            maredia_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = MWY_realm_maredia_belle_returned_tt
+                    69 = { has_state_flag = mwy_feudal_realm_state_flag }
+                }                
+            }
+            belle_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = MWY_realm_maredia_belle_returned_tt
+                   805 = { has_state_flag = mwy_feudal_realm_state_flag }
+                }
+            }
+        }
+    
+        dynamic_lists = {
+        #    chancellor_noble_gridbox = {
+        #        array = global.mwy_feudal_realms_states_array
+        #        entry_container = chancellor_noble_entry
+        #        change_scope = yes
+        #    }
+        }
+    
+        properties = {
+        }
+    
+        ai_enabled = {
+            always = no
+        }
+    
+        #ai_test_interval = 290  # The higher, the long it takes the ai to do actions
+        #ai_test_variance = 0.5
+    
+        ai_check = {
+        }
+    
+        ai_check_scope = {
+        }
+    
+        ai_weights = {
+        }
+    }
+
+    mwy_spymaster_poison_window = {
+        window_name = "mwy_spymaster_poison_window"
+        context_type = player_context
+        parent_window_token = mwy_council_window
+    
+        visible = {
+            check_variable = { mwy_spy_poison_menu_var > 0 }
+            check_variable = { mwy_ck2_menu_var = 1 }
+        }
+    
+        effects = {
+            close_button_click = {
+                set_variable = { mwy_spy_poison_menu_var = 0 }
+            }
+
+            entry_button_click = {
+                THIS = { 
+                    #set_country_flag = has_mwy_spymaster_flag
+                    country_event = {
+                        id = council_success.9
+                        days = 30
+                    }
+                }
+                ROOT = {
+                    MWY_spy_action_cooldown_effect = yes
+                    set_country_flag = spymaster_poison_flag
+                    set_variable = { mwy_spy_poison_menu_var = 0 }
+                }
+                
+            }
+
+        }
+
+        triggers = {
+            
+        }
+    
+        dynamic_lists = {
+            spymaster_at_war_gridbox = {
+                array = global.spymaster_at_war_array
+                entry_container = spymaster_at_war_list_entry
+                change_scope = yes
+            }
+        }
+    
+        properties = {
+            entry_flag = {
+                image = "[This.GetFlag]"
+            }
+        }
+    
+        ai_enabled = {
+            always = no
+        }
+    
+        #ai_test_interval = 290  # The higher, the long it takes the ai to do actions
+        #ai_test_variance = 0.5
+    
+        ai_check = {
+        }
+    
+        ai_check_scope = {
+        }
+    
+        ai_weights = {
+        }
+    }
+
+    mwy_pick_chancellor_window = {
+        window_name = "mwy_pick_chancellor_window"
+        context_type = player_context
+        parent_window_token = mwy_council_window
+    
+        visible = {
+            check_variable = { mwy_chan_pick_menu_var > 0 }
+            check_variable = { mwy_ck2_menu_var = 1 }
+        }
+    
+        effects = {
+            close_button_click = {
+                set_variable = { mwy_chan_pick_menu_var = 0 }
+            }
+
+            s_littleward_button_click = {
+                ROOT = {
+                    hidden_effect = {
+                        MWY_clear_current_chancellor = yes
+                        set_country_flag = MWY_chancellor_flag_littleward
+                        MWY_set_chan_littleward_law_approval = yes
+                        MWY_chan_pick_cooldown_effect = yes
+                        set_variable = { mwy_chan_pick_menu_var = 0 }
+                        add_political_power = -150
+                    }
+                    add_ideas = MWY_chancellor_littleward
+                    if = {
+                        limit = { has_country_flag = MWY_chancellor_flag_glow }
+                        MWY_lower_grainlands_opinion = yes
+                    }
+                    MWY_raise_grainlands_opinion = yes
+                    
+                }   
+            }
+
+            glow_button_click = {
+                ROOT = {
+                    hidden_effect = {
+                        MWY_clear_current_chancellor = yes
+                        set_country_flag = MWY_chancellor_flag_glow
+                        MWY_set_chan_glow_law_approval = yes
+                        MWY_chan_pick_cooldown_effect = yes
+                        set_variable = { mwy_chan_pick_menu_var = 0 }
+                        add_political_power = -150
+                    }
+                    add_ideas = MWY_chancellor_glow
+                    #if = {
+                    #    limit = { has_country_flag = MWY_chancellor_flag_littleward }
+                    #    MWY_lower_grainlands_opinion = yes
+                    #}
+                    MWY_raise_grainlands_opinion = yes
+                    
+                }   
+            }
+        }
+
+        triggers = {
+            s_littleward_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = MWY_chancellor_pick_not_littleward
+                    NOT = { has_country_flag = MWY_chancellor_flag_littleward }
+                }
+                custom_trigger_tooltip = {
+                    tooltip = MWY_chancellor_cooldown_tt
+                    NOT = { has_country_flag = MWY_chan_pick_cooldown_flag }
+                }
+                custom_trigger_tooltip = {
+                    tooltip = MWY_chancellor_pick_littleward_alive_tt
+                    NOT = { has_country_flag = MWY_littleward_dead_flag }
+                }
+                custom_trigger_tooltip = {
+                    tooltip = cost_150_pp_tt
+                    has_political_power > 149
+                }
+            }
+            glow_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = MWY_chancellor_pick_not_glow
+                    NOT = { has_country_flag = MWY_chancellor_flag_glow }
+                }
+                custom_trigger_tooltip = {
+                    tooltip = MWY_chancellor_cooldown_tt
+                    NOT = { has_country_flag = MWY_chan_pick_cooldown_flag }
+                }            
+                custom_trigger_tooltip = {
+                    tooltip = MWY_chancellor_pick_duke_glow_tt
+                    has_country_flag = MWY_grainlands_glow_flag
+                }
+                custom_trigger_tooltip = {
+                    tooltip = cost_150_pp_tt
+                    has_political_power > 149
+                }
+            }
+        }
+    
+        dynamic_lists = {
+        }
+    
+        properties = {
+        }
+    
+        ai_enabled = {
+            always = no
+        }
+    
+        #ai_test_interval = 290  # The higher, the long it takes the ai to do actions
+        #ai_test_variance = 0.5
+    
+        ai_check = {
+        }
+    
+        ai_check_scope = {
+        }
+    
+        ai_weights = {
+        }
+    }
+
+    mwy_pick_marshal_window = {
+        window_name = "mwy_pick_marshal_window"
+        context_type = player_context
+        parent_window_token = mwy_council_window
+    
+        visible = {
+            check_variable = { mwy_mar_pick_menu_var > 0 }
+            check_variable = { mwy_ck2_menu_var = 1 }
+        }
+    
+        effects = {
+            close_button_click = {
+                set_variable = { mwy_mar_pick_menu_var = 0 }
+            }
+
+            strongwing_button_click = {
+                ROOT = {
+                    hidden_effect = {
+                        MWY_clear_current_marshal = yes
+                        set_country_flag = MWY_marshal_flag_strongwing
+                        MWY_set_mar_strongwing_law_approval = yes
+                        MWY_mar_pick_cooldown_effect = yes
+                        set_variable = { mwy_mar_pick_menu_var = 0 }
+                        add_political_power = -150
+                    }
+                    add_ideas = MWY_marshal_strongwing
+                    if = {
+                        limit = { has_country_flag = MWY_marshal_flag_gatormaw }
+                        MWY_lower_radigator_opinion = yes
+                    }
+                    
+                }   
+            }
+
+            gatormaw_button_click = {
+                ROOT = {
+                    hidden_effect = {
+                        MWY_clear_current_marshal = yes
+                        set_country_flag = MWY_marshal_flag_gatormaw
+                        MWY_set_mar_gatormaw_law_approval = yes
+                        MWY_mar_pick_cooldown_effect = yes
+                        set_variable = { mwy_mar_pick_menu_var = 0 }
+                        add_political_power = -150
+                    }
+                    add_ideas = MWY_marshal_gatormaw
+                    MWY_raise_radigator_opinion = yes
+                    
+                }   
+            }
+        }
+
+        triggers = {
+            strongwing_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = MWY_marshal_pick_not_strongwing
+                    NOT = { has_country_flag = MWY_marshal_flag_strongwing }
+                }
+                custom_trigger_tooltip = {
+                    tooltip = MWY_marshal_cooldown_tt
+                    NOT = { has_country_flag = MWY_mar_pick_cooldown_flag }
+                }
+                custom_trigger_tooltip = {
+                    tooltip = cost_150_pp_tt
+                    has_political_power > 149
+                }
+            }
+            gatormaw_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = MWY_marshal_pick_not_gatormaw
+                    NOT = { has_country_flag = MWY_marshal_flag_gatormaw }
+                }
+                custom_trigger_tooltip = {
+                    tooltip = MWY_marshal_cooldown_tt
+                    NOT = { has_country_flag = MWY_mar_pick_cooldown_flag }
+                }
+                custom_trigger_tooltip = {
+                    tooltip = cost_150_pp_tt
+                    has_political_power > 149
+                }      
+            }
+        }
+    
+        dynamic_lists = {
+        }
+    
+        properties = {
+        }
+    
+        ai_enabled = {
+            always = no
+        }
+    
+        #ai_test_interval = 290  # The higher, the long it takes the ai to do actions
+        #ai_test_variance = 0.5
+    
+        ai_check = {
+        }
+    
+        ai_check_scope = {
+        }
+    
+        ai_weights = {
+        }
+    }
+
+    mwy_pick_steward_window = {
+        window_name = "mwy_pick_steward_window"
+        context_type = player_context
+        parent_window_token = mwy_council_window
+    
+        visible = {
+            check_variable = { mwy_stew_pick_menu_var > 0 }
+            check_variable = { mwy_ck2_menu_var = 1 }
+        }
+    
+        effects = {
+            close_button_click = {
+                set_variable = { mwy_stew_pick_menu_var = 0 }
+            }
+
+            w_waters_button_click = {
+                ROOT = {
+                    hidden_effect = {
+                        MWY_clear_current_steward = yes
+                        set_country_flag = MWY_steward_flag_wavy_waters
+                        MWY_set_stew_waters_law_approval = yes
+                        MWY_stew_pick_cooldown_effect = yes
+                        set_variable = { mwy_stew_pick_menu_var = 0 }
+                        add_political_power = -150
+                    }
+                    add_ideas = MWY_steward_wavy_waters
+                    if = {
+                        limit = { has_country_flag = MWY_steward_flag_sunflower }
+                        MWY_lower_amethyst_opinion = yes
+                    }
+                    MWY_raise_peninsula_opinion = yes
+                    
+                }   
+            }
+
+            s_sunflower_button_click = {
+                ROOT = {
+                    hidden_effect = {
+                        MWY_clear_current_steward = yes
+                        set_country_flag = MWY_steward_flag_sunflower
+                        MWY_set_stew_sunflower_law_approval = yes
+                        MWY_stew_pick_cooldown_effect = yes
+                        set_variable = { mwy_stew_pick_menu_var = 0 }
+                        add_political_power = -150
+                    }
+                    add_ideas = MWY_steward_spring_sunflower
+                    if = {
+                        limit = { has_country_flag = MWY_steward_flag_wavy_waters }
+                        MWY_lower_peninsula_opinion = yes
+                    }
+                    MWY_raise_amethyst_opinion = yes
+                    
+                }   
+            }
+        }
+
+        triggers = {
+            w_waters_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = MWY_steward_pick_not_waters
+                    NOT = { has_country_flag = MWY_steward_flag_wavy_waters }
+                }                
+                custom_trigger_tooltip = {
+                    tooltip = MWY_steward_cooldown_tt
+                    NOT = { has_country_flag = MWY_stew_pick_cooldown_flag }
+                }
+                custom_trigger_tooltip = {
+                    tooltip = cost_150_pp_tt
+                    has_political_power > 149
+                }
+            }
+            s_sunflower_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = MWY_steward_pick_not_sunflower
+                    NOT = { has_country_flag = MWY_steward_flag_sunflower }
+                }                
+                custom_trigger_tooltip = {
+                    tooltip = MWY_steward_cooldown_tt
+                    NOT = { has_country_flag = MWY_stew_pick_cooldown_flag }
+                }
+                custom_trigger_tooltip = {
+                    tooltip = cost_150_pp_tt
+                    has_political_power > 149
+                }
+            }
+        }
+    
+        dynamic_lists = {
+        }
+    
+        properties = {
+        }
+    
+        ai_enabled = {
+            always = no
+        }
+    
+        #ai_test_interval = 290  # The higher, the long it takes the ai to do actions
+        #ai_test_variance = 0.5
+    
+        ai_check = {
+        }
+    
+        ai_check_scope = {
+        }
+    
+        ai_weights = {
+        }
+    }
+
+    mwy_pick_spymaster_window = {
+        window_name = "mwy_pick_spymaster_window"
+        context_type = player_context
+        parent_window_token = mwy_council_window
+    
+        visible = {
+            check_variable = { mwy_spy_pick_menu_var > 0 }
+            check_variable = { mwy_ck2_menu_var = 1 }
+        }
+    
+        effects = {
+            close_button_click = {
+                set_variable = { mwy_spy_pick_menu_var = 0 }
+            }
+
+            widow_button_click = {
+                ROOT = {
+                    hidden_effect = {
+                        MWY_clear_current_spymaster = yes
+                        set_country_flag = MWY_spy_flag_red_widow
+                        MWY_set_spy_widow_law_approval = yes
+                        MWY_spy_pick_cooldown_effect = yes
+                        set_variable = { mwy_spy_pick_menu_var = 0 }
+                        add_political_power = -150
+                    }
+                    add_ideas = MWY_spymaster_red_widow
+                    if = {
+                        limit = { has_country_flag = MWY_spy_flag_light }
+                        MWY_lower_swampy_opinion = yes
+                    }
+                    
+                    
+                }   
+            }
+
+            light_button_click = {
+                ROOT = {
+                    hidden_effect = {
+                        MWY_clear_current_spymaster = yes
+                        set_country_flag = MWY_spy_flag_light
+                        MWY_set_spy_light_law_approval = yes
+                        MWY_spy_pick_cooldown_effect = yes
+                        set_variable = { mwy_spy_pick_menu_var = 0 }
+                        add_political_power = -150
+                    }
+                    add_ideas = MWY_spymaster_pale_light
+                    MWY_raise_swampy_opinion = yes
+                    
+                }   
+            }
+        }
+
+        triggers = {
+            widow_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = MWY_spymaster_pick_not_widow
+                    NOT = { has_country_flag = MWY_spy_flag_red_widow }
+                }                
+                custom_trigger_tooltip = {
+                    tooltip = MWY_spy_cooldown_tt
+                    NOT = { has_country_flag = MWY_spy_pick_cooldown_flag }
+                }
+                custom_trigger_tooltip = {
+                    tooltip = cost_150_pp_tt
+                    has_political_power > 149
+                }
+            }
+            light_button_click_enabled = {
+                custom_trigger_tooltip = {
+                    tooltip = MWY_spymaster_pick_not_light
+                    NOT = { has_country_flag = MWY_spy_flag_light }
+                }
+                custom_trigger_tooltip = {
+                    tooltip = MWY_spy_cooldown_tt
+                    NOT = { has_country_flag = MWY_spy_pick_cooldown_flag }
+                }
+                custom_trigger_tooltip = {
+                    tooltip = cost_150_pp_tt
+                    has_political_power > 149
+                }
+            }
+        }
+    
+        dynamic_lists = {
+        }
+    
+        properties = {
+        }
+    
+        ai_enabled = {
+            always = no
+        }
+    
+        #ai_test_interval = 290  # The higher, the long it takes the ai to do actions
+        #ai_test_variance = 0.5
+    
+        ai_check = {
+        }
+    
+        ai_check_scope = {
+        }
+    
+        ai_weights = {
+        }
+    }
+
+    mwy_realms_gui = {
+        window_name = "mwy_realms_window"
+        context_type = player_context
+    
+        visible = {
+            check_variable = { mwy_ck2_menu_var = 2 }
+        }
+    
+        effects = {
+            close_button_click = {
+                set_variable = { mwy_ck2_menu_var = 0 }
+            }
+        }
+    
+        triggers = {
+
+        }
+    
+        dynamic_lists = {
+        }
+    
+        properties = {
+            east_basin_levy_balls = {
+                frame = mwy_grainlands_levy_var
+            }
+            central_basin_levy_balls = {
+                frame = mwy_amethyst_levy_var
+            }
+            maredia_levy_balls = {
+                frame = mwy_maredia_levy_var
+            }
+            radigator_levy_balls = {
+                frame = mwy_radigator_levy_var
+            }
+            swampy_levy_balls = {
+                frame = mwy_swampy_levy_var
+            }
+            peninsula_levy_balls = {
+                frame = mwy_peninsula_levy_var
+            }
+            belle_levy_balls = {
+                frame = mwy_belle_levy_var
+            }
+
+        }
+    
+        ai_enabled = {
+            always = no
+        }
+    
+        ai_test_interval = 290  # The higher, the long it takes the ai to do actions
+        ai_test_variance = 0.5
+    
+        ai_check = {
+        }
+    
+        ai_check_scope = {
+        }
+    
+        ai_weights = {
+        }
+    }
+
+    mwy_laws_gui = {
+        window_name = "mwy_laws_window"
+        context_type = player_context
+    
+        visible = {
+            check_variable = { mwy_ck2_menu_var = 3 }
+        }
+    
+        effects = {
+            close_button_click = {
+                set_variable = { mwy_ck2_menu_var = 0 }
+            }
+            #Serf Buttons
+                serf_laws_button_1_click = {
+                    if = {
+                        limit = { NOT = { check_variable = { serf_laws_var = 1 } } }
+                        MWY_min_feudal_effect = yes
+                        hidden_effect = {
+                            MWY_reset_serf_laws_frames = yes
+                            set_variable = { serf_laws_var = 1 }
+                            set_variable = { serf_laws_button_1_frame_var = 2 }
+                            MWY_serf_law_cooldown_effect = yes
+                            add_political_power = -50
+                        }
+                        MWY_serf_laws_1_opinion_effect = yes
+                    }
+                }
+                serf_laws_button_2_click = {
+                    if = {
+                        limit = { NOT = { check_variable = { serf_laws_var = 2 } } }
+                        MWY_low_feudal_effect = yes
+                        hidden_effect = {
+                            MWY_reset_serf_laws_frames = yes
+                            set_variable = { serf_laws_var = 2 }
+                            set_variable = { serf_laws_button_2_frame_var = 2 }
+                            MWY_serf_law_cooldown_effect = yes
+                            add_political_power = -50
+                        }
+                        if = {
+                            limit = { NOT = { has_country_flag = MWY_no_opinion_loss_minor_protection } }
+                            MWY_serf_laws_2_opinion_effect = yes
+                        }
+                        
+                    }
+                }
+                serf_laws_button_3_click = {
+                    if = {
+                        limit = { NOT = { check_variable = { serf_laws_var = 3 } } }
+                        MWY_med_feudal_effect = yes
+                        hidden_effect = {
+                            MWY_reset_serf_laws_frames = yes
+                            set_variable = { serf_laws_var = 3 }
+                            set_variable = { serf_laws_button_3_frame_var = 2 }
+                            MWY_serf_law_cooldown_effect = yes
+                            add_political_power = -50
+                        }
+                        MWY_serf_laws_3_opinion_effect = yes
+                    }
+                }
+                serf_laws_button_4_click = {
+                    if = {
+                        limit = { NOT = { check_variable = { serf_laws_var = 4 } } }
+                        MWY_high_feudal_effect = yes
+                        hidden_effect = {
+                            MWY_reset_serf_laws_frames = yes
+                            set_variable = { serf_laws_var = 4 }
+                            set_variable = { serf_laws_button_4_frame_var = 2 }
+                            MWY_serf_law_cooldown_effect = yes
+                            add_political_power = -50
+                        }
+                        MWY_serf_laws_4_opinion_effect = yes
+                    }
+                }
+                serf_laws_button_5_click = {
+                    if = {
+                        limit = { NOT = { check_variable = { serf_laws_var = 5 } } }
+                        MWY_max_feudal_effect = yes
+                        hidden_effect = {
+                            MWY_reset_serf_laws_frames = yes
+                            set_variable = { serf_laws_var = 5 }
+                            set_variable = { serf_laws_button_5_frame_var = 2 }
+                            MWY_serf_law_cooldown_effect = yes
+                            add_political_power = -50
+                        }
+                        MWY_serf_laws_5_opinion_effect = yes
+                    }
+                }
+
+            #Centralization Buttons
+                centralization_laws_button_1_click = {
+                    if = {
+                        limit = { NOT = { check_variable = { centralization_laws_var = 1 } } }
+                        MWY_min_central_effect = yes
+                        hidden_effect = {
+                            MWY_reset_centralization_laws_frames = yes
+                            set_variable = { centralization_laws_var = 1 }
+                            set_variable = { centralization_laws_button_1_frame_var = 2 }
+                            MWY_centralization_law_cooldown_effect = yes
+                            add_political_power = -50
+                        }
+                        MWY_centralization_laws_1_opinion_effect = yes
+                    }
+                }
+                centralization_laws_button_2_click = {
+                    if = {
+                        limit = { NOT = { check_variable = { centralization_laws_var = 2 } } }
+                        MWY_low_central_effect = yes
+                        hidden_effect = {
+                            MWY_reset_centralization_laws_frames = yes
+                            set_variable = { centralization_laws_var = 2 }
+                            set_variable = { centralization_laws_button_2_frame_var = 2 }
+                            MWY_centralization_law_cooldown_effect = yes
+                            add_political_power = -50
+                        }
+                        MWY_centralization_laws_2_opinion_effect = yes
+                    }
+                }
+                centralization_laws_button_3_click = {
+                    if = {
+                        limit = { NOT = { check_variable = { centralization_laws_var = 3 } } }
+                        MWY_med_central_effect = yes
+                        hidden_effect = {
+                            MWY_reset_centralization_laws_frames = yes
+                            set_variable = { centralization_laws_var = 3 }
+                            set_variable = { centralization_laws_button_3_frame_var = 2 }
+                            MWY_centralization_law_cooldown_effect = yes
+                            add_political_power = -50
+                        }
+                        MWY_centralization_laws_3_opinion_effect = yes
+                    }
+                }
+                centralization_laws_button_4_click = {
+                    if = {
+                        limit = { NOT = { check_variable = { centralization_laws_var = 4 } } }
+                        MWY_high_central_effect = yes
+                        hidden_effect = {
+                            MWY_reset_centralization_laws_frames = yes
+                            set_variable = { centralization_laws_var = 4 }
+                            set_variable = { centralization_laws_button_4_frame_var = 2 }
+                            MWY_centralization_law_cooldown_effect = yes
+                            add_political_power = -50
+                        }
+                        MWY_centralization_laws_4_opinion_effect = yes
+                    }
+                }
+                centralization_laws_button_5_click = {
+                    if = {
+                        limit = { NOT = { check_variable = { centralization_laws_var = 5 } } }
+                        MWY_max_central_effect = yes
+                        hidden_effect = {
+                            MWY_reset_centralization_laws_frames = yes
+                            set_variable = { centralization_laws_var = 5 }
+                            set_variable = { centralization_laws_button_5_frame_var = 2 }
+                            MWY_centralization_law_cooldown_effect = yes
+                            add_political_power = -50
+                        }
+                        MWY_centralization_laws_5_opinion_effect = yes
+                    }
+                }
+
+            #Army Buttons
+                army_laws_button_1_click = {
+                    if = {
+                        limit = { NOT = { check_variable = { army_laws_var = 1 } } }
+                        add_ideas = knight_guard_law
+                        MWY_army_laws_1_opinion_effect = yes
+                        hidden_effect = {
+                            MWY_reset_army_laws_frames = yes
+                            set_variable = { army_laws_var = 1 }
+                            set_variable = { army_laws_button_1_frame_var = 2 }
+                            MWY_army_law_cooldown_effect = yes
+                            add_political_power = -50
+                            
+                        }
+                    }
+                }
+                army_laws_button_2_click = {
+                    if = {
+                        limit = { NOT = { check_variable = { army_laws_var = 2 } } }
+                        add_ideas = token_retinue_law
+                        MWY_army_laws_2_opinion_effect = yes
+                        hidden_effect = {
+                            MWY_reset_army_laws_frames = yes
+                            set_variable = { army_laws_var = 2 }
+                            set_variable = { army_laws_button_2_frame_var = 2 }
+                            MWY_army_law_cooldown_effect = yes
+                            add_political_power = -50
+                        }
+                    }
+                }
+                army_laws_button_3_click = {
+                    if = {
+                        limit = { NOT = { check_variable = { army_laws_var = 3 } } }
+                        add_ideas = full_retinue_law
+                        MWY_army_laws_3_opinion_effect = yes
+                        hidden_effect = {
+                            MWY_reset_army_laws_frames = yes
+                            set_variable = { army_laws_var = 3 }
+                            set_variable = { army_laws_button_3_frame_var = 2 }
+                            MWY_army_law_cooldown_effect = yes
+                            add_political_power = -50
+                        }
+                    }
+                }
+                army_laws_button_4_click = {
+                    if = {
+                        limit = { NOT = { check_variable = { army_laws_var = 4 } } }
+                        add_ideas = serf_conscript_law
+                        MWY_army_laws_4_opinion_effect = yes
+                        hidden_effect = {
+                            MWY_reset_army_laws_frames = yes
+                            set_variable = { army_laws_var = 4 }
+                            set_variable = { army_laws_button_4_frame_var = 2 }
+                            MWY_army_law_cooldown_effect = yes
+                            add_political_power = -50
+                        }
+                        if = {
+                            limit = { check_variable = { army_laws_var = 5 } }
+                            hidden_effect = {
+                                set_country_flag = MWY_feudal_manpower_flag
+                                set_country_flag = cant_see_regular_conscription_flag
+                            }
+                        }
+                    }
+                }
+                army_laws_button_5_click = {
+                    if = {
+                        limit = { NOT = { check_variable = { army_laws_var = 5 } } }
+                        custom_effect_tooltip = MWY_regular_conscription_laws
+                        add_ideas = limited_conscription
+                        MWY_army_laws_5_opinion_effect = yes
+                        hidden_effect = {
+                            MWY_reset_army_laws_frames = yes
+                            set_variable = { army_laws_var = 5 }
+                            set_variable = { army_laws_button_5_frame_var = 2 }
+                            clr_country_flag = MWY_feudal_manpower_flag
+                            clr_country_flag = cant_see_regular_conscription_flag
+                            MWY_army_law_cooldown_effect = yes
+                            add_political_power = -50
+                        } 
+                    }
+                }
+        }
+    
+        triggers = {
+            #Serf Buttons
+                serf_laws_button_1_click_enabled = {
+                    MWY_serf_laws_1_maj_approval = yes
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_has_adjacent_law_tt
+                        OR = {
+                            check_variable = { serf_laws_var = 1 }
+                            check_variable = { serf_laws_var = 2 }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_serf_cooldown_tt
+                        NOT = { has_country_flag = MWY_serf_law_cooldown_flag }
+                    }
+                    has_completed_focus = MWY_backroom_squabbles
+                    custom_trigger_tooltip = {
+                        tooltip = cost_50_pp_tt
+                        has_political_power > 49
+                    }
+                }
+                serf_laws_button_2_click_enabled = {
+                    MWY_serf_laws_2_maj_approval = yes
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_has_adjacent_law_tt
+                        OR = {
+                            check_variable = { serf_laws_var = 1 }
+                            check_variable = { serf_laws_var = 2 }
+                            check_variable = { serf_laws_var = 3 }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_serf_cooldown_tt
+                        NOT = { has_country_flag = MWY_serf_law_cooldown_flag }
+                    }
+                    has_completed_focus = MWY_backroom_squabbles
+                    custom_trigger_tooltip = {
+                        tooltip = cost_50_pp_tt
+                        has_political_power > 49
+                    }
+                }
+                serf_laws_button_3_click_enabled = {
+                    MWY_serf_laws_3_maj_approval = yes
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_has_adjacent_law_tt
+                        OR = {
+                            check_variable = { serf_laws_var = 2 }
+                            check_variable = { serf_laws_var = 3 }
+                            check_variable = { serf_laws_var = 4 }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_serf_cooldown_tt
+                        NOT = { has_country_flag = MWY_serf_law_cooldown_flag }
+                    }
+                    has_completed_focus = MWY_backroom_squabbles
+                    custom_trigger_tooltip = {
+                        tooltip = cost_50_pp_tt
+                        has_political_power > 49
+                    }
+                }
+                serf_laws_button_4_click_enabled = {
+                    MWY_serf_laws_4_maj_approval = yes
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_has_adjacent_law_tt
+                        OR = {
+                            check_variable = { serf_laws_var = 3 }
+                            check_variable = { serf_laws_var = 4 }
+                            check_variable = { serf_laws_var = 5 }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_serf_cooldown_tt
+                        NOT = { has_country_flag = MWY_serf_law_cooldown_flag }
+                    }
+                    has_completed_focus = MWY_backroom_squabbles
+                    custom_trigger_tooltip = {
+                        tooltip = cost_50_pp_tt
+                        has_political_power > 49
+                    }
+                }
+                serf_laws_button_5_click_enabled = {
+                    MWY_serf_laws_5_maj_approval = yes
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_has_adjacent_law_tt
+                        OR = {
+                            check_variable = { serf_laws_var = 4 }
+                            check_variable = { serf_laws_var = 5 }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_serf_cooldown_tt
+                        NOT = { has_country_flag = MWY_serf_law_cooldown_flag }
+                    }
+                    has_completed_focus = MWY_backroom_squabbles
+                    custom_trigger_tooltip = {
+                        tooltip = cost_50_pp_tt
+                        has_political_power > 49
+                    }
+                }
+
+            #Centralization Buttons
+                centralization_laws_button_1_click_enabled = {
+                    MWY_centralization_laws_1_maj_approval = yes
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_has_adjacent_law_tt
+                        OR = {
+                            check_variable = { centralization_laws_var = 1 }
+                            check_variable = { centralization_laws_var = 2 }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_centralization_cooldown_tt
+                        NOT = { has_country_flag = MWY_centralization_law_cooldown_flag }
+                    }
+                    has_completed_focus = MWY_backroom_squabbles
+                    custom_trigger_tooltip = {
+                        tooltip = cost_50_pp_tt
+                        has_political_power > 49
+                    }
+                }
+                centralization_laws_button_2_click_enabled = {
+                    MWY_centralization_laws_2_maj_approval = yes
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_has_adjacent_law_tt
+                        OR = {
+                            check_variable = { centralization_laws_var = 1 }
+                            check_variable = { centralization_laws_var = 2 }
+                            check_variable = { centralization_laws_var = 3 }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_centralization_cooldown_tt
+                        NOT = { has_country_flag = MWY_centralization_law_cooldown_flag }
+                    }
+                    has_completed_focus = MWY_backroom_squabbles
+                    custom_trigger_tooltip = {
+                        tooltip = cost_50_pp_tt
+                        has_political_power > 49
+                    }
+                }
+                centralization_laws_button_3_click_enabled = {
+                    MWY_centralization_laws_3_maj_approval = yes
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_has_adjacent_law_tt
+                        OR = {
+                            check_variable = { centralization_laws_var = 2 }
+                            check_variable = { centralization_laws_var = 3 }
+                            check_variable = { centralization_laws_var = 4 }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_centralization_cooldown_tt
+                        NOT = { has_country_flag = MWY_centralization_law_cooldown_flag }
+                    }
+                    has_completed_focus = MWY_backroom_squabbles
+                    custom_trigger_tooltip = {
+                        tooltip = cost_50_pp_tt
+                        has_political_power > 49
+                    }
+                }
+                centralization_laws_button_4_click_enabled = {
+                    MWY_centralization_laws_4_maj_approval = yes
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_has_adjacent_law_tt
+                        OR = {
+                            check_variable = { centralization_laws_var = 3 }
+                            check_variable = { centralization_laws_var = 4 }
+                            check_variable = { centralization_laws_var = 5 }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_centralization_cooldown_tt
+                        NOT = { has_country_flag = MWY_centralization_law_cooldown_flag }
+                    }
+                    has_completed_focus = MWY_backroom_squabbles
+                    custom_trigger_tooltip = {
+                        tooltip = cost_50_pp_tt
+                        has_political_power > 49
+                    }
+                }
+                centralization_laws_button_5_click_enabled = {
+                    MWY_centralization_laws_5_maj_approval = yes
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_has_adjacent_law_tt
+                        OR = {
+                            check_variable = { centralization_laws_var = 4 }
+                            check_variable = { centralization_laws_var = 5 }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_centralization_cooldown_tt
+                        NOT = { has_country_flag = MWY_centralization_law_cooldown_flag }
+                    }
+                    has_completed_focus = MWY_backroom_squabbles
+                    custom_trigger_tooltip = {
+                        tooltip = cost_50_pp_tt
+                        has_political_power > 49
+                    }
+                }
+
+            #Army Buttons
+                army_laws_button_1_click_enabled = {
+                    MWY_army_laws_1_maj_approval = yes
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_has_adjacent_law_tt
+                        OR = {
+                            check_variable = { army_laws_var = 1 }
+                            check_variable = { army_laws_var = 2 }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_army_cooldown_tt
+                        NOT = { has_country_flag = MWY_army_law_cooldown_flag }
+                    }
+                    has_completed_focus = MWY_backroom_squabbles
+                    custom_trigger_tooltip = {
+                        tooltip = cost_50_pp_tt
+                        has_political_power > 49
+                    }
+                }
+                army_laws_button_2_click_enabled = {
+                    MWY_army_laws_2_maj_approval = yes
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_has_adjacent_law_tt
+                        OR = {
+                            check_variable = { army_laws_var = 1 }
+                            check_variable = { army_laws_var = 2 }
+                            check_variable = { army_laws_var = 3 }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_army_cooldown_tt
+                        NOT = { has_country_flag = MWY_army_law_cooldown_flag }
+                    }
+                    has_completed_focus = MWY_backroom_squabbles
+                    custom_trigger_tooltip = {
+                        tooltip = cost_50_pp_tt
+                        has_political_power > 49
+                    }
+                }
+                army_laws_button_3_click_enabled = {
+                    MWY_army_laws_3_maj_approval = yes
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_has_adjacent_law_tt
+                        OR = {
+                            check_variable = { army_laws_var = 2 }
+                            check_variable = { army_laws_var = 3 }
+                            check_variable = { army_laws_var = 4 }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_army_cooldown_tt
+                        NOT = { has_country_flag = MWY_army_law_cooldown_flag }
+                    }
+                    has_completed_focus = MWY_backroom_squabbles
+                    custom_trigger_tooltip = {
+                        tooltip = cost_50_pp_tt
+                        has_political_power > 49
+                    }
+                }
+                army_laws_button_4_click_enabled = {
+                    MWY_army_laws_4_maj_approval = yes
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_has_adjacent_law_tt
+                        OR = {
+                            check_variable = { army_laws_var = 3 }
+                            check_variable = { army_laws_var = 4 }
+                            #check_variable = { army_laws_var = 5 }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_army_cooldown_tt
+                        NOT = { has_country_flag = MWY_army_law_cooldown_flag }
+                    }
+                    has_completed_focus = MWY_backroom_squabbles
+                    custom_trigger_tooltip = {
+                        tooltip = cost_50_pp_tt
+                        has_political_power > 49
+                    }
+                }
+                army_laws_button_5_click_enabled = {
+                    MWY_army_laws_5_maj_approval = yes
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_has_adjacent_law_tt
+                        OR = {
+                            check_variable = { army_laws_var = 4 }
+                            check_variable = { army_laws_var = 5 }
+                        }
+                    }
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_army_cooldown_tt
+                        NOT = { has_country_flag = MWY_army_law_cooldown_flag }
+                    }
+                    has_completed_focus = MWY_backroom_squabbles
+                    custom_trigger_tooltip = {
+                        tooltip = cost_50_pp_tt
+                        has_political_power > 49
+                    }
+                }
+        }
+    
+        dynamic_lists = {
+        }
+    
+        properties = {
+            #Serf Buttons
+                serf_laws_button_1 = {
+                    frame = serf_laws_button_1_frame_var
+                }
+                serf_laws_button_2 = {
+                    frame = serf_laws_button_2_frame_var
+                }
+                serf_laws_button_3 = {
+                    frame = serf_laws_button_3_frame_var
+                }
+                serf_laws_button_4 = {
+                    frame = serf_laws_button_4_frame_var
+                }
+                serf_laws_button_5 = {
+                    frame = serf_laws_button_5_frame_var
+                }
+
+            #Centalization Buttons
+                centralization_laws_button_1 = {
+                    frame = centralization_laws_button_1_frame_var
+                }
+                centralization_laws_button_2 = {
+                    frame = centralization_laws_button_2_frame_var
+                }
+                centralization_laws_button_3 = {
+                    frame = centralization_laws_button_3_frame_var
+                }
+                centralization_laws_button_4 = {
+                    frame = centralization_laws_button_4_frame_var
+                }
+                centralization_laws_button_5 = {
+                    frame = centralization_laws_button_5_frame_var
+                }
+
+            #Army Buttons
+                army_laws_button_1 = {
+                    frame = army_laws_button_1_frame_var
+                }
+                army_laws_button_2 = {
+                    frame = army_laws_button_2_frame_var
+                }
+                army_laws_button_3 = {
+                    frame = army_laws_button_3_frame_var
+                }
+                army_laws_button_4 = {
+                    frame = army_laws_button_4_frame_var
+                }
+                army_laws_button_5 = {
+                    frame = army_laws_button_5_frame_var
+                }
+
+            #Council Approval
+                #Serf Laws
+                    serf_laws_button_1_chan = {
+                        frame = serf_laws_button_1_chan_var
+                    }
+                    serf_laws_button_1_mar = {
+                        frame = serf_laws_button_1_mar_var
+                    }
+                    serf_laws_button_1_stew = {
+                        frame = serf_laws_button_1_stew_var
+                    }
+                    serf_laws_button_1_spy = {
+                        frame = serf_laws_button_1_spy_var
+                    }
+
+
+                    serf_laws_button_2_chan = {
+                        frame = serf_laws_button_2_chan_var
+                    }
+                    serf_laws_button_2_mar = {
+                        frame = serf_laws_button_2_mar_var
+                    }
+                    serf_laws_button_2_stew = {
+                        frame = serf_laws_button_2_stew_var
+                    }
+                    serf_laws_button_2_spy = {
+                        frame = serf_laws_button_2_spy_var
+                    }
+
+
+                    serf_laws_button_3_chan = {
+                        frame = serf_laws_button_3_chan_var
+                    }
+                    serf_laws_button_3_mar = {
+                        frame = serf_laws_button_3_mar_var
+                    }
+                    serf_laws_button_3_stew = {
+                        frame = serf_laws_button_3_stew_var
+                    }
+                    serf_laws_button_3_spy = {
+                        frame = serf_laws_button_3_spy_var
+                    }
+
+
+                    serf_laws_button_4_chan = {
+                        frame = serf_laws_button_4_chan_var
+                    }
+                    serf_laws_button_4_mar = {
+                        frame = serf_laws_button_4_mar_var
+                    }
+                    serf_laws_button_4_stew = {
+                        frame = serf_laws_button_4_stew_var
+                    }
+                    serf_laws_button_4_spy = {
+                        frame = serf_laws_button_4_spy_var
+                    }
+
+
+                    serf_laws_button_5_chan = {
+                        frame = serf_laws_button_5_chan_var
+                    }
+                    serf_laws_button_5_mar = {
+                        frame = serf_laws_button_5_mar_var
+                    }
+                    serf_laws_button_5_stew = {
+                        frame = serf_laws_button_5_stew_var
+                    }
+                    serf_laws_button_5_spy = {
+                        frame = serf_laws_button_5_spy_var
+                    }
+
+
+                #Centralization Laws
+                    centralization_laws_button_1_chan = {
+                        frame = centralization_laws_button_1_chan_var
+                    }
+                    centralization_laws_button_1_mar = {
+                        frame = centralization_laws_button_1_mar_var
+                    }
+                    centralization_laws_button_1_stew = {
+                        frame = centralization_laws_button_1_stew_var
+                    }
+                    centralization_laws_button_1_spy = {
+                        frame = centralization_laws_button_1_spy_var
+                    }
+
+
+                    centralization_laws_button_2_chan = {
+                        frame = centralization_laws_button_2_chan_var
+                    }
+                    centralization_laws_button_2_mar = {
+                        frame = centralization_laws_button_2_mar_var
+                    }
+                    centralization_laws_button_2_stew = {
+                        frame = centralization_laws_button_2_stew_var
+                    }
+                    centralization_laws_button_2_spy = {
+                        frame = centralization_laws_button_2_spy_var
+                    }
+
+
+                    centralization_laws_button_3_chan = {
+                        frame = centralization_laws_button_3_chan_var
+                    }
+                    centralization_laws_button_3_mar = {
+                        frame = centralization_laws_button_3_mar_var
+                    }
+                    centralization_laws_button_3_stew = {
+                        frame = centralization_laws_button_3_stew_var
+                    }
+                    centralization_laws_button_3_spy = {
+                        frame = centralization_laws_button_3_spy_var
+                    }
+
+
+                    centralization_laws_button_4_chan = {
+                        frame = centralization_laws_button_4_chan_var
+                    }
+                    centralization_laws_button_4_mar = {
+                        frame = centralization_laws_button_4_mar_var
+                    }
+                    centralization_laws_button_4_stew = {
+                        frame = centralization_laws_button_4_stew_var
+                    }
+                    centralization_laws_button_4_spy = {
+                        frame = centralization_laws_button_4_spy_var
+                    }
+
+
+                    centralization_laws_button_5_chan = {
+                        frame = centralization_laws_button_5_chan_var
+                    }
+                    centralization_laws_button_5_mar = {
+                        frame = centralization_laws_button_5_mar_var
+                    }
+                    centralization_laws_button_5_stew = {
+                        frame = centralization_laws_button_5_stew_var
+                    }
+                    centralization_laws_button_5_spy = {
+                        frame = centralization_laws_button_5_spy_var
+                    }
+
+                #Army Laws
+                    army_laws_button_1_chan = {
+                        frame = army_laws_button_1_chan_var
+                    }
+                    army_laws_button_1_mar = {
+                        frame = army_laws_button_1_mar_var
+                    }
+                    army_laws_button_1_stew = {
+                        frame = army_laws_button_1_stew_var
+                    }
+                    army_laws_button_1_spy = {
+                        frame = army_laws_button_1_spy_var
+                    }
+
+
+                    army_laws_button_2_chan = {
+                        frame = army_laws_button_2_chan_var
+                    }
+                    army_laws_button_2_mar = {
+                        frame = army_laws_button_2_mar_var
+                    }
+                    army_laws_button_2_stew = {
+                        frame = army_laws_button_2_stew_var
+                    }
+                    army_laws_button_2_spy = {
+                        frame = army_laws_button_2_spy_var
+                    }
+
+
+                    army_laws_button_3_chan = {
+                        frame = army_laws_button_3_chan_var
+                    }
+                    army_laws_button_3_mar = {
+                        frame = army_laws_button_3_mar_var
+                    }
+                    army_laws_button_3_stew = {
+                        frame = army_laws_button_3_stew_var
+                    }
+                    army_laws_button_3_spy = {
+                        frame = army_laws_button_3_spy_var
+                    }
+
+
+                    army_laws_button_4_chan = {
+                        frame = army_laws_button_4_chan_var
+                    }
+                    army_laws_button_4_mar = {
+                        frame = army_laws_button_4_mar_var
+                    }
+                    army_laws_button_4_stew = {
+                        frame = army_laws_button_4_stew_var
+                    }
+                    army_laws_button_4_spy = {
+                        frame = army_laws_button_4_spy_var
+                    }
+
+
+                    army_laws_button_5_chan = {
+                        frame = army_laws_button_5_chan_var
+                    }
+                    army_laws_button_5_mar = {
+                        frame = army_laws_button_5_mar_var
+                    }
+                    army_laws_button_5_stew = {
+                        frame = army_laws_button_5_stew_var
+                    }
+                    army_laws_button_5_spy = {
+                        frame = army_laws_button_5_spy_var
+                    }
+        }
+    
+        ai_enabled = {
+            always = no
+        }
+    
+        ai_test_interval = 290  # The higher, the long it takes the ai to do actions
+        ai_test_variance = 0.5
+    
+        ai_check = {
+        }
+    
+        ai_check_scope = {
+        }
+    
+        ai_weights = {
+        }
+    }
+
+
+
+    mwy_ck2_politics_buttons = {
+        window_name = "mwy_ck2_politics_buttons_window"
+        context_type = player_context
+        parent_window_token = politics_tab
+    
+        visible = {
+            tag = MWY
+        }
+    
+        effects = {
+            mwy_council_button_click = {
+                if = {
+                    limit = { check_variable = { mwy_ck2_menu_var = 1 } }
+                    ROOT = {
+                        set_variable = { mwy_ck2_menu_var = 0 }
+                    }
+                }
+                else_if = {
+                    limit = { 
+                        NOT { check_variable = { mwy_ck2_menu_var = 1 } }
+                        check_variable = { mwy_ck2_menu_var > 0 } 
+                    }
+                    ROOT = {
+                        set_variable = { mwy_ck2_menu_var = 1 }
+                    }
+                }
+                else = {
+                    ROOT = {
+                        set_variable = { mwy_ck2_menu_var = 1 }
+                    }
+                }
+
+                MWY_close_all_council_submenu = yes
+            }
+
+            mwy_realms_button_click = {
+                if = {
+                    limit = { check_variable = { mwy_ck2_menu_var = 2 } }
+                    ROOT = {
+                        set_variable = { mwy_ck2_menu_var = 0 }
+                    }
+                }
+                else_if = {
+                    limit = { 
+                        NOT { check_variable = { mwy_ck2_menu_var = 2 } }
+                        check_variable = { mwy_ck2_menu_var > 0 } 
+                    }
+                    ROOT = {
+                        set_variable = { mwy_ck2_menu_var = 2 }
+                    }
+                }
+                else = {
+                    ROOT = {
+                        set_variable = { mwy_ck2_menu_var = 2 }
+                    }
+                } 
+            }
+
+            mwy_laws_button_click = {
+                if = {
+                    limit = { check_variable = { mwy_ck2_menu_var = 3 } }
+                    ROOT = {
+                        set_variable = { mwy_ck2_menu_var = 0 }
+                    }
+                }
+                else_if = {
+                    limit = { 
+                        NOT { check_variable = { mwy_ck2_menu_var = 3 } }
+                        check_variable = { mwy_ck2_menu_var > 0 } 
+                    }
+                    ROOT = {
+                        set_variable = { mwy_ck2_menu_var = 3 }
+                    }
+                }
+                else = {
+                    ROOT = {
+                        set_variable = { mwy_ck2_menu_var = 3 }
+                    }
+                } 
+            }
+        }
+
+        triggers = {
+            
+        }
+    
+        dynamic_lists = {
+        }
+    
+        properties = {
+
+        }
+    
+        ai_enabled = {
+            always = no
+        }
+    
+        #ai_test_interval = 290  # The higher, the long it takes the ai to do actions
+        #ai_test_variance = 0.5
+    
+        ai_check = {
+        }
+    
+        ai_check_scope = {
+        }
+    
+        ai_weights = {
+        }
+    }
+}
