@@ -1096,7 +1096,7 @@ shared_focus = {
 	relative_position_id = goddess_canon_stick_redeye
 	x = 0
 	y = 1
-	cost = 5
+	cost = 2
 
 	available_if_capitulated = no
 	ai_will_do = {
@@ -2292,36 +2292,101 @@ shared_focus = {
 	}
 }
 
-#Growing Up
+#Cleaning Up the Testing Chambers
 shared_focus = {
-	id = unity_eco_2
-	icon = GFX_goal_uni_Growing_up
+	id = UNI_cleaning_test_chambers
+	icon = GFX_goal_unknown
+	relative_position_id = unity_eco_1
+	x = -2
+	y =	1
+	cost = 5
+
+	available_if_capitulated = no
+	prerequisite = { focus = unity_eco_1 }
+	ai_will_do = {
+		factor = 10
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus UNI_cleaning_test_chambers"
+	}
+}
+
+#Repairing Old Vats
+shared_focus = {
+	id = UNI_repair_old_vats
+	icon = GFX_goal_unknown
+	relative_position_id = UNI_cleaning_test_chambers
+	x = 0
+	y =	1
+	cost = 5
+
+	available_if_capitulated = no
+	prerequisite = { focus = UNI_cleaning_test_chambers }
+	ai_will_do = {
+		factor = 10
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus UNI_repair_old_vats"
+	}
+}
+
+#Salvage Lost Sections
+shared_focus = {
+	id = unity_eco_5
+	icon = GFX_goal_uni_More_Materials
 	prerequisite = { focus = unity_eco_1 }
 	
 	relative_position_id = unity_eco_1
-	x = -2
+	x = 2
 	y = 1
 	cost = 10
 
 	available_if_capitulated = no
 	ai_will_do = {
 		factor = 1
-
-		modifier = {
-			has_completed_focus = goddess_redeye_1
-			factor = 15
-		}
 	}	
 
 	completion_reward = {
 		518 = {
-			add_extra_state_shared_building_slots = 4
-			add_building_construction = {
-				type = industrial_complex
-				level = 2
-				instant_build = yes
+			add_resource = {
+				type = crystals
+				amount = 3
 			}
+			add_resource = {
+				type = metal
+				amount = 3
+			}
+			add_resource = {
+				type = advanced
+				amount = 3
+			}
+			add_extra_state_shared_building_slots = 2
 		}
+		hidden_effect = {
+			country_event = unity_misc.5
+		}
+	}
+}
+
+#Building Anew
+shared_focus = {
+	id = UNI_building_anew
+	icon = GFX_goal_unknown
+	relative_position_id = unity_eco_5
+	x = 0
+	y =	1
+	cost = 5
+
+	available_if_capitulated = no
+	prerequisite = { focus = unity_eco_5 }
+	ai_will_do = {
+		factor = 10
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus UNI_building_anew"
 	}
 }
 
@@ -2329,9 +2394,10 @@ shared_focus = {
 shared_focus = {
 	id = unity_eco_3
 	icon = GFX_goal_uni_Growing_out
-	prerequisite = { focus = unity_eco_1 }
+	prerequisite = { focus = UNI_building_anew }
+	prerequisite = { focus = UNI_repair_old_vats }
 	
-	relative_position_id = unity_eco_1
+	relative_position_id = UNI_repair_old_vats
 	x = 2
 	y = 1
 	cost = 10
@@ -2364,11 +2430,46 @@ shared_focus = {
 	}
 }
 
+#Growing Up
+shared_focus = {
+	id = unity_eco_2
+	icon = GFX_goal_uni_Growing_up
+	#prerequisite = { focus = unity_eco_1 }
+	
+	relative_position_id = unity_eco_1
+	x = -2
+	y = 1
+	cost = 10
+
+	available_if_capitulated = no
+	ai_will_do = {
+		factor = 1
+
+		modifier = {
+			has_completed_focus = goddess_redeye_1
+			factor = 15
+		}
+	}	
+
+	completion_reward = {
+		518 = {
+			add_extra_state_shared_building_slots = 4
+			add_building_construction = {
+				type = industrial_complex
+				level = 2
+				instant_build = yes
+			}
+		}
+	}
+}
+
+
+
 #Constructing More Vats
 shared_focus = {
 	id = unity_eco_4
 	icon = GFX_goal_uni_Expanding_vats
-	prerequisite = { focus = unity_eco_2 }
+	#prerequisite = { focus = unity_eco_2 }
 	
 	relative_position_id = unity_eco_2 
 	x = 0
@@ -2395,43 +2496,6 @@ shared_focus = {
 	}
 }
 
-#Salvage Lost Sections
-shared_focus = {
-	id = unity_eco_5
-	icon = GFX_goal_uni_More_Materials
-	prerequisite = { focus = unity_eco_4 }
-	
-	relative_position_id = unity_eco_2
-	x = -1
-	y = 2
-	cost = 10
-
-	available_if_capitulated = no
-	ai_will_do = {
-		factor = 1
-	}	
-
-	completion_reward = {
-		518 = {
-			add_resource = {
-				type = crystals
-				amount = 3
-			}
-			add_resource = {
-				type = metal
-				amount = 3
-			}
-			add_resource = {
-				type = advanced
-				amount = 3
-			}
-			add_extra_state_shared_building_slots = 2
-		}
-		hidden_effect = {
-			country_event = unity_misc.5
-		}
-	}
-}
 
 #Digging for Crystals
 shared_focus = {
@@ -2470,7 +2534,7 @@ shared_focus = {
 	prerequisite = { focus = unity_eco_3 }
 	
 	relative_position_id = unity_eco_3
-	x = 0
+	x = -1
 	y = 1
 	cost = 10
 
@@ -2508,7 +2572,7 @@ shared_focus = {
 shared_focus = {
 	id = unity_eco_8
 	icon = GFX_goal_uni_Expanding_vats
-	prerequisite = { focus = unity_eco_4 }
+	#prerequisite = { focus = unity_eco_4 }
 	
 	relative_position_id = unity_eco_2
 	x = 1
@@ -2574,7 +2638,7 @@ shared_focus = {
 	prerequisite = { focus = unity_eco_6 }
 	
 	relative_position_id = unity_eco_6
-	x = 0
+	x = -1
 	y = 1
 	cost = 10
 
@@ -2677,7 +2741,7 @@ shared_focus = {
 	prerequisite = { focus = unity_eco_6 }
 	
 	relative_position_id = unity_eco_6
-	x = 2
+	x = 1
 	y = 1
 	cost = 10
 
