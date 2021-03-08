@@ -14,17 +14,19 @@ foe_slaving_cat = {
 		}
 
 		days_remove = 60
-		days_re_enable = 30
-		remove_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_counter"
-
-			one_random_arms_factory = yes
-
+		days_re_enable = 40
+		complete_effect = {
 			custom_effect_tooltip = foe_3_lose_slave_tt
 			subtract_from_variable = {
 				var = foe_slaves_var
 				value = 3
 			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_counter"
+
+			one_random_arms_factory = yes
+
 		}
 
 		ai_will_do = {
@@ -34,29 +36,31 @@ foe_slaving_cat = {
 
 	foe_slave_civ_factory = {
 		icon = generic_construction
-		cost = 40
+		cost = 50
 
 		available = {
 			custom_trigger_tooltip = {
-				tooltip = foe_3_cost_slave_tt
+				tooltip = foe_4_cost_slave_tt
 				check_variable = {
-					foe_slaves_var > 2
+					foe_slaves_var > 3
 				}
 			}
 		}
 
 		days_remove = 60
-		days_re_enable = 30
+		days_re_enable = 40
+		complete_effect = {
+			custom_effect_tooltip = foe_4_lose_slave_tt
+			subtract_from_variable = {
+				var = foe_slaves_var
+				value = 4
+			}
+		}
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_counter"
 
 			one_random_industrial_complex = yes
 
-			custom_effect_tooltip = foe_3_lose_slave_tt
-			subtract_from_variable = {
-				var = foe_slaves_var
-				value = 3
-			}
 		}
 
 		ai_will_do = {
@@ -85,6 +89,13 @@ foe_slaving_cat = {
 
 		days_remove = 60
 		days_re_enable = 30
+		complete_effect = {
+			custom_effect_tooltip = foe_2_lose_slave_tt
+			subtract_from_variable = {
+				var = foe_slaves_var
+				value = 2
+			}
+		}
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision RED_slave_counter"
 
@@ -97,11 +108,6 @@ foe_slaving_cat = {
 				add_manpower = 2000
 			}
 
-			custom_effect_tooltip = foe_2_lose_slave_tt
-			subtract_from_variable = {
-				var = foe_slaves_var
-				value = 2
-			}
 		}
 
 		ai_will_do = {
@@ -173,7 +179,54 @@ foe_slaving_cat = {
 		cost = 80
 
 		visible = {
-			tag = OAP
+			original_tag = OAP
+			NOT = {has_completed_focus = OAP_southwest_trade}
+		}
+
+		days_remove = 50
+		modifier = {
+			consumer_goods_factor = 0.05
+			political_power_gain = -0.1
+		}
+		days_re_enable = 80
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_western_slave"
+
+			custom_effect_tooltip = foe_2_gain_slave_tt
+			add_to_variable = {
+				var = foe_slaves_var
+				value = 2
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = {
+					var = foe_slaves_var
+					value = 5
+					compare = less_than_or_equals
+				}
+			}
+			modifier = {
+				add = 10
+				check_variable = {
+					var = foe_slaves_var
+					value = 10
+					compare = less_than_or_equals
+				}
+			}
+		}
+	}
+	
+	OAP_western_slaves_2 = {
+		icon = slavery
+		cost = 40
+
+		visible = {
+			original_tag = OAP
+			has_completed_focus = OAP_southwest_trade
 		}
 
 		days_remove = 50
