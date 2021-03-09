@@ -1,0 +1,4439 @@
+###By Argeddion
+###No touching without asking me!
+
+#The Weather-Factory
+shared_focus = {
+		id = LIT_Starting_Focus
+		icon = GFX_goal_generic_repair_cloudcity
+		x = 28
+		y = 0
+		cost = 1
+		
+		available_if_capitulated = yes 
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_Starting_Focus"
+			country_event = { id = LIT_event.1 }
+			
+		}
+}
+
+#The Fall of Cloudsdale
+shared_focus = {
+		id = LIT_Starting_Focus_2
+		icon = GFX_goal_NEV_burning_building
+		x = 28
+		y = 1
+		cost = 1
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_Starting_Focus }
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_Starting_Focus_2"
+			country_event = { id = LIT_event.2 }
+		}
+}
+
+#The Thunder-war
+shared_focus = {
+		id = LIT_Starting_Focus_3
+		icon = GFX_goal_thunder_war
+		x = 28
+		y = 2
+		cost = 1
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_Starting_Focus_2 }
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_Starting_Focus_3"
+			country_event = { id = LIT_event.3 }
+		}
+}
+
+###############
+###Emergency###
+###############
+
+#Emergency Mobilization
+shared_focus = {
+		id = LIT_emergency1
+		icon = GFX_goal_unicorn_soldier
+		x = 7
+		y = 10
+		cost = 1.43
+		available = { has_war_with = MAS}
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 3000
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_emergency1"
+			division_template = {
+				name = "Emergency Militia"
+				priority = 2
+				is_locked = no
+				regiments = {
+					militia = { x = 0 y = 0 }
+					militia = { x = 0 y = 1 }
+					militia = { x = 1 y = 0 }
+					militia = { x = 1 y = 1 }
+				}
+				}
+			550 = {
+				create_unit = {
+					division = "name = \"1. Emergency Militia\" division_template = \"Emergency Militia\" start_experience_factor = 0.3" 
+					owner = LIT
+				}
+				create_unit = {
+					division = "name = \"2. Emergency Militia\" division_template = \"Emergency Militia\" start_experience_factor = 0.3" 
+					owner = LIT
+				}
+			}
+			34 = {
+				create_unit = {
+					division = "name = \"3. Emergency Militia\" division_template = \"Emergency Militia\" start_experience_factor = 0.3" 
+					owner = LIT
+				}
+			}
+			551 = {
+				create_unit = {
+					division = "name = \"4. Emergency Militia\" division_template = \"Emergency Militia\" start_experience_factor = 0.3" 
+					owner = LIT
+				}
+			}
+			add_political_power = -60
+			If = {
+				limit = { LIT = {is_ai = yes}}
+				add_timed_idea = {
+					idea = LIT_screw_mas_player_idea
+					days = 250
+				}
+				add_equipment_to_stockpile = {
+					type = ballistic_equipment_1
+					amount = 1100
+					producer = OWE
+				}
+				add_manpower = 1000
+			}
+		}
+}
+
+#Seize Civillian Arms
+shared_focus = {
+		id = LIT_emergency2
+		icon = GFX_goal_Arms_Export
+		x = -1
+		y = 1
+		cost = 2.15
+		relative_position_id = LIT_emergency1
+		available = { has_war_with = MAS}
+		prerequisite = {focus = LIT_emergency1}
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_emergency2"
+			add_equipment_to_stockpile = {
+				type = ballistic_equipment_1
+				amount = 192
+				producer = OWE
+			}
+			add_political_power = -30
+		}
+}
+
+#A Wall of Flesh
+shared_focus = {
+		id = LIT_emergency3
+		icon = GFX_goal_conscription_pony
+		x = 1
+		y = 1
+		cost = 2.15
+		relative_position_id = LIT_emergency1
+		available = { has_war_with = MAS}
+		prerequisite = {focus = LIT_emergency1}
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 3000
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_emergency3"
+			add_manpower = 159
+			add_political_power = -30
+		}
+}
+
+#Fall back to Cloudsdale
+shared_focus = {
+		id = LIT_emergency4
+		icon = GFX_goal_OTT_Land_Reform
+		x = 0
+		y = 2
+		cost = 2.15
+		relative_position_id = LIT_emergency1
+		available = { has_war_with = MAS surrender_progress > 0.05}
+		prerequisite = {focus = LIT_emergency2 focus = LIT_emergency3}
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 3000
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_emergency4"
+			565 = {
+				add_building_construction = {
+				type = bunker
+				province = 12926
+				level = 2
+				instant_build = yes
+				}
+				add_building_construction = {
+				type = bunker
+				province = 14021
+				level = 2
+				instant_build = yes
+				}
+				add_building_construction = {
+				type = bunker
+				province = 1474
+				level = 2
+				instant_build = yes
+				}
+				add_building_construction = {
+				type = bunker
+				province = 13625
+				level = 2
+				instant_build = yes
+				}
+			}
+			If = {
+				limit = {MAS = {is_ai = no} LIT = {is_ai = yes}}
+				798 = {
+				create_unit = {
+					division = "name = \"Final Defense\" division_template = \"Lightning Warband\" start_experience_factor = 0.9" 
+					owner = LIT
+				}
+				create_unit = {
+					division = "name = \"Final Defense 2\" division_template = \"Lightning Warband\" start_experience_factor = 0.9" 
+					owner = LIT
+				}
+				create_unit = {
+					division = "name = \"Final Defense 3\" division_template = \"Lightning Warband\" start_experience_factor = 0.9" 
+					owner = LIT
+				}
+				create_unit = {
+					division = "name = \"Final Defense 4\" division_template = \"Lightning Warband\" start_experience_factor = 0.9" 
+					owner = LIT
+				}
+				create_unit = {
+					division = "name = \"Final Defense 5\" division_template = \"Lightning Warband\" start_experience_factor = 0.9" 
+					owner = LIT
+				}
+				}
+			}
+		}
+}
+
+#Our Last Stand
+shared_focus = {
+		id = LIT_emergency5
+		icon = GFX_goal_generic_lau_military
+		x = 0
+		y = 3
+		cost = 2.15
+		relative_position_id = LIT_emergency1
+		available = { has_war_with = MAS surrender_progress > 0.15}
+		prerequisite = {focus = LIT_emergency4 }
+		available_if_capitulated = no
+		
+		ai_will_do = { 
+		factor = 3000
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_emergency5"
+			add_timed_idea = {
+					idea = LIT_last_stand_idea
+					days = 200
+				}
+		}
+}
+
+###############
+###Political###
+###############
+
+#The Assembly is Called
+shared_focus = {
+		id = LIT_assembly_is_called
+		icon = GFX_goal_generic_lau_democracy
+		x = 0
+		y = 2
+		relative_position_id = LIT_Starting_Focus_3
+		cost = 2.86
+		
+		available_if_capitulated = yes 
+		available = {date > 1236.4.1}
+		prerequisite = { focus = LIT_Starting_Focus_3 }
+		ai_will_do = { 
+		factor = 3000
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_assembly_is_called"
+			country_event = { id = LIT_event.4 }
+		}
+}
+
+#Shake Things Up
+shared_focus = {
+		id = LIT_shake_things_up
+		icon = GFX_goal_Form_Rockbreaker_Divisions
+		x = 5
+		y = 1
+		relative_position_id = LIT_assembly_is_called
+		cost = 2.86
+		available = {
+			OR = {
+				has_country_leader = {
+				name = "Swift Storm"
+				ruling_only = yes
+				}
+				has_country_leader = {
+				name = "Hook Hoof"
+				ruling_only = yes
+				}
+			}
+		}
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_assembly_is_called }
+		ai_will_do = { 
+		factor = 3000
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_shake_things_up"
+			add_stability = -0.05
+			add_war_support = 0.12
+		}
+}
+
+#Revanchist Coalition
+shared_focus = {
+		id = LIT_revanchist_coalition
+		icon = GFX_goal_revolution_pony
+		x = 0
+		y = 1
+		relative_position_id = LIT_shake_things_up
+		cost = 2.86
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_shake_things_up }
+		ai_will_do = { 
+		factor = 3000
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_revanchist_coalition"
+			add_popularity = { ideology = destruction popularity = 0.20 }
+			add_popularity = { ideology = visionary popularity = 0.20 }
+		}
+}
+
+#A deal with the Plainsraiders?
+shared_focus = {
+		id = LIT_deal_with_plainsraiders
+		icon = GFX_goal_generic_NAP_flag_focus
+		x = -2
+		y = 2
+		relative_position_id = LIT_shake_things_up
+		cost = 5.72
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_revanchist_coalition }
+		ai_will_do = { 
+		factor = 3000
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_deal_with_plainsraiders"
+			PBN = { country_event = LIT_event.19 }
+		}
+}
+
+#Buy Black Market Weapons
+shared_focus = {
+		id = LIT_black_market_weapons
+		icon = GFX_goal_generic_esp_plasma
+		x = 0
+		y = 2
+		relative_position_id = LIT_shake_things_up
+		cost = 5.72
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_revanchist_coalition }
+		ai_will_do = { 
+		factor = 3000
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_black_market_weapons"
+			add_political_power = -40
+			add_equipment_to_stockpile = { type = energy_equipment_2 amount = 90 producer = OWE }
+			add_equipment_to_stockpile = { type = melee_equipment_3 amount = 60 producer = OWE }
+			add_equipment_to_stockpile = { type = ballistic_equipment_3 amount = 30 producer = OWE }
+		}
+}
+
+#Push out the Complacent
+shared_focus = {
+		id = LIT_push_out_the_complacent
+		icon = GFX_goal_step_on_skull
+		x = 2
+		y = 2
+		relative_position_id = LIT_shake_things_up
+		cost = 5.72
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_revanchist_coalition }
+		ai_will_do = { 
+		factor = 3000
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_push_out_the_complacent"
+			add_war_support = 0.08
+			add_popularity = { ideology = survivalism popularity = -0.15 }
+			add_popularity = { ideology = continuation popularity = -0.15 }
+		}
+}
+
+#The Second Thunder War
+shared_focus = {
+		id = LIT_second_thunder_war
+		icon = GFX_goal_thunder_war
+		x = 0
+		y = 3
+		relative_position_id = LIT_shake_things_up
+		cost = 5.72
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_deal_with_plainsraiders }
+		prerequisite = { focus = LIT_black_market_weapons }
+		prerequisite = { focus = LIT_push_out_the_complacent }
+		ai_will_do = { 
+		factor = 3000
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_second_thunder_war"
+			FTA = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			hidden_effect = {
+				IF = {
+					limit = { PBN = {is_in_faction_with = LIT}}
+					PBN = {add_state_claim = 161}
+				}
+			}
+		}
+}
+
+#The Inevitable Conclusion
+shared_focus = {
+		id = LIT_inevitable_conclusion
+		icon = GFX_goal_fire
+		x = 0
+		y = 4
+		relative_position_id = LIT_shake_things_up
+		cost = 5.72
+		available = {owns_state = 802 owns_state = 526}
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_second_thunder_war }
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_inevitable_conclusion"
+			country_event = LIT_event.20
+			hidden_effect = {
+				dismantle_faction = yes
+			}
+		}
+}
+
+#Hook Hoof wins out
+shared_focus = {
+		id = LIT_hook_hoof_wins
+		icon = GFX_goal_LIT_hook_hoof_focus
+		x = -3
+		y = 5
+		relative_position_id = LIT_shake_things_up
+		cost = 5.72
+		mutually_exclusive = {focus = LIT_enclavists_wins}
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_inevitable_conclusion }
+		ai_will_do = { 
+		factor = 500
+		modifier = {
+			factor = 0
+			has_game_rule = {
+                    rule = LIT_AI_BEHAVIOR
+                    option = ENCLAVISTS
+                }
+			}
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_hook_hoof_wins"
+			set_politics = { ruling_party = destruction elections_allowed = no }
+			add_popularity = { ideology = destruction popularity = 0.20 }
+			add_manpower = -129
+		}
+}
+
+#Root out Swift Storms Supporters
+shared_focus = {
+		id = LIT_kill_enclavists
+		icon = GFX_goal_Theatre_of_Death
+		x = -5
+		y = 6
+		relative_position_id = LIT_shake_things_up
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_hook_hoof_wins }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_kill_enclavists"
+			add_popularity = { ideology = visionary popularity = -0.25 }
+			550 = {add_manpower = -56}
+			551 = {add_manpower = -71}
+			798 = {add_manpower = -44}
+			remove_ideas = LIT_coalition_collapse_idea
+		}
+}
+
+#March unto Plainstown
+shared_focus = {
+		id = LIT_march_plainstown
+		icon = GFX_goal_blacksun_tank
+		x = -3
+		y = 6
+		relative_position_id = LIT_shake_things_up
+		cost = 8.58
+		available_if_capitulated = yes 
+		bypass = {
+			owns_state = 561
+			owns_state = 192
+			owns_state = 557
+			owns_state = 196
+			owns_state = 548
+		}
+		prerequisite = { focus = LIT_hook_hoof_wins }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_march_plainstown"
+			PBN = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+}
+
+#Assimilate Warbands
+shared_focus = {
+		id = LIT_assimilate_warbands
+		icon = GFX_goal_red_war_paint
+		x = -3
+		y = 7
+		relative_position_id = LIT_shake_things_up
+		cost = 8.58
+		available_if_capitulated = yes 
+		available = {
+			owns_state = 561
+			owns_state = 192
+			owns_state = 557
+			owns_state = 196
+			owns_state = 548
+		}
+		prerequisite = { focus = LIT_march_plainstown }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_assimilate_warbands"
+			add_war_support = 0.08
+			Core_original_PBN = yes
+		}
+}
+
+#Ploughshares into Swords
+shared_focus = {
+		id = LIT_ploughshares_swords
+		icon = GFX_focus_indy_swing_the_sword
+		x = -5
+		y = 7
+		relative_position_id = LIT_shake_things_up
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_march_plainstown }
+		prerequisite = { focus = LIT_kill_enclavists }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_ploughshares_swords"
+			add_ideas = LIT_ploughs_to_swords_idea
+		}
+}
+
+#Prepare for the Great Struggle
+shared_focus = {
+		id = LIT_prepare_great_struggle
+		icon = GFX_goal_generic_formable_appleloosa
+		x = -3
+		y = 8
+		relative_position_id = LIT_shake_things_up
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_ploughshares_swords }
+		prerequisite = { focus = LIT_assimilate_warbands }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_prepare_great_struggle"
+			LIT_lower_tension = yes
+			add_timed_idea = {idea = LIT_uniting_appleloosa_idea days = 365}
+		}
+}
+
+#Through the Desert to seize an Oasis
+shared_focus = {
+		id = LIT_des_fuck_OAP
+		icon = GFX_goal_generic_old_appleloosa
+		x = -5
+		y = 9
+		relative_position_id = LIT_shake_things_up
+		cost = 8.58
+		available_if_capitulated = yes 
+		bypass = {
+			OAP = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+		}
+		prerequisite = { focus = LIT_prepare_great_struggle }
+		ai_will_do = { 
+		factor = 5
+		modifier = {
+				factor = 100
+				owns_state = 563
+			}
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_des_fuck_OAP"
+			OAP = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+}
+
+#Burn New Appleloosa
+shared_focus = {
+		id = LIT_des_fuck_NAP
+		icon = GFX_goal_generic_NAP_flag_focus
+		x = -3
+		y = 9
+		relative_position_id = LIT_shake_things_up
+		cost = 8.58
+		available_if_capitulated = yes 
+		bypass = {
+			NAP = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+		}
+		prerequisite = { focus = LIT_prepare_great_struggle }
+		ai_will_do = { 
+		factor = 500
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_des_fuck_NAP"
+			NAP = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+}
+
+#Towards the Azureway
+shared_focus = {
+		id = LIT_des_fuck_ROK
+		icon = GFX_goal_solar_swords_crossed
+		x = -1
+		y = 9
+		relative_position_id = LIT_shake_things_up
+		cost = 8.58
+		available_if_capitulated = yes 
+		bypass = {
+			ROK = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+		}
+		prerequisite = { focus = LIT_prepare_great_struggle }
+		ai_will_do = { 
+		factor = 5
+		modifier = {
+				factor = 100
+				owns_state = 596
+			}
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_des_fuck_ROK"
+			ROK = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+}
+
+#What Lies beyond
+shared_focus = {
+		id = LIT_des_fuck_everyone
+		icon = GFX_goal_ELF_equestria
+		x = -3
+		y = 10
+		relative_position_id = LIT_shake_things_up
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_des_fuck_NAP }
+		prerequisite = { focus = LIT_des_fuck_OAP }
+		prerequisite = { focus = LIT_des_fuck_ROK }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_des_fuck_everyone"
+			add_state_claim = 527
+			add_state_claim = 303
+			add_state_claim = 511
+			add_ideas = LIT_fuck_everyone_idea
+			hidden_effect = {clr_country_flag = random_war_protected}
+		}
+}
+
+#Enclavists win out
+shared_focus = {
+		id = LIT_enclavists_wins
+		icon = GFX_goal_generic_enclave_power_armor
+		x = 3
+		y = 5
+		relative_position_id = LIT_shake_things_up
+		cost = 5.72
+		mutually_exclusive = {focus = LIT_hook_hoof_wins}
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_inevitable_conclusion }
+		ai_will_do = { 
+		factor = 500
+		modifier = {
+			factor = 0
+			has_game_rule = {
+                    rule = LIT_AI_BEHAVIOR
+                    option = HOOKHOOF
+                }
+			}
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_enclavists_wins"
+			add_popularity = { ideology = visionary popularity = 0.20 }
+		}
+}
+
+#Integrate the Local ponies
+shared_focus = {
+		id = LIT_integrate_local_ponies
+		icon = GFX_goal_eqs_military_cooperation
+		x = 0
+		y = 6
+		relative_position_id = LIT_shake_things_up
+		cost = 5.72
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_hook_hoof_wins focus = LIT_enclavists_wins }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_integrate_local_ponies"
+			set_technology = { tech_unicorn = 1}
+			LIT_lower_tension = yes
+		}
+}
+
+#Reach out to Remaining Talons
+shared_focus = {
+		id = LIT_integrate_local_talons
+		icon = GFX_goal_generic_talon_flag
+		x = 0
+		y = 7
+		relative_position_id = LIT_shake_things_up
+		cost = 5.72
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_integrate_local_ponies }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_integrate_local_talons"
+			Core_original_FTA = yes
+		}
+}
+
+#Execute Hook Hoof
+shared_focus = {
+		id = LIT_execute_hh
+		icon = GFX_goal_skull_cannon
+		x = 3
+		y = 6
+		relative_position_id = LIT_shake_things_up
+		cost = 5.72
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_enclavists_wins }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_execute_hh"
+			add_popularity = { ideology = destruction popularity = -0.25 }
+			remove_ideas = LIT_coalition_collapse_idea
+			add_manpower = -1
+			create_country_leader = {
+						name = "Leaderless Mob"
+						desc = "foreign_rule"
+						picture = ""
+						expire = "1965.1.1"
+						ideology = raider
+						traits = {}
+				}
+		}
+}
+
+#Move the Capital to Cloudsdale
+shared_focus = {
+		id = LIT_cloudsdale_capital
+		icon = GFX_goal_NEV_cloudsdale
+		x = 5
+		y = 6
+		relative_position_id = LIT_shake_things_up
+		cost = 5.72
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_enclavists_wins }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_cloudsdale_capital"
+			798 = {add_extra_state_shared_building_slots = 4 add_manpower = 150}
+			set_capital = 798
+		}
+}
+
+#Proclaim pegasi the Superior Race
+shared_focus = {
+		id = LIT_superior_pegasi
+		icon = GFX_goal_generic_pony_pegasus
+		x = 4
+		y = 7
+		relative_position_id = LIT_shake_things_up
+		cost = 5.72
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_execute_hh }
+		prerequisite = { focus = LIT_cloudsdale_capital }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_superior_pegasi"
+			set_cosmetic_tag = LIT_provisional_government_cloudsdale
+			LIT_raise_tension = yes
+			custom_effect_tooltip = LIT_pegasi_guard_tt
+			hidden_effect = {
+			division_template = {
+			name = "Cloudsdale Guard"
+			priority = 1
+			is_locked = no
+			regiments = {
+			pegasi = { x = 0 y = 0 }
+			pegasi = { x = 0 y = 1 }
+			pegasi = { x = 0 y = 2 }
+			pegasi = { x = 0 y = 3 }
+			pegasi = { x = 1 y = 0 }
+			pegasi = { x = 1 y = 1 }
+			pegasi = { x = 1 y = 2 }
+			pegasi = { x = 1 y = 3 }
+			}
+			}
+			798 = {
+				create_unit = {
+					division = "name = \"1. Cloudsdale Guard\" division_template = \"Cloudsdale Guard\" start_experience_factor = 0.7" 
+					owner = LIT
+				}
+				create_unit = {
+					division = "name = \"2. Cloudsdale Guard\" division_template = \"Cloudsdale Guard\" start_experience_factor = 0.7" 
+					owner = LIT
+				}
+			}
+			}
+		}
+}
+
+#Abolish the Assembly
+shared_focus = {
+		id = LIT_abolish_assembly
+		icon = GFX_goal_Securing_Information_
+		x = 5
+		y = 8
+		relative_position_id = LIT_shake_things_up
+		cost = 5.72
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_superior_pegasi }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_abolish_assembly"
+			add_popularity = { ideology = visionary popularity = 0.35 }
+			set_party_name = { ideology = visionary long_name = LIT_vis_long name = LIT_vis_short }
+			add_political_power = 60
+		}
+}
+
+#Open Hill 432 Armories
+shared_focus = {
+		id = LIT_hill_432_armory
+		icon = GFX_goal_SR_power_armor
+		x = 5
+		y = 9
+		relative_position_id = LIT_shake_things_up
+		cost = 5.72
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_abolish_assembly }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_hill_432_armory"
+			add_offsite_building = { type = arms_factory level = 1 }
+			add_equipment_to_stockpile = { type = energy_equipment_3 amount = 149 producer = OWE }
+			add_equipment_to_stockpile = { type = support_equipment amount = 99 producer = OWE }
+			add_equipment_to_stockpile = { type = ballistic_equipment_3 amount = 306 producer = OWE }
+			add_equipment_to_stockpile = { type = power_armor_equipment_3 amount = 62 producer = OWE }
+		}
+}
+
+#Fund Cloudsdale Reconstruction
+shared_focus = {
+		id = LIT_funds_cloudsdale
+		icon = GFX_goal_generic_construct_public_housing
+		x = 3
+		y = 8
+		relative_position_id = LIT_shake_things_up
+		cost = 5.72
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_superior_pegasi }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_funds_cloudsdale"
+			add_offsite_building = { type = industrial_complex level = 1 }
+			798 = {
+				add_state_modifier = {
+					modifier = {
+						monthly_population = 0.5
+						production_speed_buildings_factor = 0.2
+					}				
+				}
+			}
+		}
+}
+
+#Our Glorious Pegasi heritage
+shared_focus = {
+		id = LIT_pegasi_heritage
+		icon = GFX_goal_NEV_cloud_economy
+		x = 3
+		y = 9
+		relative_position_id = LIT_shake_things_up
+		cost = 5.72
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_funds_cloudsdale }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_pegasi_heritage"
+			swap_ideas = {remove_idea = LIT_legacy_of_cloudsdale_idea add_idea = LIT_legacy_of_cloudsdale_idea_2}
+		}
+}
+
+#Propose to Neighvarro
+shared_focus = {
+		id = LIT_propose_to_neighvarro
+		icon = GFX_goal_NEV_the_conspiracy
+		x = 4
+		y = 10
+		relative_position_id = LIT_shake_things_up
+		cost = 5.72
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_hill_432_armory }
+		prerequisite = { focus = LIT_pegasi_heritage }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_propose_to_neighvarro"
+			NEV = { country_event = LIT_event.21 }
+		}
+}
+
+#Denial
+shared_focus = {
+		id = LIT_enclave_denial
+		icon = GFX_goal_NEV_the_conspiracy
+		x = 0
+		y = 1
+		relative_position_id = LIT_propose_to_neighvarro
+		cost = 8.58
+		allow_branch = {
+			has_country_flag = LIT_NEV_denial_flag
+		}
+		available_if_capitulated = no
+		prerequisite = { focus = LIT_propose_to_neighvarro }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_enclave_denial"
+			
+		}
+}
+
+#Rally the troops
+shared_focus = {
+		id = LIT_denial_rally_troops
+		icon = GFX_goal_NEV_dashite_question
+		x = -3
+		y = 2
+		relative_position_id = LIT_propose_to_neighvarro
+		cost = 8.58
+		available_if_capitulated = no 
+		prerequisite = { focus = LIT_enclave_denial }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_denial_rally_troops"
+			LIT_lower_isolation = yes
+			add_ideas = LIT_manpower_trickle_idea
+		}
+}
+
+#Churn out the Weapons
+shared_focus = {
+		id = LIT_denial_churn_weapons
+		icon = GFX_goal_generic_bb_gun
+		x = 0
+		y = 2
+		relative_position_id = LIT_propose_to_neighvarro
+		cost = 8.58
+		available_if_capitulated = no 
+		prerequisite = { focus = LIT_enclave_denial }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_denial_churn_weapons"
+			one_random_arms_factory = yes
+			one_random_arms_factory = yes
+			add_equipment_to_stockpile = { type = infantry_equipment_1 amount = 200 producer = LIT }
+		}
+}
+
+#Prepare our own Airforce
+shared_focus = {
+		id = LIT_denial_prepare_airforce
+		icon = GFX_goal_new_airforce
+		x = 3
+		y = 2
+		relative_position_id = LIT_propose_to_neighvarro
+		cost = 8.58
+		available_if_capitulated = no 
+		prerequisite = { focus = LIT_enclave_denial }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_denial_prepare_airforce"
+			add_equipment_to_stockpile = { type = fighter_equipment_3 amount = 60 producer = OWE }
+			air_experience = 50
+		}
+}
+
+#Expunge the Plainsraiders
+shared_focus = {
+		id = LIT_denial_expunge_plains
+		icon = GFX_goal_generic_PBN_flag_focus
+		x = -2
+		y = 3
+		relative_position_id = LIT_propose_to_neighvarro
+		cost = 8.58
+		bypass = {
+			owns_state = 561
+			owns_state = 192
+			owns_state = 557
+			owns_state = 196
+			owns_state = 548
+		}
+		available_if_capitulated = no 
+		prerequisite = { focus = LIT_denial_rally_troops }
+		prerequisite = { focus = LIT_denial_churn_weapons }
+		prerequisite = { focus = LIT_denial_prepare_airforce }
+		ai_will_do = { 
+		factor = 60
+			modifier = {
+				factor = 0.1
+				has_war = yes
+			}
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_denial_expunge_plains"
+			PBN = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+}
+
+#Annihilate Gorgetown
+shared_focus = {
+		id = LIT_denial_annihilate_GOR
+		icon = GFX_goal_generic_dangerous_deal_pony_pony
+		x = -1
+		y = 4
+		relative_position_id = LIT_propose_to_neighvarro
+		cost = 8.58
+		bypass = {
+			owns_state = 178
+			owns_state = 303
+			owns_state = 520
+		}
+		available_if_capitulated = no 
+		prerequisite = { focus = LIT_denial_expunge_plains }
+		ai_will_do = { 
+		factor = 60
+			modifier = {
+				factor = 0.1
+				has_war = yes
+			}
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_denial_annihilate_GOR"
+			GOR = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+}
+
+#Trials of Fire
+shared_focus = {
+		id = LIT_denial_trial_fire
+		icon = GFX_goal_NEV_burning_building
+		x = -3
+		y = 4
+		relative_position_id = LIT_propose_to_neighvarro
+		cost = 8.58
+		available = {
+			owns_state = 561
+			owns_state = 192
+			owns_state = 557
+			owns_state = 196
+			owns_state = 548
+		}
+		available_if_capitulated = no 
+		prerequisite = { focus = LIT_denial_expunge_plains }
+		ai_will_do = { 
+		factor = 600
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_denial_trial_fire"
+			Core_original_PBN = yes
+			add_political_power = -50
+			LIT_lower_tension = yes
+		}
+}
+
+#Uplift the Worthy
+shared_focus = {
+		id = LIT_denial_uplift_worthy
+		icon = GFX_goal_celestia_raising_the_sun
+		x = -3
+		y = 5
+		relative_position_id = LIT_propose_to_neighvarro
+		cost = 8.58
+		available = {
+			owns_state = 178
+			owns_state = 303
+			owns_state = 520
+		}
+		available_if_capitulated = no 
+		prerequisite = { focus = LIT_denial_annihilate_GOR }
+		ai_will_do = { 
+		factor = 600
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_denial_uplift_worthy"
+			Core_original_GOR = yes
+			add_political_power = -50
+			LIT_lower_tension = yes
+		}
+}
+
+#Descend upon New Appleloosa
+shared_focus = {
+		id = LIT_denial_descend_NAP
+		icon = GFX_goal_generic_NAP_flag_focus
+		x = 2
+		y = 3
+		relative_position_id = LIT_propose_to_neighvarro
+		cost = 8.58
+		bypass = {
+			NAP = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+		}
+		available_if_capitulated = no 
+		prerequisite = { focus = LIT_denial_rally_troops }
+		prerequisite = { focus = LIT_denial_churn_weapons }
+		prerequisite = { focus = LIT_denial_prepare_airforce }
+		ai_will_do = { 
+		factor = 500
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_denial_descend_NAP"
+			NAP = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+}
+
+#Wipe out Old Appleloosa
+shared_focus = {
+		id = LIT_denial_wipeout_OAP
+		icon = GFX_goal_generic_old_appleloosa
+		x = 1
+		y = 4
+		relative_position_id = LIT_propose_to_neighvarro
+		cost = 8.58
+		bypass = {
+			OAP = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+		}
+		available_if_capitulated = no 
+		prerequisite = { focus = LIT_denial_descend_NAP }
+		ai_will_do = { 
+		factor = 60
+			modifier = {
+				factor = 0.1
+				has_war = yes
+			}
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_denial_wipeout_OAP"
+			OAP = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+}
+
+#The Selection
+shared_focus = {
+		id = LIT_denial_selection
+		icon = GFX_goal_TEM_purification_campaign
+		x = 3
+		y = 4
+		relative_position_id = LIT_propose_to_neighvarro
+		cost = 8.58
+		available = {
+			owns_state = 563
+			owns_state = 298
+			owns_state = 241
+		}
+		available_if_capitulated = no 
+		prerequisite = { focus = LIT_denial_descend_NAP }
+		ai_will_do = { 
+		factor = 600
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_denial_selection"
+			Core_original_NAP = yes
+			add_political_power = -50
+			LIT_lower_tension = yes
+		}
+}
+
+#With us or in the Desert
+shared_focus = {
+		id = LIT_denial_desert_option
+		icon = GFX_goal_purge_opposition
+		x = 3
+		y = 5
+		relative_position_id = LIT_propose_to_neighvarro
+		cost = 8.58
+		available = {
+			owns_state = 213
+			owns_state = 205
+			owns_state = 587
+			owns_state = 596
+			owns_state = 599
+			owns_state = 111
+			owns_state = 67
+		}
+		available_if_capitulated = no 
+		prerequisite = { focus = LIT_denial_wipeout_OAP }
+		ai_will_do = { 
+		factor = 600
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_denial_desert_option"
+			Core_original_OAP = yes
+			add_political_power = -50
+			LIT_lower_tension = yes
+		}
+}
+
+#Cut Thorugh Azuria
+shared_focus = {
+		id = LIT_denial_cut_Azuria
+		icon = GFX_goal_NCR_attack
+		x = 0
+		y = 6
+		relative_position_id = LIT_propose_to_neighvarro
+		cost = 8.58
+		available_if_capitulated = no 
+		prerequisite = { focus = LIT_denial_desert_option }
+		prerequisite = { focus = LIT_denial_wipeout_OAP }
+		prerequisite = { focus = LIT_denial_uplift_worthy }
+		prerequisite = { focus = LIT_denial_annihilate_GOR }
+		ai_will_do = { 
+		factor = 600
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_denial_cut_Azuria"
+			ROK = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			SHA = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			MAN = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			LRA = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+}
+
+#Deal with the Pretender
+shared_focus = {
+		id = LIT_denial_deal_with_pretenders
+		icon = GFX_goal_NEV_autumn
+		x = 0
+		y = 7
+		relative_position_id = LIT_propose_to_neighvarro
+		bypass = {
+			owns_state = 696
+		}
+		cost = 8.58
+		available_if_capitulated = no 
+		prerequisite = { focus = LIT_denial_cut_Azuria }
+		ai_will_do = { 
+		factor = 600
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_denial_deal_with_pretenders"
+			NEV = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			hidden_effect = {clr_country_flag = random_war_protected}
+		}
+}
+
+#Acceptance
+shared_focus = {
+		id = LIT_enclave_acceptance
+		icon = GFX_goal_NEV_the_conspiracy
+		x = 0
+		y = 1
+		relative_position_id = LIT_propose_to_neighvarro
+		cost = 8.58
+		allow_branch = {
+			has_country_flag = LIT_NEV_acceptance_flag
+		}
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_propose_to_neighvarro }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_enclave_acceptance"
+			
+		}
+}
+
+#Invite Enclave Military Instructors
+shared_focus = {
+		id = LIT_acceptance_invite_instructors
+		icon = GFX_goal_NEV_military_matters
+		x = -2
+		y = 1
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_enclave_acceptance }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_invite_instructors"
+			add_ideas = LIT_enclave_instructors_idea
+		}
+}
+
+#Settle Enclave Pegasi
+shared_focus = {
+		id = LIT_acceptance_settle_pegasi
+		icon = GFX_goal_NEV_pegasi_settlement
+		x = 0
+		y = 1
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_enclave_acceptance }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_settle_pegasi"
+			every_owned_state = {
+				limit = {
+					is_core_of = LIT
+				}
+				add_manpower = 350
+			}
+		}
+}
+
+#Superior Enclave Infrastructure
+shared_focus = {
+		id = LIT_acceptance_enclave_infrastructure
+		icon = GFX_goal_connect_the_countryside
+		x = 2
+		y = 1
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_enclave_acceptance }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_settle_pegasi"
+			LIT_lower_isolation = yes
+			Two_random_infrastructure = yes
+			One_random_infrastructure = yes
+		}
+}
+
+#Restructure our Armed Forces
+shared_focus = {
+		id = LIT_acceptance_restructure_army
+		icon = GFX_goal_ELF_army
+		x = -2
+		y = 2
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_acceptance_invite_instructors }
+		prerequisite = { focus = LIT_acceptance_settle_pegasi }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_restructure_army"
+			swap_ideas = { remove_idea = LIT_enclave_instructors_idea add_idea = LIT_enclave_instructors_idea2}
+			add_war_support = 0.08
+		}
+}
+
+#Power-Armour for our Soldiers
+shared_focus = {
+		id = LIT_acceptance_power_armor
+		icon = GFX_goal_X0_1_armor
+		x = -3
+		y = 3
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_acceptance_restructure_army }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_power_armor"
+			set_technology = {
+				x01_pa_tech = 1
+				x02_pa_tech = 1
+			}
+			add_equipment_to_stockpile = {
+    			type = power_armor_equipment_x02
+    			amount = 200
+    			producer = NEV
+			}
+		}
+}
+
+#Cloudships for our Airforce
+shared_focus = {
+		id = LIT_acceptance_cloudships
+		icon = GFX_goal_learn_of_cloudships
+		x = -1
+		y = 3
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_acceptance_restructure_army }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_cloudships"
+			set_technology = {
+				raptor_tech = 1
+			}
+			air_experience = 50
+		}
+}
+
+#Test our New Might
+shared_focus = {
+		id = LIT_acceptance_test_might
+		icon = GFX_goal_behenmoths_of_a_sandy_sea
+		x = -2
+		y = 4
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_acceptance_power_armor }
+		prerequisite = { focus = LIT_acceptance_cloudships }
+		ai_will_do = { 
+		factor = 50
+		} 
+		
+		will_lead_to_war_with = NAP
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_test_might"
+			NAP = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+}
+
+#Adopt Cloud-Economics
+shared_focus = {
+		id = LIT_acceptance_cloud_economics
+		icon = GFX_goal_confiscate_slavers_possessions
+		x = 2
+		y = 2
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_acceptance_settle_pegasi }
+		prerequisite = { focus = LIT_acceptance_enclave_infrastructure }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_cloud_economics"
+			add_ideas = enclave_economy
+			add_offsite_building = { type = industrial_complex level = 1 }
+			add_offsite_building = { type = arms_factory level = 1 }
+		}
+}
+
+#Hybridize Cloudseeding and Agriculture
+shared_focus = {
+		id = LIT_acceptance_hybridize_farming
+		icon = GFX_goal_SZC_improvised_farming_machinery
+		x = 1
+		y = 3
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_acceptance_cloud_economics }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_hybridize_farming"
+			add_ideas = LIT_hybrid_food_idea
+		}
+}
+
+#Educate the Masses
+shared_focus = {
+		id = LIT_acceptance_educate_masses
+		icon = GFX_goal_eqs_public_schools
+		x = 3
+		y = 3
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_acceptance_cloud_economics }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_educate_masses"
+			set_technology = {
+				infantry_tech_level_scientific  = 1
+				power_armour_tech_level_scientific = 1
+				support_tech_level_scientific = 1
+				air_tech_level_scientific = 1
+				tools_tech_level_scientific = 1
+				exploitation_tech_level_scientific = 1
+				electronics_tech_level_scientific = 1
+			}
+		}
+}
+
+#Put the Lesser Races in their Place
+shared_focus = {
+		id = LIT_acceptance_lesser_races
+		icon = GFX_goal_NEV_volunteer_problem
+		x = 2
+		y = 4
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_acceptance_educate_masses }
+		prerequisite = { focus = LIT_acceptance_hybridize_farming }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_lesser_races"
+			remove_ideas = LIT_racial_tensions_1_idea
+			remove_ideas = LIT_racial_tensions_2_idea
+			remove_ideas = LIT_racial_tensions_3_idea
+			remove_ideas = LIT_racial_tensions_ultra_idea
+			add_ideas = LIT_pegasi_supremacy_idea
+		}
+}
+
+#The Cloudsdale Mandate
+shared_focus = {
+		id = LIT_acceptance_seize_land
+		icon = GFX_goal_seize_grand_applelossa
+		x = 0
+		y = 5
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_acceptance_lesser_races }
+		prerequisite = { focus = LIT_acceptance_test_might }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		will_lead_to_war_with = OAP
+		will_lead_to_war_with = ROK
+		will_lead_to_war_with = PBN
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_seize_land"
+			OAP = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			ROK = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			PBN = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+}
+
+#The Breadbasket of the Enclave
+shared_focus = {
+		id = LIT_acceptance_breadbasket
+		icon = GFX_goal_grf_com_agriculture
+		x = 0
+		y = 6
+		relative_position_id = LIT_enclave_acceptance
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_acceptance_seize_land }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_acceptance_breadbasket"
+			swap_ideas = {remove_idea = LIT_hybrid_food_idea add_idea = LIT_hybrid_food_idea2}
+		}
+}
+
+#Keep to tradition
+shared_focus = {
+		id = LIT_keep_to_tradition
+		icon = GFX_goal_generic_national_unity_horseshoe
+		x = -5
+		y = 1
+		relative_position_id = LIT_assembly_is_called
+		cost = 2.86
+		
+		available_if_capitulated = yes 
+		available = {
+			OR = {
+				has_country_leader = {
+				name = "Shake Spar"
+				ruling_only = yes
+				}
+				has_country_leader = {
+				name = "Sky Breaker"
+				ruling_only = yes
+				}
+			}
+		}
+		prerequisite = { focus = LIT_assembly_is_called }
+		ai_will_do = { 
+		factor = 3000
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_keep_to_tradition"
+			add_stability = 0.08
+			add_political_power = 60
+		}
+}
+
+#Shake Spar has won
+shared_focus = {
+		id = LIT_shakespar_has_won
+		icon = GFX_goal_generic_pony_unity
+		x = -5
+		y = 2
+		relative_position_id = LIT_assembly_is_called
+		cost = 2.86
+		
+		available_if_capitulated = yes 
+		available = {
+			has_country_leader = {
+			name = "Shake Spar"
+			ruling_only = yes
+			}
+		}
+		prerequisite = { focus = LIT_keep_to_tradition }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_shakespar_has_won"
+			add_popularity = { ideology = survivalism popularity = 0.15 }
+		}
+}
+
+#Crack down on the Extremists
+shared_focus = {
+		id = LIT_crack_down_extremists
+		icon = GFX_goal_ideology_harmonist
+		x = -5
+		y = 3
+		relative_position_id = LIT_assembly_is_called
+		cost = 5.72
+		
+		available_if_capitulated = yes 
+		available = {
+			has_country_leader = {
+			name = "Shake Spar"
+			ruling_only = yes
+			}
+		}
+		prerequisite = { focus = LIT_shakespar_has_won }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_crack_down_extremists"
+			add_popularity = { ideology = destruction popularity = -0.15 }
+			add_popularity = { ideology = visionary popularity = -0.15 }
+			add_war_support = -0.1
+		}
+}
+
+#United in Diversity
+shared_focus = {
+		id = LIT_united_in_diversity
+		icon = GFX_goal_generic_pony_unicorn
+		x = -6
+		y = 4
+		relative_position_id = LIT_assembly_is_called
+		cost = 5.72
+		
+		available_if_capitulated = yes 
+		available = {
+			has_country_leader = {
+			name = "Shake Spar"
+			ruling_only = yes
+			}
+		}
+		prerequisite = { focus = LIT_crack_down_extremists }
+		prerequisite = { focus = LIT_mitigate_tensions }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_united_in_diversity"
+			LIT_lower_tension = yes
+		}
+}
+
+#Trade water with OAP
+shared_focus = {
+		id = LIT_trade_water_OAP
+		icon = GFX_goal_water_trade
+		x = -5
+		y = 5
+		relative_position_id = LIT_assembly_is_called
+		cost = 5.72
+		
+		available_if_capitulated = yes
+		available = {
+			has_country_leader = {
+			name = "Shake Spar"
+			ruling_only = yes
+			}
+		}
+		prerequisite = { focus = LIT_crack_down_extremists }
+		prerequisite = { focus = LIT_united_in_diversity }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_trade_water_OAP"
+			550 = {
+				add_resource = {
+					type = water
+					amount = -6
+				}
+			}
+			596 = {
+				add_resource = {
+					type = water
+					amount = 6
+				}
+			}
+			add_ideas = LIT_OAP_trade_idea
+		}
+}
+
+#Erase our past loss
+shared_focus = {
+		id = LIT_erase_past_loss
+		icon = GFX_goal_thunder_war
+		x = -7
+		y = 6
+		relative_position_id = LIT_assembly_is_called
+		cost = 8.58
+		
+		available_if_capitulated = yes 
+		available = {
+			has_country_leader = {
+			name = "Shake Spar"
+			ruling_only = yes
+			}
+		}
+		prerequisite = { focus = LIT_trade_water_OAP }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_erase_past_loss"
+			custom_effect_tooltip = LIT_unlock_borderwar_tt
+		}
+}
+
+#Spy on the Stabledwellers
+shared_focus = {
+		id = LIT_spy_on_stabledwellers
+		icon = GFX_goal_FSR_stabletec
+		x = -5
+		y = 6
+		relative_position_id = LIT_assembly_is_called
+		cost = 8.58
+		available = {
+			has_country_leader = {
+			name = "Shake Spar"
+			ruling_only = yes
+			}
+		}
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_trade_water_OAP }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_spy_on_stabledwellers"
+			add_tech_bonus = {
+			name = energy_weapon_bonus
+			bonus = 0.8
+			uses = 1
+			category = energy_weapon_tech
+			}
+			add_tech_bonus = {
+			name = race_tech
+			bonus = 0.8
+			uses = 1
+			category = race_tech
+			}
+		}
+}
+
+#Restore relations with Featherbrush
+shared_focus = {
+		id = LIT_restrore_relations_fta
+		icon = GFX_goal_generic_talon_flag
+		x = -7
+		y = 7
+		relative_position_id = LIT_assembly_is_called
+		cost = 8.58
+		available = {
+		owns_state = 802
+		has_country_leader = {
+			name = "Shake Spar"
+			ruling_only = yes
+			}
+		
+		}
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_erase_past_loss }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_restrore_relations_fta"
+			add_opinion_modifier = { target = FTA modifier = relations_restored }
+			reverse_add_opinion_modifier = { target = FTA modifier = relations_restored }
+			add_stability = 0.04
+		}
+}
+
+#A Tithe to the Weather-Factories
+shared_focus = {
+		id = LIT_tithe_weather_factories
+		icon = GFX_goal_GRF_weter_university
+		x = -5
+		y = 7
+		relative_position_id = LIT_assembly_is_called
+		cost = 8.58
+		available = {
+			has_country_leader = {
+			name = "Shake Spar"
+			ruling_only = yes
+			}
+		}
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_spy_on_stabledwellers }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_tithe_weather_factories"
+			save_current_manpower = yes
+			550 = { 
+				add_manpower = 1000
+				add_extra_state_shared_building_slots = 2
+				add_building_construction = {type = industrial_complex level = 1 instant_build = yes}
+			}
+			restore_previous_manpower = yes
+		}
+}
+
+#The 3 Races united
+shared_focus = {
+		id = LIT_3_races_united
+		icon = GFX_goal_generic_national_unity_claws
+		x = -5
+		y = 8
+		relative_position_id = LIT_assembly_is_called
+		cost = 8.58
+		available = {
+			has_country_leader = {
+			name = "Shake Spar"
+			ruling_only = yes
+			}
+		}
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_restrore_relations_fta }
+		prerequisite = { focus = LIT_tithe_weather_factories }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_3_races_united"
+			LIT_lower_tension = yes
+			set_technology = {
+				tech_pegasi = 1
+			}
+		}
+}
+
+#One under the Nation
+shared_focus = {
+		id = LIT_one_under_nation
+		icon = GFX_goal_national_populism
+		x = -6
+		y = 9
+		relative_position_id = LIT_assembly_is_called
+		cost = 8.58
+		available = {
+			has_country_leader = {
+			name = "Shake Spar"
+			ruling_only = yes
+			}
+		}
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_3_races_united }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_one_under_nation"
+			add_political_power = 100
+			add_stability = 0.08
+			add_war_support = 0.08
+		}
+}
+
+#One within the nation
+shared_focus = {
+		id = LIT_one_within_nation
+		icon = GFX_goal_generic_scientific_exchange_pony
+		x = -4
+		y = 9
+		relative_position_id = LIT_assembly_is_called
+		cost = 8.58
+		available = {
+			has_country_leader = {
+			name = "Shake Spar"
+			ruling_only = yes
+			}
+		}
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_3_races_united }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_one_within_nation"
+			LIT_lower_isolation = yes
+			one_random_industrial_complex = yes
+		}
+}
+
+#Truly splendid_isolation
+shared_focus = {
+		id = LIT_splendid_isolation
+		icon = GFX_focus_indy_democratic_process
+		x = -5
+		y = 10
+		relative_position_id = LIT_assembly_is_called
+		mutually_exclusive = { focus = LIT_rightfully_ours }
+		cost = 8.58
+		available = {
+			has_country_leader = {
+			name = "Shake Spar"
+			ruling_only = yes
+			}
+		}
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_one_under_nation }
+		prerequisite = { focus = LIT_one_within_nation }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_splendid_isolation"
+			add_ideas = LIT_truly_splendid_isolation
+		}
+}
+
+#Prepare for the coming Storm
+shared_focus = {
+		id = LIT_prepare_storm
+		icon = GFX_goal_Black_State_Rising_2
+		x = -8
+		y = 9
+		relative_position_id = LIT_assembly_is_called
+		cost = 8.58
+		available = {
+			has_country_leader = {
+			name = "Shake Spar"
+			ruling_only = yes
+			}
+		}
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_tithe_weather_factories }
+		prerequisite = { focus = LIT_restrore_relations_fta }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_prepare_storm"
+			add_ideas = LIT_storm_prepared_idea
+		}
+}
+
+#What is rightfully Ours
+shared_focus = {
+		id = LIT_rightfully_ours
+		icon = GFX_goal_NLR_Stabby_Map
+		x = -8
+		y = 10
+		relative_position_id = LIT_assembly_is_called
+		mutually_exclusive = { focus = LIT_splendid_isolation }
+		cost = 8.58
+		available = {
+			has_country_leader = {
+			name = "Shake Spar"
+			ruling_only = yes
+			}
+		}
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_prepare_storm }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		will_lead_to_war_with = MAS
+		will_lead_to_war_with = NAP
+		will_lead_to_war_with = OAP
+		will_lead_to_war_with = ROK
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_rightfully_ours"
+			If = {
+				limit = { NOT = {owns_state = 527}}
+				MAS = {
+					ROOT = {
+						grant_wargoals_on_core_states_of_prev = yes
+					}
+				}
+			}
+			NAP = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			OAP = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			ROK = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+}
+
+#Skybreaker has won
+shared_focus = {
+		id = LIT_skybreaker_has_won
+		icon = GFX_goal_LIT_skybreaker_focus
+		x = -11
+		y = 2
+		relative_position_id = LIT_assembly_is_called
+		cost = 2.86
+		
+		available_if_capitulated = yes 
+		available = {
+			has_country_leader = {
+			name = "Sky Breaker"
+			ruling_only = yes
+			}
+		}
+		prerequisite = { focus = LIT_keep_to_tradition }
+		ai_will_do = { 
+		factor = 3000
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_skybreaker_has_won"
+			add_popularity = { ideology = continuation popularity = 0.15 }
+			add_stability = -0.05
+		}
+}
+
+
+#Mitigate tensions
+shared_focus = {
+		id = LIT_mitigate_tensions
+		icon = GFX_goal_TEN_army_tactics
+		x = -8
+		y = 3
+		relative_position_id = LIT_assembly_is_called
+		cost = 5.72
+		
+		available_if_capitulated = yes 
+		
+		prerequisite = { focus = LIT_skybreaker_has_won focus = LIT_shakespar_has_won }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_mitigate_tensions"
+			LIT_lower_tension = yes
+		}
+}
+
+#Approach the ministry
+shared_focus = {
+		id = LIT_approach_mas
+		icon = GFX_goal_MAS
+		x = -11
+		y = 3
+		relative_position_id = LIT_assembly_is_called
+		cost = 5.72
+		
+		available = {
+			has_country_leader = {
+			name = "Sky Breaker"
+			ruling_only = yes
+			}
+		}
+		available_if_capitulated = yes 
+		
+		prerequisite = { focus = LIT_skybreaker_has_won }
+		ai_will_do = { 
+		factor = 5000
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_approach_mas"
+			MAS = { country_event = LIT_event.7 }
+		}
+}
+
+#Clean Water Energy
+shared_focus = {
+		id = LIT_clean_water_for_energy
+		icon = GFX_focus_MAS_IncreaceMilBudget
+		x = -12
+		y = 4
+		relative_position_id = LIT_assembly_is_called
+		cost = 5.72
+		
+		available = {
+			has_country_leader = {
+			name = "Sky Breaker"
+			ruling_only = yes
+			}
+		}
+		available_if_capitulated = yes 
+		
+		prerequisite = { focus = LIT_approach_mas }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_clean_water_for_energy"
+			550 = {add_resource = { type = water amount = -6 }add_resource = { type = energy amount = 9 }}
+			527 = {add_resource = { type = water amount = 6 }}
+		}
+}
+
+#Unicorn Expertise
+shared_focus = {
+		id = LIT_import_unicorn_epertise
+		icon = GFX_focus_MAS_P2F6C1
+		x = -10
+		y = 4
+		relative_position_id = LIT_assembly_is_called
+		cost = 5.72
+		
+		available = {
+			has_country_leader = {
+			name = "Sky Breaker"
+			ruling_only = yes
+			}
+		}
+		available_if_capitulated = yes 
+		
+		prerequisite = { focus = LIT_approach_mas }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_import_unicorn_epertise"
+			set_technology = { tech_unicorn = 1}
+			add_tech_bonus = {
+                bonus = 0.6
+                uses = 3
+                category = race_tech
+				}
+		}
+}
+
+#Seperate towns for Seperate Species
+shared_focus = {
+		id = LIT_seperation_of_races
+		icon = GFX_focus_MAS_P3H8
+		x = -8
+		y = 4
+		relative_position_id = LIT_assembly_is_called
+		cost = 5.72
+		
+		available = {
+			has_country_leader = {
+			name = "Sky Breaker"
+			ruling_only = yes
+			}
+		}
+		available_if_capitulated = yes 
+		
+		prerequisite = { focus = LIT_approach_mas }
+		prerequisite = { focus = LIT_mitigate_tensions }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_import_unicorn_epertise"
+			remove_ideas = LIT_racial_tensions_2_idea
+			LIT_raise_isolation = yes
+		}
+}
+
+#Ministry Rooaads... Take me hooome...
+shared_focus = {
+		id = LIT_ministry_roads
+		icon = GFX_focus_MAS_P3H9C3
+		x = -14
+		y = 5
+		relative_position_id = LIT_assembly_is_called
+		cost = 8.58
+		available = {
+			has_country_leader = {
+			name = "Sky Breaker"
+			ruling_only = yes
+			}
+		}
+		available_if_capitulated = yes 
+		
+		prerequisite = { focus = LIT_clean_water_for_energy }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_ministry_roads"
+			LIT_lower_isolation = yes
+			33 = {
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+			34 = {
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+			550 = {
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+			551 = {
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+}
+
+#Gimme dem Slaves
+shared_focus = {
+		id = LIT_ministry_servant_tech
+		icon = GFX_focus_MAS_P3H6C3
+		x = -12
+		y = 5
+		relative_position_id = LIT_assembly_is_called
+		cost = 8.58
+		available = {
+			has_country_leader = {
+			name = "Sky Breaker"
+			ruling_only = yes
+			}
+		}
+		available_if_capitulated = yes 
+		
+		prerequisite = { focus = LIT_clean_water_for_energy }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_ministry_servant_tech"
+			add_ideas = advanced_research_base
+			set_technology = {
+				special_forces_tech_level_scientific = 1
+				robotics_tech_level_settler = 1
+			}
+			save_current_manpower = yes
+			551 = { add_manpower = -600}
+			restore_previous_manpower = yes
+			MAS = {country_event = LIT_event.10}
+		}
+}
+
+#Ministry Training
+shared_focus = {
+		id = LIT_ministry_training
+		icon = GFX_focus_MAS_ExpandTheArmyOfMages
+		x = -10
+		y = 5
+		relative_position_id = LIT_assembly_is_called
+		cost = 8.58
+		available = {
+			has_country_leader = {
+			name = "Sky Breaker"
+			ruling_only = yes
+			}
+		}
+		available_if_capitulated = yes 
+		
+		prerequisite = { focus = LIT_import_unicorn_epertise }
+		prerequisite = { focus = LIT_seperation_of_races }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_ministry_training"
+			add_ideas = LIT_MAS_imitation_officers
+		}
+}
+
+#Propose to fuck up NAP
+shared_focus = {
+		id = LIT_lets_fuck_NAP
+		icon = GFX_focus_MAS_P3H7
+		x = -11
+		y = 6
+		relative_position_id = LIT_assembly_is_called
+		cost = 8.58
+		available = {
+			has_country_leader = {
+			name = "Sky Breaker"
+			ruling_only = yes
+			}
+		}
+		available_if_capitulated = yes 
+		
+		prerequisite = { focus = LIT_ministry_servant_tech }
+		prerequisite = { focus = LIT_ministry_training }
+		ai_will_do = { 
+		factor = 500
+		} 
+
+		will_lead_to_war_with = NAP
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_lets_fuck_NAP"
+			MAS = {country_event = LIT_event.12}
+		}
+}
+
+#Integrate NAP
+shared_focus = {
+		id = LIT_integrate_NAP
+		icon = GFX_focus_MAS_P2F6C2
+		x = -14
+		y = 7
+		relative_position_id = LIT_assembly_is_called
+		mutually_exclusive = { focus = LIT_betrayed_by_MAS }
+		cost = 8.58
+		
+		available_if_capitulated = yes 
+		available = { owns_state = 563 owns_state = 298 owns_state = 241}
+		prerequisite = { focus = LIT_lets_fuck_NAP }
+		prerequisite = { focus = LIT_ministry_roads }
+		ai_will_do = { 
+		factor = 5000
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_integrate_NAP"
+			Core_original_NAP = yes
+		}
+}
+
+#Betrayed by MAS
+shared_focus = {
+		id = LIT_betrayed_by_MAS
+		icon = GFX_focus_MAS_P2F1
+		x = -11
+		y = 7
+		relative_position_id = LIT_assembly_is_called
+		mutually_exclusive = { focus = LIT_integrate_NAP }
+		cost = 8.58
+		available = { MAS = {has_country_flag = MAS_LIT_hates_us_flag}}
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_lets_fuck_NAP }
+		prerequisite = { focus = LIT_ministry_roads }
+		ai_will_do = { 
+		factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_betrayed_by_MAS"
+			add_war_support = 0.15
+		}
+}
+
+#Through Thich and Thin
+shared_focus = {
+		id = LIT_through_thick_thin
+		icon = GFX_focus_MAS_P2F8
+		x = -16
+		y = 8
+		relative_position_id = LIT_assembly_is_called
+		mutually_exclusive = { focus = LIT_strong_to_resist }
+		cost = 8.58
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_integrate_NAP }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_through_thick_thin"
+			custom_effect_tooltip = LIT_stick_with_MAS_tt
+			add_stability = 0.1
+			one_random_industrial_complex = yes
+		}
+}
+
+#Strong enough to Resist
+shared_focus = {
+		id = LIT_strong_to_resist
+		icon = GFX_focus_MAS_P3H6C2
+		x = -13
+		y = 8
+		relative_position_id = LIT_assembly_is_called
+		mutually_exclusive = { focus = LIT_through_thick_thin }
+		cost = 8.58
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_integrate_NAP }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_strong_to_resist"
+			custom_effect_tooltip = LIT_betray_MAS_tt
+			add_war_support = 0.1
+			one_random_arms_factory = yes
+		}
+}
+
+#Integrate Industries
+shared_focus = {
+		id = LIT_MAS_integrate_industries
+		icon = GFX_focus_MAS_NewMachineries
+		x = -16
+		y = 9
+		relative_position_id = LIT_assembly_is_called
+		cost = 8.58
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_through_thick_thin }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_MAS_integrate_industries"
+			swap_ideas = {remove_idea = LIT_MAS_worse_rifles add_idea = LIT_MAS_worse_rifles2}
+			one_random_industrial_complex = yes
+			MAS = {one_random_industrial_complex = yes}
+		}
+}
+
+#Further integration
+shared_focus = {
+		id = LIT_MAS_further_integration
+		icon = GFX_focus_MAS_P2F5C4
+		x = -17
+		y = 10
+		relative_position_id = LIT_assembly_is_called
+		mutually_exclusive = { focus = LIT_MAS_equal_partnership }
+		cost = 8.58
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_MAS_integrate_industries }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_MAS_further_integration"
+			one_random_industrial_complex = yes
+			MAS = {one_random_industrial_complex = yes}
+			add_stability = 0.08
+		}
+}
+
+#Join our Ministerial Brothers
+shared_focus = {
+		id = LIT_MAS_join_brothers
+		icon = GFX_focus_MAS_P2F2C1
+		x = -17
+		y = 11
+		relative_position_id = LIT_assembly_is_called
+		cost = 8.58
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_MAS_further_integration }
+		ai_will_do = { 
+		factor = 5000
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_MAS_join_brothers"
+			MAS = {
+				annex_country = {
+					target = LIT
+					transfer_troops = yes
+				}
+				Core_original_NAP = yes
+				Core_original_LIT = yes
+				country_event = LIT_event.16
+			}
+		}
+}
+
+#An Equal Partnership
+shared_focus = {
+		id = LIT_MAS_equal_partnership
+		icon = GFX_focus_MAS_P2F4C1
+		mutually_exclusive = { focus = LIT_MAS_further_integration }
+		x = -15
+		y = 10
+		relative_position_id = LIT_assembly_is_called
+		cost = 8.58
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_MAS_integrate_industries }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_MAS_equal_partnership"
+			set_autonomy = {
+				target = LIT
+				autonomy_state = autonomy_free
+			}
+			add_offsite_building = { type = industrial_complex level = 3 }
+			hidden_effect = {
+			IF = {
+				limit = {LIT = {NOT = {is_in_faction_with = MAS}}}
+				MAS = { 
+					create_faction = MAS_LIT_faction
+					add_to_faction = LIT 
+				}
+			}
+			}
+			hidden_effect = { LIT = { add_ai_strategy = { type = alliance id = "MAS" value = 200} add_opinion_modifier = { target = MAS modifier = huge_increase } } }
+			hidden_effect = { MAS = { add_ai_strategy = { type = alliance id = "LIT" value = 200} add_opinion_modifier = { target = LIT modifier = huge_increase } } }
+			
+		}
+}
+
+#Conscript the Appleloosans
+shared_focus = {
+		id = LIT_conscript_appleloosans
+		icon = GFX_focus_MAS_P2F3
+		x = -14
+		y = 9
+		relative_position_id = LIT_assembly_is_called
+		cost = 8.58
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_through_thick_thin focus = LIT_strong_to_resist }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_conscript_appleloosans"
+			add_manpower = 250
+		}
+}
+
+#Secret Industry
+shared_focus = {
+		id = LIT_secret_buildup
+		icon = GFX_focus_MAS_FortificationsForAnyCase
+		x = -12
+		y = 9
+		relative_position_id = LIT_assembly_is_called
+		cost = 8.58
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_strong_to_resist }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_secret_buildup"
+			two_random_arms_factory = yes
+			add_manpower = 50
+			If = {
+				limit = {is_ai = yes}
+				add_equipment_to_stockpile = {
+				type = magx_equipment_gun
+				amount = 500
+				producer = MAS
+				}
+			}
+		}
+}
+
+#Demand our Old Lands
+shared_focus = {
+		id = LIT_demand_old_lands
+		icon = GFX_focus_MAS_P3H6C1
+		x = -13
+		y = 10
+		relative_position_id = LIT_assembly_is_called
+		mutually_exclusive = { focus = LIT_stab_in_back }
+		cost = 8.58
+		bypass = {
+			owns_state = 802
+			owns_state = 34
+			owns_state = 33
+		}
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_secret_buildup }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_demand_old_lands"
+			MAS = {country_event = LIT_event.17}
+		}
+}
+
+#Peace Prosperity unity
+shared_focus = {
+		id = LIT_peace_prosperity_unity
+		icon = GFX_focus_MAS_P3M2C1
+		x = -14
+		y = 11
+		relative_position_id = LIT_assembly_is_called
+		cost = 8.58
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_MAS_equal_partnership focus = LIT_demand_old_lands }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_peace_prosperity_unity"
+			add_stability = 0.08
+			one_random_industrial_complex = yes
+			every_owned_state = {
+				limit = {
+					is_core_of = LIT
+				}
+				add_extra_state_shared_building_slots = 1
+			}
+		}
+}
+
+#Stab in the Back
+shared_focus = {
+		id = LIT_stab_in_back
+		icon = GFX_focus_MAS_P3H9C2
+		x = -11
+		y = 10
+		relative_position_id = LIT_assembly_is_called
+		mutually_exclusive = { focus = LIT_demand_old_lands }
+		cost = 8.58
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_secret_buildup focus = LIT_betrayed_by_MAS }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		will_lead_to_war_with = MAS
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_stab_in_back"
+			set_autonomy = {
+				target = LIT
+				autonomy_state = autonomy_free
+			}
+			leave_faction = yes
+			MAS = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+}
+
+#Lightning Strikes Again
+shared_focus = {
+		id = LIT_lightning_strikes_again
+		icon = GFX_goal_seize_grand_applelossa
+		x = -12
+		y = 11
+		relative_position_id = LIT_assembly_is_called
+		cost = 8.58
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_demand_old_lands focus = LIT_stab_in_back focus = LIT_MAS_equal_partnership }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_lightning_strikes_again"
+			OAP = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			ROK = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+}
+
+#Look for a new Patron
+shared_focus = {
+		id = LIT_look_for_new_patron
+		icon = GFX_goal_arise_ye_bold_and_brave
+		x = -10
+		y = 11
+		relative_position_id = LIT_assembly_is_called
+		cost = 8.1236
+		available = {has_war = no}
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_stab_in_back }
+		ai_will_do = {
+		factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_look_for_new_patron"
+			custom_effect_tooltip = LIT_we_ask_majors_for_protection_tt
+		}
+}
+
+
+##############
+###Military###
+##############
+
+
+#Reforming the Armed Forces
+shared_focus = {
+		id = LIT_reform_armed_forces
+		icon = GFX_focus_indy_tanks_across_the_border
+		x = -21
+		y = 2
+		relative_position_id = LIT_Starting_Focus_3
+		cost = 4.29
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_Starting_Focus_3 }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_reform_armed_forces"
+			army_experience = 25
+		}
+}
+
+#Special Forces Focus
+shared_focus = {
+		id = LIT_spec_ops_focus
+		icon = GFX_goal_griffon_special_force
+		x = -2
+		y = 1
+		relative_position_id = LIT_reform_armed_forces
+		cost = 6.43
+		available_if_capitulated = yes
+		mutually_exclusive = { focus = LIT_mass_inf_focus }
+		prerequisite = { focus = LIT_reform_armed_forces }
+		ai_will_do = { 
+			factor = 0
+		modifier = {
+			add = 200
+			has_game_rule = {
+                    rule = LIT_AI_BEHAVIOR
+                    option = ENCLAVISTS
+                }
+			}
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_spec_ops_focus"
+			add_ideas = LIT_spec_ops_idea_1
+			add_tech_bonus = {
+			name = special_forces_bonus
+			bonus = 1.0
+			uses = 1
+			category = special_force_tech
+			}
+		}
+}
+
+#United in Service
+shared_focus = {
+		id = LIT_united_in_service
+		icon = GFX_goal_ELF_servicemare
+		x = 0
+		y = 2
+		relative_position_id = LIT_reform_armed_forces
+		cost = 6.43
+		available_if_capitulated = yes
+		prerequisite = { focus = LIT_spec_ops_focus focus = LIT_mass_inf_focus }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_united_in_service"
+			LIT_lower_isolation = yes
+		}
+}
+
+#Anti-Machine research
+shared_focus = {
+		id = LIT_anti_tank
+		icon = GFX_focus_generic_tank_destroyer
+		x = -2
+		y = 2
+		relative_position_id = LIT_reform_armed_forces
+		cost = 6.43
+		available_if_capitulated = yes
+		prerequisite = { focus = LIT_spec_ops_focus }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_anti_tank"
+			add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.6
+			uses = 2
+			category = anti_tank_tech
+			}
+		}
+}
+
+#Spec-Ops Doctrine
+shared_focus = {
+		id = LIT_spec_doctrine
+		icon = GFX_goal_finnish_spirit
+		x = -3
+		y = 3
+		relative_position_id = LIT_reform_armed_forces
+		cost = 6.43
+		available_if_capitulated = yes
+		prerequisite = { focus = LIT_anti_tank }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_spec_doctrine"
+			add_tech_bonus = {
+			name = special_doctrine_bonus
+			bonus = 1.0
+			uses = 3
+			category = specops_tech
+			}
+		}
+}
+
+#Value of Mobility
+shared_focus = {
+		id = LIT_value_mobility
+		icon = GFX_goal_NCR_Army_of_Mobility
+		x = -1
+		y = 3
+		relative_position_id = LIT_reform_armed_forces
+		cost = 8.58
+		available_if_capitulated = yes
+		prerequisite = { focus = LIT_anti_tank }
+		prerequisite = { focus = LIT_united_in_service }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_value_mobility"
+			add_tech_bonus = {
+			name = vehicle_bonus
+			bonus = 1.0
+			uses = 2
+			category = vehicle_tech
+			}
+		}
+}
+
+#PA Research
+shared_focus = {
+		id = LIT_PA_research
+		icon = GFX_goal_research_into_power_armor
+		x = -2
+		y = 4
+		relative_position_id = LIT_reform_armed_forces
+		cost = 8.58
+		available_if_capitulated = yes
+		prerequisite = { focus = LIT_spec_doctrine }
+		prerequisite = { focus = LIT_value_mobility }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_PA_research"
+			add_tech_bonus = {
+			name = power_armor_bonus
+			bonus = 0.8
+			uses = 2
+			category = power_armor_tech
+			}
+		}
+}
+
+#Mass Infantry Focus
+shared_focus = {
+		id = LIT_mass_inf_focus
+		icon = GFX_goal_conscription_pony
+		x = 2
+		y = 1
+		relative_position_id = LIT_reform_armed_forces
+		cost = 6.43
+		available_if_capitulated = yes
+		mutually_exclusive = { focus = LIT_spec_ops_focus }
+		prerequisite = { focus = LIT_reform_armed_forces }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_mass_inf_focus"
+			add_ideas = LIT_mass_inf_idea_1
+			add_tech_bonus = {
+			name = doctrine_bonus
+			bonus = 1.0
+			uses = 1
+			category = cat_terror_tactics
+			}
+		}
+}
+
+#Chem Research
+shared_focus = {
+		id = LIT_chems_research
+		icon = GFX_KHA_focus_synthesise_chems
+		x = 2
+		y = 2
+		relative_position_id = LIT_reform_armed_forces
+		cost = 6.43
+		available_if_capitulated = yes
+		prerequisite = { focus = LIT_mass_inf_focus }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_chems_research"
+			add_tech_bonus = {
+			name = fireteam_bonus
+			bonus = 0.8
+			uses = 2
+			category = medical_tech
+			}
+		}
+}
+
+#Universal Doctrine
+shared_focus = {
+		id = LIT_universal_doctrine
+		icon = GFX_goal_grim_doctrine
+		x = 3
+		y = 3
+		relative_position_id = LIT_reform_armed_forces
+		cost = 6.43
+		available_if_capitulated = yes
+		prerequisite = { focus = LIT_chems_research }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_universal_doctrine"
+			add_tech_bonus = {
+			name = doctrine_bonus
+			bonus = 1.0
+			uses = 2
+			category = land_doctrine
+			}
+		}
+}
+
+#Virtue of bravery
+shared_focus = {
+		id = LIT_virtue_bravery
+		icon = GFX_goal_arise_ye_bold_and_brave
+		x = 1
+		y = 3
+		relative_position_id = LIT_reform_armed_forces
+		cost = 8.58
+		available_if_capitulated = yes
+		prerequisite = { focus = LIT_chems_research }
+		prerequisite = { focus = LIT_united_in_service }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_virtue_bravery"
+			add_tech_bonus = {
+			name = doctrine_bonus
+			bonus = 1.0
+			uses = 2
+			category = training_tech
+			}
+		}
+}
+
+#Grenades for Everypony
+shared_focus = {
+		id = LIT_grenades_for_all
+		icon = GFX_goal_TIM_patch_rifle_shooting
+		x = 2
+		y = 4
+		relative_position_id = LIT_reform_armed_forces
+		cost = 8.58
+		available_if_capitulated = yes
+		prerequisite = { focus = LIT_universal_doctrine }
+		prerequisite = { focus = LIT_virtue_bravery }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_grenades_for_all"
+			add_tech_bonus = {
+			name = fireteam_bonus
+			bonus = 1.0
+			uses = 2
+			category = demolition_tech
+			}
+		}
+}
+
+#Gun-Research
+shared_focus = {
+		id = LIT_gun_research
+		icon = GFX_goal_double_research
+		x = 0
+		y = 4
+		relative_position_id = LIT_reform_armed_forces
+		cost = 8.58
+		available_if_capitulated = yes
+		prerequisite = { focus = LIT_value_mobility focus = LIT_virtue_bravery }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_gun_research"
+			add_research_slot = 1
+		}
+}
+
+#Illustrious elite
+shared_focus = {
+		id = LIT_illustrious_elite
+		icon = GFX_goal_ranger_focused_military
+		x = -2
+		y = 5
+		relative_position_id = LIT_reform_armed_forces
+		cost = 8.58
+		available_if_capitulated = yes
+		prerequisite = { focus = LIT_PA_research }
+		prerequisite = { focus = LIT_gun_research }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_illustrious_elite"
+			swap_ideas = { remove_idea = LIT_spec_ops_idea_1  add_idea = LIT_spec_ops_idea_2}
+		}
+}
+
+#More Bodies than Bullets
+shared_focus = {
+		id = LIT_more_bodies_bullets
+		icon = GFX_goal_whip_them_into_shape
+		x = 2
+		y = 5
+		relative_position_id = LIT_reform_armed_forces
+		cost = 8.58
+		available_if_capitulated = yes
+		prerequisite = { focus = LIT_grenades_for_all }
+		prerequisite = { focus = LIT_gun_research }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_more_bodies_bullets"
+			swap_ideas = { remove_idea = LIT_mass_inf_idea_1  add_idea = LIT_mass_inf_idea_2}
+		}
+}
+
+
+#Aircraft Development+Airfields
+shared_focus = {
+		id = LIT_airforce_1
+		icon = GFX_goal_air_armada
+		x = 5
+		y = 1
+		relative_position_id = LIT_reform_armed_forces
+		cost = 6.43
+		available = {owns_state = 798}
+		available_if_capitulated = no
+		prerequisite = { focus = LIT_reform_armed_forces }
+		ai_will_do = { 
+		factor = 20
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_airforce_1"
+			air_experience = 25
+			798 = { 
+				add_building_construction = {
+					type = air_base
+					level = 3
+					instant_build = yes
+				} 
+			}
+		}
+}
+
+#Fighter Development
+shared_focus = {
+		id = LIT_airforce_2
+		icon = GFX_goal_POL_recon_aircraft
+		x = 4
+		y = 2
+		relative_position_id = LIT_reform_armed_forces
+		cost = 8.58
+		available_if_capitulated = yes
+		prerequisite = { focus = LIT_airforce_1 }
+		ai_will_do = { 
+		factor = 20
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_airforce_2"
+			add_tech_bonus = {
+			name = light_fighter
+			bonus = 0.8
+			uses = 2
+			category = fighter_tech
+			}
+		}
+}
+
+#CAS Development
+shared_focus = {
+		id = LIT_airforce_3
+		icon = GFX_goal_generic_airplane
+		x = 6
+		y = 2
+		relative_position_id = LIT_reform_armed_forces
+		cost = 8.58
+		available_if_capitulated = yes
+		prerequisite = { focus = LIT_airforce_1 }
+		ai_will_do = { 
+		factor = 20
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_airforce_3"
+			add_tech_bonus = {
+			name = cas_bomber
+			bonus = 0.8
+			uses = 2
+			category = air_support_tech
+			}
+		}
+}
+
+#Air Doctrine
+shared_focus = {
+		id = LIT_airforce_4
+		icon = GFX_goal_generic_air_doctrines_focus
+		x = 5
+		y = 3
+		relative_position_id = LIT_reform_armed_forces
+		cost = 8.58
+		available_if_capitulated = yes
+		prerequisite = { focus = LIT_airforce_2 focus = LIT_airforce_3 }
+		ai_will_do = { 
+		factor = 20
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_airforce_4"
+			add_tech_bonus = {
+			name = air_doctrine
+			bonus = 1.0
+			uses = 3
+			category = air_doctrine
+			}
+		}
+}
+
+#Airship Yards
+shared_focus = {
+		id = LIT_airforce_5
+		icon = GFX_goal_generic_airship_1
+		x = 5
+		y = 4
+		relative_position_id = LIT_reform_armed_forces
+		cost = 8.58
+		available_if_capitulated = yes
+		prerequisite = { focus = LIT_airforce_4 }
+		ai_will_do = { 
+		factor = 20
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_airforce_5"
+			two_random_arms_factory = yes
+			add_tech_bonus = {
+			name = cas_bomber
+			bonus = 0.8
+			uses = 2
+			category = airship_tech
+			}
+		}
+}
+
+#Naval Development+Dockyards
+shared_focus = {
+		id = LIT_navy_1
+		icon = GFX_goal_dockyard_generic_psody
+		x = -5
+		y = 1
+		relative_position_id = LIT_reform_armed_forces
+		cost = 6.43
+		available = { OR = {owns_state = 34 owns_state = 33}}
+		available_if_capitulated = no
+		prerequisite = { focus = LIT_reform_armed_forces }
+		ai_will_do = { 
+		factor = 5
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_navy_1"
+			two_random_dockyards = yes
+			navy_experience = 25
+		}
+}
+
+#Canou Research
+shared_focus = {
+		id = LIT_navy_2
+		icon = GFX_goal_BOS_steel_cage
+		x = -6
+		y = 2
+		relative_position_id = LIT_reform_armed_forces
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_navy_1 }
+		ai_will_do = { 
+		factor = 20
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_navy_2"
+			add_tech_bonus = {
+			name = naval_tech
+			bonus = 1.0
+			uses = 2
+			category = naval_light_hull_tech
+			}
+		}
+}
+
+#Naval Guns
+shared_focus = {
+		id = LIT_navy_3
+		icon = GFX_goal_Anti_Air_Guns
+		x = -4
+		y = 2
+		relative_position_id = LIT_reform_armed_forces
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_navy_1 }
+		ai_will_do = { 
+		factor = 20
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_navy_3"
+			add_tech_bonus = {
+			name = naval_heavy_weapons_tech
+			bonus = 1.0
+			uses = 2
+			category = naval_heavy_weapons_tech
+			}
+			add_tech_bonus = {
+			name = naval_heavy_weapons_tech
+			bonus = 1.0
+			uses = 2
+			category = naval_light_weapons_tech
+			}
+		}
+}
+
+#Naval Doctrine
+shared_focus = {
+		id = LIT_navy_4
+		icon = GFX_goal_generic_naval_doctrines_focus
+		x = -5
+		y = 3
+		relative_position_id = LIT_reform_armed_forces
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_navy_3 focus = LIT_navy_2 }
+		ai_will_do = { 
+		factor = 20
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_navy_4"
+			add_tech_bonus = {
+			name = naval_heavy_weapons_tech
+			bonus = 1.0
+			uses = 3
+			category = naval_doctrine
+			}
+		}
+}
+
+#Battleships
+shared_focus = {
+		id = LIT_navy_5
+		icon = GFX_focus_generic_navy_battleship3
+		x = -5
+		y = 4
+		relative_position_id = LIT_reform_armed_forces
+		cost = 8.58
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_navy_4 }
+		ai_will_do = { 
+		factor = 20
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_navy_5"
+			add_tech_bonus = {
+			name = naval_heavy_hull_tech
+			bonus = 1.5
+			uses = 2
+			category = naval_heavy_hull_tech
+			}
+		}
+}
+
+##############
+###Industry###
+##############
+
+#Economic Matters
+shared_focus = {
+		id = LIT_economic_matters
+		icon = GFX_goal_bag_of_money_pony
+		x = 18
+		y = 2
+		relative_position_id = LIT_Starting_Focus_3
+		cost = 5.72
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_Starting_Focus_3 }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_economic_matters"
+			add_tech_bonus = {
+				name = industry_bonus
+				bonus = 1.0
+				uses = 2
+				category = industry
+			}
+		}
+}
+
+#The Rebuilding of Cloudsdale
+shared_focus = {
+		id = LIT_rebuilding_cloudsdale
+		icon = GFX_goal_generic_repair_cloudcity
+		x = -3
+		y = 1
+		relative_position_id = LIT_economic_matters
+		cost = 5.72
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_economic_matters }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_rebuilding_cloudsdale"
+			798 = { add_extra_state_shared_building_slots = 5 add_manpower = 500}
+		}
+}
+
+#Repair the Infrastructure around the City
+shared_focus = {
+		id = LIT_rebuilding_cloudsdale_infrastructure
+		icon = GFX_goal_generic_railroad
+		x = -4
+		y = 2
+		relative_position_id = LIT_economic_matters
+		cost = 5.72
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_rebuilding_cloudsdale }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_rebuilding_cloudsdale_infrastructure"
+			565 = {add_extra_state_shared_building_slots = 1 add_building_construction = {type = infrastructure level = 1 instant_build = yes}}
+			32 = {add_extra_state_shared_building_slots = 1 add_building_construction = {type = infrastructure level = 1 instant_build = yes}}
+			811 = {add_extra_state_shared_building_slots = 1 add_building_construction = {type = infrastructure level = 1 instant_build = yes}}
+			798 = {add_extra_state_shared_building_slots = 1 add_building_construction = {type = infrastructure level = 2 instant_build = yes}}
+
+		}
+}
+
+#Scavenge what can't be repaired
+shared_focus = {
+		id = LIT_rebuilding_cloudsdale_scavenge
+		icon = GFX_goal_generic_metal_focus
+		x = -2
+		y = 2
+		relative_position_id = LIT_economic_matters
+		cost = 5.72
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_rebuilding_cloudsdale }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_rebuilding_cloudsdale_scavenge"
+			798 = {
+				add_resource = {
+					type = composites
+					amount = 9
+				}
+				add_resource = {
+					type = circuitry
+					amount = 6
+				}
+				add_resource = {
+					type = advanced
+					amount = 5
+				}
+			}
+		}
+}
+
+#A Magnificient Find
+shared_focus = {
+		id = LIT_rebuilding_cloudsdale_cloudship
+		icon = GFX_goal_Destroyed_Cloudship_generic
+		x = -5
+		y = 3
+		relative_position_id = LIT_economic_matters
+		cost = 8.58
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_rebuilding_cloudsdale_infrastructure }
+		prerequisite = { focus = LIT_rebuilding_cloudsdale_scavenge }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_rebuilding_cloudsdale_cloudship"
+			country_event = { id = LIT_event.11 }
+		}
+}
+
+#Settle the Outscirts
+shared_focus = {
+		id = LIT_rebuilding_cloudsdale_settling
+		icon = GFX_goal_generic_cities_focus
+		x = -3
+		y = 3
+		relative_position_id = LIT_economic_matters
+		cost = 5.72
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_rebuilding_cloudsdale_infrastructure }
+		prerequisite = { focus = LIT_rebuilding_cloudsdale_scavenge }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_rebuilding_cloudsdale_settling"
+			custom_effect_tooltip = LIT_unlock_cloudsdale_settlement_tt
+			set_technology = {
+				habitation_tech_level_settler = 1
+			}
+			add_stability = 0.04
+		}
+}
+
+#Repair Cloud-Factories
+shared_focus = {
+		id = LIT_rebuilding_cloudsdale_factories
+		icon = GFX_goal_generic_building_focus
+		x = -1
+		y = 3
+		relative_position_id = LIT_economic_matters
+		cost = 8.58
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_rebuilding_cloudsdale_infrastructure }
+		prerequisite = { focus = LIT_rebuilding_cloudsdale_scavenge }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_rebuilding_cloudsdale_factories"
+			798 = {add_extra_state_shared_building_slots = 2 add_building_construction = {type = industrial_complex level = 2 instant_build = yes}}
+		}
+}
+
+#A Proud City once More
+shared_focus = {
+		id = LIT_rebuilding_cloudsdale_finish
+		icon = GFX_goal_rainbow_falls
+		x = -3
+		y = 4
+		relative_position_id = LIT_economic_matters
+		cost = 8.58
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_rebuilding_cloudsdale_cloudship }
+		prerequisite = { focus = LIT_rebuilding_cloudsdale_settling }
+		prerequisite = { focus = LIT_rebuilding_cloudsdale_factories }
+		ai_will_do = { 
+		factor = 500
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_rebuilding_cloudsdale_finish"
+			798 = {set_state_name = "Cloudsdale" add_manpower = 2500}
+			set_province_name = { id = 9272 name = "Cloudsdale"}
+			set_province_name = { id = 9256 name = "New Rainbow"}
+			add_offsite_building = { type = industrial_complex level = 2 }
+			add_offsite_building = { type = arms_factory level = 1 }
+			add_research_slot = 1
+		}
+}
+
+#The Country as a Whole
+shared_focus = {
+		id = LIT_country_whole
+		icon = GFX_goal_generic_lau_construction
+		x = 3
+		y = 1
+		relative_position_id = LIT_economic_matters
+		cost = 5.72
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_economic_matters }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_country_whole"
+			add_stability = 0.08
+			add_timed_idea = { idea = LIT_rebuilding_initiative days = 250 }
+		}
+}
+
+#Build streets between settlements
+shared_focus = {
+		id = LIT_country_streets
+		icon = GFX_goal_generic_railway_construction
+		x = 2
+		y = 2
+		relative_position_id = LIT_economic_matters
+		cost = 5.72
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_country_whole }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_country_streets"
+			550 = {add_extra_state_shared_building_slots = 1 add_building_construction = {type = infrastructure level = 1 instant_build = yes}}
+			551 = {add_extra_state_shared_building_slots = 1 add_building_construction = {type = infrastructure level = 1 instant_build = yes}}
+			33 = {add_extra_state_shared_building_slots = 1 add_building_construction = {type = infrastructure level = 1 instant_build = yes}}
+			34 = {add_extra_state_shared_building_slots = 1 add_building_construction = {type = infrastructure level = 1 instant_build = yes}}
+			LIT_lower_isolation = yes
+		}
+}
+
+#Run Power to outlying Settlements
+shared_focus = {
+		id = LIT_country_power
+		icon = GFX_focus_generic_electricity
+		x = 4
+		y = 2
+		relative_position_id = LIT_economic_matters
+		cost = 5.72
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_country_whole }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_country_power"
+			550 = {
+				add_resource = {
+					type = energy
+					amount = 12
+				}
+			}
+		}
+}
+
+#Let Private Enterprise Flourish
+shared_focus = {
+		id = LIT_country_enterprise
+		icon = GFX_goal_factory_complex
+		x = 1
+		y = 3
+		relative_position_id = LIT_economic_matters
+		cost = 8.58
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_country_streets }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_country_enterprise"
+			one_random_industrial_complex = yes
+			add_tech_bonus = {
+				name = industry_bonus
+				bonus = 0.8
+				uses = 1
+				category = industry
+			}
+		}
+}
+
+#Wide-Scale land clearance
+shared_focus = {
+		id = LIT_country_clearance
+		icon = GFX_goal_reichsautobahn
+		x = 5
+		y = 3
+		relative_position_id = LIT_economic_matters
+		cost = 8.58
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_country_power }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_country_clearance"
+			550 = {add_extra_state_shared_building_slots = 3 }
+			551 = {add_extra_state_shared_building_slots = 3 }
+			33 = {add_extra_state_shared_building_slots = 3 }
+			34 = {add_extra_state_shared_building_slots = 3 }
+		}
+}
+
+#Closer Together Now
+shared_focus = {
+		id = LIT_country_closer
+		icon = GFX_focus_generic_diplomatic_treaty_pony
+		x = 3
+		y = 3
+		relative_position_id = LIT_economic_matters
+		cost = 5.72
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_country_power focus = LIT_country_streets }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_country_closer"
+			LIT_lower_isolation = yes
+			add_research_slot = 1
+		}
+}
+
+#A Modern Country
+shared_focus = {
+		id = LIT_country_finish
+		icon = GFX_goal_support_democracy
+		x = 3
+		y = 4
+		relative_position_id = LIT_economic_matters
+		cost = 8.58
+		
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_country_enterprise focus = LIT_country_clearance }
+		prerequisite = { focus = LIT_country_closer}
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_country_finish"
+			LIT_lower_isolation = yes
+			add_ideas = wasteland_society2
+		}
+}
+
+#Appleloosan Ambition
+shared_focus = {
+		id = LIT_apple_ambition
+		icon = GFX_goal_apple_icon
+		x = 0
+		y = 5
+		relative_position_id = LIT_economic_matters
+		cost = 8.58
+		
+		available_if_capitulated = no
+		prerequisite = { focus = LIT_country_finish }
+		prerequisite = { focus = LIT_rebuilding_cloudsdale_finish}
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_apple_ambition"
+			add_manpower = 500
+			add_political_power = 50
+		}
+}
+
+#OAP Railroads
+shared_focus = {
+		id = LIT_OAP_railroad
+		icon = GFX_goal_KTG_Jungle_Railroad
+		x = -3
+		y = 6
+		relative_position_id = LIT_economic_matters
+		cost = 8.58
+		available = {
+			owns_state = 596
+			owns_state = 587
+			owns_state = 205
+			owns_state = 213
+			owns_state = 599
+			owns_state = 111
+			owns_state = 67
+		}
+		
+		available_if_capitulated = no
+		prerequisite = { focus = LIT_apple_ambition }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_OAP_railroad"
+			596 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+			213 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+			205 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+			587 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+			111 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+}
+
+#Lichenfield Glass Factory
+shared_focus = {
+		id = LIT_lichenfield_glass
+		icon = GFX_goal_generic_lau_factory
+		x = -3
+		y = 7
+		relative_position_id = LIT_economic_matters
+		cost = 8.58
+		
+		available_if_capitulated = no
+		prerequisite = { focus = LIT_OAP_railroad }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_lichenfield_glass"
+			213 = {
+				add_extra_state_shared_building_slots = 4
+				add_building_construction = {
+					type = industrial_complex
+					level = 2
+					instant_build = yes
+				}
+				add_manpower = 250
+			}
+			add_stability = 0.02
+		}
+}
+
+#Desert Solar-Farms
+shared_focus = {
+		id = LIT_OAP_solar
+		icon = GFX_goal_generic_focus_solar_energy
+		x = -4
+		y = 8
+		relative_position_id = LIT_economic_matters
+		cost = 8.58
+		
+		available_if_capitulated = no
+		prerequisite = { focus = LIT_lichenfield_glass }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_OAP_solar"
+			67 = {
+				add_resource = { type = energy amount = 16 }
+				add_manpower = 400
+			}
+		}
+}
+
+#Desert Gun-Foundries
+shared_focus = {
+		id = LIT_OAP_gun_foundries
+		icon = GFX_goal_Focus_Military_Mobilisation
+		x = -2
+		y = 8
+		relative_position_id = LIT_economic_matters
+		cost = 8.58
+		
+		available_if_capitulated = no
+		prerequisite = { focus = LIT_lichenfield_glass }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_OAP_gun_foundries"
+			596 = {
+				add_extra_state_shared_building_slots = 2
+				add_building_construction = {
+					type = arms_factory
+					level = 2
+					instant_build = yes
+				}
+				add_resource = { type = metal amount = 8 }
+			}
+		}
+}
+
+#NAP-Cloudsdale Integration
+shared_focus = {
+		id = LIT_NAP_integration
+		icon = GFX_goal_what_the_winds_of_trade_bring
+		x = 0
+		y = 6
+		relative_position_id = LIT_economic_matters
+		cost = 8.58
+		available = {
+			owns_state = 563
+			owns_state = 298
+			owns_state = 241
+		}
+		available_if_capitulated = no
+		prerequisite = { focus = LIT_apple_ambition }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_NAP_integration"
+			798 = {
+				add_extra_state_shared_building_slots = 2
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			563 = {
+				add_extra_state_shared_building_slots = 2
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+}
+
+#Re-Settle Artisans
+shared_focus = {
+		id = LIT_NAP_settle_artisans
+		icon = GFX_goal_fallout_tool
+		x = -1
+		y = 7
+		relative_position_id = LIT_economic_matters
+		cost = 8.58
+		available_if_capitulated = no
+		prerequisite = { focus = LIT_NAP_integration }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_NAP_settle_artisans"
+			798 = {
+				add_resource = { type = circuitry amount = 10 }
+				add_manpower = 100
+			}
+			563 = {
+				save_current_manpower = yes
+				add_manpower = -100
+				restore_previous_manpower = yes
+			}
+		}
+}
+
+#Monopolize Appleloosan trade
+shared_focus = {
+		id = LIT_NAP_monopolies
+		icon = GFX_goal_generic_wasteland_trade
+		x = 1
+		y = 7
+		relative_position_id = LIT_economic_matters
+		cost = 8.58
+		available_if_capitulated = no
+		prerequisite = { focus = LIT_NAP_integration }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_NAP_monopolies"
+			add_ideas = LIT_trade_monopoly_idea
+		}
+}
+
+#Precision Manufacturing
+shared_focus = {
+		id = LIT_NAP_precision_manufacturing
+		icon = GFX_goal_generic_circuit_adv
+		x = 0
+		y = 8
+		relative_position_id = LIT_economic_matters
+		cost = 8.58
+		available_if_capitulated = no
+		prerequisite = { focus = LIT_NAP_monopolies }
+		prerequisite = { focus = LIT_NAP_settle_artisans }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_NAP_precision_manufacturing"
+			798 = {
+				add_resource = { type = advanced amount = 8 }
+			}
+			set_technology = {
+				tools_tech_level_scientific = 1
+				electronics_tech_level_scientific = 1
+			}
+		}
+}
+
+#Ports of Hoof City
+shared_focus = {
+		id = LIT_ROK_ports
+		icon = GFX_goal_dockyard_generic_psody
+		x = 3
+		y = 6
+		relative_position_id = LIT_economic_matters
+		cost = 8.58
+		available = {
+			owns_state = 564
+			owns_state = 36
+			owns_state = 184
+			owns_state = 803
+			owns_state = 589
+		}
+		available_if_capitulated = no
+		prerequisite = { focus = LIT_apple_ambition }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_ROK_ports"
+			36 = {
+				add_extra_state_shared_building_slots = 4
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+				add_building_construction = {
+					type = dockyard
+					level = 1
+					instant_build = yes
+				}
+			}
+			set_technology = { habitation_tech_level_scientific = 1 }
+		}
+}
+
+#Increase Rock production
+shared_focus = {
+		id = LIT_ROK_moar_rocks
+		icon = GFX_goal_KTG_Jungle_Gold_Mine
+		x = 3
+		y = 7
+		relative_position_id = LIT_economic_matters
+		cost = 8.58
+		available_if_capitulated = no
+		prerequisite = { focus = LIT_ROK_ports }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_ROK_moar_rocks"
+			589 = {
+				add_resource = { type = metal amount = 16 }
+				add_manpower = 200
+			}
+		}
+}
+
+#Settle East Appleloosa
+shared_focus = {
+		id = LIT_ROK_east_settlement
+		icon = GFX_goal_pony_passport
+		x = 2
+		y = 8
+		relative_position_id = LIT_economic_matters
+		cost = 8.58
+		available_if_capitulated = no
+		prerequisite = { focus = LIT_ROK_moar_rocks }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_ROK_east_settlement"
+			every_owned_state = {
+				limit = { is_core_of = ROK }
+				add_manpower = 250
+			}
+		}
+}
+
+#Subsidize Composite production
+shared_focus = {
+		id = LIT_ROK_composites
+		icon = GFX_goal_generic_sledgehammers
+		x = 4
+		y = 8
+		relative_position_id = LIT_economic_matters
+		cost = 8.58
+		available_if_capitulated = no
+		prerequisite = { focus = LIT_ROK_moar_rocks }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_ROK_composites"
+			36 = {
+				add_resource = { type = composites amount = 10 }
+				add_extra_state_shared_building_slots = 2
+			}
+		}
+}
+
+#The Dream, Fulfilled!
+shared_focus = {
+		id = LIT_dream_fulfilled
+		icon = GFX_goal_seize_grand_applelossa
+		x = 0
+		y = 9
+		relative_position_id = LIT_economic_matters
+		cost = 8.58
+		available_if_capitulated = no
+		prerequisite = { focus = LIT_NAP_precision_manufacturing }
+		prerequisite = { focus = LIT_OAP_gun_foundries }
+		prerequisite = { focus = LIT_OAP_solar }
+		prerequisite = { focus = LIT_ROK_east_settlement }
+		prerequisite = { focus = LIT_ROK_composites }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_dream_fulfilled"
+			add_ideas = LIT_Appleloosa_united_idea
+		}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
