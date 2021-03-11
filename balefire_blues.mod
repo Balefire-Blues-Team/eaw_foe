@@ -1,4 +1,4 @@
-version="Beta"
+version="1.1"
 replace_path="common/ai_focuses"
 replace_path="common/ai_peace"
 replace_path="common/ai_strategy"
@@ -43,5 +43,5 @@ dependencies={
 }
 picture="thumbnail.png"
 supported_version="1.10.*"
-path="C:/Users/Admin/Documents/Paradox Interactive/Hearts of Iron IV/mod/eaw_foe"
+path="mod/balefire_blues"
 remote_file_id="2307988796"
