@@ -27,6 +27,8 @@ NDefines.NCountry.BASE_FUEL_CAPACITY = 0.1						-- base amount of fuel capacity
 
 NDefines.NMilitary.BASE_CAPTURE_EQUIPMENT_RATIO = 0.3
 
+NDefines.NCountry.POPULATION_YEARLY_GROWTH_BASE = 0.04			-- basic population growth per year, used for monthly manpower gain
+
 --------------------
 -- AI battleplans --
 --------------------
