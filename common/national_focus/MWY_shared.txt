@@ -815,6 +815,7 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MWY_qw_grand_tour"
+			custom_effect_tooltip = MWY_dangerous_focus_grand_tour_tt
 		}
 	}
 
@@ -1146,6 +1147,8 @@
 			hidden_effect = {
 				set_country_flag = MWY_chan_always_support_serf_law_2
 				set_variable = { serf_laws_button_2_chan_var = 3 }
+
+				MWY_calc_all_laws_approval = yes
 			}
 		}
 	}
@@ -1331,6 +1334,7 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MWY_qw_cutie_marks"
+			country_event = newmareway.54
 		}
 	}
 
@@ -1376,6 +1380,11 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MWY_qw_merchant_class"
+			add_popularity = {
+			    ideology = visionary
+			    popularity = 0.05
+			}
+			add_ideas = MWY_middle_class_idea
 		}
 	}
 
@@ -1390,12 +1399,17 @@
 		prerequisite = { focus = MWY_qw_cutie_marks }
 		prerequisite = { focus = MWY_qw_declaration_of_rights }
 
+		bypass = {
+			MWY_serf_laws_4_or_higher = yes
+		}
+
 		ai_will_do = { 
 			factor = 10
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MWY_qw_economic_freedom"
+			custom_effect_tooltip = MWY_economic_freedom_decisions_tt
 		}
 	}
 
@@ -1410,9 +1424,9 @@
 		prerequisite = { focus = MWY_qw_development_council }
 		available = {
 			custom_trigger_tooltip = {
-                   tooltip = MWY_steward_is_waters_tt
-                   hidden_trigger = { has_country_flag = MWY_steward_flag_wavy_waters }
-               }
+                tooltip = MWY_steward_is_waters_tt
+                hidden_trigger = { has_country_flag = MWY_steward_flag_wavy_waters }
+            }
 		}
 
 		mutually_exclusive = {
@@ -1591,12 +1605,43 @@
 		prerequisite = { focus = MWY_qw_economic_freedom }
 		prerequisite = { focus = MWY_qw_old_world_knowledge }
 
+		available = {
+			MWY_serf_laws_4_or_higher = yes
+		}
+
+		bypass = {
+			MWY_serf_laws_5_or_higher = yes
+		}
+
 		ai_will_do = { 
 			factor = 10
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MWY_qw_queen_of_the_people"
+			custom_effect_tooltip = MWY_set_serf_law_5_tt
+			MWY_max_feudal_effect = yes
+            hidden_effect = {
+                MWY_reset_serf_laws_frames = yes
+                set_variable = { serf_laws_var = 5 }
+                set_variable = { serf_laws_button_5_frame_var = 2 }
+                MWY_serf_law_cooldown_effect = yes
+                add_political_power = -50
+            }
+            if = {
+            	limit = { has_country_flag = MWY_light_serf_support }
+            	MWY_lower_grainlands_opinion = yes
+            	MWY_lower_amethyst_opinion = yes
+            	MWY_lower_radigator_opinion = yes
+            	MWY_lower_peninsula_opinion = yes
+            }
+            else = {
+            	MWY_lower_grainlands_opinion = yes
+            	MWY_lower_amethyst_opinion = yes
+            	MWY_lower_radigator_opinion = yes
+            	MWY_lower_swampy_opinion = yes
+            	MWY_lower_peninsula_opinion = yes
+            }
 		}
 	}
 
@@ -1617,6 +1662,7 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MWY_qw_magic_of_friendship"
+			country_event = newmareway.53
 		}
 	}
 
