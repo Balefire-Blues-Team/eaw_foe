@@ -1060,3 +1060,256 @@ NCG_corporate_puppets_cat = {
 	
 }
 
+NCG_star_foundry_cat = {
+
+	NCG_star_foundry_1 = {
+		icon = generic_construction
+		is_good = yes
+
+		available = {
+			has_political_power > 24
+			num_of_civilian_factories_available_for_projects > 1
+		}
+		modifier = {
+			civilian_factory_use = 2
+		}
+		days_remove = 50
+		fire_only_once = yes
+		cost = 25
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NCG_star_foundry_1 "
+			
+			806 = { add_extra_state_shared_building_slots = 2}
+			set_country_flag = NCG_sunforge_excav
+			
+			
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+	NCG_star_foundry_2 = {
+		icon = generic_construction
+		is_good = yes
+
+		available = {
+			has_political_power > 24
+			num_of_civilian_factories_available_for_projects > 1
+			has_country_flag = NCG_sunforge_excav
+		}
+		modifier = {
+			civilian_factory_use = 2
+		}
+		days_remove = 110
+		fire_only_once = yes
+		cost = 25
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NCG_star_foundry_2 "
+			
+			747 = {
+				add_resource = {
+				type = metal
+				amount = -2
+				}
+			}
+			set_country_flag = NCG_sunforge_build_1
+			
+			
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+	NCG_star_foundry_3 = {
+		icon = generic_construction
+		is_good = yes
+
+		available = {
+			has_political_power > 24
+			num_of_civilian_factories_available_for_projects > 2
+			has_country_flag = NCG_sunforge_excav
+		}
+		modifier = {
+			civilian_factory_use = 3
+		}
+		days_remove = 60
+		fire_only_once = yes
+		cost = 25
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NCG_star_foundry_3 "
+			
+			806 = {add_building_construction = { type = infrastructure instant_build = yes level = 2}}
+			set_country_flag = NCG_sunforge_build_2
+			
+			
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+	NCG_star_foundry_4 = {
+		icon = generic_construction
+		is_good = yes
+
+		available = {
+			has_political_power > 24
+			num_of_civilian_factories_available_for_projects > 3
+			has_country_flag = NCG_sunforge_excav
+		}
+		modifier = {
+			civilian_factory_use = 4
+		}
+		days_remove = 90
+		fire_only_once = yes
+		cost = 25
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NCG_star_foundry_4 "
+			806 = { add_extra_state_shared_building_slots = 1}
+			set_country_flag = NCG_sunforge_build_3
+			
+			
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+	NCG_star_foundry_5 = {
+		icon = generic_construction
+		is_good = yes
+
+		available = {
+			has_political_power > 49
+			num_of_civilian_factories_available_for_projects > 5
+			has_country_flag = NCG_sunforge_phase2
+		}
+		modifier = {
+			civilian_factory_use = 6
+			political_power_gain = -0.1
+		}
+		days_remove = 90
+		fire_only_once = yes
+		cost = 50
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NCG_star_foundry_5 "
+			set_country_flag = NCG_sunforge_charge
+			
+			
+		}
+
+		ai_will_do = {
+			factor = 190
+		}
+	}
+	NCG_star_foundry_6 = {
+		icon = generic_construction
+		is_good = yes
+
+		available = {
+			has_political_power > 49
+			has_country_flag = NCG_sunforge_charge
+			
+		}
+		days_remove = 90
+		fire_only_once = yes
+		cost = 50
+		
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NCG_star_foundry_6 "
+			country_event = neocastle.24
+			set_fuel_ratio = 0.0
+		}
+
+		ai_will_do = {
+			factor = 190
+		}
+	}
+
+
+}
+
+NCG_electrification_cat = {
+
+	NCG_electrification_dec = {
+		icon = GFX_decision_battery
+		ai_will_do = {
+			factor = 100
+			
+		}
+		fire_only_once = no
+		is_good = yes
+		
+		visible = {
+			FROM = {
+				NOT = {
+                    has_dynamic_modifier = { 
+                        modifier = NCG_electric_territory 
+                    } 
+					has_state_flag = NCG_electric_territory_flag
+                }
+				is_owned_by = NCG
+				#any_neighbor_state = {has_state_flag = NCG_electric_territory_flag }
+			}
+		}
+		available = {
+			FROM = {
+                compliance > 10
+                NOT = {
+                    has_dynamic_modifier = { 
+                        modifier = NCG_electric_territory 
+                    } 
+                }
+				is_owned_by = NCG
+            }
+			num_of_civilian_factories_available_for_projects > 1
+		}
+		target_root_trigger = {
+			has_completed_focus = NCG_expand_network
+        }
+        state_target = yes
+        on_map_mode = map_and_decisions_view  
+		
+		cost = 50
+		days_remove = 50
+		modifier = { civilian_factory_use = 2}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NCG_electrification_dec"
+			custom_effect_tooltip = NCG_electric_network_tt
+            hidden_effect = {
+                FROM = {
+                    add_dynamic_modifier = {
+						modifier = NCG_electric_territory
+					}
+					add_state_flag = NCG_electric_territory_flag
+					IF = {
+						limit = { FROM = {state_population < 1000}}
+						add_manpower = 250
+					}
+                }
+            }
+			
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+

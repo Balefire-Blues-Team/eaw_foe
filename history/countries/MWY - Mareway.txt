@@ -15,25 +15,60 @@ set_technology = {
     vehicles_tech_level_tribal = 1
     vehicles_tech_level_settler = 1
     robotics_tech_level_tribal = 1
-    robotics_tech_level_settler = 1
     air_tech_level_tribal = 1
     air_tech_level_settler = 1
     naval_tech_level_tribal = 1
     naval_tech_level_settler = 1
     tools_tech_level_tribal = 1
-    tools_tech_level_settler = 1
     habitation_tech_level_tribal = 1
-    habitation_tech_level_settler = 1
     exploitation_tech_level_tribal = 1
-    exploitation_tech_level_settler = 1
     electronics_tech_level_tribal = 1
-    electronics_tech_level_settler = 1
 
 	pony_race = 1
 	standard_weaponry_tech = 1
 	ballistic_weaponry_tech_1 = 1
 	support_weaponry = 1
 	demolitions_weaponry_tech = 1
+}
+
+if = {
+	limit = {
+		has_dlc = "Man the Guns"
+	}
+	set_technology = {
+		nautics_tech_1 = 1
+		nautics_tech_2 = 1
+		light_navy_hull_tech_1 = 1
+		medium_navy_hull_tech_1 = 1
+		medium_navy_hull_tech_2 = 1
+		heavy_navy_hull_tech_1 = 1
+		waterproof_sealing_tech = 1
+		multi_deck_construction_tech = 1
+		naval_invasion_tech_1 = 1
+		naval_module_tech = 1
+		naval_weapons_module_tech = 1
+		naval_armour_tech_1 = 1
+		naval_support_module_tech = 1
+		naval_subsurface_module_tech_1 = 1
+		naval_pd_module_tech_1 = 1
+	}
+}
+
+if = {
+	limit = {
+		NOT = { has_dlc = "Man the Guns" }
+	}
+	set_technology = {
+		nautics_tech_non_mtg_1 = 1
+		nautics_tech_non_mtg_2 = 1
+		light_navy_hull_tech_non_mtg_1 = 1
+		waterproof_sealing_tech_non_mtg = 1
+		multi_deck_construction_tech_non_mtg = 1
+		medium_navy_hull_tech_non_mtg_1 = 1
+		medium_navy_hull_tech_non_mtg_2 = 1
+		heavy_navy_hull_tech_non_mtg_1 = 1
+		naval_invasion_tech_non_mtg_1 = 1
+	}
 }
 
 set_convoys = 20
@@ -71,6 +106,8 @@ add_ideas = {
 	MWY_spymaster_red_widow
 	MWY_marshal_strongwing
 }
+
+activate_mission = MWY_famine_crisis
 
 #1 is poor opinion, 2 is neutral, 3 is good
 	set_variable = { mwy_grainlands_opinion = 3 }
@@ -145,10 +182,14 @@ country_event = {
 	id = newmareway.25
 	days = 45
 }
+country_event = {
+	id = newmareway.49
+	days = 1
+}
 
 
 set_stability = 0.30
-set_war_support = 0.10
+set_war_support = 0.05
 
 set_country_flag = is_settler_nation
 
@@ -191,6 +232,111 @@ create_country_leader = {
 	}
 }
 
+create_corps_commander = {
+	name = "Nimbus Strongwing"
+	picture = "Gearbox.tga"
+	traits = { enduring_trait lucky_trait royal_guard_trait pony_race_trait }
+	#desc = RED_gearbox_desc
+	#female = yes
+	skill = 3
+	attack_skill = 2
+	defense_skill = 3
+	planning_skill = 2
+	logistics_skill = 2
+	id = 549001
+}
+
+create_field_marshal = {
+	name = "Hoof Gatormaw"
+	picture = "Gearbox.tga"
+	traits = { strong_trait agile_trait noble_commander_trait pony_race_trait }
+	#desc = RED_gearbox_desc
+	#female = yes
+	skill = 2
+	attack_skill = 3
+	defense_skill = 1
+	planning_skill = 2
+	logistics_skill = 1
+	id = 549002
+}
+
+create_field_marshal = {
+	name = "Sparkle Littleward"
+	picture = "Gearbox.tga"
+	traits = { intelligent_trait incompetent_noble_trait pony_race_trait }
+	#desc = RED_gearbox_desc
+	#female = yes
+	skill = 1
+	attack_skill = 1
+	defense_skill = 1
+	planning_skill = 2
+	logistics_skill = 1
+	id = 549003
+}
+
+create_corps_commander = {
+	name = "Spring Sunflower"
+	picture = "Gearbox.tga"
+	traits = { charismatic_trait incompetent_noble_trait pony_race_trait }
+	#desc = RED_gearbox_desc
+	female = yes
+	skill = 1
+	attack_skill = 1
+	defense_skill = 1
+	planning_skill = 1
+	logistics_skill = 1
+	id = 549004
+}
+
+create_navy_leader = {
+	name = "Wavy Waters"
+	picture = "Gearbox.tga"
+	traits = { pony_race_trait navy_noble_commander_trait }
+	skill = 1
+	attack_skill = 1
+	defense_skill = 1
+	maneuvering_skill = 2
+	coordination_skill = 2
+	id = 15
+}
+
 set_rule = {
 	can_generate_female_aces = yes
+}
+
+create_equipment_variant = {
+	name = "Patrol Vessel"
+	type = ship_hull_light_1
+	name_group = NCR_LIGHT
+	parent_version = 0
+	modules = {
+		fixed_ship_command_slot = ship_command_module_1
+		fixed_ship_engine_slot = light_ship_oars_module
+		fixed_ship_engine_slot_1 = light_ship_oars_module
+		fixed_ship_battery_slot = ship_light_mounted_gun_module
+		fixed_ship_battery_slot_1 = ship_light_mounted_gun_module
+		fixed_ship_detection_slot = empty
+		fixed_ship_detection_slot_1 = empty
+	}
+}
+
+create_equipment_variant = {
+	name = "Noble Yacht"
+	type = ship_hull_medium_2
+	name_group = NCR_MEDIUM
+	parent_version = 0
+	modules = {
+		fixed_ship_command_slot = ship_command_module_1
+		fixed_ship_engine_slot = medium_ship_sail_module
+		fixed_ship_engine_slot_1 = medium_ship_sail_module
+		fixed_ship_battery_slot = ship_medium_mounted_gun_module
+		fixed_ship_battery_slot_1 = ship_medium_mounted_gun_module
+		fixed_ship_detection_slot = empty
+		fixed_ship_detection_slot_1 = empty
+		fixed_ship_armour_slot = medium_ship_armour_module_1
+		fixed_ship_point_defense_slot = ship_light_mounted_gun_module
+		fixed_ship_point_defense_slot_1 = ship_light_mounted_gun_module
+		front_1_custom_slot = ship_medium_mounted_gun_module
+		fixed_ship_subsurface_slot = medium_ship_subsurface_module_1
+	}
 }
