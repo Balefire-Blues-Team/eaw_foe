@@ -284,7 +284,10 @@ MWY_levy_cat = {
 		}
 
 		available = {
-			has_country_flag = MWY_raised_levies_flag
+			custom_trigger_tooltip = {
+                tooltip = MWY_has_levies_raised
+                hidden_trigger = { has_country_flag = MWY_raised_levies_flag }
+            }
 		}
 
 		visible = {
@@ -298,18 +301,40 @@ MWY_levy_cat = {
 			delete_unit_template_and_units = {
 			    division_template = "Commoner Levies"
 			}
-			division_template = {
-			    name = "Commoner Levies"
-			    is_locked = yes
-			    regiments = {
-					infantry = { x = 0 y = 0 }
-					infantry = { x = 1 y = 0 }
-					militia = { x = 0 y = 1 }
-					militia = { x = 1 y = 1 }
-					militia = { x = 0 y = 2 }
-					militia = { x = 1 y = 2 }
-					militia = { x = 0 y = 3 }
-					militia = { x = 1 y = 3 }
+			if = {
+				limit = { has_country_flag = MWY_better_levies_flag }
+				division_template = {
+				    name = "Commoner Levies"
+				    is_locked = yes
+				    regiments = {
+						infantry = { x = 0 y = 0 }
+						infantry = { x = 1 y = 0 }
+						infantry = { x = 0 y = 1 }
+						infantry = { x = 1 y = 1 }
+						infantry = { x = 0 y = 2 }
+						infantry = { x = 1 y = 2 }
+						infantry = { x = 0 y = 3 }
+						infantry = { x = 1 y = 3 }
+					}
+					support = {
+						demolitions_support = { x = 0 y = 0 }
+					}
+				}
+			}
+			else = {
+				division_template = {
+				    name = "Commoner Levies"
+				    is_locked = yes
+				    regiments = {
+						infantry = { x = 0 y = 0 }
+						infantry = { x = 1 y = 0 }
+						militia = { x = 0 y = 1 }
+						militia = { x = 1 y = 1 }
+						militia = { x = 0 y = 2 }
+						militia = { x = 1 y = 2 }
+						militia = { x = 0 y = 3 }
+						militia = { x = 1 y = 3 }
+					}
 				}
 			}
 			clr_country_flag = MWY_raised_levies_flag
@@ -511,17 +536,17 @@ MWY_levy_cat = {
 		}
 
 		custom_cost_trigger = {
-			has_army_experience > 20
+			has_army_experience > 10
 			has_political_power > 25
 		}
-		custom_cost_text = decision_cost_army_xp_20_pp_25
+		custom_cost_text = decision_cost_army_xp_10_pp_25
 
 		available = {
 			custom_trigger_tooltip = {
                 tooltip = MWY_marshal_is_gatormaw_tt
                 hidden_trigger = { has_country_flag = MWY_marshal_flag_gatormaw }
             }
-            has_army_experience > 20
+            has_army_experience > 10
             has_political_power > 25
 		}
 
@@ -546,7 +571,238 @@ MWY_levy_cat = {
 			}
 
 			set_country_flag = MWY_has_bribed_economic_freedom_flag
-			hidden_effect = { add_political_power = -25 army_experience = -20 }
+			hidden_effect = { add_political_power = -25 army_experience = -10 }
+		}
+	}
+
+	mwy_army_reform_better_levies = {
+		icon = GFX_decision_stable_door
+		ai_will_do = {
+			base = 0
+		}
+
+		custom_cost_trigger = {
+			has_army_experience > 25
+			command_power > 25
+		}
+		custom_cost_text = decision_cost_army_xp_25_CP_25
+
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = MWY_has_no_levies_raised
+                hidden_trigger = { NOT = { has_country_flag = MWY_raised_levies_flag } }
+            }
+            has_army_experience > 25
+            command_power > 25
+		}
+
+		visible = {
+			#has_completed_focus = MWY_qw_economic_freedom
+			#NOT = { has_country_flag = MWY_has_bribed_economic_freedom_flag }
+			#check_variable = { serf_laws_var < 4 }
+			tag = MWY
+		}
+		#fire_only_once = yes
+
+		days_remove = 90
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision mwy_army_reform_better_levies"
+
+			custom_effect_tooltip = MWY_improves_levies_to_inf_tt
+			set_country_flag = MWY_better_levies_flag
+			hidden_effect = { army_experience = -5 add_command_power = -25 }
+			hidden_effect = {
+				delete_unit_template_and_units = {
+				    division_template = "Commoner Levies"
+				}
+				division_template = {
+				    name = "Commoner Levies"
+				    is_locked = yes
+				    regiments = {
+						infantry = { x = 0 y = 0 }
+						infantry = { x = 1 y = 0 }
+						infantry = { x = 0 y = 1 }
+						infantry = { x = 1 y = 1 }
+						infantry = { x = 0 y = 2 }
+						infantry = { x = 1 y = 2 }
+						infantry = { x = 0 y = 3 }
+						infantry = { x = 1 y = 3 }
+					}
+					support = {
+						demolitions_support = { x = 0 y = 0 }
+					}
+				}
+			}
+		}
+	}
+
+	mwy_army_reform_talon_wargames = {
+		icon = GFX_decision_stable_door
+		ai_will_do = {
+			base = 0
+		}
+
+		custom_cost_trigger = {
+			has_army_experience > 10
+			command_power > 50
+		}
+		custom_cost_text = decision_cost_army_xp_10_CP_50
+
+		available = {
+            has_army_experience > 10
+            command_power > 50
+		}
+
+		visible = {
+			#has_completed_focus = MWY_qw_economic_freedom
+			#NOT = { has_country_flag = MWY_has_bribed_economic_freedom_flag }
+			#check_variable = { serf_laws_var < 4 }
+			tag = MWY
+		}
+		#fire_only_once = yes
+
+		days_remove = 30
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision mwy_army_reform_talon_wargames"
+
+
+			hidden_effect = { army_experience = -10 add_command_power = -50 }
+		}
+	}
+
+	mwy_army_reform_peony_raid = {
+		icon = GFX_decision_stable_door
+		ai_will_do = {
+			base = 0
+		}
+
+		custom_cost_trigger = {
+			has_army_experience > 10
+			command_power > 50
+		}
+		custom_cost_text = decision_cost_army_xp_10_CP_50
+
+		available = {
+            has_army_experience > 10
+            command_power > 50
+		}
+
+		visible = {
+			#has_completed_focus = MWY_qw_economic_freedom
+			#NOT = { has_country_flag = MWY_has_bribed_economic_freedom_flag }
+			#check_variable = { serf_laws_var < 4 }
+			tag = MWY
+		}
+		#fire_only_once = yes
+
+		days_remove = 30
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision mwy_army_reform_peony_raid"
+
+
+			hidden_effect = { army_experience = -10 add_command_power = -50 }
+		}
+	}
+
+	mwy_army_reform_prepare_warplan_red = {
+		icon = GFX_decision_stable_door
+		ai_will_do = {
+			base = 0
+		}
+
+		custom_cost_trigger = {
+			has_army_experience > 5
+			command_power > 30
+		}
+		custom_cost_text = decision_cost_army_xp_5_CP_30
+
+		available = {
+            has_army_experience > 5
+            command_power > 30
+		}
+
+		visible = {
+			#has_completed_focus = MWY_qw_economic_freedom
+			#NOT = { has_country_flag = MWY_has_bribed_economic_freedom_flag }
+			#check_variable = { serf_laws_var < 4 }
+			tag = MWY
+		}
+		#fire_only_once = yes
+
+		days_remove = 180
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision mwy_army_reform_prepare_warplan_red"
+
+
+			hidden_effect = { army_experience = -5 add_command_power = -30 }
+		}
+	}
+
+	mwy_army_reform_prepare_warplan_blue = {
+		icon = GFX_decision_stable_door
+		ai_will_do = {
+			base = 0
+		}
+
+		custom_cost_trigger = {
+			has_army_experience > 5
+			command_power > 30
+		}
+		custom_cost_text = decision_cost_army_xp_5_CP_30
+
+		available = {
+            has_army_experience > 5
+            command_power > 30
+		}
+
+		visible = {
+			#has_completed_focus = MWY_qw_economic_freedom
+			#NOT = { has_country_flag = MWY_has_bribed_economic_freedom_flag }
+			#check_variable = { serf_laws_var < 4 }
+			tag = MWY
+		}
+		#fire_only_once = yes
+
+		days_remove = 180
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision mwy_army_reform_prepare_warplan_blue"
+
+
+			hidden_effect = { army_experience = -5 add_command_power = -30 }
+		}
+	}
+
+	mwy_army_reform_prepare_warplan_orange = {
+		icon = GFX_decision_stable_door
+		ai_will_do = {
+			base = 0
+		}
+
+		custom_cost_trigger = {
+			has_army_experience > 5
+			command_power > 30
+		}
+		custom_cost_text = decision_cost_army_xp_5_CP_30
+
+		available = {
+            has_army_experience > 5
+            command_power > 30
+		}
+
+		visible = {
+			#has_completed_focus = MWY_qw_economic_freedom
+			#NOT = { has_country_flag = MWY_has_bribed_economic_freedom_flag }
+			#check_variable = { serf_laws_var < 4 }
+			tag = MWY
+		}
+		#fire_only_once = yes
+
+		days_remove = 180
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision mwy_army_reform_prepare_warplan_orange"
+
+
+			hidden_effect = { army_experience = -5 add_command_power = -30 }
 		}
 	}
 }
