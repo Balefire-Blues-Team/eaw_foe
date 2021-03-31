@@ -12,7 +12,7 @@ news_event = {
  	id = lpspecial.1
  	title = lpspecial.1.title
 	desc = lpspecial.1.desc
- 	picture = GFX_outofthestable
+ 	picture = GFX_outofthestable_news
 
  	is_triggered_only = yes
 	fire_only_once = yes
@@ -30,6 +30,26 @@ news_event = {
 				value = 39
 			}
  		}
+	}
+}
+
+##Day of Sunshine and rainbows
+news_event = {
+ 	id = lpspecial.2
+ 	title = lpspecial.2.title
+	desc = lpspecial.2.desc
+ 	picture = GFX_event_sunshine_and_rainbows_news
+
+ 	is_triggered_only = yes
+	fire_only_once = yes
+	immediate = {
+		log = "[GetDateText]: [Root.GetName]: Event lpspecial.2 (Subshine and Rainbows)"
+	}
+
+	option = {
+		name = lpspecial.2.a
+		ai_chance = { base = 50 }
+		
 	}
 }
 
@@ -854,7 +874,7 @@ country_event = {
  	id = lightbringer.9
  	title = lightbringer.9.title
  	desc = lightbringer.9.desc
- 	picture = GFX_outofthestable
+ 	picture = GFX_event_foe_ghoul_event
 
  	is_triggered_only = yes
  	fire_only_once = yes
@@ -1723,7 +1743,14 @@ country_event = { #The Villain Of The Piece 1
 
 	immediate = {
 		log = "[GetDateText]: [Root.GetName]: Event lpoffshoot.5 (The Villain Of The Piece 1)"
- 		
+ 		hidden_effect = {
+ 			every_country = {
+				limit = {
+					has_full_control_of_state = 21 #Tenpony
+				}
+				save_event_target_as = Tenpony
+			}
+ 		}
  	}
 
 	option = {#Kill The Ghoul
@@ -1799,7 +1826,7 @@ country_event = { #The Villain Of The Piece 1
 				}
 			}
 			set_global_flag = GUT_destroyed
-			event_target = {
+			event_target:Tenpony = {
 				country_event = {
     				id = lpoffshoot.6
     				days = 3
@@ -2498,7 +2525,7 @@ country_event = {
 			}
 			hidden_effect = {
 				country_event = {
-    				id = lightbringer.28
+    				id = lightbringer.26
     				days = 138
     			}
 			}
@@ -2517,6 +2544,7 @@ country_event = {
     					id = lp_utility.26
     					days = 38
     				}
+    				set_country_flag = lightbringer_skipped_red_eye
 				}
 			}
 		}
@@ -2528,7 +2556,6 @@ country_event = {
     					id = lp_utility.24
     					days = 25
     				}
-    				set_country_flag = lightbringer_skipped_red_eye
 				}
 			}
 		}
@@ -2861,9 +2888,9 @@ country_event = {
 
 		else = {
 			hidden_effect = {
-				FSR = {
+				OWE = {
 					country_event = {
-    					id = lightbringer.27
+    					id = lp_utility.26
     					days = 3
     				}
 				}
@@ -3182,6 +3209,7 @@ country_event = { #Hour Of The Wolf 1
     					days = 277
     				}
 				}
+				OWE = { set_country_flag = lightbringer_skipped_goddess }
 			}
 		}
 
@@ -3228,7 +3256,7 @@ country_event = {
 				limit = { UNI = { exists = yes } }
 				UNI = {
 					country_event = {
-    					id = lightbringer.28
+    					id = lightbringer.29
     				}
 				}
 			}
@@ -3460,7 +3488,9 @@ country_event = {
  		log = "[GetDateText]: [Root.GetName]: Event lightbringer.31 (Life Interuppted)"
  		hidden_effect = {
  			if = {
- 				limit = { OWE = { set_country_flag = lightbringer_skipped_goddess } }
+ 				limit = { 
+ 					OWE = { has_country_flag = lightbringer_skipped_goddess }
+ 				}
  				OWE = {
  					add_to_variable = { lightbringer_status_var = 3 } 
  				}
@@ -4906,5 +4936,14 @@ country_event = {
 		name = lightbringer.46.a
 		ai_chance = { base = 50}
 
+		hidden_effect = {
+			every_country = { 
+				limit = { is_ai = no }
+	
+				country_event = {
+					id = lpspecial.2
+				}
+			}
+		}
 	}
 }
