@@ -602,7 +602,7 @@ MWY_levy_cat = {
 			#check_variable = { serf_laws_var < 4 }
 			tag = MWY
 		}
-		#fire_only_once = yes
+		fire_only_once = yes
 
 		days_remove = 90
 		remove_effect = {
@@ -659,13 +659,12 @@ MWY_levy_cat = {
 			#check_variable = { serf_laws_var < 4 }
 			tag = MWY
 		}
-		#fire_only_once = yes
+		fire_only_once = yes
 
 		days_remove = 30
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision mwy_army_reform_talon_wargames"
-
-
+			set_country_flag = MWY_army_reformer_action_flag
 			hidden_effect = { army_experience = -10 add_command_power = -50 }
 		}
 	}
@@ -693,14 +692,56 @@ MWY_levy_cat = {
 			#check_variable = { serf_laws_var < 4 }
 			tag = MWY
 		}
-		#fire_only_once = yes
+		fire_only_once = yes
 
 		days_remove = 30
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision mwy_army_reform_peony_raid"
-
-
+			set_country_flag = MWY_army_reformer_action_flag
 			hidden_effect = { army_experience = -10 add_command_power = -50 }
+		}
+	}
+
+	mwy_army_serf_conscription_decision = {
+		icon = GFX_decision_stable_door
+		ai_will_do = {
+			base = 0
+		}
+		cost = 75
+
+		available = {
+        	custom_trigger_tooltip = {
+        		tooltip = MWY_has_done_levies_and_reformer
+        		hidden_trigger = {
+        			AND = {
+        				has_country_flag = MWY_better_levies_flag
+        				has_country_flag = MWY_army_reformer_action_flag
+        			}
+        		}
+        	}
+		}
+
+		visible = {
+			#has_completed_focus = MWY_qw_economic_freedom
+			#NOT = { has_country_flag = MWY_has_bribed_economic_freedom_flag }
+			#check_variable = { serf_laws_var < 4 }
+			tag = MWY
+		}
+		fire_only_once = yes
+
+		days_remove = 30
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision mwy_army_serf_conscription_decision"
+			custom_effect_tooltip = MWY_set_army_law_4_tt
+			add_ideas = serf_conscript_law
+            MWY_army_laws_4_opinion_effect = yes
+            hidden_effect = {
+                MWY_reset_army_laws_frames = yes
+                set_variable = { army_laws_var = 4 }
+                set_variable = { army_laws_button_4_frame_var = 2 }
+                MWY_army_law_cooldown_effect = yes
+                add_political_power = -50
+            }
 		}
 	}
 
@@ -719,6 +760,7 @@ MWY_levy_cat = {
 		available = {
             has_army_experience > 5
             command_power > 30
+            is_neighbor_of = RED
 		}
 
 		visible = {
@@ -727,13 +769,13 @@ MWY_levy_cat = {
 			#check_variable = { serf_laws_var < 4 }
 			tag = MWY
 		}
-		#fire_only_once = yes
+		fire_only_once = yes
 
 		days_remove = 180
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision mwy_army_reform_prepare_warplan_red"
-
-
+			custom_effect_tooltip = MWY_unlock_warplan_red_decision
+			set_country_flag = MWY_warlpan_red_flag
 			hidden_effect = { army_experience = -5 add_command_power = -30 }
 		}
 	}
@@ -753,6 +795,7 @@ MWY_levy_cat = {
 		available = {
             has_army_experience > 5
             command_power > 30
+            is_neighbor_of = NEV
 		}
 
 		visible = {
@@ -761,13 +804,13 @@ MWY_levy_cat = {
 			#check_variable = { serf_laws_var < 4 }
 			tag = MWY
 		}
-		#fire_only_once = yes
+		fire_only_once = yes
 
 		days_remove = 180
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision mwy_army_reform_prepare_warplan_blue"
-
-
+			custom_effect_tooltip = MWY_unlock_warplan_blue_decision
+			set_country_flag = MWY_warlpan_blue_flag
 			hidden_effect = { army_experience = -5 add_command_power = -30 }
 		}
 	}
@@ -787,6 +830,7 @@ MWY_levy_cat = {
 		available = {
             has_army_experience > 5
             command_power > 30
+            is_neighbor_of = SHA
 		}
 
 		visible = {
@@ -795,13 +839,13 @@ MWY_levy_cat = {
 			#check_variable = { serf_laws_var < 4 }
 			tag = MWY
 		}
-		#fire_only_once = yes
+		fire_only_once = yes
 
 		days_remove = 180
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision mwy_army_reform_prepare_warplan_orange"
-
-
+			custom_effect_tooltip = MWY_unlock_warplan_orange_decision
+			set_country_flag = MWY_warlpan_orange_flag
 			hidden_effect = { army_experience = -5 add_command_power = -30 }
 		}
 	}
