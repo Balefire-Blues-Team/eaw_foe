@@ -1523,9 +1523,29 @@ country_event = { ###New Way
 	is_triggered_only = yes
  	fire_only_once = yes
 
-	option = { #Free Law!
+	option = { #Switch party to visionary
 		name = newmareway.46.a
-		
+		set_politics = {
+			ruling_party = visionary
+		}
+		add_popularity = {
+		    ideology = visionary
+		    popularity = 0.05
+		}
+		hidden_effect = {
+			if = {
+				limit = { has_country_flag = MWY_queen_status_quo_flag }
+				add_country_leader_trait = queen_status_quo_trait
+			}
+			else_if = {
+				limit = { has_country_flag = MWY_queen_small_opti_flag }
+				add_country_leader_trait = queen_small_opti_trait
+			}
+			else_if = {
+				limit = { has_country_flag = MWY_queen_big_opti_flag }
+				add_country_leader_trait = queen_big_opti_trait
+			}
+		}
 	}
 }
 
@@ -1566,6 +1586,19 @@ country_event = { ###Mareway Development Council
 
 	option = { #Develop Industrial Potential
 		name = newmareway.48.b
+		549 = {	
+			add_extra_state_shared_building_slots = 2	
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+			}
+		}
 		
 	}
 
@@ -1573,6 +1606,24 @@ country_event = { ###Mareway Development Council
 		name = newmareway.48.c
 		trigger = {
 			has_completed_focus = MWY_qw_four_year_plan
+		}
+		549 = {	
+			add_extra_state_shared_building_slots = 3	
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+			add_building_construction = {
+				type = arms_factory
+				level = 2
+				instant_build = yes
+			}
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
 		}
 	}
 
@@ -1929,5 +1980,69 @@ country_event = { ###Talon Wargames
 			limit = { has_id = 549006 }
 			add_skill_level = 1
 		}
+	}
+}
+
+country_event = { ###Famine Recovery
+ 	id = newmareway.64
+ 	title = newmareway.64.title
+ 	desc = newmareway.64.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.64.a
+		swap_ideas = {
+			remove_idea = MWY_serf_famine
+			add_idea = MWY_famine_recovery
+		}
+	}
+}
+
+country_event = { ###Meet with Counts
+ 	id = newmareway.65
+ 	title = newmareway.65.title
+ 	desc = newmareway.65.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.65.a
+		add_political_power = -100
+		add_popularity = {
+		    ideology = visionary
+		    popularity = 0.05
+		}
+	}
+}
+
+country_event = { ###Rug Pulled
+ 	id = newmareway.66
+ 	title = newmareway.66.title
+ 	desc = newmareway.66.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.66.a
+
+		custom_effect_tooltip = MWY_set_centralization_law_4_tt
+
+		MWY_high_central_effect = yes
+        hidden_effect = {
+            MWY_reset_centralization_laws_frames = yes
+            set_variable = { centralization_laws_var = 4 }
+            set_variable = { centralization_laws_button_4_frame_var = 2 }
+            MWY_centralization_law_cooldown_effect = yes
+            add_political_power = -50
+        }
+
+		custom_effect_tooltip = MWY_nobles_will_remember_tt
 	}
 }
