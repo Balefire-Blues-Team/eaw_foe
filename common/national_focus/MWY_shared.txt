@@ -627,6 +627,10 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MWY_qw_learning_from_loss"
+			swap_ideas = {
+				add_idea = MWY_gatormaw_doctrine_2
+				remove_idea = MWY_gatormaw_doctrine
+			}
 		}
 	}
 
@@ -871,10 +875,15 @@
 
 		ai_will_do = { 
 			factor = 10
-		} 
+		}
+
+		select_effect = {
+			country_event = {id = newmareway.67 days = 1 random = 36}
+		}
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MWY_qw_grand_tour"
+			MWY_grand_tour_final_event = yes
 			custom_effect_tooltip = MWY_dangerous_focus_grand_tour_tt
 		}
 	}
@@ -1798,12 +1807,46 @@
 		prerequisite = { focus = MWY_qw_queen_of_the_people }
 		prerequisite = { focus = MWY_qw_magic_of_friendship }
 
+		available = {
+			NOT = { country_exists = MWN }
+		}
+
 		ai_will_do = { 
 			factor = 10
-		} 
+		}
+
+		select_effect = {
+			if = {
+				limit = {
+					limit = {
+						check_variable = { realm_poor_opinion_count_var > 4 }
+					}
+				}
+				country_event = {id = newmareway.74 days = 17 random = 36}
+			}
+			else_if = {
+				limit = {
+					limit = {
+						check_variable = { realm_poor_opinion_count_var < 1 }
+					}
+				}
+				country_event = {id = newmareway.73 days = 17 random = 36}
+			}
+			else_if = {
+				limit = {
+					limit = {
+						check_variable = { realm_poor_opinion_count_var > 0 }
+					}
+				}
+				country_event = {id = newmareway.75 days = 17 random = 36}
+			}
+		}
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MWY_qw_forgiveness"
+			ERA = {
+				country_event = newmareway.76
+			}
 		}
 	}
 

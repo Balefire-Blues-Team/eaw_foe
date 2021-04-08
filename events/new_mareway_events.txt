@@ -786,7 +786,7 @@ country_event = { ###Noble Coup - No Civil War
 
 	option = { #Recall Marshal
 		name = newmareway.22.a
-		retire_country_leader = yes
+		#retire_country_leader = yes
 		retire_ideology_leader = continuation
 		set_politics = {
 			ruling_party = continuation
@@ -2044,5 +2044,453 @@ country_event = { ###Rug Pulled
         }
 
 		custom_effect_tooltip = MWY_nobles_will_remember_tt
+	}
+}
+
+country_event = { ###Grand Tour 1 - Peninsula
+ 	id = newmareway.67
+ 	title = newmareway.67.title
+ 	desc = newmareway.67.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		trigger = {
+			NOT = {
+				has_completed_focus = MWY_qw_peninsula_invest
+			}
+		}
+		name = newmareway.67.a
+		hidden_effect = {
+			country_event = {
+				id = newmareway.68
+				days = 2
+				random = 24
+			}
+		}
+	}
+
+	option = { #Peninsula Investments
+		trigger = {
+			has_completed_focus = MWY_qw_peninsula_invest
+		}
+		name = newmareway.67.b
+		MWY_raise_peninsula_opinion = yes
+		hidden_effect = {
+			country_event = {
+				id = newmareway.68
+				days = 2
+				random = 24
+			}
+		}
+	}
+}
+
+country_event = { ###Grand Tour 2 - Noble Meeting
+ 	id = newmareway.68
+ 	title = newmareway.68.title
+ 	desc = newmareway.68.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.68.a
+		hidden_effect = {
+			country_event = {
+				id = newmareway.69
+				days = 7
+				random = 24
+			}
+		}
+	}
+
+
+}
+
+country_event = { ###Grand Tour 3 - Grainlands & Amethyst
+ 	id = newmareway.69
+ 	title = newmareway.69.title
+ 	desc = newmareway.69.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		trigger = {
+			NOT = {
+				has_completed_focus = MWY_qw_magic_of_friendship
+			}
+		}
+		name = newmareway.69.a
+		hidden_effect = {
+			country_event = {
+				id = newmareway.70
+				days = 7
+				random = 24
+			}
+		}
+	}
+
+	option = { #Magic of Friendship - Grainlands
+		trigger = {
+			has_completed_focus = MWY_qw_magic_of_friendship
+		}
+		name = newmareway.69.b
+		MWY_raise_grainlands_opinion = yes
+		hidden_effect = {
+			country_event = {
+				id = newmareway.70
+				days = 7
+				random = 24
+			}
+		}
+	}
+
+	option = { #Magic of Friendship - Amethyst
+		trigger = {
+			has_completed_focus = MWY_qw_magic_of_friendship
+		}
+		name = newmareway.69.c
+		MWY_raise_amethyst_opinion = yes
+		hidden_effect = {
+			country_event = {
+				id = newmareway.70
+				days = 7
+				random = 24
+			}
+		}
+	}
+}
+
+country_event = { ###Grand Tour 4 - Radigator & Swampy
+ 	id = newmareway.70
+ 	title = newmareway.70.title
+ 	desc = newmareway.70.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.70.a
+	}
+
+	option = { #Gatormaw
+		trigger = {
+			has_army_manpower = { size > 3000 }    			
+		}
+		name = newmareway.70.b
+		MWY_raise_radigator_opinion = yes
+	}
+}
+
+country_event = { ###Grand Tour End - Civil War
+ 	id = newmareway.71
+ 	title = newmareway.71.title
+ 	desc = newmareway.71.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.71.a
+		hidden_effect = {
+			country_event = newmareway.23
+		}
+	}
+}
+
+country_event = { ###Grand Tour End - Good Ending
+ 	id = newmareway.72
+ 	title = newmareway.72.title
+ 	desc = newmareway.72.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.72.a
+		MWY_raise_grainlands_opinion = yes
+		MWY_raise_amethyst_opinion = yes
+		MWY_raise_radigator_opinion = yes
+		MWY_raise_swampy_opinion = yes
+		MWY_raise_peninsula_opinion = yes
+	}
+}
+
+country_event = { ###Strongwing Revolt - Fail
+ 	id = newmareway.73
+ 	title = newmareway.73.title
+ 	desc = newmareway.73.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.73.a
+		add_stability = 0.10
+		every_unit_leader = {
+			limit = {
+				has_id = 549001
+			}
+			retire = yes
+		}
+		add_popularity = {
+		    ideology = survivalism
+		    popularity = -0.50
+		}
+		set_country_flag = MWY_strongwing_revolt_flag
+		if = {
+			limit = {
+				has_idea = MWY_marshal_strongwing
+			}
+			hidden_effect = {
+	            MWY_clear_current_marshal = yes
+	            set_country_flag = MWY_marshal_flag_gatormaw
+	            MWY_set_mar_gatormaw_law_approval = yes
+	            MWY_mar_pick_cooldown_effect = yes
+	            set_variable = { mwy_mar_pick_menu_var = 0 }
+	        }
+	        add_ideas = MWY_marshal_gatormaw
+	    }
+	}
+}
+
+country_event = { ###Strongwing Revolt - Full Success
+ 	id = newmareway.74
+ 	title = newmareway.74.title
+ 	desc = newmareway.74.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.74.a
+		add_stability = -0.10
+		add_war_support = 0.15
+		add_popularity = {
+		    ideology = survivalism
+		    popularity = 0.50
+		}
+		set_politics = {
+			ruling_party = survivalism
+		}
+		if = {
+			limit = {
+				has_idea = MWY_marshal_strongwing
+			}
+			hidden_effect = {
+	            MWY_clear_current_marshal = yes
+	            set_country_flag = MWY_marshal_flag_gatormaw
+	            MWY_set_mar_gatormaw_law_approval = yes
+	            MWY_mar_pick_cooldown_effect = yes
+	            set_variable = { mwy_mar_pick_menu_var = 0 }
+	        }
+	        add_ideas = MWY_marshal_gatormaw
+	    }
+	}
+}
+
+country_event = { ###Strongwing Revolt - Civil War Setup
+ 	id = newmareway.75
+ 	title = newmareway.75.title
+ 	desc = newmareway.75.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	#fire_only_once = yes
+ 	hidden = yes
+
+	option = { #
+		name = newmareway.75.a
+		hidden_effect = {
+			MWY_noble_civil_war_state_flag_setup = yes
+			country_event = newmareway.76
+		}
+	}
+}
+
+country_event = { ###Strongwing Revolt - Civil War Start
+ 	id = newmareway.75
+ 	title = newmareway.75.title
+ 	desc = newmareway.75.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	immediate = {
+ 		hidden_effect = {
+	 		MWY_noble_civil_war_state_setup = yes
+			MWN = {
+				transfer_state = 553
+				every_state = {
+					limit = { is_core_of = MWY }
+					add_core_of = MWN
+				}
+				set_capital = 553
+				inherit_technology = MWY
+				declare_war_on = {
+					target = MWY
+					type = annex_everything
+				}
+			}
+			553 = {
+				teleport_armies = {
+					limit = { tag = MWY }
+				}
+			}
+			MWY_noble_civil_war_coast_breakaway = yes
+			set_global_flag = MWY_strongwing_cw_flag
+			set_country_flag = MWY_strongwing_revolt_flag
+		}
+ 	}
+
+	option = { #Queen
+		name = newmareway.75.a
+		
+		
+	}
+	option = { #Strongwing
+		name = newmareway.75.b
+		MWN = { 
+			change_tag_from = ROOT
+		}
+	}
+}
+
+country_event = { ###ERA - Forgiveness
+ 	id = newmareway.76
+ 	title = newmareway.76.title
+ 	desc = newmareway.76.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Lol No
+		name = newmareway.76.a
+		MWY = {
+			country_event = {
+				id = newmareway.77
+				days = 3
+				random = 12
+			}
+		}
+	}
+
+	option = { #Sure
+		name = newmareway.76.b
+		custom_effect_tooltip = MWY_ERA_annex_tt
+		hidden_effect = {
+			MWY = {
+				country_event = {
+					id = newmareway.78
+					days = 3
+					random = 12
+				}
+			}
+			set_country_flag = ERA_accepts_MWY_forgiveness_flag 
+		}
+	}
+}
+
+country_event = { ###ERA declines forgiveness
+ 	id = newmareway.77
+ 	title = newmareway.77.title
+ 	desc = newmareway.77.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #aww...
+		name = newmareway.77.a
+		
+	}
+}
+
+country_event = { ###ERA accepts forgiveness
+ 	id = newmareway.78
+ 	title = newmareway.78.title
+ 	desc = newmareway.78.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #yay - no cw
+		trigger = {
+			NOT = { country_exists = MWN }
+		}
+		name = newmareway.78.a
+		ERA = {
+			every_unit_leader = {
+				limit = {
+					has_id = 6901
+				}
+				set_nationality = RED
+			}
+			change_tag_from = ROOT
+		}
+		annex_country = {
+		    target = ERA
+		    transfer_troops = yes
+		}
+
+	}
+
+	option = { #yay - cw
+		trigger = {
+			country_exists = MWN
+		}
+		set_country_flag = MWY_ERA_annex_after_war_flag
+		name = newmareway.78.b
+		add_to_war = { 
+		    targeted_alliance = ERA 
+		    enemy = MWN 
+		    hostility_reason = asked_to_join
+		}
+		
+	}
+}
+
+country_event = { ###ERA joins after war
+ 	id = newmareway.79
+ 	title = newmareway.79.title
+ 	desc = newmareway.79.desc
+	picture = GFX_event_medieval_city_3
+
+	trigger = {
+		has_country_flag = MWY_ERA_annex_after_war_flag
+		has_country_flag = ERA_accepts_MWY_forgiveness_flag
+		NOT = { country_exists = MWN }
+	}
+ 	fire_only_once = yes
+
+	option = { #yay
+		name = newmareway.79.a
+		ERA = {
+			every_unit_leader = {
+				limit = {
+					has_id = 6901
+				}
+				set_nationality = RED
+			}
+			change_tag_from = ROOT
+		}
+		annex_country = {
+		    target = ERA
+		    transfer_troops = yes
+		}
 	}
 }
