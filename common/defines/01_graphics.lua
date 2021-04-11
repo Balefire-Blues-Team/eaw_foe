@@ -34,4 +34,4 @@ NDefines.NGraphics.COUNTRY_FLAG_LARGE_STRIPE_MAX_WIDTH = 41
 NDefines.NGraphics.COUNTRY_FLAG_LARGE_STRIPE_MAX_HEIGHT = 24000
 NDefines.NGraphics.CAPITAL_ICON_CUTOFF = 750	-- At what camera distance capital icons disappears (was 1000)
 
-NDefines.NGraphics.MAX_NUMBER_OF_TEXTURES = 50000, -- increase if you have more than this textures
+NDefines.NGraphics.MAX_NUMBER_OF_TEXTURES = 50000 -- increase if you have more than this textures
