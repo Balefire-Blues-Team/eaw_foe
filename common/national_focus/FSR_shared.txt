@@ -717,15 +717,19 @@ shared_focus = {
 		
 		prerequisite = { focus = FSR_defensenetwork }
 		available = {
-			date > 1238.01.01
+			date > 1237.01.01
 		}
-		bypass = {
-			date > 1238.01.01
-		}
+		#bypass = {
+		#	date > 1237.01.01
+		#}
 		available_if_capitulated = yes 
 		
 		ai_will_do = { 
-		factor = 50
+			factor = 75
+			modifier = {
+				factor = 5
+				check_variable = { lightbringer_status_var = 18 }
+			}
 		} 
 		
 		completion_reward = {
@@ -1817,7 +1821,7 @@ shared_focus = {
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_loyal_scribes"
 			if = {
-				has_idea = FSR_bad_scribes
+				limit = { has_idea = FSR_bad_scribes }
 				remove_ideas = FSR_bad_scribes
 			}
 			add_political_power = -50
@@ -3239,6 +3243,16 @@ shared_focus = {
 		prerequisite = { focus = FSR_war_prep }
 		prerequisite = { focus = FSR_prep_reform }
 		
+		bypass = {
+			RED = { exists = no }
+			owns_state = 532
+			owns_state = 48
+			owns_state = 45
+			owns_state = 593
+			owns_state = 513
+			owns_state = 523
+		}
+		
 		ai_will_do = { 
 		factor = 50
 		} 
@@ -3249,6 +3263,14 @@ shared_focus = {
 			declare_war_on = { 
 		    type = annex_everything 
 			target = RED 
+			}
+			IF = {
+				limit = { RED = { exists = no }}
+				RED = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+				}
 			}
 			hidden_effect = {
 				if = {
@@ -4307,7 +4329,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_newindustry"
-			 add_tech_bonus = {
+			add_tech_bonus = {
 				name = industry_bonus
 				bonus = 0.75
 				uses = 1
@@ -5801,6 +5823,7 @@ shared_focus = {
 		prerequisite = {
 			focus = FSR_sl_colony_office
 		} 
+		
 
 		ai_will_do = { 
 		factor = 500
@@ -5927,6 +5950,15 @@ shared_focus = {
 		prerequisite = {
 			focus = FSR_sl_pony_aid
 		}
+		
+		bypass = {
+			FTP = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+			CCD = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+		}
 
 		ai_will_do = { 
 		factor = 70
@@ -5935,13 +5967,15 @@ shared_focus = {
 		will_lead_to_war_with = CCD
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus FSR_sl_march_north"
-		declare_war_on = { 
-		    type = annex_everything 
-			target = FTP
+			FTP = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
 			}
-		declare_war_on = { 
-		    type = annex_everything 
-			target = CCD
+			CCD = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
 			}
 		}
 		
