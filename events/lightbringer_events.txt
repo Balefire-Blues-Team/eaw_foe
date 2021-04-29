@@ -12,7 +12,7 @@ news_event = {
  	id = lpspecial.1
  	title = lpspecial.1.title
 	desc = lpspecial.1.desc
- 	picture = GFX_outofthestable_news
+ 	picture = GFX_event_foe_lightbringer_event
 
  	is_triggered_only = yes
 	fire_only_once = yes
@@ -53,12 +53,41 @@ news_event = {
 	}
 }
 
+##Battle of Stable 2
+news_event = {
+ 	id = lpspecial.3
+ 	title = lpspecial.3.title
+	desc = lpspecial.3.desc
+ 	picture = GFX_outofthestable_news
+
+ 	is_triggered_only = yes
+	fire_only_once = yes
+	immediate = {
+		log = "[GetDateText]: [Root.GetName]: Event lpspecial.3 (Battle of Stable 2)"
+	}
+
+	option = {
+		name = lpspecial.3.a
+		ai_chance = { base = 50 }
+		if = {
+			limit = {
+				tag = MSR
+				has_government = continuation
+			}
+			add_timed_idea = {
+				idea = MSR_aj_ranger_support_idea
+				days = 304
+			}
+		}
+	}
+}
+
 ##Out Of The Stable
 country_event = {
  	id = lightbringer.1
  	title = lightbringer.1.title
  	desc = lightbringer.1.desc
- 	picture = GFX_event_foe_lightbringer_event
+ 	picture = GFX_outofthestable_news
 
  	is_triggered_only = yes
  	fire_only_once = yes
@@ -3158,6 +3187,15 @@ country_event = { #Hour Of The Wolf 1
 		name = lpoffshoot.10.a
 		ai_chance = { base = 80 }
 
+		hidden_effect = {
+			every_country = { 
+				limit = { is_steel_ranger_nation = yes }
+	
+				country_event = {
+					id = lpspecial.3
+				}
+			}
+		}
 		hidden_effect = {
 			set_global_flag = stable_2_applejack_rangers_flag
 		}

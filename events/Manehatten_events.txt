@@ -532,12 +532,9 @@ country_event = {
 		    idea = MSR_suspicious_scribes_idea
 		    days = 270
 		}
-		custom_effect_tooltip = MSR_gain_progress_tt
+		custom_effect_tooltip = MSR_help_later_tt
 		hidden_effect = {
-			add_to_variable = {
-				var = black_success
-				value = 1
-			}
+			set_country_flag = MSR_scribe_help_cottage_flag
 		}
  	}
  	option = {
@@ -594,13 +591,6 @@ country_event = {
  	option = {
  		ai_chance = { factor = 50}
  		name = MSR.16.a
- 		hidden_effect = {
- 			add_to_variable = {
-				var = black_success
-				value = 2
-			}
- 		}
-		custom_effect_tooltip = MSR_gain_progress_tt
 
 		add_state_core = 55
  	}
@@ -733,12 +723,6 @@ country_event = {
 	option = {
  		name = MSR.201.a
 		
-		hidden_effect = {
- 			add_to_variable = {
-				var = black_success
-				value = 3
-			}
- 		}
 		custom_effect_tooltip = MSR_gain_progress_tt
 		set_country_flag = MSR_found_black_book
 		set_global_flag = global_black_book_has_been_found_flag
@@ -849,15 +833,29 @@ country_event = {
 		custom_effect_tooltip = MSR_Upload_success_tt
 		custom_effect_tooltip = RED_new_focus_tree_tt
 		hidden_effect = {
-			load_focus_tree = ManeSr_Cottage_Success
+			retire_country_leader = yes
+			create_country_leader = {
+				name = "Elder Cottage Cheese"
+				picture = "GFX_Green_Cheese_animated"
+				expire = "1965.1.1"
+				ideology = steel_ranger_cont
+				traits = {
+				}
+			}
+
 			set_country_flag = MSR_Success_Tree
+			load_focus_tree = { 
+				tree = ManeSr_Cottage_Success
+				keep_completed = yes
+			}
 		}
 
 	}
 	
 	option = { #Failure
-		#trigger = {
-		#}
+		trigger = {
+			NOT = { has_country_flag = MSR_found_black_book}
+		}
 		ai_chance = { factor = 30 
 			modifier = {
 				factor = 1
@@ -869,8 +867,21 @@ country_event = {
 		custom_effect_tooltip = MSR_Upload_failiure_tt
 		custom_effect_tooltip = RED_new_focus_tree_tt
 		hidden_effect = {
+			retire_country_leader = yes
+			create_country_leader = {
+				name = "Elder Cottage Cheese"
+				picture = "GFX_Red_Cheese_animated"
+				expire = "1965.1.1"
+				ideology = steel_ranger_cont
+				traits = {
+				}
+			}
+
 			set_country_flag = MSR_Failure_Tree
-			load_focus_tree = ManeSr_Cottage_Failure
+			load_focus_tree = { 
+				tree = ManeSr_Cottage_Failure
+				keep_completed = yes
+			}
 		}
 	
 
@@ -947,6 +958,31 @@ country_event = {
  		hidden_effect = {
  			set_country_flag = MSR_located_crusader_flag
  		}
+ 	}
+}
+
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.25"}
+ 	id = MSR.25
+ 	title = MSR.25.title
+ 	desc = MSR.25.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+
+ 	trigger = {
+ 		has_country_flag = MSR_scribe_help_cottage_flag
+ 		has_country_flag = MSR_has_done_alternative_methods
+ 	}
+ 	mean_time_to_happen = {
+		days = 25
+	}
+
+ 	option = {
+ 		name = MSR.23.a
+ 		ai_chance = { factor = 30 }
+ 		custom_effect_tooltip = MSR_one_crus_alt_point_tt
+		add_to_variable = { MSR_alt_methods_var = 1 } 
  	}
 }
 
