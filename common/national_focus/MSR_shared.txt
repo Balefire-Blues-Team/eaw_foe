@@ -161,7 +161,7 @@ shared_focus = {
 		}
 
 		### REMOVE #s FROM THESE vvvvv ###
-		prerequisite = { Focus = MSR_Finished }
+		prerequisite = { focus = MSR_Finished }
 		#mutually_exclusive = { focus = MSR_River }
 		#mutually_exclusive = { focus = MSR_Crossroads }
 		#mutually_exclusive = { focus = MSR_Hooves }
@@ -189,7 +189,7 @@ shared_focus = {
 		}
 
 		### REMOVE #s FROM THESE vvvvv ###
-		prerequisite = { Focus = MSR_Finished }
+		prerequisite = { focus = MSR_Finished }
 		#mutually_exclusive = { focus = MSR_Crossroads }
 		#mutually_exclusive = { focus = MSR_Hooves }
 		#mutually_exclusive = { focus = MSR_Cottage }
@@ -218,7 +218,7 @@ shared_focus = {
 		}
 
 		### REMOVE #s FROM THESE vvvvv ###
-		prerequisite = { Focus = MSR_Finished }
+		prerequisite = { focus = MSR_Finished }
 		#mutually_exclusive = { focus = MSR_River }
 		#mutually_exclusive = { focus = MSR_Crossroads }
 		#mutually_exclusive = { focus = MSR_Cottage }
@@ -246,7 +246,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Cottage }
+		prerequisite = { focus = MSR_Cottage }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cottage_Council"
@@ -267,7 +267,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Cottage }
+		prerequisite = { focus = MSR_Cottage }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cottage_Loyalties"
@@ -289,7 +289,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Cottage }
+		prerequisite = { focus = MSR_Cottage }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cottage_technician"
@@ -311,9 +311,9 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Cottage_Loyalties }
-		prerequisite = { Focus = MSR_Cottage_Council }
-		prerequisite = { Focus = MSR_Cottage_technician }
+		prerequisite = { focus = MSR_Cottage_Loyalties }
+		prerequisite = { focus = MSR_Cottage_Council }
+		prerequisite = { focus = MSR_Cottage_technician }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Shoring_Up_Defense"
@@ -351,9 +351,9 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Cottage_Loyalties }
-		prerequisite = { Focus = MSR_Cottage_Council }
-		prerequisite = { Focus = MSR_Cottage_technician }
+		prerequisite = { focus = MSR_Cottage_Loyalties }
+		prerequisite = { focus = MSR_Cottage_Council }
+		prerequisite = { focus = MSR_Cottage_technician }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Focusing_Our_Efforts"
@@ -362,8 +362,8 @@ shared_focus = {
 }
 
 shared_focus = { 
-		id = MSR_A_New_Project
-		icon = GFX_goal_The_New_Project_
+		id = MSR_crusaders
+		icon = GFX_goal_steel_rangers
 		relative_position_id = MSR_Cottage_Loyalties
 		x = 0
 		y = 2
@@ -374,8 +374,29 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Focusing_Our_Efforts }
-		prerequisite = { Focus = MSR_Shoring_Up_Defense }
+		prerequisite = { focus = MSR_Focusing_Our_Efforts }
+		prerequisite = { focus = MSR_Shoring_Up_Defense }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_A_New_Project"
+			country_event = { id = MSR.13 }
+		}
+}
+
+shared_focus = { 
+		id = MSR_A_New_Project
+		icon = GFX_goal_The_New_Project_
+		relative_position_id = MSR_crusaders
+		x = -1
+		y = 1
+		cost = 8.58
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 1
+		}
+
+		prerequisite = { focus = MSR_crusaders }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_A_New_Project"
@@ -386,8 +407,8 @@ shared_focus = {
 shared_focus = { 
 		id = MSR_Securing_Info
 		icon = GFX_goal_Securing_Information_
-		relative_position_id = MSR_A_New_Project
-		x = 0
+		relative_position_id = MSR_crusaders
+		x = 1
 		y = 1
 		cost = 8.58
 
@@ -396,7 +417,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_A_New_Project }
+		prerequisite = { focus = MSR_crusaders }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Securing_Info"
@@ -407,27 +428,37 @@ shared_focus = {
 shared_focus = { 
 		id = MSR_A_New_Objective
 		icon = GFX_goal_invade_manehatten_raiders
-		relative_position_id = MSR_Securing_Info
+		relative_position_id = MSR_crusaders
 		x = 0
-		y = 1
+		y = 2
 		cost = 8.58
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
 			factor = 1
 		}
+
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = MSR_discovered_crusader_location_tt
+    			hidden_trigger = {
+    				has_country_flag = MSR_located_crusader_flag
+				}
+			}
+		}
 		
 		will_lead_to_war_with = MRA
 		
-		prerequisite = { Focus = MSR_Securing_Info }
+		prerequisite = { focus = MSR_A_New_Project }
+		prerequisite = { focus = MSR_Securing_Info }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_The_Mainframe"
+			add_state_claim = 55
 			declare_war_on = {
 				target = MRA
 				type = annex_everything
 			}
-			add_state_claim = 55
 		}
 }
 
@@ -441,19 +472,17 @@ shared_focus = {
 
 		available_if_capitulated = yes 
 		available = {
-		owns_state = 55
-		NOT = { has_idea = MSR_Project }
+			owns_state = 55
 		}
 		ai_will_do = { 
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_A_New_Objective }
+		prerequisite = { focus = MSR_A_New_Objective }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_The_Mainframe"
 			country_event = { id = MSR.16 }
-			add_state_core = 55
 		}
 }
 
@@ -470,7 +499,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_The_Mainframe }
+		prerequisite = { focus = MSR_The_Mainframe }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_An_Unexp_Prob"
@@ -483,7 +512,7 @@ shared_focus = {
 		id = MSR_Dark_Magic
 		icon = GFX_goal_Dark_Magic_
 		relative_position_id = MSR_An_Unexp_Prob
-		x = 0
+		x = 4
 		y = 1
 		cost = 8.58
 
@@ -501,7 +530,7 @@ shared_focus = {
 			}
 		}
 
-		prerequisite = { Focus = MSR_An_Unexp_Prob }
+		prerequisite = { focus = MSR_An_Unexp_Prob }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Dark_Magic"
@@ -522,7 +551,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Dark_Magic }
+		prerequisite = { focus = MSR_Dark_Magic }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_The_Black_Book"
@@ -533,7 +562,7 @@ shared_focus = {
 shared_focus = { 
 		id = MSR_Becoming_One
 		icon = GFX_goal_Becoming_One_with_Technology
-		relative_position_id = MSR_The_Black_Book
+		relative_position_id = MSR_An_Unexp_Prob
 		x = 0
 		y = 1
 		cost = 8.58
@@ -548,13 +577,19 @@ shared_focus = {
 				has_country_flag = lightbringer_met_cottage_flag
 				has_global_flag = lightbringer_dead_flag
 			}
-			OR = {
-				has_country_flag = MSR_found_black_book
-				has_country_flag = MSR_given_up_search_for_black_book
+			custom_trigger_tooltip = {
+				tooltip = MSR_fixed_crusader_problem_tt
+    			hidden_trigger = {
+    				always = no
+				}
 			}
+			#OR = {
+			#	has_country_flag = MSR_found_black_book
+			#	has_country_flag = MSR_given_up_search_for_black_book
+			#}
 		}
 
-		prerequisite = { Focus = MSR_The_Black_Book }
+		prerequisite = { focus = MSR_An_Unexp_Prob }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Becoming_One"
@@ -581,7 +616,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Becoming_One }
+		#prerequisite = { focus = MSR_Becoming_One }
 		mutually_exclusive = { focus = MSR_Failure }
 
 		
@@ -620,7 +655,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Becoming_One }
+		#prerequisite = { focus = MSR_Becoming_One }
 		mutually_exclusive = { focus = MSR_Success }
 
 		completion_reward = {
@@ -672,7 +707,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Testing_The_Waters_S }
+		prerequisite = { focus = MSR_Testing_The_Waters_S }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_A_New_Era"
@@ -695,7 +730,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_A_New_Era }
+		prerequisite = { focus = MSR_A_New_Era }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Review_Our_Ind"
@@ -721,7 +756,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Review_Our_Ind }
+		prerequisite = { focus = MSR_Review_Our_Ind }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Recal_Ind_Out"
@@ -742,7 +777,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Review_Our_Ind }
+		prerequisite = { focus = MSR_Review_Our_Ind }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Anal_Res_Ext"
@@ -764,8 +799,8 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Recal_Ind_Out }
-		prerequisite = { Focus = MSR_Anal_Res_Ext }
+		prerequisite = { focus = MSR_Recal_Ind_Out }
+		prerequisite = { focus = MSR_Anal_Res_Ext }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Auto_Eff"
@@ -788,7 +823,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_A_New_Era }
+		prerequisite = { focus = MSR_A_New_Era }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Rev_Our_Army"
@@ -810,7 +845,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Rev_Our_Army }
+		prerequisite = { focus = MSR_Rev_Our_Army }
 
 
 		completion_reward = {
@@ -833,7 +868,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Rev_Our_Army }
+		prerequisite = { focus = MSR_Rev_Our_Army }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Enforce_Chain_Binds"
@@ -855,8 +890,8 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Eval_Ranger_Training }
-		prerequisite = { Focus = MSR_Enforce_Chain_Binds }
+		prerequisite = { focus = MSR_Eval_Ranger_Training }
+		prerequisite = { focus = MSR_Enforce_Chain_Binds }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_A_New_Army"
@@ -882,8 +917,8 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_A_New_Army } 
-		prerequisite = { Focus = MSR_Auto_Eff }
+		prerequisite = { focus = MSR_A_New_Army } 
+		prerequisite = { focus = MSR_Auto_Eff }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Looking_Out"
@@ -905,7 +940,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Looking_Out } 
+		prerequisite = { focus = MSR_Looking_Out } 
 
 		will_lead_to_war_with = EMP
 		will_lead_to_war_with = RAR
@@ -941,7 +976,7 @@ shared_focus = {
 			owns_state = 44
 		}
 
-		prerequisite = { Focus = MSR_Looking_Westward } 
+		prerequisite = { focus = MSR_Looking_Westward } 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Enter_New_Trotbany"
@@ -963,7 +998,7 @@ shared_focus = {
 			factor = 1
 		}
 		available = { owns_state = 49 owns_state = 58}
-		prerequisite = { Focus = MSR_Enter_New_Trotbany } 
+		prerequisite = { focus = MSR_Enter_New_Trotbany } 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_A_Summer_In_Summer"
@@ -985,7 +1020,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_A_Summer_In_Summer } 
+		prerequisite = { focus = MSR_A_Summer_In_Summer } 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Repairing_the_roads"
@@ -1042,7 +1077,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Looking_Out } 
+		prerequisite = { focus = MSR_Looking_Out } 
 
 		will_lead_to_war_with = MAR
 		will_lead_to_war_with = TEN
@@ -1110,7 +1145,7 @@ shared_focus = {
 			owns_state = 39
 		}
 
-		prerequisite = { Focus = MSR_Moving_South } 
+		prerequisite = { focus = MSR_Moving_South } 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Breaking_Peninsula"
@@ -1137,7 +1172,7 @@ shared_focus = {
 			owns_state = 55
 		}
 
-		prerequisite = { Focus = MSR_Breaking_Peninsula } 
+		prerequisite = { focus = MSR_Breaking_Peninsula } 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Getting_Rid_Raiders"
@@ -1160,7 +1195,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Getting_Rid_Raiders } 
+		prerequisite = { focus = MSR_Getting_Rid_Raiders } 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Securing_Tenpony"
@@ -1186,7 +1221,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Looking_Out } 
+		prerequisite = { focus = MSR_Looking_Out } 
 
 		will_lead_to_war_with = ARB
 		will_lead_to_war_with = ABT
@@ -1218,7 +1253,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Retaking_the_East } 
+		prerequisite = { focus = MSR_Retaking_the_East } 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Clearing_Arbu"
@@ -1240,7 +1275,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Clearing_Arbu } 
+		prerequisite = { focus = MSR_Clearing_Arbu } 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Controlling_Ports"
@@ -1263,7 +1298,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Controlling_Ports } 
+		prerequisite = { focus = MSR_Controlling_Ports } 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Rebuilding_Dockyards"
@@ -1289,9 +1324,9 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Securing_Tenpony }
-		prerequisite = { Focus = MSR_Rebuilding_Dockyards }
-		prerequisite = { Focus = MSR_Repairing_the_roads }
+		prerequisite = { focus = MSR_Securing_Tenpony }
+		prerequisite = { focus = MSR_Rebuilding_Dockyards }
+		prerequisite = { focus = MSR_Repairing_the_roads }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_A_Wealth_Technology"
@@ -1312,7 +1347,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_A_Wealth_Technology } 
+		prerequisite = { focus = MSR_A_Wealth_Technology } 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_A_New_City_Rises"
@@ -1358,7 +1393,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Testing_The_Waters_F }
+		prerequisite = { focus = MSR_Testing_The_Waters_F }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_The_Crash"
@@ -1379,7 +1414,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_The_Crash }
+		prerequisite = { focus = MSR_The_Crash }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Eval_Situation"
@@ -1400,7 +1435,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Eval_Situation }
+		prerequisite = { focus = MSR_Eval_Situation }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_New_Provisional_Council"
@@ -1430,7 +1465,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_New_Provisional_Council }
+		prerequisite = { focus = MSR_New_Provisional_Council }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Call_Back_Teams"
@@ -1451,7 +1486,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Call_Back_Teams }
+		prerequisite = { focus = MSR_Call_Back_Teams }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Secure_Our_Ass"
@@ -1474,7 +1509,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Call_Back_Teams }
+		prerequisite = { focus = MSR_Call_Back_Teams }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Geat_Head_Count"
@@ -1495,8 +1530,8 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Geat_Head_Count }
-		prerequisite = { Focus = MSR_Secure_Our_Ass }
+		prerequisite = { focus = MSR_Geat_Head_Count }
+		prerequisite = { focus = MSR_Secure_Our_Ass }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Limit_Outside_Operation"
@@ -1519,7 +1554,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_New_Provisional_Council }
+		prerequisite = { focus = MSR_New_Provisional_Council }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Deal_With_The_Traitors"
@@ -1540,7 +1575,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Deal_With_The_Traitors }
+		prerequisite = { focus = MSR_Deal_With_The_Traitors }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Reinforce_Old_Ways"
@@ -1561,7 +1596,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Deal_With_The_Traitors }
+		prerequisite = { focus = MSR_Deal_With_The_Traitors }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Purge_Any_Opposition"
@@ -1589,8 +1624,8 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Reinforce_Old_Ways }
-		prerequisite = { Focus = MSR_Purge_Any_Opposition }
+		prerequisite = { focus = MSR_Reinforce_Old_Ways }
+		prerequisite = { focus = MSR_Purge_Any_Opposition }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Enforce_Lock_Down"
@@ -1612,7 +1647,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_New_Provisional_Council }
+		prerequisite = { focus = MSR_New_Provisional_Council }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Evaluate_Our_Contingent"
@@ -1633,7 +1668,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Evaluate_Our_Contingent }
+		prerequisite = { focus = MSR_Evaluate_Our_Contingent }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cease_Outsider_Recruitment"
@@ -1654,7 +1689,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Evaluate_Our_Contingent }
+		prerequisite = { focus = MSR_Evaluate_Our_Contingent }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Dissuade_Outside_Contact"
@@ -1675,8 +1710,8 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Cease_Outsider_Recruitment }
-		prerequisite = { Focus = MSR_Dissuade_Outside_Contact }
+		prerequisite = { focus = MSR_Cease_Outsider_Recruitment }
+		prerequisite = { focus = MSR_Dissuade_Outside_Contact }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Ensure_Steel_Ranger_Purity"
@@ -1699,9 +1734,9 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Enforce_Lock_Down }
-		prerequisite = { Focus = MSR_Limit_Outside_Operation }
-		prerequisite = { Focus = MSR_Ensure_Steel_Ranger_Purity }
+		prerequisite = { focus = MSR_Enforce_Lock_Down }
+		prerequisite = { focus = MSR_Limit_Outside_Operation }
+		prerequisite = { focus = MSR_Ensure_Steel_Ranger_Purity }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Strict_Isolation"
@@ -1724,7 +1759,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_River }
+		prerequisite = { focus = MSR_River }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_The_New_Dev "
@@ -1754,33 +1789,11 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_The_New_Dev }
+		prerequisite = { focus = MSR_The_New_Dev }
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus MSR_Secure_Our_Tech "
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_Secure_Our_Tech"
 			country_event = { id = MSR.118 }
-
-		}
-}
-
-shared_focus = { 
-		id = MSR_Seize_The_Memes
-		icon = GFX_goal_steel_rangers
-		relative_position_id = MSR_Secure_Our_Tech
-		x = 0
-		y = 1
-		cost = 1.5
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 1
-		}
-
-		prerequisite = { Focus = MSR_Secure_Our_Tech }
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus MSR_Seize_The_Memes "
-			country_event = { id = MSR.119 }
 
 		}
 }
@@ -1788,8 +1801,8 @@ shared_focus = {
 shared_focus = { 
 		id = MSR_Scribe_Support
 		icon = GFX_goal_steel_rangers
-		relative_position_id = MSR_Seize_The_Memes
-		x = 0
+		relative_position_id = MSR_Secure_Our_Tech
+		x = -1
 		y = 1
 		cost = 1.5
 
@@ -1798,7 +1811,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Seize_The_Memes }
+		prerequisite = { focus = MSR_Secure_Our_Tech }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Scribe_Support "
@@ -1808,7 +1821,7 @@ shared_focus = {
 }
 
 shared_focus = { 
-		id = MSR_Storm_The_Armory
+		id = MSR_Seize_The_Memes
 		icon = GFX_goal_steel_rangers
 		relative_position_id = MSR_Scribe_Support
 		x = 0
@@ -1820,11 +1833,56 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Scribe_Support }
+		prerequisite = { focus = MSR_Scribe_Support }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_Seize_The_Memes"
+			country_event = { id = MSR.119 }
+
+		}
+}
+
+shared_focus = { 
+		id = MSR_Storm_The_Armory
+		icon = GFX_goal_steel_rangers
+		relative_position_id = MSR_Secure_Our_Tech
+		x = 1
+		y = 1
+		cost = 1.5
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 1
+		}
+
+		prerequisite = { focus = MSR_Secure_Our_Tech }
+		prerequisite = { focus = MSR_Gather_The_Rangers }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Storm_The_Armory "
 			country_event = { id = MSR.123 }
+
+		}
+}
+
+shared_focus = { 
+		id = MSR_Night_Of_Long_Knives
+		icon = GFX_goal_steel_rangers
+		relative_position_id = MSR_Storm_The_Armory
+		x = 0
+		y = 1
+		cost = 1.5
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 1
+		}
+
+		prerequisite = { focus = MSR_Storm_The_Armory }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_Night_Of_Long_Knives "
+			country_event = { id = MSR.127 }
 
 		}
 }
@@ -1844,7 +1902,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_The_New_Dev }
+		prerequisite = { focus = MSR_The_New_Dev }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Gather_The_Rangers "
@@ -1857,7 +1915,7 @@ shared_focus = {
 		id = MSR_Secure_Loyalty
 		icon = GFX_goal_steel_rangers
 		relative_position_id = MSR_Gather_The_Rangers
-		x = 0
+		x = 1
 		y = 1
 		cost = 1.5
 
@@ -1866,7 +1924,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Gather_The_Rangers }
+		prerequisite = { focus = MSR_Gather_The_Rangers }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Secure_Loyalty"
@@ -1888,7 +1946,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Secure_Loyalty }
+		prerequisite = { focus = MSR_Secure_Loyalty }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Dissent "
@@ -1897,27 +1955,7 @@ shared_focus = {
 		}
 }
 
-shared_focus = { 
-		id = MSR_Night_Of_Long_Knives
-		icon = GFX_goal_steel_rangers
-		relative_position_id = MSR_Dissent
-		x = 0
-		y = 1
-		cost = 1.5
 
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 1
-		}
-
-		prerequisite = { Focus = MSR_Dissent }
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus MSR_Night_Of_Long_Knives "
-			country_event = { id = MSR.127 }
-
-		}
-}
 
 ### River Converge ###
 
@@ -1926,7 +1964,7 @@ shared_focus = {
 		icon = GFX_goal_steel_rangers
 		relative_position_id = MSR_The_New_Dev
 		x = 0
-		y = 5
+		y = 4
 		cost = 1.5
 
 		available_if_capitulated = yes 
@@ -1934,8 +1972,9 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Night_Of_Long_Knives }
-		prerequisite = { Focus = MSR_Storm_The_Armory }
+		prerequisite = { focus = MSR_Night_Of_Long_Knives }
+		prerequisite = { focus = MSR_Seize_The_Memes }
+		prerequisite = { focus = MSR_Dissent }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Thorn_In_My_Side "
@@ -1957,7 +1996,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Thorn_In_My_Side }
+		prerequisite = { focus = MSR_Thorn_In_My_Side }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Crushing_The_Rebellion "
@@ -1979,7 +2018,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Crushing_The_Rebellion }
+		prerequisite = { focus = MSR_Crushing_The_Rebellion }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -2010,7 +2049,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		#prerequisite = { Focus = MSR_Crushing_The_Rebellion }
+		#prerequisite = { focus = MSR_Crushing_The_Rebellion }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Steel_Rangers_No_More"
@@ -2036,7 +2075,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Steel_Rangers_No_More }
+		prerequisite = { focus = MSR_Steel_Rangers_No_More }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -2060,7 +2099,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_A_Nation_Reborn }
+		prerequisite = { focus = MSR_A_Nation_Reborn }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls"
@@ -2090,7 +2129,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Rebuild_Our_Industry }
+		prerequisite = { focus = MSR_Rebuild_Our_Industry }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -2112,7 +2151,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Giving_Out_Aid }
+		prerequisite = { focus = MSR_Giving_Out_Aid }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -2134,7 +2173,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Outlaw_Slavery }
+		prerequisite = { focus = MSR_Outlaw_Slavery }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -2156,7 +2195,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Healthcare_For_All }
+		prerequisite = { focus = MSR_Healthcare_For_All }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -2186,7 +2225,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Rebuild_Our_Industry }
+		prerequisite = { focus = MSR_Rebuild_Our_Industry }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -2214,7 +2253,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_New_Construction_Methods }
+		prerequisite = { focus = MSR_New_Construction_Methods }
 		mutually_exclusive = { focus = MSR_Guns_For_Soldiers }
 
 		completion_reward = {
@@ -2236,7 +2275,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_New_Construction_Methods }
+		prerequisite = { focus = MSR_New_Construction_Methods }
 		mutually_exclusive = { focus = MSR_Product_For_Civilians }
 
 		completion_reward = {
@@ -2259,7 +2298,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Guns_For_Soldiers OR = MSR_Product_For_Civilians }
+		prerequisite = { focus = MSR_Guns_For_Soldiers OR = MSR_Product_For_Civilians }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -2283,7 +2322,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Rebuild_Our_Industry }
+		prerequisite = { focus = MSR_Rebuild_Our_Industry }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -2325,7 +2364,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Rebuild_The_Roads }
+		prerequisite = { focus = MSR_Rebuild_The_Roads }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -2346,7 +2385,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Standardize_Production }
+		prerequisite = { focus = MSR_Standardize_Production }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -2367,7 +2406,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Create_New_Labor_Laws }
+		prerequisite = { focus = MSR_Create_New_Labor_Laws }
 		available = {
 			has_completed_focus = MSR_New_Construction_Methods
 		}
@@ -2399,9 +2438,9 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Project_Purity }
-		prerequisite = { Focus = MSR_Factories_For_The_Future }
-		prerequisite = { Focus = MSR_A_New_Equestrian_Economy }
+		prerequisite = { focus = MSR_Project_Purity }
+		prerequisite = { focus = MSR_Factories_For_The_Future }
+		prerequisite = { focus = MSR_A_New_Equestrian_Economy }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -2442,7 +2481,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_A_Nation_Reborn }
+		prerequisite = { focus = MSR_A_Nation_Reborn }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -2465,7 +2504,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Expanding_Our_Borders }
+		prerequisite = { focus = MSR_Expanding_Our_Borders }
 
 		bypass = {
 			owns_state = 51
@@ -2497,7 +2536,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Sacking_The_Empire }
+		prerequisite = { focus = MSR_Sacking_The_Empire }
 		
 		available = { owns_state = 44 }
 
@@ -2541,7 +2580,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Raining_No_More }
+		prerequisite = { focus = MSR_Raining_No_More }
 		available = { is_neighbor_of = FER }
 
 		bypass = {
@@ -2577,7 +2616,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Expanding_Our_Borders }
+		prerequisite = { focus = MSR_Expanding_Our_Borders }
 
 		bypass = {
 			owns_state = 39
@@ -2610,7 +2649,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Clearing_Out_Cannibals }
+		prerequisite = { focus = MSR_Clearing_Out_Cannibals }
 
 		will_lead_to_war_with = ABT
 		completion_reward = {
@@ -2639,7 +2678,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Pushing_Towards_Portshoof }
+		prerequisite = { focus = MSR_Pushing_Towards_Portshoof }
 
 		will_lead_to_war_with = MRA
 		completion_reward = {
@@ -2670,7 +2709,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Expanding_Our_Borders }
+		prerequisite = { focus = MSR_Expanding_Our_Borders }
 
 		will_lead_to_war_with = MAR
 		completion_reward = {
@@ -2699,7 +2738,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Crossing_Into_Marelem }
+		prerequisite = { focus = MSR_Crossing_Into_Marelem }
 		available = { is_neighbor_of = TEN }
 
 		will_lead_to_war_with = TEN
@@ -2740,7 +2779,7 @@ shared_focus = {
 
 		available = { is_neighbor_of = FRI }
 
-		prerequisite = { Focus = MSR_Dinner_In_Tenpony }
+		prerequisite = { focus = MSR_Dinner_In_Tenpony }
 
 		will_lead_to_war_with = FRI
 		completion_reward = {
@@ -2771,9 +2810,9 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Moving_To_End_Friendship }
-		prerequisite = { Focus = MSR_Taking_Stable_29 }
-		prerequisite = { Focus = MSR_A_Free_Trip_to_Freeside }
+		prerequisite = { focus = MSR_Moving_To_End_Friendship }
+		prerequisite = { focus = MSR_Taking_Stable_29 }
+		prerequisite = { focus = MSR_A_Free_Trip_to_Freeside }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -2819,9 +2858,9 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Moving_To_End_Friendship }
-		prerequisite = { Focus = MSR_Taking_Stable_29 }
-		prerequisite = { Focus = MSR_A_Free_Trip_to_Freeside }
+		prerequisite = { focus = MSR_Moving_To_End_Friendship }
+		prerequisite = { focus = MSR_Taking_Stable_29 }
+		prerequisite = { focus = MSR_A_Free_Trip_to_Freeside }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -2886,8 +2925,8 @@ shared_focus = {
 			has_completed_focus = MSR_Industrial_Hearland_Reborn
 		}
 
-		prerequisite = { Focus = MSR_Eastward_Expansion }
-		prerequisite = { Focus = MSR_March_Along_the_Coast }
+		prerequisite = { focus = MSR_Eastward_Expansion }
+		prerequisite = { focus = MSR_March_Along_the_Coast }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -2923,7 +2962,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Send_in_The_Peace_Keepers }
+		prerequisite = { focus = MSR_Send_in_The_Peace_Keepers }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -2953,7 +2992,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Stirring_Up_Trouble }
+		prerequisite = { focus = MSR_Stirring_Up_Trouble }
 
 		will_lead_to_war_with = RED
 		completion_reward = {
@@ -2977,7 +3016,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Ending_Red_Eyes_Reign }
+		prerequisite = { focus = MSR_Ending_Red_Eyes_Reign }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls"
@@ -3010,7 +3049,7 @@ shared_focus = {
 			NOT = { country_exists = FSR }
 		}
 
-		prerequisite = { Focus = MSR_Freeing_the_Enslaved }
+		prerequisite = { focus = MSR_Freeing_the_Enslaved }
 
 		will_lead_to_war_with = FSR
 		completion_reward = {
@@ -3034,7 +3073,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Meeting_Old_Friends }
+		prerequisite = { focus = MSR_Meeting_Old_Friends }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -3057,7 +3096,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_A_Nation_Reborn }
+		prerequisite = { focus = MSR_A_Nation_Reborn }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -3079,7 +3118,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_A_New_Equestrian_Army }
+		prerequisite = { focus = MSR_A_New_Equestrian_Army }
 		mutually_exclusive = { focus = MSR_An_Highly_Mobile_Army }
 
 		completion_reward = {
@@ -3110,7 +3149,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_A_Organized_Army }
+		prerequisite = { focus = MSR_A_Organized_Army }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -3135,7 +3174,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Infantry_Support_Weapons }
+		prerequisite = { focus = MSR_Infantry_Support_Weapons }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -3161,7 +3200,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_A_New_Equestrian_Army }
+		prerequisite = { focus = MSR_A_New_Equestrian_Army }
 		mutually_exclusive = { focus = MSR_A_Organized_Army }
 
 		completion_reward = {
@@ -3187,7 +3226,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_An_Highly_Mobile_Army }
+		prerequisite = { focus = MSR_An_Highly_Mobile_Army }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -3212,7 +3251,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Putting_Guns_On_Trucks }
+		prerequisite = { focus = MSR_Putting_Guns_On_Trucks }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -3241,7 +3280,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_A_New_Equestrian_Army }
+		prerequisite = { focus = MSR_A_New_Equestrian_Army }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -3286,7 +3325,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Hiring_New_Generals }
+		prerequisite = { focus = MSR_Hiring_New_Generals }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -3315,7 +3354,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Office_of_Internal_Integrity }
+		prerequisite = { focus = MSR_Office_of_Internal_Integrity }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -3348,7 +3387,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Keeping_the_Peace }
+		prerequisite = { focus = MSR_Keeping_the_Peace }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Service_Gurantees_Citizenship "
@@ -3371,7 +3410,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_A_New_Equestrian_Army }
+		prerequisite = { focus = MSR_A_New_Equestrian_Army }
 		mutually_exclusive = { focus = MSR_Special_Intervention_Force }
 
 		completion_reward = {
@@ -3401,7 +3440,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Deployment_Groups }
+		prerequisite = { focus = MSR_Deployment_Groups }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -3425,7 +3464,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Going_In_Guns_Blazing }
+		prerequisite = { focus = MSR_Going_In_Guns_Blazing }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -3457,7 +3496,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_A_New_Equestrian_Army }
+		prerequisite = { focus = MSR_A_New_Equestrian_Army }
 		mutually_exclusive = { focus = MSR_Deployment_Groups }
 
 		completion_reward = {
@@ -3487,7 +3526,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Special_Intervention_Force }
+		prerequisite = { focus = MSR_Special_Intervention_Force }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -3512,7 +3551,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Asymmetric_Warfare }
+		prerequisite = { focus = MSR_Asymmetric_Warfare }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -3539,9 +3578,9 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Raining_Fire OR = MSR_Beasts_of_Steel }
-		prerequisite = { Focus = MSR_Service_Gurantees_Citizenship }
-		prerequisite = { Focus = MSR_Vertibuck_Assault_Teams OR = MSR_Long_Range_Wasteland_Group }
+		prerequisite = { focus = MSR_Raining_Fire OR = MSR_Beasts_of_Steel }
+		prerequisite = { focus = MSR_Service_Gurantees_Citizenship }
+		prerequisite = { focus = MSR_Vertibuck_Assault_Teams OR = MSR_Long_Range_Wasteland_Group }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
@@ -3568,7 +3607,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Hooves }
+		prerequisite = { focus = MSR_Hooves }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Hold_Speech"
@@ -3592,7 +3631,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Hooves }
+		prerequisite = { focus = MSR_Hooves }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Talk_With_Paladins"
@@ -3615,7 +3654,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Hooves }
+		prerequisite = { focus = MSR_Hooves }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Meet_With_Scribes"
@@ -3639,9 +3678,9 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Meet_With_Scribes }
-		prerequisite = { Focus = MSR_Talk_With_Paladins }
-		prerequisite = { Focus = MSR_Hold_Speech }
+		prerequisite = { focus = MSR_Meet_With_Scribes }
+		prerequisite = { focus = MSR_Talk_With_Paladins }
+		prerequisite = { focus = MSR_Hold_Speech }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Exile_Extremists"
@@ -3665,9 +3704,9 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Meet_With_Scribes }
-		prerequisite = { Focus = MSR_Talk_With_Paladins }
-		prerequisite = { Focus = MSR_Hold_Speech }
+		prerequisite = { focus = MSR_Meet_With_Scribes }
+		prerequisite = { focus = MSR_Talk_With_Paladins }
+		prerequisite = { focus = MSR_Hold_Speech }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Rid_The_Old_Ways"
@@ -3696,8 +3735,8 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Exile_Extremists }
-		prerequisite = { Focus = MSR_Rid_The_Old_Ways }
+		prerequisite = { focus = MSR_Exile_Extremists }
+		prerequisite = { focus = MSR_Rid_The_Old_Ways }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Rally_The_Rangers"
@@ -3719,7 +3758,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Rally_The_Rangers }
+		prerequisite = { focus = MSR_Rally_The_Rangers }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Break_The_Chains"
@@ -3741,7 +3780,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Break_The_Chains }
+		prerequisite = { focus = MSR_Break_The_Chains }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Change_Our_Approach"
@@ -3808,7 +3847,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Change_Our_Approach }
+		prerequisite = { focus = MSR_Change_Our_Approach }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Our_Original_Mission"
@@ -3839,7 +3878,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		#prerequisite = { Focus = MSR_Our_Original_Mission }
+		#prerequisite = { focus = MSR_Our_Original_Mission }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Steel_Rangers_Reborn"
@@ -3861,7 +3900,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Steel_Rangers_Reborn }
+		prerequisite = { focus = MSR_Steel_Rangers_Reborn }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Allow_More_Outsiders"
@@ -3884,7 +3923,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Steel_Rangers_Reborn }
+		prerequisite = { focus = MSR_Steel_Rangers_Reborn }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Open_Up_Outside_Relations"
@@ -3926,7 +3965,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Steel_Rangers_Reborn }
+		prerequisite = { focus = MSR_Steel_Rangers_Reborn }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Increase_Patrols"
@@ -3951,9 +3990,9 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Allow_More_Outsiders }
-		prerequisite = { Focus = MSR_Open_Up_Outside_Relations }
-		prerequisite = { Focus = MSR_Increase_Patrols }
+		prerequisite = { focus = MSR_Allow_More_Outsiders }
+		prerequisite = { focus = MSR_Open_Up_Outside_Relations }
+		prerequisite = { focus = MSR_Increase_Patrols }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Protecting_Wastelanders"
@@ -3994,7 +4033,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Protecting_Wastelanders }
+		prerequisite = { focus = MSR_Protecting_Wastelanders }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Support_Local_Settlement"
@@ -4083,9 +4122,9 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Allow_More_Outsiders }
-		prerequisite = { Focus = MSR_Open_Up_Outside_Relations }
-		prerequisite = { Focus = MSR_Increase_Patrols }
+		prerequisite = { focus = MSR_Allow_More_Outsiders }
+		prerequisite = { focus = MSR_Open_Up_Outside_Relations }
+		prerequisite = { focus = MSR_Increase_Patrols }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Incentivize_Trade"
@@ -4110,7 +4149,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Incentivize_Trade }
+		prerequisite = { focus = MSR_Incentivize_Trade }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Support_Local_Caravans"
@@ -4149,8 +4188,8 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Support_Local_Caravans }
-		prerequisite = { Focus = MSR_Support_Local_Settlement }
+		prerequisite = { focus = MSR_Support_Local_Caravans }
+		prerequisite = { focus = MSR_Support_Local_Settlement }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Become_A_Force_For_Good"
@@ -4175,7 +4214,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Become_A_Force_For_Good }
+		prerequisite = { focus = MSR_Become_A_Force_For_Good }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_A_Fork_In_The_Road"
@@ -4223,7 +4262,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Manehattan_Treaty_Organization }
+		prerequisite = { focus = MSR_Manehattan_Treaty_Organization }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Offer_Membership_To_Others"
@@ -4289,7 +4328,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Offer_Membership_To_Others }
+		prerequisite = { focus = MSR_Offer_Membership_To_Others }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Create_A_Mutual_Defense_Pact"
@@ -4312,7 +4351,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Create_A_Mutual_Defense_Pact }
+		prerequisite = { focus = MSR_Create_A_Mutual_Defense_Pact }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Joint_Military_Exercises"
@@ -4343,7 +4382,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Joint_Military_Exercises }
+		prerequisite = { focus = MSR_Joint_Military_Exercises }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Aid_In_Re_Industrialization"
@@ -4372,7 +4411,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Aid_In_Re_Industrialization }
+		prerequisite = { focus = MSR_Aid_In_Re_Industrialization }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Manehattan_Recovery_Program"
@@ -4397,7 +4436,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_A_Fork_In_The_Road }
+		prerequisite = { focus = MSR_A_Fork_In_The_Road }
 		mutually_exclusive = { focus = MSR_Passing_The_Torch }
 
 		completion_reward = {
@@ -4420,7 +4459,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Keeping_The_Flame }
+		prerequisite = { focus = MSR_Keeping_The_Flame }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Carrying_On_A_Memory"
@@ -4442,7 +4481,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Carrying_On_A_Memory }
+		prerequisite = { focus = MSR_Carrying_On_A_Memory }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Talk_With_Crossroads"
@@ -4464,7 +4503,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Talk_With_Crossroads }
+		prerequisite = { focus = MSR_Talk_With_Crossroads }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Remember_Our_Oaths"
@@ -4486,7 +4525,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Remember_Our_Oaths }
+		prerequisite = { focus = MSR_Remember_Our_Oaths }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Embracing_Outsiders"
@@ -4508,7 +4547,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Embracing_Outsiders }
+		prerequisite = { focus = MSR_Embracing_Outsiders }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_The_Spirit_Of_Honesty"
@@ -4530,7 +4569,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_The_Spirit_Of_Honesty }
+		prerequisite = { focus = MSR_The_Spirit_Of_Honesty }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_An_Unwavering_Vision"
@@ -4617,7 +4656,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Remember_Our_Oaths OR = MSR_Remember_Our_Mission }
+		prerequisite = { focus = MSR_Remember_Our_Oaths OR = MSR_Remember_Our_Mission }
 
 		will_lead_to_war_with = MRA
 		completion_reward = {
@@ -4688,7 +4727,7 @@ shared_focus = {
 
 		mutually_exclusive = { focus = MSR_Keeping_The_Flame }
 
-		prerequisite = { Focus = MSR_A_Fork_In_The_Road }
+		prerequisite = { focus = MSR_A_Fork_In_The_Road }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Passing_The_Torch"
@@ -4710,7 +4749,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Passing_The_Torch }
+		prerequisite = { focus = MSR_Passing_The_Torch }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Necessary_Compromise"
@@ -4732,7 +4771,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Necessary_Compromise }
+		prerequisite = { focus = MSR_Necessary_Compromise }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Realism_Not_Idealism"
@@ -4754,7 +4793,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Realism_Not_Idealism }
+		prerequisite = { focus = MSR_Realism_Not_Idealism }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Remember_Our_Mission"
@@ -4776,7 +4815,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Remember_Our_Mission }
+		prerequisite = { focus = MSR_Remember_Our_Mission }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Bring_Back_The_Outcasts"
@@ -4798,7 +4837,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Bring_Back_The_Outcasts }
+		prerequisite = { focus = MSR_Bring_Back_The_Outcasts }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_The_Supremacy_Of_Steel"
@@ -4820,7 +4859,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_The_Supremacy_Of_Steel }
+		prerequisite = { focus = MSR_The_Supremacy_Of_Steel }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_A_Reasonable_View"
@@ -4844,7 +4883,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Passing_The_Torch }
+		prerequisite = { focus = MSR_Passing_The_Torch }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Bucklyn_Defense_Initiative"
@@ -4867,7 +4906,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Bucklyn_Defense_Initiative }
+		prerequisite = { focus = MSR_Bucklyn_Defense_Initiative }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Convince_Others_To_Join"
@@ -4932,7 +4971,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Convince_Others_To_Join }
+		prerequisite = { focus = MSR_Convince_Others_To_Join }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Offer_Military_Protection"
@@ -4972,7 +5011,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Offer_Military_Protection }
+		prerequisite = { focus = MSR_Offer_Military_Protection }
 		available = {
 			num_subjects > 0
 		}
@@ -5016,7 +5055,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Create_A_Technology_Tax }
+		prerequisite = { focus = MSR_Create_A_Technology_Tax }
 		available = {
 			OR = {
 				owns_state = 21
@@ -5069,7 +5108,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Seize_Illegal_Technology }
+		prerequisite = { focus = MSR_Seize_Illegal_Technology }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Occupy_Strategic_Locations"
@@ -5124,7 +5163,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_A_City_In_Ruins }
+		prerequisite = { focus = MSR_A_City_In_Ruins }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Repairing_Bucklyn_Cross"
@@ -5151,7 +5190,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Repairing_Bucklyn_Cross }
+		prerequisite = { focus = MSR_Repairing_Bucklyn_Cross }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Securing_Bucklyn_Proper"
@@ -5178,7 +5217,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Securing_Bucklyn_Proper }
+		prerequisite = { focus = MSR_Securing_Bucklyn_Proper }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Rebuilding_Rail_Lines"
@@ -5214,7 +5253,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_A_City_In_Ruins }
+		prerequisite = { focus = MSR_A_City_In_Ruins }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Arms_Salvaging"
@@ -5241,7 +5280,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Arms_Salvaging }
+		prerequisite = { focus = MSR_Arms_Salvaging }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Hiring_Weaponsmith"
@@ -5270,7 +5309,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Arms_Salvaging }
+		prerequisite = { focus = MSR_Arms_Salvaging }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Vigilant_Recycling"
@@ -5301,7 +5340,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Hiring_Weaponsmith }
+		prerequisite = { focus = MSR_Hiring_Weaponsmith }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Foundries_Of_Steel"
@@ -5338,7 +5377,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Hiring_Weaponsmith }
+		prerequisite = { focus = MSR_Hiring_Weaponsmith }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Metailurgy_Reborn"
@@ -5364,7 +5403,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Foundries_Of_Steel }
+		prerequisite = { focus = MSR_Foundries_Of_Steel }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Stripping_World_Facilities"
@@ -5392,7 +5431,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_A_City_In_Ruins }
+		prerequisite = { focus = MSR_A_City_In_Ruins }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Back_Yard_Forages"
@@ -5422,7 +5461,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Back_Yard_Forages }
+		prerequisite = { focus = MSR_Back_Yard_Forages }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Civilian_Labor_Corp"
@@ -5451,7 +5490,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Back_Yard_Forages }
+		prerequisite = { focus = MSR_Back_Yard_Forages }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_City_Of_Steel"
@@ -5491,7 +5530,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Civilian_Labor_Corp }
+		prerequisite = { focus = MSR_Civilian_Labor_Corp }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Rebuilding_Old_Canneries"
@@ -5520,7 +5559,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Civilian_Labor_Corp }
+		prerequisite = { focus = MSR_Civilian_Labor_Corp }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Repairing_The_Generators"
@@ -5579,9 +5618,9 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Rebuilding_Old_Canneries }
-		prerequisite = { Focus = MSR_Rebuilding_Rail_Lines }
-		prerequisite = { Focus = MSR_Foundries_Of_Steel }
+		prerequisite = { focus = MSR_Rebuilding_Old_Canneries }
+		prerequisite = { focus = MSR_Rebuilding_Rail_Lines }
+		prerequisite = { focus = MSR_Foundries_Of_Steel }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Buckyln_Reborn"
@@ -5628,7 +5667,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Taking_To_The_Skies }
+		prerequisite = { focus = MSR_Taking_To_The_Skies }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Repairing_Old_Airfields"
@@ -5657,7 +5696,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Repairing_Old_Airfields }
+		prerequisite = { focus = MSR_Repairing_Old_Airfields }
 		mutually_exclusive = { focus = MSR_Support_Our_Troops }
 
 		completion_reward = {
@@ -5685,7 +5724,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Secure_The_Skies }
+		prerequisite = { focus = MSR_Secure_The_Skies }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Focus_On_Fighters"
@@ -5707,7 +5746,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Focus_On_Fighters }
+		prerequisite = { focus = MSR_Focus_On_Fighters }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Dominate_The_Skies"
@@ -5735,7 +5774,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Dominate_The_Skies }
+		prerequisite = { focus = MSR_Dominate_The_Skies }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Flying_Fortresses"
@@ -5764,7 +5803,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Repairing_Old_Airfields }
+		prerequisite = { focus = MSR_Repairing_Old_Airfields }
 		mutually_exclusive = { focus = MSR_Secure_The_Skies }
 
 		completion_reward = {
@@ -5792,7 +5831,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Support_Our_Troops }
+		prerequisite = { focus = MSR_Support_Our_Troops }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Focus_On_CAS"
@@ -5814,7 +5853,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Focus_On_CAS }
+		prerequisite = { focus = MSR_Focus_On_CAS }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Death_From_Above"
@@ -5843,7 +5882,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Death_From_Above }
+		prerequisite = { focus = MSR_Death_From_Above }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Strategic_Bombing"
@@ -5872,7 +5911,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Flying_Fortresses OR = MSR_Strategic_Bombing }
+		prerequisite = { focus = MSR_Flying_Fortresses OR = MSR_Strategic_Bombing }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_birds_of_steel"
@@ -5898,7 +5937,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		#prerequisite = { Focus = MSR_Finished }
+		#prerequisite = { focus = MSR_Finished }
 		#mutually_exclusive = { focus = MSR_River }
 		#mutually_exclusive = { focus = MSR_Crossroads }
 		#mutually_exclusive = { focus = MSR_Hooves }
@@ -5924,7 +5963,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Army_Reorganization }
+		prerequisite = { focus = MSR_Army_Reorganization }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Combat_Log"
@@ -5950,7 +5989,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Combat_Log }
+		prerequisite = { focus = MSR_Combat_Log }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Raider_Wars"
@@ -5976,7 +6015,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Raider_Wars }
+		prerequisite = { focus = MSR_Raider_Wars }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Combat_Simulation"
@@ -6004,7 +6043,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Army_Reorganization }
+		prerequisite = { focus = MSR_Army_Reorganization }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Reverse_Engineering"
@@ -6025,7 +6064,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Reverse_Engineering }
+		prerequisite = { focus = MSR_Reverse_Engineering }
 		mutually_exclusive = { focus = MSR_New_World }
 
 		completion_reward = {
@@ -6047,7 +6086,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Reverse_Engineering }
+		prerequisite = { focus = MSR_Reverse_Engineering }
 		mutually_exclusive = { focus = MSR_Old_World }
 
 		completion_reward = {
@@ -6071,7 +6110,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Army_Reorganization }
+		prerequisite = { focus = MSR_Army_Reorganization }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Routine_Maintenance"
@@ -6092,7 +6131,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Routine_Maintenance }
+		prerequisite = { focus = MSR_Routine_Maintenance }
 		mutually_exclusive = { focus = MSR_Reinforced_Alloys }
 
 		completion_reward = {
@@ -6114,7 +6153,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Routine_Maintenance }
+		prerequisite = { focus = MSR_Routine_Maintenance }
 		mutually_exclusive = { focus = MSR_Streamlined_Parts }
 
 		completion_reward = {
@@ -6138,7 +6177,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Army_Reorganization }
+		prerequisite = { focus = MSR_Army_Reorganization }
 		#mutually_exclusive = { focus = MSR_River }
 
 		completion_reward = {
@@ -6165,7 +6204,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_PBF }
+		prerequisite = { focus = MSR_PBF }
 		mutually_exclusive = { focus = MSR_Mobile_Weapon_System }
 
 		completion_reward = {
@@ -6193,7 +6232,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_PBF }
+		prerequisite = { focus = MSR_PBF }
 		mutually_exclusive = { focus = MSR_Legion_Of_Steel }
 
 		completion_reward = {
@@ -6223,7 +6262,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Army_Reorganization }
+		prerequisite = { focus = MSR_Army_Reorganization }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Promoting_Initiates"
@@ -6244,7 +6283,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Promoting_Initiates }
+		prerequisite = { focus = MSR_Promoting_Initiates }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Wasteland_Conscription"
@@ -6265,7 +6304,7 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Wasteland_Conscription }
+		prerequisite = { focus = MSR_Wasteland_Conscription }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Multirole_Training"
@@ -6288,9 +6327,9 @@ shared_focus = {
 			factor = 1
 		}
 
-		prerequisite = { Focus = MSR_Streamlined_Parts OR = MSR_Reinforced_Alloys }
-		prerequisite = { Focus = MSR_Old_World OR = MSR_New_World }
-		prerequisite = { Focus = MSR_Legion_Of_Steel OR = MSR_Mobile_Weapon_System }
+		prerequisite = { focus = MSR_Streamlined_Parts OR = MSR_Reinforced_Alloys }
+		prerequisite = { focus = MSR_Old_World OR = MSR_New_World }
+		prerequisite = { focus = MSR_Legion_Of_Steel OR = MSR_Mobile_Weapon_System }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Rangers_Lead_The_Way"

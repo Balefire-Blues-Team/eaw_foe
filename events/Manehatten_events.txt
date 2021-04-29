@@ -491,7 +491,7 @@ country_event = {
  	}
 }
 
-##Cottage Defense
+##Crusader Info
 country_event = {
 	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.13"}
  	id = MSR.13
@@ -501,6 +501,11 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = {
+ 		name = MSR.13.a
+ 		ai_chance = { factor = 30 }
+ 	}
 }
 
 ##Cottage Project
@@ -522,7 +527,10 @@ country_event = {
 				is_historical_focus_on = yes
 			}
 		}
- 		add_ideas = MSR_suspicious_scribes_idea
+		add_timed_idea = {
+		    idea = MSR_suspicious_scribes_idea
+		    days = 270
+		}
 		custom_effect_tooltip = MSR_gain_progress_tt
 		hidden_effect = {
 			add_to_variable = {
@@ -552,28 +560,22 @@ country_event = {
  	option = {
  		ai_chance = { factor = 50}
  		name = MSR.15.a
- 		hidden_effect = {
- 			add_to_variable = {
-				var = black_success
-				value = 1
-			}
- 		}
-		custom_effect_tooltip = MSR_gain_progress_tt
-		add_timed_idea = { idea = MSR_Project days = 180 }
+		add_political_power = 25
+		add_popularity = {
+		    ideology = continuation
+		    popularity = 0.05
+		}
  	}
 
  	option = {
  		ai_chance = { factor = 50}
  		name = MSR.15.b
- 		hidden_effect = {
- 			add_to_variable = {
-				var = black_success
-				value = 1
-			}
- 		}
-		custom_effect_tooltip = MSR_gain_progress_tt
-		add_timed_idea = { idea = MSR_Project days = 60 }
-		add_manpower = -200
+		custom_effect_tooltip = MSR_quicker_crusader_locating_tt
+		add_manpower = -150
+		add_stability = -0.05
+		hidden_effect = {
+			set_country_flag = MSR_more_scouting_teams_flag
+		}
  	}
 }
 
@@ -598,8 +600,8 @@ country_event = {
 			}
  		}
 		custom_effect_tooltip = MSR_gain_progress_tt
-		add_manpower = -50
-		MRA = {add_manpower = -100}
+
+		add_state_core = 55
  	}
 
 }
@@ -617,33 +619,35 @@ country_event = {
 	option = {
  		ai_chance = { factor = 50}
  		name = MSR.18.a
- 		hidden_effect = {
- 			add_to_variable = {
-				var = black_success
-				value = 1
-			}
- 		}
-		custom_effect_tooltip = MSR_gain_progress_tt
-		add_timed_idea = { idea = MSR_Project days = 180 }
 		add_manpower = -150
 		add_stability = -0.05
+
 		clr_country_flag = cant_do_dark_magic_flag
+
+		hidden_effect = {
+			country_event = { 
+				id = MSR.19
+				days = 89
+				random = 48
+			}
+		}
  	}
 
  	option = {
  		ai_chance = { factor = 50}
  		name = MSR.18.b
- 		hidden_effect = {
- 			add_to_variable = {
-				var = black_success
-				value = 1
-			}
- 		}
-		custom_effect_tooltip = MSR_gain_progress_tt
-		add_timed_idea = { idea = MSR_Project days = 60 }
 		add_manpower = -300
 		add_stability = -0.1
+
 		clr_country_flag = cant_do_dark_magic_flag
+
+		hidden_effect = {
+			country_event = { 
+				id = MSR.19
+				days = 59
+				random = 48
+			}
+		}
  	}
 }
 
@@ -659,15 +663,22 @@ country_event = {
  	fire_only_once = yes
 	
 	option = {
- 		ai_chance = { factor = 50}
+ 		ai_chance = { factor = 50 }
+
  		name = MSR.19.a
+ 		unlock_decision_tooltip = MSR_hunt_for_black_book
  		add_political_power = -100
+
 		add_tech_bonus = {
 			name = race_tech_bonus
 			bonus = 1.0
 			uses = 2
 			category = race_tech
-			}
+		}
+
+		hidden_effect = {
+			set_country_flag = MSR_dark_magic_flag
+		}
  	}
 }
 
@@ -701,7 +712,7 @@ country_event = {
 			}
 		
 		}
-		else = {country_event = { id = MSR.203 days = 20 }}
+		else = { country_event = { id = MSR.203 days = 20 } }
 		}
 
 	}
@@ -824,10 +835,7 @@ country_event = {
  	fire_only_once = yes
 	fixed_random_seed = no
 
-	option = {
-		trigger = {
-			has_country_flag = pip_beats_cottage_flag
-		}
+	option = { #Success
 		ai_chance = { factor = 30 
 			modifier = {
 				factor = 5
@@ -835,20 +843,17 @@ country_event = {
 			}
 		}
  		name = MSR.21.a
-		custom_effect_tooltip = MSR_LP_stops_tt
+ 		
+		custom_effect_tooltip = MSR_Upload_success_tt
+		custom_effect_tooltip = RED_new_focus_tree_tt
 		hidden_effect = {
-			set_politics = {
-				ruling_party = visionary
-			}
-			add_popularity = {
-				ideology = visionary
-				popularity = 0.5
-			}
+			load_focus_tree = ManeSr_Cottage_Success
+			set_country_flag = MSR_Success_Tree
 		}
 
 	}
 	
-	option = {
+	option = { #Failure
 		#trigger = {
 		#}
 		ai_chance = { factor = 30 
@@ -858,147 +863,14 @@ country_event = {
 			}
 		}
  		name = MSR.21.b
-		custom_effect_tooltip = MSR_LP_no_stops_tt
-		
-	random_list = {
- 		0 = {
- 			modifier = {
-					add = 10
-					check_variable = {
-                        black_success > 0
-                    }
-				}
-			modifier = {
-					add = 10
-					check_variable = {
-                        black_success > 1
-                    }
-				}
-			modifier = {
-					add = 10
-					check_variable = {
-                        black_success > 2
-                    }
-				}
-			modifier = {
-					add = 10
-					check_variable = {
-                        black_success > 3
-                    }
-				}
-			modifier = {
-					add = 10
-					check_variable = {
-                        black_success > 4
-                    }
-				}
-			modifier = {
-					add = 10
-					check_variable = {
-                        black_success > 5
-                    }
-				}
-			modifier = {
-					add = 10
-					check_variable = {
-                        black_success > 6
-                    }
-				}
-			modifier = {
-					add = 10
-					check_variable = {
-                        black_success > 7
-                    }
-				}
-			modifier = {
-					add = 10
-					check_variable = {
-                        black_success > 8
-                    }
-				}
-			modifier = {
-					add = 10
-					check_variable = {
-                        black_success > 9
-                    }
-				}
-			set_country_flag = MSR_Success_Tree
-			custom_effect_tooltip = MSR_Upload_success_tt
-			hidden_effect = {
-				load_focus_tree = ManeSr_Cottage_Success
-				bypass_focus = MSR_Success
-			}
- 		}
-
-		100 = {
-			modifier = {
-					add = -10
-					check_variable = {
-                        black_success > 0
-                    }
-				}
-			modifier = {
-					add = -10
-					check_variable = {
-                        black_success > 1
-                    }
-				}
-			modifier = {
-					add = -10
-					check_variable = {
-                        black_success > 2
-                    }
-				}
-			modifier = {
-					add = -10
-					check_variable = {
-                        black_success > 3
-                    }
-				}
-			modifier = {
-					add = -10
-					check_variable = {
-                        black_success > 4
-                    }
-				}
-			modifier = {
-					add = -10
-					check_variable = {
-                        black_success > 5
-                    }
-				}
-			modifier = {
-					add = -10
-					check_variable = {
-                        black_success > 6
-                    }
-				}
-			modifier = {
-					add = -10
-					check_variable = {
-                        black_success > 7
-                    }
-				}
-			modifier = {
-					add = -10
-					check_variable = {
-                        black_success > 8
-                    }
-				}
-			modifier = {
-					add = -10
-					check_variable = {
-                        black_success > 9
-                    }
-				}
-        	set_country_flag = MSR_Failure_Tree
-			custom_effect_tooltip = MSR_Upload_failiure_tt
-			hidden_effect = {
-				load_focus_tree = ManeSr_Cottage_Failure
-				bypass_focus = MSR_Failure
-			}
-        }
-	}
+		#custom_effect_tooltip = MSR_LP_no_stops_tt
+		custom_effect_tooltip = MSR_Upload_failiure_tt
+		custom_effect_tooltip = RED_new_focus_tree_tt
+		hidden_effect = {
+			set_country_flag = MSR_Failure_Tree
+			load_focus_tree = ManeSr_Cottage_Failure
+		}
+	
 
 	}
 }
@@ -1037,6 +909,44 @@ country_event = {
 #	}
 #	
 #}
+
+##Crusader Loaction
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.23"}
+ 	id = MSR.23
+ 	title = MSR.23.title
+ 	desc = MSR.23.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+
+ 	trigger = {
+ 		original_tag = MSR
+ 		has_completed_focus = MSR_crusaders
+ 	}
+ 	mean_time_to_happen = {
+		days = 365
+		modifier = {
+			factor = 0.6
+			has_country_flag = MSR_more_scouting_teams_flag
+		}
+		modifier = {
+			add = -90
+			has_country_flag = MSR_stable_tec_location_data_flag
+		}
+	}
+
+ 	option = {
+ 		name = MSR.23.a
+ 		ai_chance = { factor = 30 }
+ 		custom_effect_tooltip = MSR_located_crusader_tt
+ 		goto_state = 55
+ 		add_political_power = 50
+ 		hidden_effect = {
+ 			set_country_flag = MSR_located_crusader_flag
+ 		}
+ 	}
+}
 
 ## Successful Line ##
 
