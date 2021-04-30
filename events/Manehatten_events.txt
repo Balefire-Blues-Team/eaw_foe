@@ -1,6 +1,7 @@
 ###By Kingsmen
 
 add_namespace = MSR
+add_namespace = MSR_aj_rangers
 add_namespace = MSR_cr
 add_namespace = MSR_bs
 add_namespace = MSR_sl
@@ -1092,6 +1093,279 @@ country_event = {
  		name = MSR.52.a
 		add_stability = 0.15
 	}
+}
+
+#############################
+## Historical AJ's Rangers ##
+#############################
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.1"}
+ 	id = MSR_aj_rangers.1
+ 	title = MSR_aj_rangers.1.title
+ 	desc = MSR_aj_rangers.1.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			every_state = {
+				limit = { is_core_of = MSR }
+				add_core_of = AJR				
+			}
+			469 = {
+				add_core_of = AJR
+				teleport_armies = {
+					limit = { tag = MSR }
+				}
+			}
+			53 = {
+				add_core_of = AJR
+				teleport_armies = {
+					limit = { tag = MSR }
+				}
+			}
+			55 = {
+				add_core_of = AJR
+				teleport_armies = {
+					limit = { tag = MSR }
+				}
+			}
+			AJR = {
+				transfer_state = 469
+				transfer_state = 53
+				transfer_state = 55
+				inherit_technology = MSR
+			}
+		}
+	}
+
+ 	option = { #MSR
+ 		name = MSR_aj_rangers.1.a
+ 		ai_chance = { factor = 30 }
+ 		MSR = {
+ 			kill_country_leader = yes
+			create_country_leader = {
+				name = "Council of Paladins"
+				desc = ""
+				picture = ""
+				expire = "1965.1.1"
+				ideology = despotism
+				traits = {
+					paladin_council_trait
+				}
+			}
+			add_popularity = {
+			    ideology = visionary
+			    popularity = -0.50
+			}
+ 			custom_effect_tooltip = RED_new_focus_tree_tt
+ 			hidden_effect = {
+ 				set_country_flag = MSR_aj_rangers_revolt
+				set_country_flag = MSR_aj_rangers_must_do_focus_flag
+ 				load_focus_tree = { 
+					tree = ManeSr_cw_tree
+					keep_completed = yes
+				}
+
+ 			}
+ 		}
+
+ 	}
+
+ 	option = { #AJR
+ 		name = MSR_aj_rangers.1.b
+ 		ai_chance = { factor = 30 }
+ 		custom_effect_tooltip = set_country_to_AJR
+ 		hidden_effect = {
+ 			MSR = {
+	 			kill_country_leader = yes
+				create_country_leader = {
+					name = "Council of Paladins"
+					desc = ""
+					picture = ""
+					expire = "1965.1.1"
+					ideology = despotism
+					traits = {
+						paladin_council_trait
+					}
+				}
+				add_popularity = {
+				    ideology = visionary
+				    popularity = -0.50
+				}
+	 			set_country_flag = MSR_aj_rangers_revolt
+				set_country_flag = MSR_aj_rangers_must_do_focus_flag
+ 				load_focus_tree = { 
+					tree = ManeSr_cw_tree
+					keep_completed = yes
+				}
+	 		}
+	 		AJR = { 
+				change_tag_from = ROOT
+			}
+		}
+ 	}
+}
+
+country_event = { #Crossroads' Trial
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.2"}
+ 	id = MSR_aj_rangers.2
+ 	title = MSR_aj_rangers.2.title
+ 	desc = MSR_aj_rangers.2.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = { 
+ 		name = MSR_aj_rangers.2.a
+
+ 	}
+
+}
+
+country_event = { #Cauterize Ceasefire
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.3"}
+ 	id = MSR_aj_rangers.3
+ 	title = MSR_aj_rangers.3.title
+ 	desc = MSR_aj_rangers.3.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	trigger = {
+		has_global_flag = cauterize_in_progress_flag
+		tag = AJR
+		has_war_with = NEV
+		MSR = {
+			has_war_with = NEV
+		}
+	}
+	mean_time_to_happen = {
+		days = 3
+	}
+
+
+ 	option = { #Send Ceasefire
+ 		name = MSR_aj_rangers.3.a
+ 		ai_chance = {
+ 			base = 40
+ 			modifier = {
+ 				factor = 0
+ 				is_historical_focus_on = yes
+ 			}
+ 		}
+ 		MSR = {
+	 		country_event = {
+	 			id = MSR_aj_rangers.4
+	 			days = 2
+	 		}
+	 	}
+ 		custom_effect_tooltip = if_MSR_accepts_ceasefire_tt
+ 	}
+
+ 	option = { #Justice Cannot Wait
+ 		name = MSR_aj_rangers.3.b
+ 		ai_chance = {
+ 			base = 10
+ 			modifier = {
+ 				factor = 0
+ 				is_historical_focus_on = yes
+ 			}
+ 		}
+
+ 		add_political_power = 25
+ 		add_stability = -0.05
+ 		add_war_support = -0.10
+ 	}
+}
+
+country_event = { #Cauterize Ceasefire - MSR
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.4"}
+ 	id = MSR_aj_rangers.4
+ 	title = MSR_aj_rangers.4.title
+ 	desc = MSR_aj_rangers.4.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = { #Accept Ceasefire
+ 		name = MSR_aj_rangers.4.a
+ 		ai_chance = {
+ 			base = 40
+ 			modifier = {
+ 				factor = 0
+ 				is_historical_focus_on = yes
+ 			}
+ 		}
+
+ 		MSR_AJR_cauterize_ceasefire = yes
+
+ 		hidden_effect = {
+ 			AJR = {
+ 				country_event = MSR_aj_rangers.5
+ 			}
+ 		}
+ 	}
+
+ 	option = { #War Continues
+ 		name = MSR_aj_rangers.4.b
+ 		ai_chance = {
+ 			base = 10
+ 			modifier = {
+ 				factor = 0
+ 				is_historical_focus_on = yes
+ 			}
+ 		}
+
+ 		add_political_power = 25
+ 		add_stability = -0.05
+ 		add_war_support = -0.10
+
+ 		hidden_effect = {
+ 			AJR = {
+ 				country_event = MSR_aj_rangers.6
+ 			}
+ 		}
+ 	}
+}
+
+country_event = { #Ceasefire Accepted
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.5"}
+ 	id = MSR_aj_rangers.5
+ 	title = MSR_aj_rangers.5.title
+ 	desc = MSR_aj_rangers.5.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = { #yay
+ 		name = MSR_aj_rangers.5.a
+ 		add_stability = 0.05
+ 	}
+}
+
+country_event = { #Ceasefire Declined
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.6"}
+ 	id = MSR_aj_rangers.6
+ 	title = MSR_aj_rangers.6.title
+ 	desc = MSR_aj_rangers.6.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = { #aww
+ 		name = MSR_aj_rangers.6.a
+ 		add_stability = -0.05
+ 	}
 }
 
 #############################
