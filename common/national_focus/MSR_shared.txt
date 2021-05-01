@@ -3367,7 +3367,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
-			create_field_marshal = {
+			create_corps_commander = {
 				name = "Growler Brightclaw"
 				portrait_path = "gfx/leaders/Talons/foe_generic_talon_5.tga"
 				traits = { lucky_trait merc_commander griffon_race_trait }
@@ -3380,7 +3380,7 @@ shared_focus = {
 			}
 			custom_effect_tooltip = MSR_growler_stats_tt
 
-			create_field_marshal = {
+			create_corps_commander = {
 				name = "Lunar Hymn"
 				portrait_path = "gfx/leaders/Generic/foe_generic_pony_5.tga"
 				traits = { perceptive_trait thestral_race_trait }
@@ -5439,9 +5439,9 @@ shared_focus = {
 			log = "[GetDateText]: [Root.GetName]:Focus MSR_Foundries_Of_Steel"
 			54 = {
 				add_building_construction = {
-				type = arms_factory
-				level = 2
-				instant_build = yes
+					type = arms_factory
+					level = 2
+					instant_build = yes
 				}
 				add_extra_state_shared_building_slots = 2
 			}
@@ -6061,10 +6061,10 @@ shared_focus = {
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Combat_Log"
 			add_tech_bonus = {
-			name = doctrine_bonus
-			bonus = 0.8
-			uses = 2
-			category = land_doctrine
+				name = doctrine_bonus
+				bonus = 0.75
+				uses = 1
+				category = land_doctrine
 			}
 		}
 }
@@ -6087,10 +6087,10 @@ shared_focus = {
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Raider_Wars"
 			add_tech_bonus = {
-			name = doctrine_bonus
-			bonus = 0.8
-			uses = 2
-			category = land_doctrine
+				name = doctrine_bonus
+				bonus = 0.75
+				uses = 1
+				category = land_doctrine
 			}
 		}
 }
@@ -6113,10 +6113,10 @@ shared_focus = {
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Combat_Simulation"
 			add_tech_bonus = {
-			name = doctrine_bonus
-			bonus = 0.8
-			uses = 2
-			category = land_doctrine
+				name = doctrine_bonus
+				bonus = 0.75
+				uses = 1
+				category = land_doctrine
 			}
 		}
 }
@@ -6442,12 +6442,13 @@ shared_focus = {
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
-			factor = 1
+			factor = 300
 		}
 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_fight_disorganization"
+			country_event = MSR_aj_rangers.16
 
 		}
 }
@@ -6462,13 +6463,15 @@ shared_focus = {
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
-			factor = 1
+			factor = 300
 		}
 
 		prerequisite = { focus = MSR_fight_disorganization }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: MSR_consolidate_contingent"
+			add_stability = 0.10
+			add_manpower = 159
 		}
 }
 
@@ -6482,7 +6485,7 @@ shared_focus = {
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
-			factor = 1
+			factor = 300
 		}
 
 		prerequisite = { focus = MSR_consolidate_contingent }
@@ -6508,7 +6511,7 @@ shared_focus = {
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
-			factor = 1
+			factor = 5
 		}
 
 		prerequisite = { focus = MSR_attack_traitors }
@@ -6535,7 +6538,7 @@ shared_focus = {
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
-			factor = 1
+			factor = 5
 		}
 
 		prerequisite = { focus = MSR_attack_traitors }
@@ -6561,7 +6564,7 @@ shared_focus = {
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
-			factor = 1
+			factor = 5
 		}
 
 		prerequisite = { focus = MSR_attack_traitors }
@@ -6573,6 +6576,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_aid_from_other_contingents"
+			country_event = MSR_aj_rangers.8
 		}
 }
 
@@ -6586,7 +6590,7 @@ shared_focus = {
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
-			factor = 1
+			factor = 5
 		}
 
 		prerequisite = { focus = MSR_attack_traitors }
@@ -6631,7 +6635,7 @@ shared_focus = {
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
-			factor = 1
+			factor = 5
 		}
 
 		prerequisite = { focus = MSR_attack_traitors }
@@ -6675,6 +6679,16 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_mend_the_contingent"
+			remove_ideas = MSR_AJR_civil_war_idea
+			add_timed_idea = {
+			    idea = MSR_civil_war_recovery_idea
+			    days = 450
+			}
+
+			if = {
+				limit = { has_idea = scraping_the_barrel }
+				add_ideas = extensive_conscription
+			}
 			
 		}
 }
@@ -6695,8 +6709,13 @@ shared_focus = {
 
 		prerequisite = { focus = MSR_mend_the_contingent }
 
+		bypass = {
+			owns_state = 66
+		}
+
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_cw_secure_our_position"
+			custom_effect_tooltip = MSR_unlock_empire_border_war_tt
 		}
 }
 
@@ -6717,6 +6736,13 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_cw_apply_defensive_doctrines"
+			add_tech_bonus = {
+				name = doctrine_bonus
+				bonus = 0.75
+				uses = 1
+				category = land_doctrine
+			}
+			add_ideas = MSR_defensive_doctrine_idea
 		}
 }
 
@@ -6733,10 +6759,36 @@ shared_focus = {
 			factor = 1
 		}
 
+		available = {
+			any_other_country = {
+				is_steel_ranger_nation = yes
+				has_government = continuation 
+			}
+		}
+
+		bypass = {
+			NOT = {
+				any_other_country = {
+					is_steel_ranger_nation = yes
+					has_government = continuation 
+				}
+			}
+		}
+
 		prerequisite = { focus = MSR_cw_secure_our_position }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_cw_support_other_elders"
+			every_other_country = {
+				limit = {
+					is_steel_ranger_nation = yes
+					has_government = continuation 
+				}
+				add_timed_idea = {
+					idea = support_from_MSR_idea
+					days = 365
+				}
+			}
 		}
 }
 
@@ -6753,11 +6805,18 @@ shared_focus = {
 			factor = 1
 		}
 
+		available = {
+			NOT = {
+				has_idea = MSR_civil_war_recovery_idea
+			}
+		}
+
 		prerequisite = { focus = MSR_cw_support_other_elders }
 		prerequisite = { focus = MSR_cw_apply_defensive_doctrines }
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_cw_anti_aj_operations"
+			country_event = MSR_aj_rangers.15
 		}
 }
 
@@ -6818,10 +6877,32 @@ shared_focus = {
 			factor = 1
 		}
 
+		bypass = {
+			OR = {
+				owns_state = 18
+				MAR = {
+					is_subject_of = MSR
+				}
+			}
+		}
+
 		prerequisite = { focus = MSR_cw_Deal_With_The_Traitors }
+
+		will_lead_to_war_with = MAR
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_cw_secure_southside"
+			custom_effect_tooltip = red_mar_annex_tt
+			hidden_effect = {
+				every_other_country = {
+					limit = {
+						has_full_control_of_state = 18 #Marelem
+					}
+					MSR = {
+						create_wargoal = { type = annex_everything target = PREV }
+					}
+				}
+			}
 	}
 }
 
@@ -6886,6 +6967,19 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_tally_up_technology"
+			add_resource = {
+				type = advanced
+				amount = 4
+				state = 19
+			}
+
+			custom_effect_tooltip = MSR_60_day_cw_recover_tt
+			hidden_effect = {
+				modify_timed_idea = {
+				    idea = MSR_civil_war_recovery_idea
+				    days = -60
+				}
+			}
 		}
 }
 
@@ -6953,6 +7047,8 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Strict_Isolation"
+			add_offsite_building = { type = arms_factory level = 5 }
+			add_ideas = MSR_steel_arsenel_idea
 		}
 }
 
@@ -6962,7 +7058,7 @@ shared_focus = {
 		icon = GFX_goal_steel_rangers
 		x = 7
 		y = 13
-		cost = 1
+		cost = 5
 
 		ai_will_do = { 
 			factor = 1
@@ -6992,7 +7088,16 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_the_menace_above"
-
+			add_timed_idea = {
+				idea = MSR_menace_above_idea
+				days = 180
+			}
+			AJR = {
+				add_timed_idea = {
+					idea = MSR_menace_above_idea
+					days = 180
+				}
+			}
 		}
 }
 
@@ -7005,7 +7110,7 @@ shared_focus = {
 		cost = 1
 
 		ai_will_do = { 
-			factor = 1
+			factor = 300
 		}
 
 		available = {
@@ -7017,7 +7122,12 @@ shared_focus = {
 
 		prerequisite = { focus = MSR_the_menace_above }
 
+		will_lead_to_war_with = AJR
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: MSR_resume_hostilities"
+			declare_war_on = {
+				target = AJR
+				type = annex_everything
+			}
 		}
 }

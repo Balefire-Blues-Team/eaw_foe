@@ -1042,12 +1042,12 @@ country_event = {
  		name = MSR.50.a
 		kill_country_leader = yes
 		create_country_leader = {
-		name = "Utter Chaos"
-		desc = ""
-		picture = ""
-		expire = "1965.1.1"
-		ideology = despotism
-		traits = {}
+			name = "Total Anarchy"
+			desc = ""
+			picture = ""
+			expire = "1965.1.1"
+			ideology = steel_ranger_cont
+			traits = {}
 		}
 	}
 }
@@ -1130,16 +1130,164 @@ country_event = {
 				transfer_state = 55
 				inherit_technology = MSR
 			}
+			AJR = {
+				if = {
+					limit = { 
+			            NOT = { 
+						    has_template = "Knight Company"
+						}
+					}
+					division_template = {
+						name = "Knight Company"
+
+						regiments = {
+							power_armour = { x = 0 y = 0 }
+							power_armour = { x = 0 y = 1 }
+							power_armour = { x = 0 y = 2 }
+							power_armour = { x = 1 y = 0 }
+							power_armour = { x = 1 y = 1 }
+						}
+						support = {
+							fireteam_support = { x = 0 y = 0 }
+						}
+					}
+				}
+				if = {
+					limit = { 
+			            NOT = { 
+						    has_template = "Reserve Company"
+						}
+					}
+					division_template = {
+						name = "Reserve Company"
+
+						regiments = {
+							infantry = { x = 0 y = 0 }
+							infantry = { x = 0 y = 1 }
+							infantry = { x = 0 y = 2 }
+							infantry = { x = 0 y = 3 }
+						}
+					}
+				}
+				if = {
+					limit = { 
+			            NOT = { 
+						    has_template = "Initiate Milita"
+						}
+					}
+					division_template = {
+						name = "Initiate Militia"
+
+						regiments = {
+							militia = { x = 0 y = 0 }
+							militia = { x = 0 y = 1 }
+							militia = { x = 1 y = 0 }
+							militia = { x = 1 y = 1 }
+						}
+					}
+				}
+				if = {
+					limit = { 
+			            NOT = { 
+						    has_template = "Ranger Strike-Team"
+						}
+					}
+					division_template = {
+						name = "Ranger Strike-Team"
+
+						regiments = {
+							spec_ops = { x = 0 y = 0 }
+							spec_ops = { x = 0 y = 1 }
+							spec_ops = { x = 0 y = 2 }
+							spec_ops = { x = 0 y = 3 }
+						}
+					}
+				}
+
+
+				55 = {
+					create_unit = {
+						division = "name = \"Applejack's Finest\" division_template = \"Knight Company\" start_experience_factor = 1.0 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+					create_unit = {
+						division = "name = \"Ranger Outcasts\" division_template = \"Knight Company\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+					create_unit = {
+						division = "name = \"Platinum Company\" division_template = \"Knight Company\" start_experience_factor = 0.3 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+
+					create_unit = {
+						division = "name = \"1st Reserve Squad\" division_template = \"Reserve Company\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+					create_unit = {
+						division = "name = \"2nd Reserve Squad\" division_template = \"Reserve Company\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+				}
+				53 = {
+					create_unit = {
+						division = "name = \"Fetlock Knights\" division_template = \"Knight Company\" start_experience_factor = 0.2 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+					create_unit = {
+						division = "name = \"3rd Reserve Squad\" division_template = \"Reserve Company\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+					create_unit = {
+						division = "name = \"4th Reserve Squad\" division_template = \"Reserve Company\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+					create_unit = {
+						division = "name = \"5th Reserve Squad\" division_template = \"Reserve Company\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+				}
+				469 = {
+					create_unit = {
+						division = "name = \"Orangedale Knights\" division_template = \"Knight Company\" start_experience_factor = 0.2 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+					create_unit = {
+						division = "name = \"6th Reserve Squad\" division_template = \"Reserve Company\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+					create_unit = {
+						division = "name = \"7th Reserve Squad\" division_template = \"Reserve Company\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+				}
+			}
+
 			if = {
 				limit = { MSR = { owns_state = 18 } }
+				AJR = {
+					transfer_state = 18
+					add_state_core = 18
+				}
 				18 = {
-					add_core_of = AJR
 					teleport_armies = {
 						limit = { tag = MSR }
 					}
+					create_unit = {
+						division = "name = \"Marelem Knights\" division_template = \"Knight Company\" start_experience_factor = 0.1 start_equipment_factor = 1.0"
+						owner = AJR
+					}
 				}
-				AJR = {
-					transfer_state = 18
+			}
+
+			MSR = {
+				every_unit_leader = {
+					limit = {
+						OR = {
+							has_id = 88844
+							has_id = 88842
+						}
+					}
+					set_nationality = AJR
 				}
 			}
 		}
@@ -1148,24 +1296,31 @@ country_event = {
  	option = { #MSR
  		name = MSR_aj_rangers.1.a
  		ai_chance = { factor = 30 }
+ 		646 = {
+			set_demilitarized_zone = yes
+		}
+		54 = {
+			set_demilitarized_zone = yes
+		}
  		MSR = {
  			kill_country_leader = yes
 			create_country_leader = {
-				name = "Council of Paladins"
+				name = "Total Anarchy"
 				desc = ""
 				picture = ""
 				expire = "1965.1.1"
-				ideology = despotism
+				ideology = steel_ranger_cont
 				traits = {
-					paladin_council_trait
 				}
 			}
 			add_popularity = {
 			    ideology = visionary
 			    popularity = -0.50
 			}
-			add_stability = -0.40
+			add_stability = -1.0
+			
 			add_ideas = MSR_AJR_civil_war_idea
+			add_ideas = MSR_no_leadership_idea
  			custom_effect_tooltip = RED_new_focus_tree_tt
  			hidden_effect = {
  				clr_country_flag = MSR_crusader_decisions_available
@@ -1183,6 +1338,7 @@ country_event = {
  			AJR = {
  				add_ideas = MSR_AJR_civil_war_idea
  			}
+
  		}
 
  	}
@@ -1195,24 +1351,30 @@ country_event = {
  		}
  		custom_effect_tooltip = set_country_to_AJR
  		hidden_effect = {
+ 			646 = {
+				set_demilitarized_zone = yes
+			}
+			54 = {
+				set_demilitarized_zone = yes
+			}
  			MSR = {
 	 			kill_country_leader = yes
 				create_country_leader = {
-					name = "Council of Paladins"
+					name = "Total Anarchy"
 					desc = ""
 					picture = ""
 					expire = "1965.1.1"
-					ideology = despotism
+					ideology = steel_ranger_cont
 					traits = {
-						paladin_council_trait
 					}
 				}
 				add_popularity = {
 				    ideology = visionary
 				    popularity = -0.50
 				}
-				add_stability = -0.40
+				add_stability = -1.0
 				add_ideas = MSR_AJR_civil_war_idea
+				add_ideas = MSR_no_leadership_idea
 				clr_country_flag = MSR_crusader_decisions_available
 	 			set_country_flag = MSR_aj_rangers_revolt
 	 			set_country_flag = MSR_aj_rangers_load_tree_flag
@@ -1242,7 +1404,11 @@ country_event = { #Crossroads' Trial
 
  	option = { 
  		name = MSR_aj_rangers.2.a
-
+ 		add_popularity = {
+		    ideology = continuation
+		    popularity = 0.05
+		}
+ 		add_stability = 0.05
  	}
 
 }
@@ -1385,6 +1551,349 @@ country_event = { #Ceasefire Declined
  	option = { #aww
  		name = MSR_aj_rangers.6.a
  		add_stability = -0.05
+ 	}
+}
+
+country_event = { #Firefight at Bucklyn Cross
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.7"}
+ 	id = MSR_aj_rangers.7
+ 	title = MSR_aj_rangers.7.title
+ 	desc = MSR_aj_rangers.7.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = { 
+ 		name = MSR_aj_rangers.7.a
+ 		add_manpower = -72
+ 		add_stability = -0.01
+ 		save_current_manpower = yes
+ 		19 = {
+ 			add_manpower = -57
+ 			damage_building = {
+			    type = infrastructure
+			    damage = 4
+			}
+			damage_building = {
+			    type = bunker
+			    damage = 6
+			    province = 7509
+			}
+			damage_building = {
+			    type = arms_factory
+			    damage = 3
+			}
+ 		}
+ 		restore_previous_manpower = yes
+ 	}
+
+}
+
+country_event = { #Reinforcements from Hoofington
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.8"}
+ 	id = MSR_aj_rangers.8
+ 	title = MSR_aj_rangers.8.title
+ 	desc = MSR_aj_rangers.8.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = { #Huzzah
+ 		name = MSR_aj_rangers.8.a
+ 		create_corps_commander = {
+			name = "Paladin Sugar Toffee"
+			portrait_path = "gfx/leaders/Generic/foe_generic_pony_5.tga"
+			traits = { enduring_trait hoof_veteran_trait pony_race_trait }
+			skill = 2
+			attack_skill = 2
+			defense_skill = 2
+			planning_skill = 3
+			logistics_skill = 2
+			id = 88851
+		}
+		custom_effect_tooltip = MSR_toffee_stats_tt
+		custom_effect_tooltip = MSR_hoofington_oob_tt
+ 		hidden_effect = {
+ 			load_oob = MSR_hoofington
+ 		}
+ 	}
+}
+
+country_event = { #Bucklyn Outskirts border war - on attacker win
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.9"}
+ 	id = MSR_aj_rangers.9
+ 	title = MSR_aj_rangers.9.title
+ 	desc = MSR_aj_rangers.9.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = { #Take State
+ 		name = MSR_aj_rangers.9.a
+ 		add_political_power = 50
+		add_war_support = 0.05
+		ROOT = {
+			transfer_state = 66
+		}
+ 	}
+
+ 	option = { #Reduce Debuff
+ 		name = MSR_aj_rangers.9.b
+ 		add_political_power = 50
+		add_stability = 0.05
+
+		custom_effect_tooltip = MSR_120_day_cw_recover_tt
+		hidden_effect = {
+			modify_timed_idea = {
+			    idea = MSR_civil_war_recovery_idea
+			    days = -120
+			}
+		}
+ 	}
+ 	}
+}
+
+country_event = { #Bucklyn Outskirts border war - on attacker lose
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.10"}
+ 	id = MSR_aj_rangers.10
+ 	title = MSR_aj_rangers.10.title
+ 	desc = MSR_aj_rangers.10.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = { #Take State
+ 		name = MSR_aj_rangers.10.a
+ 		add_political_power = -50
+ 	}
+}
+
+country_event = { #Bucklyn Outskirts border war - on attacker cancel
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.11"}
+ 	id = MSR_aj_rangers.11
+ 	title = MSR_aj_rangers.11.title
+ 	desc = MSR_aj_rangers.11.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = {
+ 		name = MSR_aj_rangers.11.a
+ 		add_political_power = -25
+ 	}
+}
+
+country_event = { #Bucklyn Outskirts border war - on defender win
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.12"}
+ 	id = MSR_aj_rangers.12
+ 	title = MSR_aj_rangers.12.title
+ 	desc = MSR_aj_rangers.12.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = {
+ 		name = MSR_aj_rangers.12.a
+ 		add_political_power = 50
+		add_war_support = 0.05
+ 	}
+}
+
+country_event = { #Bucklyn Outskirts border war - on defender lose
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.13"}
+ 	id = MSR_aj_rangers.13
+ 	title = MSR_aj_rangers.13.title
+ 	desc = MSR_aj_rangers.13.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = {
+ 		name = MSR_aj_rangers.13.a
+ 		add_political_power = -50
+		add_stability = -0.05
+ 	}
+}
+
+country_event = { #Bucklyn Outskirts border war - on defender cancel
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.14"}
+ 	id = MSR_aj_rangers.14
+ 	title = MSR_aj_rangers.14.title
+ 	desc = MSR_aj_rangers.14.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = {
+ 		name = MSR_aj_rangers.14.a
+ 		add_political_power = -25
+ 	}
+}
+
+country_event = { #Police State Time
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.15"}
+ 	id = MSR_aj_rangers.15
+ 	title = MSR_aj_rangers.15.title
+ 	desc = MSR_aj_rangers.15.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = { #aww
+ 		name = MSR_aj_rangers.15.a
+ 		add_ideas =  MSR_literally_1984_idea
+ 	}
+}
+
+country_event = { #Paladin Council Assumes Power
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.16"}
+ 	id = MSR_aj_rangers.16
+ 	title = MSR_aj_rangers.16.title
+ 	desc = MSR_aj_rangers.16.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = { 
+ 		name = MSR_aj_rangers.16.a
+
+ 		kill_country_leader = yes
+		create_country_leader = {
+			name = "Council of Paladins"
+			desc = ""
+			picture = ""
+			expire = "1965.1.1"
+			ideology = steel_ranger_cont
+			traits = {
+				paladin_council_trait
+			}
+		}
+		add_stability = 0.10
+		remove_ideas = MSR_no_leadership_idea
+		646 = {
+			set_demilitarized_zone = no
+		}
+		54 = {
+			set_demilitarized_zone = no
+		}
+ 		
+ 	}
+}
+
+country_event = { #End Ceasefire
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.17"}
+ 	id = MSR_aj_rangers.17
+ 	title = MSR_aj_rangers.17.title
+ 	desc = MSR_aj_rangers.17.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	trigger = {
+		has_country_flag = MSR_has_truce_with_AJR_flag
+		tag = MSR
+		is_in_faction_with = AJR
+		NEV = {
+			exists = no
+		}
+		AJR = {
+			exists = yes
+		}
+	}
+	mean_time_to_happen = {
+		days = 3
+	}
+
+
+ 	option = { #End Ceasefire
+ 		name = MSR_aj_rangers.17.a
+ 		ai_chance = {
+ 			base = 40
+ 			modifier = {
+ 				factor = 0
+ 				is_historical_focus_on = yes
+ 			}
+ 		}
+ 		AJR = {
+	 		country_event = {
+	 			id = MSR_aj_rangers.18
+	 			days = 2
+	 		}
+	 	}
+
+ 		dismantle_faction = yes
+ 		add_war_support = 0.05
+
+ 		hidden_effect = {
+ 			diplomatic_relation = {
+			    country = AJR
+			    relation = guarantee
+			    active = no
+			}
+			diplomatic_relation = {
+			    country = AJR
+			    relation = non_aggression_pact
+			    active = no
+			}
+			diplomatic_relation = {
+			    country = AJR
+			    relation = military_access
+			    active = no
+			}
+			AJR = {
+				diplomatic_relation = {
+				    country = MSR
+				    relation = guarantee
+				    active = no
+				}
+				diplomatic_relation = {
+				    country = MSR
+				    relation = non_aggression_pact
+				    active = no
+				}
+				diplomatic_relation = {
+				    country = MSR
+				    relation = military_access
+				    active = no
+				}
+			}
+ 		}
+ 	}
+}
+
+country_event = { #AJR - Ceasefire Over
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.18"}
+ 	id = MSR_aj_rangers.18
+ 	title = MSR_aj_rangers.18.title
+ 	desc = MSR_aj_rangers.18.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = { #aww
+ 		name = MSR_aj_rangers.18.a
+ 		add_war_support = 0.05
  	}
 }
 
