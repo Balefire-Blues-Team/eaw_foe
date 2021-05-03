@@ -859,12 +859,13 @@ TEN_monorail_line_category = {
 		}
 
 		remove_effect = {
-		add_building_construction = {
-				type = dockyard 
-				province = 4276
-				level = 1
-				instant_build = yes
+			478 = {
+				add_building_construction = {
+					type = dockyard 
+					level = 1
+					instant_build = yes
 				}
+			}
 		set_country_flag = TEN_naval_focus
 		load_focus_tree = TEN_society_naval
 		}
@@ -2065,3 +2066,486 @@ TEN_penal_squads_category = {
 		}
 	}	
 }
+
+###THE GHOUL PATH###
+
+###Crushing the Resistances
+
+TEN_ghoul_resistance = {
+	
+	TEN_soc_resistance_mission = {
+		
+		days_mission_timeout = 60
+		is_good = no
+		fire_only_once = yes
+		
+		allowed = { tag = TEN }
+		
+		icon = revolt
+		
+		activation = {
+			has_country_flag = TEN_soc_bigots_hate_ghouls
+		}
+
+		available = {
+			NOT = {
+				has_country_flag = TEN_soc_bigots_hate_ghouls
+			}
+		}
+		
+		visible = {
+		}
+		
+		timeout_effect = {
+			set_politics = {
+			ruling_party = continuation
+			elections_allowed = no
+			}
+		}
+		
+		complete_effect = {
+			remove_ideas = TEN_twilight_resistance_against_ghouls
+		}
+		
+	}
+	
+	TEN_grim_resistance_mission = {
+		
+		days_mission_timeout = 60
+		is_good = no
+		fire_only_once = yes
+		
+		allowed = { tag = TEN }
+		
+		icon = revolt
+		
+		activation = {
+			has_country_flag = TEN_grim_star_being_a_dickhead
+		}
+
+		available = {
+			NOT = {
+				has_country_flag = TEN_grim_star_being_a_dickhead
+			}
+		}
+		
+		visible = {
+		}
+		
+		timeout_effect = {
+			set_politics = {
+			ruling_party = visionary
+			elections_allowed = no
+			}
+		}
+		
+		complete_effect = {
+			remove_ideas = TEN_grim_stars_resistance
+		}
+		
+	}
+}
+
+TEN_ghoul_goering = {
+	TEN_warmongering_ghouls = {
+		
+		days_mission_timeout = 365
+		is_good = no
+		fire_only_once = no
+		
+		allowed = { tag = TEN }
+		
+		icon = revolt
+		
+		activation = {
+			has_completed_focus = TEN_ghoul_war_econ
+		}
+
+		available = {
+			has_war = yes
+		}
+		
+		visible = {
+			has_completed_focus = TEN_ghoul_war_econ
+		}
+		
+		timeout_effect = {
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = manpower_laws_blocked
+					}	
+				}
+				set_country_flag = manpower_laws_blocked
+			}
+		}
+		
+		complete_effect = {
+		}
+		
+	}
+}
+
+TEN_ghoul_tower_assembly = {
+####more party pop
+	TEN_assembly_dec_0 = {              
+		allowed = { original_tag = TEN }
+
+		icon = generic_civil_support
+
+		cost = 200
+
+		days_remove = 80
+
+		ai_will_do = {
+			base = 100
+		}
+
+		is_good = yes
+
+		available = {
+			
+		}
+		visible = {
+			has_completed_focus = TEN_ghoul_takeover
+		}
+
+		modifier = {
+			political_power_cost = 0.80
+			destruction_drift = 0.08
+		}
+	}
+####EVEN MORE ARMY BOYS
+	TEN_assembly_dec_1 = {              
+		allowed = { original_tag = TEN }
+
+		icon = generic_civil_support
+
+		cost = 150
+
+		days_remove = 20
+		days_re_enable = 365
+
+		ai_will_do = {
+			base = 100
+		}
+
+		is_good = yes
+
+		available = {
+			NOT = {
+				has_country_flag = TEN_debate_in_process
+			}
+		}
+		visible = {
+			has_completed_focus = TEN_ghoul_i_1
+		}
+		
+		complete_effect = {
+			country_event = { id = TEN.137 }
+			set_country_flag = TEN_debate_in_process
+			set_country_flag = TEN_volcel
+		}
+		
+		remove_effect = {
+			country_event = { id = TEN.140 }
+			clr_country_flag = TEN_debate_in_process
+		}
+
+		modifier = {
+		}
+	}
+###Deportation time!!!!1
+	TEN_assembly_dec_2 = {              
+		allowed = { original_tag = TEN }
+
+		icon = generic_civil_support
+
+		cost = 150
+
+		days_remove = 20
+		days_re_enable = 120
+
+		ai_will_do = {
+			base = 100
+		}
+
+		is_good = yes
+
+		available = {
+			NOT = {
+				has_country_flag = TEN_debate_in_process
+			}
+		}
+		visible = {
+			has_completed_focus = TEN_ghoul_i_1
+		}
+		
+		complete_effect = {
+			country_event = { id = TEN.137 }
+			set_country_flag = TEN_debate_in_process
+			set_country_flag = TEN_deport
+		}
+		
+		remove_effect = {
+			country_event = { id = TEN.140 }
+			clr_country_flag = TEN_debate_in_process
+		}
+
+		modifier = {
+		}
+	}
+######RESOURCES
+###Tighten miner quotas
+	TEN_assembly_dec_3 = {
+	allowed = { original_tag = TEN }
+
+		icon = generic_civil_support
+
+		cost = 120
+
+		days_remove = 20
+		days_re_enable = 180
+
+		ai_will_do = {
+			base = 100
+		}
+
+		is_good = yes
+
+		available = {
+			NOT = {
+				has_country_flag = TEN_debate_in_process
+			}
+		}
+		visible = {
+			has_completed_focus = TEN_ghoul_i_1
+		}
+		
+		complete_effect = {
+			country_event = { id = TEN.137 }
+			set_country_flag = TEN_debate_in_process
+			set_country_flag = TEN_armboys
+		}
+		
+		remove_effect = {
+			country_event = { id = TEN.140 }
+			clr_country_flag = TEN_debate_in_process
+		}
+
+		modifier = {
+
+		}
+	}
+###Do a lil scavenging
+	TEN_assembly_dec_4 = {
+		allowed = { original_tag = TEN }
+
+		icon = generic_civil_support
+
+		cost = 120
+
+		days_remove = 20
+		days_re_enable = 365
+
+		ai_will_do = {
+			base = 100
+		}
+
+		is_good = yes
+
+		available = {
+			NOT = {
+				has_country_flag = TEN_debate_in_process
+			}
+		}
+		visible = {
+			has_completed_focus = TEN_ghoul_i_2_a
+		}
+		
+		complete_effect = {
+			country_event = { id = TEN.137 }
+			set_country_flag = TEN_debate_in_process
+			set_country_flag = TEN_lilscav
+		}
+		
+		remove_effect = {
+			country_event = { id = TEN.140 }
+			clr_country_flag = TEN_debate_in_process
+		}
+
+		modifier = {
+
+		}
+	}
+#
+###Try and recruit some boys in the army
+	TEN_assembly_dec_5 = {
+	allowed = { original_tag = TEN }
+
+		icon = generic_civil_support
+
+		cost = 100
+
+		days_remove = 20
+		days_re_enable = 180
+
+		ai_will_do = {
+			base = 100
+		}
+
+		is_good = yes
+
+		available = {
+			NOT = {
+				has_country_flag = TEN_debate_in_process
+			}
+		}
+		visible = {
+			has_completed_focus = TEN_ghoul_i_2_a
+		}
+		complete_effect = {
+			country_event = { id = TEN.137 }
+			set_country_flag = TEN_debate_in_process
+			set_country_flag = TEN_minequot
+		}
+		
+		remove_effect = {
+			country_event = { id = TEN.140 }
+			clr_country_flag = TEN_debate_in_process
+		}
+
+		modifier = {
+
+		}
+	}
+
+
+	TEN_assembly_dec_6 = {
+		allowed = { original_tag = TEN }
+
+		icon = generic_civil_support
+
+		cost = 120
+
+		days_remove = 20
+		days_re_enable = 160
+
+		ai_will_do = {
+			base = 100
+		}
+
+		is_good = yes
+
+		available = {
+			NOT = {
+				has_country_flag = TEN_debate_in_process
+			}
+		}
+		visible = {
+			has_completed_focus = TEN_ghoul_i_2_b
+		}
+		
+		complete_effect = {
+			country_event = { id = TEN.137 }
+			set_country_flag = TEN_debate_in_process
+			set_country_flag = TEN_faspro
+		}
+		
+		remove_effect = {
+			country_event = { id = TEN.140 }
+			clr_country_flag = TEN_debate_in_process
+		}
+
+		modifier = {
+		
+		}
+	}
+
+	TEN_assembly_dec_7 = {
+		allowed = { original_tag = TEN }
+
+		icon = generic_civil_support
+
+		cost = 120
+		days_re_enable = 365
+
+		days_remove = 20
+
+		ai_will_do = {
+			base = 100
+		}
+
+		is_good = yes
+
+		available = {
+			NOT = {
+				has_country_flag = TEN_debate_in_process
+			}
+		}
+		visible = {
+			has_completed_focus = TEN_ghoul_i_2_b
+		}
+		
+		complete_effect = {
+			country_event = { id = TEN.137 }
+			set_country_flag = TEN_debate_in_process
+			set_country_flag = TEN_ranfac
+		}
+		
+		remove_effect = {
+			country_event = { id = TEN.140 }
+			clr_country_flag = TEN_debate_in_process
+		}
+		
+		modifier = {
+		}
+	}
+	
+	TEN_assembly_dec_8 = {
+		allowed = { original_tag = TEN }
+
+		icon = generic_civil_support
+
+		cost = 150
+		fire_only_once = no
+
+		days_remove = 20
+
+		ai_will_do = {
+			base = 100
+		}
+
+		is_good = yes
+
+		available = {
+			NOT = {
+				has_country_flag = TEN_debate_in_process
+			}
+			has_country_flag = manpower_laws_blocked
+			has_completed_focus = TEN_ghoul_war_econ
+		}
+		visible = {
+			has_completed_focus = TEN_ghoul_war_econ
+			has_country_flag = manpower_laws_blocked
+		}
+		
+		complete_effect = {
+			country_event = { id = TEN.137 }
+			set_country_flag = TEN_debate_in_process
+		}
+		
+		remove_effect = {
+			country_event = { id = TEN.141 }
+			clr_country_flag = TEN_debate_in_process
+		}
+		
+		modifier = {
+		}
+	}
+}
+
+###144-150
+
+
+

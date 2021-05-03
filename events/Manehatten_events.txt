@@ -1,9 +1,14 @@
 ###By Kingsmen
 
 add_namespace = MSR
+add_namespace = MSR_aj_rangers
 add_namespace = MSR_cr
 add_namespace = MSR_bs
 add_namespace = MSR_sl
+add_namespace = MSR_steelhooves
+add_namespace = MSR_crossroads
+add_namespace = MSR_arbu
+add_namespace = MSR_elections
 
 ################
 ####Defaults####
@@ -26,8 +31,8 @@ country_event = {
 		name = MSR.1.a
 		ai_chance = { factor = 50}
 		
-		add_equipment_to_stockpile = { type = energy_equipment_2 amount = 250 producer = MSR }
-		add_equipment_to_stockpile = { type = support_equipment amount = 50 producer = MSR }
+		add_equipment_to_stockpile = { type = energy_equipment_2 amount = 250 producer = OWE }
+		add_equipment_to_stockpile = { type = support_equipment amount = 50 producer = OWE }
 		
 	}
 	option = {
@@ -184,9 +189,173 @@ country_event = {
 	is_triggered_only = yes
  	fire_only_once = yes
 
- 	option = {
+ 	option = { #Cottage Cheese
 		name = MSR.6.a
-		ai_chance = { factor = 50}	
+		ai_chance = { factor = 50}
+		add_political_power = 50
+		set_country_flag = cottage_cheese_wins_MSR
+	}
+	option = { #Steel Hooves
+		name = MSR.6.b
+		ai_chance = { factor = 50}
+		set_politics = {
+			ruling_party = visionary
+		}
+		add_popularity = {
+		    ideology = visionary
+		    popularity = 0.35
+		}
+		set_country_flag = steel_hooves_wins_MSR
+	}
+	option = { #River Autumn
+		name = MSR.6.c
+		ai_chance = { factor = 50}
+		trigger = {
+			check_variable = { MSR_river_support_var = 1 }
+		}
+		country_event =  {
+			id = MSR_elections.3
+			days = 1
+		}
+
+		
+	}
+}
+
+country_event = { #Advanced Tech Found
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_elections.1"}
+ 	id = MSR_elections.1
+ 	title = MSR_elections.1.title
+ 	desc = MSR_elections.1.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Withhold it
+		name = MSR_elections.1.a
+		ai_chance = { factor = 50}
+		
+		add_stability = 0.05
+
+		hidden_effect = {
+			country_event =  {
+				id = MSR_elections.2
+				days = 6
+				random = 32
+			}
+		}
+	}
+
+	option = { #Hand it over to the scribes
+		name = MSR_elections.1.b
+		ai_chance = { factor = 50}
+		
+		add_tech_bonus = {
+		    bonus = 0.15
+		    uses = 1
+		    category = electronics
+		}
+		hidden_effect = {
+			set_variable = { MSR_river_support_var = 1 }
+		}
+
+		hidden_effect = {
+			country_event =  {
+				id = MSR_elections.2
+				days = 6
+				random = 32
+			}
+		}
+	}
+}
+
+country_event = { #Steelhooves makes an appearance
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_elections.2"}
+ 	id = MSR_elections.2
+ 	title = MSR_elections.2.title
+ 	desc = MSR_elections.2.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Wow!
+		name = MSR_elections.2.a
+		ai_chance = { factor = 50}
+		
+		add_popularity = {
+			ideology = visionary
+			popularity = 0.1
+		}
+		add_stability = 0.05
+	}
+}
+
+country_event = { #Political Deadlock
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_elections.3"}
+ 	id = MSR_elections.3
+ 	title = MSR_elections.3.title
+ 	desc = MSR_elections.3.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Filibuster moment
+		name = MSR_elections.3.a
+		ai_chance = { factor = 50}
+		
+		add_stability = -0.15
+		add_political_power = -50
+	}
+}
+
+country_event = { #River's Coup
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_elections.4"}
+ 	id = MSR_elections.4
+ 	title = MSR_elections.4.title
+ 	desc = MSR_elections.4.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Waifu time
+		name = MSR_elections.4.a
+		ai_chance = { factor = 50}
+		
+		kill_country_leader = yes
+		add_stability = -0.35
+		add_war_support = -0.35
+		add_political_power = -50
+
+		create_country_leader = {
+			name = "Elder Steel Hooves"
+			picture = "SteelHooves.tga"
+			expire = "1965.1.1"
+			ideology = steel_ranger_cont
+			traits = {
+		
+			}
+		}
+		create_country_leader = {
+			name = "Elder River Autumn"
+			picture = "ScribeRiverAutumn.tga"
+			expire = "1965.1.1"
+			ideology = river_autumn_ideology
+			traits = {
+				
+			}
+		}
+		set_politics = {
+			ruling_party = visionary
+		}
+		add_popularity = {
+		    ideology = visionary
+		    popularity = 0.25
+		}
+		set_country_flag = river_wins_MSR
 	}
 }
 
@@ -266,7 +435,13 @@ country_event = {
 
  	option = {
 		name = MSR.9.a
-		ai_chance = { factor = 50}
+		ai_chance = { 
+			factor = 50
+			modifier = {
+				factor = 0
+				is_historical_focus_on = yes
+			}
+		}
 		custom_effect_tooltip = MSR_steelhooves_unlock_tt
 		hidden_effect = {
        		set_country_flag = MSR_steel_hooves_Unlocked
@@ -277,16 +452,11 @@ country_event = {
 
 	option = {
 		name = MSR.9.b
-		ai_chance = { factor = 50
-		modifier = {
-				factor = 0
-				is_historical_focus_on = yes
-			}
+		ai_chance = { 
+			factor = 50
+			
 		}
-		#custom_effect_tooltip = MSR_river_unlock_tt
-		#hidden_effect = {
-        #	set_country_flag = MSR_River_Autumn_Unlocked
-        #}
+		custom_effect_tooltip = MSR_exile_steelhooves_tt
         remove_unit_leader = 88844
 	}
 }
@@ -315,7 +485,7 @@ country_event = {
  	}
 }
 
-##Cottage Defense
+##Crusader Info
 country_event = {
 	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.13"}
  	id = MSR.13
@@ -325,6 +495,11 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = {
+ 		name = MSR.13.a
+ 		ai_chance = { factor = 30 }
+ 	}
 }
 
 ##Cottage Project
@@ -346,13 +521,13 @@ country_event = {
 				is_historical_focus_on = yes
 			}
 		}
- 		add_ideas = MSR_suspicious_scribes_idea
-		custom_effect_tooltip = MSR_gain_progress_tt
+		add_timed_idea = {
+		    idea = MSR_suspicious_scribes_idea
+		    days = 270
+		}
+		custom_effect_tooltip = MSR_help_later_tt
 		hidden_effect = {
-			add_to_variable = {
-				var = black_success
-				value = 1
-			}
+			set_country_flag = MSR_scribe_help_cottage_flag
 		}
  	}
  	option = {
@@ -376,28 +551,22 @@ country_event = {
  	option = {
  		ai_chance = { factor = 50}
  		name = MSR.15.a
- 		hidden_effect = {
- 			add_to_variable = {
-				var = black_success
-				value = 1
-			}
- 		}
-		custom_effect_tooltip = MSR_gain_progress_tt
-		add_timed_idea = { idea = MSR_Project days = 180 }
+		add_political_power = 25
+		add_popularity = {
+		    ideology = continuation
+		    popularity = 0.05
+		}
  	}
 
  	option = {
  		ai_chance = { factor = 50}
  		name = MSR.15.b
- 		hidden_effect = {
- 			add_to_variable = {
-				var = black_success
-				value = 1
-			}
- 		}
-		custom_effect_tooltip = MSR_gain_progress_tt
-		add_timed_idea = { idea = MSR_Project days = 60 }
-		add_manpower = -200
+		custom_effect_tooltip = MSR_quicker_crusader_locating_tt
+		add_manpower = -150
+		add_stability = -0.05
+		hidden_effect = {
+			set_country_flag = MSR_more_scouting_teams_flag
+		}
  	}
 }
 
@@ -415,15 +584,8 @@ country_event = {
  	option = {
  		ai_chance = { factor = 50}
  		name = MSR.16.a
- 		hidden_effect = {
- 			add_to_variable = {
-				var = black_success
-				value = 2
-			}
- 		}
-		custom_effect_tooltip = MSR_gain_progress_tt
-		add_manpower = -50
-		MRA = {add_manpower = -100}
+
+		add_state_core = 55
  	}
 
 }
@@ -441,33 +603,35 @@ country_event = {
 	option = {
  		ai_chance = { factor = 50}
  		name = MSR.18.a
- 		hidden_effect = {
- 			add_to_variable = {
-				var = black_success
-				value = 1
-			}
- 		}
-		custom_effect_tooltip = MSR_gain_progress_tt
-		add_timed_idea = { idea = MSR_Project days = 180 }
 		add_manpower = -150
 		add_stability = -0.05
+
 		clr_country_flag = cant_do_dark_magic_flag
+
+		hidden_effect = {
+			country_event = { 
+				id = MSR.19
+				days = 89
+				random = 48
+			}
+		}
  	}
 
  	option = {
  		ai_chance = { factor = 50}
  		name = MSR.18.b
- 		hidden_effect = {
- 			add_to_variable = {
-				var = black_success
-				value = 1
-			}
- 		}
-		custom_effect_tooltip = MSR_gain_progress_tt
-		add_timed_idea = { idea = MSR_Project days = 60 }
 		add_manpower = -300
 		add_stability = -0.1
+
 		clr_country_flag = cant_do_dark_magic_flag
+
+		hidden_effect = {
+			country_event = { 
+				id = MSR.19
+				days = 59
+				random = 48
+			}
+		}
  	}
 }
 
@@ -483,15 +647,22 @@ country_event = {
  	fire_only_once = yes
 	
 	option = {
- 		ai_chance = { factor = 50}
+ 		ai_chance = { factor = 50 }
+
  		name = MSR.19.a
+ 		unlock_decision_tooltip = MSR_hunt_for_black_book
  		add_political_power = -100
+
 		add_tech_bonus = {
 			name = race_tech_bonus
 			bonus = 1.0
 			uses = 2
 			category = race_tech
-			}
+		}
+
+		hidden_effect = {
+			set_country_flag = MSR_dark_magic_flag
+		}
  	}
 }
 
@@ -525,7 +696,7 @@ country_event = {
 			}
 		
 		}
-		else = {country_event = { id = MSR.203 days = 20 }}
+		else = { country_event = { id = MSR.203 days = 20 } }
 		}
 
 	}
@@ -545,14 +716,9 @@ country_event = {
 	option = {
  		name = MSR.201.a
 		
-		hidden_effect = {
- 			add_to_variable = {
-				var = black_success
-				value = 3
-			}
- 		}
 		custom_effect_tooltip = MSR_gain_progress_tt
 		set_country_flag = MSR_found_black_book
+		set_global_flag = global_black_book_has_been_found_flag
 
 	}
 }
@@ -648,10 +814,7 @@ country_event = {
  	fire_only_once = yes
 	fixed_random_seed = no
 
-	option = {
-		trigger = {
-			has_country_flag = pip_beats_cottage_flag
-		}
+	option = { #Success
 		ai_chance = { factor = 30 
 			modifier = {
 				factor = 5
@@ -659,22 +822,33 @@ country_event = {
 			}
 		}
  		name = MSR.21.a
-		custom_effect_tooltip = MSR_LP_stops_tt
+ 		
+		custom_effect_tooltip = MSR_Upload_success_tt
+		custom_effect_tooltip = RED_new_focus_tree_tt
 		hidden_effect = {
-			set_politics = {
-				ruling_party = visionary
+			retire_country_leader = yes
+			create_country_leader = {
+				name = "Elder Cottage Cheese"
+				picture = "GFX_Green_Cheese_animated"
+				expire = "1965.1.1"
+				ideology = steel_ranger_cont
+				traits = {
+				}
 			}
-			add_popularity = {
-				ideology = visionary
-				popularity = 0.5
+			clr_country_flag = MSR_crusader_decisions_available
+			set_country_flag = MSR_Success_Tree
+			load_focus_tree = { 
+				tree = ManeSr_Cottage_Success
+				keep_completed = yes
 			}
 		}
 
 	}
 	
-	option = {
-		#trigger = {
-		#}
+	option = { #Failure
+		trigger = {
+			NOT = { has_country_flag = MSR_found_black_book}
+		}
 		ai_chance = { factor = 30 
 			modifier = {
 				factor = 1
@@ -682,147 +856,27 @@ country_event = {
 			}
 		}
  		name = MSR.21.b
-		custom_effect_tooltip = MSR_LP_no_stops_tt
-		
-	random_list = {
- 		0 = {
- 			modifier = {
-					add = 10
-					check_variable = {
-                        black_success > 0
-                    }
+		#custom_effect_tooltip = MSR_LP_no_stops_tt
+		custom_effect_tooltip = MSR_Upload_failiure_tt
+		custom_effect_tooltip = RED_new_focus_tree_tt
+		hidden_effect = {
+			retire_country_leader = yes
+			create_country_leader = {
+				name = "Elder Cottage Cheese"
+				picture = "GFX_Red_Cheese_animated"
+				expire = "1965.1.1"
+				ideology = steel_ranger_cont
+				traits = {
 				}
-			modifier = {
-					add = 10
-					check_variable = {
-                        black_success > 1
-                    }
-				}
-			modifier = {
-					add = 10
-					check_variable = {
-                        black_success > 2
-                    }
-				}
-			modifier = {
-					add = 10
-					check_variable = {
-                        black_success > 3
-                    }
-				}
-			modifier = {
-					add = 10
-					check_variable = {
-                        black_success > 4
-                    }
-				}
-			modifier = {
-					add = 10
-					check_variable = {
-                        black_success > 5
-                    }
-				}
-			modifier = {
-					add = 10
-					check_variable = {
-                        black_success > 6
-                    }
-				}
-			modifier = {
-					add = 10
-					check_variable = {
-                        black_success > 7
-                    }
-				}
-			modifier = {
-					add = 10
-					check_variable = {
-                        black_success > 8
-                    }
-				}
-			modifier = {
-					add = 10
-					check_variable = {
-                        black_success > 9
-                    }
-				}
-			set_country_flag = MSR_Success_Tree
-			custom_effect_tooltip = MSR_Upload_success_tt
-			hidden_effect = {
-				load_focus_tree = ManeSr_Cottage_Success
-				bypass_focus = MSR_Success
 			}
- 		}
-
-		100 = {
-			modifier = {
-					add = -10
-					check_variable = {
-                        black_success > 0
-                    }
-				}
-			modifier = {
-					add = -10
-					check_variable = {
-                        black_success > 1
-                    }
-				}
-			modifier = {
-					add = -10
-					check_variable = {
-                        black_success > 2
-                    }
-				}
-			modifier = {
-					add = -10
-					check_variable = {
-                        black_success > 3
-                    }
-				}
-			modifier = {
-					add = -10
-					check_variable = {
-                        black_success > 4
-                    }
-				}
-			modifier = {
-					add = -10
-					check_variable = {
-                        black_success > 5
-                    }
-				}
-			modifier = {
-					add = -10
-					check_variable = {
-                        black_success > 6
-                    }
-				}
-			modifier = {
-					add = -10
-					check_variable = {
-                        black_success > 7
-                    }
-				}
-			modifier = {
-					add = -10
-					check_variable = {
-                        black_success > 8
-                    }
-				}
-			modifier = {
-					add = -10
-					check_variable = {
-                        black_success > 9
-                    }
-				}
-        	set_country_flag = MSR_Failure_Tree
-			custom_effect_tooltip = MSR_Upload_failiure_tt
-			hidden_effect = {
-				load_focus_tree = ManeSr_Cottage_Failure
-				bypass_focus = MSR_Failure
+			clr_country_flag = MSR_crusader_decisions_available
+			set_country_flag = MSR_Failure_Tree
+			load_focus_tree = { 
+				tree = ManeSr_Cottage_Failure
+				keep_completed = yes
 			}
-        }
-	}
+		}
+	
 
 	}
 }
@@ -861,6 +915,69 @@ country_event = {
 #	}
 #	
 #}
+
+##Crusader Loaction
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.23"}
+ 	id = MSR.23
+ 	title = MSR.23.title
+ 	desc = MSR.23.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+
+ 	trigger = {
+ 		original_tag = MSR
+ 		has_completed_focus = MSR_crusaders
+ 	}
+ 	mean_time_to_happen = {
+		days = 365
+		modifier = {
+			factor = 0.6
+			has_country_flag = MSR_more_scouting_teams_flag
+		}
+		modifier = {
+			add = -90
+			has_country_flag = MSR_stable_tec_location_data_flag
+		}
+	}
+
+ 	option = {
+ 		name = MSR.23.a
+ 		ai_chance = { factor = 30 }
+ 		custom_effect_tooltip = MSR_located_crusader_tt
+ 		goto_state = 55
+ 		add_political_power = 50
+ 		hidden_effect = {
+ 			set_country_flag = MSR_located_crusader_flag
+ 		}
+ 	}
+}
+
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.25"}
+ 	id = MSR.25
+ 	title = MSR.25.title
+ 	desc = MSR.25.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+
+ 	trigger = {
+ 		has_country_flag = MSR_scribe_help_cottage_flag
+ 		has_country_flag = MSR_has_done_alternative_methods
+ 	}
+ 	mean_time_to_happen = {
+		days = 25
+	}
+
+ 	option = {
+ 		name = MSR.23.a
+ 		ai_chance = { factor = 30 }
+ 		custom_effect_tooltip = MSR_one_crus_alt_point_tt
+		add_to_variable = { MSR_alt_methods_var = 1 } 
+ 	}
+}
 
 ## Successful Line ##
 
@@ -925,12 +1042,12 @@ country_event = {
  		name = MSR.50.a
 		kill_country_leader = yes
 		create_country_leader = {
-		name = "Utter Chaos"
-		desc = ""
-		picture = ""
-		expire = "1965.1.1"
-		ideology = despotism
-		traits = {}
+			name = "Total Anarchy"
+			desc = ""
+			picture = ""
+			expire = "1965.1.1"
+			ideology = steel_ranger_cont
+			traits = {}
 		}
 	}
 }
@@ -971,6 +1088,843 @@ country_event = {
 }
 
 #############################
+## Historical AJ's Rangers ##
+#############################
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.1"}
+ 	id = MSR_aj_rangers.1
+ 	title = MSR_aj_rangers.1.title
+ 	desc = MSR_aj_rangers.1.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			every_state = {
+				limit = { is_core_of = MSR }
+				add_core_of = AJR				
+			}
+			469 = {
+				add_core_of = AJR
+				teleport_armies = {
+					limit = { tag = MSR }
+				}
+			}
+			53 = {
+				add_core_of = AJR
+				teleport_armies = {
+					limit = { tag = MSR }
+				}
+			}
+			55 = {
+				add_core_of = AJR
+				teleport_armies = {
+					limit = { tag = MSR }
+				}
+			}
+			AJR = {
+				transfer_state = 469
+				transfer_state = 53
+				transfer_state = 55
+				inherit_technology = MSR
+			}
+			if = {
+				limit = {
+					MSR = {
+						visionary > 0.30
+					}
+				}
+				AJR = {
+					transfer_state = 646
+				}
+			}
+			AJR = {
+				if = {
+					limit = { 
+			            NOT = { 
+						    has_template = "Knight Company"
+						}
+					}
+					division_template = {
+						name = "Knight Company"
+
+						regiments = {
+							power_armour = { x = 0 y = 0 }
+							power_armour = { x = 0 y = 1 }
+							power_armour = { x = 0 y = 2 }
+							power_armour = { x = 1 y = 0 }
+							power_armour = { x = 1 y = 1 }
+						}
+						support = {
+							fireteam_support = { x = 0 y = 0 }
+						}
+					}
+				}
+				if = {
+					limit = { 
+			            NOT = { 
+						    has_template = "Reserve Company"
+						}
+					}
+					division_template = {
+						name = "Reserve Company"
+
+						regiments = {
+							infantry = { x = 0 y = 0 }
+							infantry = { x = 0 y = 1 }
+							infantry = { x = 0 y = 2 }
+							infantry = { x = 0 y = 3 }
+						}
+					}
+				}
+				if = {
+					limit = { 
+			            NOT = { 
+						    has_template = "Initiate Milita"
+						}
+					}
+					division_template = {
+						name = "Initiate Militia"
+
+						regiments = {
+							militia = { x = 0 y = 0 }
+							militia = { x = 0 y = 1 }
+							militia = { x = 1 y = 0 }
+							militia = { x = 1 y = 1 }
+						}
+					}
+				}
+				if = {
+					limit = { 
+			            NOT = { 
+						    has_template = "Ranger Strike-Team"
+						}
+					}
+					division_template = {
+						name = "Ranger Strike-Team"
+
+						regiments = {
+							spec_ops = { x = 0 y = 0 }
+							spec_ops = { x = 0 y = 1 }
+							spec_ops = { x = 0 y = 2 }
+							spec_ops = { x = 0 y = 3 }
+						}
+					}
+				}
+
+
+				55 = {
+					create_unit = {
+						division = "name = \"Applejack's Finest\" division_template = \"Knight Company\" start_experience_factor = 1.0 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+					create_unit = {
+						division = "name = \"Ranger Outcasts\" division_template = \"Knight Company\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+					create_unit = {
+						division = "name = \"Platinum Company\" division_template = \"Knight Company\" start_experience_factor = 0.3 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+
+					create_unit = {
+						division = "name = \"1st Reserve Squad\" division_template = \"Reserve Company\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+					create_unit = {
+						division = "name = \"2nd Reserve Squad\" division_template = \"Reserve Company\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+				}
+				53 = {
+					create_unit = {
+						division = "name = \"Fetlock Knights\" division_template = \"Knight Company\" start_experience_factor = 0.2 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+					create_unit = {
+						division = "name = \"3rd Reserve Squad\" division_template = \"Reserve Company\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+					create_unit = {
+						division = "name = \"4th Reserve Squad\" division_template = \"Reserve Company\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+					create_unit = {
+						division = "name = \"5th Reserve Squad\" division_template = \"Reserve Company\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+				}
+				469 = {
+					create_unit = {
+						division = "name = \"Orangedale Knights\" division_template = \"Knight Company\" start_experience_factor = 0.2 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+					create_unit = {
+						division = "name = \"Stable 2 Veterans\" division_template = \"Knight Company\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+					create_unit = {
+						division = "name = \"6th Reserve Squad\" division_template = \"Reserve Company\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+					create_unit = {
+						division = "name = \"7th Reserve Squad\" division_template = \"Reserve Company\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+				}
+			}
+
+			if = {
+				limit = { MSR = { owns_state = 18 } }
+				AJR = {
+					transfer_state = 18
+					add_state_core = 18
+				}
+				18 = {
+					teleport_armies = {
+						limit = { tag = MSR }
+					}
+					create_unit = {
+						division = "name = \"Marelem Knights\" division_template = \"Knight Company\" start_experience_factor = 0.1 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+					create_unit = {
+						division = "name = \"8th Reserve Squad\" division_template = \"Reserve Company\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
+						owner = AJR
+					}
+				}
+			}
+
+			MSR = {
+				every_unit_leader = {
+					limit = {
+						OR = {
+							has_id = 88844
+							has_id = 88842
+						}
+					}
+					set_nationality = AJR
+				}
+			}
+		}
+	}
+
+ 	option = { #MSR
+ 		name = MSR_aj_rangers.1.a
+ 		ai_chance = { factor = 30 }
+ 		646 = {
+			set_demilitarized_zone = yes
+		}
+		54 = {
+			set_demilitarized_zone = yes
+		}
+ 		MSR = {
+ 			kill_country_leader = yes
+			create_country_leader = {
+				name = "Total Anarchy"
+				desc = ""
+				picture = ""
+				expire = "1965.1.1"
+				ideology = steel_ranger_cont
+				traits = {
+				}
+			}
+			add_popularity = {
+			    ideology = visionary
+			    popularity = -0.50
+			}
+			add_stability = -1.0
+			
+			add_ideas = MSR_AJR_civil_war_idea
+			add_ideas = MSR_no_leadership_idea
+			MSR_AJR_population_move = yes
+ 			custom_effect_tooltip = RED_new_focus_tree_tt
+ 			hidden_effect = {
+ 				clr_country_flag = MSR_crusader_decisions_available
+ 				set_country_flag = MSR_aj_rangers_revolt
+ 				set_country_flag = MSR_aj_rangers_load_tree_flag
+				set_country_flag = MSR_aj_rangers_must_do_focus_flag
+ 				load_focus_tree = { 
+					tree = ManeSr_cw_tree
+					keep_completed = yes
+				}
+
+ 			}
+ 		}
+ 		hidden_effect = {
+ 			AJR = {
+ 				add_ideas = MSR_AJR_civil_war_idea
+ 			}
+
+ 		}
+
+ 	}
+
+ 	option = { #AJR
+ 		name = MSR_aj_rangers.1.b
+ 		ai_chance = { factor = 30 }
+ 		AJR = {
+ 			add_ideas = MSR_AJR_civil_war_idea
+ 		}
+ 		custom_effect_tooltip = set_country_to_AJR
+ 		hidden_effect = {
+ 			646 = {
+				set_demilitarized_zone = yes
+			}
+			54 = {
+				set_demilitarized_zone = yes
+			}
+ 			MSR = {
+	 			kill_country_leader = yes
+				create_country_leader = {
+					name = "Total Anarchy"
+					desc = ""
+					picture = ""
+					expire = "1965.1.1"
+					ideology = steel_ranger_cont
+					traits = {
+					}
+				}
+				add_popularity = {
+				    ideology = visionary
+				    popularity = -0.50
+				}
+				add_stability = -1.0
+				add_ideas = MSR_AJR_civil_war_idea
+				add_ideas = MSR_no_leadership_idea
+				MSR_AJR_population_move = yes
+				clr_country_flag = MSR_crusader_decisions_available
+	 			set_country_flag = MSR_aj_rangers_revolt
+	 			set_country_flag = MSR_aj_rangers_load_tree_flag
+				set_country_flag = MSR_aj_rangers_must_do_focus_flag
+ 				load_focus_tree = { 
+					tree = ManeSr_cw_tree
+					keep_completed = yes
+				}
+	 		}
+	 		AJR = {
+				change_tag_from = ROOT
+			}
+		}
+ 	}
+}
+
+country_event = { #Crossroads' Trial
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.2"}
+ 	id = MSR_aj_rangers.2
+ 	title = MSR_aj_rangers.2.title
+ 	desc = MSR_aj_rangers.2.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = { 
+ 		name = MSR_aj_rangers.2.a
+ 		add_popularity = {
+		    ideology = continuation
+		    popularity = 0.05
+		}
+ 		add_stability = 0.05
+ 	}
+
+}
+
+country_event = { #Cauterize Ceasefire
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.3"}
+ 	id = MSR_aj_rangers.3
+ 	title = MSR_aj_rangers.3.title
+ 	desc = MSR_aj_rangers.3.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	trigger = {
+		has_global_flag = cauterize_in_progress_flag
+		tag = AJR
+		has_war_with = NEV
+		MSR = {
+			has_war_with = NEV
+		}
+	}
+	mean_time_to_happen = {
+		days = 3
+	}
+
+
+ 	option = { #Send Ceasefire
+ 		name = MSR_aj_rangers.3.a
+ 		ai_chance = {
+ 			base = 40
+ 			modifier = {
+ 				factor = 0
+ 				is_historical_focus_on = yes
+ 			}
+ 		}
+ 		MSR = {
+	 		country_event = {
+	 			id = MSR_aj_rangers.4
+	 			days = 2
+	 		}
+	 	}
+ 		custom_effect_tooltip = if_MSR_accepts_ceasefire_tt
+ 	}
+
+ 	option = { #Justice Cannot Wait
+ 		name = MSR_aj_rangers.3.b
+ 		ai_chance = {
+ 			base = 10
+ 			modifier = {
+ 				factor = 0
+ 				is_historical_focus_on = yes
+ 			}
+ 		}
+
+ 		add_political_power = 25
+ 		add_stability = -0.05
+ 		add_war_support = -0.10
+ 	}
+}
+
+country_event = { #Cauterize Ceasefire - MSR
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.4"}
+ 	id = MSR_aj_rangers.4
+ 	title = MSR_aj_rangers.4.title
+ 	desc = MSR_aj_rangers.4.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = { #Accept Ceasefire
+ 		name = MSR_aj_rangers.4.a
+ 		ai_chance = {
+ 			base = 40
+ 			modifier = {
+ 				factor = 0
+ 				is_historical_focus_on = yes
+ 			}
+ 		}
+
+ 		MSR_AJR_cauterize_ceasefire = yes
+
+ 		hidden_effect = {
+ 			AJR = {
+ 				country_event = MSR_aj_rangers.5
+ 			}
+ 		}
+ 	}
+
+ 	option = { #War Continues
+ 		name = MSR_aj_rangers.4.b
+ 		ai_chance = {
+ 			base = 10
+ 			modifier = {
+ 				factor = 0
+ 				is_historical_focus_on = yes
+ 			}
+ 		}
+
+ 		add_political_power = 25
+ 		add_stability = -0.05
+ 		add_war_support = -0.10
+
+ 		hidden_effect = {
+ 			AJR = {
+ 				country_event = MSR_aj_rangers.6
+ 			}
+ 		}
+ 	}
+}
+
+country_event = { #Ceasefire Accepted
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.5"}
+ 	id = MSR_aj_rangers.5
+ 	title = MSR_aj_rangers.5.title
+ 	desc = MSR_aj_rangers.5.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = { #yay
+ 		name = MSR_aj_rangers.5.a
+ 		add_stability = 0.05
+ 	}
+}
+
+country_event = { #Ceasefire Declined
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.6"}
+ 	id = MSR_aj_rangers.6
+ 	title = MSR_aj_rangers.6.title
+ 	desc = MSR_aj_rangers.6.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = { #aww
+ 		name = MSR_aj_rangers.6.a
+ 		add_stability = -0.05
+ 	}
+}
+
+country_event = { #Firefight at Bucklyn Cross
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.7"}
+ 	id = MSR_aj_rangers.7
+ 	title = MSR_aj_rangers.7.title
+ 	desc = MSR_aj_rangers.7.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = { 
+ 		name = MSR_aj_rangers.7.a
+ 		add_manpower = -72
+ 		add_stability = -0.01
+ 		save_current_manpower = yes
+ 		19 = {
+ 			add_manpower = -57
+ 			damage_building = {
+			    type = infrastructure
+			    damage = 4
+			}
+			damage_building = {
+			    type = bunker
+			    damage = 6
+			    province = 7509
+			}
+			damage_building = {
+			    type = arms_factory
+			    damage = 3
+			}
+ 		}
+ 		restore_previous_manpower = yes
+ 	}
+
+}
+
+country_event = { #Reinforcements from Hoofington
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.8"}
+ 	id = MSR_aj_rangers.8
+ 	title = MSR_aj_rangers.8.title
+ 	desc = MSR_aj_rangers.8.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = { #Huzzah
+ 		name = MSR_aj_rangers.8.a
+ 		create_corps_commander = {
+			name = "Paladin Sugar Toffee"
+			portrait_path = "gfx/leaders/Generic/foe_generic_pony_5.tga"
+			traits = { enduring_trait hoof_veteran_trait pony_race_trait }
+			skill = 2
+			attack_skill = 2
+			defense_skill = 2
+			planning_skill = 3
+			logistics_skill = 2
+			id = 88851
+		}
+		custom_effect_tooltip = MSR_toffee_stats_tt
+		custom_effect_tooltip = MSR_hoofington_oob_tt
+ 		hidden_effect = {
+ 			load_oob = MSR_hoofington
+ 		}
+ 	}
+}
+
+country_event = { #Bucklyn Outskirts border war - on attacker win
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.9"}
+ 	id = MSR_aj_rangers.9
+ 	title = MSR_aj_rangers.9.title
+ 	desc = MSR_aj_rangers.9.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = { #Take State
+ 		name = MSR_aj_rangers.9.a
+ 		add_political_power = 50
+		add_war_support = 0.05
+		ROOT = {
+			transfer_state = 66
+		}
+ 	}
+
+ 	option = { #Reduce Debuff
+ 		name = MSR_aj_rangers.9.b
+ 		add_political_power = 50
+		add_stability = 0.05
+
+		custom_effect_tooltip = MSR_120_day_cw_recover_tt
+		hidden_effect = {
+			modify_timed_idea = {
+			    idea = MSR_civil_war_recovery_idea
+			    days = -120
+			}
+		}
+ 	}
+ 	}
+}
+
+country_event = { #Bucklyn Outskirts border war - on attacker lose
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.10"}
+ 	id = MSR_aj_rangers.10
+ 	title = MSR_aj_rangers.10.title
+ 	desc = MSR_aj_rangers.10.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = { #Take State
+ 		name = MSR_aj_rangers.10.a
+ 		add_political_power = -50
+ 	}
+}
+
+country_event = { #Bucklyn Outskirts border war - on attacker cancel
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.11"}
+ 	id = MSR_aj_rangers.11
+ 	title = MSR_aj_rangers.11.title
+ 	desc = MSR_aj_rangers.11.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = {
+ 		name = MSR_aj_rangers.11.a
+ 		add_political_power = -25
+ 	}
+}
+
+country_event = { #Bucklyn Outskirts border war - on defender win
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.12"}
+ 	id = MSR_aj_rangers.12
+ 	title = MSR_aj_rangers.12.title
+ 	desc = MSR_aj_rangers.12.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = {
+ 		name = MSR_aj_rangers.12.a
+ 		add_political_power = 50
+		add_war_support = 0.05
+ 	}
+}
+
+country_event = { #Bucklyn Outskirts border war - on defender lose
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.13"}
+ 	id = MSR_aj_rangers.13
+ 	title = MSR_aj_rangers.13.title
+ 	desc = MSR_aj_rangers.13.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = {
+ 		name = MSR_aj_rangers.13.a
+ 		add_political_power = -50
+		add_stability = -0.05
+ 	}
+}
+
+country_event = { #Bucklyn Outskirts border war - on defender cancel
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.14"}
+ 	id = MSR_aj_rangers.14
+ 	title = MSR_aj_rangers.14.title
+ 	desc = MSR_aj_rangers.14.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = {
+ 		name = MSR_aj_rangers.14.a
+ 		add_political_power = -25
+ 	}
+}
+
+country_event = { #Police State Time
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.15"}
+ 	id = MSR_aj_rangers.15
+ 	title = MSR_aj_rangers.15.title
+ 	desc = MSR_aj_rangers.15.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = { #aww
+ 		name = MSR_aj_rangers.15.a
+ 		add_ideas =  MSR_literally_1984_idea
+ 	}
+}
+
+country_event = { #Paladin Council Assumes Power
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.16"}
+ 	id = MSR_aj_rangers.16
+ 	title = MSR_aj_rangers.16.title
+ 	desc = MSR_aj_rangers.16.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = { 
+ 		name = MSR_aj_rangers.16.a
+
+ 		kill_country_leader = yes
+		create_country_leader = {
+			name = "Council of Paladins"
+			desc = ""
+			picture = ""
+			expire = "1965.1.1"
+			ideology = steel_ranger_cont
+			traits = {
+				paladin_council_trait
+			}
+		}
+		add_stability = 0.10
+		remove_ideas = MSR_no_leadership_idea
+		646 = {
+			set_demilitarized_zone = no
+		}
+		54 = {
+			set_demilitarized_zone = no
+		}
+ 		
+ 	}
+}
+
+country_event = { #End Ceasefire
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.17"}
+ 	id = MSR_aj_rangers.17
+ 	title = MSR_aj_rangers.17.title
+ 	desc = MSR_aj_rangers.17.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	trigger = {
+		has_country_flag = MSR_has_truce_with_AJR_flag
+		tag = MSR
+		is_in_faction_with = AJR
+		NEV = {
+			exists = no
+		}
+		AJR = {
+			exists = yes
+		}
+	}
+	mean_time_to_happen = {
+		days = 3
+	}
+
+
+ 	option = { #End Ceasefire
+ 		name = MSR_aj_rangers.17.a
+ 		ai_chance = {
+ 			base = 40
+ 			modifier = {
+ 				factor = 0
+ 				is_historical_focus_on = yes
+ 			}
+ 		}
+ 		AJR = {
+	 		country_event = {
+	 			id = MSR_aj_rangers.18
+	 			days = 2
+	 		}
+	 	}
+
+ 		dismantle_faction = yes
+ 		add_war_support = 0.05
+
+ 		hidden_effect = {
+ 			MSR = {
+	 			diplomatic_relation = {
+				    country = AJR
+				    relation = guarantee
+				    active = no
+				}
+				diplomatic_relation = {
+				    country = AJR
+				    relation = non_aggression_pact
+				    active = no
+				}
+				diplomatic_relation = {
+				    country = AJR
+				    relation = military_access
+				    active = no
+				}
+
+				clr_country_flag = MSR_has_truce_with_AJR_flag
+			}
+			
+			AJR = {
+				diplomatic_relation = {
+				    country = MSR
+				    relation = guarantee
+				    active = no
+				}
+				diplomatic_relation = {
+				    country = MSR
+				    relation = non_aggression_pact
+				    active = no
+				}
+				diplomatic_relation = {
+				    country = MSR
+				    relation = military_access
+				    active = no
+				}
+
+				clr_country_flag = AJR_has_truce_with_MSR_flag
+			}
+ 		}
+ 	}
+}
+
+country_event = { #AJR - Ceasefire Over
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.18"}
+ 	id = MSR_aj_rangers.18
+ 	title = MSR_aj_rangers.18.title
+ 	desc = MSR_aj_rangers.18.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = { #aww
+ 		name = MSR_aj_rangers.18.a
+ 		add_war_support = 0.05
+ 	}
+}
+
+#############################
 ##Steel Hooves & Crossroads##
 #############################
 
@@ -984,6 +1938,10 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = {
+ 		name = MSR.69.a
+	}
 }
 
 ##SH Talk
@@ -996,6 +1954,10 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = {
+ 		name = MSR.70.a
+	}
 }
 
 ##SH Scribes
@@ -1008,6 +1970,10 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = {
+ 		name = MSR.71.a
+	}
 }
 
 ##SH Fork in Road
@@ -1020,22 +1986,512 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = { #Steel Hooves
+ 		name = MSR.88.a
+ 		add_political_power = 50
+
+	}
+	option = { #Crossroads
+ 		name = MSR.88.b
+ 		set_politics = {
+			ruling_party = survivalism
+		}
+		add_popularity = {
+		    ideology = survivalism
+		    popularity = 0.30
+		}
+
+	}
+}
+
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_steelhooves.1"}
+ 	id = MSR_steelhooves.1
+ 	title = MSR_steelhooves.1.title
+ 	desc = MSR_steelhooves.1.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Accept
+ 		name = MSR_steelhooves.1.a
+ 		add_timed_idea = {
+ 			idea = trade_with_MSR_idea
+ 			days = 180
+ 		}
+	}
 }
 
 ################
 ##Steel Hooves##
 ################
 
-##SH Offer Membership
+##SH Offer Membership - ABT
 country_event = {
-	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.90"}
- 	id = MSR.90
- 	title = MSR.90.title
- 	desc = MSR.90.desc
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_steelhooves.2"}
+ 	id = MSR_steelhooves.2
+ 	title = MSR_steelhooves.2.title
+ 	desc = MSR_steelhooves.2.desc
 	picture = GFX_event_test
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_steelhooves.2.a
+ 		ai_chance = {
+ 			base = 50
+ 			modifier = {
+ 				factor = 0
+ 				has_country_leader = {
+				    name = "Chief Grim Star"
+				    ruling_only = yes
+				}
+ 			}
+ 		}
+ 		MSR = { add_to_faction = ROOT }
+ 		set_country_flag = MATO_member_flag
+
+ 		if = {
+ 			limit = {
+ 				orginal_tag = ABT
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_steelhooves.3
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = ARB
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_steelhooves.4
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = MAR
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_steelhooves.5
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = TEN
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_steelhooves.6
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = GUT
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_steelhooves.7
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = FRI
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_steelhooves.8
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+	}
+
+	option = { #Decline
+ 		name = MSR_steelhooves.2.a
+ 		ai_chance = {
+ 			base = 25
+ 		}
+ 		add_political_power = 25
+
+ 		if = {
+ 			limit = {
+ 				orginal_tag = ABT
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_steelhooves.9
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = ARB
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_steelhooves.10
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = MAR
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_steelhooves.11
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = TEN
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_steelhooves.12
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = GUT
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_steelhooves.13
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = FRI
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_steelhooves.14
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+	}
+}
+
+country_event = { # ABT Accepts
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_steelhooves.3"}
+ 	id = MSR_steelhooves.3
+ 	title = MSR_steelhooves.3.title
+ 	desc = MSR_steelhooves.3.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_steelhooves.3.a
+	}
+}
+
+country_event = { # ARB Accepts
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_steelhooves.4"}
+ 	id = MSR_steelhooves.4
+ 	title = MSR_steelhooves.4.title
+ 	desc = MSR_steelhooves.4.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_steelhooves.4.a
+	}
+}
+
+country_event = { # MAR Accepts
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_steelhooves.5"}
+ 	id = MSR_steelhooves.5
+ 	title = MSR_steelhooves.5.title
+ 	desc = MSR_steelhooves.5.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_steelhooves.5.a
+	}
+}
+
+country_event = { # TEN Accepts
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_steelhooves.6"}
+ 	id = MSR_steelhooves.6
+ 	title = MSR_steelhooves.6.title
+ 	desc = MSR_steelhooves.6.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_steelhooves.6.a
+	}
+}
+
+country_event = { # GUT Accepts
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_steelhooves.7"}
+ 	id = MSR_steelhooves.7
+ 	title = MSR_steelhooves.7.title
+ 	desc = MSR_steelhooves.7.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_steelhooves.7.a
+	}
+}
+
+country_event = { # FRI Accepts
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_steelhooves.8"}
+ 	id = MSR_steelhooves.8
+ 	title = MSR_steelhooves.8.title
+ 	desc = MSR_steelhooves.8.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_steelhooves.8.a
+	}
+}
+
+
+
+country_event = { # ABT Declines
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_steelhooves.9"}
+ 	id = MSR_steelhooves.9
+ 	title = MSR_steelhooves.9.title
+ 	desc = MSR_steelhooves.9.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_steelhooves.9.a
+	}
+}
+
+country_event = { # ARB Declines
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_steelhooves.10"}
+ 	id = MSR_steelhooves.10
+ 	title = MSR_steelhooves.10.title
+ 	desc = MSR_steelhooves.10.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_steelhooves.10.a
+	}
+}
+
+country_event = { # MAR Declines
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_steelhooves.11"}
+ 	id = MSR_steelhooves.11
+ 	title = MSR_steelhooves.11.title
+ 	desc = MSR_steelhooves.11.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_steelhooves.11.a
+	}
+}
+
+country_event = { # TEN Declines
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_steelhooves.12"}
+ 	id = MSR_steelhooves.12
+ 	title = MSR_steelhooves.12.title
+ 	desc = MSR_steelhooves.12.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_steelhooves.12.a
+	}
+}
+
+country_event = { # GUT Declines
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_steelhooves.13"}
+ 	id = MSR_steelhooves.13
+ 	title = MSR_steelhooves.13.title
+ 	desc = MSR_steelhooves.13.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_steelhooves.13.a
+	}
+}
+
+country_event = { # FRI Declines
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_steelhooves.14"}
+ 	id = MSR_steelhooves.14
+ 	title = MSR_steelhooves.14.title
+ 	desc = MSR_steelhooves.14.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_steelhooves.14.a
+	}
+}
+
+country_event = {
+	id = MSR_steelhooves.15
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_steelhooves.15"}
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		is_ai = yes
+		NOT = { has_war_with = FROM }
+	}
+	option = {
+		event_target:defender = {
+			ROOT = {
+				add_to_war = {
+					targeted_alliance = PREV
+					enemy = FROM
+				}
+			}
+		}
+	}
+}
+
+#Arbu Investigation 1
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_arbu.1"}
+ 	id = MSR_arbu.1
+ 	title = MSR_arbu.1.title
+ 	desc = MSR_arbu.1.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Do Nothing
+ 		name = MSR_arbu.1.a
+
+ 		add_political_power = 25
+	}
+
+	option = { #Wargoal
+ 		name = MSR_arbu.1.b
+ 		if = {
+ 			limit = {
+ 				ARB = {
+ 					is_in_faction_with = MSR
+ 				}
+ 			}
+ 			remove_from_faction = ARB
+ 		}
+
+ 		create_wargoal = {
+		    type = annex_everything
+		    target = ARB
+		}
+
+	}
+}
+
+#Arbu Investigation 2
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_arbu.2"}
+ 	id = MSR_arbu.2
+ 	title = MSR_arbu.2.title
+ 	desc = MSR_arbu.2.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+
+ 	trigger = {
+ 		orginal_tag = MSR
+ 		ARB = { exists = no }
+ 		has_completed_focus = MSR_Investigate_Arbu
+ 		owns_state = 642
+ 	}
+
+ 	option = { #Murderize them
+ 		name = MSR_arbu.2.a
+ 		save_current_manpower = yes
+		642 = {
+			add_manpower = -3000
+			add_compliance = 50
+			add_resistance = -25
+		}
+		15 = {
+			add_manpower = -2500
+			add_compliance = 50
+			add_resistance = -25
+		}
+		restore_previous_manpower = yes
+
+	}
+
+	option = { #Don't Murderize
+ 		name = MSR_arbu.2.b
+ 		ARB = {
+ 			transfer_state = 642
+ 			transfer_state = 15
+ 		}
+ 		puppet = ARB
+ 		add_stability = -0.10
+	}
 }
 
 ############################################
@@ -1070,19 +2526,1074 @@ country_event = {
 ##Crossroads##
 ##############
 
-##CR Convince Others
+##SH Offer Membership - ABT
 country_event = {
-	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.114"}
- 	id = MSR.114
- 	title = MSR.114.title
- 	desc = MSR.114.desc
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.2"}
+ 	id = MSR_crossroads.2
+ 	title = MSR_crossroads.2.title
+ 	desc = MSR_crossroads.2.desc
 	picture = GFX_event_test
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.2.a
+ 		ai_chance = {
+ 			base = 30
+ 			modifier = {
+ 				factor = 0
+ 				has_country_leader = {
+				    name = "Chief Grim Star"
+				    ruling_only = yes
+				}
+ 			}
+ 		}
+ 		MSR = { add_to_faction = ROOT }
+
+ 		if = {
+ 			limit = {
+ 				orginal_tag = ABT
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_crossroads.3
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = ARB
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_crossroads.4
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = MAR
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_crossroads.5
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = TEN
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_crossroads.6
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = GUT
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_crossroads.7
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = FRI
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_crossroads.8
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+	}
+
+	option = { #Decline
+ 		name = MSR_crossroads.2.a
+ 		ai_chance = {
+ 			base = 25
+ 		}
+ 		add_political_power = 25
+ 		custom_effect_tooltip = if_decline_MSR_attack_tt
+ 		if = {
+ 			limit = {
+ 				orginal_tag = ABT
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_crossroads.9
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = ARB
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_crossroads.10
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = MAR
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_crossroads.11
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = TEN
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_crossroads.12
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = GUT
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_crossroads.13
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = FRI
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_crossroads.14
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+	}
 }
 
-##CR Strategic Locations
+country_event = { # ABT Accepts
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.3"}
+ 	id = MSR_crossroads.3
+ 	title = MSR_crossroads.3.title
+ 	desc = MSR_crossroads.3.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.3.a
+	}
+}
+
+country_event = { # ARB Accepts
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.4"}
+ 	id = MSR_crossroads.4
+ 	title = MSR_crossroads.4.title
+ 	desc = MSR_crossroads.4.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.4.a
+	}
+}
+
+country_event = { # MAR Accepts
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.5"}
+ 	id = MSR_crossroads.5
+ 	title = MSR_crossroads.5.title
+ 	desc = MSR_crossroads.5.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.5.a
+	}
+}
+
+country_event = { # TEN Accepts
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.6"}
+ 	id = MSR_crossroads.6
+ 	title = MSR_crossroads.6.title
+ 	desc = MSR_crossroads.6.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.6.a
+	}
+}
+
+country_event = { # GUT Accepts
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.7"}
+ 	id = MSR_crossroads.7
+ 	title = MSR_crossroads.7.title
+ 	desc = MSR_crossroads.7.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.7.a
+	}
+}
+
+country_event = { # FRI Accepts
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.8"}
+ 	id = MSR_crossroads.8
+ 	title = MSR_crossroads.8.title
+ 	desc = MSR_crossroads.8.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.8.a
+	}
+}
+
+
+
+country_event = { # ABT Declines
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.9"}
+ 	id = MSR_crossroads.9
+ 	title = MSR_crossroads.9.title
+ 	desc = MSR_crossroads.9.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.9.a
+ 		create_wargoal = {
+		    type = puppet_wargoal_focus
+		    target = ABT
+		}
+	}
+}
+
+country_event = { # ARB Declines
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.10"}
+ 	id = MSR_crossroads.10
+ 	title = MSR_crossroads.10.title
+ 	desc = MSR_crossroads.10.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.10.a
+ 		create_wargoal = {
+		    type = puppet_wargoal_focus
+		    target = ARB
+		}
+	}
+}
+
+country_event = { # MAR Declines
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.11"}
+ 	id = MSR_crossroads.11
+ 	title = MSR_crossroads.11.title
+ 	desc = MSR_crossroads.11.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.11.a
+ 		create_wargoal = {
+		    type = puppet_wargoal_focus
+		    target = MAR
+		}
+	}
+}
+
+country_event = { # TEN Declines
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.12"}
+ 	id = MSR_crossroads.12
+ 	title = MSR_crossroads.12.title
+ 	desc = MSR_crossroads.12.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.12.a
+ 		create_wargoal = {
+		    type = puppet_wargoal_focus
+		    target = TEN
+		}
+	}
+}
+
+country_event = { # GUT Declines
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.13"}
+ 	id = MSR_crossroads.13
+ 	title = MSR_crossroads.13.title
+ 	desc = MSR_crossroads.13.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.13.a
+ 		create_wargoal = {
+		    type = puppet_wargoal_focus
+		    target = GUT
+		}
+	}
+}
+
+country_event = { # FRI Declines
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.14"}
+ 	id = MSR_crossroads.14
+ 	title = MSR_crossroads.14.title
+ 	desc = MSR_crossroads.14.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.14.a
+ 		create_wargoal = {
+		    type = puppet_wargoal_focus
+		    target = FRI
+		}
+	}
+}
+
+
+
+##SH Offer Membership - ABT
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.15"}
+ 	id = MSR_crossroads.15
+ 	title = MSR_crossroads.15.title
+ 	desc = MSR_crossroads.15.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.15.a
+ 		ai_chance = {
+ 			base = 20
+ 			modifier = {
+ 				factor = 0
+ 				has_country_leader = {
+				    name = "Chief Grim Star"
+				    ruling_only = yes
+				}
+ 			}
+ 			modifier = {
+ 				factor = 1.25
+ 				OR = {
+ 					orginal_tag = ARB
+ 					orginal_tag = ABT
+ 				}
+ 			}
+ 			modifier = {
+ 				factor = 5
+ 				OR = {
+ 					orginal_tag = GUT
+ 					orginal_tag = MAR
+ 				}
+ 			}
+ 		}
+ 		MSR = { puppet = ROOT }
+
+ 		if = {
+ 			limit = {
+ 				orginal_tag = ABT
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_crossroads.16
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = ARB
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_crossroads.17
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = MAR
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_crossroads.18
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = TEN
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_crossroads.19
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = GUT
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_crossroads.20
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = FRI
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_crossroads.21
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+	}
+
+	option = { #Decline
+ 		name = MSR_crossroads.15.a
+ 		ai_chance = {
+ 			base = 25
+ 		}
+ 		add_political_power = 25
+ 		custom_effect_tooltip = if_decline_MSR_attack_tt
+ 		remove_from_faction = ROOT
+ 		if = {
+ 			limit = {
+ 				orginal_tag = ABT
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_crossroads.22
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = ARB
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_crossroads.23
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = MAR
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_crossroads.24
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = TEN
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_crossroads.25
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = GUT
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_crossroads.26
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+ 		else_if = {
+ 			limit = {
+ 				orginal_tag = FRI
+ 			}
+ 			MSR = {
+ 				country_event = {
+ 					id = MSR_crossroads.27
+ 					days = 3
+ 					random = 6
+ 				}
+ 			}
+ 		}
+	}
+}
+
+country_event = { # ABT Accepts
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.16"}
+ 	id = MSR_crossroads.16
+ 	title = MSR_crossroads.16.title
+ 	desc = MSR_crossroads.16.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.16.a
+	}
+}
+
+country_event = { # ARB Accepts
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.17"}
+ 	id = MSR_crossroads.17
+ 	title = MSR_crossroads.17.title
+ 	desc = MSR_crossroads.17.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.17.a
+	}
+}
+
+country_event = { # MAR Accepts
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.18"}
+ 	id = MSR_crossroads.18
+ 	title = MSR_crossroads.18.title
+ 	desc = MSR_crossroads.18.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.18.a
+	}
+}
+
+country_event = { # TEN Accepts
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.19"}
+ 	id = MSR_crossroads.19
+ 	title = MSR_crossroads.19.title
+ 	desc = MSR_crossroads.19.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.19.a
+	}
+}
+
+country_event = { # GUT Accepts
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.20"}
+ 	id = MSR_crossroads.20
+ 	title = MSR_crossroads.20.title
+ 	desc = MSR_crossroads.20.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.20.a
+	}
+}
+
+country_event = { # FRI Accepts
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.21"}
+ 	id = MSR_crossroads.21
+ 	title = MSR_crossroads.21.title
+ 	desc = MSR_crossroads.21.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.21.a
+	}
+}
+
+
+
+country_event = { # ABT Declines
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.22"}
+ 	id = MSR_crossroads.22
+ 	title = MSR_crossroads.22.title
+ 	desc = MSR_crossroads.22.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.22.a
+ 		create_wargoal = {
+		    type = puppet_wargoal_focus
+		    target = ABT
+		}
+	}
+}
+
+country_event = { # ARB Declines
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.23"}
+ 	id = MSR_crossroads.23
+ 	title = MSR_crossroads.23.title
+ 	desc = MSR_crossroads.23.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.23.a
+ 		create_wargoal = {
+		    type = puppet_wargoal_focus
+		    target = ARB
+		}
+	}
+}
+
+country_event = { # MAR Declines
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.24"}
+ 	id = MSR_crossroads.24
+ 	title = MSR_crossroads.24.title
+ 	desc = MSR_crossroads.24.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.24.a
+ 		create_wargoal = {
+		    type = puppet_wargoal_focus
+		    target = MAR
+		}
+	}
+}
+
+country_event = { # TEN Declines
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.25"}
+ 	id = MSR_crossroads.25
+ 	title = MSR_crossroads.25.title
+ 	desc = MSR_crossroads.25.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.25.a
+ 		create_wargoal = {
+		    type = puppet_wargoal_focus
+		    target = TEN
+		}
+	}
+}
+
+country_event = { # GUT Declines
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.26"}
+ 	id = MSR_crossroads.26
+ 	title = MSR_crossroads.26.title
+ 	desc = MSR_crossroads.26.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.26.a
+ 		create_wargoal = {
+		    type = puppet_wargoal_focus
+		    target = GUT
+		}
+	}
+}
+
+country_event = { # FRI Declines
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.27"}
+ 	id = MSR_crossroads.27
+ 	title = MSR_crossroads.27.title
+ 	desc = MSR_crossroads.27.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Join MaTO
+ 		name = MSR_crossroads.27.a
+ 		create_wargoal = {
+		    type = puppet_wargoal_focus
+		    target = FRI
+		}
+	}
+}
+
+country_event = { #Strategic Locations - ARB
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.28"}
+ 	id = MSR_crossroads.28
+ 	title = MSR_crossroads.28.title
+ 	desc = MSR_crossroads.28.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Give land
+ 		name = MSR_crossroads.28.a
+ 		ai_chance = {
+ 			base = 25
+ 		}
+ 		MSR = {
+ 			transfer_state = 15
+ 		}
+
+ 		MSR = {
+ 			country_event = {
+ 				id = MSR_crossroads.29
+ 				days = 2
+ 				random = 3
+ 			}
+ 		}
+	}
+	option = { #No
+ 		name = MSR_crossroads.28.b
+ 		ai_chance = {
+ 			base = 15
+ 		}
+ 		add_war_support = 0.25
+ 		custom_effect_tooltip = if_decline_MSR_attack_tt
+ 		remove_from_faction = ROOT
+
+ 		MSR = {
+ 			country_event = {
+ 				id = MSR_crossroads.30
+ 				days = 2
+ 				random = 3
+ 			}
+ 		}
+	}
+}
+
+country_event = { #ARB accepts
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.29"}
+ 	id = MSR_crossroads.29
+ 	title = MSR_crossroads.29.title
+ 	desc = MSR_crossroads.29.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #yay
+ 		name = MSR_crossroads.27.a
+ 		add_political_power = 25
+	}
+}
+
+country_event = { #ARB Declines
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.30"}
+ 	id = MSR_crossroads.30
+ 	title = MSR_crossroads.30.title
+ 	desc = MSR_crossroads.30.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #yay
+ 		name = MSR_crossroads.30.a
+ 		15 = {
+			owner = {
+				MSR = {
+					create_wargoal = {
+						type = take_state_focus
+						target = PREV
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = { #Strategic Locations - ABT
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.31"}
+ 	id = MSR_crossroads.31
+ 	title = MSR_crossroads.31.title
+ 	desc = MSR_crossroads.31.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Give land
+ 		name = MSR_crossroads.31.a
+ 		ai_chance = {
+ 			base = 25
+ 		}
+ 		MSR = {
+ 			transfer_state = 47
+ 			transfer_state = 57
+ 		}
+
+ 		MSR = {
+ 			country_event = {
+ 				id = MSR_crossroads.32
+ 				days = 2
+ 				random = 3
+ 			}
+ 		}
+	}
+	option = { #No
+ 		name = MSR_crossroads.31.b
+ 		ai_chance = {
+ 			base = 10
+ 		}
+ 		add_war_support = 0.25
+ 		custom_effect_tooltip = if_decline_MSR_attack_tt
+ 		remove_from_faction = ROOT
+
+ 		MSR = {
+ 			country_event = {
+ 				id = MSR_crossroads.33
+ 				days = 2
+ 				random = 3
+ 			}
+ 		}
+	}
+}
+
+country_event = { #ABT accepts
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.32"}
+ 	id = MSR_crossroads.32
+ 	title = MSR_crossroads.32.title
+ 	desc = MSR_crossroads.32.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #yay
+ 		name = MSR_crossroads.27.a
+ 		add_political_power = 25
+	}
+}
+
+country_event = { #ABT Declines
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.33"}
+ 	id = MSR_crossroads.33
+ 	title = MSR_crossroads.33.title
+ 	desc = MSR_crossroads.33.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #yay
+ 		name = MSR_crossroads.33.a
+ 		47 = {
+			owner = {
+				MSR = {
+					create_wargoal = {
+						type = take_state_focus
+						target = PREV
+					}
+				}
+			}
+		}
+		57 = {
+			owner = {
+				MSR = {
+					create_wargoal = {
+						type = take_state_focus
+						target = PREV
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = { #Strategic Locations - TEN
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.34"}
+ 	id = MSR_crossroads.34
+ 	title = MSR_crossroads.34.title
+ 	desc = MSR_crossroads.34.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #Give land
+ 		name = MSR_crossroads.34.a
+ 		ai_chance = {
+ 			base = 25
+ 		}
+ 		MSR = {
+ 			transfer_state = 15
+ 		}
+
+ 		MSR = {
+ 			country_event = {
+ 				id = MSR_crossroads.35
+ 				days = 2
+ 				random = 3
+ 			}
+ 		}
+	}
+	option = { #No
+ 		name = MSR_crossroads.34.b
+ 		ai_chance = {
+ 			base = 10
+ 		}
+ 		add_war_support = 0.25
+ 		custom_effect_tooltip = if_decline_MSR_attack_tt
+ 		remove_from_faction = ROOT
+
+ 		MSR = {
+ 			country_event = {
+ 				id = MSR_crossroads.36
+ 				days = 2
+ 				random = 3
+ 			}
+ 		}
+	}
+}
+
+country_event = { #TEN accepts
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.35"}
+ 	id = MSR_crossroads.35
+ 	title = MSR_crossroads.35.title
+ 	desc = MSR_crossroads.35.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #yay
+ 		name = MSR_crossroads.35.a
+ 		add_political_power = 25
+	}
+}
+
+country_event = { #TEN Declines
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.36"}
+ 	id = MSR_crossroads.36
+ 	title = MSR_crossroads.36.title
+ 	desc = MSR_crossroads.36.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = { #yay
+ 		name = MSR_crossroads.36.a
+ 		680 = {
+			owner = {
+				MSR = {
+					create_wargoal = {
+						type = take_state_focus
+						target = PREV
+					}
+				}
+			}
+		}
+	}
+}
+
+################
+##River Autumn##
+################
+
+##RA Secure our Tech
 country_event = {
 	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.118"}
  	id = MSR.118
@@ -1092,39 +3603,37 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
-}
 
-################
-##River Autumn##
-################
-
-##RA Secure our Tech
-country_event = {
-	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.64"}
- 	id = MSR.118
- 	title = MSR.118.title
- 	desc = MSR.118.desc
-	picture = GFX_event_test
-
-	is_triggered_only = yes
- 	fire_only_once = yes
+ 	option = {
+ 		name = MSR.118.a
+ 		add_equipment_to_stockpile = { type = energy_equipment_2 amount = 100 producer = OWE }
+ 	}
 }
 
 ##RA Seize the Memes
 country_event = {
-	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.65"}
- 	id = MSR.118
- 	title = MSR.118.title
- 	desc = MSR.118.desc
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.119"}
+ 	id = MSR.119
+ 	title = MSR.119.title
+ 	desc = MSR.119.desc
 	picture = GFX_event_test
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = {
+ 		name = MSR.119.a
+ 		54 = {
+ 			decimate_half_all_industry = yes
+ 			set_demilitarized_zone = no
+ 		}
+ 		add_ideas = sudden_economic_stop
+ 	}
 }
 
 ##RA Scribe Support
 country_event = {
-	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.66"}
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.122"}
  	id = MSR.122
  	title = MSR.122.title
  	desc = MSR.122.desc
@@ -1132,11 +3641,17 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = {
+ 		name = MSR.122.a
+ 		add_stability = 0.05
+ 		add_political_power = 25
+ 	}
 }
 
 ##RA Storm the Armory
 country_event = {
-	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.67"}
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.123"}
  	id = MSR.123
  	title = MSR.123.title
  	desc = MSR.123.desc
@@ -1144,11 +3659,20 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = {
+ 		name = MSR.123.a
+ 		add_stability = -0.05
+ 		add_war_support = 0.05
+
+ 		add_equipment_to_stockpile = { type = energy_equipment_2 amount = 150 producer = OWE }
+ 		add_equipment_to_stockpile = { type = power_armor_equipment_3 amount = 75 producer = OWE }
+ 	}
 }
 
 ##RA Gather The Rangers
 country_event = {
-	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.68"}
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.124"}
  	id = MSR.124
  	title = MSR.124.title
  	desc = MSR.124.desc
@@ -1156,11 +3680,20 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = {
+ 		name = MSR.124.a
+ 		add_popularity = {
+		    ideology = visionary
+		    popularity = 0.10
+		}
+ 		add_political_power = 50
+ 	}
 }
 
 ##RA Secure Loyalty
 country_event = {
-	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.69"}
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.125"}
  	id = MSR.125
  	title = MSR.125.title
  	desc = MSR.125.desc
@@ -1168,11 +3701,17 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = {
+ 		name = MSR.125.a
+ 		add_war_support = -0.05
+ 		add_political_power = -25
+ 	}
 }
 
 ##RA Dissent
 country_event = {
-	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.70"}
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.126"}
  	id = MSR.126
  	title = MSR.126.title
  	desc = MSR.126.desc
@@ -1180,23 +3719,57 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = {
+ 		name = MSR.125.a
+ 		add_stability = -0.05
+ 	}
 }
 
 ##RA Long Knifes
 country_event = {
-	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.71"}
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.127"}
  	id = MSR.127
  	title = MSR.127.title
  	desc = MSR.127.desc
-	picture = GFX_event_test
+	picture = GFX_event_ponies_in_battle
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = {
+ 		name = MSR.125.a
+ 		add_stability = -0.10
+ 		add_manpower = -500
+ 		add_ideas = msr_purged_military_staff
+
+ 		custom_effect_tooltip = MSR_purged_generals_tt
+ 		hidden_effect = {
+ 			every_unit_leader = {
+				limit = {
+					has_id = 88843
+				}
+				retire = yes
+			}
+			every_unit_leader = {
+				limit = {
+					has_id = 88845
+				}
+				retire = yes
+			}
+			every_unit_leader = {
+				limit = {
+					has_id = 88846
+				}
+				retire = yes
+			}
+		}
+ 	}
 }
 
 ##RA Thorn in my Side
 country_event = {
-	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.72"}
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.128"}
  	id = MSR.128
  	title = MSR.128.title
  	desc = MSR.128.desc
@@ -1204,11 +3777,39 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = {
+ 		name = MSR.125.a
+ 		add_popularity = {
+		    ideology = visionary
+		    popularity = -0.01
+		}
+ 		add_manpower = -50
+
+ 		custom_effect_tooltip = MSR_purged_aj_rangers_tt
+ 		hidden_effect = {
+ 			kill_ideology_leader = visionary
+ 			kill_ideology_leader = survivalism
+ 			set_country_flag = MSR_crossroads_dead_flag
+ 			every_unit_leader = {
+				limit = {
+					has_id = 88844
+				}
+				retire = yes
+			}
+			every_unit_leader = {
+				limit = {
+					has_id = 88842
+				}
+				retire = yes
+			}
+		}
+ 	}
 }
 
 ##RA Crushing the Rebellion
 country_event = {
-	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.73"}
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.129"}
  	id = MSR.129
  	title = MSR.129.title
  	desc = MSR.129.desc
@@ -1216,6 +3817,45 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = {
+ 		name = MSR.129.a
+ 		add_stability = 0.05
+ 		add_manpower = -100
+ 	}
+}
+
+##RA Stable 29
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.130"}
+ 	id = MSR.130
+ 	title = MSR.130.title
+ 	desc = MSR.130.desc
+	picture = GFX_event_test
+
+	trigger = {
+		tag = MSR
+		has_country_leader = {
+		    name = "Grand Marshal River Autumn"
+		    ruling_only = yes
+		}
+		owns_state = 55
+	}
+ 	fire_only_once = yes
+
+ 	option = {
+ 		name = MSR.130.a
+ 		add_resource = {
+		    type = circuitry
+		    amount = 5
+		    state = 55
+		}
+		add_resource = {
+		    type = advanced
+		    amount = 2
+		    state = 55
+		}
+ 	}
 }
 
 ##RA A Nation Reborn
@@ -1224,10 +3864,134 @@ country_event = {
  	id = MSR.132
  	title = MSR.132.title
  	desc = MSR.132.desc
+	picture = GFX_event_radio_new_vegas
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = {
+ 		name = MSR.132.a
+ 		add_stability = 0.10
+ 		add_popularity = {
+		    ideology = visionary
+		    popularity = 0.10
+		}
+ 		MSR = { set_cosmetic_tag = MSR_new_enclave }
+
+ 		create_country_leader = {
+			name = "Grand Marshal River Autumn"
+			picture = "MarshalRiverAutumn.tga"
+			expire = "1965.1.1"
+			ideology = river_autumn_ideology
+			traits = {
+				
+			}
+		}
+ 		create_field_marshal = {
+			name = "River Autumn"
+			picture = "MarshalRiverAutumn.tga"
+			traits = { river_unit_leader_trait intelligent_trait charismatic_trait pony_race_trait }
+			skill = 2
+			attack_skill = 1
+			defense_skill = 1
+			planning_skill = 3
+			logistics_skill = 2
+			female = yes
+			id = 88847
+		}
+		custom_effect_tooltip = MSR_river_stats_tt
+ 	}
+}
+
+##RA ready to arm slaves
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.133"}
+ 	id = MSR.133
+ 	title = MSR.133.title
+ 	desc = MSR.133.desc
 	picture = GFX_event_test
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = {
+ 		name = MSR.133.a
+ 		clr_country_flag = MSR_arm_slaves_cooldown
+ 	}
+}
+
+##RA RED Slave Revolt
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.134"}
+ 	id = MSR.134
+ 	title = MSR.134.title
+ 	desc = MSR.134.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = {
+ 		name = MSR.134.a
+ 		FFD = {
+			#change_tag_from = RED 
+			transfer_state = 45
+			transfer_state = 48
+			transfer_state = 532
+			transfer_state = 525
+			
+			declare_war_on = {
+				target = RED
+				type = annex_everything
+			}
+		}
+		hidden_effect = {
+			FFD = {
+				load_oob = FFD_RA_1 
+				delete_unit_template_and_units = {
+					division_template = "Talon Company"
+				}
+				add_manpower = 600
+				inherit_technology = RED
+			}
+			45 = {
+				teleport_armies = {
+					limit = { tag = RED }
+				}
+			}
+			48 = {
+				teleport_armies = {
+					limit = { tag = RED }
+				}
+			}
+			532 = {
+				teleport_armies = {
+					limit = { tag = RED }
+				}
+			}
+			525 = {
+				teleport_armies = {
+					limit = { tag = RED }
+				}
+			}
+			if = {
+				limit = { MSR = { check_variable = { MSR_RED_unrest_var > 1 } } }
+				FFD = { load_oob = FFD_RA_2 }
+			}
+			if = {
+				limit = { MSR = { check_variable = { MSR_RED_unrest_var > 2 } } }
+				FFD = { load_oob = FFD_RA_3 }
+			}
+			if = {
+				limit = { MSR = { check_variable = { MSR_RED_unrest_var > 3 } } }
+				FFD = { load_oob = FFD_RA_4 }
+			}
+			if = {
+				limit = { MSR = { check_variable = { MSR_RED_unrest_var > 4 } } }
+				FFD = { load_oob = FFD_RA_5 }
+			}
+		}
+ 	}
 }
 
 ##RA Taking Stable 29
@@ -1252,6 +4016,77 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = yes
+
+ 	option = {#Accept
+ 		name = MSR.163.a
+ 		ai_chance = {
+ 			base = 5
+ 		}
+ 		MSR = {
+ 			country_event = {
+ 				id = MSR.164
+ 				days = 1
+ 			}
+ 		}
+ 	}
+
+ 	option = {#Decline
+ 		name = MSR.163.b
+ 		ai_chance = {
+ 			base = 30
+ 		}
+ 		MSR = {
+ 			country_event = {
+ 				id = MSR.165
+ 				days = 1
+ 			}
+ 		}
+ 	}
+}
+
+##RA FSR Accepts
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.164"}
+ 	id = MSR.164
+ 	title = MSR.164.title
+ 	desc = MSR.164.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = {
+ 		name = MSR.164.a
+ 		annex_country = {
+		    target = FSR
+		    transfer_troops = yes
+		}
+		FSR = {
+			every_unit_leader = {
+				set_nationality = MSR
+			}
+		}
+ 	}
+}
+
+##RA FSR Declines
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR.165"}
+ 	id = MSR.165
+ 	title = MSR.165.title
+ 	desc = MSR.165.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = {
+ 		name = MSR.165.a
+ 		create_wargoal = {
+		    type = annex_everything
+		    target = FSR
+		}
+ 	}
 }
 
 ###############################
