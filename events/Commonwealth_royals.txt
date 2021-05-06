@@ -650,7 +650,14 @@ country_event = {
 				IF = {
 					limit = {has_country_flag = COR_civwar_extra_MP_flag}
 					add_manpower = 300
+					clr_country_flag = COR_civwar_extra_MP_flag
 				}
+				IF = {
+					limit = {has_country_flag = COR_peasant_relief_flag}
+					add_timed_idea = { idea = COR_peasant_division_idea days = 80 }
+					clr_country_flag = COR_peasant_relief_flag
+				}
+				inherit_technology = COM
 			}
 			COM = {
 				retire_ideology_leader = destruction
@@ -702,7 +709,18 @@ country_event = {
 				IF = {
 					limit = {has_country_flag = COM_civwar_extra_MP_flag}
 					add_manpower = 300
+					clr_country_flag = COM_civwar_extra_MP_flag
 				}
+				IF = {
+					limit = {has_country_flag = COM_smuggled_guns_flag}
+					add_equipment_to_stockpile = {
+						type = ballistic_equipment_1
+						amount = 400
+						producer = COM
+					}
+					clr_country_flag = COM_smuggled_guns_flag
+				}
+				load_focus_tree = COM_civwar_focus
 			}
 			COL = {
 				set_division_template_lock = {
@@ -715,6 +733,7 @@ country_event = {
 				}
 				load_oob = COL_CW_oob
 				COL_spawn_experiment = yes
+				inherit_technology = COM
 			}
 			COC = {
 				set_division_template_lock = {
@@ -727,6 +746,7 @@ country_event = {
 				}
 				load_oob = COC_CW_oob
 				COC_spawn_cossack_militia = yes
+				inherit_technology = COM
 			}
 		
 		}
@@ -735,22 +755,45 @@ country_event = {
 	option = {
 		name = commonwealth_start.16.a
 		ai_chance = { factor = 50}
-		
+		hidden_effect = {
+			COM = { complete_national_focus = COM_not_yet_lost}
+			COR = { complete_national_focus = COR_revolution_begins}
+			COC = { complete_national_focus = COC_raise_banners}
+			COL = { complete_national_focus = COL_great_experiment}
+		}
 	}
 	option = {
 		name = commonwealth_start.16.b
 		ai_chance = { factor = 50}
 		COR = { change_tag_from = ROOT }
+		hidden_effect = {
+			COM = { complete_national_focus = COM_not_yet_lost}
+			COR = { complete_national_focus = COR_revolution_begins}
+			COC = { complete_national_focus = COC_raise_banners}
+			COL = { complete_national_focus = COL_great_experiment}
+		}
 	}
 	option = {
 		name = commonwealth_start.16.c
 		ai_chance = { factor = 50}
 		COL = { change_tag_from = ROOT }
+		hidden_effect = {
+			COM = { complete_national_focus = COM_not_yet_lost}
+			COR = { complete_national_focus = COR_revolution_begins}
+			COC = { complete_national_focus = COC_raise_banners}
+			COL = { complete_national_focus = COL_great_experiment}
+		}
 	}
 	option = {
 		name = commonwealth_start.16.e
 		ai_chance = { factor = 50}
 		COC = { change_tag_from = ROOT }
+		hidden_effect = {
+			COM = { complete_national_focus = COM_not_yet_lost}
+			COR = { complete_national_focus = COR_revolution_begins}
+			COC = { complete_national_focus = COC_raise_banners}
+			COL = { complete_national_focus = COL_great_experiment}
+		}
 	}
 }
 
@@ -811,6 +854,7 @@ country_event = {
 			remove_state_core = 282
 			remove_state_core = 422
 			remove_state_core = 262
+			set_country_flag = COM_civwar_flag
 		}
 		COR = {
 			transfer_state = 82
@@ -896,6 +940,7 @@ country_event = {
 				COR = { transfer_state = 121 add_state_core = 121 }
 				COM = { remove_state_core = 121 }
 			}
+			clr_country_flag = COM_peryfer_royalist_flag
 			country_event = {
 				id = commonwealth_start.16
 			}
@@ -952,7 +997,7 @@ country_event = {
  	fire_only_once = no
 
 	option = {
-		name = commonwealth_start.18.b
+		name = commonwealth_start.18.a
 		ai_chance = { factor = 50}
 		complete_national_focus = COM_assembly_hearts
 		custom_effect_tooltip = COM_COR_gains_MP_tt
