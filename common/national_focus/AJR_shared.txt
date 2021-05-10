@@ -642,12 +642,21 @@
 
 		ai_will_do = {
 			factor = 1
-		} 
+		}
+
+		select_effect = {
+			country_event =  {
+				id = applejack.6
+				days = 6
+				random = 24
+			}
+		}
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_settling_down"
 			
 			custom_effect_tooltip = AJR_load_main_tree
+			country_event = applejack.16
 		}
 
 	}
@@ -1339,9 +1348,9 @@
 		y = 1
 		cost = 5
 
-		#allow_branch = {
-		#	has_country_flag = AJR_load_main_tree_flag
-		#}
+		allow_branch = {
+			has_country_flag = AJR_load_main_tree_flag
+		}
 
 		prerequisite = { focus = AJR_settling_down }
 
@@ -1817,7 +1826,37 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_the_expeditionary_corp"
-
+			custom_effect_tooltip = AJR_unlocks_expeditionary_corp_focus_tt
+			if = {
+				limit = { has_country_flag = AJR_work_with_NCR_flag }
+				SHA = {
+					add_dynamic_modifier = { modifier = AJR_expedition_modifier }
+					add_to_array = {
+	                    array = global.countries_with_AJR_expedition_array
+	                    value = THIS.id
+	                }
+				}
+			}
+			if = {
+				limit = { has_country_flag = AJR_work_with_seafire_flag }
+				NEV = {
+					add_dynamic_modifier = { modifier = AJR_expedition_modifier }
+					add_to_array = {
+	                    array = global.countries_with_AJR_expedition_array
+	                    value = THIS.id
+	                }
+				}
+			}
+			if = {
+				limit = { has_country_flag = AJR_work_with_trottingham_flag }
+				TSR = {
+					add_dynamic_modifier = { modifier = AJR_expedition_modifier }
+					add_to_array = {
+	                    array = global.countries_with_AJR_expedition_array
+	                    value = THIS.id
+	                }
+				}
+			}
 			hidden_effect = {
 				set_variable = { AJR_vis_drift_var = 0.05 }
 				set_variable = { AJR_research_bonus_var = 0.025 }
