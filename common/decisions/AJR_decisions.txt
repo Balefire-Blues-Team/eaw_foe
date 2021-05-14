@@ -1,0 +1,144 @@
+AJR_expedition_cat = {
+	AJR_expedition_dec_placeholder = {
+		icon = GFX_decision_stable_door
+		cost = 75
+		ai_will_do = {
+			base = 0
+
+		}
+
+		available = {
+		}
+		visible = {
+		#	has_completed_focus = AJR_the_expeditionary_corp
+		}
+		#fire_only_once = yes
+
+		days_remove = 90
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AJR_expedition_dec_placeholder"
+			
+		}
+	}
+
+	AJR_clear_array = {
+		icon = GFX_decision_stable_door
+		cost = 0
+		ai_will_do = {
+			base = 0
+
+		}
+
+		available = {
+		}
+		visible = {
+		#	has_completed_focus = AJR_the_expeditionary_corp
+		}
+		fire_only_once = no
+
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AJR_clear_array"
+			#add_political_power = 50
+			clear_array = global.countries_with_AJR_expedition_array
+			every_country = {
+				limit = {
+					has_dynamic_modifier = {
+					    modifier = AJR_expedition_modifier
+					}
+				}
+				remove_dynamic_modifier = { modifier = AJR_expedition_modifier } 
+			}
+		}
+	}
+
+	AJR_clear_vars = {
+		icon = GFX_decision_stable_door
+		cost = 0
+		ai_will_do = {
+			base = 0
+
+		}
+
+		available = {
+		}
+		visible = {
+		#	has_completed_focus = AJR_the_expeditionary_corp
+		}
+		fire_only_once = no
+
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AJR_clear_array"
+
+			clear_variable = AJR_vis_drift_var
+			clear_variable = AJR_research_bonus_var
+		}
+	}
+
+	AJR_add_NCR_dec = {
+		icon = GFX_decision_stable_door
+		cost = 0
+		ai_will_do = {
+			base = 0
+
+		}
+
+		available = {
+		}
+		visible = {
+		#	has_completed_focus = AJR_the_expeditionary_corp
+		}
+		fire_only_once = no
+
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AJR_add_NCR_dec"
+			SHA = {
+				add_dynamic_modifier = { modifier = AJR_expedition_modifier }
+				add_to_array = {
+                    array = global.countries_with_AJR_expedition_array
+                    value = THIS.id
+                }
+			}
+		}
+	}
+
+	AJR_add_all_non_destruction_dec = {
+		icon = GFX_decision_stable_door
+		cost = 0
+		ai_will_do = {
+			base = 0
+
+		}
+
+		available = {
+		}
+		visible = {
+		#	has_completed_focus = AJR_the_expeditionary_corp
+		}
+		fire_only_once = no
+
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AJR_add_all_non_destruction_dec"
+			every_other_country = {
+                limit = {
+                    NOT = {
+                    	OR = {
+                       		has_government = destruction
+                       		tag = OWE
+                       		tag = MSR
+                       	}
+                    }
+                }
+                add_dynamic_modifier = { modifier = AJR_expedition_modifier }
+                add_to_array = {
+                    array = global.countries_with_AJR_expedition_array
+                    value = THIS.id
+                }
+            }
+		}
+	}
+}
