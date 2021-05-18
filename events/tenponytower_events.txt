@@ -174,14 +174,67 @@ country_event = {
 
  	option = {
 		name = TEN.5.a
-		ai_chance = { factor = 1000}
+		ai_chance = { factor = 10
+			modifier = {
+                factor = 100
+                is_historical_focus_on = yes
+            }
+        	modifier = {
+                factor = 100
+                has_game_rule = {
+                    rule = TEN_AI_BEHAVIOR
+                    option = SOCIETY
+                }
+            }
+            modifier = {
+                factor = 0
+                has_game_rule = {
+                    rule = TEN_AI_BEHAVIOR
+                    option = GRIMSTAR
+                }
+            }
+            modifier = {
+                factor = 0
+                has_game_rule = {
+                    rule = TEN_AI_BEHAVIOR
+                    option = GHOULS
+                }
+            }
+        }
 		set_country_flag = TEN_dead_ghouls
 		add_political_power = 50
 		}
 
 	option = {
 		name = TEN.5.b
-		ai_chance = { factor = 0}
+		ai_chance = { factor = 10
+			modifier = {
+                factor = 0
+                is_historical_focus_on = yes
+            }
+        	modifier = {
+                factor = 0
+                has_game_rule = {
+                    rule = TEN_AI_BEHAVIOR
+                    option = SOCIETY
+                }
+            }
+            modifier = {
+                factor = 100
+                has_game_rule = {
+                    rule = TEN_AI_BEHAVIOR
+                    option = GRIMSTAR
+                }
+            }
+            modifier = {
+                factor = 0
+                has_game_rule = {
+                    rule = TEN_AI_BEHAVIOR
+                    option = GHOULS
+                }
+            }
+        }
+
 		country_event = { id = TEN.6 }
 	}
 }
@@ -2447,9 +2500,10 @@ country_event = {
 	picture = GFX_event_test
 
 	trigger = {
-		date > 1235.06.10
+		date > 1235.08.10
 		original_tag = TEN
 		has_completed_focus = TEN_communication
+		has_idea = TEN_ghoul_problem
 		NOT = {
 			has_country_leader = { ruling_only = yes name = "Chief Grim Star" }
 		}
@@ -2788,6 +2842,10 @@ country_event = {
 			value = 1
 		}
 		add_ideas = TEN_clique_enslaved
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.05
+		}
 		if = {
 			limit = {
 				check_variable = { enslave_da_bigots = kill_da_bigots }
@@ -2827,6 +2885,10 @@ country_event = {
 			value = 1
 		}
 		add_ideas = TEN_clique_killed
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.08
+		}
 		if = {
 			limit = {
 				check_variable = { enslave_da_bigots = kill_da_bigots }
@@ -2970,7 +3032,7 @@ country_event = {
 	option = {
 		name = TEN.114.a
 		ai_chance = { factor = 40 }
-		add_ideas = TEN_empowered_security_council
+		swap_ideas = { remove_idea = TEN_empowered_security_council add_idea = TEN_empowered_security_council }
 	}		
 } 
 ####HUNTING GRIM AND SOCS######
@@ -3820,23 +3882,6 @@ country_event = {
 	}
 }
 
-country_event = {
-	id = TEN.147
-	title = TEN.147.title
-	desc = TEN.147.desc
-	picture = GFX_event_test
-	
-	is_triggered_only = yes
-	trigger = {
-		tag = TEN 
-	}
-	
-	option = {
-		name = TEN.147.a
-		ai_chance = { factor = 40 }
-	}
-}
-
 
 #Homage Event
 country_event = {
@@ -3855,10 +3900,10 @@ country_event = {
 		ai_chance = { factor = 40 }
 		random_list = {
 			50 = {
-				country_event = { TEN.148 }
+				country_event = { id = TEN.148 }
 			}
 			50 = {
-				country_event = { TEN.149 }
+				country_event = { id = TEN.149 }
 			}
 		}
 	}
@@ -3880,7 +3925,7 @@ country_event = {
 		ai_chance = { factor = 40 }
 		add_popularity = {
 			ideology = destruction
-			popularity = 0.6
+			popularity = 0.06
 		}
 		add_manpower = 200
 	}
