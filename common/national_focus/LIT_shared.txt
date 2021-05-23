@@ -2303,15 +2303,10 @@ shared_focus = {
 		prerequisite = { focus = LIT_restrore_relations_fta }
 		ai_will_do = { 
 		factor = 50
-		} 
-
+		}
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus LIT_prepare_storm"
-			add_ideas = LIT_storm_prepared_idea
-			swap_ideas = {
-				remove_idea = LIT_warbands_idea2
-				add_idea = LIT_warbands_idea3
-			}
+			add_ideas = LIT_storm_prepared_idea	
 		}
 }
 
@@ -2681,6 +2676,11 @@ shared_focus = {
 			}
 		}
 		available_if_capitulated = yes 
+		bypass = {
+			NOT = {
+				country_exists = NAP
+			}
+		}
 		
 		prerequisite = { focus = LIT_ministry_servant_tech }
 		prerequisite = { focus = LIT_ministry_training }
@@ -3452,18 +3452,47 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus LIT_army_skybreaker_abandontradition"
-			hidden_effect = {
+			if = {
+				limit = {
+					has_idea = LIT_warbands_idea
+				}
+				remove_ideas = { LIT_warbands_idea }
+				country_lock_all_division_template = no
 				remove_ideas = {
 					LIT_warbands_idea
 					LIT_warbands_idea2
 					LIT_warbands_idea3
 					LIT_warbands_idea4
 				}
+			else_if = {
+				limit = {
+					has_idea = LIT_warbands_idea2
+				}
+				remove_ideas = { LIT_warbands_idea2 }
+				country_lock_all_division_template = no
 			}
-			country_lock_all_division_template = no
+			else_if = {
+				limit = {
+					has_idea = LIT_warbands_idea3
+				}
+				remove_ideas = { LIT_warbands_idea3 }
+				country_lock_all_division_template = no
+			}
+			else_if = {
+				limit = {
+					has_idea = LIT_warbands_idea4
+				}
+				remove_ideas = { LIT_warbands_idea4 }
+				country_lock_all_division_template = no
+			}
+			else = {
+				army_experience = 25
+			}
+			
+			}
 			add_political_power = -25
+		}
 	}
-}
 
 shared_focus = {
 	id = LIT_army_skybreaker_equippedarmy
@@ -3504,7 +3533,7 @@ shared_focus = {
 
 shared_focus = {
 	id = LIT_army_skybreaker_magicarmy
-	icon = GFX_goal_MAS_P2F6C1
+	icon = GFX_focus_MAS_ImproveOurSkills
 	x = 2
 	y = 1
 	relative_position_id = LIT_army_skybreaker_abandontradition
@@ -3621,6 +3650,9 @@ shared_focus = {
 	}
 	available_if_capitulated = yes
 	prerequisite = { focus = LIT_army_skybreaker_newera }
+	available = {
+		has_idea = LIT_MAS_imitation_officers
+	}
 	ai_will_do = {
 		factor = 50
 	}
@@ -3732,6 +3764,231 @@ shared_focus = {
 			army_experience = 25
 		}
 }
+shared_focus = {
+		id = LIT_army_shakespar_united
+		icon = GFX_focus_indy_tanks_across_the_border
+		x = 0
+		y = 1
+		relative_position_id = LIT_army_shakespar_start
+		cost = 4.29
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_army_shakespar_start }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_army_shakespar_united"
+			LIT_lower_isolation = yes
+			IF = {
+				limit = {
+					has_idea = LIT_warbands_idea
+				}
+			swap_ideas = {
+				remove_idea = LIT_warbands_idea
+				add_idea = LIT_warbands_idea2
+				}
+			country_lock_all_division_template = no
+			}
+			add_war_support = 0.15
+		}
+}
+shared_focus = {
+		id = LIT_army_shakespar_civilize
+		icon = GFX_focus_indy_tanks_across_the_border
+		x = 0
+		y = 1
+		relative_position_id = LIT_army_shakespar_united
+		cost = 4.29
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_army_shakespar_united }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_army_shakespar_civilize"
+		}
+}
+shared_focus = {
+		id = LIT_army_shakespar_tradition
+		icon = GFX_focus_indy_tanks_across_the_border
+		x = -2
+		y = 1
+		relative_position_id = LIT_army_shakespar_civilize
+		cost = 4.29
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_army_shakespar_tradition }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_army_shakespar_tradition"
+		}
+}
+shared_focus = {
+		id = LIT_army_shakespar_future
+		icon = GFX_focus_indy_tanks_across_the_border
+		x = 2
+		y = 1
+		relative_position_id = LIT_army_shakespar_civilize
+		cost = 4.29
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_army_shakespar_future }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_army_shakespar_future"
+		}
+}
+shared_focus = {
+		id = LIT_army_shakespar_loyalty
+		icon = GFX_focus_indy_tanks_across_the_border
+		x = 2
+		y = 1
+		relative_position_id = LIT_army_shakespar_tradition
+		cost = 4.29
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_army_shakespar_tradition }
+		prerequisite = { focus = LIT_army_shakespar_future }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_army_shakespar_loyalty"
+			swap_ideas = {
+				remove_idea = LIT_warbands_idea2
+				add_idea = LIT_warbands_idea3
+			}
+		}
+}
+shared_focus = {
+		id = LIT_army_shakespar_reachingout
+		icon = GFX_focus_indy_tanks_across_the_border
+		x = 0
+		y = 1
+		relative_position_id = LIT_army_shakespar_loyalty
+		cost = 4.29
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_army_shakespar_loyalty }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_army_shakespar_reachingout"
+		}
+}
+shared_focus = {
+		id = LIT_army_shakespar_newrangers
+		icon = GFX_focus_indy_tanks_across_the_border
+		x = -2
+		y = 1
+		relative_position_id = LIT_army_shakespar_reachingout
+		cost = 4.29
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_army_shakespar_reachingout }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_army_shakespar_newrangers"
+		}
+}
+shared_focus = {
+		id = LIT_army_shakespar_rock
+		icon = GFX_focus_indy_tanks_across_the_border
+		x = 0
+		y = 1
+		relative_position_id = LIT_army_shakespar_reachingout
+		cost = 4.29
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_army_shakespar_reachingout }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_army_shakespar_rock"
+		}
+}
+shared_focus = {
+		id = LIT_army_shakespar_crane
+		icon = GFX_focus_indy_tanks_across_the_border
+		x = 2
+		y = 1
+		relative_position_id = LIT_army_shakespar_reachingout
+		cost = 4.29
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_army_shakespar_reachingout }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_army_shakespar_railright"
+		}
+}
+shared_focus = {
+		id = LIT_army_shakespar_desert
+		icon = GFX_focus_indy_tanks_across_the_border
+		x = -1
+		y = 1
+		relative_position_id = LIT_army_shakespar_rock
+		cost = 4.29
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_army_shakespar_newrangers }
+		prerequisite = { focus = LIT_army_shakespar_rock }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_army_shakespar_desert"
+		}
+}
+shared_focus = {
+		id = LIT_army_shakespar_terrain
+		icon = GFX_focus_indy_tanks_across_the_border
+		x = 1
+		y = 1
+		relative_position_id = LIT_army_shakespar_rock
+		cost = 4.29
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_army_shakespar_rock }
+		prerequisite = { focus = LIT_army_shakespar_crane }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_army_shakespar_terrain"
+		}
+}
+shared_focus = {
+		id = LIT_army_shakespar_final
+		icon = GFX_focus_indy_tanks_across_the_border
+		x = 1
+		y = 1
+		relative_position_id = LIT_army_shakespar_desert
+		cost = 4.29
+		available_if_capitulated = yes 
+		prerequisite = { focus = LIT_army_shakespar_desert }
+		prerequisite = { focus = LIT_army_shakespar_terrain }
+		ai_will_do = { 
+		factor = 50
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus LIT_army_shakespar_final"
+		}
+}
+
 
 
 
