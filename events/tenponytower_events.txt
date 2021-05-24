@@ -3565,7 +3565,7 @@ country_event = {
 			}
 			hidden_effect = {
 				country_event = {
-					id = TEN.420
+					id = TEN.134
 				}
 			}
 		}
@@ -3585,9 +3585,9 @@ country_event = {
 ##THE GREAT FATE##
 #Horsie slave
 country_event = {
-	id = TEN.420
-	title = TEN.420.title
-	desc = TEN.420.desc
+	id = TEN.134
+	title = TEN.134.title
+	desc = TEN.134.desc
 	picture = GFX_event_test
 	
 	is_triggered_only = yes
@@ -3597,7 +3597,7 @@ country_event = {
 	}
 	
 	option = {
-		name = TEN.420.a
+		name = TEN.134.a
 		ai_chance = { factor = 40 }
 		add_ideas = TEN_enslave_everyone
 		add_stability = -0.10
@@ -4077,23 +4077,34 @@ country_event = {
 	option = {
 		name = TEN.150.a
 		ai_chance = { factor = 40 }
-		if = {
-			limit = {
-				check_variable = { rotting_non_feral_count < rotting_feral_count }
-			}
-			hidden_effect = {
+		hidden_effect = {
+			if = {
+				limit = {
+					check_variable = { rotting_non_feral_count > rotting_feral_count }
+				}
 				country_event = {
 					id = TEN.151
 				}
 			}
-		}
-		if = {
-			limit = {
-				check_variable = { rotting_non_feral_count > rotting_feral_count }
-			}
-			hidden_effect = {
+			if = {
+				limit = {
+					check_variable = { rotting_non_feral_count < rotting_feral_count }
+				}
 				country_event = {
 					id = TEN.152
+				}
+			}
+			if = {
+				limit = {
+					check_variable = { rotting_non_feral_count = rotting_feral_count }
+				}
+				random_list = {
+					50 = {
+						country_event = { id = TEN.151 }
+					}
+					50 = {
+						country_event = { id = TEN.152 }
+					}
 				}
 			}
 		}
@@ -4140,6 +4151,16 @@ country_event = {
 	option = {
 		name = TEN.152.a
 		ai_chance = { factor = 40 }
+		kill_country_leader = yes
+		create_country_leader = { #Destruction/Alternate
+			name = "Feral Rotting Tail"
+			picture = "Sheriff_Rotting_Man.tga"
+			expire = "1965.1.1"
+			ideology = purist
+			traits = {
+				feral_sheriff
+			}
+		}
 	}
 }
 
