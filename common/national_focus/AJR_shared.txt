@@ -1958,14 +1958,164 @@
 		y = 1
 		cost = 5
 
+		available = {
+			has_completed_focus = AJR_the_expeditionary_corp
+		}
+
 		prerequisite = { focus = AJR_protectors_of_equestria }
+
+		bypass = {
+			NOT = {
+				country_exists = MAR
+				country_exists = TEN
+				country_exists = GUT
+				country_exists = FRI
+				country_exists = ARB
+			}
+		}
 
 		ai_will_do = {
 			factor = 1
 		} 
 
+		will_lead_to_war_with = MAR
+		will_lead_to_war_with = TEN
+		will_lead_to_war_with = GUT
+		will_lead_to_war_with = FRI
+		will_lead_to_war_with = ARB
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_secure_manehattan"
+			if = {
+				limit = {
+					TEN = {
+						OR = {
+							has_country_leader = {
+							    name = "Chief Grim Star"
+							    ruling_only = yes
+							}
+							has_country_leader = {
+							    name = "Sheriff Rotting Tail"
+							    ruling_only = yes
+							}
+						}
+					}
+				}
+				create_wargoal = {
+				    type = annex_everything
+				    target = TEN
+				}
+			}
+			else = {
+				custom_effect_tooltip = AJR_send_expediton_to_TEN_tt
+				give_guarantee = TEN
+				TEN = {
+					add_dynamic_modifier = { modifier = AJR_expedition_modifier }
+					add_to_array = {
+	                    array = global.countries_with_AJR_expedition_array
+	                    value = THIS.id
+	                }
+					country_event = applejack.27
+				}
+			}
+
+			if = {
+				limit = {
+					MAR = {
+						has_government = destruction
+					}
+				}
+				create_wargoal = {
+				    type = annex_everything
+				    target = MAR
+				}
+			}
+			else = {
+				custom_effect_tooltip = AJR_send_expediton_to_MAR_tt
+				give_guarantee = MAR
+				MAR = {
+					add_dynamic_modifier = { modifier = AJR_expedition_modifier }
+					add_to_array = {
+	                    array = global.countries_with_AJR_expedition_array
+	                    value = THIS.id
+	                }
+					country_event = applejack.27
+				}
+			}
+
+			if = {
+				limit = {
+					GUT = {
+						has_government = destruction
+					}
+				}
+				create_wargoal = {
+				    type = annex_everything
+				    target = GUT
+				}
+			}
+			else = {
+				custom_effect_tooltip = AJR_send_expediton_to_GUT_tt
+				give_guarantee = GUT
+				GUT = {
+					add_dynamic_modifier = { modifier = AJR_expedition_modifier }
+					add_to_array = {
+	                    array = global.countries_with_AJR_expedition_array
+	                    value = THIS.id
+	                }
+					country_event = applejack.27
+				}
+			}
+
+			if = {
+				limit = {
+					FRI = {
+						has_government = destruction
+					}
+				}
+				create_wargoal = {
+				    type = annex_everything
+				    target = FRI
+				}
+			}
+			else = {
+				custom_effect_tooltip = AJR_send_expediton_to_FRI_tt
+				give_guarantee = FRI
+				FRI = {
+					add_dynamic_modifier = { modifier = AJR_expedition_modifier }
+					add_to_array = {
+	                    array = global.countries_with_AJR_expedition_array
+	                    value = THIS.id
+	                }
+					country_event = applejack.27
+				}
+			}
+
+			if = {
+				limit = {
+					ARB = {
+						OR = {
+							has_government = destruction
+							has_idea = revealed_cannibals
+						}
+					}
+				}
+				create_wargoal = {
+				    type = annex_everything
+				    target = ARB
+				}
+			}
+			else = {
+				custom_effect_tooltip = AJR_send_expediton_to_ARB_tt
+				give_guarantee = FRI
+				ARB = {
+					add_dynamic_modifier = { modifier = AJR_expedition_modifier }
+					add_to_array = {
+	                    array = global.countries_with_AJR_expedition_array
+	                    value = THIS.id
+	                }
+					country_event = applejack.27
+				}
+			}
 		}
 	}
 
@@ -1977,7 +2127,20 @@
 		y = 1
 		cost = 5
 
+		available = {
+			TEN = {
+				has_dynamic_modifier = {
+				    modifier = AJR_expedition_modifier
+				}
+			}
+		}
 		prerequisite = { focus = AJR_secure_manehattan }
+
+		bypass = {
+			NOT = {
+				country_exists = TEN
+			}
+		}
 
 		ai_will_do = {
 			factor = 1
@@ -1986,6 +2149,11 @@
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_ranger_delegation_in_tenpony"
 
+			TEN = {
+				remove_dynamic_modifier = { modifier = AJR_expedition_modifier }
+				add_dynamic_modifier = { modifier = AJR_embassy_modifier }
+			}
+			reverse_add_opinion_modifier = { target = TEN modifier = has_AJR_embassy }
 		}
 	}
 
@@ -1997,7 +2165,20 @@
 		y = 1
 		cost = 5
 
+		available = {
+			FRI = {
+				has_dynamic_modifier = {
+				    modifier = AJR_expedition_modifier
+				}
+			}
+		}
 		prerequisite = { focus = AJR_secure_manehattan }
+
+		bypass = {
+			NOT = {
+				country_exists = FRI
+			}
+		}
 
 		ai_will_do = {
 			factor = 1
@@ -2005,6 +2186,12 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_modernize_friendship_city"
+
+			FRI = {
+				add_ideas = old_world_society
+				one_random_industrial_complex = yes
+			}
+			reverse_add_opinion_modifier = { target = FRI modifier = friends_with_AJR }
 
 		}
 	}
@@ -2024,9 +2211,30 @@
 			factor = 1
 		} 
 
+		will_lead_to_war_with = RAR
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_summerfield_plan"
 
+			if = {
+				limit = { country_exists = RTA }
+				RTA = { country_event = applejack.29 }
+			}
+			if = {
+				limit = { country_exists = EMP }
+				EMP = { country_event = applejack.30 }
+			}
+			if = {
+				limit = {
+					NOT = {
+						country_exists = RTA
+						country_exists = EMP
+					}
+				}
+				create_wargoal = {
+				    type = annex_everything
+				    target = RAR
+				}
+			}
 		}
 	}
 
@@ -2067,6 +2275,7 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_support_prospectors"
+			custom_effect_tooltip = AJR_support_prospectors_tt
 
 		}
 
@@ -2097,6 +2306,7 @@
 	                    array = global.countries_with_AJR_expedition_array
 	                    value = THIS.id
 	                }
+	                country_event = applejack.27
 				}
 			}
 			if = {
@@ -2107,6 +2317,7 @@
 	                    array = global.countries_with_AJR_expedition_array
 	                    value = THIS.id
 	                }
+	                country_event = applejack.27
 				}
 			}
 			if = {
@@ -2117,6 +2328,7 @@
 	                    array = global.countries_with_AJR_expedition_array
 	                    value = THIS.id
 	                }
+	                country_event = applejack.27
 				}
 			}
 			hidden_effect = {
@@ -2369,7 +2581,7 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_secondary_mission"
-
+			country_event = applejack.28
 		}
 	}
 
