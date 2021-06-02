@@ -9,7 +9,7 @@ add_namespace = MSR_steelhooves
 add_namespace = MSR_crossroads
 add_namespace = MSR_arbu
 add_namespace = MSR_elections
-
+add_namespace = MSR_fsr
 ################
 ####Defaults####
 ################
@@ -191,13 +191,54 @@ country_event = {
 
  	option = { #Cottage Cheese
 		name = MSR.6.a
-		ai_chance = { factor = 50}
+		ai_chance = { 
+			factor = 50
+			modifier = {
+				factor = 0
+				OR = {
+		            has_game_rule = {
+		                rule = MSR_AI_BEHAVIOR
+		                option = STEELHOOVES
+		            }
+		            has_game_rule = {
+		                rule = MSR_AI_BEHAVIOR
+		                option = RIVER
+		            }
+		        }
+			}
+		}
 		add_political_power = 50
 		set_country_flag = cottage_cheese_wins_MSR
 	}
 	option = { #Steel Hooves
 		name = MSR.6.b
-		ai_chance = { factor = 50}
+		ai_chance = { 
+			factor = 40
+			modifier = {
+				factor = 0
+				OR = {
+		            AND = {
+		                is_historical_focus_on = yes
+		                has_game_rule = {
+		                    rule = MSR_AI_BEHAVIOR
+		                    option = DEFAULT
+		                }
+		            }
+		            has_game_rule = {
+		                rule = MSR_AI_BEHAVIOR
+		                option = HISTORICAL_AJR
+		            }
+		            has_game_rule = {
+		                rule = MSR_AI_BEHAVIOR
+		                option = COTTAGE
+		            }
+		            has_game_rule = {
+		                rule = MSR_AI_BEHAVIOR
+		                option = RIVER
+		            }
+		        }
+			}
+		}
 		set_politics = {
 			ruling_party = visionary
 		}
@@ -209,7 +250,33 @@ country_event = {
 	}
 	option = { #River Autumn
 		name = MSR.6.c
-		ai_chance = { factor = 50}
+		ai_chance = {
+			factor = 25
+			modifier = {
+				factor = 0
+				OR = {
+		            AND = {
+		                is_historical_focus_on = yes
+		                has_game_rule = {
+		                    rule = MSR_AI_BEHAVIOR
+		                    option = DEFAULT
+		                }
+		            }
+		            has_game_rule = {
+		                rule = MSR_AI_BEHAVIOR
+		                option = HISTORICAL_AJR
+		            }
+		            has_game_rule = {
+		                rule = MSR_AI_BEHAVIOR
+		                option = COTTAGE
+		            }
+		            has_game_rule = {
+		                rule = MSR_AI_BEHAVIOR
+		                option = STEELHOOVES
+		            }
+		        }
+			}
+		}
 		trigger = {
 			check_variable = { MSR_river_support_var = 1 }
 		}
@@ -341,6 +408,7 @@ country_event = { #River's Coup
 		}
 		create_country_leader = {
 			name = "Elder River Autumn"
+			desc = "POLITICS_RIVERAUTUMN_DESC"
 			picture = "ScribeRiverAutumn.tga"
 			expire = "1965.1.1"
 			ideology = river_autumn_ideology
@@ -456,6 +524,7 @@ country_event = {
 			factor = 50
 			
 		}
+		set_country_flag = cottage_exiled_steelhooves
 		custom_effect_tooltip = MSR_exile_steelhooves_tt
         remove_unit_leader = 88844
 	}
@@ -830,6 +899,7 @@ country_event = {
 			retire_country_leader = yes
 			create_country_leader = {
 				name = "Elder Cottage Cheese"
+				desc = "POLITICS_COTTAGEGOD_DESC"
 				picture = "GFX_Green_Cheese_animated"
 				expire = "1965.1.1"
 				ideology = steel_ranger_cont
@@ -864,6 +934,7 @@ country_event = {
 			retire_country_leader = yes
 			create_country_leader = {
 				name = "Elder Cottage Cheese"
+				desc = "POLITICS_COTTAGEFAIL_DESC"
 				picture = "GFX_Red_Cheese_animated"
 				expire = "1965.1.1"
 				ideology = steel_ranger_cont
@@ -1014,8 +1085,10 @@ country_event = {
 	option = {
  		name = MSR.44.a
 		core_original_ARB = yes
+		save_current_manpower = yes
 		642 = {add_manpower = -500}
 		15 = {add_manpower = -500}
+		restore_previous_manpower = yes
 		add_stability = 0.05
 
 	}
@@ -1590,9 +1663,10 @@ country_event = { #Firefight at Bucklyn Cross
  		name = MSR_aj_rangers.7.a
  		add_manpower = -72
  		add_stability = -0.01
+ 		add_war_support = -0.05
  		save_current_manpower = yes
  		19 = {
- 			add_manpower = -57
+ 			add_manpower = -157
  			damage_building = {
 			    type = infrastructure
 			    damage = 4
@@ -1608,6 +1682,7 @@ country_event = { #Firefight at Bucklyn Cross
 			}
  		}
  		restore_previous_manpower = yes
+ 		add_ideas = msr_low_morale
  	}
 
 }
@@ -1925,6 +2000,32 @@ country_event = { #AJR - Ceasefire Over
  	}
 }
 
+country_event = { #Pip Beats Cottage - No CW
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_aj_rangers.19"}
+ 	id = MSR_aj_rangers.19
+ 	title = MSR_aj_rangers.19.title
+ 	desc = MSR_aj_rangers.19.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+	is_triggered_only = yes
+
+
+ 	option = { #aww
+ 		name = MSR_aj_rangers.19.a
+ 		unlock_national_focus = MSR_Hooves
+
+ 		set_politics = {
+			ruling_party = visionary
+		}
+		add_popularity = {
+		    ideology = visionary
+		    popularity = 0.35
+		}
+ 	}
+}
+
+
 #############################
 ##Steel Hooves & Crossroads##
 #############################
@@ -2001,6 +2102,10 @@ country_event = {
 		add_popularity = {
 		    ideology = survivalism
 		    popularity = 0.30
+		}
+		hidden_effect = {
+			clr_global_flag = msr_steelhooves_flag
+			set_global_flag = msr_crossroads_flag
 		}
 
 	}
@@ -4031,6 +4136,7 @@ country_event = {
 
  		create_country_leader = {
 			name = "Grand Marshal River Autumn"
+			desc = "POLITICS_GRANDMARSHALRIVER_DESC"
 			picture = "MarshalRiverAutumn.tga"
 			expire = "1965.1.1"
 			ideology = river_autumn_ideology
@@ -4238,6 +4344,62 @@ country_event = {
 		    target = FSR
 		}
  	}
+}
+
+###FSR Events###
+country_event = {
+	id = MSR_fsr.1
+	title = MSR_fsr.1.t
+	desc = MSR_fsr.1.d
+	
+	picture = GFX_event_test
+	
+	fire_only_once = yes
+	trigger = {
+		NOT = {
+			country_exists = FSR
+		}
+		OR = {
+		has_global_flag = msr_cottage_flag
+		has_global_flag = msr_cottagegod_flag
+		has_global_flag = msr_steelhooves_flag
+		has_global_flag = msr_crossroads_flag
+		}
+	}
+	
+	option = {
+		name = MSR_fsr.1.a
+		ai_chance = { factor = 50 }
+		hidden_effect = { load_oob = "MSR_fillydelphia_remnants" }
+		IF = {
+			limit = { has_global_flag = fsr_blueberry_flag }
+			custom_effect_tooltip = MSR_blueberry_tt
+			hidden_effect = {
+			set_country_flag = MSR_blueberry_advisor_flag
+			}
+			else_if = {
+			limit = { has_global_flag = msr_strawberry_flag }
+			custom_effect_tooltip = MSR_strawberry_tt
+			hidden_effect = {
+			set_country_flag = MSR_strawberry_advisor_flag
+			create_corps_commander = {
+				name = "Strawberry Lemonade"
+				picture = "Strawberry_Lemonade.tga"
+				traits = { charismatic_trait lucky_trait agile_trait }
+				skill = 1
+				attack_skill = 2
+				defense_skill = 2
+				planning_skill = 2
+				logistics_skill = 1
+				id = 777032
+			}
+			}
+			}
+			else = {
+			custom_effect_tooltip = MSR_fsr_remnants_tt
+			}
+		}
+	}
 }
 
 ###############################

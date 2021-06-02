@@ -623,3 +623,574 @@ country_event = { ###For a Better Future
 		}
 	}
 }
+
+country_event = { ###Raider Round-Up
+ 	id = applejack.17
+ 	title = applejack.17.title
+ 	desc = applejack.17.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #yee haw
+		name = applejack.17.a
+		ai_chance = {
+			factor = 80
+		}
+
+		set_province_name = { id = 8720 name = "New Orangedale"}
+		save_current_manpower = yes
+		469 = {
+			add_manpower = -867
+		}
+		restore_previous_manpower = yes
+		add_stability = 0.05
+	}
+}
+
+country_event = { ###Matter of Knights
+ 	id = applejack.18
+ 	title = applejack.18.title
+ 	desc = applejack.18.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Pardon some, exile the rest
+		name = applejack.18.a
+		ai_chance = {
+			factor = 33
+		}
+
+		add_manpower = 150
+	}
+
+	option = { #pardon all
+		name = applejack.18.b
+		ai_chance = {
+			factor = 33
+		}
+
+		add_manpower = 500
+		add_popularity = {
+		    ideology = continuation
+		    popularity = 0.20
+		}
+		add_stability = -0.05
+		add_war_support = -0.05
+	}
+
+	option = { #Exile all
+		name = applejack.18.c
+		ai_chance = {
+			factor = 33
+		}
+
+		add_stability = 0.05
+		custom_effect_tooltip = AJR_exile_unforeseen_consequences_tt
+	}
+
+	option = { #shoot some, exile the rest
+		name = applejack.18.d
+		ai_chance = {
+			factor = 10
+		}
+
+		trigger = {
+			has_country_leader = {
+			    name = "Elder Crossroads"
+			    ruling_only = yes
+			}
+		}
+
+		add_popularity = {
+		    ideology = survivalism
+		    popularity = 0.15
+		}
+		add_stability = -0.10
+		add_war_support = 0.05
+	}
+}
+
+country_event = { ###Matter of Paladins
+ 	id = applejack.19
+ 	title = applejack.19.title
+ 	desc = applejack.19.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Give them a fair trial
+		name = applejack.19.a
+		ai_chance = {
+			factor = 50
+		}
+
+		add_political_power = -25
+		add_popularity = {
+		    ideology = visionary
+		    popularity = 0.05
+		}
+	}
+
+	option = { #Lock them away and be done with it
+		name = applejack.19.b
+		ai_chance = {
+			factor = 30
+		}
+
+		add_stability = 0.01
+		add_popularity = {
+		    ideology = survivalism
+		    popularity = 0.05
+		}
+	}
+
+	option = { #These monsters deserve nothing less than the noose
+		name = applejack.19.c
+		ai_chance = {
+			factor = 10
+		}
+
+		add_popularity = {
+		    ideology = visionary
+		    popularity = 0.10
+		}
+		add_political_power = 50
+		add_stability = 0.05
+		add_war_support = -0.10
+	}
+}
+
+country_event = { ###Matter of Scribes
+ 	id = applejack.20
+ 	title = applejack.20.title
+ 	desc = applejack.20.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Reintegration
+		name = applejack.20.a
+		ai_chance = {
+			factor = 50
+		}
+
+		swap_ideas = {
+			remove_idea = ranger_scribes
+			add_idea = ranger_scribes_2
+		}
+		add_political_power = -25
+		add_popularity = {
+		    ideology = continuation
+		    popularity = 0.10
+		}
+	}
+
+	option = { #Strip them of their rank
+		name = applejack.20.b
+		ai_chance = {
+			factor = 30
+		}
+
+		add_stability = 0.01
+		add_popularity = {
+		    ideology = visionary
+		    popularity = 0.05
+		}
+	}
+}
+
+country_event = { ###Buckyn Cross Devastation
+ 	id = applejack.21
+ 	title = applejack.21.title
+ 	desc = applejack.21.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #War is hell
+		name = applejack.21.a
+		ai_chance = {
+			factor = 80
+		}
+
+		add_popularity = {
+		    ideology = visionary
+		    popularity = 0.01
+		}
+		add_timed_idea = {
+		    idea = AJR_saving_the_cross
+		    days = 120
+		}
+		set_victory_points = {
+			province = 7509
+			value = 10
+		}
+	}
+}
+
+country_event = { ###MAR - Annex into AJR
+ 	id = applejack.22
+ 	title = applejack.22.title
+ 	desc = applejack.22.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #yes
+		name = applejack.22.a
+		ai_chance = {
+			factor = 50
+			modifier = {
+				add = 15
+				AJR = { has_completed_focus = AJR_secure_manehattan }
+			}
+		}
+
+		if = {
+			limit = { 
+				is_ai = no
+				AJR = {
+					is_ai = no
+				}
+			}
+			AJR = { change_tag_from = ROOT }
+		}
+		AJR = {
+			annex_country = {
+			    target = MAR
+			    transfer_troops = no
+			}
+			add_state_core = 18
+			country_event = applejack.23
+		}
+	}
+
+	option = { #No
+		name = applejack.22.b
+		ai_chance = {
+			factor = 20
+			modifier = {
+				factor = 0
+				TEN = {
+					has_country_leader = { ruling_only = yes name = "Chief Grim Star" }
+				}
+			}
+		}
+
+		add_political_power = 25
+		AJR = {
+			country_event = applejack.24
+		}
+	}
+}
+
+country_event = { ###We Annexed MAR
+ 	id = applejack.23
+ 	title = applejack.23.title
+ 	desc = applejack.23.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #yes
+		name = applejack.23.a
+		ai_chance = {
+			factor = 50			
+		}
+
+		add_political_power = 25
+	}
+}
+
+country_event = { ###MAR Delcined
+ 	id = applejack.24
+ 	title = applejack.24.title
+ 	desc = applejack.24.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #yes
+		name = applejack.24.a
+		ai_chance = {
+			factor = 50
+		}
+
+		add_political_power = -25
+	}
+}
+
+##Remove Civil War Recovery
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event applejack.25"}
+ 	id = applejack.25
+ 	title = applejack.25.title
+ 	desc = applejack.25.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+
+ 	trigger = {
+ 		original_tag = AJR
+ 		has_completed_focus = MSR_crusaders
+ 	}
+ 	mean_time_to_happen = {
+		days = 200
+		modifier = {
+			add = -60
+			has_completed_focus = AJR_settling_down
+		}
+	}
+
+ 	option = {
+ 		name = applejack.25.a
+ 		ai_chance = { factor = 30 }
+ 		
+ 		remove_ideas = AJR_civil_war_recovery_idea
+ 	}
+}
+
+country_event = { ###Crusader Question
+ 	id = applejack.26
+ 	title = applejack.26.title
+ 	desc = applejack.26.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Use it 
+		name = applejack.26.a
+		ai_chance = {
+			factor = 50
+		}
+
+		add_ideas = AJR_crusader_help
+	}
+
+	option = { #Scrap it
+		name = applejack.26.b
+		ai_chance = {
+			factor = 30
+		}
+
+		55 = {
+			add_resource = {
+			    type = advanced
+			    amount = 5
+			}
+			add_resource = {
+			    type = circuitry
+			    amount = 10
+			}
+			add_resource = {
+			    type = metal
+			    amount = 8
+			}
+		}
+		add_tech_bonus = {
+		    ahead_reduction = 3
+		    uses = 1
+		    technology = electronic_engineering_7
+		}
+	}
+}
+
+country_event = { ###AJR has set up an expedition in our territory
+ 	id = applejack.27
+ 	title = applejack.27.title
+ 	desc = applejack.27.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #okay
+		name = applejack.27.a
+		ai_chance = {
+			factor = 50
+		}
+
+		add_popularity = {
+		    ideology = visionary
+		    popularity = 0.01
+		}
+	}
+}
+
+country_event = { ###Secondary Mission
+ 	id = applejack.28
+ 	title = applejack.28.title
+ 	desc = applejack.28.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #okay
+		name = applejack.28.a
+		ai_chance = {
+			factor = 50
+		}
+		
+		add_political_power = 50
+	}
+}
+
+country_event = { ###RTA Summerfield Plan
+ 	id = applejack.29
+ 	title = applejack.29.title
+ 	desc = applejack.29.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Accept
+		name = applejack.29.a
+		ai_chance = {
+			factor = 50
+		}
+		
+		AJR = {
+			country_event = {
+				id = applejack.31
+				days = 5
+			}
+		}
+	}
+
+	option = { #Decline
+		name = applejack.29.b
+		ai_chance = {
+			factor = 0
+		}
+		
+		AJR = {
+			country_event = {
+				id = applejack.32
+				days = 5
+			}
+		}
+	}
+}
+
+country_event = { ###EMP Summerfield Plan
+ 	id = applejack.30
+ 	title = applejack.30.title
+ 	desc = applejack.30.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Accept
+		name = applejack.30.a
+		ai_chance = {
+			factor = 50
+		}
+		
+		AJR = {
+			country_event = {
+				id = applejack.33
+				days = 2
+			}
+		}
+	}
+
+	option = { #Decline
+		name = applejack.30.b
+		ai_chance = {
+			factor = 0
+		}
+		
+		AJR = {
+			country_event = {
+				id = applejack.34
+				days = 2
+			}
+		}
+	}
+}
+
+country_event = { ###RTA Accepts Summerfield Plan
+ 	id = applejack.31
+ 	title = applejack.31.title
+ 	desc = applejack.31.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Wonderful
+		name = applejack.31.a
+		ai_chance = {
+			factor = 50
+		}
+		
+	}
+}
+
+country_event = { ###RTA Declines Summerfield Plan
+ 	id = applejack.32
+ 	title = applejack.32.title
+ 	desc = applejack.32.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Oh Well
+		name = applejack.32.a
+		ai_chance = {
+			factor = 50
+		}
+		
+	}
+}
+
+country_event = { ###EMP Accepts Summerfield Plan
+ 	id = applejack.33
+ 	title = applejack.33.title
+ 	desc = applejack.33.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Wonderful
+		name = applejack.33.a
+		ai_chance = {
+			factor = 50
+		}
+		
+	}
+}
+
+country_event = { ###EMP Declines Summerfield Plan
+ 	id = applejack.34
+ 	title = applejack.34.title
+ 	desc = applejack.34.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Oh Well
+		name = applejack.34.a
+		ai_chance = {
+			factor = 50
+		}
+		
+	}
+}

@@ -3740,10 +3740,34 @@ country_event = {
 
 	option = {
 		name = lightbringer.33.a
-		ai_chance = { base = 0 }
+		ai_chance = { 
+			base = 0
+			modifier = {
+				add = 10000000
+				OR = {
+		            AND = {
+		                is_historical_focus_on = yes
+		                has_game_rule = {
+		                    rule = MSR_AI_BEHAVIOR
+		                    option = DEFAULT
+		                }
+		            }
+		            has_game_rule = {
+		                rule = MSR_AI_BEHAVIOR
+		                option = HISTORICAL_AJR
+		            }
+		        }
+			}
+		}
 
 		if = {
-			limit = { MSR = { has_government = continuation } }
+			limit = { 
+				MSR = { 
+					has_government = continuation
+					has_idea = MSR_aj_ranger_support_idea
+				}
+			}
+
 			hidden_effect = {
 				MSR = { 
 					set_country_flag = pip_beats_cottage_flag
@@ -3751,6 +3775,26 @@ country_event = {
 						id = MSR_aj_rangers.1
 						days = 2
 						random = 48
+					}
+				}
+			}
+		}
+		else_if = {
+			if = {
+				limit = { 
+					MSR = { 
+						has_government = continuation
+						NOT = { has_idea = MSR_aj_ranger_support_idea }
+					}
+				}
+				hidden_effect = {
+					MSR = { 
+						set_country_flag = pip_beats_cottage_flag
+						country_event = {
+							id = MSR_aj_rangers.19
+							days = 2
+							random = 48
+						}
 					}
 				}
 			}
@@ -3782,7 +3826,27 @@ country_event = {
 
 	option = { #fail
 		name = lightbringer.33.b
-		ai_chance = { base = 50}
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 10000000
+				NOT = {
+					OR = {
+			            AND = {
+			                is_historical_focus_on = yes
+			                has_game_rule = {
+			                    rule = MSR_AI_BEHAVIOR
+			                    option = DEFAULT
+			                }
+			            }
+			            has_game_rule = {
+			                rule = MSR_AI_BEHAVIOR
+			                option = HISTORICAL_AJR
+			            }
+			        }
+		        }
+			}
+		}
 
 		if = {
 			limit = { MSR = { has_government = continuation } }

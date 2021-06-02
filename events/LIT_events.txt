@@ -297,10 +297,9 @@ country_event = {
 		add_popularity = { ideology = survivalism popularity = 0.10 }
 	}
 	option = {
-	trigger = {
-			MAS = {has_country_leader = { ruling_only = yes name = "Horny Miracle" }}
-		}
 		name = LIT_event.45.b
+		trigger = { MAS = {has_country_leader = { ruling_only = yes name = "Grand Spark" }} 
+		}
 		ai_chance = {
 		factor = 20
 			modifier = {
@@ -845,6 +844,9 @@ country_event = {
 		LIT = {
 			create_faction = LIT_PBN_alliance
 			add_to_faction = PBN
+			country_event = {
+				id = LIT_event192
+			}
 		}
 		hidden_effect = { LIT = { add_ai_strategy = { type = alliance id = "PBN" value = 200} add_opinion_modifier = { target = PBN modifier = huge_increase } } }
 		hidden_effect = { PBN = { add_ai_strategy = { type = alliance id = "LIT" value = 200} add_opinion_modifier = { target = LIT modifier = huge_increase } } }
@@ -857,6 +859,25 @@ country_event = {
 		LIT = {
 			country_event = LIT_event.18
 		}
+	}
+	
+}
+
+##PBN Accepts Alliance
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_event.18"}
+ 	id = LIT_event.192
+ 	title = LIT_event.192.t
+ 	desc = LIT_event.192.d
+	picture = GFX_event_generic_pony_diplomacy
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	#yes
+	option = {
+		name = LIT_event.192.a
+		ai_chance = { factor = 90}
 	}
 	
 }
@@ -876,7 +897,6 @@ country_event = {
 	option = {
 		name = LIT_event.18.a
 		ai_chance = { factor = 90}
-		
 		
 	}
 	
@@ -907,6 +927,9 @@ country_event = {
 			ideology = visionary
 			long_name = LIT_visionary_enclavist
 			name = LIT_visionary_enclavist_short
+		}
+		remove_idea = {
+			LIT_revanchistcouncil_idea2
 		}
 	}
 	
@@ -1003,7 +1026,6 @@ country_event = {
 		add_political_power = -100
 	}
 }
-}
 
 ##Swift Storm proclaims a new Destiny
 country_event = {
@@ -1080,7 +1102,7 @@ country_event = {
 	picture = GFX_event_vertibuck
 
 	trigger = {
-		tag = LIT
+		original_tag = LIT
 		has_completed_focus = LIT_denial_rally_troops
 		owns_state = 798
 	}
@@ -1132,7 +1154,7 @@ country_event = {
 	picture = GFX_event_generic_pony_diplomacy
 
 	trigger = {
-		tag = SHA
+		original_tag = SHA
 		LIT = {
 			has_completed_focus = LIT_look_for_new_patron
 		}
@@ -1158,7 +1180,7 @@ country_event = {
 	picture = GFX_event_generic_pony_diplomacy
 
 	trigger = {
-		tag = FTA
+		original_tag = FTA
 		LIT = {
 			exists = no
 		}
@@ -1188,7 +1210,7 @@ country_event = {
 	picture = GFX_event_generic_pony_diplomacy
 
 	trigger = {
-		tag = LIT
+		original_tag = LIT
 		NEV = {
 			exists = no
 		}
@@ -1555,20 +1577,21 @@ country_event = {
  	desc = LIT_flavorevent.12.d
 	picture = GFX_event_test
 	trigger = {
-		tag = LIT
-		has_country_leader = "Skybreaker"
-		has_full_control_of_state = 527
+		original_tag = LIT
+		has_country_leader = {
+			name = "Skybreaker"
+			ruling_only = yes
+		}
+		owns_state = 527
 	}
-	is_triggered_only = yes
  	fire_only_once = yes
-
+	
 	option = {
 		name = LIT_flavorevent.12.a
-		ai_chance = { factor = 30}
+		ai_chance = { factor = 30 }
 		add_ideas = {
 			LIT_MAS_integrated_idea
 		}
-		add_state_core = 527
 	}
 	
 }
@@ -1584,7 +1607,7 @@ country_event = {
 
 	option = {
 		name = LIT_flavorevent.13.a
-		ai_chance = { factor = 30}
+		ai_chance = { factor = 30 }
 		country_event = {
 			id = LIT_flavorevent.14
 			days = 7
@@ -1620,6 +1643,7 @@ country_event = {
 			id = LIT_flavorevent.15
 			days = 180
 		}
+		set_country_flag = LIT_platinumking_flag
 		}
 		set_party_name = {
 			ideology = continuation
@@ -1640,10 +1664,6 @@ country_event = {
 			ideology = survivalism
 			long_name = LIT_survivalism_platnium_party
 			name = LIT_survivalism_platnium_short
-		}
-		swap_ideas = {
-			remove_idea = LIT_MAS_imitation_officers
-			add_idea = LIT_platnium_guard_idea
 		}
 	}
 	
@@ -1762,6 +1782,7 @@ country_event = {
 		}
 		remove_unit_leader = 920204
 	}
+}
 country_event = {
 	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_flavorevent.19"}
  	id = LIT_flavorevent.19
@@ -1777,7 +1798,7 @@ country_event = {
 		ai_chance = { factor = 30}
 		add_stability = 0.20
 		add_political_power = 100
-		custom_effect_tooltip = lit_shakespar_done_tt
+		custom_effect_tooltip = LIT_shakespar_done_tt
 	}
 	
 }
@@ -1840,7 +1861,14 @@ country_event = {
 		expire = 1965.1.1
 		ideology = despotism
 		}
-		custom_effect_tooltip = lit_shakespar_done_tt
+		swap_ideas = {
+			remove_idea = LIT_assemblystart_idea
+			add_idea = LIT_expandedassembly_idea
+		}
+		custom_effect_tooltip = LIT_shakespar_done_tt
+		hidden_effect = {
+			set_country_flag = LIT_expandedassembly_flag
+		}
 	}
 	
 }
@@ -1895,10 +1923,6 @@ country_event = {
 			ideology = destruction
 			popularity = 0.10
 		}
-		swap_ruler_traits = {
-			remove = lit_hookhoof
-			add = lit_hookhoof_unifier
-		}
 	}
 	
 }
@@ -1909,7 +1933,7 @@ country_event = {
  	desc = LIT_flavorevent.23.d
 	picture = GFX_event_test
 	trigger = {
-		tag = LIT
+		original_tag = LIT
 		owns_state = 593 
 		owns_state = 532
 		owns_state = 610
@@ -1917,7 +1941,6 @@ country_event = {
 		has_war = no
 		has_completed_focus = lit_des_fuck_everyone
 	}
-	is_triggered_only = yes
  	fire_only_once = yes
 
 	option = {
@@ -1948,7 +1971,7 @@ country_event = {
 			defense_skill = 3
 			planning_skill = 2
 			logistics_skill = 2
-			traits = { strong_trait intelligent_trait }
+			traits = { strong_trait intelligent_trait griffon_race_trait }
 		}
 		division_template = {
 			name = "Talon Company"
@@ -1965,6 +1988,7 @@ country_event = {
 				recon_company = { x = 0 y = 1 }
 			}
 		}
+		set_technology = { tech_talons = 1 }
 	}
 	
 }
@@ -2319,7 +2343,7 @@ country_event = {
 		expire = "1965.1.1"
 		ideology = rebuilder
 		traits = {
-		lit_insaneskybreaker
+		lit_insaneswiftstorm
 		}
 		}
 		country_event = {
@@ -2328,42 +2352,30 @@ country_event = {
 		}
 		IF = {
 		limit = {
-			NEV = {
-				has_country_leader = {
-					name = "Autumn Leaf"
-					ruling_only = yes
-				}
-			}
-			country_event = {
-				id = LIT_flavorevent.39
-			}
+			has_global_flag = NEV_autumn_leader_flag
 		}
+			country_event = {
+			id = LIT_flavorevent.39
+			days = 7
+			}
 		}
 		IF = {
 		limit = {
-			NEV = {
-				has_country_leader = {
-					name = "Tornado"
-					ruling_only = yes
-				}
-			}
+			has_global_flag = NEV_tornado_leader_flag
+		}
 			country_event = {
 				id = LIT_flavorevent.40
+				days = 7
 			}
-		}
 		}
 		IF = {
 		limit = {
-			NEV = {
-				has_country_leader = {
-					name = "Senator Seafire"
-					ruling_only = yes
-				}
-			}
+			has_global_flag = NEV_seafire_leader_flag
+		}
 			country_event = {
 				id = LIT_flavorevent.41
+				days = 7
 			}
-		}
 		}
 		}
 	}
@@ -2398,7 +2410,7 @@ country_event = {
 
 	option = {
 		name = LIT_flavorevent.39.a
-		ai_chance = { factor = 30}
+		ai_chance = { factor = 30 }
 	}
 	
 }
@@ -2447,6 +2459,56 @@ country_event = {
 	option = {
 		name = LIT_flavorevent.42.a
 		ai_chance = { factor = 30}
+		561 = {
+			set_building_level = {
+			type = infrastructure
+			level = 2
+			}
+			add_manpower = -441
+		}
+		192 = {
+			set_building_level = {
+			type = infrastructure
+			level = 1
+			}
+			add_manpower = -84
+		}
+		557 = {
+			set_building_level = {
+			type = infrastructure
+			level = 0
+			}
+			add_manpower = -948
+		}
+		196 = {
+			set_building_level = {
+			type = infrastructure
+			level = 1
+			}
+			add_manpower = -102
+		}
+		548 = {
+			set_building_level = {
+			type = infrastructure
+			level = 2
+			}
+			add_manpower = -94
+		}
+		set_victory_points = {
+			province = 9175
+			value = 5
+		}
+		set_province_name = {
+			id = 9175
+			name = "Plainstown Ruins"
+		}
+		add_province_modifier = {
+			static_modifiers = { lit_burnt_out_ruin }
+			province = { 
+				id = 9175
+			}
+		}
+		
 	}
 	
 }
@@ -2463,6 +2525,10 @@ country_event = {
 	option = {
 		name = LIT_flavorevent.43.a
 		ai_chance = { factor = 30}
+		add_stability = 0.05
+		add_ideas = {
+			LIT_NEV_loyalty_idea
+		}
 	}
 	
 }
@@ -2479,6 +2545,10 @@ country_event = {
 	option = {
 		name = LIT_flavorevent.44.a
 		ai_chance = { factor = 30}
+		add_war_support = 0.05
+		add_ideas = {
+			LIT_NEV_merit_idea
+		}
 	}
 	
 }
@@ -2495,6 +2565,10 @@ country_event = {
 	option = {
 		name = LIT_flavorevent.45.a
 		ai_chance = { factor = 30}
+		add_political_power = 50
+		add_ideas = {
+			LIT_NEV_slavers_idea
+		}
 	}
 	
 }
@@ -2504,13 +2578,18 @@ country_event = {
  	title = LIT_flavorevent.46.t
  	desc = LIT_flavorevent.46.d
 	picture = GFX_event_test
-
-	is_triggered_only = yes
+	trigger = {
+		original_tag = LIT
+		has_completed_focus = LIT_denial_cut_Azuria
+		owns_state = 36
+		has_war = no
+	}
  	fire_only_once = yes
 
 	option = {
 		name = LIT_flavorevent.46.a
 		ai_chance = { factor = 30}
+		add_stability = -0.10
 	}
 	
 }
@@ -2520,13 +2599,24 @@ country_event = {
  	title = LIT_flavorevent.47.t
  	desc = LIT_flavorevent.47.d
 	picture = GFX_event_test
-
-	is_triggered_only = yes
+	trigger = {
+		original_tag = LIT
+		has_completed_focus = LIT_denial_cut_Azuria
+		owns_state = 610
+		has_war = no
+	}
  	fire_only_once = yes
 
 	option = {
 		name = LIT_flavorevent.47.a
 		ai_chance = { factor = 30}
+		hidden_effect = {
+			add_ideas = {
+				LIT_NEV_Republican_Resistance4
+				LIT_NEV_Talon_Resistance4
+			}
+		}
+		custom_effect_tooltip = LIT_NEV_SHA_tt
 	}
 	
 }
@@ -2536,13 +2626,24 @@ country_event = {
  	title = LIT_flavorevent.48.t
  	desc = LIT_flavorevent.48.d
 	picture = GFX_event_test
-
-	is_triggered_only = yes
+	trigger = {
+		original_tag = LIT
+		has_completed_focus = LIT_denial_cut_Azuria
+		owns_state = 575
+		has_war = no
+	}
  	fire_only_once = yes
 
 	option = {
 		name = LIT_flavorevent.48.a
 		ai_chance = { factor = 30}
+		hidden_effect = {
+			add_ideas = {
+				LIT_NEV_Freedom_Resistance4
+				LIT_NEV_Raider_Resistance4
+			}
+		}
+		custom_effect_tooltip = LIT_NEV_LRA_tt
 	}
 	
 }
@@ -2552,13 +2653,194 @@ country_event = {
  	title = LIT_flavorevent.49.t
  	desc = LIT_flavorevent.49.d
 	picture = GFX_event_test
-
-	is_triggered_only = yes
+	trigger = {
+		original_tag = LIT
+		has_completed_focus = LIT_denial_cut_Azuria
+		owns_state = 795
+		has_war = no
+	}
  	fire_only_once = yes
 
 	option = {
 		name = LIT_flavorevent.49.a
 		ai_chance = { factor = 30}
+		hidden_effect = {
+			add_ideas = {
+				LIT_NEV_Batcong_Resistance4
+			}
+		}
+		custom_effect_tooltip = LIT_NEV_MAN_tt
 	}
 	
 }
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_flavorevent.50"}
+ 	id = LIT_flavorevent.50
+ 	title = LIT_flavorevent.50.t
+ 	desc = LIT_flavorevent.50.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = LIT_flavorevent.50.a
+		ai_chance = { factor = 30}
+		country_event = {
+			id = LIT_flavorevent.51
+		}
+	}
+	option = {
+		name = LIT_flavorevent.50.b
+		add_ideas = {
+			LIT_NEV_Griffhunt_idea
+		}
+		hidden_effect = {
+			country_event = LIT_flavorevent.53
+			days = 25
+		}
+	}
+	
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_flavorevent.51"}
+ 	id = LIT_flavorevent.51
+ 	title = LIT_flavorevent.51.t
+ 	desc = LIT_flavorevent.51.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_flavorevent.51.a
+		ai_chance = { factor = 30}
+		hidden_effect = {
+			country_event = {
+				id = LIT_flavorevent.52
+				days = 10
+			}
+		}
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_flavorevent.52"}
+ 	id = LIT_flavorevent.52
+ 	title = LIT_flavorevent.52.t
+ 	desc = LIT_flavorevent.52.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_flavorevent.52.a
+		ai_chance = { factor = 30}
+		add_manpower = -30
+		add_stability = -0.05
+		add_war_support = -0.05
+		add_political_power = -30
+		hidden_effect = {
+			country_event = {
+				id = LIT_flavorevent.53
+				days = 10
+			}
+		}
+	}	
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_flavorevent.53"}
+ 	id = LIT_flavorevent.53
+ 	title = LIT_flavorevent.53.t
+ 	desc = LIT_flavorevent.53.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = LIT_flavorevent.53.a
+		ai_chance = { factor = 30 }
+		custom_effect_tooltip = LIT_NEV_resistance_final_tt
+		add_manpower = -31
+		add_stability = -0.10
+		add_war_support = -0.10
+		hidden_effect = {
+			LIT_lower_talon_resistance = yes
+			IF = {
+				limit = {
+				has_idea = LIT_NEV_Griffhunt_idea
+				}
+				remove_ideas = { LIT_NEV_Griffhunt_idea }
+			}
+			add_state_core = 808
+			add_state_core = 500
+			add_state_core = 572
+			add_state_core = 810
+			add_state_core = 287
+			add_state_core = 334
+			add_state_core = 261
+		}
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_flavorevent.53"}
+ 	id = LIT_flavorevent.54
+ 	title = LIT_flavorevent.54.t
+ 	desc = LIT_flavorevent.54.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = LIT_flavorevent.54.a
+		ai_chance = { factor = 30 }
+		add_manpower = -100
+		add_stability = 0.10
+		add_political_power = 40
+		custom_effect_tooltip = LIT_NEV_resistance_tt
+		hidden_effect = {
+			LIT_lower_raider_resistance = yes
+		}
+	}
+	option = {
+		name = LIT_flavorevent.54.b
+		ai_chance = { factor = 30 }
+		add_manpower = 500
+		add_stability = -0.05
+		add_war_support = -0.05
+		add_political_power = -50
+		custom_effect_tooltip = LIT_NEV_resistance_tt
+		custom_effect_tooltip = LIT_NEV_raiderrecruits_tt
+		hidden_effect = {
+			LIT_lower_raider_resistance = yes
+			create_corps_commander = {
+				name = "Crazy Crank"
+				picture = Governor.tga
+				traits = { raider_commander lucky_trait }
+				skill = 3
+				attack_skill = 5
+				defense_skill = 3
+				planning_skill = 1
+				logistics_skill = 1
+			}
+			create_corps_commander = {
+				name = "Primrose"
+				picture = Governor.tga
+				traits = { raider_commander charismatic_trait }
+				skill = 3
+				attack_skill = 2
+				defense_skill = 3
+				planning_skill = 2
+				logistics_skill = 3
+			}
+			create_corps_commander = {
+				name = "Aletalon"
+				picture = Governor.tga
+				traits = { raider_commander intelligent_trait }
+				skill = 3
+				attack_skill = 1
+				defense_skill = 2
+				planning_skill = 4
+				logistics_skill = 2
+			}
+		}
+	}
+}
+
