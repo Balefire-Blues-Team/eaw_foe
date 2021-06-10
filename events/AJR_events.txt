@@ -1137,7 +1137,13 @@ country_event = { ###RTA Accepts Summerfield Plan
 		ai_chance = {
 			factor = 50
 		}
+
+		country_event = {
+			id = applejack.35
+			days = 3
+		}
 		
+		set_country_flag = RTA_accepts_summerfield_plan
 	}
 }
 
@@ -1155,7 +1161,13 @@ country_event = { ###RTA Declines Summerfield Plan
 		ai_chance = {
 			factor = 50
 		}
-		
+
+		country_event = {
+			id = applejack.35
+			days = 3
+		}
+
+		set_country_flag = RTA_declines_summerfield_plan		
 	}
 }
 
@@ -1173,7 +1185,20 @@ country_event = { ###EMP Accepts Summerfield Plan
 		ai_chance = {
 			factor = 50
 		}
+
+		if = {
+			limit = {
+				NOT = {
+					country_exists = RTA
+				}
+			}
+			country_event = {
+				id = applejack.35
+				days = 3
+			}
+		}
 		
+		set_country_flag = EMP_accepts_summerfield_plan
 	}
 }
 
@@ -1191,6 +1216,192 @@ country_event = { ###EMP Declines Summerfield Plan
 		ai_chance = {
 			factor = 50
 		}
+
+		if = {
+			limit = {
+				NOT = {
+					country_exists = RTA
+				}
+			}
+			country_event = {
+				id = applejack.35
+				days = 3
+			}
+		}
 		
+		set_country_flag = EMP_declines_summerfield_plan
+	}
+}
+
+country_event = { ###Launch Summerfield Plan
+ 	id = applejack.35
+ 	title = applejack.35.title
+ 	desc = applejack.35.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #To Arms
+		name = applejack.35.a
+		ai_chance = {
+			factor = 50
+		}
+		
+		AJR_launch_summerfield_plan_effect = yes
+	}
+}
+
+country_event = { ###Summerfield Conference
+ 	id = applejack.36
+ 	title = applejack.36.title
+ 	desc = applejack.36.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #To Arms
+		name = applejack.36.a
+		ai_chance = {
+			factor = 50
+		}
+
+		if = {
+			limit = { has_country_flag = RTA_accepts_summerfield_plan }
+			SFL = {
+				transfer_state = 442
+			}
+			RTA = {
+				set_capital = 815
+				three_random_industrial_complex = yes
+				two_random_arms_factory = yes
+			}
+		}
+
+		if = {
+			limit = { has_country_flag = EMP_accepts_summerfield_plan }
+			SFL = {
+				transfer_state = 44
+			}
+			EMP = {
+				three_random_industrial_complex = yes
+				two_random_arms_factory = yes
+			}
+		}
+		
+		SFL = {
+			transfer_state = 49
+			transfer_state = 816
+
+			add_state_core = 49
+			add_state_core = 816
+			add_state_core = 442
+			add_state_core = 44
+		}
+
+		if = {
+			limit = {
+				has_dlc = "Together for Victory"
+			}
+			set_autonomy = {
+				target = SFL
+				autonomous_state = autonomy_puppet
+				freedom_level = 0.65
+			}
+		}
+		else = {
+			puppet = SFL
+		}
+
+		SFL = {
+			set_popularities = {
+				survivalism = 20
+				visionary = 55
+				continuation = 5
+				destruction = 20
+			}
+		}
+	}
+}
+
+country_event = { ###Summerfield Plan Peacedeal
+ 	id = applejack.37
+ 	title = applejack.37.title
+ 	desc = applejack.37.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+
+ 	trigger = {
+ 		tag = AJR
+ 		has_completed_focus = AJR_summerfield_plan
+ 		NOT = {
+ 			OR = {
+ 				owns_state = 58
+				owns_state = 471
+				owns_state = 87
+				owns_state = 449
+				owns_state = 49
+				owns_state = 816
+ 			}
+ 		}
+ 		NOT = {
+			country_exists = RAR
+		}
+ 	}
+
+	option = { #To Arms
+		name = applejack.37.a
+		ai_chance = {
+			factor = 50
+		}
+
+		transfer_state = 58
+		transfer_state = 471
+		transfer_state = 87
+		transfer_state = 449
+		transfer_state = 49
+		transfer_state = 816
+
+	}
+}
+
+country_event = { ###Empire Requests Protection
+ 	id = applejack.38
+ 	title = applejack.38.title
+ 	desc = applejack.38.desc
+	picture = GFX_event_test
+
+	trigger = {
+		tag = AJR
+		has_completed_focus = AJR_summerfield_conference
+		has_country_flag = EMP_accepts_summerfield_plan
+		EMP = {
+			has_dynamic_modifier = {
+			    modifier = AJR_expedition_modifier
+			}
+		}
+	}
+	mean_time_to_happen = {
+		days = 60
+	}
+ 	fire_only_once = yes
+
+	option = { #To Arms
+		name = applejack.38.a
+		ai_chance = {
+			factor = 50
+		}
+		
+		annex_country = {
+		    target = EMP
+		    transfer_troops = no
+		}
+		add_state_core = 66
+		add_state_core = 51
+		add_state_core = 436
+		add_state_core = 598
+
 	}
 }
