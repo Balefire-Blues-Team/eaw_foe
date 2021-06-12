@@ -1,4 +1,145 @@
 AJR_expedition_cat = {
+	AJR_view_expedition_send_options = {
+		icon = GFX_decision_stable_door
+		cost = 0
+		ai_will_do = {
+			base = 0
+
+		}
+
+		available = {
+		}
+		visible = {
+			NOT = { has_country_flag = AJR_view_send_expedition_flag }
+		}
+		fire_only_once = no
+
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AJR_clear_array"
+			set_country_flag = AJR_view_send_expedition_flag
+		}
+	}
+
+	AJR_hide_expedition_send_options = {
+		icon = GFX_decision_stable_door
+		cost = 0
+		ai_will_do = {
+			base = 0
+
+		}
+
+		available = {
+		}
+		visible = {
+			has_country_flag = AJR_view_send_expedition_flag
+		}
+		fire_only_once = no
+
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AJR_clear_array"
+			clr_country_flag = AJR_view_send_expedition_flag
+		}
+	}
+
+	AJR_send_expedition_state = {
+
+		icon = onmap_recruit_operative
+
+		available = {
+			has_manpower > 5
+			custom_trigger_tooltip = {
+				tooltip = AJR_not_establishing_expedition_tt
+				hidden_trigger = {
+					NOT = { has_country_flag = AJR_establishing_expedtion }
+				}
+			}
+		}
+
+		state_target = yes
+		target_trigger = {
+			FROM = {
+				is_capital = yes
+				OWNER = {
+					NOT = {
+						has_dynamic_modifier = {
+							modifier = AJR_expedition_modifier
+						}	
+					}
+					NOT = {
+						OR = {
+							has_government = destruction
+							tag = ROOT
+							tag = UNI
+							tag = CAL
+							has_idea = closed_stable_society
+							has_war_with = ROOT
+							AND = {
+								is_steel_ranger_nation = yes
+								has_government = continuation
+							}
+							AND = {
+								tag = NEV
+								NOT = { has_government = visionary }
+							}
+						}
+					}
+				}
+			}
+		}
+		visible = {
+			has_country_flag = AJR_view_send_expedition_flag
+			custom_trigger_tooltip = {
+				tooltip = AJR_not_establishing_expedition_tt
+				hidden_trigger = {
+					NOT = { has_country_flag = AJR_establishing_expedtion }
+				}
+			}
+		}
+
+		fire_only_once = yes
+		cost = 100
+
+		days_remove = 60
+		on_map_mode = map_and_decisions_view
+		highlight_color_while_active = 1
+		complete_effect = {
+			ROOT = {
+				add_manpower = -5
+				hidden_effect = {
+					set_country_flag = AJR_establishing_expedtion
+				}
+			}
+		}
+		remove_effect = {
+			ROOT = {
+				hidden_effect = {
+					clr_country_flag = AJR_establishing_expedtion
+				}
+			}
+
+			FROM.OWNER = {
+				add_dynamic_modifier = { modifier = AJR_expedition_modifier }
+				add_to_array = {
+                    array = global.countries_with_AJR_expedition_array
+                    value = THIS.id
+                }
+			}
+			#hidden_effect = {
+			#	create_operative_leader = {
+			#		bypass_recruitment = yes
+			#		nationalities = { FROM.OWNER }
+			#		portrait_tag_override = FROM.OWNER
+			#	}
+			#}
+		}
+
+		ai_will_do = {
+			base = 0
+		}
+	}
+
 	AJR_expedition_dec_placeholder = {
 		icon = GFX_decision_stable_door
 		cost = 75
@@ -10,6 +151,7 @@ AJR_expedition_cat = {
 		available = {
 		}
 		visible = {
+			always = no
 		#	has_completed_focus = AJR_the_expeditionary_corp
 		}
 		#fire_only_once = yes
@@ -33,6 +175,7 @@ AJR_expedition_cat = {
 		available = {
 		}
 		visible = {
+			always = no
 		#	has_completed_focus = AJR_the_expeditionary_corp
 		}
 		fire_only_once = no
@@ -64,6 +207,7 @@ AJR_expedition_cat = {
 		available = {
 		}
 		visible = {
+			always = no
 		#	has_completed_focus = AJR_the_expeditionary_corp
 		}
 		fire_only_once = no
@@ -88,6 +232,7 @@ AJR_expedition_cat = {
 		available = {
 		}
 		visible = {
+			always = no
 		#	has_completed_focus = AJR_the_expeditionary_corp
 		}
 		fire_only_once = no
@@ -116,6 +261,7 @@ AJR_expedition_cat = {
 		available = {
 		}
 		visible = {
+			always = no
 		#	has_completed_focus = AJR_the_expeditionary_corp
 		}
 		fire_only_once = no
