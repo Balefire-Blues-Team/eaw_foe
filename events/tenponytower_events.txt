@@ -2502,7 +2502,6 @@ country_event = {
 	trigger = {
 		date > 1235.08.10
 		original_tag = TEN
-		has_completed_focus = TEN_communication
 		has_idea = TEN_ghoul_problem
 		NOT = {
 			has_country_leader = { ruling_only = yes name = "Chief Grim Star" }
@@ -2544,6 +2543,57 @@ country_event = {
 				}
 				clr_country_flag = can_use_celestia_one_flag
 			}
+			remove_unit_leader = 13372
+			remove_unit_leader = 13371
+			create_field_marshal = {
+				name = "Sheriff Rotting Tail"
+				picture = "Sheriff_Rotting_Man.tga"
+				traits = { strong_trait charismatic_trait }
+				id = 2104
+				skill = 4
+				attack_skill = 4
+				defense_skill = 1
+				planning_skill = 2
+				logistics_skill = 2
+			}
+			create_corps_commander = {
+				name = "Crimson Bayonet"
+				picture = "Governor.tga"
+				traits = { perceptive_trait }
+				skill = 2
+				attack_skill = 2
+				defense_skill = 3
+				planning_skill = 4
+				logistics_skill = 1
+				id = 2105
+			}
+			create_corps_commander = {
+				name = "Messy Cap"
+				picture = "Governor.tga"
+				traits = { enduring_trait agile_trait }
+				skill = 2
+				attack_skill = 2
+				defense_skill = 4
+				planning_skill = 1
+				logistics_skill = 3
+				id = 2106
+			}
+			create_corps_commander = {
+				name = "Colonel Joe"
+				picture = "Governor.tga"
+				traits = { strong_trait lucky_trait }
+				skill = 1
+				attack_skill = 1
+				defense_skill = 2
+				planning_skill = 1
+				logistics_skill = 4
+				id = 2107
+			}
+			delete_unit_template_and_units = {
+				division_template = "Security Forces"
+				disband = yes
+			}
+			load_oob = TEN_ghoul_start
 		}
 	}
 }
@@ -2554,16 +2604,35 @@ country_event = {
 	desc = TEN.98.desc
 	picture = GFX_event_test
 	
+	is_triggered_only = yes 
+	mean_time_to_happen = { days = 5 }
 	fire_only_once = yes
 	trigger = {
-		tag = TEN
-		TEN = {
-			has_completed_focus = TEN_ghoul_takeover
-		}	 
+		tag = TEN 
+		has_completed_focus = TEN_ghoul_takeover
 	}
 	
 	option = {
 		name = TEN.98.a
+		ai_chance = { factor = 40}
+		country_event = { id = TEN.982 }
+	}
+}
+
+country_event = {
+	id = TEN.982
+	title = TEN.982.title
+	desc = TEN.982.desc
+	picture = GFX_event_test
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = TEN
+	}
+	
+	option = {
+		name = TEN.982.a
 		ai_chance = { factor = 40}
 	}
 }
@@ -2619,18 +2688,41 @@ country_event = {
 	desc = TEN.101.desc
 	picture = GFX_event_test
 	
+	is_triggered_only = yes
 	fire_only_once = yes
 	trigger = {
-		tag = TEN
-		TEN = {
-			has_completed_focus = TEN_ghoul_sj_1
-		}	 
+		tag = TEN 
 	}
 	
 	option = {
 		name = TEN.101.a
 		ai_chance = { factor = 40 }
-		
+		country_event = { id = TEN.1012 }
+	}
+}
+
+country_event = {
+	id = TEN.1012
+	title = TEN.1012.title
+	desc = TEN.1012.desc
+	picture = GFX_event_test
+	
+	is_triggered_only = yes
+	fire_only_once = yes
+	trigger = {
+		tag = TEN 
+	}
+	
+	option = {
+		name = TEN.1012.a
+		ai_chance = { factor = 40 }
+		hidden_effect = {
+			load_oob = TEN_ghoul_council
+		}
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.02
+		}
 	}
 }
 ################COLLECTIVIZE###########################
@@ -2704,6 +2796,10 @@ country_event = {
 		}
 		set_country_flag = TEN_collec_was_implemented
 		clr_country_flag = TEN_collec_fucked_up
+		add_to_variable = {
+			var = rotting_feral_count
+			value = 1
+		}
 	}
 }
 
@@ -2731,6 +2827,10 @@ country_event = {
 		}
 		set_country_flag = TEN_collec_was_implemented
 		clr_country_flag = TEN_collec_fucked_up
+		add_to_variable = {
+			var = rotting_non_feral_count
+			value = 1
+		}
 	}		
 }
 
@@ -2995,6 +3095,7 @@ country_event = {
 		name = TEN.112.a
 		ai_chance = { factor = 40 }
 		set_country_flag = TEN_manehattan_liberated
+		add_country_leader_trait = liberator_manehattan
 	}		
 } 
 
@@ -3002,7 +3103,7 @@ country_event = {
 	id = TEN.113
 	title = TEN.113.title
 	desc = TEN.113.desc
-	picture = GFX_event_test
+	picture = foe_ghoul_event
 	
 	is_triggered_only = yes
 	fire_only_once = yes
@@ -3014,6 +3115,11 @@ country_event = {
 		name = TEN.113.a
 		ai_chance = { factor = 40 }
 		set_country_flag = TEN_south_secured
+		add_war_support = 0.10
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.05
+		}
 	}		
 } 
 
@@ -3051,6 +3157,11 @@ country_event = {
 	option = {
 		name = TEN.115.a
 		ai_chance = { factor = 40 }
+		add_manpower = -15
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.03
+		}
 	}		
 } 
 
@@ -3069,6 +3180,11 @@ country_event = {
 	option = {
 		name = TEN.116.a
 		ai_chance = { factor = 40 }
+		add_manpower = -40
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.03
+		}
 	}		
 } 
 
@@ -3087,6 +3203,7 @@ country_event = {
 	option = {
 		name = TEN.117.a
 		ai_chance = { factor = 40 }
+		swap_ideas = { remove_idea = TEN_security_resistance add_idea = TEN_security_resistance_less }
 	}		
 } 
 
@@ -3105,6 +3222,7 @@ country_event = {
 	option = {
 		name = TEN.118.a
 		ai_chance = { factor = 40 }
+		swap_ideas = { remove_idea = TEN_twilight_resistance_against_ghouls add_idea = TEN_twilight_resistance_against_ghouls_less }
 	}		
 } 
 
@@ -3123,7 +3241,7 @@ country_event = {
 	option = {
 		name = TEN.119.a
 		ai_chance = { factor = 40 }
-		remove_ideas = TEN_twilight_resistance_against_ghouls
+		remove_ideas = TEN_twilight_resistance_against_ghouls_less
 	}		
 } 
 
@@ -3142,7 +3260,7 @@ country_event = {
 	option = {
 		name = TEN.120.a
 		ai_chance = { factor = 40 }
-		remove_ideas = TEN_security_resistance
+		remove_ideas = TEN_security_resistance_less
 	}		
 } 
 
@@ -3161,6 +3279,11 @@ country_event = {
 	option = {
 		name = TEN.121.a
 		ai_chance = { factor = 40 }
+		add_stability = 0.05
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.05
+		}
 	}		
 } 
 ####WAR TRIBUNALS for internal####
@@ -3179,6 +3302,15 @@ country_event = {
 	option = {
 		name = TEN.122.a
 		ai_chance = { factor = 40 }
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.02
+		}
+		add_popularity = {
+			ideology = continuation
+			popularity = -0.06
+		}
+		add_stability = 0.05
 	}		
 } 
 
@@ -3197,6 +3329,11 @@ country_event = {
 	option = {
 		name = TEN.123.a
 		ai_chance = { factor = 40 }
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.03
+		}
+		add_war_support = 0.05
 	}		
 } 
 
@@ -3215,6 +3352,14 @@ country_event = {
 	option = {
 		name = TEN.124.a
 		ai_chance = { factor = 40 }
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.04
+		}
+		add_popularity = {
+			ideology = visionary
+			popularity = -0.06
+		}
 	}		
 } 
 
@@ -3238,6 +3383,18 @@ country_event = {
 			var = enslave_da_bigots
 			value = 1
 		}
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.05
+		}
+		add_to_variable = {
+			var = rotting_non_feral_count
+			value = 1
+		}
+		478 = {
+			add_manpower = -477
+		}
+		add_state_core = 478
 	}
 	option = {
 		name = TEN.125.b
@@ -3246,6 +3403,18 @@ country_event = {
 			var = kill_da_bigots
 			value = 1
 		}
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.08
+		}
+		add_to_variable = {
+			var = rotting_feral_count
+			value = 1
+		}
+		478 = {
+			add_manpower = -1669
+		}
+		add_state_core = 478
 	}
 } 
 
@@ -3268,6 +3437,18 @@ country_event = {
 			var = enslave_da_bigots
 			value = 1
 		}
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.05
+		}
+		add_to_variable = {
+			var = rotting_non_feral_count
+			value = 1
+		}
+		18 = {
+			add_manpower = -869
+		}
+		add_state_core = 18
 	}
 	option = {
 		name = TEN.126.b
@@ -3276,6 +3457,18 @@ country_event = {
 			var = kill_da_bigots
 			value = 1
 		}
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.08
+		}
+		add_to_variable = {
+			var = rotting_feral_count
+			value = 1
+		}
+		18 = {
+			add_manpower = -2607
+		}
+		add_state_core = 18
 	}		
 } 
 
@@ -3298,6 +3491,18 @@ country_event = {
 			var = enslave_da_bigots
 			value = 1
 		}
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.05
+		}
+		add_to_variable = {
+			var = rotting_non_feral_count
+			value = 1
+		}
+		469 = {
+			add_manpower = -498
+		}
+		add_state_core = 469
 	}
 	option = {
 		name = TEN.127.b
@@ -3306,6 +3511,18 @@ country_event = {
 			var = kill_da_bigots
 			value = 1
 		}
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.08
+		}
+		add_to_variable = {
+			var = rotting_feral_count
+			value = 1
+		}
+		469 = {
+			add_manpower = -1494
+		}
+		add_state_core = 469
 	}
 } 
 
@@ -3328,6 +3545,18 @@ country_event = {
 			var = enslave_da_bigots
 			value = 1
 		}
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.05
+		}
+		add_to_variable = {
+			var = rotting_non_feral_count
+			value = 1
+		}
+		39 = {
+			add_manpower = -1517
+		}
+		add_state_core = 39
 	}
 	option = {
 		name = TEN.128.b
@@ -3336,6 +3565,18 @@ country_event = {
 			var = kill_da_bigots
 			value = 1
 		}
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.08
+		}
+		add_to_variable = {
+			var = rotting_feral_count
+			value = 1
+		}
+		39 = {
+			add_manpower = -4551
+		}
+		add_state_core = 39
 	}		
 } 
 
@@ -3378,6 +3619,19 @@ country_event = {
 			var = enslave_da_bigots
 			value = 1
 		}
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.05
+		}
+		add_to_variable = {
+			var = rotting_non_feral_count
+			value = 1
+		}
+		642 = {
+			add_manpower = -665
+		}
+		add_state_core = 642
+		
 	}
 	option = {
 		name = TEN.130.b
@@ -3386,6 +3640,18 @@ country_event = {
 			var = kill_da_bigots
 			value = 1
 		}
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.08
+		}
+		add_to_variable = {
+			var = rotting_feral_count
+			value = 1
+		}
+		642 = {
+			add_manpower = -1995
+		}
+		add_state_core = 642
 	}		
 } 
 
@@ -3409,6 +3675,18 @@ country_event = {
 			var = enslave_da_bigots
 			value = 1
 		}
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.05
+		}
+		add_to_variable = {
+			var = rotting_non_feral_count
+			value = 1
+		}
+		19 = {
+			add_manpower = -611
+		}
+		add_state_core = 19
 	}
 	option = {
 		name = TEN.132.b
@@ -3417,6 +3695,18 @@ country_event = {
 			var = kill_da_bigots
 			value = 1
 		}
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.08
+		}
+		add_to_variable = {
+			var = rotting_feral_count
+			value = 1
+		}
+		19 = {
+			add_manpower = -1833
+		}
+		add_state_core = 19
 	}		
 } 
 
@@ -3451,7 +3741,7 @@ country_event = {
 			}
 			hidden_effect = {
 				country_event = {
-					id = TEN.420
+					id = TEN.134
 				}
 			}
 		}
@@ -3471,9 +3761,9 @@ country_event = {
 ##THE GREAT FATE##
 #Horsie slave
 country_event = {
-	id = TEN.420
-	title = TEN.420.title
-	desc = TEN.420.desc
+	id = TEN.134
+	title = TEN.134.title
+	desc = TEN.134.desc
 	picture = GFX_event_test
 	
 	is_triggered_only = yes
@@ -3483,10 +3773,16 @@ country_event = {
 	}
 	
 	option = {
-		name = TEN.420.a
+		name = TEN.134.a
 		ai_chance = { factor = 40 }
+		custom_effect_tooltip = TEN_rotting_chain_tt
 		add_ideas = TEN_enslave_everyone
 		add_stability = -0.10
+		add_country_leader_trait = judge_manehattan
+		every_other_country = {	
+			add_opinion_modifier = { target = ROOT modifier = slaver_ghouls }
+			reverse_add_opinion_modifier = { target = ROOT modifier = bigot_smoothskins }
+		}
 	}
 }
 
@@ -3506,6 +3802,7 @@ country_event = {
 	option = {
 		name = TEN.135.a
 		ai_chance = { factor = 40 }
+		custom_effect_tooltip = TEN_smoothskin_genocide_tt
 		add_ideas = TEN_kill_everyone
 		add_stability = -0.2
 		every_neighbor_country = {
@@ -3513,6 +3810,11 @@ country_event = {
 				type = annex_everything
 				target = TEN
 			}
+		}
+		add_country_leader_trait = judge_manehattan
+		every_other_country = {	
+			add_opinion_modifier = { target = ROOT modifier = genocidal_ghouls }
+			reverse_add_opinion_modifier = { target = ROOT modifier = bigot_smoothskins }
 		}
 	}
 }
@@ -3531,8 +3833,14 @@ country_event = {
 	option = {
 		name = TEN.144.a
 		ai_chance = { factor = 40 }
+		custom_effect_tooltip = TEN_rotting_equilibrium_tt
 		add_ideas = TEN_thanos_balanced
 		add_stability = -0.15
+		add_country_leader_trait = judge_manehattan
+		every_other_country = {	
+			add_opinion_modifier = { target = ROOT modifier = xenophobic_ghouls }
+			reverse_add_opinion_modifier = { target = ROOT modifier = bigot_smoothskins }
+		}
 	}
 }
 
@@ -3553,6 +3861,7 @@ country_event = {
 		name = TEN.136.a
 		ai_chance = { factor = 40 }
 		swap_ideas = { remove_idea = TEN_import_economy add_idea = TEN_complete_communal_prosperity }
+		add_country_leader_trait = capitalism_demon
 	}
 }
 
@@ -3606,6 +3915,10 @@ country_event = {
 			has_country_flag = TEN_deport
 		}
 		clr_country_flag = TEN_deport
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.05
+		}
 		random_owned_controlled_state = {
 			add_manpower = -750
 		}
@@ -3840,7 +4153,7 @@ country_event = {
 
 ###144-150
 
-
+##Begin trial event###
 country_event = {
 	id = TEN.145
 	title = TEN.145.title
@@ -3855,10 +4168,15 @@ country_event = {
 	option = {
 		name = TEN.145.a
 		ai_chance = { factor = 40 }
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.06
+		}
+		add_war_support = 0.05
 	}
 }
 
-
+###Library open for ghouls###
 country_event = {
 	id = TEN.146
 	title = TEN.146.title
@@ -3945,6 +4263,112 @@ country_event = {
 	option = {
 		name = TEN.149.a
 		ai_chance = { factor = 40 }
+	}
+}
+
+###The end###
+country_event = {
+	id = TEN.150
+	title = TEN.150.title
+	desc = TEN.150.desc
+	picture = GFX_event_test
+	
+	is_triggered_only = yes
+	trigger = {
+		tag = TEN 
+	}
+	
+	option = {
+		name = TEN.150.a
+		ai_chance = { factor = 40 }
+		hidden_effect = {
+			if = {
+				limit = {
+					check_variable = { rotting_non_feral_count > rotting_feral_count }
+				}
+				country_event = {
+					id = TEN.151
+				}
+			}
+			if = {
+				limit = {
+					check_variable = { rotting_non_feral_count < rotting_feral_count }
+				}
+				country_event = {
+					id = TEN.152
+				}
+			}
+			if = {
+				limit = {
+					check_variable = { rotting_non_feral_count = rotting_feral_count }
+				}
+				random_list = {
+					50 = {
+						country_event = { id = TEN.151 }
+					}
+					50 = {
+						country_event = { id = TEN.152 }
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = TEN.151
+	title = TEN.151.title
+	desc = TEN.151.desc
+	picture = GFX_event_test
+	
+	is_triggered_only = yes
+	trigger = {
+		tag = TEN 
+	}
+	
+	option = {
+		name = TEN.151.a
+		ai_chance = { factor = 40 }
+		kill_country_leader = yes
+		create_country_leader = { #Destruction/Alternate
+			name = "The Tower Assembly"
+			picture = "Tower_Assembly.tga"
+			expire = "1965.1.1"
+			ideology = purist
+			traits = {
+			}
+		}
+	}
+}
+
+country_event = {
+	id = TEN.152
+	title = TEN.152.title
+	desc = TEN.152.desc
+	picture = GFX_event_test
+	
+	is_triggered_only = yes
+	trigger = {
+		tag = TEN 
+	}
+	
+	option = {
+		name = TEN.152.a
+		ai_chance = { factor = 40 }
+		hidden_effect = {
+			kill_country_leader = yes
+			create_country_leader = { #Destruction/Alternate
+				name = "Rotting Tail"
+				picture = "Rotting_Tail.tga"
+				expire = "1965.1.1"
+				ideology = purist
+				traits = {
+					feral_sheriff
+				}
+			}
+		}
+		custom_effect_tooltip = TEN_rottingjesus_tt
+		add_ideas = TEN_fuckingmadness
 	}
 }
 
