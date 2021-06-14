@@ -105,3 +105,260 @@ news_event = {
 	}
 }
 
+#Trottfield Conference 1
+country_event = {
+ 	id = unification.5
+	immediate = {log = "[GetDateText]: [Root.GetName]: event unification.5"}
+ 	title = unification.5.t
+ 	desc = unification.5.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = no
+
+	option = {
+		name = unification.5.a
+		ai_chance = { factor = 50}
+		
+		OWE = {
+			add_to_variable = {
+				var = OWE_nurior_unification
+				value = 1
+			}
+		}
+	}
+	option = {
+		name = unification.5.b
+		ai_chance = { factor = 50}
+		
+		OWE = {
+			subtract_from_variable = {
+				var = OWE_nurior_unification
+				value = 1
+			}
+		}
+	}
+}
+
+#Trottfield Conference 2
+country_event = {
+ 	id = unification.6
+ 	title = unification.6.t
+ 	desc = unification.6.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = no
+
+	option = {
+		name = unification.6.a
+		trigger = {
+			OWE = {
+				check_variable = {
+                        OWE_nurior_unification > 0
+                    }
+			}
+		}
+		ai_chance = { factor = 50}
+		IF = {
+			limit = { tag = TFL }
+			annex_country = { target = VOI transfer_troops = yes }
+			annex_country = { target = DEP transfer_troops = yes }
+			annex_country = { target = TMS transfer_troops = yes }
+			set_country_flag = Trottfield_unifier_flag
+		}
+		ELSE_IF = {
+			limit = { tag = VOI }
+			annex_country = { target = TFL transfer_troops = yes }
+			annex_country = { target = DEP transfer_troops = yes }
+			annex_country = { target = TMS transfer_troops = yes }
+			set_country_flag = Trottfield_unifier_flag
+		}
+		ELSE_IF = {
+			limit = { tag = DEP }
+			annex_country = { target = VOI transfer_troops = yes }
+			annex_country = { target = TFL transfer_troops = yes }
+			annex_country = { target = TMS transfer_troops = yes }
+			set_country_flag = Trottfield_unifier_flag
+		}
+		ELSE_IF = {
+			limit = { tag = TMS }
+			annex_country = { target = VOI transfer_troops = yes }
+			annex_country = { target = DEP transfer_troops = yes }
+			annex_country = { target = TFL transfer_troops = yes }
+			set_country_flag = Trottfield_unifier_flag
+		}
+		every_state = {
+			limit = {
+				OR = {
+					is_core_of = TFL
+					is_core_of = VOI
+					is_core_of = DEP
+					is_core_of = TMS
+				}
+			}
+			add_claim_by = ROOT
+			add_core_of = ROOT
+		}
+		add_political_power = -200
+		add_stability = -0.15
+		set_cosmetic_tag = Nurior_federation
+		news_event = { id = unification.7 }
+	}
+	option = {
+		name = unification.6.b
+		trigger = {
+			OWE = {
+				check_variable = {
+                        OWE_nurior_unification > 0
+                    }
+			}
+		}
+		ai_chance = { factor = 30}
+		IF = {
+			limit = { tag = TFL }
+			puppet = VOI
+			puppet = DEP
+			puppet = TMS
+			set_country_flag = Trottfield_unifier_flag
+		}
+		ELSE_IF = {
+			limit = { tag = VOI }
+			puppet = TFL
+			puppet = DEP
+			puppet = TMS
+			set_country_flag = Trottfield_unifier_flag
+		}
+		ELSE_IF = {
+			limit = { tag = DEP }
+			puppet = VOI
+			puppet = TFL
+			puppet = TMS
+			set_country_flag = Trottfield_unifier_flag
+		}
+		ELSE_IF = {
+			limit = { tag = TMS }
+			puppet = VOI
+			puppet = DEP
+			puppet = TFL
+			set_country_flag = Trottfield_unifier_flag
+		}
+		every_state = {
+			limit = {
+				OR = {
+					is_core_of = TFL
+					is_core_of = VOI
+					is_core_of = DEP
+					is_core_of = TMS
+				}
+			}
+			add_claim_by = ROOT
+			add_core_of = ROOT
+		}
+	}
+	option = {
+		name = unification.6.c
+		trigger = {
+			OWE = {
+				check_variable = {
+                        OWE_nurior_unification = 0
+                    }
+			}
+		}
+		ai_chance = { factor = 50}
+		TFL = { dismantle_faction = yes }
+	}
+	option = {
+		name = unification.6.e
+		trigger = {
+			OWE = {
+				check_variable = {
+                        OWE_nurior_unification < 0
+                    }
+			}
+		}
+		ai_chance = { factor = 50}
+		TFL = { dismantle_faction = yes }
+		TFL = {
+			declare_war_on = {
+				target = VOI
+				type = annex_everything
+			}
+			declare_war_on = {
+				target = DEP
+				type = annex_everything
+			}
+			declare_war_on = {
+				target = TMS
+				type = annex_everything
+			}
+		}
+		TMS = {
+			declare_war_on = {
+				target = VOI
+				type = annex_everything
+			}
+			declare_war_on = {
+				target = DEP
+				type = annex_everything
+			}
+		}
+		VOI = {
+			declare_war_on = {
+				target = DEP
+				type = annex_everything
+			}
+		}
+		news_event = { id = unification.8 }
+	}
+}
+
+#Nurior Federation
+news_event = {
+	id = unification.7
+	immediate = {log = "[GetDateText]: [Root.GetName]: event unification.7"}
+	title = unification.7.t
+	desc = unification.7.d
+	picture = GFX_event_pon3_broadcast
+
+	major = yes
+	
+
+	is_triggered_only = yes
+	fire_only_once = no
+
+	option = {
+		name = unification.7.a
+		
+	}
+}
+
+#Nurior Civil War
+news_event = {
+	id = unification.8
+	immediate = {log = "[GetDateText]: [Root.GetName]: event unification.8"}
+	title = unification.8.t
+	desc = unification.8.d
+	picture = GFX_event_pon3_broadcast
+
+	major = yes
+	
+
+	is_triggered_only = yes
+	fire_only_once = no
+
+	option = {
+		name = unification.8.a
+		
+	}
+}
+
+
+
+
+
+
+
+
+
+
