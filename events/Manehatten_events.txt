@@ -416,6 +416,11 @@ country_event = { #River's Coup
 				
 			}
 		}
+		set_party_name = { 
+		    ideology = visionary 
+		    long_name = MSR_visionary_party_river 
+		    name = MSR_visionary_party_river 
+		}
 		set_politics = {
 			ruling_party = visionary
 		}
@@ -2096,6 +2101,7 @@ country_event = {
 	}
 	option = { #Crossroads
  		name = MSR.88.b
+ 		custom_effect_tooltip = MSR_steelhooves_steps_down_tt
  		set_politics = {
 			ruling_party = survivalism
 		}
@@ -2168,7 +2174,7 @@ country_event = {
  				country_event = {
  					id = MSR_steelhooves.3
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -2180,7 +2186,7 @@ country_event = {
  				country_event = {
  					id = MSR_steelhooves.4
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -2192,7 +2198,7 @@ country_event = {
  				country_event = {
  					id = MSR_steelhooves.5
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -2204,7 +2210,7 @@ country_event = {
  				country_event = {
  					id = MSR_steelhooves.6
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -2216,7 +2222,7 @@ country_event = {
  				country_event = {
  					id = MSR_steelhooves.7
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -2228,7 +2234,7 @@ country_event = {
  				country_event = {
  					id = MSR_steelhooves.8
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -2249,7 +2255,7 @@ country_event = {
  				country_event = {
  					id = MSR_steelhooves.9
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -2261,7 +2267,7 @@ country_event = {
  				country_event = {
  					id = MSR_steelhooves.10
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -2273,7 +2279,7 @@ country_event = {
  				country_event = {
  					id = MSR_steelhooves.11
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -2285,7 +2291,7 @@ country_event = {
  				country_event = {
  					id = MSR_steelhooves.12
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -2297,7 +2303,7 @@ country_event = {
  				country_event = {
  					id = MSR_steelhooves.13
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -2309,7 +2315,7 @@ country_event = {
  				country_event = {
  					id = MSR_steelhooves.14
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -2531,6 +2537,12 @@ country_event = { #Carry On A Memory
 
  	option = {
  		name = MSR_steelhooves.16.a
+ 		add_ideas = msr_aj_push_forward
+	}
+
+	option = {
+ 		name = MSR_steelhooves.16.b
+ 		add_ideas = msr_aj_help_others
 	}
 }
 
@@ -2546,6 +2558,34 @@ country_event = { #Talk With Crossroads
 
  	option = {
  		name = MSR_steelhooves.17.a
+
+ 		country_event = MSR_steelhooves.21
+	}
+}
+
+country_event = { #Talk With Crossroads continued
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_steelhooves.21"}
+ 	id = MSR_steelhooves.21
+ 	title = MSR_steelhooves.21.title
+ 	desc = MSR_steelhooves.21.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	option = {
+ 		name = MSR_steelhooves.21.a
+
+ 		every_unit_leader = {
+ 			limit = { has_id = 88842 }
+ 			demote_leader = yes
+ 			random_list = {
+ 				25 = { add_attack = 2 }
+ 				25 = { add_defense = 2 }
+ 				25 = { add_planning = 2 }
+ 				25 = { add_logistics = 2 }
+ 			}
+ 		}
 	}
 }
 
@@ -2561,6 +2601,12 @@ country_event = { #Remember Our Oaths
 
  	option = {
  		name = MSR_steelhooves.18.a
+
+ 		add_war_support = 0.05
+ 		add_popularity = {
+		    ideology = visionary
+		    popularity = 0.10
+		}
 	}
 }
 
@@ -2576,6 +2622,11 @@ country_event = { #Embrace Outsiders
 
  	option = {
  		name = MSR_steelhooves.19.a
+ 		custom_effect_tooltip = msr_15_percent_coring_cost_tt
+		add_to_variable = { coring_cost_country_factor = -0.15 }
+
+ 		add_stability = -0.10
+ 		add_ideas = outsider_law_batallions	
 	}
 }
 
@@ -2591,6 +2642,7 @@ country_event = { #Spirit of Honesty
 
  	option = {
  		name = MSR_steelhooves.20.a
+ 		add_ideas = msr_memories_of_applejack
 	}
 }
 
@@ -2672,6 +2724,15 @@ country_event = {
  		}
  		puppet = ARB
  		add_stability = -0.10
+
+ 		hidden_effect = {
+ 			ARB = {
+ 				remove_ideas = {
+ 					hidden_cannibals
+ 					revealed_cannibals
+ 				}
+ 			}
+ 		}
 	}
 }
 
@@ -2740,7 +2801,7 @@ country_event = {
  				country_event = {
  					id = MSR_crossroads.3
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -2752,7 +2813,7 @@ country_event = {
  				country_event = {
  					id = MSR_crossroads.4
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -2764,7 +2825,7 @@ country_event = {
  				country_event = {
  					id = MSR_crossroads.5
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -2776,7 +2837,7 @@ country_event = {
  				country_event = {
  					id = MSR_crossroads.6
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -2788,7 +2849,7 @@ country_event = {
  				country_event = {
  					id = MSR_crossroads.7
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -2800,7 +2861,7 @@ country_event = {
  				country_event = {
  					id = MSR_crossroads.8
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -2821,7 +2882,7 @@ country_event = {
  				country_event = {
  					id = MSR_crossroads.9
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -2833,7 +2894,7 @@ country_event = {
  				country_event = {
  					id = MSR_crossroads.10
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -2845,7 +2906,7 @@ country_event = {
  				country_event = {
  					id = MSR_crossroads.11
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -2857,7 +2918,7 @@ country_event = {
  				country_event = {
  					id = MSR_crossroads.12
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -2869,7 +2930,7 @@ country_event = {
  				country_event = {
  					id = MSR_crossroads.13
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -2881,7 +2942,7 @@ country_event = {
  				country_event = {
  					id = MSR_crossroads.14
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -3096,7 +3157,7 @@ country_event = { # FRI Declines
 
 
 
-##SH Offer Membership - ABT
+#Crossroads demands puppet
 country_event = {
 	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_crossroads.15"}
  	id = MSR_crossroads.15
@@ -3107,7 +3168,7 @@ country_event = {
 	is_triggered_only = yes
  	fire_only_once = yes
 
- 	option = { #Join MaTO
+ 	option = { #Accept
  		name = MSR_crossroads.15.a
  		ai_chance = {
  			base = 20
@@ -3143,7 +3204,7 @@ country_event = {
  				country_event = {
  					id = MSR_crossroads.16
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -3155,7 +3216,7 @@ country_event = {
  				country_event = {
  					id = MSR_crossroads.17
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -3167,7 +3228,7 @@ country_event = {
  				country_event = {
  					id = MSR_crossroads.18
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -3179,7 +3240,7 @@ country_event = {
  				country_event = {
  					id = MSR_crossroads.19
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -3191,7 +3252,7 @@ country_event = {
  				country_event = {
  					id = MSR_crossroads.20
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -3203,7 +3264,7 @@ country_event = {
  				country_event = {
  					id = MSR_crossroads.21
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -3225,7 +3286,7 @@ country_event = {
  				country_event = {
  					id = MSR_crossroads.22
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -3237,7 +3298,7 @@ country_event = {
  				country_event = {
  					id = MSR_crossroads.23
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -3249,7 +3310,7 @@ country_event = {
  				country_event = {
  					id = MSR_crossroads.24
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -3261,7 +3322,7 @@ country_event = {
  				country_event = {
  					id = MSR_crossroads.25
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -3273,7 +3334,7 @@ country_event = {
  				country_event = {
  					id = MSR_crossroads.26
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -3285,7 +3346,7 @@ country_event = {
  				country_event = {
  					id = MSR_crossroads.27
  					days = 3
- 					random = 6
+ 					random = 24
  				}
  			}
  		}
@@ -3513,17 +3574,18 @@ country_event = { #Strategic Locations - ARB
  		ai_chance = {
  			base = 25
  		}
+ 		add_stability = -0.05
  		MSR = {
  			transfer_state = 15
  		}
 
- 		MSR = {
- 			country_event = {
- 				id = MSR_crossroads.29
- 				days = 2
- 				random = 3
- 			}
- 		}
+ 		#MSR = {
+ 		#	country_event = {
+ 		#		id = MSR_crossroads.29
+ 		#		days = 2
+ 		#		random = 3
+ 		#	}
+ 		#}
 	}
 	option = { #No
  		name = MSR_crossroads.28.b
@@ -3538,7 +3600,7 @@ country_event = { #Strategic Locations - ARB
  			country_event = {
  				id = MSR_crossroads.30
  				days = 2
- 				random = 3
+ 				random = 24
  			}
  		}
 	}
@@ -3600,18 +3662,19 @@ country_event = { #Strategic Locations - ABT
  		ai_chance = {
  			base = 25
  		}
+ 		add_stability = -0.05
  		MSR = {
  			transfer_state = 47
  			transfer_state = 57
  		}
 
- 		MSR = {
- 			country_event = {
- 				id = MSR_crossroads.32
- 				days = 2
- 				random = 3
- 			}
- 		}
+ 		#MSR = {
+ 		#	country_event = {
+ 		#		id = MSR_crossroads.32
+ 		#		days = 2
+ 		#		random = 3
+ 		#	}
+ 		#}
 	}
 	option = { #No
  		name = MSR_crossroads.31.b
@@ -3626,7 +3689,7 @@ country_event = { #Strategic Locations - ABT
  			country_event = {
  				id = MSR_crossroads.33
  				days = 2
- 				random = 3
+ 				random = 24
  			}
  		}
 	}
@@ -3782,6 +3845,11 @@ country_event = { #Compromise
 
  	option = {
  		name = MSR_crossroads.37.a
+ 		add_political_power = -50
+ 		add_popularity = {
+		    ideology = survivalism
+		    popularity = 0.10
+		}
 	}
 }
 
@@ -3797,6 +3865,11 @@ country_event = { #Realism
 
  	option = {
  		name = MSR_crossroads.38.a
+
+ 		add_popularity = {
+		    ideology = visionary
+		    popularity = -0.05
+		}
 	}
 }
 
@@ -3812,6 +3885,9 @@ country_event = { #Remember Our Mission
 
  	option = {
  		name = MSR_crossroads.39.a
+
+ 		add_political_power = 50
+ 		add_stability = 0.05
 	}
 }
 
@@ -3827,6 +3903,9 @@ country_event = { #Outcasts
 
  	option = {
  		name = MSR_crossroads.40.a
+
+ 		add_manpower = 247
+ 		add_war_support = 0.10
 	}
 }
 
@@ -3842,6 +3921,13 @@ country_event = { #Steel Supremacy
 
  	option = {
  		name = MSR_crossroads.41.a
+
+ 		add_war_support = 0.05
+ 		add_tech_bonus = {
+			bonus = 0.75
+			uses = 2
+			category = power_armor_tech
+		}
 	}
 }
 
