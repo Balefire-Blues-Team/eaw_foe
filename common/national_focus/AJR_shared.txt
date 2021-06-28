@@ -1659,6 +1659,10 @@
 
 		prerequisite = { focus = AJR_mwt_successors }
 
+		available = {
+			has_completed_focus = AJR_the_expeditionary_corp
+		}
+
 		ai_will_do = {
 			factor = 1
 		} 
@@ -1666,10 +1670,11 @@
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_stable_tec_calling"
 
+			custom_effect_tooltip = AJR_unlock_expedition_stable_dec_tt
 		}
 	}
 
-	shared_focus = { #Operation Paperclip thing
+	shared_focus = {
 		id = AJR_operation_moonbeam
 		icon = GFX_goal_steel_rangers
 		relative_position_id = AJR_mwt_successors
@@ -1679,12 +1684,21 @@
 
 		prerequisite = { focus = AJR_mwt_successors }
 
+		available = {
+			OR = {
+				TEN = { has_AJR_embassy = yes }
+				21 = { is_owned_by_ROOT_or_subject = yes }
+			}
+
+		}
+
 		ai_will_do = {
 			factor = 1
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_operation_moonbeam"
+			country_event = applejack.42
 
 		}
 	}
@@ -1832,9 +1846,8 @@
 						tag = AJR
 					}
 					OR = {
-						has_dynamic_modifier = {
-						    modifier = AJR_expedition_modifier
-						}
+						has_AJR_expedition = yes
+						has_AJR_embassy = yes
 						is_in_faction_with = AJR
 					}
 				}
@@ -2213,9 +2226,7 @@
 
 		available = {
 			TEN = {
-				has_dynamic_modifier = {
-				    modifier = AJR_expedition_modifier
-				}
+				has_AJR_expedition = yes
 			}
 		}
 		prerequisite = { focus = AJR_secure_manehattan }
@@ -2251,9 +2262,7 @@
 
 		available = {
 			FRI = {
-				has_dynamic_modifier = {
-				    modifier = AJR_expedition_modifier
-				}
+				has_AJR_expedition = yes
 			}
 		}
 		prerequisite = { focus = AJR_secure_manehattan }
@@ -2566,6 +2575,15 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_request_stable_2_access"
+			if = {
+				limit = {
+					has_country_flag = AJR_steelhooves_dead_flag
+				}
+				country_event = applejack.45
+			}
+			else = {
+				country_event = applejack.46
+			}
 
 		}
 	}
@@ -2624,6 +2642,7 @@
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_bulwark_against_evil"
 
+			add_ideas = AJR_shield_of_equestria
 		}
 	}
 
