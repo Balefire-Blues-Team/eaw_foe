@@ -12,12 +12,13 @@ news_event = {
  	id = lpspecial.1
  	title = lpspecial.1.title
 	desc = lpspecial.1.desc
- 	picture = GFX_outofthestable_news
+ 	picture = GFX_event_foe_lightbringer_event
 
  	is_triggered_only = yes
 	fire_only_once = yes
 	immediate = {
 		log = "[GetDateText]: [Root.GetName]: Event lpspecial.1 (Pipdead)"
+		
 	}
 
 	option = {
@@ -30,6 +31,19 @@ news_event = {
 				value = 39
 			}
  		}
+ 		hidden_effect = {
+	 		if = {
+	 			limit = {
+	 				AJR = {
+	 					exists = yes
+	 					has_country_leader_with_trait = adventuring_elder_trait
+	 				}
+	 			}
+	 			AJR = {
+	 				country_event = applejack.40
+	 			}
+	 		}
+	 	}
 	}
 }
 
@@ -53,12 +67,50 @@ news_event = {
 	}
 }
 
+##Battle of Stable 2
+news_event = {
+ 	id = lpspecial.3
+ 	title = lpspecial.3.title
+	desc = lpspecial.3.desc
+ 	picture = GFX_outofthestable_news
+
+ 	is_triggered_only = yes
+	fire_only_once = yes
+	immediate = {
+		log = "[GetDateText]: [Root.GetName]: Event lpspecial.3 (Battle of Stable 2)"
+	}
+
+	option = {
+		name = lpspecial.3.a
+		ai_chance = { base = 50 }
+		if = {
+			limit = {
+				tag = MSR
+				has_government = continuation
+			}
+			add_timed_idea = {
+				idea = MSR_aj_ranger_support_idea
+				days = 365
+			}
+		}
+
+		if = {
+			limit = {
+				tag = FSR
+				has_government = continuation
+			}
+			add_manpower = -150
+			add_war_support = -0.10
+		}
+	}
+}
+
 ##Out Of The Stable
 country_event = {
  	id = lightbringer.1
  	title = lightbringer.1.title
  	desc = lightbringer.1.desc
- 	picture = GFX_event_foe_lightbringer_event
+ 	picture = GFX_outofthestable_news
 
  	is_triggered_only = yes
  	fire_only_once = yes
@@ -3159,6 +3211,15 @@ country_event = { #Hour Of The Wolf 1
 		ai_chance = { base = 80 }
 
 		hidden_effect = {
+			every_country = { 
+				limit = { is_steel_ranger_nation = yes }
+	
+				country_event = {
+					id = lpspecial.3
+				}
+			}
+		}
+		hidden_effect = {
 			set_global_flag = stable_2_applejack_rangers_flag
 		}
 
@@ -3643,13 +3704,31 @@ country_event = {
 		name = lp_utility.32.a
 		ai_chance = { base = 50}
 
-		hidden_effect = {
-			event_target:Stable29 = {
+		if = {
+			limit = {
+				MSR = { 
+					has_government = continuation
+					exists = yes
+					has_idea = MSR_aj_ranger_support_idea
+				}
+			}
+			hidden_effect = {
+				event_target:Stable29 = {
+					country_event = {
+    					id = lightbringer.33
+    				}
+				}
+			}
+		}
+		else = {
+			OWE = {
 				country_event = {
-    				id = lightbringer.33
+    				id = lp_utility.33
+    				days = 15
     			}
 			}
 		}
+		
 	}
 }
 
@@ -3675,12 +3754,66 @@ country_event = {
 
 	option = {
 		name = lightbringer.33.a
-		ai_chance = { base = 0 }
-
-		MSR = { 
-			set_country_flag = pip_beats_cottage_flag
-			add_political_power = -50
+		ai_chance = { 
+			base = 0
+			modifier = {
+				add = 10000000
+				OR = {
+		            AND = {
+		                is_historical_focus_on = yes
+		                has_game_rule = {
+		                    rule = MSR_AI_BEHAVIOR
+		                    option = DEFAULT
+		                }
+		            }
+		            has_game_rule = {
+		                rule = MSR_AI_BEHAVIOR
+		                option = HISTORICAL_AJR
+		            }
+		        }
+			}
 		}
+
+		if = {
+			limit = { 
+				MSR = { 
+					has_government = continuation
+					has_idea = MSR_aj_ranger_support_idea
+				}
+			}
+
+			hidden_effect = {
+				MSR = { 
+					set_country_flag = pip_beats_cottage_flag
+					country_event = {
+						id = MSR_aj_rangers.1
+						days = 2
+						random = 48
+					}
+				}
+			}
+		}
+		else_if = {
+			if = {
+				limit = { 
+					MSR = { 
+						has_government = continuation
+						NOT = { has_idea = MSR_aj_ranger_support_idea }
+					}
+				}
+				hidden_effect = {
+					MSR = { 
+						set_country_flag = pip_beats_cottage_flag
+						country_event = {
+							id = MSR_aj_rangers.19
+							days = 2
+							random = 48
+						}
+					}
+				}
+			}
+		}
+		
 
 		if = {
 			limit = { has_global_flag = player_lightbringer}
@@ -3695,9 +3828,9 @@ country_event = {
 
 		else = {
 			hidden_effect = {
-				ARB = {
+				OWE = {
 					country_event = {
-    					id = lightbringer.34
+    					id = lp_utility.33
     					days = 15
     				}
 				}
@@ -3707,11 +3840,33 @@ country_event = {
 
 	option = { #fail
 		name = lightbringer.33.b
-		ai_chance = { base = 50}
+		ai_chance = {
+			base = 0
+			modifier = {
+				add = 10000000
+				NOT = {
+					OR = {
+			            AND = {
+			                is_historical_focus_on = yes
+			                has_game_rule = {
+			                    rule = MSR_AI_BEHAVIOR
+			                    option = DEFAULT
+			                }
+			            }
+			            has_game_rule = {
+			                rule = MSR_AI_BEHAVIOR
+			                option = HISTORICAL_AJR
+			            }
+			        }
+		        }
+			}
+		}
 
-		MSR = { 
-			set_country_flag = cottage_beats_pip_flag 
-			add_political_power = 50
+		if = {
+			limit = { MSR = { has_government = continuation } }
+			MSR = { 
+				set_country_flag = cottage_beats_pip_flag 
+			}
 		}
 		
 		if = {
@@ -3795,6 +3950,22 @@ country_event = {
 	option = {
 		name = lightbringer.34.a
 		ai_chance = { base = 50}
+
+		if = {
+			limit = { 
+				MSR = { 
+					has_government = continuation 
+					has_country_flag = pip_beats_cottage_flag
+				} 
+			}
+			hidden_effect = {
+				MSR = {
+					country_event = {
+						id = MSR_aj_rangers.7
+					}
+				}
+			}
+		}
 
 		if = {
 			limit = { has_global_flag = player_lightbringer}
@@ -4242,6 +4413,14 @@ country_event = {
  		hidden_effect = {
  			OWE = {
  				add_to_variable = { lightbringer_status_var = 1 } 
+ 			}
+ 			if = {
+ 				limit = {
+ 					AJR = { exists = yes }
+ 				}
+ 				AJR = {
+ 					country_event = applejack.39
+ 				}
  			}
  		}
  	}
