@@ -164,9 +164,9 @@ AJR_expedition_cat = {
 		}
 	}
 
-	AJR_expedition_dec_placeholder = {
+	AJR_total_country_pop_effect_dec = {
 		icon = GFX_decision_stable_door
-		cost = 75
+		cost = 0
 		ai_will_do = {
 			base = 0
 
@@ -180,11 +180,36 @@ AJR_expedition_cat = {
 		}
 		#fire_only_once = yes
 
-		days_remove = 90
+		#days_remove = 90
 
-		remove_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision AJR_expedition_dec_placeholder"
-			
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AJR_total_country_pop_effect_dec"
+			total_country_pop_effect = yes
+			set_variable = { AJR.new_recruit_monthly_var = 0 }
+		}
+	}
+
+	AJR_calc_new_recruits_dec = {
+		icon = GFX_decision_stable_door
+		cost = 0
+		ai_will_do = {
+			base = 0
+
+		}
+
+		available = {
+		}
+		visible = {
+			always = no
+		#	has_completed_focus = AJR_the_expeditionary_corp
+		}
+		#fire_only_once = yes
+
+		#days_remove = 90
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AJR_calc_new_recruits_dec"
+			add_to_ajr_new_recruits_monthly = yes
 		}
 	}
 
@@ -265,6 +290,35 @@ AJR_expedition_cat = {
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision AJR_add_NCR_dec"
 			SHA = {
+				add_dynamic_modifier = { modifier = AJR_expedition_modifier }
+				add_to_array = {
+                    array = global.countries_with_AJR_expedition_array
+                    value = THIS.id
+                }
+			}
+		}
+	}
+
+	AJR_add_TEN_dec = {
+		icon = GFX_decision_stable_door
+		cost = 0
+		ai_will_do = {
+			base = 0
+
+		}
+
+		available = {
+		}
+		visible = {
+			always = no
+		#	has_completed_focus = AJR_the_expeditionary_corp
+		}
+		fire_only_once = no
+
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision AJR_add_NCR_dec"
+			TEN = {
 				add_dynamic_modifier = { modifier = AJR_expedition_modifier }
 				add_to_array = {
                     array = global.countries_with_AJR_expedition_array
