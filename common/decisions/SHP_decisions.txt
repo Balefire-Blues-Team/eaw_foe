@@ -1,0 +1,398 @@
+SHP_restore_facility_cat = {
+	SHP_facility_excavation = {
+		icon = GFX_decision_stable_door
+		cost = 50
+		ai_will_do = {
+			base = 50
+		}
+		available = {
+			has_manpower > 200
+		}
+		
+		visible = {
+			tag = SHP
+			has_completed_focus = SHP_project_scylla
+		}
+		fire_only_once = no
+		days_remove = 80
+		complete_effect = {
+			add_manpower = -200
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SHP_facility_excavation"
+			add_manpower = 190
+			custom_effect_tooltip = SHP_new_slot_excavated
+			add_to_variable = {
+				var = free_slots
+				value = 1
+			}
+		}
+	}
+	
+	SHP_facility_civs = {
+		icon = GFX_decision_stable_door
+		cost = 50
+		ai_will_do = {
+			base = 50
+		}
+		available = {
+			has_manpower > 400
+			num_of_civilian_factories_available_for_projects > 1
+			custom_trigger_tooltip = {
+                tooltip = SHP_free_slat_available_tt
+                    check_variable = {
+                        free_slots > 0
+                    }
+            }
+		}
+		modifier = {
+			civilian_factory_use = 2
+		}
+		visible = {
+			tag = SHP
+			has_completed_focus = SHP_properly_rebuilding_the_facility
+		}
+		fire_only_once = no
+		days_remove = 100
+		complete_effect = {
+			add_manpower = -400
+			custom_effect_tooltip = SHP_construction_begins_tt
+			subtract_from_variable = {
+				var = free_slots
+				value = 1
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SHP_facility_civs"
+			add_manpower = 360
+			add_offsite_building = { type = industrial_complex level = 1 }
+			add_to_variable = {
+				var = usage_civs
+				value = 1
+			}
+		}
+	}
+	
+	SHP_facility_mils = {
+		icon = GFX_decision_stable_door
+		cost = 50
+		ai_will_do = {
+			base = 50
+		}
+		available = {
+			has_manpower > 350
+			num_of_civilian_factories_available_for_projects > 1
+			custom_trigger_tooltip = {
+                tooltip = SHP_free_slat_available_tt
+                    check_variable = {
+                        free_slots > 0
+                    }
+            }
+		}
+		
+		visible = {
+			tag = SHP
+			has_completed_focus = SHP_properly_rebuilding_the_facility
+		}
+		fire_only_once = no
+		days_remove = 100
+		modifier = {
+			civilian_factory_use = 2
+		}
+		complete_effect = {
+			add_manpower = -400
+			custom_effect_tooltip = SHP_construction_begins_tt
+			subtract_from_variable = {
+				var = free_slots
+				value = 1
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SHP_facility_mils"
+			add_manpower = 330
+			add_offsite_building = { type = arms_factory level = 1 }
+			add_to_variable = {
+				var = usage_mils
+				value = 1
+			}
+		}
+	}
+	
+	SHP_facility_labs = {
+		icon = GFX_decision_mainframe_1
+		cost = 50
+		ai_will_do = {
+			base = 50
+		}
+		available = {
+			has_manpower > 350
+			num_of_civilian_factories_available_for_projects > 3
+			custom_trigger_tooltip = {
+                tooltip = SHP_free_slat_available_tt
+                    check_variable = {
+                        free_slots > 0
+                    }
+            }
+		}
+		
+		visible = {
+			tag = SHP
+			has_completed_focus = SHP_properly_rebuilding_the_facility
+		}
+		fire_only_once = no
+		days_remove = 100
+		modifier = {
+			civilian_factory_use = 4
+		}
+		complete_effect = {
+			add_manpower = -300
+			custom_effect_tooltip = SHP_construction_begins_tt
+			subtract_from_variable = {
+				var = free_slots
+				value = 1
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SHP_facility_labs"
+			add_manpower = 280
+			custom_effect_tooltip = SHP_new_lab_tt
+			add_to_variable = {
+				var = usage_labs
+				value = 1
+			}
+			add_to_variable = {
+				var = monthly_research
+				value = 1
+			}
+		}
+	}
+	
+}
+
+SHP_subject_research_cat = {
+
+	SHP_research_income = {
+		icon = GFX_decision_chip_blue
+		### Never "complete" success
+		activation  = {
+			#has_country_flag = NEV_deploy_points_unlock
+			has_completed_focus = SHP_project_scylla
+		}
+		available = {
+			always = no
+		}
+		allowed = {
+			tag = SHP
+		}
+		is_good = yes
+		days_mission_timeout = 30
+		fire_only_once = no
+		###Add points to actual number
+		timeout_effect = {
+			custom_effect_tooltip = SHP_add_research_tt
+				
+				###Add points of monthly net
+				
+				add_to_variable = {
+				var = total_research
+				value = monthly_research
+				}
+		}
+		days_re_enable = 0
+		days_remove = 1
+	}
+	
+	SHP_improve_eurytus_strain = {
+		icon = GFX_decision_medX
+		cost = 50
+		ai_will_do = {
+			base = 50
+		}
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = SHP_100_research_tt
+                    check_variable = {
+                        total_research > 99
+                    }
+            }
+		}
+		
+		visible = {
+			tag = SHP
+			has_completed_focus = SHP_restore_strain_databanks
+		}
+		fire_only_once = yes
+		days_remove = 120
+		modifier = {
+			research_speed_factor = -0.15
+		}
+		complete_effect = {
+			custom_effect_tooltip = SHP_research_100_removed_tt
+			subtract_from_variable = {
+				var = total_research
+				value = 100
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SHP_improve_eurytus_strain"
+			add_ideas = eurytus_strain_idea
+		}
+	}
+	
+	SHP_improve_cerastes_strain = {
+		icon = GFX_decision_medX
+		cost = 50
+		ai_will_do = {
+			base = 50
+		}
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = SHP_100_research_tt
+                    check_variable = {
+                        total_research > 99
+                    }
+            }
+		}
+		
+		visible = {
+			tag = SHP
+			has_completed_focus = SHP_restore_strain_databanks
+		}
+		fire_only_once = yes
+		days_remove = 120
+		modifier = {
+			research_speed_factor = -0.15
+		}
+		complete_effect = {
+			custom_effect_tooltip = SHP_research_100_removed_tt
+			subtract_from_variable = {
+				var = total_research
+				value = 100
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SHP_improve_cerastes_strain"
+			add_ideas = cerastes_strain_idea
+		}
+	}
+	
+	SHP_improve_echidna_strain = {
+		icon = GFX_decision_medX
+		cost = 50
+		ai_will_do = {
+			base = 50
+		}
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = SHP_100_research_tt
+                    check_variable = {
+                        total_research > 99
+                    }
+            }
+		}
+		
+		visible = {
+			tag = SHP
+			has_completed_focus = SHP_restore_strain_databanks
+		}
+		fire_only_once = yes
+		days_remove = 120
+		modifier = {
+			research_speed_factor = -0.15
+		}
+		complete_effect = {
+			custom_effect_tooltip = SHP_research_100_removed_tt
+			subtract_from_variable = {
+				var = total_research
+				value = 100
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SHP_improve_echidna_strain"
+			add_ideas = echidna_strain_idea
+		}
+	}
+	
+	SHP_improve_eidolon_strain = {
+		icon = GFX_decision_medX
+		cost = 50
+		ai_will_do = {
+			base = 50
+		}
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = SHP_100_research_tt
+                    check_variable = {
+                        total_research > 99
+                    }
+            }
+		}
+		
+		visible = {
+			tag = SHP
+			has_completed_focus = SHP_restore_strain_databanks
+		}
+		fire_only_once = yes
+		days_remove = 120
+		modifier = {
+			research_speed_factor = -0.15
+		}
+		complete_effect = {
+			custom_effect_tooltip = SHP_research_100_removed_tt
+			subtract_from_variable = {
+				var = total_research
+				value = 100
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SHP_improve_eidolon_strain"
+			add_ideas = eidolon_strain_idea
+		}
+	}
+	
+	SHP_improve_anathema_strain = {
+		icon = GFX_decision_medX
+		cost = 50
+		ai_will_do = {
+			base = 50
+		}
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = SHP_100_research_tt
+                    check_variable = {
+                        total_research > 99
+                    }
+            }
+		}
+		
+		visible = {
+			tag = SHP
+			has_completed_focus = SHP_produce_anathema_strain
+		}
+		fire_only_once = yes
+		days_remove = 120
+		modifier = {
+			research_speed_factor = -0.15
+		}
+		complete_effect = {
+			custom_effect_tooltip = SHP_research_100_removed_tt
+			subtract_from_variable = {
+				var = total_research
+				value = 100
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SHP_improve_anathema_strain"
+			add_ideas = anathema_strain_idea
+		}
+	}
+
+
+
+
+
+
+
+
+
+}
