@@ -3,31 +3,163 @@ COL_magic_ressource_cat = {
 		icon = GFX_decision_stable_door
 		cost = 5
 		ai_will_do = {
-			base = 100
+			base = 10
 
 		}
 
 		available = {
-			
+			custom_trigger_tooltip = {
+				tooltip = AT_LEAST_5_CRYSTALS
+				check_variable = { resource@crystals > 4 }
+			}
 		}
 		visible = {
 			has_completed_focus = COL_experimental_nation
 		}
 		fire_only_once = no
 
-		days_remove = 90
-		
-		complete_effect = {
+		days_remove = 50
+		days_re_enable = 5
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COL_exploit_crystals_smol"
 			custom_effect_tooltip = COL_gain_100_magic_ressource_tt
 			add_to_variable = {
 				var = COL_magic_ressource
 				value = 100
 			}
 		}
+	}
+	
+	COL_buy_foreign_artefacts = {
+		icon = GFX_decision_stable_door
+		cost = 20
+		ai_will_do = {
+			base = 10
+
+		}
+		available = {
+			has_war = no
+		}
+
+		visible = {
+			has_completed_focus = COL_experimental_nation
+		}
+		modifier = {
+			consumer_goods_factor = 0.05
+		}
+		fire_only_once = no
+
+		days_remove = 100
+		days_re_enable = 80
 
 		remove_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision COL_exploit_crystals_smol"
-			custom_effect_tooltip = COL_add_back_crystals_tt
+			log = "[GetDateText]: [Root.GetName]: Decision COL_buy_foreign_artefacts"
+			custom_effect_tooltip = COL_gain_100_magic_ressource_tt
+			add_to_variable = {
+				var = COL_magic_ressource
+				value = 100
+			}
+		}
+	}
+	
+	COL_refill_stockpiles = {
+		icon = GFX_decision_stable_door
+		cost = 20
+		ai_will_do = {
+			base = 10
+
+		}
+		available = {
+			num_of_civilian_factories_available_for_projects > 4
+		}
+
+		visible = {
+			has_completed_focus = COL_military_arcanist_complex
+		}
+		modifier = {
+			civilian_factory_use = 5
+		}
+		fire_only_once = no
+
+		days_remove = 50
+		days_re_enable = 50
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COL_refill_stockpiles"
+			custom_effect_tooltip = COL_gain_100_magic_ressource_tt
+			add_to_variable = {
+				var = COL_magic_ressource
+				value = 100
+			}
+		}
+	}
+	
+	COL_extract_souls = {
+		icon = GFX_decision_stable_door
+		cost = 10
+		ai_will_do = {
+			base = 10
+
+		}
+		available = {
+			has_manpower > 49
+		}
+
+		visible = {
+			has_completed_focus = COL_take_on_disciples
+		}
+		modifier = {
+			stability_weekly_factor = -0.01
+		}
+		fire_only_once = no
+
+		days_remove = 10
+		days_re_enable = 90
+		
+		complete_effect = {
+			add_manpower = -50
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COL_extract_souls"
+			custom_effect_tooltip = COL_gain_50_magic_ressource_tt
+			add_to_variable = {
+				var = COL_magic_ressource
+				value = 50
+			}
+		}
+	}
+	
+	COL_make_super_potions = {
+		icon = GFX_decision_stable_door
+		cost = 25
+		ai_will_do = {
+			base = 10
+
+		}
+		available = {
+			
+		}
+
+		visible = {
+			has_completed_focus = COL_potions_of_potionmaking
+		}
+		modifier = {
+			industrial_capacity_factory = -0.05
+		}
+		fire_only_once = no
+
+		days_remove = 100
+		days_re_enable = 10
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COL_extract_souls"
+			custom_effect_tooltip = COL_gain_50_magic_ressource_tt
+			add_to_variable = {
+				var = COL_magic_ressource
+				value = 50
+			}
 		}
 	}
 
@@ -38,8 +170,11 @@ COL_magic_drugs_cat = {
 	COL_distribute_super_antibiotics = {
 		icon = GFX_decision_chems
 		ai_will_do = {
-			base = 100
-
+			base = 10
+			modifier = {
+				factor = 0
+				has_country_flag = COL_distribute_super_antibiotics_complete
+			}
 		}
 		is_good = yes
 
@@ -55,9 +190,10 @@ COL_magic_drugs_cat = {
 		visible = {
 			always = yes
 		}
-		fire_only_once = yes
+		fire_only_once = no
 
 		days_remove = 90
+		days_re_enable = 10
 		
 		modifier = {
 			monthly_population = 0.25
@@ -74,12 +210,21 @@ COL_magic_drugs_cat = {
 
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision COL_distribute_super_antibiotics"
-			custom_effect_tooltip = COL_add_5_sss_progress_tt
-			add_to_variable = {
-				var = COL_sss_research
-				value = 5
+			IF = {
+				limit = {NOT = {has_country_flag = COL_distribute_super_antibiotics_complete}}
+				custom_effect_tooltip = COL_add_5_sss_progress_tt
+				add_to_variable = {
+					var = COL_sss_research
+					value = 5
+				}
 			}
-			hidden_effect = { clr_country_flag = COL_sss_research_in_progress_flag }
+			hidden_effect = {
+				clr_country_flag = COL_sss_research_in_progress_flag 
+				IF = {
+				limit = {NOT = {has_country_flag = COL_distribute_super_antibiotics_complete}}
+					set_country_flag = COL_distribute_super_antibiotics_complete
+				}
+			}
 		}
 	}
 
