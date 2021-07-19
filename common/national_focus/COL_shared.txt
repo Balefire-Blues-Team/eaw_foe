@@ -3492,7 +3492,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_prepare_for_great_march"
-		
+		add_timed_idea = {idea = COL_prepare_for_great_march_idea days = 300}
 	}
 }
 
@@ -3510,9 +3510,32 @@ shared_focus = {
 		factor = 100
 	} 
 
+	will_lead_to_war_with = KHA
+	will_lead_to_war_with = DEC
+	will_lead_to_war_with = AOS
+	will_lead_to_war_with = ARR
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_strike_southern_oppressors"
-		
+		ARR = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		KHA = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		DEC = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		AOS = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 }
 
@@ -3522,6 +3545,7 @@ shared_focus = {
 	x = 2
 	y = 4
 	cost = 4.29
+	available = {owns_state = 361 owns_state = 387}
 	relative_position_id = COL_the_dream_of_freedom
 	prerequisite = { focus = COL_strike_southern_oppressors } 
 
@@ -3532,7 +3556,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_secure_the_peace"
-		
+		every_owned_state = {
+			limit = {OR = {is_core_of = AOS is_core_of = DEC}}
+			add_compliance = 25
+		}
 	}
 }
 
@@ -3552,7 +3579,16 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_hunt_down_gangs"
-		
+		361 = {add_manpower = -1422}
+		152 = {add_manpower = -209}
+		IF = {
+			limit = {owns_state = 359}
+			359 = {add_manpower = -137}
+		}
+		IF = {
+			limit = {owns_state = 68}
+			68 = {add_manpower = -156}
+		}
 	}
 }
 
@@ -3572,7 +3608,22 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_eradicate_the_cult"
-		
+		387 = {
+			add_manpower = -711
+				remove_building = {
+   				type = arms_factory
+    			level = 1
+				}
+		}
+		73 = { add_manpower = -199}
+		IF = {
+			limit = {owns_state = 363}
+			363 = {add_manpower = -226}
+		}
+		IF = {
+			limit = {owns_state = 105}
+			105 = {add_manpower = -214}
+		}
 	}
 }
 
@@ -3593,7 +3644,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_eradicate_the_cult"
-		#Raise faintly necromantic black monolyths, in order to forever remind the ponies here of the wrongs their ancestors caused
+		country_event = { id = springcouncil.19 }
+		Core_original_AOS = yes
+		Core_original_DEC = yes
 	}
 }
 
@@ -3603,6 +3656,7 @@ shared_focus = {
 	x = -2
 	y = 4
 	cost = 4.29
+	available = {owns_state = 344 owns_state = 292}
 	relative_position_id = COL_the_dream_of_freedom
 	prerequisite = { focus = COL_strike_southern_oppressors } 
 
@@ -3613,7 +3667,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_repair_broken_infrastructure"
-		
+		every_owned_state = {
+			limit = {OR = {is_core_of = ARR is_core_of = KHA}}
+			add_building_construction = { type = infrastructure instant_build = yes level = 1}
+		}
 	}
 }
 
@@ -3633,7 +3690,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_secure_fourth_city"
-		
+		every_owned_state = {
+			limit = {is_core_of = ARR }
+			add_compliance = 40
+		}
 	}
 }
 
@@ -3653,7 +3713,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_raise_undead_yaks"
-		
+		#Access to YAK racial units
+		add_manpower = 500
 	}
 }
 
@@ -3674,7 +3735,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_re_integrating_south"
-		
+		Core_original_ARR = yes
+		Core_original_KHA = yes
 	}
 }
 
@@ -3695,8 +3757,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_empty_the_graveyards"
-		#fun event about necromantic principles
-		#phase out living soldiers mostly, automatically switch custom consc-laws if at war or peace
+		country_event = { id = springcouncil.20 }
+		custom_effect_tooltip = COL_empty_the_graveyards_tt
+		set_country_flag = cant_see_regular_conscription_flag
+		set_country_flag = COL_necro_conscription_flag
+		hidden_effect = {
+			add_ideas = COL_conscription_necro_peace_law
+		}
 	}
 }
 
@@ -3714,9 +3781,107 @@ shared_focus = {
 		factor = 100
 	} 
 
+	will_lead_to_war_with = SDF
+	will_lead_to_war_with = USC
+	will_lead_to_war_with = RSW
+	will_lead_to_war_with = WHJ
+	will_lead_to_war_with = BFS
+	will_lead_to_war_with = EXC
+	will_lead_to_war_with = EIL
+	will_lead_to_war_with = LAU
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_war_for_st_petershoof"
-		
+		IF = {
+			limit = { SDF = {exists = yes} }
+			declare_war_on = { 
+				type = annex_everything 
+				target = SDF 
+			}
+		}
+		ELSE = {
+			SDF = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+		IF = {
+			limit = { USC = {exists = yes} }
+			declare_war_on = { 
+				type = annex_everything 
+				target = USC 
+			}
+		}
+		ELSE = {
+			USC = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+		IF = {
+			limit = { RSW = {exists = yes} }
+			declare_war_on = { 
+				type = annex_everything 
+				target = RSW 
+			}
+		}
+		ELSE = {
+			RSW = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+		IF = {
+			limit = { WHJ = {exists = yes} }
+			declare_war_on = { 
+				type = annex_everything 
+				target = WHJ 
+			}
+		}
+		IF = {
+			limit = { BFS = {exists = yes} }
+			declare_war_on = { 
+				type = annex_everything 
+				target = BFS 
+			}
+		}
+		IF = {
+			limit = { EXC = {exists = yes} }
+			declare_war_on = { 
+				type = annex_everything 
+				target = EXC 
+			}
+		}
+		IF = {
+			limit = { EIL = {exists = yes} }
+			declare_war_on = { 
+				type = annex_everything 
+				target = EIL 
+			}
+		}
+		IF = {
+			limit = { LAU = {exists = yes} }
+			declare_war_on = { 
+				type = annex_everything 
+				target = LAU 
+			}
+		}
+		hidden_effect = {
+			every_state = {
+				limit = {
+					OR = {
+						is_core_of = LAU
+						is_core_of = EIL
+						is_core_of = EXC
+						is_core_of = BFS
+						is_core_of = WHJ
+					}
+				}
+				add_claim_by = COL
+			}
+		}
 	}
 }
 
