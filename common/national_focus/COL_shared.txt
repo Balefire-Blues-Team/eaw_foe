@@ -3896,12 +3896,17 @@ shared_focus = {
 
 	available_if_capitulated = yes 
 	ai_will_do = { 
-		factor = 100
+		factor = 1000
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_offer_to_congregation"
-		
+		create_faction = COL_ZIRRATU_FACTION
+		IF = {
+			limit = {VLC = {exists = yes}}
+			custom_effect_tooltip = COL_offer_to_congregation_tt
+			VLC = {country_event = { id = springcouncil.23 }}
+		}
 	}
 }
 
@@ -3913,6 +3918,7 @@ shared_focus = {
 	cost = 4.29
 	relative_position_id = COL_the_dream_of_freedom
 	prerequisite = { focus = COL_war_for_st_petershoof } 
+	available = {has_war = yes}
 
 	available_if_capitulated = yes 
 	ai_will_do = { 
@@ -3921,7 +3927,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_necromantic_infiltration"
-		
+		every_country = {
+			limit = {has_war_with = COL}
+			add_timed_idea = {idea = COL_necromantic_infiltration_idea days = 300}
+		}
 	}
 }
 
@@ -3933,15 +3942,64 @@ shared_focus = {
 	cost = 4.29
 	relative_position_id = COL_the_dream_of_freedom
 	prerequisite = { focus = COL_war_for_st_petershoof } 
+	available = {controls_state = 392}
 
 	available_if_capitulated = yes 
 	ai_will_do = { 
-		factor = 100
+		factor = 1000
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_raise_old_northern_expedition"
-		#re-animate the dead of the first great northern expedition
+		division_template = {
+			name = "First Northern Expedition"
+			is_locked = no
+			regiments = {
+				skeletons = { x = 0 y = 0 }
+				skeletons = { x = 0 y = 1 }
+				skeletons = { x = 0 y = 2 }
+				skeletons = { x = 0 y = 3 }
+				skeletons = { x = 0 y = 4 }
+				skeletons = { x = 1 y = 0 }
+				skeletons = { x = 1 y = 1 }
+				skeletons = { x = 1 y = 2 }
+				skeletons = { x = 1 y = 3 }
+				skeletons = { x = 1 y = 4 }
+			}
+			support = {
+				fireteam_support = { x = 0 y = 0 }
+				recon_company = { x = 0 y = 1 }
+			}
+		}
+		custom_effect_tooltip = COL_raise_old_northern_expedition_tt
+		hidden_effect = {
+		392 = { 
+				create_unit = {
+					division = "name = \"First Northern Expedition\" division_template = \"First Northern Expedition\" start_experience_factor = 0.45 start_equipment_factor = 0.8"
+					owner = ROOT
+				}
+				create_unit = {
+					division = "name = \"First Northern Expedition\" division_template = \"First Northern Expedition\" start_experience_factor = 0.45 start_equipment_factor = 0.8"
+					owner = ROOT
+				}
+				create_unit = {
+					division = "name = \"First Northern Expedition\" division_template = \"First Northern Expedition\" start_experience_factor = 0.45 start_equipment_factor = 0.8"
+					owner = ROOT
+				}
+				create_unit = {
+					division = "name = \"First Northern Expedition\" division_template = \"First Northern Expedition\" start_experience_factor = 0.45 start_equipment_factor = 0.8"
+					owner = ROOT
+				}
+				create_unit = {
+					division = "name = \"First Northern Expedition\" division_template = \"First Northern Expedition\" start_experience_factor = 0.45 start_equipment_factor = 0.8"
+					owner = ROOT
+				}
+				create_unit = {
+					division = "name = \"First Northern Expedition\" division_template = \"First Northern Expedition\" start_experience_factor = 0.45 start_equipment_factor = 0.8"
+					owner = ROOT
+				}
+			}
+		}
 	}
 }
 
@@ -3959,9 +4017,20 @@ shared_focus = {
 		factor = 50
 	} 
 
+	will_lead_to_war_with = SFO
+	will_lead_to_war_with = IFT
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_open_up_northern_front"
-		
+		SFO = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		IFT = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 }
 
@@ -3976,12 +4045,19 @@ shared_focus = {
 
 	available_if_capitulated = yes 
 	ai_will_do = { 
-		factor = 50
+		factor = 5
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_chellenge_them_on_the_seas"
-		
+		Two_random_dockyards = yes
+		Two_random_dockyards = yes
+		add_tech_bonus = {
+			name = naval_tech
+			bonus = 0.8
+			uses = 4
+			category = naval_tech
+		}
 	}
 }
 
@@ -3992,6 +4068,16 @@ shared_focus = {
 	y = 10
 	cost = 4.29
 	relative_position_id = COL_the_dream_of_freedom
+	available = {
+		owns_state = 460
+		owns_state = 329
+		owns_state = 218
+		owns_state = 252
+		owns_state = 466
+		owns_state = 390
+		owns_state = 485
+		owns_state = 432
+	}
 	prerequisite = { focus = COL_necromantic_infiltration focus = COL_open_up_northern_front} 
 	prerequisite = { focus = COL_raise_old_northern_expedition focus = COL_offer_to_congregation focus = COL_chellenge_them_on_the_seas}
 
@@ -4002,7 +4088,15 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_city_of_broken_shackles"
-		
+		country_event = { id = springcouncil.25 }
+		460 = {add_compliance = 10}
+		329 = {add_compliance = 10}
+		218 = {add_compliance = 10}
+		252 = {add_compliance = 10}
+		466 = {add_compliance = 10}
+		390 = {add_compliance = 10}
+		485 = {add_compliance = 10}
+		432 = {add_compliance = 10}
 	}
 }
 
@@ -4022,7 +4116,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_enact_social_security"
-		
+		add_ideas = COL_social_security
 	}
 }
 
@@ -4042,7 +4136,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_a_living_fair_police_force"
-		
+		add_ideas = COL_living_police
 	}
 }
 
@@ -4062,7 +4156,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_free_education_for_all"
-		
+		add_research_slot = 1
 	}
 }
 
@@ -4083,7 +4177,18 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_city_of_uhuru"
 		#Uhuru means Liberty
-		#Renames St. Petershoof, gives nice event
+		every_owned_state = {
+			limit = {
+				OR = {
+					is_core_of = BFS
+					is_core_of = EIL
+					is_core_of = EXC
+					is_core_of = LAU
+				}
+			}
+			add_compliance = 25
+		}
+		country_event = { id = springcouncil.30 }
 	}
 }
 
@@ -4103,7 +4208,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_call_to_the_dreamers"
-		#event to recruit all the disenfranchised and oppressed to come to our nation, and be embraced
+		country_event = { id = springcouncil.31 }
 	}
 }
 
@@ -4123,7 +4228,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_the_100_year_plan"
-		
+		add_timed_idea = { idea = COL_100_year_plan_idea days = 36500}
 	}
 }
 
@@ -4143,7 +4248,17 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_embrace_cultural_pluralism"
-		
+		add_stability = 0.05
+		custom_effect_tooltip = COL_embrace_cultural_pluralism_tt
+		hidden_effect = {
+			set_technology = {
+				pegasus_race = 1
+				griffon_race = 1
+				diamond_dog_race = 1
+				generic_race = 1
+				popup = no
+			}
+		}
 	}
 }
 
@@ -4167,9 +4282,51 @@ shared_focus = {
 		factor = 500
 	} 
 
+	will_lead_to_war_with = PAR
+	will_lead_to_war_with = NOV
+	will_lead_to_war_with = DSB
+	will_lead_to_war_with = SKY
+	will_lead_to_war_with = LOS
+	will_lead_to_war_with = SOL
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_no_more_chains"
-		
+		Core_original_BFS = yes
+		Core_original_EXC = yes
+		Core_original_EIL = yes
+		Core_original_LAU = yes
+		custom_effect_tooltip = COL_no_more_chains_tt
+		hidden_effect = {
+			PAR = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			NOV = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			DSB = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			SKY = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			LOS = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			SOL = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
 	}
 }
 
@@ -4181,6 +4338,7 @@ shared_focus = {
 	cost = 4.29
 	relative_position_id = COL_the_dream_of_freedom
 	prerequisite = { focus = COL_no_more_chains } 
+	available = { owns_state = 840 owns_state = 841}
 	
 	available_if_capitulated = yes 
 	ai_will_do = { 
@@ -4189,7 +4347,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_mending_the_divide"
-		
+		Core_original_LOS = yes
+		Core_original_ZEX = yes
+		Core_original_BOR = yes
 	}
 }
 
@@ -4201,6 +4361,7 @@ shared_focus = {
 	cost = 4.29
 	relative_position_id = COL_the_dream_of_freedom
 	prerequisite = { focus = COL_no_more_chains } 
+	available = { owns_state = 28 owns_state = 299}
 	
 	available_if_capitulated = yes 
 	ai_will_do = { 
@@ -4209,7 +4370,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_smash_enclave_oppression"
-		
+		Core_original_SKY = yes
 	}
 }
 
@@ -4221,6 +4382,7 @@ shared_focus = {
 	cost = 4.29
 	relative_position_id = COL_the_dream_of_freedom
 	prerequisite = { focus = COL_no_more_chains } 
+	available = { owns_state = 331 owns_state = 835}
 	
 	available_if_capitulated = yes 
 	ai_will_do = { 
@@ -4229,7 +4391,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_universal_freedom_of_religion"
-		
+		Core_original_SOL = yes
+		Core_original_PEN = yes
 	}
 }
 
@@ -4241,6 +4404,7 @@ shared_focus = {
 	cost = 4.29
 	relative_position_id = COL_the_dream_of_freedom
 	prerequisite = { focus = COL_no_more_chains } 
+	available = { owns_state = 321 owns_state = 204}
 	
 	available_if_capitulated = yes 
 	ai_will_do = { 
@@ -4249,7 +4413,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_embrace_lost_siblings"
-		
+		Core_original_NOV = yes
+		Core_original_DSB = yes
 	}
 }
 
@@ -4260,7 +4425,8 @@ shared_focus = {
 	y = 14
 	cost = 4.29
 	relative_position_id = COL_the_dream_of_freedom
-	prerequisite = { focus = COL_no_more_chains } 
+	prerequisite = { focus = COL_no_more_chains }
+	available = { owns_state = 837 owns_state = 839}	
 	
 	available_if_capitulated = yes 
 	ai_will_do = { 
@@ -4269,7 +4435,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_rebuild_the_broken_city"
-		
+		Core_original_PAR = yes
+		Core_original_ACV = yes
 	}
 }
 
