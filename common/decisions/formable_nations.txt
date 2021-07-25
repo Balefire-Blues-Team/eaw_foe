@@ -40,7 +40,7 @@ formable_nations = {
 					has_war = no
 					has_country_leader = {
 						name = "Shake Spar"
-						is_ruling_only = yes
+						ruling_only = yes
 					}
 				}
 			country_event = {
@@ -54,7 +54,7 @@ formable_nations = {
 					has_war = no
 					has_country_leader = {
 						name = "Skybreaker"
-						is_ruling_only = yes
+						ruling_only = yes
 					}
 				}
 			country_event = {
@@ -65,9 +65,9 @@ formable_nations = {
 			if = {
 				limit = {
 					tag = LIT
+					has_war = no
 					has_completed_focus = LIT_des_fuck_everyone
 				}
-				has_war = no
 			country_event = {
 				id = LIT_flavorevent.22
 				days = 7
@@ -409,7 +409,78 @@ formable_nations = {
 		}
 
 		complete_effect = {
-			set_cosmetic_tag = manehattan_nation
+			if = {
+				limit = {
+					TEN = {
+						has_government = destruction
+					}
+				}
+				set_cosmetic_tag = TEN_free_manehattan
+			}
+			else = {
+				set_cosmetic_tag = manehattan_nation
+				custom_effect_tooltip = form_manehattan_nation_tt
+				set_capital = 21
+				21 = {
+					set_state_name = "Central Manehattan"
+					add_manpower = 8000
+				}
+				478 = {
+					add_manpower = -2000
+					add_extra_state_shared_building_slots = 2
+				}
+				15 = {
+					add_manpower = -2000
+					add_extra_state_shared_building_slots = 2
+				}
+				18 = {
+					add_manpower = -2000
+					add_extra_state_shared_building_slots = 2
+				}
+				set_province_name = {
+					id = 14776
+					name = "Manehattan Tower"
+				}
+				set_province_name = {
+					id = 10322
+					name = "Friendship Island"
+				}
+				if = {
+					limit = {
+						FRI = { is_puppet_of = TEN}
+					}
+					TEN = { annex_country = { target = FRI transfer_troops = yes  } }
+				}
+				
+				hidden_effect = {
+					if = {
+						limit = {
+							tag = GUT
+						}
+						country_event = {
+							id = gutterville.1
+							days = 80
+							random = 48
+							random_days = 15
+						}
+					}
+					every_state = {
+						limit = {
+							OR = {
+								is_core_of = FRI
+								is_core_of = GUT
+								is_core_of = ARB
+								is_core_of = TEN
+								is_core_of = MAR
+								is_core_of = MRA
+							}
+						}
+						add_claim_by = ROOT
+						add_core_of = ROOT
+					}
+					54 = {add_core_of = ROOT}
+				}
+			}
 			custom_effect_tooltip = form_manehattan_nation_tt
 			set_capital = 21
 			21 = {

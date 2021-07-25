@@ -3,6 +3,9 @@
 add_namespace = LIT_event
 add_namespace = LIT_borderwar_event
 add_namespace = LIT_flavorevent
+add_namespace = LIT_hookhoof
+add_namespace = LIT_steelwall
+add_namespace = LIT_meme
 
 ################
 ####Defaults####
@@ -21,8 +24,8 @@ country_event = {
 
 	option = {
 		name = LIT_event.1.a
-		ai_chance = { factor = 50}
-		save_current_manpowe = yes
+		ai_chance = { factor = 50 }
+		save_current_manpower = yes
 		550 = { add_manpower = 150 add_resource = {type = water amount = 16}}
 		restore_previous_manpower = yes
 		
@@ -30,7 +33,7 @@ country_event = {
 	}
 	option = {
 		name = LIT_event.1.b
-		ai_chance = { factor = 70
+		ai_chance = { factor = 70 
 		modifier = {
 				factor = 0
 				is_historical_focus_on = yes
@@ -44,7 +47,7 @@ country_event = {
 	}
 	option = {
 		name = LIT_event.1.c
-		ai_chance = { factor = 30
+		ai_chance = { factor = 30 
 			modifier = {
 				factor = 0
 				is_historical_focus_on = yes
@@ -69,10 +72,13 @@ country_event = {
 	option = {
 		name = LIT_event.2.a
 		ai_chance = { factor = 30}
-		save_current_manpowe = yes
+		save_current_manpower = yes
 		550 = { add_manpower = 3000 }
 		restore_previous_manpower = yes
-		add_stability = -0.1
+		swap_ideas = {
+			remove_idea = controlled_borders
+			add_idea = open_borders
+		}
 	}
 	option = {
 		name = LIT_event.2.b
@@ -82,10 +88,10 @@ country_event = {
 				is_historical_focus_on = yes
 			}
 		}
-		save_current_manpowe = yes
+		save_current_manpower = yes
 		550 = { add_manpower = 1500 }
 		restore_previous_manpower = yes
-		add_stability = -0.05
+		add_political_power = 50
 		
 	}
 	option = {
@@ -96,7 +102,10 @@ country_event = {
 				is_historical_focus_on = yes
 			}
 		}
-		add_stability = 0.05		
+		swap_ideas = {
+			remove_idea = controlled_borders
+			add_idea = closed_borders
+		}
 	}
 }
 
@@ -113,7 +122,7 @@ country_event = {
 
 	option = {
 		name = LIT_event.3.a
-		ai_chance = { factor = 30}
+		ai_chance = { factor = 30 }
 		add_manpower = -168
 		add_equipment_to_stockpile = {
     			type = ballistic_equipment_1
@@ -131,6 +140,9 @@ country_event = {
     			producer = OWE
 			}
 			army_experience = 15
+		add_ideas = {
+			LIT_thunderwar1_idea
+		}
 	}
 	option = {
 		name = LIT_event.3.b
@@ -141,7 +153,9 @@ country_event = {
 			}
 		}
 		add_manpower = -25
-		
+		add_ideas = {
+			LIT_thunderwar2_idea
+		}
 	}
 	
 }
@@ -277,20 +291,17 @@ country_event = {
 	option = {
 		name = LIT_event.45.a
 		ai_chance = {
-			factor = 20
+			factor = 30
 			modifier = {
-			factor = 99
+			factor = 100
 			has_game_rule = {
                     rule = LIT_AI_BEHAVIOR
                     option = KEEP_TRADITION
                 }
 			}
 			modifier = {
-			factor = 99
-			has_game_rule = {
-                    rule = LIT_AI_BEHAVIOR
-                    option = DEFAULT
-                }
+				factor = 100
+				is_historical_focus_on = yes
 			}
 		}
 		add_stability = 0.1
@@ -301,18 +312,14 @@ country_event = {
 		trigger = { MAS = {has_country_leader = { ruling_only = yes name = "Grand Spark" }} 
 		}
 		ai_chance = {
-		factor = 20
+		factor = 30
 			modifier = {
-			factor = 99
+			factor = 100
 			has_game_rule = {
                     rule = LIT_AI_BEHAVIOR
                     option = SKYBREAKER
                 }
 			}
-			modifier = {
-					factor = 0
-					is_historical_focus_on = yes
-				}
 				
 		}
 		set_politics = { ruling_party = continuation elections_allowed = no }
@@ -323,23 +330,19 @@ country_event = {
 		ai_chance = { 
 		factor = 30
 			modifier = {
-			factor = 99
+			factor = 100
 			has_game_rule = {
                     rule = LIT_AI_BEHAVIOR
                     option = ENCLAVISTS
                 }
 			}
 			modifier = {
-			factor = 99
+			factor = 100
 			has_game_rule = {
                     rule = LIT_AI_BEHAVIOR
                     option = HOOKHOOF
                 }
 			}
-			modifier = {
-					factor = 0
-					is_historical_focus_on = yes
-				}
 		}
 		set_politics = { ruling_party = visionary elections_allowed = no }
 		add_popularity = { ideology = destruction popularity = 0.20 }
@@ -557,7 +560,7 @@ country_event = {
 	option = {
 		name = LIT_event.11.a
 		ai_chance = { factor = 50}
-		563 = {
+		798 = {
 			add_resource = {
 					type = composites
 					amount = 6
@@ -680,7 +683,7 @@ country_event = {
 		NAP = {is_subject_of = MAS}
 		}
 	}
- 	fire_only_once = no
+ 	fire_only_once = yes
 
 	#yes
 	option = {
@@ -1129,14 +1132,14 @@ country_event = {
 					power_armour = { x = 0 y = 2 }
 				}
 				support = {
-					demolitions_support = { x = 0 y = 0 }
-					fireteam_support = { x = 0 y = 2 }
+					explosive_company = { x = 0 y = 0 }
+					fireteam_company = { x = 0 y = 2 }
 					medical_chem_company = { x = 0 y = 1 }
 				}
 				}
 		798 = {
 			create_unit = {
-					division = "name = \"Enclave Liberation Volunteers\" division_template = \"Enclave Volunteers\" start_experience_factor = 0.9" 
+					division = "name = \"Enclave Liberation Volunteers\" division_template = \"Enclave Volunteers\" start_experience_factor = 0.9 start_equipment_factor = 1.0" 
 					owner = LIT
 				}
 		}
@@ -1868,6 +1871,7 @@ country_event = {
 		custom_effect_tooltip = LIT_shakespar_done_tt
 		hidden_effect = {
 			set_country_flag = LIT_expandedassembly_flag
+			set_cosmetic_tag = LIT_EA
 		}
 	}
 	
@@ -1923,6 +1927,9 @@ country_event = {
 			ideology = destruction
 			popularity = 0.10
 		}
+		hidden_effect = {
+			set_cosmetic_tag = LIT_HOOK
+		}
 	}
 	
 }
@@ -1932,15 +1939,7 @@ country_event = {
  	title = LIT_flavorevent.23.t
  	desc = LIT_flavorevent.23.d
 	picture = GFX_event_test
-	trigger = {
-		original_tag = LIT
-		owns_state = 593 
-		owns_state = 532
-		owns_state = 610
-		owns_state = 696
-		has_war = no
-		has_completed_focus = lit_des_fuck_everyone
-	}
+	is_triggered_only = yes
  	fire_only_once = yes
 
 	option = {
@@ -2841,6 +2840,1991 @@ country_event = {
 				logistics_skill = 2
 			}
 		}
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_hookhoof.1"}
+ 	id = LIT_hookhoof.1
+ 	title = LIT_hookhoof.1.t
+ 	desc = LIT_hookhoof.1.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_hookhoof.1.a
+		ai_chance = { factor = 30}
+		add_political_power = 10
+	}	
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_hookhoof.2"}
+ 	id = LIT_hookhoof.2
+ 	title = LIT_hookhoof.2.t
+ 	desc = LIT_hookhoof.2.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_hookhoof.2.a
+		ai_chance = { factor = 50 }
+		213 = {
+			add_state_modifier = {
+				modifier = {
+					local_building_slots = 5
+					local_resources_factor = 0.15
+					state_production_speed_buildings_factor = 0.2
+				}
+			}
+		}
+		599 = {
+			add_state_modifier = {
+				modifier = {
+					local_building_slots = 5
+					local_resources_factor = 0.15
+					state_production_speed_buildings_factor = 0.2
+				}
+			}
+		}
+		hidden_effect = {
+			LIT = {
+				add_to_variable = {
+					var = OAP_politics
+					value = 1
+				}
+			}
+		}
+		custom_effect_tooltip = LIT_hookhoof_OAP_anger_EC_tt
+	}
+	option = {
+		name = LIT_hookhoof.2.b
+		ai_chance = { factor = 50 }
+		596 = {
+			add_state_modifier = {
+				modifier = {
+					local_building_slots = 5
+					local_resources_factor = 0.15
+					state_production_speed_buildings_factor = 0.2
+				}
+			}
+		}
+		587 = {
+			add_state_modifier = {
+				modifier = {
+					local_building_slots = 5
+					local_resources_factor = 0.15
+					state_production_speed_buildings_factor = 0.2
+				}
+			}
+		}
+		hidden_effect = {
+			LIT = {
+				subtract_from_variable = {
+					var = OAP_politics
+					value = 1
+				}
+			}
+		}
+		custom_effect_tooltip = LIT_hookhoof_OAP_anger_AU_tt
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_hookhoof.3"}
+ 	id = LIT_hookhoof.3
+ 	title = LIT_hookhoof.3.t
+ 	desc = LIT_hookhoof.3.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_hookhoof.3.a
+		ai_chance = { factor = 50 }
+		213 = {
+			add_manpower = 492
+		}
+		599 = {
+			add_manpower = 374
+		}
+		205 = {
+			add_manpower = 391
+		}
+		111 = {
+			add_manpower = 420
+		}
+		67 = {
+			add_manpower = 235
+		}
+		587 = {
+			add_manpower = 353
+		}
+		add_political_power = 50
+		add_stability = 0.05
+		hidden_effect = {
+			LIT = {
+				add_to_variable = {
+					var = OAP_politics
+					value = 1
+				}
+			}
+		}
+		custom_effect_tooltip = LIT_hookhoof_OAP_anger_EC_tt
+	}
+	option = {
+		name = LIT_hookhoof.3.b
+		ai_chance = { factor = 50 }
+		add_ideas = {
+			LIT_OAP_breadbasket
+		}
+		hidden_effect = {
+			LIT = {
+				subtract_from_variable = {
+					var = OAP_politics
+					value = 1
+				}
+			}
+		}
+		custom_effect_tooltip = LIT_hookhoof_OAP_anger_AU_tt
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_hookhoof.4"}
+ 	id = LIT_hookhoof.4
+ 	title = LIT_hookhoof.4.t
+ 	desc = LIT_hookhoof.4.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_hookhoof.4.a
+		ai_chance = { factor = 50 }
+		add_stability = 0.05
+		custom_effect_tooltip = LIT_hookhoof_OAP_rails_tt
+		hidden_effect = {
+			set_country_flag = LIT_hook_OAP_rails_flag
+		}
+		hidden_effect = {
+			LIT = {
+				add_to_variable = {
+					var = OAP_politics
+					value = 1
+				}
+			}
+		}
+		custom_effect_tooltip = LIT_hookhoof_OAP_anger_EC_tt
+	}
+	option = {
+		name = LIT_hookhoof.4.b
+		ai_chance = { factor = 50 }
+		hidden_effect = {
+			LIT = {
+				subtract_from_variable = {
+					var = OAP_politics
+					value = 1
+				}
+			}
+		}
+		custom_effect_tooltip = LIT_hookhoof_OAP_anger_AU_tt
+		596 = {
+			add_building_construction = {
+				type = industrial_complex
+				level = 2
+				instant_build = yes
+			}
+		}
+		596 = {
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+			}
+		}
+		587 = {
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+		}
+		587 = {
+			add_building_construction = {
+				type = arms_factory
+				level = 2
+				instant_build = yes
+			}
+		}
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_hookhoof.5"}
+ 	id = LIT_hookhoof.5
+ 	title = LIT_hookhoof.5.t
+ 	desc = LIT_hookhoof.5.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_hookhoof.5.a
+		ai_chance = { factor = 10 }
+		hidden_effect = {
+			LIT = {
+				add_to_variable = {
+					var = OAP_politics
+					value = 3
+				}
+			}
+			IF = {
+				limit = {
+					check_variable = {
+						var = OAP_politics
+						value = 12
+						compare = greater_than_or_equals
+					}
+				}
+				country_event = {
+					id = LIT_hookhoof.6
+				}
+				
+			}
+		}
+		custom_effect_tooltip = LIT_hookhoof_OAP_pissoff_EC_tt
+	}
+	option = {
+		name = LIT_hookhoof.5.b
+		ai_chance = { factor = 10 }
+		hidden_effect = {
+			LIT = {
+				subtract_from_variable = {
+					var = OAP_politics
+					value = 3
+				}
+			}
+			IF = {
+				limit = {
+					check_variable = {
+						var = OAP_politics
+						value = 8
+						compare = less_than_or_equals
+					}
+				}
+				country_event = {
+				id = LIT_hookhoof.7
+				}
+			}
+		}
+		custom_effect_tooltip = LIT_hookhoof_OAP_pissoff_AU_tt
+	}
+	option = {
+		name = LIT_hookhoof.5.c
+		ai_chance = { factor = 80 }
+		add_political_power = -50
+		add_stability = -0.02
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_hookhoof.6"}
+ 	id = LIT_hookhoof.6
+ 	title = LIT_hookhoof.6.t
+ 	desc = LIT_hookhoof.6.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_hookhoof.6.a
+		ai_chance = { factor = 30}
+		custom_effect_tooltip = LIT_hookhoof_OAP_rangers_tt
+		custom_effect_tooltip = LIT_army_shakespar_ranger_tt
+		hidden_effect = {
+			set_country_flag = LIT_hookhoof_OAP_rangers_flag
+			load_oob = "LIT_lightningrangers"
+		}
+	}	
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_hookhoof.7"}
+ 	id = LIT_hookhoof.7
+ 	title = LIT_hookhoof.7.t
+ 	desc = LIT_hookhoof.7.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_hookhoof.7.a
+		ai_chance = { factor = 30}
+		hidden_effect = {
+			set_country_flag = slavery_allowed
+		}
+		custom_effect_tooltip = LIT_OAP_slavery_tt
+	}	 
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_hookhoof.8"}
+ 	id = LIT_hookhoof.8
+ 	title = LIT_hookhoof.8.t
+ 	desc = LIT_hookhoof.8.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_hookhoof.8.a
+		ai_chance = { factor = 30}
+		hidden_effect = {
+			set_country_flag = LIT_ROK_union_flag
+		}
+		custom_effect_tooltip = LIT_ROK_union_tt
+	}
+	option = {
+		name = LIT_hookhoof.8.b
+		ai_chance = { factor = 30}
+		hidden_effect = {
+			set_country_flag = LIT_ROK_rich_flag
+			country_event = {
+				id = LIT_hookhoof.9
+			}
+		}
+		custom_effect_tooltip = LIT_ROK_rich_tt
+	}
+	option = {
+		name = LIT_hookhoof.8.c
+		ai_chance = { factor = 30}
+		custom_effect_tooltip = LIT_ROK_ignore_tt
+	}	
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_hookhoof.9"}
+ 	id = LIT_hookhoof.9
+ 	title = LIT_hookhoof.9.t
+ 	desc = LIT_hookhoof.9.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_hookhoof.9.a
+		ai_chance = { factor = 30 }
+		hidden_effect = {
+			set_country_flag = LIT_ROK_rich_flag1
+		}
+		803 = {
+			add_manpower = -97
+		}
+		add_stability = -0.05
+		add_war_support = -0.05
+		add_political_power = -50
+		add_popularity = {
+			ideology = destruction
+			popularity = -0.05
+		}
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_hookhoof.10"}
+ 	id = LIT_hookhoof.10
+ 	title = LIT_hookhoof.10.t
+ 	desc = LIT_hookhoof.10.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_hookhoof.10.a
+		ai_chance = { factor = 30 }
+		country_event = {
+			id = LIT_hookhoof.11
+		}
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_hookhoof.11"}
+ 	id = LIT_hookhoof.11
+ 	title = LIT_hookhoof.11.t
+ 	desc = LIT_hookhoof.11.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_hookhoof.11.a
+		ai_chance = { factor = 30 }
+		hidden_effect = {
+			set_country_flag = LIT_ROK_rich_flag3
+		}
+		589 = {
+			add_manpower = -204
+		}
+		add_stability = -0.10
+		add_war_support = -0.10
+		add_political_power = -100
+		add_popularity = {
+			ideology = destruction
+			popularity = -0.10
+		}
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_hookhoof.12"}
+ 	id = LIT_hookhoof.12
+ 	title = LIT_hookhoof.12.t
+ 	desc = LIT_hookhoof.12.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_hookhoof.12.a
+		ai_chance = { factor = 50 }
+		hidden_effect = {
+			set_country_flag = LIT_LRA_rocksolid_flag
+		}
+		custom_effect_tooltip = LIT_LRA_rocksolid_tt
+
+	}
+	option = {
+		name = LIT_hookhoof.12.b 
+		ai_chance = { factor = 50 }
+		hidden_effect = {
+			set_country_flag = LIT_LRA_raider_flag
+		}
+		custom_effect_tooltip = LIT_LRA_raider_tt
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_hookhoof.13"}
+ 	id = LIT_hookhoof.13
+ 	title = LIT_hookhoof.13.t
+ 	desc = LIT_hookhoof.13.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_hookhoof.13.a
+		ai_chance = { factor = 50 }
+		hidden_effect = {
+			set_country_flag = LIT_MAN_peace_1_flag
+		}
+		custom_effect_tooltip = LIT_MAN_peace_tt
+
+	}
+	option = {
+		name = LIT_hookhoof.13.b 
+		ai_chance = { factor = 50 }
+		hidden_effect = {
+			set_country_flag = LIT_MAN_death_1_flag
+		}
+		custom_effect_tooltip = LIT_MAN_death_tt
+		add_political_power = 50
+		add_war_support = 0.05
+		add_stability = -0.05
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_hookhoof.14"}
+ 	id = LIT_hookhoof.14
+ 	title = LIT_hookhoof.14.t
+ 	desc = LIT_hookhoof.14.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_hookhoof.14.a
+		ai_chance = { factor = 50 }
+		hidden_effect = {
+			set_country_flag = LIT_MAN_peace_2_flag
+		}
+		add_political_power = -50
+		add_war_support = -0.05
+		add_stability = 0.05
+
+	}
+	option = {
+		name = LIT_hookhoof.14.b 
+		ai_chance = { factor = 50 }
+		hidden_effect = {
+			set_country_flag = LIT_MAN_death_1_flag
+		}
+		add_political_power = 50
+		add_war_support = 0.05
+		add_stability = -0.05
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_hookhoof.15"}
+ 	id = LIT_hookhoof.15
+ 	title = LIT_hookhoof.15.t
+ 	desc = LIT_hookhoof.15.d
+	picture = GFX_event_test
+	trigger = {
+		AND = {
+			original_tag = LIT
+			has_government = destruction
+			owns_state = 610
+			has_war = no
+			has_completed_focus = LIT_army_hookhoof_emerging
+			NOT = {
+				country_exists = SHA
+			}
+		}
+	}
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_hookhoof.15.a
+		ai_chance = { factor = 50 }
+		hidden_effect = {
+			set_country_flag = LIT_SHA_start_flag
+			set_country_flag = LIT_steelwall_countdown_flag
+			retire_ideology_leader = continuation
+			create_country_leader = {
+				name = "Marshal Steel Wall"
+				picture = "Steel_Wall.tga"
+				expire = "1965.1.1"
+				ideology = despotism
+			}
+			
+		}
+		add_ideas = {
+			LIT_SHA_olive1_idea
+			LIT_SHA_regina1_idea
+			LIT_SHA_steel1_idea
+		}
+		set_party_name = {
+			ideology = continuation
+			long_name = LIT_continuation_steelwall_party
+			name = LIT_continuation_steelwall_short
+		}
+		
+
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_hookhoof.16"}
+ 	id = LIT_hookhoof.16
+ 	title = LIT_hookhoof.16.t
+ 	desc = LIT_hookhoof.16.d
+	picture = GFX_event_test
+	trigger = {
+		AND = {
+			original_tag = LIT
+			has_global_flag = steelwall_rebellion_flag
+			NOT = {
+				country_exists = SHA
+			}
+		}
+	}
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_hookhoof.16.a
+		ai_chance = { factor = 50 }
+		custom_effect_tooltip = LIT_steelwall_putdown_tt
+		hidden_effect = {
+			LIT = {
+				Core_original_NAP = yes
+				Core_original_OAP = yes
+				Core_original_ROK = yes
+				Core_original_SHA = yes
+				Core_original_LRA = yes
+				Core_original_MAN = yes
+			}
+			set_country_flag = LIT_poststeel_flag
+		}
+		add_war_support = 0.05
+		add_stability = 0.05
+		add_political_power = 100
+		country_event = {
+			id = LIT_hookhoof.17
+			days = 5
+		}
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_hookhoof.17"}
+ 	id = LIT_hookhoof.17
+ 	title = LIT_hookhoof.17.t
+ 	desc = LIT_hookhoof.17.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_hookhoof.17.a
+		ai_chance = { factor = 50 }
+		set_party_name = {
+			ideology = continuation
+			long_name = LIT_continuation_poststeel_party
+			name = LIT_continuation_poststeel_short
+		}
+		add_popularity = {
+			ideology = continuation
+			popularity = -0.25
+		}
+		add_stability = 0.05
+		add_war_support = 0.05
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_hookhoof.18"}
+ 	id = LIT_hookhoof.18
+ 	title = LIT_hookhoof.18.t
+ 	desc = LIT_hookhoof.18.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_hookhoof.18.a
+		ai_chance = { factor = 50 }
+		hidden_effect = {
+			set_cosmetic_tag = LIT_EMPIRE
+		}
+		set_party_name = {
+			ideology = destruction
+			long_name = LIT_destruction_imperial_party
+			name = LIT_destruction_imperial_short
+		}
+		add_war_support = 0.10
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_hookhoof.19"}
+ 	id = LIT_hookhoof.19
+ 	title = LIT_hookhoof.19.t
+ 	desc = LIT_hookhoof.19.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_hookhoof.19.a
+		ai_chance = { factor = 50 }
+		hidden_effect = {
+			set_cosmetic_tag = LIT_UNION
+		}
+		set_party_name = {
+			ideology = destruction
+			long_name = LIT_destruction_council_party
+			name = LIT_destruction_council_short
+		}
+		add_stability = 0.10
+		add_war_support = -0.10
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_hookhoof.20"}
+ 	id = LIT_hookhoof.20
+ 	title = LIT_hookhoof.20.t
+ 	desc = LIT_hookhoof.20.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_hookhoof.20.a
+		ai_chance = { factor = 50 }
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_hookhoof.21"}
+ 	id = LIT_hookhoof.21
+ 	title = LIT_hookhoof.21.t
+ 	desc = LIT_hookhoof.21.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_hookhoof.21.a
+		ai_chance = { factor = 50 }
+		custom_effect_tooltip = LIT_hookhoof_done_tt
+		hidden_effect = {
+			create_country_leader = {
+				name = "Equestrian Junta"
+				desc = "POLITICS_JUNTA_DESC"
+				picture = "WarlordCouncil.tga"
+				expire = "1965.1.1"
+				ideology = raider
+				traits = { 
+					lit_junta_trait
+				}
+			}
+		}
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_hookhoof.22"}
+ 	id = LIT_hookhoof.22
+ 	title = LIT_hookhoof.22.t
+ 	desc = LIT_hookhoof.22.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_hookhoof.22.a
+		ai_chance = { factor = 50 }
+
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_hookhoof.23"}
+ 	id = LIT_hookhoof.23
+ 	title = LIT_hookhoof.23.t
+ 	desc = LIT_hookhoof.23.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_hookhoof.23.a
+		ai_chance = { factor = 50 }
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_steelwall.1"}
+ 	id = LIT_steelwall.1
+ 	title = LIT_steelwall.1.t
+ 	desc = LIT_steelwall.1.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_steelwall.1.a
+		custom_effect_tooltip = LIT_steelrebel_sha1_tt
+		hidden_effect = {
+			remove_ideas = {
+				LIT_SHA_steel1_idea
+				LIT_SHA_steel2_idea
+				LIT_SHA_steel3_idea
+				LIT_SHA_steel4_idea
+			}
+		}
+		hidden_effect = {
+			LIT = {
+				teleport_armies = {
+					limit = {
+						state = 810
+					}
+					to_state = 550
+				}
+			}
+			LIT = {
+				teleport_armies = {
+					limit = {
+						state = 311
+					}
+					to_state = 550
+				}
+			}
+		}
+		hidden_effect = {
+			SHA = {
+				set_cosmetic_tag = SHA_NCMS
+				set_party_name = { ideology = visionary long_name = GAWD_long name = GAWD_short }
+				set_party_name = { ideology = destruction long_name = WATER_long name = WATER_short }
+				set_party_name = { ideology = continuation long_name = STEEL_long name = STEEL_short }
+				set_party_name = { ideology = survivalism long_name = SHIP_long name = SHIP_short }
+
+				transfer_state = 311
+				transfer_state = 810
+				declare_war_on = {
+					target = LIT
+					type = annex_everything
+				}
+				retire_country_leader = yes
+				division_template = {
+					name = "Republican Army"
+					is_locked = no
+					regiments = {
+						infantry = { x = 0 y = 0 }
+						infantry = { x = 1 y = 0 }
+						infantry = { x = 2 y = 0 }
+						infantry = { x = 0 y = 1 }
+						infantry = { x = 1 y = 1 }
+						infantry = { x = 2 y = 1 }
+					}
+					support = {
+						demolitions_support = { x = 0 y = 0 }
+						anti_tank_company =  { x = 0 y = 1 }
+					}
+				}
+				division_template = {
+					name = "Republican Militia"
+					is_locked = no
+					regiments = {
+						infantry = { x = 0 y = 0 }
+						infantry = { x = 0 y = 1 }
+						militia = { x = 1 y = 0 }
+						militia = { x = 1 y = 1 }
+						militia = { x = 2 y = 0 }
+						militia = { x = 2 y = 1 }
+					}
+					support = {
+						demolitions_support = { x = 0 y = 0 }
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			set_global_flag = steelwall_rebellion_flag
+		}
+		hidden_effect = {
+			SHA = {
+				create_country_leader = {
+					name = "Marshal Steel Wall"
+					desc = "POLITICS_STEELWALLREVOLUTION_DESC"
+					picture = "Steel_Wall.tga"
+					expire = "1965.1.1"
+					ideology = ncr_eap
+					traits = {
+						lit_steelwall_revolutionary
+					}
+				}
+				remove_unit_leader = 11111
+				create_field_marshal = {
+					name = "Steel Wall"
+					picture = "Steel_Wall.tga"
+					traits = { pony_race_trait enduring_trait }
+					skill = 5
+					attack_skill = 4
+					defense_skill = 5
+					planning_skill = 3
+					logistics_skill = 3
+				}
+				set_politics = {
+					ruling_party = continuation
+					elections_allowed = no
+				}
+			}
+		}
+		hidden_effect = {
+			SHA = { 
+			311 = {
+				create_unit = {
+					division = "name = \"Steel Walls Loyal\" division_template = \"Republican Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+					owner = SHA
+				}
+				create_unit = {
+					division = "name = \"Purple Brigade\" division_template = \"Republican Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+					owner = SHA
+				}
+				create_unit = {
+					division = "name = \"Forest Dwellers\" division_template = \"Republican Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+					owner = SHA
+				}
+				create_unit = {
+					division = "name = \"Corona Militia\" division_template = \"Republican Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+					owner = SHA
+				}
+				create_unit = {
+					division = "name = \"Lighthoof Militia\" division_template = \"Republican Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+					owner = SHA
+				}
+			}
+			810 = {
+				create_unit = {
+					division = "name = \"2nd Brigade\" division_template = \"Republican Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+					owner = SHA
+				}
+				create_unit = {
+					division = "name = \"Waterwork Supporters\" division_template = \"Republican Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+					owner = SHA
+				}
+				create_unit = {
+					division = "name = \"Blessed Tree Worshippers\" division_template = \"Republican Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+					owner = SHA
+				}
+				create_unit = {
+					division = "name = \"Offgrid Warriors\" division_template = \"Republican Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+					owner = SHA
+				}
+				create_unit = {
+					division = "name = \"Innawoods Enthusiasts\" division_template = \"Republican Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+					owner = SHA
+				}
+				create_unit = {
+					division = "name = \"Lost Reenactors\" division_template = \"Republican Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+					owner = SHA
+				}
+			}
+			}
+			}
+		hidden_effect = {
+			IF = {
+				limit = {
+					NOT = {
+						LIT = {
+							has_country_flag = LIT_SHA_steelwall_3_flag
+						}
+					}
+				}
+				SHA = {
+					transfer_state = 260
+					transfer_state = 610
+					transfer_state = 578
+				260 = {
+				create_unit = {
+					division = "name = \"Plains Soldiers\" division_template = \"Republican Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+					owner = SHA
+				}
+				create_unit = {
+					division = "name = \"Conscripted Raiders\" division_template = \"Republican Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+					owner = SHA
+				}
+				create_unit = {
+					division = "name = \"Young Republican Front\" division_template = \"Republican Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+					owner = SHA
+				}
+				}
+				610 = {
+				create_unit = {
+					division = "name = \"Shattered Hoof Guards\" division_template = \"Republican Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+					owner = SHA
+				}
+				create_unit = {
+					division = "name = \"Enthusiastic Officers\" division_template = \"Republican Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+					owner = SHA
+				}
+				create_unit = {
+					division = "name = \"Grand Guard\" division_template = \"Republican Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+					owner = SHA
+				}
+				create_unit = {
+					division = "name = \"The Liberators\" division_template = \"Republican Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+					owner = SHA
+				}
+				create_unit = {
+					division = "name = \"Steel Wall Fetishists\" division_template = \"Republican Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+					owner = SHA
+				}
+				create_unit = {
+					division = "name = \"Topaz Apologists\" division_template = \"Republican Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+					owner = SHA
+				}
+				create_unit = {
+					division = "name = \"Hobbyist Revolutionaries\" division_template = \"Republican Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+					owner = SHA
+				}
+				}
+				578 = {
+				create_unit = {
+					division = "name = \"Exiled Brigade\" division_template = \"Republican Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+					owner = SHA
+				}
+				create_unit = {
+					division = "name = \"Angered Fishers\" division_template = \"Republican Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+					owner = SHA
+				}
+				}
+				}
+			}
+			}
+		hidden_effect = {
+			IF = {
+				limit = {
+					NOT = {
+						LIT = {
+							has_country_flag = LIT_SHA_steelwall_2_flag
+						}
+					}
+				}
+				SHA = {
+					transfer_state = 254
+					transfer_state = 261
+					254 = {
+					create_unit = {
+						division = "name = \"Broken Shield Garrison\" division_template = \"Republican Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Fort Sherhoof Garrison\" division_template = \"Republican Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Tougher Stuff Division\" division_template = \"Republican Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Seventh Brigade\" division_template = \"Republican Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					}
+					261 = {
+					create_unit = {
+						division = "name = \"Ohioville Militia\" division_template = \"Republican Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Ohioville Detractors\" division_template = \"Republican Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Ohioville Escapees\" division_template = \"Republican Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			IF = {
+				limit = {
+					NOT = {
+						LIT = {
+							has_country_flag = LIT_SHA_steelwall_1_flag
+						}
+					}
+				}
+				SHA = {
+					transfer_state = 287
+					transfer_state = 334
+					transfer_state = 588
+					287 = {
+					create_unit = {
+						division = "name = \"Drifters Garrison\" division_template = \"Republican Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Ohioville Containment Unit\" division_template = \"Republican Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Retired Mercenaries\" division_template = \"Republican Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Crippled Guardponies\" division_template = \"Republican Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					}
+					334 = {
+					create_unit = {
+						division = "name = \"Rural Wannabes\" division_template = \"Republican Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					}
+					588 = {
+					create_unit = {
+						division = "name = \"Headwaters Garrison\" division_template = \"Republican Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Riverway Militia\" division_template = \"Republican Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Angered Politicians\" division_template = \"Republican Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					}
+				}
+			}
+			}
+		hidden_effect = {
+			IF = {
+				limit = {
+					NOT = {
+						LIT = {
+							has_country_flag = LIT_SHA_riversecure
+						}
+					}
+				}
+			country_event = {
+				id = LIT_steelwall.2
+				days = 3
+			}
+			}
+		}
+		hidden_effect = {
+			IF = {
+				limit = {
+					NOT = {
+						LIT = {
+							has_country_flag = LIT_SHA_talonkill
+						}
+					}
+				}
+			country_event = {
+				id = LIT_steelwall.3
+				days = 5
+			}
+			}
+		}
+		hidden_effect = {
+			IF = {
+				limit = {
+					NOT = {
+						LIT = {
+							has_country_flag = LIT_MAN_mangosecure
+						}
+					}
+				}
+			country_event = {
+				id = LIT_steelwall.4
+				days = 7
+			}
+			}
+		}
+		hidden_effect = {
+			IF = {
+				limit = {
+					AND = {
+						NOT = {
+							LIT = {
+								has_country_flag = LIT_LRA_rocksecure
+							}
+						}
+						LIT = {
+							has_country_flag = LIT_LRA_rocksolid_flag
+						}
+					}
+				}
+			country_event = {
+				id = LIT_steelwall.5
+				days = 9
+			}
+			set_country_flag = LIT_rocksolid_betrayal_flag
+			}
+		}
+		hidden_effect = {
+			IF = {
+				limit = {
+					AND = {
+						NOT = {
+							LIT = {
+								has_country_flag = LIT_LRA_raidersecure
+							}
+						}
+						LIT = {
+							has_country_flag = LIT_LRA_raider_flag
+						}
+					}
+				}
+			country_event = {
+				id = LIT_steelwall.6
+				days = 9
+			}
+			}
+		}
+		hidden_effect = {
+			IF = {
+				limit = {
+					AND = {
+						NOT = {
+							LIT = {
+								has_country_flag = LIT_LRA_raider_flag
+							}
+						}
+						NOT = {
+							LIT = {
+								has_country_flag = LIT_LRA_rocksolid_flag
+							}
+						}
+					}
+				}
+			country_event = {
+				id = LIT_steelwall.6
+				days = 9
+			}
+			}
+		}
+		hidden_effect = {
+			IF = {
+				limit = {
+					NOT = {
+						LIT = {
+							has_country_flag = LIT_ROK_congress_flag
+						}
+					}
+				}
+			country_event = {
+				id = LIT_steelwall.7
+				days = 10
+			}
+			}
+		}
+		hidden_effect = {
+			IF = {
+				limit = {
+					NOT = {
+						LIT = {
+							has_country_flag = LIT_ROK_citycouncil_flag
+						}
+					}
+				}
+			country_event = {
+				id = LIT_steelwall.8
+				days = 11
+			}
+			}
+		}
+		hidden_effect = {
+			IF = {
+				limit = {
+					NOT = {
+						LIT = {
+							has_country_flag = LIT_NAP_secure
+						}
+					}
+				}
+			country_event = {
+				id = LIT_steelwall.9
+				days = 13
+			}
+			}
+		}
+		hidden_effect = {
+			IF = {
+				limit = {
+				AND = {
+					NOT = {
+						LIT = {
+							check_variable = {
+								var = OAP_politics
+								value = 12
+								compare = greater_than_or_equals
+							}			
+						}
+					}
+					LIT = {
+						check_variable = {
+							var = OAP_politics 
+							value = 25
+							compare = less_than_or_equals
+						}
+					}
+				}
+				}
+			country_event = {
+				id = LIT_steelwall.10
+				days = 14
+			}
+			}
+		}
+		hidden_effect = {
+			IF = {
+				limit = {
+					NOT = {
+						LIT = {
+							check_variable = {
+								var = OAP_politics
+								value = 8
+								compare = less_than_or_equals
+							}
+						}
+					}
+
+				}
+			country_event = {
+				id = LIT_steelwall.11
+				days = 15
+			}
+			}
+		}
+		}
+	}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_steelwall.2"}
+ 	id = LIT_steelwall.2
+ 	title = LIT_steelwall.2.t
+ 	desc = LIT_steelwall.2.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_steelwall.2.a
+		custom_effect_tooltip = LIT_steelrebel_sha2_tt
+		hidden_effect = {
+			SHA = {
+				transfer_state = 572
+				transfer_state = 288
+				transfer_state = 562
+				division_template = {
+					name = "Olive's Republicans"
+					is_locked = no
+					regiments = {
+						infantry = { x = 0 y = 0 }
+						infantry = { x = 0 y = 1 }
+						infantry = { x = 0 y = 2 }
+						infantry = { x = 0 y = 3 }
+						militia = { x = 1 y = 0 }
+						militia = { x = 1 y = 1 }
+					}
+					support = {
+						anti_tank_company =  { x = 0 y = 1 }
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			SHA = {
+				572 = {
+					create_unit = {
+						division = "name = \"Braisetown Republicans\" division_template = \"Olive's Republicans\" start_experience_factor = 0.9 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Rock Exiles\" division_template = \"Olive's Republicans\" start_experience_factor = 0.9 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Olive's Loyal\" division_template = \"Olive's Republicans\" start_experience_factor = 0.9 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+				}
+				288 = {
+					create_unit = {
+						division = "name = \"Azure Garrison\" division_template = \"Olive's Republicans\" start_experience_factor = 0.9 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"One-Eyed Brigade\" division_template = \"Olive's Republicans\" start_experience_factor = 0.9 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Shanty-Singing Republicans\" division_template = \"Olive's Republicans\" start_experience_factor = 0.9 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"River Republicans\" division_template = \"Olive's Republicans\" start_experience_factor = 0.9 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+				}
+				562 = {
+					create_unit = {
+						division = "name = \"Smugglers\" division_template = \"Olive's Republicans\" start_experience_factor = 0.9 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Green Crossing Garrison\" division_template = \"Olive's Republicans\" start_experience_factor = 0.9 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+				}
+			}
+		}
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_steelwall.3"}
+ 	id = LIT_steelwall.3
+ 	title = LIT_steelwall.3.t
+ 	desc = LIT_steelwall.3.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_steelwall.3.a
+		custom_effect_tooltip = LIT_steelrebel_sha3_tt
+		hidden_effect = {
+			SHA = {
+				transfer_state = 808
+				transfer_state = 500
+				transfer_state = 25
+				division_template = {
+					name = "Regina's Talons"
+					is_locked = no
+					regiments = {
+						talons = { x = 0 y = 0 }
+						talons = { x = 0 y = 1 }
+						talons = { x = 0 y = 2 }
+						talons = { x = 1 y = 0 }
+						talons = { x = 1 y = 1 }
+					}
+					support = {
+						demolitions_support = { x = 0 y = 0 }
+						anti_tank_company =  { x = 0 y = 1 }
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			SHA = {
+				808 = {
+					create_unit = {
+						division = "name = \"Junction Talons\" division_template = \"Regina's Talons\" start_experience_factor = 1.0 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Gawd's Finest\" division_template = \"Regina's Talons\" start_experience_factor = 1.0 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Regina's Faithful\" division_template = \"Regina's Talons\" start_experience_factor = 1.0 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+				}
+				500 = {
+					create_unit = {
+						division = "name = \"Trainyard Patrol\" division_template = \"Regina's Talons\" start_experience_factor = 1.0 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Hired Beaks\" division_template = \"Regina's Talons\" start_experience_factor = 1.0 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+				}
+				25 = {
+					create_unit = {
+						division = "name = \"Purepoint Talons\" division_template = \"Regina's Talons\" start_experience_factor = 1.0 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Knights for Hire\" division_template = \"Regina's Talons\" start_experience_factor = 1.0 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+				}
+			}
+		}
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_steelwall.4"}
+ 	id = LIT_steelwall.4
+ 	title = LIT_steelwall.4.t
+ 	desc = LIT_steelwall.4.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_steelwall.4.a
+		custom_effect_tooltip = LIT_steelrebel_man_tt
+		hidden_effect = {
+			SHA = {
+				Core_original_MAN = yes
+				transfer_state = 795
+				transfer_state = 608
+				transfer_state = 594 
+				transfer_state = 220
+				load_oob = "MAN_batcong"
+			}
+		}
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_steelwall.5"}
+ 	id = LIT_steelwall.5
+ 	title = LIT_steelwall.5.t
+ 	desc = LIT_steelwall.5.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_steelwall.5.a
+		custom_effect_tooltip = LIT_steelrebel_lra1_tt
+		hidden_effect = {
+			SHA = {
+				transfer_state = 794
+				transfer_state = 26
+				transfer_state = 575
+				transfer_state = 571
+				Core_original_LRA = yes
+				division_template = {
+					name = "Leslie Army"
+					is_locked = no
+					regiments = {
+						infantry = { x = 0 y = 0 }
+						infantry = { x = 1 y = 0 }
+						infantry = { x = 2 y = 0 }
+						infantry = { x = 0 y = 1 }
+						infantry = { x = 1 y = 1 }
+						infantry = { x = 2 y = 1 }
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			SHA = {
+				575 = {
+					create_unit = {
+						division = "name = \"Leslie Guard\" division_template = \"Leslie Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Hired Guns\" division_template = \"Leslie Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Rock Solid's Bodyguards\" division_template = \"Leslie Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Reformed Raiders\" division_template = \"Leslie Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+				}
+			}
+		}
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_steelwall.6"}
+ 	id = LIT_steelwall.6
+ 	title = LIT_steelwall.6.t
+ 	desc = LIT_steelwall.6.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_steelwall.6.a
+		custom_effect_tooltip = LIT_steelrebel_lra2_tt
+		hidden_effect = {
+			SHA = {
+				transfer_state = 794
+				transfer_state = 26
+				transfer_state = 575
+				transfer_state = 571
+				Core_original_LRA = yes
+				division_template = {
+					name = "Leslie Revolutionaries"
+					is_locked = no
+					regiments = {
+						militia = { x = 0 y = 0 }
+						militia = { x = 0 y = 1 }
+						militia = { x = 0 y = 2 }
+						demolitions_infantry = { x = 1 y = 1 }
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			SHA = {
+				794 = {
+					create_unit = {
+						division = "name = \"Woodchuckin Raiders\" division_template = \"Leslie Revolutionaries\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Cabin Gang\" division_template = \"Leslie Revolutionaries\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+				}
+				26 = {
+					create_unit = {
+						division = "name = \"Serpent's Gang\" division_template = \"Leslie Revolutionaries\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Hayseed Exiles\" division_template = \"Leslie Revolutionaries\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+				}
+				575 = {
+					create_unit = {
+						division = "name = \"Boss Nails Revivalists\" division_template = \"Leslie Revolutionaries\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Serf Liberation Front\" division_template = \"Leslie Revolutionaries\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+				}
+				571 = {
+					create_unit = {
+						division = "name = \"Bridge Trolls\" division_template = \"Leslie Revolutionaries\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Riverside Raiders\" division_template = \"Leslie Revolutionaries\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+				}
+			}
+		}
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_steelwall.7"}
+ 	id = LIT_steelwall.7
+ 	title = LIT_steelwall.7.t
+ 	desc = LIT_steelwall.7.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_steelwall.7.a
+		custom_effect_tooltip = LIT_steelrebel_rok1_tt
+		hidden_effect = {
+			SHA = {
+				transfer_state = 589
+				transfer_state = 184
+				transfer_state = 803
+				Core_original_ROK = yes
+				division_template = {
+					name = "Rock Farmer Militia"
+					is_locked = no
+					regiments = {
+						militia = { x = 0 y = 0 }
+						militia = { x = 1 y = 0 }
+						militia = { x = 2 y = 0 }
+						militia = { x = 3 y = 0 }
+						militia = { x = 4 y = 0 }
+						militia = { x = 5 y = 0 }
+					}
+					support = {
+						demolitions_support = { x = 0 y = 0 }
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			SHA = {
+				589 = {
+					create_unit = {
+						division = "name = \"Traditionalist Radicals\" division_template = \"Rock Farmer Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Foals of the Rock\" division_template = \"Rock Farmer Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Sediment Square Militia\" division_template = \"Rock Farmer Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+				}
+				184 = {
+					create_unit = {
+						division = "name = \"Quartz Quarry Residents\" division_template = \"Rock Farmer Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Disgruntlled Miners\" division_template = \"Rock Farmer Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+				}
+				803 = {
+					create_unit = {
+						division = "name = \"Violent Strikers\" division_template = \"Rock Farmer Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Angry Unionists\" division_template = \"Rock Farmer Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Rock Hypernationalists\" division_template = \"Rock Farmer Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+				}
+			}
+		}
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_steelwall.8"}
+ 	id = LIT_steelwall.8
+ 	title = LIT_steelwall.8.t
+ 	desc = LIT_steelwall.8.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_steelwall.8.a
+		custom_effect_tooltip = LIT_steelrebel_rok2_tt
+		hidden_effect = {
+			SHA = {
+				transfer_state = 36
+				Core_original_ROK = yes
+				division_template = {
+					name = "Hoof City Army"
+					is_locked = no
+					regiments = {
+						infantry = { x = 0 y = 0 }
+						infantry = { x = 1 y = 0 }
+						heavy_infantry = { x = 2 y = 0 }
+						heavy_infantry = { x = 3 y = 0 }
+					}
+					support = {
+						anti_personnel_company = { x = 0 y = 0 }
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			SHA = {
+				36 = {
+					create_unit = {
+						division = "name = \"Hoof City Guard\" division_template = \"Hoof City Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Hoof City Private Guard\" division_template = \"Hoof City Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Urban Volunteers\" division_template = \"Hoof City Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Bored Elite\" division_template = \"Hoof City Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Enthusiastic Pony Hunters\" division_template = \"Hoof City Army\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+				}
+			}
+		}
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_steelwall.9"}
+ 	id = LIT_steelwall.9
+ 	title = LIT_steelwall.9.t
+ 	desc = LIT_steelwall.9.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_steelwall.9.a
+		custom_effect_tooltip = LIT_steelrebel_nap_tt
+		hidden_effect = {
+			SHA = {
+				transfer_state = 563
+				Core_original_NAP = yes
+				division_template = {
+					name = "New Appleloosan Guard"
+					is_locked = no
+					regiments = {
+						infantry = { x = 0 y = 0 }
+						infantry = { x = 1 y = 0 }
+						militia = { x = 0 y = 1 }
+						militia = { x = 1 y = 1 }
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			SHA = {
+				563 = {
+					create_unit = {
+						division = "name = \"Desperate Scavengers\" division_template = \"New Appleloosan Guard\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Volunteer Militia\" division_template = \"New Appleloosan Guard\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Calamity Fan Club\" division_template = \"New Appleloosan Guard\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+				}
+			}
+		}
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_steelwall.10"}
+ 	id = LIT_steelwall.10
+ 	title = LIT_steelwall.10.t
+ 	desc = LIT_steelwall.10.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_steelwall.10.a
+		custom_effect_tooltip = LIT_steelrebel_oap1_tt
+		hidden_effect = {
+			SHA = {
+				transfer_state = 599
+				transfer_state = 213
+				Core_original_OAP = yes
+				division_template = {
+					name = "Revolutionary Rangers"
+					is_locked = no
+					regiments = {
+						spec_ops = { x = 0 y = 0 }
+						spec_ops = { x = 1 y = 0 }
+						spec_ops = { x = 0 y = 1 }
+						spec_ops = { x = 1 y = 1 }
+						infantry = { x = 0 y = 2 }
+						infantry = { x = 1 y = 2 }
+					}
+					support = {
+						anti_tank_company =  { x = 0 y = 1 }
+					}
+				}
+				division_template = {
+					name = "Mixie Militia"
+					is_locked = no
+					regiments = {
+						militia = { x = 0 y = 0 }
+						militia = { x = 1 y = 0 }
+						militia = { x = 0 y = 1 }
+						militia = { x = 1 y = 1 }
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			SHA = {
+				599 = {
+					create_unit = {
+						division = "name = \"Ranger Remnants\" division_template = \"Revolutionary Rangers\" start_experience_factor = 1.0 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Ghoul Veterans\" division_template = \"Revolutionary Rangers\" start_experience_factor = 1.0 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Ranger LARPers\" division_template = \"Mixie Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Foal Crusaders\" division_template = \"Mixie Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Hook Hoof Haters\" division_template = \"Mixie Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Eager Abolitionists\" division_template = \"Mixie Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+				}
+				213 = {
+					create_unit = {
+						division = "name = \"Last Best Hope\" division_template = \"Revolutionary Rangers\" start_experience_factor = 1.0 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Confused Prohibitionists\" division_template = \"Mixie Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Well-Meaning Hyperanarchists\" division_template = \"Mixie Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+				}
+			}
+		}
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_steelwall.11"}
+ 	id = LIT_steelwall.11
+ 	title = LIT_steelwall.11.t
+ 	desc = LIT_steelwall.11.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_steelwall.11.a
+		custom_effect_tooltip = LIT_steelrebel_oap2_tt
+		hidden_effect = {
+			SHA = {
+				transfer_state = 596
+				transfer_state = 587
+				Core_original_OAP = yes
+				division_template = {
+					name = "Mixie Mercenaries"
+					is_locked = no
+					regiments = {
+						infantry = { x = 0 y = 0 }
+						infantry = { x = 0 y = 1 }
+						infantry = { x = 0 y = 2 }
+						infantry = { x = 0 y = 3 }
+					}
+					support = {
+						demolitions_support = { x = 0 y = 0 }
+						anti_personnel_company =  { x = 0 y = 1 }
+					}
+				}
+				division_template = {
+					name = "Mixie Militia"
+					is_locked = no
+					regiments = {
+						militia = { x = 0 y = 0 }
+						militia = { x = 1 y = 0 }
+						militia = { x = 0 y = 1 }
+						militia = { x = 1 y = 1 }
+					}
+				}
+			}
+		}
+		hidden_effect = {
+			SHA = {
+				596 = {
+					create_unit = {
+						division = "name = \"Shackle's Company\" division_template = \"Mixie Mercenaries\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Newmane's Company\" division_template = \"Mixie Mercenaries\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Sharplock's Company\" division_template = \"Mixie Mercenaries\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Slavery Apologists\" division_template = \"Mixie Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Equestrian Revisionists\" division_template = \"Mixie Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+				}
+				587 = {
+					create_unit = {
+						division = "name = \"Bareback's Company\" division_template = \"Mixie Mercenaries\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Brightmane's Company\" division_template = \"Mixie Mercenaries\" start_experience_factor = 0.8 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+					create_unit = {
+						division = "name = \"Conscripted Servants\" division_template = \"Mixie Militia\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+						owner = SHA
+					}
+				}
+			}
+		}
+	}
+}
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event LIT_meme.1"}
+ 	id = LIT_meme.1
+ 	title = LIT_meme.1.t
+ 	desc = LIT_meme.1.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = LIT_meme.1.a
+
+	}
+	option = {
+		name = LIT_meme.1.b
+	}
+	option = {
+		name = LIT_meme.1.c
+		custom_effect_tooltip = LIT_meme_1_tt
 	}
 }
 

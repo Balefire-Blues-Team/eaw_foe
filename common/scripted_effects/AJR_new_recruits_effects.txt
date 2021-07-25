@@ -1,0 +1,77 @@
+### Thanks to OWB for figuring out how to calculate a tag's total population
+
+@MAX_INT = 2147483
+
+AJR_total_country_pop_effect = {
+	hidden_effect = {
+		# Cored ROOT's population.
+		# The code is insane, because it does not work properly in triggers otherwise or spams log with errors when it works.
+		ROOT = {
+			set_variable = { ajr_workaround_var = 0 }
+		}
+
+		ROOT = {
+			every_owned_state = {
+				limit = {
+					is_core_of = ROOT
+				}
+				ROOT = { add_to_variable = { ajr_workaround_var = PREV.state_population_k } }
+			}
+			set_variable = { PREV.new_recruits_var_cored_pop = ajr_workaround_var }
+		}
+
+		# If new_recruits_var_cored_pop overflows assign max int value to it.
+		if = {
+			limit = { check_variable = { ROOT.new_recruits_var_cored_pop < 0 } }
+			set_variable = { ROOT.new_recruits_var_cored_pop = @MAX_INT }
+		}
+	}
+}
+
+AJR_total_PREV_country_pop_effect = {
+	hidden_effect = {
+		# Cored ROOT's population.
+		# The code is insane, because it does not work properly in triggers otherwise or spams log with errors when it works.
+		
+		PREV = {
+			set_variable = { ajr_workaround_var = 0 }
+		}
+
+		PREV = {
+			every_owned_state = {
+				limit = {
+					is_core_of = PREV
+				}
+				PREV = { add_to_variable = { ajr_workaround_var = PREV.state_population_k } }
+			}
+			set_variable = { PREV.new_recruits_var_cored_pop = ajr_workaround_var }
+		}
+
+		# If new_recruits_var_cored_pop overflows assign max int value to it.
+		if = {
+			limit = { check_variable = { PREV.new_recruits_var_cored_pop < 0 } }
+			set_variable = { PREV.new_recruits_var_cored_pop = @MAX_INT }
+		}
+	}
+}
+
+add_to_ajr_new_recruits_monthly = {
+	every_country = {
+		limit = { 
+			OR = {
+				has_AJR_expedition = yes
+				has_AJR_embassy = yes
+			}
+			NOT = { tag = AJR }
+		}
+
+		PREV = {
+			AJR_total_PREV_country_pop_effect = yes
+		}
+		set_variable = { PREV.new_recruit_host_pop_var = PREV.new_recruits_var_cored_pop}
+		multiply_variable = { ROOT.new_recruit_host_pop_var = 0.25 }
+		round_variable = PREV.new_recruit_host_pop_var
+		
+		add_to_variable = { AJR.new_recruit_monthly_var = PREV.new_recruit_host_pop_var }
+	}
+}

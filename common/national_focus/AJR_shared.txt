@@ -377,6 +377,7 @@
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_stable_2_veterans"
 			add_ideas = AJR_anti_pa_tactics_idea
+			add_political_power = -50
 			add_stability = -0.05
 			add_war_support = -0.10
 		}
@@ -1645,6 +1646,7 @@
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_mwt_successors"
 
+			add_ideas = AJR_MWT_successors_idea
 		}
 	}
 
@@ -1658,6 +1660,10 @@
 
 		prerequisite = { focus = AJR_mwt_successors }
 
+		available = {
+			has_completed_focus = AJR_the_expeditionary_corp
+		}
+
 		ai_will_do = {
 			factor = 1
 		} 
@@ -1665,10 +1671,11 @@
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_stable_tec_calling"
 
+			custom_effect_tooltip = AJR_unlock_expedition_stable_dec_tt
 		}
 	}
 
-	shared_focus = { #Operation Paperclip thing
+	shared_focus = {
 		id = AJR_operation_moonbeam
 		icon = GFX_goal_steel_rangers
 		relative_position_id = AJR_mwt_successors
@@ -1678,12 +1685,21 @@
 
 		prerequisite = { focus = AJR_mwt_successors }
 
+		available = {
+			OR = {
+				TEN = { has_AJR_embassy = yes }
+				21 = { is_owned_by_ROOT_or_subject = yes }
+			}
+
+		}
+
 		ai_will_do = {
 			factor = 1
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_operation_moonbeam"
+			country_event = applejack.42
 
 		}
 	}
@@ -1711,7 +1727,12 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_NCR_research"
-
+			army_experience = 10
+			add_tech_bonus = {
+				bonus = 0.50
+				uses = 2
+				category = land_doctrine
+			}
 		}
 	}
 
@@ -1732,11 +1753,20 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_enclave_research"
-
+			set_technology = {
+				x_pa_unlock_tech = 1
+			}
+			add_tech_bonus = {
+				bonus = 0.5
+				ahead_reduction = 10
+				uses = 2
+				technology = x01_pa_tech
+				technology = x02_pa_tech
+			}
 		}
 	}
 
-	shared_focus = { #NOT IMPLEMENTED UNTIL 2.0!
+	shared_focus = { #NOT IMPLEMENTED UNTIL 2.0! ### Ignore that I lied
 		id = AJR_trottingham_research
 		icon = GFX_goal_steel_rangers
 		relative_position_id = AJR_mwt_successors
@@ -1753,7 +1783,10 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_trottingham_research"
-
+			swap_ideas = {
+				remove_idea = ranger_scribes
+				add_idea = AJR_MWT_successors_idea2
+			}
 		}
 	}
 
@@ -1776,6 +1809,7 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_internal_research"
+			add_research_slot = 1
 
 		}
 	}
@@ -1795,6 +1829,7 @@
 				has_completed_focus = AJR_enclave_research
 				has_completed_focus = AJR_trottingham_research
 			}
+			is_in_faction = yes
 		}
 
 		mutually_exclusive = { focus = AJR_internal_research }
@@ -1805,7 +1840,20 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_special_development_group"
-
+			add_to_tech_sharing_group = ajr_wasteland_research
+			every_country = {
+				limit = {
+					NOT = {
+						tag = AJR
+					}
+					OR = {
+						has_AJR_expedition = yes
+						has_AJR_embassy = yes
+						is_in_faction_with = AJR
+					}
+				}
+				add_to_tech_sharing_group = ajr_wasteland_research
+			}
 		}
 	}
 
@@ -1818,9 +1866,9 @@
 		y = 1
 		cost = 5
 
-		#allow_branch = {
-		#	has_country_flag = AJR_work_with_NCR_flag
-		#}
+		allow_branch = {
+			has_country_flag = AJR_work_with_NCR_flag
+		}
 
 		prerequisite = { focus = AJR_protectors_of_equestria }
 
@@ -1831,6 +1879,11 @@
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_NCR_cooperation"
 
+			SHA = {
+				add_ideas = AJR_NCR_cooperation_idea
+			}
+
+			add_ideas = AJR_cooperation_with_NCR_idea
 		}
 
 	}
@@ -1844,6 +1897,7 @@
 		cost = 5
 
 		prerequisite = { focus = AJR_NCR_cooperation }
+		available = { has_manpower > 400 } #Flubbing the numbers to make it easier to pick this focus
 
 		ai_will_do = {
 			factor = 1
@@ -1851,7 +1905,17 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_rangers_of_republic"
+			add_political_power = 50
+			add_manpower = -400 
 
+			custom_effect_tooltip = AJR_NCR_power_armor_units_tt
+			hidden_effect = {
+				SHA = {
+					load_oob = AJR_NCR_rangers
+					add_manpower = 530 #Actual manpower cost of the divisions
+					country_event = applejack.41
+				}
+			}
 		}
 
 	}
@@ -1870,6 +1934,12 @@
 		}
 
 		prerequisite = { focus = AJR_protectors_of_equestria }
+		available = {
+			has_equipment = {
+			    power_armor_equipment > 300
+			}
+			industrial_complex > 5
+		}
 
 		ai_will_do = {
 			factor = 1
@@ -1878,6 +1948,22 @@
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_enclave_cooperation"
 
+			custom_effect_tooltip = AJR_NEV_equipment_exhange_tt
+
+			send_equipment = {
+			    equipment = power_armor_equipment
+			    amount = 300
+			    target = NEV
+			}
+			add_ideas = AJR_cooperation_with_NEV_idea
+			NEV = {
+				add_offsite_building = { type = industrial_complex level = 5 }
+			}
+			add_equipment_to_stockpile = {
+			    type = raptor_equipment
+			    amount = 5
+			    producer = NEV
+			}
 		}
 
 	}
@@ -1899,6 +1985,9 @@
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_pegasi_rangers"
 
+			set_technology = {
+				tech_pegasi = 1
+			}
 		}
 
 	}
@@ -1925,6 +2014,7 @@
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_trottingham_cooperation"
 
+			add_ideas = AJR_cooperation_with_TSR_idea
 		}
 
 	}
@@ -1945,6 +2035,14 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_knights_of_the_mwt"
+
+			add_ideas = AJR_pa_legacy
+
+			add_equipment_to_stockpile = {
+			    type = power_armor_equipment_4
+			    amount = 150
+			    producer = OWE
+			}
 
 		}
 
@@ -2129,9 +2227,7 @@
 
 		available = {
 			TEN = {
-				has_dynamic_modifier = {
-				    modifier = AJR_expedition_modifier
-				}
+				has_AJR_expedition = yes
 			}
 		}
 		prerequisite = { focus = AJR_secure_manehattan }
@@ -2159,7 +2255,7 @@
 
 	shared_focus = { 
 		id = AJR_modernize_friendship_city
-		icon = GFX_goal_steel_rangers
+		icon = GFX_goal_generic_foe_manehattan
 		relative_position_id = AJR_secure_manehattan
 		x = 1
 		y = 1
@@ -2167,9 +2263,7 @@
 
 		available = {
 			FRI = {
-				has_dynamic_modifier = {
-				    modifier = AJR_expedition_modifier
-				}
+				has_AJR_expedition = yes
 			}
 		}
 		prerequisite = { focus = AJR_secure_manehattan }
@@ -2206,6 +2300,12 @@
 
 		prerequisite = { focus = AJR_ranger_delegation_in_tenpony }
 		prerequisite = { focus = AJR_modernize_friendship_city }
+
+		bypass = {
+			NOT = {
+				country_exists = RAR
+			}
+		}
 
 		ai_will_do = {
 			factor = 1
@@ -2254,6 +2354,9 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_expand_recruitment"
+
+			add_war_support = 0.05
+			add_manpower = 300
 
 		}
 
@@ -2322,7 +2425,7 @@
 			}
 			if = {
 				limit = { has_country_flag = AJR_work_with_trottingham_flag }
-				TSR = {
+				FSR = {
 					add_dynamic_modifier = { modifier = AJR_expedition_modifier }
 					add_to_array = {
 	                    array = global.countries_with_AJR_expedition_array
@@ -2375,6 +2478,7 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_local_chapters"
+			custom_effect_tooltip = AJR_unlocks_local_chapters_up_tt
 
 		}
 	}
@@ -2395,6 +2499,7 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_work_with_the_followers"
+			custom_effect_tooltip = AJR_unlocks_followers_up_tt
 
 		}
 	}
@@ -2418,7 +2523,8 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_armed_deterrence"
-
+			add_war_support = 0.10
+			custom_effect_tooltip = AJR_unlocks_armed_exped_up_tt
 		}
 	}
 
@@ -2441,7 +2547,8 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_scribe_aid"
-
+			add_stability = 0.10
+			custom_effect_tooltip = AJR_unlocks_support_exped_up_tt
 		}
 	}
 
@@ -2469,6 +2576,15 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_request_stable_2_access"
+			if = {
+				limit = {
+					has_country_flag = AJR_steelhooves_dead_flag
+				}
+				country_event = applejack.45
+			}
+			else = {
+				country_event = applejack.46
+			}
 
 		}
 	}
@@ -2497,6 +2613,7 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_reclaiming_the_old_for_the_new"
+			custom_effect_tooltip = AJR_unlocks_scav_up_tt
 
 		}
 	}
@@ -2526,6 +2643,7 @@
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_bulwark_against_evil"
 
+			add_ideas = AJR_shield_of_equestria
 		}
 	}
 
@@ -2536,6 +2654,13 @@
 		x = 3
 		y = 1
 		cost = 5
+
+		available = {
+			has_full_control_of_state = 49
+			NOT = {
+				country_exists = RAR
+			}
+		}
 
 		prerequisite = { 
 			focus = AJR_special_development_group
@@ -2553,6 +2678,7 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus AJR_summerfield_conference"
+			country_event = applejack.36
 
 		}
 	}
