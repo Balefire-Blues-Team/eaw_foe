@@ -11,11 +11,55 @@ scripted_gui = {
             close_button_click = {
                 set_variable = { sez_gui_var = 0 }
             }
+			westtown_button_click = {
+				ROOT = {
+                    set_variable = { sez_gui_cons_var = 1 }
+					151 = {set_state_flag = SEZ_state_inspected_flag}
+                }
+			}
 			
         }
     
         triggers = {
-			
+			westtown_button_click_enabled = {
+				owns_state = 151
+			}
+			smocinc_button_click_enabled = {
+				owns_state = 720
+			}
+			nectown_button_click_enabled = {
+				owns_state = 168
+			}
+			celestial_plaza_button_click_enabled = {
+				owns_state = 676
+			}
+			pirydeft_button_click_enabled = {
+				owns_state = 667
+			}
+			gruhmak_button_click_enabled = {
+				owns_state = 677
+			}
+			jzemrok_button_click_enabled = {
+				owns_state = 163
+			}
+			northbazaar_button_click_enabled = {
+				owns_state = 733
+			}
+			centralprincessyn_button_click_enabled = {
+				owns_state = 732
+			}
+			rodinvale_button_click_enabled = {
+				owns_state = 718
+			}
+			administration_button_click_enabled = {
+				owns_state = 658
+			}
+			victorypoint_button_click_enabled = {
+				owns_state = 729
+			}
+			fortsoarin_button_click_enabled = {
+				owns_state = 159
+			}
         }
     
         dynamic_lists = {
@@ -23,8 +67,44 @@ scripted_gui = {
     
         properties = {
 		
+			westtown_button = {
+				image = "[SEZgetWesttown]"
+			}
+			smocinc_button = {
+				image = "[SEZgetSmocinc]"
+			}
+			nectown_button = {
+				image = "[SEZgetNectown]"
+			}
+			celestial_plaza_button = {
+				image = "[SEZgetCelestial]"
+			}
+			pirydeft_button = {
+				image = "[SEZgetPirdeft]"
+			}
+			gruhmak_button = {
+				image = "[SEZgetGruhmak]"
+			}
+			jzemrok_button = {
+				image = "[SEZgetJzemrok]"
+			}
+			northbazaar_button = {
+				image = "[SEZgetNorthbazaar]"
+			}
+			centralprincessyn_button = {
+				image = "[SEZgetCentralprincessyn]"
+			}
+			rodinvale_button = {
+				image = "[SEZgetRodinvale]"
+			}
 			administration_button = {
 				image = "[SEZgetAdministration]"
+			}
+			victorypoint_button = {
+				image = "[SEZgetVictorypoint]"
+			}
+			fortsoarin_button = {
+				image = "[SEZgetFortsoarin]"
 			}
         }
     
@@ -45,13 +125,56 @@ scripted_gui = {
         }
     }
 	
+	sez_city_construction_menu = {
+        window_name = "sez_city_construction_menu_window"
+        context_type = player_context
+    
+		visible = {
+            check_variable = { sez_gui_cons_var = 1 }
+        }
+    
+        effects = {
+			close_button_click = {
+                set_variable = { sez_gui_cons_var = 0 }
+				every_owned_state = {
+					clr_state_flag =  SEZ_state_inspected_flag
+				}
+            }
+        }
+        triggers = {
+            core_button_click_enabled = {
+				any_owned_state = { limit = { has_state_flag = SEZ_state_inspected_flag } NOT = { is_core_of = ROOT } }
+			}
+        }
+        dynamic_lists = {
+        }
+        properties = {
+        }
+        ai_enabled = {
+            always = no
+        }
+        ai_check = {
+        }
+        ai_check_scope = {
+        }
+        ai_weights = {
+        }
+    }
+	
 	sez_city_opener = {
         window_name = "sez_city_button_window"
         context_type = player_context
         parent_window_token = politics_tab
     
         visible = {
-            tag = SEZ
+			OR = {
+				tag = SEZ
+				tag = RST
+				tag = LEE
+				tag = NVR
+				tag = SDI
+				tag = NAC
+			}
         }
     
         effects = {
