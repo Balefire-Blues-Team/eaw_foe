@@ -58,7 +58,7 @@ country_event = {
 		add_building_construction = {
 				type = bunker
 				province = 10311
-				level = 1
+				level = 3
 				instant_build = yes
 				}	
 	}
@@ -2523,10 +2523,19 @@ country_event = {
 
 		hidden_effect = {
 			complete_national_focus = TEN_ghoul_takeover
-			every_other_country = {	
-				add_opinion_modifier = { target = ROOT modifier = gross_ghouls }
-				reverse_add_opinion_modifier = { target = ROOT modifier = bigot_smoothskins }
-			}
+			for_each_scope_loop = {
+					array = global.countries
+					if = {
+						limit = {
+							NOT = {
+								original_tag = TEN
+								has_country_flag = is_ghoul_nation
+							}
+						}
+						add_opinion_modifier = { target = ROOT modifier = gross_ghouls }
+						reverse_add_opinion_modifier = { target = ROOT modifier = bigot_smoothskins }
+					}
+				}
 			clr_country_flag = no_mutants_allowed
 			set_country_flag = is_ghoul_nation
 			set_country_flag = TEN_ghoultree
@@ -3096,6 +3105,7 @@ country_event = {
 		ai_chance = { factor = 40 }
 		set_country_flag = TEN_manehattan_liberated
 		add_country_leader_trait = liberator_manehattan
+		set_cosmetic_tag = TEN_free_manehattan
 	}		
 } 
 
@@ -3138,7 +3148,7 @@ country_event = {
 	option = {
 		name = TEN.114.a
 		ai_chance = { factor = 40 }
-		swap_ideas = { remove_idea = TEN_empowered_security_council add_idea = TEN_empowered_security_council }
+		swap_ideas = { remove_idea = TEN_ghoul_security_council add_idea = TEN_empowered_security_council }
 	}		
 } 
 ####HUNTING GRIM AND SOCS######
@@ -3203,6 +3213,7 @@ country_event = {
 	option = {
 		name = TEN.117.a
 		ai_chance = { factor = 40 }
+		add_manpower = -24
 		swap_ideas = { remove_idea = TEN_security_resistance add_idea = TEN_security_resistance_less }
 	}		
 } 
@@ -3378,7 +3389,7 @@ country_event = {
 	
 	option = {
 		name = TEN.125.a
-		ai_chance = { factor = 40 }
+		ai_chance = { factor = 20 }
 		add_to_variable = {
 			var = enslave_da_bigots
 			value = 1
@@ -3398,7 +3409,7 @@ country_event = {
 	}
 	option = {
 		name = TEN.125.b
-		ai_chance = { factor = 40 }
+		ai_chance = { factor = 80 }
 		add_to_variable = {
 			var = kill_da_bigots
 			value = 1
@@ -4330,9 +4341,9 @@ country_event = {
 		name = TEN.151.a
 		ai_chance = { factor = 40 }
 		kill_country_leader = yes
-		create_country_leader = { #Destruction/Alternate
+		create_country_leader = { #Destruction
 			name = "The Tower Assembly"
-			picture = "Tower_Assembly.tga"
+			picture = "Governor.tga"
 			expire = "1965.1.1"
 			ideology = purist
 			traits = {
@@ -4369,6 +4380,11 @@ country_event = {
 		}
 		custom_effect_tooltip = TEN_rottingjesus_tt
 		add_ideas = TEN_fuckingmadness
+		set_cosmetic_tag = TEN_manehattan_horde
+		custom_effect_tooltip = TEN_horde_risen
+		hidden_effect = {
+			TEN_raise_the_horde = yes
+		}	
 	}
 }
 
