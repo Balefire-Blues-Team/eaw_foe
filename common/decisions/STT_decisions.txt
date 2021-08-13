@@ -133,9 +133,9 @@ STT_phial_matrix_cat = {
 }
 
 STT_moudry_purple_revolution = {
-	STT_ = {
+	STT_pick_random_country = {
 		icon = GFX_decision_generic_research
-		cost = 100
+		cost = 0
 		ai_will_do = {
 			base = 0
 			modifier = {
@@ -149,15 +149,81 @@ STT_moudry_purple_revolution = {
 		modifier = {
 		}
 
-		days_remove = 60
+		days_remove = 0
 
 		complete_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision STT_begin_the_process"
-			country_event = { id = STT.10 }
-			set_country_flag = STT_matrix_begins
+			log = "[GetDateText]: [Root.GetName]: Decision STT_pick_random_country"
+			if = {
+				limit = {
+					any_neighbor_country = {
+						has_variable = Random_Country
+					}
+				}
+				clear_variable = Random_Country
+				random_neighbor_country = {		
+					set_variable = {
+						var = Random_Country
+						value = THIS.id
+					}
+				}
+			}
+			else = {
+				random_neighbor_country = {		
+					set_variable = {
+						var = Random_Country
+						value = THIS.id
+					}
+				}
+			}
 		}
 		remove_effect = {
-			clr_country_flag = STT_matrix_begins
+		}
+	}
+	
+	STT_test_bitch = {
+		icon = GFX_decision_generic_research
+		cost = 0
+		ai_will_do = {
+			base = 0
+			modifier = {
+			}
+		}
+
+		available = {
+		}
+		visible = {
+		}
+		modifier = {
+		}
+
+		days_remove = 0
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision STT_pick_random_country"
+			if = {
+				limit = {
+					FER = {
+						has_variable = Random_Country
+					}
+				}
+				annex_country = {
+					target = GUT
+					transfer_troops = yes
+				}
+			}
+			if = {
+				limit = {
+					MUD = {
+						has_variable = Random_Country
+					}
+				}
+				annex_country = {
+					target = RED
+					transfer_troops = yes
+				}
+			}
+		}
+		remove_effect = {
 		}
 	}
 }
