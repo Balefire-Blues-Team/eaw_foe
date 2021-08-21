@@ -43,7 +43,7 @@ country_event = {
 				is_historical_focus_on = yes
 			}
 		}
-		add_manpower = 750
+		add_manpower = 400
 	}
 	#option = {
 	#	name = MSR.1.c
@@ -108,12 +108,37 @@ country_event = {
 	is_triggered_only = yes
  	fire_only_once = yes
 
- 	option = {
+ 	option = { #Contingent
+		name = MSR.3.a
+		ai_chance = { factor = 50}
+		
+		add_war_support = 0.05
+		add_popularity = {
+		    ideology = destruction
+		    popularity = 0.03
+		}
+	}
+
+	option = { #Equestria
+		name = MSR.3.a
+		ai_chance = { factor = 50}
+		
+		add_political_power = 25
+		aadd_popularity = {
+		    ideology = visionary
+		    popularity = 0.03
+		}
+	}
+
+	option = { #Manehattan
 		name = MSR.3.a
 		ai_chance = { factor = 50}
 		
 		add_stability = 0.05
-		add_political_power = 25
+		add_popularity = {
+		    ideology = survivalism
+		    popularity = 0.03
+		}
 	}
 }
 
@@ -169,12 +194,34 @@ country_event = {
 	is_triggered_only = yes
  	fire_only_once = yes
 
- 	option = {
+ 	option = { #Cottage Cheese
 		name = MSR.5.a
 		ai_chance = { factor = 50}	
 			
-		add_war_support = 0.05
-		add_political_power = 50
+		add_political_power = 25
+		add_popularity = {
+		    ideology = continuation
+		    popularity = 0.05
+		}
+	}
+
+	option = { #The Chain that Binds
+		name = MSR.5.b
+		ai_chance = { factor = 50}	
+			
+		add_war_support = 0.03
+		add_stability = 0.03
+	}
+
+	option = { #Secrets of the Old World
+		name = MSR.5.c
+		ai_chance = { factor = 50}	
+			
+		add_tech_bonus = {
+		    bonus = 0.25
+		    uses = 1
+		    category = electronics
+		}
 	}
 }
 
@@ -532,7 +579,14 @@ country_event = {
 		}
 		set_country_flag = cottage_exiled_steelhooves
 		custom_effect_tooltip = MSR_exile_steelhooves_tt
-        remove_unit_leader = 88844
+		hidden_effect = {
+			every_unit_leader = {
+				limit = {
+					has_id = 88844
+				}
+				set_nationality = OWE
+			}
+		}
 	}
 }
 
@@ -1046,7 +1100,7 @@ country_event = {
  		has_country_flag = MSR_has_done_alternative_methods
  	}
  	mean_time_to_happen = {
-		days = 25
+		days = 30
 	}
 
  	option = {
@@ -1388,14 +1442,25 @@ country_event = {
 					set_nationality = AJR
 				}
 			}
+			OWE = {
+				every_unit_leader = {
+					limit = {
+						has_id = 88844
+					}
+					set_nationality = AJR
+				}
+			}
 		}
 	}
 
  	option = { #MSR
  		name = MSR_aj_rangers.1.a
  		ai_chance = { factor = 30 }
- 		646 = {
-			set_demilitarized_zone = yes
+ 		if = {
+ 			limit = { 646 = { is_owned_and_controlled_by = MSR } }
+ 			646 = {
+				set_demilitarized_zone = yes
+			}
 		}
 		54 = {
 			set_demilitarized_zone = yes
@@ -1434,6 +1499,7 @@ country_event = {
  			}
  		}
  		hidden_effect = {
+ 			set_global_flag = MSR_AJR_war_of_oaths_flag
  			AJR = {
  				add_ideas = MSR_AJR_civil_war_idea
  			}
@@ -1450,8 +1516,11 @@ country_event = {
  		}
  		custom_effect_tooltip = set_country_to_AJR
  		hidden_effect = {
- 			646 = {
-				set_demilitarized_zone = yes
+ 			if = {
+	 			limit = { 646 = { is_owned_and_controlled_by = MSR } }
+	 			646 = {
+					set_demilitarized_zone = yes
+				}
 			}
 			54 = {
 				set_demilitarized_zone = yes
@@ -1484,6 +1553,7 @@ country_event = {
 					keep_completed = yes
 				}
 	 		}
+	 		set_global_flag = MSR_AJR_war_of_oaths_flag
 	 		AJR = {
 				change_tag_from = ROOT
 			}
