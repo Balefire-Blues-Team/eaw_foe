@@ -56,17 +56,21 @@ AJR_total_PREV_country_pop_effect = {
 }
 
 add_to_ajr_new_recruits_monthly = {
+	set_variable = { AJR.new_recruit_monthly_var = 0 }
 	every_country = {
 		limit = { 
-			has_AJR_expedition = yes 
+			OR = {
+				has_AJR_expedition = yes
+				has_AJR_embassy = yes
+			}
 			NOT = { tag = AJR }
 		}
 
 		PREV = {
 			AJR_total_PREV_country_pop_effect = yes
 		}
-		set_variable = { PREV.new_recruit_host_pop_var = PREV.new_recruits_var_cored_pop}
-		multiply_variable = { ROOT.new_recruit_host_pop_var = 0.25 }
+		set_variable = { PREV.new_recruit_host_pop_var = PREV.new_recruits_var_cored_pop }
+		multiply_variable = { ROOT.new_recruit_host_pop_var = 0.05 }
 		round_variable = PREV.new_recruit_host_pop_var
 		
 		add_to_variable = { AJR.new_recruit_monthly_var = PREV.new_recruit_host_pop_var }
