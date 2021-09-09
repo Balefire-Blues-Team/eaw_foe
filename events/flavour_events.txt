@@ -1,0 +1,163 @@
+add_namespace = flavour
+
+country_event = {
+ 	id = flavour.1
+ 	title = flavour.1.t
+ 	desc = flavour.1.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = flavour.1.a
+		ai_chance = { factor = 10}
+		add_ideas = TMS_gold_dawn_society_1
+		hidden_effect = {
+			DEP = {
+				country_event = flavour.2
+			}
+			TFL = {
+				country_event = flavour.2
+			}
+			VOI = {
+				country_event = flavour.2
+			}
+			country_event = { id = flavour.3 days = 300}
+		}
+	}
+	option = {
+		name = flavour.1.b
+		ai_chance = { factor = 80}
+		
+	}
+}
+
+country_event = {
+ 	id = flavour.2
+ 	title = flavour.2.t
+ 	desc = flavour.2.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = no
+
+	option = {
+		name = flavour.2.a
+		ai_chance = { factor = 50}
+		add_ideas = TMS_gold_dawn_society_1
+		hidden_effect = {
+			country_event = { id = flavour.4 days = 365}
+		}
+	}
+}
+
+country_event = {
+ 	id = flavour.3
+ 	title = flavour.3.t
+ 	desc = flavour.3.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = flavour.3.a
+		ai_chance = { factor = 50}
+		swap_ideas = {remove_idea = TMS_gold_dawn_society_1 add_idea = TMS_gold_dawn_society_2 }
+		hidden_effect = {
+			country_event = { id = flavour.5 days = 365}
+		}
+	}
+}
+
+country_event = {
+ 	id = flavour.4
+ 	title = flavour.4.t
+ 	desc = flavour.4.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = no
+
+	option = {
+		name = flavour.4.a
+		ai_chance = { factor = 60}
+		swap_ideas = {remove_idea = TMS_gold_dawn_society_1 add_idea = TMS_gold_dawn_society_2 }
+		custom_effect_tooltip = TMS_gold_dawn_society_warning_tt
+	}
+	
+	option = {
+		name = flavour.4.b
+		ai_chance = { factor = 40}
+		remove_ideas = TMS_gold_dawn_society_1
+	}
+}
+
+country_event = {
+ 	id = flavour.5
+ 	title = flavour.5.t
+ 	desc = flavour.5.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = flavour.5.a
+		ai_chance = { factor = 50}
+		set_cosmetic_tag = Golden_dawn
+		hidden_effect = {
+			leave_faction = yes
+			create_country_leader = {
+				name = "Circulus Aurum"
+				picture = ""
+				expire = "1965.1.1"
+				ideology = rebuilder
+				traits = {
+					
+				}
+			}
+			add_popularity = {
+				ideology = visionary
+				popularity = 1
+			}
+			set_country_flag = TMS_golden_dawn_flag
+		}
+		set_politics = { ruling_party = visionary elections_allowed = no }
+		IF = {
+			limit = {DEP = {has_idea = TMS_gold_dawn_society_2}}
+			annex_country = { target = DEP transfer_troops = yes }
+		}
+		ELSE = {
+			declare_war_on = { 
+				type = annex_everything 
+				target = DEP 
+			}
+		}
+		Core_original_DEP = yes
+		IF = {
+			limit = {TFL = {has_idea = TMS_gold_dawn_society_2}}
+			annex_country = { target = TFL transfer_troops = yes }
+		}
+		ELSE = {
+			declare_war_on = { 
+				type = annex_everything 
+				target = TFL 
+			}
+		}
+		Core_original_TFL = yes
+		IF = {
+			limit = {VOI = {has_idea = TMS_gold_dawn_society_2}}
+			annex_country = { target = VOI transfer_troops = yes }
+		}
+		ELSE = {
+			declare_war_on = { 
+				type = annex_everything 
+				target = VOI 
+			}
+		}
+		Core_original_VOI = yes
+		
+	}
+}
