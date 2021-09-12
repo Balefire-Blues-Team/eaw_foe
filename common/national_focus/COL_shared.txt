@@ -5355,7 +5355,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_the_gilded_cage"
-		add_stability = 0.10
+		add_dynamic_modifier = {
+			modifier = COL_gilded_cage_dynamic_modifier
+		}
 	}
 }
 
@@ -5375,7 +5377,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_the_entropic_terror"
-		
+		country_event = { id = springcouncil.38 }
 	}
 }  
 
@@ -5397,7 +5399,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_the_modern_superpony"
-		
+		custom_effect_tooltip = COL_modern_superpony_tt
+		add_to_variable = {
+				var = col_superpone
+				value = 0.05
+			}
+		add_manpower = 500
 	}
 }  
 
@@ -5417,7 +5424,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_eliminate_non_harmonious_thought"
-		
+		add_stability = -0.15
+		swap_ideas = { remove_idea = COL_anti_harmony_resistance add_idea = COL_anti_harmony_resistance2 }
 	}
 } 
 
@@ -5437,7 +5445,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_bomb_out_the_resistance"
-		
+		every_owned_state = {
+			add_manpower = -80
+			damage_building = {
+				type = infrastructure
+				damage = 2
+			}
+		}
+		swap_ideas = { remove_idea = COL_anti_harmony_resistance2 add_idea = COL_anti_harmony_resistance3 }
 	}
 } 
 
@@ -5457,7 +5472,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_the_harmonic_enforcement_commission"
-		
+		swap_ideas = { remove_idea = COL_anti_harmony_resistance3 add_idea = COL_anti_harmony_resistance4 }
+		custom_effect_tooltip = COL_harmonic_inquisition_tt
+		add_to_variable = {
+				var = col_harminqui
+				value = 2
+			}
 	}
 } 
 
@@ -5478,7 +5498,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_a_completely_controlled_military"
-		
+		add_manpower = -852
+		add_war_support = -0.10
+		remove_ideas = COL_anti_harmony_resistance4
 	}
 } 
 
@@ -5498,7 +5520,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_outlaw_all_other_religions"
-		
+		add_political_power = -200
+		every_other_country = { limit = { NOT = {is_in_faction_with = ROOT }} 	
+				add_opinion_modifier = { target = COL modifier = mad_cultists }
+				reverse_add_opinion_modifier = { target = COL modifier = unbeliever_scum }
+			}
+		custom_effect_tooltip = COL_outlaw_all_other_religions_tt
 	}
 } 
 
@@ -5518,7 +5545,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_redefine_morality"
-		
+		custom_effect_tooltip = COL_morality_tt
+		add_to_variable = {
+				var = col_morality
+				value = 0.05
+			}
 	}
 } 
 
@@ -5538,7 +5569,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_mandate_personal_schedules"
-		
+		add_stability = -0.05
+		custom_effect_tooltip = COL_modern_superpony_tt
+		add_to_variable = {
+				var = col_superpone
+				value = 0.05
+			}
 	}
 } 
 
@@ -5559,7 +5595,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_the_state_is_your_parent"
-		
+		custom_effect_tooltip = COL_parenthood_tt
+		add_to_variable = {
+				var = col_parent
+				value = 0.50
+			}
 	}
 } 
 
@@ -5581,7 +5621,23 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_perfect_harmony"
-		
+		custom_effect_tooltip = COL_perfect_harmony_tt
+		add_to_variable = {
+				var = col_parent
+				value = 0.05
+			}
+		add_to_variable = {
+				var = col_superpone
+				value = 0.02
+			}
+		add_to_variable = {
+				var = col_morality
+				value = 0.02
+			}
+		add_to_variable = {
+				var = col_ncmanp
+				value = 0.01
+			}
 	}
 }  
 
@@ -5602,9 +5658,10 @@ shared_focus = {
 		factor = 50
 	} 
 
+	
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_spreading_the_blessing"
-		
+		add_ideas = COL_spreading_the_blessing_idea
 	}
 } 
 
@@ -5622,9 +5679,20 @@ shared_focus = {
 		factor = 50
 	} 
 
+	will_lead_to_war_with = DSB
+	will_lead_to_war_with = NOV
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_smiting_the_traitors"
-		
+		DSB = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		NOV = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 } 
 
@@ -5642,9 +5710,26 @@ shared_focus = {
 		factor = 50
 	} 
 
+	will_lead_to_war_with = SOL
+	will_lead_to_war_with = TAR
+	will_lead_to_war_with = SLC
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_dealing_with_false_gods"
-		
+		SOL = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		TAR = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		SLC = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 } 
 
@@ -5662,9 +5747,32 @@ shared_focus = {
 		factor = 50
 	} 
 
+	will_lead_to_war_with = PHE
+	will_lead_to_war_with = NGL
+	will_lead_to_war_with = SML
+	will_lead_to_war_with = RTA
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_spreading_harmony_southwards"
-		
+		PHE = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		NGL = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		SML = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		RTA = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 } 
 
@@ -5682,9 +5790,32 @@ shared_focus = {
 		factor = 50
 	} 
 
+	will_lead_to_war_with = ALB
+	will_lead_to_war_with = ARI
+	will_lead_to_war_with = CAN
+	will_lead_to_war_with = NLO
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_sweeping_them_into_the_sea"
-		
+		ALB = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		ARI = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		CAN = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		NLO = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 } 
 
@@ -5702,9 +5833,44 @@ shared_focus = {
 		factor = 50
 	} 
 
+	will_lead_to_war_with = SKY
+	will_lead_to_war_with = TOL
+	will_lead_to_war_with = NGU
+	will_lead_to_war_with = DFF
+	will_lead_to_war_with = NOO
+	will_lead_to_war_with = WTR
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_striking_down_the_mountain_dwellers"
-		
+		SKY = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		TOL = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		NGU = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		DFF = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		NOO = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		WTR = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 } 
 
@@ -5722,9 +5888,38 @@ shared_focus = {
 		factor = 50
 	} 
 
+	will_lead_to_war_with = NTF
+	will_lead_to_war_with = TMS
+	will_lead_to_war_with = DEP
+	will_lead_to_war_with = VOI
+	will_lead_to_war_with = TFL
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_harmonizing_the_riverside"
-		
+		NTF = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		TMS = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		DEP = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		VOI = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		TFL = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 } 
 
@@ -5742,9 +5937,86 @@ shared_focus = {
 		factor = 50
 	} 
 
+	will_lead_to_war_with = BOR
+	will_lead_to_war_with = PEN
+	will_lead_to_war_with = PAR
+	will_lead_to_war_with = BLN
+	will_lead_to_war_with = HYD
+	will_lead_to_war_with = SDO
+	will_lead_to_war_with = JAD
+	will_lead_to_war_with = LOS
+	will_lead_to_war_with = JUD
+	will_lead_to_war_with = PCM
+	will_lead_to_war_with = NMZ
+	will_lead_to_war_with = WTC
+	will_lead_to_war_with = UND
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_cleansing_the_corrupted_city"
-		
+		BOR = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		PEN = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		PAR = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		BLN = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		HYD = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		SDO = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		JAD = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		LOS = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		JUD = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		PCM = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		NMZ = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		WTC = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		UND = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 } 
 
@@ -5762,9 +6034,56 @@ shared_focus = {
 		factor = 50
 	} 
 
+	will_lead_to_war_with = NII
+	will_lead_to_war_with = FLB
+	will_lead_to_war_with = SHP
+	will_lead_to_war_with = QEU
+	will_lead_to_war_with = MOU
+	will_lead_to_war_with = HTK
+	will_lead_to_war_with = SUN
+	will_lead_to_war_with = KNT
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_felling_the_cursed_forest"
-		
+		NII = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		FLB = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		SHP = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		QEU = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		MOU = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		HTK = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		SUN = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		KNT = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 } 
 
@@ -5787,7 +6106,25 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_into_st_petershoof"
-		
+		every_state = {
+			limit = {
+				OR = {
+					is_core_of = USC
+					is_core_of = SDF
+					is_core_of = WRA
+					is_core_of = VLC
+					is_core_of = PFI
+					is_core_of = SNS
+					is_core_of = SPA
+					is_core_of = BTT
+					is_core_of = AMR
+					is_core_of = SEZ
+					is_core_of = NSU
+					is_core_of = SHT
+				}
+			}
+			add_claim_by = COL
+		}
 	}
 } 
 
@@ -5810,7 +6147,24 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_into_manehattan"
-		
+		every_state = {
+			limit = {
+				OR = {
+					is_core_of = TEN
+					is_core_of = FRI
+					is_core_of = GUT
+					is_core_of = ABT
+					is_core_of = ARB
+					is_core_of = MSR
+					is_core_of = EMP
+					is_core_of = MAR
+					is_core_of = MRA
+					is_core_of = RAR
+					is_core_of = FER
+				}
+			}
+			add_claim_by = COL
+		}
 	}
 } 
 
