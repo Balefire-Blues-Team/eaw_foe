@@ -67,3 +67,217 @@ country_event = { ### Don't Play OWE
 		RED = { change_tag_from = ROOT }
 	}
 }
+
+country_event = { ### RED Explosion Game Rule
+	id = utility.5
+	title = utility.5.title
+	desc = utility.5.desc
+	immediate = {
+		log = "[GetDateText]: [Root.GetName]: event utility.5"
+		hidden_effect = {
+			CAT = {
+				add_state_core = 593
+				add_state_core = 513
+				add_state_core = 505
+				add_state_core = 492
+				add_state_core = 533
+				add_state_core = 510
+
+				transfer_state = 593
+				transfer_state = 513
+				transfer_state = 505
+				transfer_state = 492
+				transfer_state = 533
+				transfer_state = 510
+				
+				transfer_technology = yes
+			}
+			every_unit_leader = {
+				limit = {
+					has_id = 59304
+				}
+				set_nationality = CAT
+			}
+
+			FLT = {
+				add_state_core = 529
+				add_state_core = 504
+				add_state_core = 502
+				add_state_core = 50
+				add_state_core = 512
+				add_state_core = 523
+
+				transfer_state = 529
+				transfer_state = 504
+				transfer_state = 502
+				transfer_state = 50
+				transfer_state = 512
+				transfer_state = 523
+				
+				transfer_technology = yes
+			}
+
+			every_state = {
+				limit = {
+					OR = {
+						is_core_of = CAT
+						is_core_of = FLT
+					}
+				}
+				teleport_armies = {
+				    limit = {
+				        tag = RED
+				    }
+				    to_state = 532
+				}
+			}
+		}
+	}
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = { #Fillydelphia
+		name = utility.5.a
+		ai_chance = { base = 10 }
+		remove_ideas = {
+			slave_resistance
+			fractured_comm
+			army_chaos
+		}
+		white_peace = SSC
+		custom_effect_tooltip = load_generic_focus_tree_tt
+		hidden_effect = {
+			load_focus_tree = gensettlers
+			set_country_flag = change_to_settler_tree_flag
+			mark_focus_tree_layout_dirty = yes
+		}
+	}
+	option = { #Cathedral
+		name = utility.5.b
+		ai_chance = { base = 0 }
+		CAT = { change_tag_from = ROOT }
+		hidden_effect = {
+			RED = {
+				load_focus_tree = gensettlers
+				set_country_flag = change_to_settler_tree_flag
+				mark_focus_tree_layout_dirty = yes
+				remove_ideas = {
+					slave_resistance
+					fractured_comm
+					army_chaos
+				}
+				white_peace = SSC
+			}
+		}
+	}
+	option = { #Flatlanders
+		name = utility.5.c
+		ai_chance = { base = 0 }
+		FLT = { change_tag_from = ROOT }
+		hidden_effect = {
+			RED = {
+				load_focus_tree = gensettlers
+				set_country_flag = change_to_settler_tree_flag
+				mark_focus_tree_layout_dirty = yes
+				remove_ideas = {
+					slave_resistance
+					fractured_comm
+					army_chaos
+				}
+				white_peace = SSC
+			}
+		}
+	}
+}
+
+country_event = { ### SSC Explosion Game Rule
+	id = utility.6
+	title = utility.6.title
+	desc = utility.6.desc
+	immediate = {
+		log = "[GetDateText]: [Root.GetName]: event utility.6"
+		hidden_effect = {
+			SSC = {
+				remove_state_core = 554
+				remove_state_core = 487
+				remove_state_core = 85
+				remove_state_core = 5
+				remove_state_core = 546
+
+				delete_unit_template_and_units = {
+					division_template = "Raider Warband"
+				}
+			}
+			SSS = {
+				transfer_state = 85
+				transfer_state = 5
+				transfer_state = 546
+				
+				transfer_technology = yes
+			}
+
+			SSR = {
+				transfer_state = 554
+				transfer_state = 487
+				
+				transfer_technology = yes
+			}
+
+			FSR = {
+				transfer_state = 543
+			}
+
+			every_state = {
+				limit = {
+					OR = {
+						is_core_of = SSS
+						is_core_of = SSR
+					}
+				}
+				teleport_armies = {
+				    limit = {
+				        tag = SSC
+				    }
+				    to_state = 558
+				}
+			}
+		}
+	}
+	is_triggered_only = yes
+	fire_only_once = yes
+
+	option = { #Sunny Shoals
+		name = utility.6.a
+		ai_chance = { base = 10 }
+		remove_ideas = {
+			SSC_fractured_coalition
+		}
+		set_cosmetic_tag = SSC_shoals
+	}
+	option = { #Hoofsburg
+		name = utility.6.b
+		ai_chance = { base = 0 }
+		SSS = { change_tag_from = ROOT }
+		hidden_effect = {
+			SSC = {
+				remove_ideas = {
+					SSC_fractured_coalition
+				}
+				set_cosmetic_tag = SSC_shoals
+			}
+		}
+	}
+	option = { #Raiders
+		name = utility.6.c
+		ai_chance = { base = 0 }
+		SSR = { change_tag_from = ROOT }
+		hidden_effect = {
+			SSC = {
+				remove_ideas = {
+					SSC_fractured_coalition
+				}
+				set_cosmetic_tag = SSC_shoals
+			}
+		}
+	}
+}

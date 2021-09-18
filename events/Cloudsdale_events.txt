@@ -85,10 +85,6 @@ country_event = {
 		name = cloudsdale.44.b
 		ai_chance = { factor = 30
 		modifier = {
-				factor = 1000
-				is_historical_focus_on = yes
-			}
-		modifier = {
 				factor = 0
 				has_game_rule = {
                     rule = NEV_AI_BEHAVIOR
@@ -129,7 +125,10 @@ country_event = {
 			}
 		}
 		set_country_flag = NEV_con_ai
-
+		add_popularity = {
+				ideology = destruction
+				popularity = -0.08
+			}
 
 		
 	}
@@ -548,7 +547,8 @@ country_event = {
 		modifier = {
 				factor = 0
 				has_country_flag = NEV_vis_ai
-			}}
+			}
+		}
 		add_popularity = {
 				ideology = continuation
 				popularity = -0.15
@@ -563,7 +563,7 @@ country_event = {
 			picture = "Autumn_Leaf.tga"
 			expire = "1965.1.1"
 			ideology = enclave_cont
-			traits = { provisional }
+			traits = { }
 		}
 		if = {
 			limit = { has_unit_leader = 9785 }
@@ -598,7 +598,7 @@ country_event = {
 			picture = "Regency.tga"
 			expire = "1965.1.1"
 			ideology = enclave_cont
-			traits = { provisional }
+			traits = { }
 		}
 		if = {
 			limit = { has_unit_leader = 9785 }
@@ -852,7 +852,8 @@ country_event = {
 		modifier = {
 				factor = 100
 				has_country_flag = NEV_con_ai
-			}}
+			}
+		}
 		add_popularity = {
 				ideology = continuation
 				popularity = 0.05
@@ -901,7 +902,8 @@ country_event = {
 		modifier = {
 				factor = 0
 				has_country_flag = NEV_des_ai
-			}}
+			}
+		}
 		add_popularity = {
 				ideology = continuation
 				popularity = 0.05
@@ -1009,7 +1011,8 @@ country_event = {
 		modifier = {
 				factor = 0
 				has_country_flag = NEV_des_ai
-			}}
+			}
+		}
 		add_popularity = {
 				ideology = continuation
 				popularity = 0.05
@@ -1286,6 +1289,9 @@ country_event = {
 			traits = { NEV_tornado_trait }	
 		}
 		hidden_effect = { load_focus_tree = cloudsdale_enclave_tornado_focus }
+		hidden_effect = {
+			set_global_flag = NEV_tornado_leader_flag
+		}
 	}
 	
 }
@@ -1308,7 +1314,9 @@ country_event = {
 		set_politics = { ruling_party = visionary elections_allowed = no }
 		add_popularity = { ideology = visionary popularity = 0.30 }
 		hidden_effect = { load_focus_tree = cloudsdale_enclave_seafire_focus }
-	
+		hidden_effect = {
+			set_global_flag = NEV_seafire_leader_flag 
+		}
 	}
 	
 }
@@ -1394,6 +1402,9 @@ country_event = {
 		hidden_effect = { set_country_flag = NEV_cauterize  
 			load_focus_tree = cloudsdale_enclave_cauterize_focus
 		}
+		hidden_effect = {
+			set_global_flag = NEV_autumn_leader_flag
+		}
 	}
 	
 }
@@ -1421,6 +1432,9 @@ country_event = {
 		}
 		add_country_leader_trait = NEV_tornado_trait
 		hidden_effect = { load_focus_tree = cloudsdale_enclave_tornado_focus }
+		hidden_effect = {
+			set_global_flag = NEV_tornado_leader_flag
+		}
 	}
 	
 }
@@ -1431,6 +1445,7 @@ country_event = {
  	id = cloudsdale.25
  	title = cloudsdale.25.t
  	desc = cloudsdale.25.d
+ 	picture = GFX_event_nev_elections_autumn
 	
 	is_triggered_only = yes
  	fire_only_once = yes
@@ -2527,7 +2542,11 @@ country_event = {
 		set_cosmetic_tag = NEV_new_cloudsdale_republic
 		add_stability = 0.2
 		add_war_support = 0.15
-		remove_opinion_modifier = { target = every_other_country modifier = dirty_wastelander }
+			every_other_country = {
+				ROOT = {
+					remove_opinion_modifier = { target = PREV modifier = dirty_wastelander }
+				       }
+			                      }
 		#add 1 (one) point towards enclave unification
 	}
 }
@@ -2714,7 +2733,7 @@ country_event = {
 		ai_chance = { factor = 80 
 			modifier = {
 				factor = 0
-				ruling_party = destruction
+				has_government = destruction
 			}
 		}
 		name = cloudsdale_vis.21.a
@@ -2813,7 +2832,7 @@ country_event = {
 		ai_chance = { factor = 80 
 			modifier = {
 				factor = 0
-				ruling_party = destruction
+				has_government = destruction
 			}
 		}
 		name = cloudsdale_vis.24.a
@@ -2984,7 +3003,7 @@ country_event = {
 		ai_chance = { factor = 0 }
 		name = cloudsdale_vis.31.b
 		NEV = {declare_war_on = { 
-				type = puppet 
+				type = puppet_wargoal_focus  
 				target = MWY
 		}	  }
 		hidden_effect = {NEV = { add_state_core = 581 add_state_core = 187}}
@@ -3150,6 +3169,7 @@ country_event = {
 	fire_only_once = yes
 	trigger = {
 		has_full_control_of_state = 234
+		is_ai = yes
 		NEV = {
 			has_completed_focus = NEV_des_launch_cauterize
 		}	
@@ -3158,8 +3178,27 @@ country_event = {
 	option ={
 	name = cloudsdale_purge.2.a
 	ai_chance = { factor = 90} 
-		
-		234 = { damage_building = { type = infrastructure damage = 3}  add_manpower = -2000 }
+		234 = { damage_building = { type = infrastructure damage = 8} damage_building = { type = arms_factory damage = 10} damage_building = { type = industrial_complex damage = 10} }
+		180 = { damage_building = { type = infrastructure damage = 8} damage_building = { type = arms_factory damage = 10} damage_building = { type = industrial_complex damage = 10} add_manpower = -2000 }
+		IF = {
+			limit = {tag = SCI is_ai = yes}
+				SCI = {
+					annex_country = {
+						target = CAL
+						transfer_troops = no
+					}
+					delete_unit = { 
+						state = 180             
+						disband = no
+					}
+					add_state_core = 234
+					set_cosmetic_tag = SCI_cauterize_cosm
+				}
+				set_province_name = {
+					id = 8775
+					name = "Stable City Ruins"
+				}
+		}
 	}
 }
 
@@ -3184,8 +3223,17 @@ country_event = {
 	option ={
 	name = cloudsdale_purge.3.a
 	ai_chance = { factor = 90} 
-		
-		39 = { damage_building = { type = infrastructure damage = 3} damage_building = { type = industrial_complex damage = 2}  add_manpower = -342 }
+		39 = { damage_building = { type = infrastructure damage = 5} damage_building = { type = industrial_complex damage = 4}  add_manpower = -342 }
+		IF = {
+			limit = {tag = FRI is_ai = yes}
+				FRI = {
+					delete_unit = { 
+						state = 39             
+						disband = no
+					}
+					set_cosmetic_tag = FRI_cauterize_cosm
+				}
+		}
 	}
 }
 
@@ -3570,7 +3618,7 @@ country_event = {
 		custom_effect_tooltip = NEV_cauterize_won_tt
 		country_event = { id = cloudsdale_purge.17 }
 		hidden_effect = {
-			clr_glogabl_flag = cauterize_in_progress_flag
+			clr_global_flag = cauterize_in_progress_flag
 		}
 	}
 }

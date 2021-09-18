@@ -4,6 +4,7 @@ add_namespace = fillysr
 add_namespace = fillysr_cr
 add_namespace = fillysr_bs
 add_namespace = fillysr_sl
+add_namespace = fillysr_msr
 
 ##The Great War
 country_event = {
@@ -60,31 +61,27 @@ country_event = {
 	option = {
 		name = fillysr.22.a
 		ai_chance = { factor = 40
-		modifier = {
+			modifier = {
 				factor = 0
 				is_historical_focus_on = yes
 			}
-		modifier = {
-			factor = 0
-			has_game_rule = {
+			modifier = {
+				factor = 0
+				has_game_rule = {
                     rule = FSR_AI_BEHAVIOR
                     option = BLUEBERRY
                 }
 			}
-		}
-		modifier = {
-			factor = 0
-			has_game_rule = {
+			modifier = {
+				factor = 0
+				has_game_rule = {
                     rule = FSR_AI_BEHAVIOR
-                    option = NOVARAGE
-                
+                    option = NOVARAGE        
+				}
 			}
 		}
 		
-			set_country_flag = FSR_vis_ai
-		
-		
-		
+		set_country_flag = FSR_vis_ai		
 	}
 	option = {
 		name = fillysr.22.b
@@ -1228,17 +1225,21 @@ country_event = {
 		name = fillysr_bs.2.a
 		ai_chance = { base = 0}
 		add_popularity = {
-				ideology = visionary
-				popularity = 0.1
-			}
-		country_event = { id = fillysr_bs.? }
+			ideology = visionary
+			popularity = 0.1
+		}
+		add_political_power = -100
+		
+		#country_event = { id = fillysr_bs.? }
 	}
 	
 	option ={
 		name = fillysr_bs.2.b
 		ai_chance = { factor = 900}
-		country_event = { id = fillysr_bs.? }
+		add_war_support = 0.05
 		set_country_flag = FSR_stable_2_scouted_flag
+
+		#country_event = { id = fillysr_bs.? }
 	}
 }
 
@@ -1390,7 +1391,7 @@ country_event = {
 	
 	option ={
 	name = fillysr_bs.6.a
-		remove_country_flag = fight_for_mada
+		clr_country_flag = fight_for_mada
 		add_political_power = 100
 		add_war_support = 0.05
 		transfer_state = 543
@@ -2613,7 +2614,7 @@ country_event = {
 	trigger = {
 		has_completed_focus = FSR_kill_red
 		original_tag = FSR
-		ruling_party = visionary
+		has_government = visionary
 		
 		RED = {
 			exists = no
@@ -2647,7 +2648,7 @@ country_event = {
 	trigger = {
 		has_completed_focus = FSR_slapredeye
 		original_tag = FSR
-		ruling_party = continuation
+		has_government = continuation
 		
 		RED = {
 			exists = no
@@ -2681,7 +2682,7 @@ country_event = {
 	trigger = {
 		has_completed_focus = FSR_sl_victory
 		original_tag = FSR
-		ruling_party = visionary
+		has_government = visionary
 		
 	}
 	fire_only_once = yes
@@ -2710,7 +2711,7 @@ country_event = {
 	trigger = {
 		has_completed_focus = FSR_sl_victory
 		original_tag = FSR
-		ruling_party = visionary
+		has_government = visionary
 		
 	}
 	fire_only_once = yes
@@ -2742,7 +2743,7 @@ country_event = {
 	trigger = {
 		has_completed_focus = FSR_sl_victory
 		original_tag = FSR
-		ruling_party = visionary
+		has_government = visionary
 		
 	}
 	fire_only_once = yes
@@ -3342,7 +3343,17 @@ country_event = {
 	hidden_effect = {
 	drop_cosmetic_tag = yes
 	set_cosmetic_tag = FSR_reclaim
-	add_country_leader_trait = fsr_grand_regent
+	retire_country_leader = yes
+	create_country_leader = {
+		name = "Grand Regent Strawberry Lemonade"
+		desc = "POLITICS_GRANDREGENT_DESC"
+		picture = "GFX_Regent_Strawberry_animated"
+		expire = "1965.1.1"
+		ideology = protector
+		traits = {
+		fsr_reformist fsr_grand_regent
+		}
+	}
 	}
 	}
 }
@@ -3436,24 +3447,54 @@ country_event = {
 	option ={
 	name = fillysr_sl.37.a
 	ai_chance = { factor = 90} 
-		HIT = { 
-			    country_event = { 
-			        id = fillysr_sl.38
+		IF = {
+			limit = {HIT = {exists = yes}}
+			HIT = {
+				country_event = { 
+					id = fillysr_sl.38
 					days = 3 
 				} 
 			}
-		GRV = { 
-			    country_event = { 
-			        id = fillysr_sl.38
-					days = 3 
-				} 
+		}
+		ELSE = {
+			HIT = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
 			}
-		FTR = { 
-			    country_event = { 
-			        id = fillysr_sl.38 
-					days = 3 
-				} 
+		}
+		IF = {
+			limit = {GRV = {exists = yes}}
+			GRV = { 
+					country_event = { 
+						id = fillysr_sl.38
+						days = 3 
+					} 
+				}
+		}
+		ELSE = {
+			GRV = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
 			}
+		}
+		IF = {
+			limit = {FTR = {exists = yes}}
+			FTR = { 
+					country_event = { 
+						id = fillysr_sl.38 
+						days = 3 
+					} 
+				}
+		}
+		ELSE = {
+			FTR = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
 	}
 	
 	option ={
@@ -5034,7 +5075,141 @@ country_event = {
 	
 }
 
+###MSR Remnant Events###
+country_event = {
+	id = fillysr_msr.1
+	title = fillysr_msr.1.t
+	desc = fillysr_msr.1.d
+	
+	picture = GFX_event_test
+	
+	fire_only_once = yes
+	trigger = {
+	AND = {
+		original_tag = FSR
+		NOT = {
+			country_exists = MSR
+		}
+		OR = {
+			has_global_flag = fsr_blueberry_flag
+			has_global_flag = fsr_strawberry_flag
+		}
+	}
+	}
+	
+	option = {
+		name = fillysr_msr.1.a
+		ai_chance = { factor = 50 }
+		hidden_effect = { load_oob = "FSR_manehatten_remnants" }
+		IF = {
+			limit = { has_global_flag = msr_cottage_flag }
+			custom_effect_tooltip = FSR_cottage_tt
+			hidden_effect = {
+			set_country_flag = FSR_cottage_advisor_flag
+			}
+			else_if = {
+			limit = { has_global_flag = msr_steelhooves_flag }
+			custom_effect_tooltip = FSR_steelhooves_tt
+			hidden_effect = {
+			set_country_flag = FSR_steelhooves_advisor_flag
+			create_field_marshal = {
+				name = "Star Paladin Steelhooves"
+				picture = "SteelHooves.tga"
+				traits = { canterlot_ghoul_trait enduring_trait strong_trait pony_race_trait }
+				skill = 4
+				attack_skill = 4
+				defense_skill = 4
+				planning_skill = 4
+				logistics_skill = 4
+				id = 888442
+			}
+			}
+			}
+			else_if = {
+			limit = { has_global_flag = msr_crossroads_flag }
+			custom_effect_tooltip = FSR_cross_tt
+			hidden_effect = {
+			set_country_flag = FSR_crossroads_advisor_flag
+			create_field_marshal = {
+				name = "Star Paladin Crossroads"
+				picture = "Crossroads2.tga"
+				traits = { intelligent_trait perceptive_trait pony_race_trait }
+				skill = 3
+				attack_skill = 2
+				defense_skill = 3
+				planning_skill = 2
+				logistics_skill = 3
+				id = 888422
+			}
 
+			}
+			}
+			else = {
+			custom_effect_tooltip = FSR_msr_remnants_tt
+			}
+		}
+	}
+}
+
+country_event = {
+	id = fillysr_msr.2
+	title = fillysr_msr.2.t
+	desc = fillysr_msr.2.d
+	
+	picture = GFX_event_test
+	
+	fire_only_once = yes
+	trigger = {
+	AND = {
+		original_tag = FSR
+		NOT = {
+			country_exists = MSR
+		}
+			has_global_flag = msr_cottagegod_flag
+			has_global_flag = fsr_blueberry_flag
+			owns_state = 55
+	}
+	}
+	
+	option = {
+		name = fillysr_msr.2.a
+		ai_chance = { factor = 50 }
+		custom_effect_tooltip = FSR_msr_cottagegod_tt
+		hidden_effect = {
+			set_country_flag = FSR_cottagegod_advisor_flag
+		}
+	}
+}
+
+country_event = {
+	id = fillysr_msr.3
+	title = fillysr_msr.3.t
+	desc = fillysr_msr.3.d
+	
+	picture = GFX_event_test
+	
+	fire_only_once = yes
+	trigger = {
+	AND = {
+		original_tag = FSR
+		NOT = {
+			country_exists = MSR
+		}
+			has_global_flag = msr_cottagegod_flag
+			has_global_flag = fsr_strawberry_flag
+			owns_state = 55
+		}
+	}
+	
+	option = {
+		name = fillysr_msr.3.a
+		ai_chance = { factor = 50 }
+		custom_effect_tooltip = FSR_msr_cottagegod_tt
+		hidden_effect = {
+			set_country_flag = FSR_cottagegod_advisor_flag
+		}
+	}
+}
 
 
 
@@ -5080,12 +5255,12 @@ country_event = {
 ###############################
 
 #option = { 
-		name = vedina_wedding.13.a
-		trigger = {
-			has_country_flag = VED_Chose_Fascist_Prince_Flag
-		}			
-		custom_effect_tooltip = FEA_focus_tree_tp
-		hidden_effect = { load_focus_tree = vedina_focus_evil }	
+#		name = vedina_wedding.13.a
+#		trigger = {
+#			has_country_flag = VED_Chose_Fascist_Prince_Flag
+#		}			
+#		custom_effect_tooltip = FEA_focus_tree_tp
+#		hidden_effect = { load_focus_tree = vedina_focus_evil }	
 
 
 

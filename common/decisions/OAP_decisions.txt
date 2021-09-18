@@ -1,1 +1,1746 @@
-###
+
+OAP_Ranger_decision_cat = {
+
+	OAP_ranger_example_decision = {
+		icon = generic_construction
+		is_good = no
+		available = {
+			has_country_flag = OAP_ranger_integration_allowed
+		}
+		visible = {
+			NOT = {
+				OR = {
+				has_completed_focus = OAP_power_cemented
+				has_completed_focus = OAP_call_up_rangers
+				}
+			}
+		}
+		modifier = {
+			political_power_cost = 0.1
+		}
+		fire_only_once = yes
+		days_remove = 50
+		cost = 30
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_ranger_example_decision"
+			If = {
+				limit = {
+					has_idea = OAP_ranger_defiance_1
+				}
+				remove_ideas = OAP_ranger_defiance_1
+			}
+			else_if = {
+				limit = {
+					has_idea = OAP_ranger_defiance_2
+				}
+				remove_ideas = OAP_ranger_defiance_2
+			}
+			else_if = {
+				limit = {
+					has_idea = OAP_ranger_defiance_3
+				}
+				remove_ideas = OAP_ranger_defiance_3
+			}
+			else_if = {
+				limit = {
+					has_idea = OAP_ranger_defiance_4
+				}
+				remove_ideas = OAP_ranger_defiance_4
+			}
+			else_if = {
+				limit = {
+					has_idea = OAP_ranger_defiance_5
+				}
+				remove_ideas = OAP_ranger_defiance_5
+			}
+			division_template = {
+	            name = "Rangers"
+	            is_locked = no
+	                regiments = {
+		                spec_ops = { x = 0 y = 0 }
+						spec_ops = { x = 0 y = 1 }
+						spec_ops = { x = 1 y = 0 }
+						spec_ops = { x = 1 y = 1 }
+						spec_ops = { x = 0 y = 2 }
+	                }
+            }
+			599 = {
+					create_unit = {
+						division = "name = \"1st Ranger-Team\" division_template = \"Rangers\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+					create_unit = {
+						division = "name = \"2nd Ranger-Team\" division_template = \"Rangers\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+					create_unit = {
+						division = "name = \"3rd Ranger-Team\" division_template = \"Rangers\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+					create_unit = {
+						division = "name = \"4th Ranger-Team\" division_template = \"Rangers\" start_experience_factor = 0.6 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+				}
+		}
+		
+		ai_will_do = {
+			factor = 0
+		}
+	}
+}
+
+OAP_build_HQ_decision_cat = {
+
+	OAP_HQ_groundwork = {
+		icon = railroad
+		is_good = yes
+
+		available = {
+			has_political_power > 24
+			num_of_civilian_factories_available_for_projects > 1
+		}
+		visible = {
+			has_completed_focus = OAP_rangers_start_ranger_hq
+		}
+		modifier = {
+			civilian_factory_use = 2
+		}
+		days_remove = 100
+		fire_only_once = yes
+		cost = 25
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_HQ_groundwork "
+			
+			custom_effect_tooltip = OAP_add_5_HQ_progress_tt
+			add_to_variable = {
+				var = ranger_hq
+				value = 5
+			}
+			67 = { add_extra_state_shared_building_slots = 2}
+			hidden_effect = {
+			add_victory_points = {
+				province = 13087
+				value = 2
+			}
+			}
+			
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+	
+	OAP_HQ_roads = {
+		icon = railroad
+		is_good = yes
+
+		available = {
+			has_political_power > 24
+			num_of_civilian_factories_available_for_projects > 2
+			custom_trigger_tooltip = {
+                tooltip = OAP_HQ_foundation_lait_tt
+                    check_variable = {
+                        ranger_hq > 4
+                    }
+            }
+		}
+		visible = {
+			has_completed_focus = OAP_rangers_start_ranger_hq
+		}
+		modifier = {
+			civilian_factory_use = 3
+		}
+		days_remove = 100
+		fire_only_once = yes
+		cost = 25
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_HQ_roads "
+			
+			custom_effect_tooltip = OAP_add_5_HQ_progress_tt
+			add_to_variable = {
+				var = ranger_hq
+				value = 5
+			}
+			67 = {add_building_construction = { type = infrastructure instant_build = yes level = 4}}
+			add_victory_points = {
+				province = 13087
+				value = 1
+			}
+			
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+	
+	OAP_HQ_foundation = {
+		icon = railroad
+		is_good = yes
+
+		available = {
+			has_political_power > 24
+			num_of_civilian_factories_available_for_projects > 2
+			custom_trigger_tooltip = {
+                tooltip = OAP_HQ_foundation_lait_tt
+                    check_variable = {
+                        ranger_hq > 4
+                    }
+            }
+		}
+		visible = {
+			has_completed_focus = OAP_rangers_start_ranger_hq
+		}
+		modifier = {
+			civilian_factory_use = 3
+		}
+		days_remove = 60
+		fire_only_once = yes
+		cost = 25
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_HQ_roads "
+			
+			custom_effect_tooltip = OAP_add_5_HQ_progress_tt
+			add_to_variable = {
+				var = ranger_hq
+				value = 5
+			}
+			67 = { add_extra_state_shared_building_slots = 2}
+			add_victory_points = {
+				province = 13087
+				value = 1
+			}
+			
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+	
+	OAP_HQ_water_wells = {
+		icon = railroad
+		is_good = yes
+
+		available = {
+			has_political_power > 24
+			num_of_civilian_factories_available_for_projects > 2
+			custom_trigger_tooltip = {
+                tooltip = OAP_HQ_foundation_lait_tt
+                    check_variable = {
+                        ranger_hq > 4
+                    }
+            }
+		}
+		visible = {
+			has_completed_focus = OAP_rangers_start_ranger_hq
+		}
+		modifier = {
+			civilian_factory_use = 3
+		}
+		days_remove = 60
+		fire_only_once = yes
+		cost = 25
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_HQ_water_wells "
+			
+			custom_effect_tooltip = OAP_add_5_HQ_progress_tt
+			add_to_variable = {
+				var = ranger_hq
+				value = 5
+			}
+			67 = {
+				add_resource = {
+					type = water amount = 6
+				}
+			}
+			add_victory_points = {
+				province = 13087
+				value = 1
+			}
+			
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+	
+	OAP_HQ_settle_workers = {
+		icon = railroad
+		is_good = yes
+
+		available = {
+			has_political_power > 24
+			num_of_civilian_factories_available_for_projects > 2
+			custom_trigger_tooltip = {
+                tooltip = OAP_HQ_foundation_lait_tt
+                    check_variable = {
+                        ranger_hq > 4
+                    }
+            }
+		}
+		visible = {
+			has_completed_focus = OAP_rangers_start_ranger_hq
+		}
+		modifier = {
+			civilian_factory_use = 3
+		}
+		days_remove = 40
+		fire_only_once = yes
+		cost = 25
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_HQ_settle_workers "
+			
+			custom_effect_tooltip = OAP_add_5_HQ_progress_tt
+			add_to_variable = {
+				var = ranger_hq
+				value = 5
+			}
+			67 = {
+				add_manpower = 600
+			}
+			add_victory_points = {
+				province = 13087
+				value = 1
+			}
+			
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+	
+	OAP_HQ_trench_alpha = {
+		icon = bunker
+		is_good = yes
+
+		available = {
+			has_political_power > 24
+			num_of_civilian_factories_available_for_projects > 4
+			custom_trigger_tooltip = {
+                tooltip = OAP_HQ_foundation_finished_tt
+                    check_variable = {
+                        ranger_hq > 24
+                    }
+            }
+		}
+		visible = {
+			has_completed_focus = OAP_rangers_start_ranger_hq
+		}
+		modifier = {
+			civilian_factory_use = 5
+		}
+		days_remove = 40
+		fire_only_once = yes
+		cost = 25
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_HQ_trench_alpha "
+			
+			custom_effect_tooltip = OAP_add_5_HQ_progress_tt
+			add_to_variable = {
+				var = ranger_hq
+				value = 5
+			}
+			67 = {
+				add_building_construction = {
+				type = bunker
+				province = 13729
+				level = 3
+				instant_build = yes
+				}
+				add_building_construction = {
+				type = bunker
+				province = 10942
+				level = 3
+				instant_build = yes
+				}
+			}
+			596 = {
+				add_building_construction = {
+				type = bunker
+				province = 382
+				level = 3
+				instant_build = yes
+				}
+			}
+			
+			
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+	
+	OAP_HQ_trench_beta = {
+		icon = bunker
+		is_good = yes
+
+		available = {
+			has_political_power > 24
+			num_of_civilian_factories_available_for_projects > 4
+			custom_trigger_tooltip = {
+                tooltip = OAP_HQ_foundation_finished_tt
+                    check_variable = {
+                        ranger_hq > 24
+                    }
+            }
+		}
+		visible = {
+			has_completed_focus = OAP_rangers_start_ranger_hq
+		}
+		modifier = {
+			civilian_factory_use = 5
+		}
+		days_remove = 40
+		fire_only_once = yes
+		cost = 25
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_HQ_trench_beta "
+			
+			custom_effect_tooltip = OAP_add_5_HQ_progress_tt
+			add_to_variable = {
+				var = ranger_hq
+				value = 5
+			}
+			67 = {
+				add_building_construction = {
+				type = bunker
+				province = 481
+				level = 2
+				instant_build = yes
+				}
+				add_building_construction = {
+				type = bunker
+				province = 9444
+				level = 2
+				instant_build = yes
+				}
+				
+			}
+			596 = {
+				add_building_construction = {
+				type = bunker
+				province = 2177
+				level = 2
+				instant_build = yes
+				}
+				add_building_construction = {
+				type = bunker
+				province = 15083
+				level = 2
+				instant_build = yes
+				}
+				add_building_construction = {
+				type = bunker
+				province = 14695
+				level = 2
+				instant_build = yes
+				}
+			}
+			
+			
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+	
+	OAP_HQ_fortress_defense = {
+		icon = bunker
+		is_good = yes
+
+		available = {
+			has_political_power > 24
+			num_of_civilian_factories_available_for_projects > 4
+			custom_trigger_tooltip = {
+                tooltip = OAP_HQ_foundation_finished_tt
+                    check_variable = {
+                        ranger_hq > 24
+                    }
+            }
+		}
+		visible = {
+			has_completed_focus = OAP_rangers_start_ranger_hq
+		}
+		modifier = {
+			civilian_factory_use = 5
+		}
+		days_remove = 60
+		fire_only_once = yes
+		cost = 25
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_HQ_fortress_defense "
+			
+			custom_effect_tooltip = OAP_add_5_HQ_progress_tt
+			add_to_variable = {
+				var = ranger_hq
+				value = 5
+			}
+			67 = {
+				add_building_construction = {
+				type = bunker
+				province = 13087
+				level = 6
+				instant_build = yes
+				}
+				add_building_construction = {
+				type = bunker2
+				province = 13087
+				level = 2
+				instant_build = yes
+				}
+				
+			}
+			add_victory_points = {
+				province = 13087
+				value = 2
+			}
+			
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+	
+	OAP_HQ_air_defense = {
+		icon = bunker
+		is_good = yes
+
+		available = {
+			has_political_power > 24
+			num_of_civilian_factories_available_for_projects > 4
+			custom_trigger_tooltip = {
+                tooltip = OAP_HQ_foundation_finished_tt
+                    check_variable = {
+                        ranger_hq > 24
+                    }
+            }
+		}
+		visible = {
+			has_completed_focus = OAP_rangers_start_ranger_hq
+		}
+		modifier = {
+			civilian_factory_use = 5
+		}
+		days_remove = 60
+		fire_only_once = yes
+		cost = 25
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_HQ_air_defense "
+			
+			custom_effect_tooltip = OAP_add_5_HQ_progress_tt
+			add_to_variable = {
+				var = ranger_hq
+				value = 5
+			}
+			67 = {
+				add_building_construction = {
+				type = anti_air_building
+				level = 4
+				instant_build = yes
+				}
+			}
+			
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+	
+	OAP_HQ_underground_munitions = {
+		icon = bunker
+		is_good = yes
+
+		available = {
+			has_political_power > 24
+			num_of_civilian_factories_available_for_projects > 4
+			custom_trigger_tooltip = {
+                tooltip = OAP_HQ_foundation_finished_tt
+                    check_variable = {
+                        ranger_hq > 24
+                    }
+            }
+		}
+		visible = {
+			has_completed_focus = OAP_rangers_start_ranger_hq
+		}
+		modifier = {
+			civilian_factory_use = 5
+		}
+		days_remove = 60
+		fire_only_once = yes
+		cost = 25
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_HQ_underground_munitions "
+			
+			custom_effect_tooltip = OAP_add_5_HQ_progress_tt
+			add_to_variable = {
+				var = ranger_hq
+				value = 5
+			}
+			67 = {
+				add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+				}
+			}
+			
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+	
+	OAP_HQ_fortified_housing = {
+		icon = hammer
+		is_good = yes
+
+		available = {
+			has_political_power > 24
+			num_of_civilian_factories_available_for_projects > 4
+			custom_trigger_tooltip = {
+                tooltip = OAP_HQ_foundation_finished_tt
+                    check_variable = {
+                        ranger_hq > 24
+                    }
+            }
+		}
+		visible = {
+			has_completed_focus = OAP_rangers_start_ranger_hq
+		}
+		modifier = {
+			civilian_factory_use = 5
+		}
+		days_remove = 60
+		fire_only_once = yes
+		cost = 25
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_HQ_underground_munitions "
+			
+			custom_effect_tooltip = OAP_add_5_HQ_progress_tt
+			add_to_variable = {
+				var = ranger_hq
+				value = 5
+			}
+			67 = {
+				add_extra_state_shared_building_slots = 1
+				add_manpower = 400
+			}
+			add_victory_points = {
+				province = 13087
+				value = 2
+			}
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+	
+	OAP_HQ_underground_generators = {
+		icon = hammer
+		is_good = yes
+
+		available = {
+			has_political_power > 24
+			num_of_civilian_factories_available_for_projects > 4
+			custom_trigger_tooltip = {
+                tooltip = OAP_HQ_foundation_finished_tt
+                    check_variable = {
+                        ranger_hq > 24
+                    }
+            }
+		}
+		visible = {
+			has_completed_focus = OAP_rangers_start_ranger_hq
+		}
+		modifier = {
+			civilian_factory_use = 5
+		}
+		days_remove = 60
+		fire_only_once = yes
+		cost = 25
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_HQ_underground_generators "
+			
+			custom_effect_tooltip = OAP_add_5_HQ_progress_tt
+			add_to_variable = {
+				var = ranger_hq
+				value = 5
+			}
+			67 = {
+				add_resource = { type = energy amount = 10 }
+			}
+			add_victory_points = {
+				province = 13087
+				value = 1
+			}
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+	
+	OAP_HQ_onsite_smelteries = {
+		icon = hammer
+		is_good = yes
+
+		available = {
+			has_political_power > 24
+			num_of_civilian_factories_available_for_projects > 4
+			custom_trigger_tooltip = {
+                tooltip = OAP_HQ_foundation_finished_tt
+                    check_variable = {
+                        ranger_hq > 24
+                    }
+            }
+		}
+		visible = {
+			has_completed_focus = OAP_rangers_start_ranger_hq
+		}
+		modifier = {
+			civilian_factory_use = 5
+		}
+		days_remove = 60
+		fire_only_once = yes
+		cost = 25
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_HQ_onsite_smelteries "
+			
+			custom_effect_tooltip = OAP_add_5_HQ_progress_tt
+			add_to_variable = {
+				var = ranger_hq
+				value = 5
+			}
+			67 = {
+				add_resource = { type = metal amount = 10 }
+			}
+			add_victory_points = {
+				province = 13087
+				value = 1
+			}
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+	
+	OAP_HQ_integrated_factory = {
+		icon = hammer
+		is_good = yes
+
+		available = {
+			has_political_power > 24
+			num_of_civilian_factories_available_for_projects > 4
+			custom_trigger_tooltip = {
+                tooltip = OAP_HQ_foundation_finished_tt
+                    check_variable = {
+                        ranger_hq > 24
+                    }
+            }
+		}
+		visible = {
+			has_completed_focus = OAP_rangers_start_ranger_hq
+		}
+		modifier = {
+			civilian_factory_use = 5
+		}
+		days_remove = 60
+		fire_only_once = yes
+		cost = 25
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_HQ_integrated_factory "
+			
+			custom_effect_tooltip = OAP_add_5_HQ_progress_tt
+			add_to_variable = {
+				var = ranger_hq
+				value = 5
+			}
+			67 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+				}
+			}
+			add_victory_points = {
+				province = 13087
+				value = 1
+			}
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+	
+	OAP_HQ_finish_main_body = {
+		icon = hammer
+		is_good = yes
+
+		available = {
+			has_political_power > 24
+			num_of_civilian_factories_available_for_projects > 4
+			custom_trigger_tooltip = {
+                tooltip = OAP_HQ_foundation_finished_tt
+                    check_variable = {
+                        ranger_hq > 24
+                    }
+            }
+		}
+		visible = {
+			has_completed_focus = OAP_rangers_start_ranger_hq
+		}
+		modifier = {
+			civilian_factory_use = 5
+		}
+		days_remove = 60
+		fire_only_once = yes
+		cost = 25
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_HQ_finish_main_body "
+			
+			custom_effect_tooltip = OAP_add_5_HQ_progress_tt
+			add_to_variable = {
+				var = ranger_hq
+				value = 5
+			}
+			67 = {
+				add_extra_state_shared_building_slots = 4
+			}
+			add_victory_points = {
+				province = 13087
+				value = 1
+			}
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+	
+	OAP_HQ_holo_targeting = {
+		icon = marine_helmet
+		is_good = yes
+
+		available = {
+			has_political_power > 24
+			num_of_civilian_factories_available_for_projects > 7
+			custom_trigger_tooltip = {
+                tooltip = OAP_HQ_body_finished_tt
+                    check_variable = {
+                        ranger_hq > 74
+                    }
+            }
+		}
+		visible = {
+			has_completed_focus = OAP_rangers_start_ranger_hq
+		}
+		modifier = {
+			civilian_factory_use = 8
+		}
+		days_remove = 60
+		fire_only_once = yes
+		cost = 25
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_HQ_holo_targeting "
+			
+			custom_effect_tooltip = OAP_add_5_HQ_progress_tt
+			add_to_variable = {
+				var = ranger_hq
+				value = 5
+			}
+			custom_effect_tooltip = OAP_holo_targeting_tt
+			add_victory_points = {
+				province = 13087
+				value = 2
+			}
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+	
+	OAP_HQ_command_centre = {
+		icon = terminal
+		is_good = yes
+
+		available = {
+			has_political_power > 24
+			num_of_civilian_factories_available_for_projects > 7
+			custom_trigger_tooltip = {
+                tooltip = OAP_HQ_body_finished_tt
+                    check_variable = {
+                        ranger_hq > 74
+                    }
+            }
+		}
+		visible = {
+			has_completed_focus = OAP_rangers_start_ranger_hq
+		}
+		modifier = {
+			civilian_factory_use = 8
+		}
+		days_remove = 60
+		fire_only_once = yes
+		cost = 25
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_HQ_command_centre "
+			
+			custom_effect_tooltip = OAP_add_5_HQ_progress_tt
+			add_to_variable = {
+				var = ranger_hq
+				value = 5
+			}
+			custom_effect_tooltip = OAP_command_centre_tt
+			add_victory_points = {
+				province = 13087
+				value = 2
+			}
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+	
+	OAP_HQ_recruit_centre = {
+		icon = rifles
+		is_good = yes
+
+		available = {
+			has_political_power > 24
+			num_of_civilian_factories_available_for_projects > 7
+			custom_trigger_tooltip = {
+                tooltip = OAP_HQ_body_finished_tt
+                    check_variable = {
+                        ranger_hq > 74
+                    }
+            }
+		}
+		visible = {
+			has_completed_focus = OAP_rangers_start_ranger_hq
+		}
+		modifier = {
+			civilian_factory_use = 8
+		}
+		days_remove = 60
+		fire_only_once = yes
+		cost = 25
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_HQ_recruit_centre "
+			
+			custom_effect_tooltip = OAP_add_5_HQ_progress_tt
+			add_to_variable = {
+				var = ranger_hq
+				value = 5
+			}
+			custom_effect_tooltip = OAP_recruit_centre_tt
+			add_victory_points = {
+				province = 13087
+				value = 2
+			}
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+	
+	OAP_HQ_propaganda_radio = {
+		icon = megaphone
+		is_good = yes
+
+		available = {
+			has_political_power > 24
+			num_of_civilian_factories_available_for_projects > 7
+			custom_trigger_tooltip = {
+                tooltip = OAP_HQ_body_finished_tt
+                    check_variable = {
+                        ranger_hq > 74
+                    }
+            }
+		}
+		visible = {
+			has_completed_focus = OAP_rangers_start_ranger_hq
+		}
+		modifier = {
+			civilian_factory_use = 8
+		}
+		days_remove = 60
+		fire_only_once = yes
+		cost = 25
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_HQ_propaganda_radio "
+			
+			custom_effect_tooltip = OAP_add_5_HQ_progress_tt
+			add_to_variable = {
+				var = ranger_hq
+				value = 5
+			}
+			custom_effect_tooltip = OAP_propaganda_radio_tt
+			67 = {
+				add_building_construction = {
+				type = radar_station
+				level = 3
+				instant_build = yes
+				}
+			}
+			add_victory_points = {
+				province = 13087
+				value = 2
+			}
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+	
+	OAP_HQ_command_room = {
+		icon = documents_1
+		is_good = yes
+
+		available = {
+			has_political_power > 24
+			num_of_civilian_factories_available_for_projects > 7
+			custom_trigger_tooltip = {
+                tooltip = OAP_HQ_body_finished_tt
+                    check_variable = {
+                        ranger_hq > 74
+                    }
+            }
+		}
+		visible = {
+			has_completed_focus = OAP_rangers_start_ranger_hq
+		}
+		modifier = {
+			civilian_factory_use = 8
+		}
+		days_remove = 60
+		fire_only_once = yes
+		cost = 25
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_HQ_command_room "
+			
+			custom_effect_tooltip = OAP_add_5_HQ_progress_tt
+			add_to_variable = {
+				var = ranger_hq
+				value = 5
+			}
+			custom_effect_tooltip = OAP_command_room_tt
+			add_victory_points = {
+				province = 13087
+				value = 2
+			}
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+	
+	OAP_HQ_finish = {
+		icon = modern_city
+		is_good = yes
+
+		available = {
+			has_political_power > 9
+			custom_trigger_tooltip = {
+                tooltip = OAP_HQ_finished_tt
+                    check_variable = {
+                        ranger_hq = 100
+                    }
+            }
+		}
+		visible = {
+			has_completed_focus = OAP_rangers_start_ranger_hq
+		}
+		
+		fire_only_once = yes
+		cost = 10
+		
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_HQ_command_room "
+			
+			country_event = { id = oldappleranger.4 }
+			hidden_effect = {
+			add_victory_points = {
+				province = 13087
+				value = 6
+			}
+			add_victory_points = {
+				province = 3509
+				value = -5
+			}
+			set_country_flag = OAP_rangers_hq_flag
+			}
+		}
+
+		ai_will_do = {
+			factor = 90
+		}
+	}
+
+}
+
+OAP_manage_inflation_decision_cat = {
+
+	OAP_reckless_spending = {
+		icon = cap
+		is_good = yes
+
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = OAP_has_inflation_tt
+                OR = {
+					has_idea = OAP_caps_devaluation_1 
+					has_idea = OAP_caps_devaluation_2 
+					has_idea = OAP_caps_devaluation_3 
+					has_idea = OAP_caps_devaluation_4 
+					has_idea = OAP_caps_devaluation_5 
+					has_idea = OAP_caps_devaluation_6 
+					has_idea = OAP_caps_devaluation_7 
+					has_idea = OAP_caps_devaluation_8 
+					has_idea = OAP_caps_devaluation_9 
+					has_idea = OAP_caps_devaluation_10 
+					has_idea = OAP_caps_devaluation_11
+					has_idea = OAP_caps_devaluation_12
+					has_idea = OAP_caps_devaluation_13
+					has_idea = OAP_caps_devaluation_14
+					has_idea = OAP_caps_devaluation_15
+					has_idea = OAP_caps_devaluation_collapse
+				}
+            }
+		}
+		visible = {
+			OR = {
+			has_completed_focus = OAP_power_cemented
+			has_completed_focus = OAP_ousting_traitors
+			}
+		}
+		
+		fire_only_once = no
+		cost = 10
+		
+		days_remove = 60
+		days_re_enable = 40
+		modifier = {
+			stability_weekly = -0.005
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_reckless_spending "
+			OAP_lower_inflation = yes
+			
+		}
+
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 1000
+				has_political_power > 200
+				OR = {
+					has_idea = OAP_caps_devaluation_10 
+					has_idea = OAP_caps_devaluation_11
+					has_idea = OAP_caps_devaluation_12
+					has_idea = OAP_caps_devaluation_13
+					has_idea = OAP_caps_devaluation_14
+					has_idea = OAP_caps_devaluation_15
+					has_idea = OAP_caps_devaluation_collapse
+				}
+			}
+		}
+	}
+	
+	OAP_cronies_deal = {
+		icon = cap
+		is_good = yes
+
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = OAP_has_inflation_tt
+                OR = {
+					has_idea = OAP_caps_devaluation_1 
+					has_idea = OAP_caps_devaluation_2 
+					has_idea = OAP_caps_devaluation_3 
+					has_idea = OAP_caps_devaluation_4 
+					has_idea = OAP_caps_devaluation_5 
+					has_idea = OAP_caps_devaluation_6 
+					has_idea = OAP_caps_devaluation_7 
+					has_idea = OAP_caps_devaluation_8 
+					has_idea = OAP_caps_devaluation_9 
+					has_idea = OAP_caps_devaluation_10 
+					has_idea = OAP_caps_devaluation_11
+					has_idea = OAP_caps_devaluation_12
+					has_idea = OAP_caps_devaluation_13
+					has_idea = OAP_caps_devaluation_14
+					has_idea = OAP_caps_devaluation_15
+					has_idea = OAP_caps_devaluation_collapse
+				}
+            }
+		}
+		visible = {
+			has_completed_focus = OAP_power_cemented
+		}
+		
+		fire_only_once = no
+		cost = 80
+		
+		days_remove = 80
+		days_re_enable = 120
+		modifier = {
+			stability_factor = 0.1
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_cronies_deal "
+			OAP_lower_inflation = yes
+		}
+
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 1000
+				has_political_power > 500
+				OR = {
+					has_idea = OAP_caps_devaluation_5 
+					has_idea = OAP_caps_devaluation_6 
+					has_idea = OAP_caps_devaluation_7 
+					has_idea = OAP_caps_devaluation_8 
+					has_idea = OAP_caps_devaluation_9
+					has_idea = OAP_caps_devaluation_10 
+					has_idea = OAP_caps_devaluation_11
+					has_idea = OAP_caps_devaluation_12
+					has_idea = OAP_caps_devaluation_13
+					has_idea = OAP_caps_devaluation_14
+					has_idea = OAP_caps_devaluation_15
+					has_idea = OAP_caps_devaluation_collapse
+				}
+			}
+		}
+	}
+	
+	OAP_black_deals = {
+		icon = steel
+		is_good = yes
+
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = OAP_has_inflation_tt
+                OR = {
+					has_idea = OAP_caps_devaluation_1 
+					has_idea = OAP_caps_devaluation_2 
+					has_idea = OAP_caps_devaluation_3 
+					has_idea = OAP_caps_devaluation_4 
+					has_idea = OAP_caps_devaluation_5 
+					has_idea = OAP_caps_devaluation_6 
+					has_idea = OAP_caps_devaluation_7 
+					has_idea = OAP_caps_devaluation_8 
+					has_idea = OAP_caps_devaluation_9 
+					has_idea = OAP_caps_devaluation_10 
+					has_idea = OAP_caps_devaluation_11
+					has_idea = OAP_caps_devaluation_12
+					has_idea = OAP_caps_devaluation_13
+					has_idea = OAP_caps_devaluation_14
+					has_idea = OAP_caps_devaluation_15
+					has_idea = OAP_caps_devaluation_collapse
+				}
+            }
+		}
+		visible = {
+			has_completed_focus = OAP_increase_imports
+		}
+		
+		fire_only_once = no
+		cost = 50
+		fixed_random_seed = no
+		days_remove = 100
+		days_re_enable = 20
+		modifier = {
+			political_power_cost = 0.1
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_black_deals "
+			OAP_lower_inflation = yes
+			random_list = {
+				30 = {
+					
+				}
+				15 = {
+					596 = {add_resource = {type = metal amount = 6}}
+				}
+				15 = {
+					596 = {add_resource = {type = energy amount = 6}}
+				}
+				12 = {
+					596 = {add_resource = {type = water amount = 4}}
+				}
+				12 = {
+					596 = {add_resource = {type = composites amount = 4}}
+				}
+				10 = {
+					596 = {add_resource = {type = circuitry amount = 3}}
+				}
+				5 = {
+					596 = {add_resource = {type = advanced amount = 3}}
+				}
+				1 = {
+					596 = {add_resource = {type = crystals amount = 2}}
+				}
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 1000
+				has_political_power > 100
+				OR = {
+					has_idea = OAP_caps_devaluation_1 
+					has_idea = OAP_caps_devaluation_2 
+					has_idea = OAP_caps_devaluation_3 
+					has_idea = OAP_caps_devaluation_4 
+					has_idea = OAP_caps_devaluation_5 
+					has_idea = OAP_caps_devaluation_6 
+					has_idea = OAP_caps_devaluation_7 
+					has_idea = OAP_caps_devaluation_8 
+					has_idea = OAP_caps_devaluation_9
+					has_idea = OAP_caps_devaluation_10 
+					has_idea = OAP_caps_devaluation_11
+					has_idea = OAP_caps_devaluation_12
+					has_idea = OAP_caps_devaluation_13
+					has_idea = OAP_caps_devaluation_14
+					has_idea = OAP_caps_devaluation_15
+					has_idea = OAP_caps_devaluation_collapse
+				}
+			}
+		}
+	}
+	
+	OAP_filly_investement = {
+		icon = railroad
+		is_good = yes
+
+		available = {
+			NOT = { has_idea = OAP_caps_devaluation_collapse}
+		}
+		visible = {
+			has_completed_focus = OAP_meet_red
+		}
+		
+		fire_only_once = no
+		cost = 50
+		
+		days_remove = 100
+		days_re_enable = 50
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_filly_investement "
+			OAP_raise_inflation = yes
+			random_list = {
+				25 = {
+					random_owned_controlled_state = {
+						limit = {
+							is_core = yes
+						}
+						add_extra_state_shared_building_slots = 2
+					}
+				}
+				25 = {
+					one_random_infrastructure = yes
+				}
+				20 = {
+					two_random_infrastructure = yes
+				}
+				20 = {
+					add_offsite_building = { type = arms_factory level = 1 }
+				}
+				10 = {
+					add_offsite_building = { type = industrial_complex level = 1 }
+				}
+				
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 1000
+				has_political_power > 100
+				OR = {
+					has_idea = OAP_caps_devaluation_1 
+					has_idea = OAP_caps_devaluation_2 
+					has_idea = OAP_caps_devaluation_3 
+					has_idea = OAP_caps_devaluation_4 
+					has_idea = OAP_caps_devaluation_5 
+					has_idea = OAP_caps_devaluation_6 
+					has_idea = OAP_caps_devaluation_7 
+					has_idea = OAP_caps_devaluation_8 
+					has_idea = OAP_caps_devaluation_9
+					has_idea = OAP_caps_devaluation_10 
+					has_idea = OAP_caps_devaluation_11
+					has_idea = OAP_caps_devaluation_12
+					has_idea = OAP_caps_devaluation_13
+					has_idea = OAP_caps_devaluation_14
+					has_idea = OAP_caps_devaluation_15
+				}
+			}
+		}
+	}
+
+
+}
+
+
+OAP_investement_decision_cat = {
+
+	OAP_cotton_investement = {
+		icon = flower
+		is_good = yes
+
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = foe_2_cost_slave_tt
+				check_variable = {
+					foe_slaves_var > 1
+				}
+			}
+		}
+		visible = {
+			has_completed_focus = OAP_apple_investement
+		}
+		
+		fire_only_once = yes
+		cost = 50
+		
+		days_remove = 100
+		complete_effect = {
+			custom_effect_tooltip = foe_2_lose_slave_tt
+			subtract_from_variable = {
+				var = foe_slaves_var
+				value = 2
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_cotton_investement "
+			OAP_lower_inflation = yes
+			205 = {
+				add_extra_state_shared_building_slots = 2
+				add_manpower = 2000
+			}
+		}
+
+		ai_will_do = {
+			factor = 0
+			modifier = {
+				add = 1000
+				has_political_power > 100
+				OR = {
+					has_idea = OAP_caps_devaluation_1 
+					has_idea = OAP_caps_devaluation_2 
+					has_idea = OAP_caps_devaluation_3 
+					has_idea = OAP_caps_devaluation_4 
+					has_idea = OAP_caps_devaluation_5 
+					has_idea = OAP_caps_devaluation_6 
+					has_idea = OAP_caps_devaluation_7 
+					has_idea = OAP_caps_devaluation_8 
+					has_idea = OAP_caps_devaluation_9
+					has_idea = OAP_caps_devaluation_10 
+					has_idea = OAP_caps_devaluation_11
+					has_idea = OAP_caps_devaluation_12
+					has_idea = OAP_caps_devaluation_13
+					has_idea = OAP_caps_devaluation_14
+					has_idea = OAP_caps_devaluation_15
+				}
+			}
+		}
+	}
+	
+	OAP_steel_investement = {
+		icon = steel
+		is_good = yes
+
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = foe_1_cost_slave_tt
+				check_variable = {
+					foe_slaves_var > 0
+				}
+			}
+		}
+		visible = {
+			has_completed_focus = OAP_apple_investement
+		}
+		
+		fire_only_once = yes
+		cost = 50
+		
+		days_remove = 100
+		complete_effect = {
+			custom_effect_tooltip = foe_1_lose_slave_tt
+			subtract_from_variable = {
+				var = foe_slaves_var
+				value = 1
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_steel_investement "
+			OAP_lower_inflation = yes
+			596 = {
+				add_resource = { type = metal amount = 10 }
+				add_manpower = 500
+			}
+		}
+
+		ai_will_do = {
+			factor = 1000
+			
+		}
+	}
+	
+	OAP_rail_investement = {
+		icon = railroad
+		is_good = yes
+
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = foe_2_cost_slave_tt
+				check_variable = {
+					foe_slaves_var > 1
+				}
+			}
+		}
+		visible = {
+			has_completed_focus = OAP_apple_investement
+		}
+		
+		fire_only_once = yes
+		cost = 50
+		
+		days_remove = 100
+		complete_effect = {
+			subtract_from_variable = {
+				var = foe_slaves_var
+				value = 1
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_rail_investement "
+			OAP_lower_inflation = yes
+			587 = {
+				add_extra_state_shared_building_slots = 1 add_building_construction = {type = infrastructure level = 2 instant_build = yes}
+			}
+			add_to_variable = {
+				var = foe_slaves_var
+				value = 2
+			}
+		}
+
+		ai_will_do = {
+			factor = 1000
+			
+		}
+	}
+	
+	OAP_rail2_investement = {
+		icon = railroad
+		is_good = yes
+
+		available = {
+			
+		}
+		visible = {
+			has_completed_focus = OAP_apple_investement
+		}
+		
+		fire_only_once = no
+		cost = 50
+		
+		days_remove = 100
+		days_re_enable = 50
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_rail2_investement "
+			OAP_lower_inflation = yes
+			One_random_infrastructure = yes
+		}
+
+		ai_will_do = {
+			factor = 100
+			
+		}
+	}
+	
+	OAP_cottage_investement = {
+		icon = hammer
+		is_good = yes
+
+		available = {
+			
+		}
+		visible = {
+			has_completed_focus = OAP_apple_investement
+		}
+		
+		fire_only_once = yes
+		cost = 50
+		
+		days_remove = 150
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_cottage_investement "
+			OAP_lower_inflation = yes
+			One_random_industrial_complex = yes
+		}
+
+		ai_will_do = {
+			factor = 100
+			
+		}
+	}
+	
+	OAP_gun_investement = {
+		icon = bunker
+		is_good = yes
+
+		available = {
+			
+		}
+		visible = {
+			has_completed_focus = OAP_apple_investement
+		}
+		
+		fire_only_once = yes
+		cost = 50
+		
+		days_remove = 150
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_gun_investement "
+			OAP_lower_inflation = yes
+			One_random_arms_factory = yes
+		}
+
+		ai_will_do = {
+			factor = 100
+			
+		}
+	}
+	
+	OAP_talon_investement = {
+		icon = bird_skull
+		is_good = yes
+
+		available = {
+			
+		}
+		visible = {
+			has_completed_focus = OAP_apple_investement
+		}
+		
+		fire_only_once = yes
+		cost = 50
+		
+		days_remove = 150
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_talon_investement "
+			OAP_lower_inflation = yes
+			set_technology = { tech_talons = 1 }
+		}
+
+		ai_will_do = {
+			factor = 100
+			
+		}
+	}
+	
+	OAP_recruit_investement = {
+		icon = rifles
+		is_good = yes
+
+		available = {
+			
+		}
+		visible = {
+			has_completed_focus = OAP_apple_investement
+		}
+		
+		fire_only_once = yes
+		cost = 50
+		
+		days_remove = 150
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_recruit_investement "
+			OAP_lower_inflation = yes
+			add_manpower = 250
+		}
+
+		ai_will_do = {
+			factor = 100
+			
+		}
+	}
+	
+	OAP_settle_investement = {
+		icon = modern_city
+		is_good = yes
+
+		available = {
+			
+		}
+		visible = {
+			has_completed_focus = OAP_apple_investement
+		}
+		
+		fire_only_once = yes
+		cost = 50
+		
+		days_remove = 150
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision OAP_settle_investement "
+			OAP_lower_inflation = yes
+			213 = {add_manpower = 1800}
+			599 = {add_manpower = 1200}
+		}
+
+		ai_will_do = {
+			factor = 100
+			
+		}
+	}
+
+
+
+}
+
+
+
