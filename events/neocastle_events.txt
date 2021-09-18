@@ -315,7 +315,7 @@ country_event = {
 		}
 		name = neocastle.10.a
 		set_country_flag = NCG_unlock_corpo_tree_flag
-		load_focus_tree = NCG_focus
+		mark_focus_tree_layout_dirty = yes
 		retire_country_leader = yes
 		create_country_leader = {
 			name = "Brick 'Bob' Bobcat"
@@ -342,7 +342,7 @@ country_event = {
 		}
 		name = neocastle.10.b
 		set_country_flag = NCG_unlock_slaver_tree_flag
-		load_focus_tree = NCG_focus
+		mark_focus_tree_layout_dirty = yes
 		set_politics = {
 			ruling_party = destruction
 		}
@@ -362,7 +362,7 @@ country_event = {
 		}
 		name = neocastle.10.c
 		set_country_flag = NCG_unlock_mechanicum_tree_flag
-		load_focus_tree = NCG_focus
+		mark_focus_tree_layout_dirty = yes
 		set_politics = {
 			ruling_party = visionary
 		}
@@ -811,18 +811,132 @@ country_event = {
 	option = { 
 		name = neocastle.997.a
 		set_country_flag = NCG_unlock_mobile_army_flag
-		load_focus_tree = NCG_focus
+		mark_focus_tree_layout_dirty = yes
 	}
 	option = { 
 		name = neocastle.997.b
 		set_country_flag = NCG_unlock_robot_army_flag
-		load_focus_tree = NCG_focus
+		mark_focus_tree_layout_dirty = yes
 	}
 	option = { 
 		name = neocastle.997.c
 		set_country_flag = NCG_unlock_defiant_army_flag
-		load_focus_tree = NCG_focus
+		mark_focus_tree_layout_dirty = yes
 	}
+}
+
+country_event = { 
+ 	id = neocastle.996
+ 	title = neocastle.996.t
+ 	desc = neocastle.996.d
+	picture = GFX_event_stg_future_poster
+
+	is_triggered_only = yes
+ 	fire_only_once = no
+	fixed_random_seed = no
+	option = { 
+		name = neocastle.997.a
+		set_variable = {
+			var = NCG_free_invest
+			value = 0
+		}
+		random_list = {
+			40 = { add_equipment_to_stockpile = { type = infantry_equipment_4 amount = 300 producer = OWE } }
+			30 = { IF = {
+						limit = {
+							NOT = {has_dynamic_modifier = { modifier = NCG_mil_training_modifier } }
+						}
+						add_dynamic_modifier = {
+							modifier = NCG_mil_training_modifier
+						}
+					}
+					add_to_variable = {
+						var = NCG_mil_training
+						value = 0.02
+					}
+					force_update_dynamic_modifier = yes 
+				}
+			30 = { add_offsite_building = { type = arms_factory level = 1 } }
+		}
+		add_manpower = NCG_mil_merc_count
+		add_to_variable = {
+			var = NCG_mil_invest
+			value = 1
+		}
+		random_list = {
+			40 = { 	random_list = {
+						14 = { 747 = {add_resource = {type = water amount = 4}} }
+						15 = { 747 = {add_resource = {type = energy amount = 4}} }
+						15 = { 747 = {add_resource = {type = metal amount = 4}} }
+						14 = { 747 = {add_resource = {type = composites amount = 4}} }
+						14 = { 747 = {add_resource = {type = circuitry amount = 4}} }
+						14 = { 747 = {add_resource = {type = advanced amount = 4}} }
+						14 = { 747 = {add_resource = {type = crystals amount = 4}} }
+					} 
+				}
+			30 = {
+				one_random_infrastructure = yes
+				one_random_infrastructure = yes
+				one_random_infrastructure = yes
+				one_random_infrastructure = yes
+				}
+			30 = { IF = {
+					limit = {
+						NOT = {has_dynamic_modifier = { modifier = NCG_civ_market_modifier } }
+					}
+						add_dynamic_modifier = {
+							modifier = NCG_civ_market_modifier
+						}
+				}
+				add_to_variable = {
+				var = NCG_civ_market
+				value = 0.05
+				}
+				subtract_from_variable = {
+				var = NCG_civ_market2
+				value = 0.05
+				}
+				force_update_dynamic_modifier = yes 
+				}	
+		}
+		add_offsite_building = { type = industrial_complex level = 1 }
+		add_timed_idea = {days = 50 idea = NCG_civ_invest_debuff_idea}
+		add_to_variable = {
+				var = NCG_civ_invest
+				value = 1
+				}
+		add_tech_bonus = {
+					name = robotics_tech
+					bonus = 1.0
+					uses = 1
+					category = robotics_tech
+					}
+		IF = {
+					limit = {
+						NOT = {has_dynamic_modifier = { modifier = NCG_rnd_budget_modifier } }
+					}
+						add_dynamic_modifier = {
+							modifier = NCG_rnd_budget_modifier
+						}
+				}
+				add_to_variable = {
+				var = NCG_rnd_budget
+				value = 0.03
+				}
+				force_update_dynamic_modifier = yes
+		add_to_variable = {
+				var = NCG_rnd_invest
+				value = 1
+				}
+		IF = {
+			limit = {check_variable = { NCG_mil_invest = 10 }}
+			add_ideas = NCG_rng_invest_5
+			add_ideas = NCG_civ_invest_5
+			add_ideas = NCG_mil_invest_5
+		}
+		country_event = { id = neocastle.996 days = 365}
+	}
+	
 }
 
 country_event = { 
