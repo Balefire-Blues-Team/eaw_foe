@@ -179,7 +179,7 @@ shared_focus = {
 		relative_position_id = MSR_Finished ### CHANGE THIS TO:   relative_position_id = MSR_Finished ###
 		x = 0 #FIX THE POSITIONS, OR GO GET LAUNDRY TO DO IT FOR YOU
 		y = 1
-		cost = 1.5
+		cost = 2.9
 
 		available_if_capitulated = yes
 		available = {
@@ -207,7 +207,7 @@ shared_focus = {
 		relative_position_id = MSR_Finished ### CHANGE THIS TO:   relative_position_id = MSR_Finished ###
 		x = 6 #FIX THE POSITIONS, OR GO GET LAUNDRY TO DO IT FOR YOU
 		y = 1
-		cost = 1.5
+		cost = 2.9
 
 		available_if_capitulated = yes
 		available = {
@@ -2109,8 +2109,23 @@ shared_focus = {
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Steel_Rangers_No_More"
 			swap_ideas = { remove_idea = selective_recruitment add_idea = river_recruitment }
-			swap_ideas = { remove_idea = sudden_economic_stop add_idea = msr_economic_turmoil }
+			custom_effect_tooltip = MSR_ra_swap_economy_ideas_tt
+			#swap_ideas = { remove_idea = sudden_economic_stop add_idea = msr_economic_turmoil }
 			swap_ideas = { remove_idea = msr_purged_military_staff add_idea = msr_no_organization }
+
+			hidden_effect = {
+				set_variable = { MSR_ra_economy_building_factor = -0.40}
+				set_variable = { MSR_ra_economy_consumer_goods = 0.3 }
+				set_variable = { MSR_ra_economy_industrial_cap = -0.5}
+				set_variable = { MSR_ra_economy_conscription = -0.25}
+				set_variable = { MSR_ra_economy_resources = -0.2}
+				set_variable = { MSR_ra_economy_political_power = 0.5}
+
+				remove_ideas = sudden_economic_stop
+				add_dynamic_modifier = {
+				    modifier = MSR_economic_turmoil_modifier
+				}
+			}
 
 			remove_ideas = ranger_scribes
 			add_ideas = limited_exports
@@ -2150,7 +2165,7 @@ shared_focus = {
 		relative_position_id = MSR_A_Nation_Reborn
 		x = -7
 		y = 1
-		cost = 1.5
+		cost = 3
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -2161,14 +2176,19 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls"
-			custom_effect_tooltip = MSR_split_turmoil_tt
+			#custom_effect_tooltip = MSR_split_turmoil_tt
 			add_stability = 0.05
-
-			hidden_effect = {
-				remove_ideas = msr_economic_turmoil
-				add_ideas = msr_economic_turmoil_buildings
-				add_ideas = msr_economic_turmoil_labor
+			add_tech_bonus = {
+			    bonus = 0.5
+			    uses = 1
+			    category = industry
 			}
+
+			#hidden_effect = {
+			#	remove_ideas = msr_economic_turmoil
+			#	add_ideas = msr_economic_turmoil_buildings
+			#	add_ideas = msr_economic_turmoil_labor
+			#}
 
 		}
 }
@@ -2181,7 +2201,7 @@ shared_focus = {
 		relative_position_id = MSR_Rebuild_Our_Industry
 		x = -3
 		y = 1
-		cost = 1.5
+		cost = 3
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -2189,13 +2209,19 @@ shared_focus = {
 		}
 
 		prerequisite = { focus = MSR_Rebuild_Our_Industry }
-		available = {
-			has_completed_focus = MSR_Create_New_Labor_Laws
-		}
+		#available = {
+		#	has_completed_focus = MSR_Create_New_Labor_Laws
+		#}
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
+			custom_effect_tooltip = MSR_economic_turmoil_give_out_aid_tt
+			hidden_effect = {
+				add_to_variable = { MSR_ra_economy_conscription = 0.05 }
+				subtract_from_variable = { MSR_ra_economy_political_power = 0.05 }
+			}
+
 			add_stability = 0.075
-			MSR_RA_give_aid_effect = yes
+			#MSR_RA_give_aid_effect = yes
 
 		}
 }
@@ -2206,7 +2232,7 @@ shared_focus = {
 		relative_position_id = MSR_Giving_Out_Aid
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 3
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -2217,8 +2243,14 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
+			custom_effect_tooltip = MSR_economic_turmoil_outlaw_slavery_tt
+			hidden_effect = {
+				add_to_variable = { MSR_ra_economy_conscription = 0.15 }
+				subtract_from_variable = { MSR_ra_economy_political_power = 0.20 }
+			}
+
 			add_stability = 0.1
-			MSR_RA_outlaw_slavery_effect = yes
+			#MSR_RA_outlaw_slavery_effect = yes
 
 		}
 }
@@ -2229,7 +2261,7 @@ shared_focus = {
 		relative_position_id = MSR_Outlaw_Slavery
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 3
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -2252,7 +2284,7 @@ shared_focus = {
 		relative_position_id = MSR_Healthcare_For_All
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 6
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -2283,7 +2315,7 @@ shared_focus = {
 		relative_position_id = MSR_Rebuild_Our_Industry
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 3
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -2291,19 +2323,16 @@ shared_focus = {
 		}
 
 		prerequisite = { focus = MSR_Rebuild_Our_Industry }
-		available = {
-			has_completed_focus = MSR_Create_New_Labor_Laws
-		}
+		#available = {
+		#	has_completed_focus = MSR_Create_New_Labor_Laws
+		#}
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
-			if = {
-				limit = { 
-					has_completed_focus = MSR_Rebuild_The_Roads
-				}
-				swap_ideas = { add_idea = msr_economic_turmoil_buildings2_roads remove_idea = msr_economic_turmoil_buildings3 }
-			}
-			else = {
-				swap_ideas = { add_idea = msr_economic_turmoil_buildings2 remove_idea = msr_economic_turmoil_buildings }
+
+			custom_effect_tooltip = MSR_economic_turmoil_construction_methods_tt
+			hidden_effect = {
+				add_to_variable = { MSR_ra_economy_building_factor = 0.15 }
+				subtract_from_variable = { MSR_ra_economy_consumer_goods = 0.10 }
 			}
 		}
 }
@@ -2314,7 +2343,7 @@ shared_focus = {
 		relative_position_id = MSR_New_Construction_Methods
 		x = -1
 		y = 1
-		cost = 1.5
+		cost = 5
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -2337,7 +2366,7 @@ shared_focus = {
 		relative_position_id = MSR_New_Construction_Methods
 		x = 1
 		y = 1
-		cost = 1.5
+		cost = 5
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -2361,7 +2390,7 @@ shared_focus = {
 		relative_position_id = MSR_New_Construction_Methods
 		x = 0
 		y = 2
-		cost = 1.5
+		cost = 6
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -2386,7 +2415,7 @@ shared_focus = {
 		relative_position_id = MSR_Rebuild_Our_Industry
 		x = 3
 		y = 1
-		cost = 1.5
+		cost = 3
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -2397,13 +2426,13 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
-			if = {
-				limit = { has_completed_focus = MSR_New_Construction_Methods }
-				swap_ideas = { add_idea = msr_economic_turmoil_buildings3_construction remove_idea = msr_economic_turmoil_buildings2 }
+
+			custom_effect_tooltip = MSR_economic_turmoil_rebuild_roads_tt
+			hidden_effect = {
+				add_to_variable = { MSR_ra_economy_resources = 0.1 }
+				subtract_from_variable = { MSR_ra_economy_consumer_goods = 0.05 }
 			}
-			else = {
-				swap_ideas = { add_idea = msr_economic_turmoil_buildings3 remove_idea = msr_economic_turmoil_buildings }
-			}
+
 
 			54 = {
 				add_building_construction = {
@@ -2429,7 +2458,7 @@ shared_focus = {
 		relative_position_id = MSR_Rebuild_The_Roads
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 3
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -2439,8 +2468,12 @@ shared_focus = {
 		prerequisite = { focus = MSR_Rebuild_The_Roads }
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
-			MSR_RA_standard_product_effect = yes
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls"
+			custom_effect_tooltip = MSR_economic_turmoil_standard_product_tt
+			hidden_effect = {
+				add_to_variable = { MSR_ra_economy_industrial_cap = 0.25 }
+			}
+			#MSR_RA_standard_product_effect = yes
 
 		}
 }
@@ -2451,18 +2484,22 @@ shared_focus = {
 		relative_position_id = MSR_Standardize_Production
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 3
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
-			factor = 1
+			factor = 5
 		}
 
 		prerequisite = { focus = MSR_Standardize_Production }
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
-			MSR_RA_labor_laws_effect = yes
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_Create_New_Labor_Laws"
+			custom_effect_tooltip = MSR_economic_turmoil_labor_laws_tt
+			hidden_effect = {
+				add_to_variable = { MSR_ra_economy_industrial_cap = 0.15 }
+				subtract_from_variable = { MSR_ra_economy_political_power = 0.10 }
+			}
 
 		}
 }
@@ -2473,7 +2510,7 @@ shared_focus = {
 		relative_position_id = MSR_Create_New_Labor_Laws
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 6
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -2481,18 +2518,13 @@ shared_focus = {
 		}
 
 		prerequisite = { focus = MSR_Create_New_Labor_Laws }
-		available = {
-			has_completed_focus = MSR_New_Construction_Methods
-		}
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
-			if = {
-				limit = { has_idea = msr_economic_turmoil_buildings2_roads }
-				swap_ideas = { add_idea = msr_economic_turmoil_buildings4 remove_idea = msr_economic_turmoil_buildings2_roads }
-			}
-			else = {
-				swap_ideas = { add_idea = msr_economic_turmoil_buildings4 remove_idea = msr_economic_turmoil_buildings3 }
+			custom_effect_tooltip = MSR_economic_turmoil_new_economy_tt
+			hidden_effect = {
+				add_to_variable = { MSR_ra_economy_building_factor = 0.25 }
+				subtract_from_variable = { MSR_ra_economy_consumer_goods = 0.20 }
 			}
 
 		}
@@ -2506,7 +2538,7 @@ shared_focus = {
 		relative_position_id = MSR_Factories_For_The_Future
 		x = 0
 		y = 2
-		cost = 1.5
+		cost = 7
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -2518,12 +2550,17 @@ shared_focus = {
 		prerequisite = { focus = MSR_A_New_Equestrian_Economy }
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls "
+			log = "[GetDateText]: [Root.GetName]: Focus MSR_Cementing_Controls"
+			custom_effect_tooltip = MSR_remove_economic_turmoil_tt
+			hidden_effect = {
+				 remove_dynamic_modifier = { modifier = MSR_economic_turmoil_modifier } 
+			}
 			if = {
 				limit = {
-					has_completed_focus = MSR_Project_Purity
-					has_completed_focus = MSR_Factories_For_The_Future
-					has_completed_focus = MSR_A_New_Equestrian_Economy
+					OR = {
+						has_completed_focus = MSR_Product_For_Civilians
+						has_completed_focus = MSR_Guns_For_Soldiers
+					}
 				}
 				MSR_remove_labor_turmoil = yes
 				MSR_remove_building_turmoil = yes
@@ -2550,7 +2587,7 @@ shared_focus = {
 		relative_position_id = MSR_A_Nation_Reborn
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 3
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -2574,7 +2611,7 @@ shared_focus = {
 		relative_position_id = MSR_Expanding_Our_Borders
 		x = -2
 		y = 1
-		cost = 1.5
+		cost = 6
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -2607,7 +2644,7 @@ shared_focus = {
 		relative_position_id = MSR_Sacking_The_Empire
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 6
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -2652,7 +2689,7 @@ shared_focus = {
 		relative_position_id = MSR_Raining_No_More
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 6
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -2689,7 +2726,7 @@ shared_focus = {
 		relative_position_id = MSR_Expanding_Our_Borders
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 6
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -2723,7 +2760,7 @@ shared_focus = {
 		relative_position_id = MSR_Clearing_Out_Cannibals
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 6
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -2753,7 +2790,7 @@ shared_focus = {
 		relative_position_id = MSR_Pushing_Towards_Portshoof
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 6
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -2785,7 +2822,7 @@ shared_focus = {
 		relative_position_id = MSR_Expanding_Our_Borders
 		x = 2
 		y = 1
-		cost = 1.5
+		cost = 6
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -2815,7 +2852,7 @@ shared_focus = {
 		relative_position_id = MSR_Crossing_Into_Marelem
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 6
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -2855,7 +2892,7 @@ shared_focus = {
 		relative_position_id = MSR_Dinner_In_Tenpony
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 6
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -2889,7 +2926,7 @@ shared_focus = {
 		relative_position_id = MSR_A_Free_Trip_to_Freeside
 		x = 1
 		y = 1
-		cost = 1.5
+		cost = 7
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -2938,7 +2975,7 @@ shared_focus = {
 		relative_position_id = MSR_Taking_Stable_29
 		x = 1
 		y = 1
-		cost = 1.5
+		cost = 7
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -3002,7 +3039,7 @@ shared_focus = {
 		relative_position_id = MSR_Taking_Stable_29
 		x = 0
 		y = 2
-		cost = 1.5
+		cost = 5
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -3044,7 +3081,7 @@ shared_focus = {
 		relative_position_id = MSR_Send_in_The_Peace_Keepers
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 7
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -3067,7 +3104,7 @@ shared_focus = {
 		relative_position_id = MSR_Stirring_Up_Trouble
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 3
 
 		available_if_capitulated = no
 		available = {
@@ -3100,7 +3137,7 @@ shared_focus = {
 		relative_position_id = MSR_Ending_Red_Eyes_Reign
 		x = -1
 		y = 1
-		cost = 1.5
+		cost = 3
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -3130,7 +3167,7 @@ shared_focus = {
 		relative_position_id = MSR_Ending_Red_Eyes_Reign
 		x = 1
 		y = 1
-		cost = 1.5
+		cost = 3
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -3159,7 +3196,7 @@ shared_focus = {
 		relative_position_id = MSR_Meeting_Old_Friends
 		x = -1
 		y = 1
-		cost = 1.5
+		cost = 6
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -3185,7 +3222,7 @@ shared_focus = {
 		relative_position_id = MSR_A_Nation_Reborn
 		x = 8
 		y = 1
-		cost = 1.5
+		cost = 3
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -3208,7 +3245,7 @@ shared_focus = {
 		relative_position_id = MSR_A_New_Equestrian_Army
 		x = -4
 		y = 1
-		cost = 1.5
+		cost = 3
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -3240,7 +3277,7 @@ shared_focus = {
 		relative_position_id = MSR_A_Organized_Army
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 3
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -3266,7 +3303,7 @@ shared_focus = {
 		relative_position_id = MSR_Infantry_Support_Weapons
 		x = 0
 		y = 2
-		cost = 1.5
+		cost = 5
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -3293,7 +3330,7 @@ shared_focus = {
 		relative_position_id = MSR_A_New_Equestrian_Army
 		x = -2
 		y = 1
-		cost = 1.5
+		cost = 3
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -3320,7 +3357,7 @@ shared_focus = {
 		relative_position_id = MSR_An_Highly_Mobile_Army
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 3
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -3346,7 +3383,7 @@ shared_focus = {
 		relative_position_id = MSR_Putting_Guns_On_Trucks
 		x = 0
 		y = 2
-		cost = 1.5
+		cost = 5
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -3376,7 +3413,7 @@ shared_focus = {
 		relative_position_id = MSR_A_New_Equestrian_Army
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 3
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -3422,7 +3459,7 @@ shared_focus = {
 		relative_position_id = MSR_Hiring_New_Generals
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 4
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -3452,7 +3489,7 @@ shared_focus = {
 		relative_position_id = MSR_Office_of_Internal_Integrity
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 5
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -3486,7 +3523,7 @@ shared_focus = {
 		relative_position_id = MSR_Keeping_the_Peace
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 6
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -3510,7 +3547,7 @@ shared_focus = {
 		relative_position_id = MSR_A_New_Equestrian_Army
 		x = 2
 		y = 1
-		cost = 1.5
+		cost = 3
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -3541,7 +3578,7 @@ shared_focus = {
 		relative_position_id = MSR_Deployment_Groups
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 3
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -3566,7 +3603,7 @@ shared_focus = {
 		relative_position_id = MSR_Going_In_Guns_Blazing
 		x = 0
 		y = 2
-		cost = 1.5
+		cost = 5
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -3599,7 +3636,7 @@ shared_focus = {
 		relative_position_id = MSR_A_New_Equestrian_Army
 		x = 4
 		y = 1
-		cost = 1.5
+		cost = 3
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -3630,7 +3667,7 @@ shared_focus = {
 		relative_position_id = MSR_Special_Intervention_Force
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 3
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -3656,7 +3693,7 @@ shared_focus = {
 		relative_position_id = MSR_Asymmetric_Warfare
 		x = 0
 		y = 2
-		cost = 1.5
+		cost = 5
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
@@ -3684,7 +3721,7 @@ shared_focus = {
 		relative_position_id = MSR_Service_Gurantees_Citizenship
 		x = 0
 		y = 1
-		cost = 1.5
+		cost = 7
 
 		available_if_capitulated = yes 
 		ai_will_do = { 
