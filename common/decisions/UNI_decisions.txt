@@ -1,5 +1,58 @@
 UNI_vats = {
-	UNI_create_alicorn_army1 = {
+	
+	UNI_switch_template_scout = {
+		icon = GFX_decision_generic_ignite_civil_war
+		available = {
+			NOT = {
+			    has_country_flag = UNI_training_alicorns
+			}
+		}
+		
+		visible = {
+			NOT = {
+			    has_country_flag = UNI_Template_scout
+			}
+		}
+		days_re_enable = 1
+		cost = 0
+
+		ai_will_do = {
+			factor = 0
+		}
+
+		complete_effect = {
+		set_country_flag = UNI_Template_scout
+		clr_country_flag = UNI_Template_wing
+		}
+	}
+
+	UNI_switch_template_wing = {
+		icon = GFX_decision_generic_ignite_civil_war
+		available = {
+			NOT = {
+			    has_country_flag = UNI_training_alicorns
+			}
+		}
+		
+		visible = {
+			NOT = {
+			    has_country_flag = UNI_Template_wing
+			}
+		}
+		days_re_enable = 1
+		cost = 0
+
+		ai_will_do = {
+			factor = 0
+		}
+
+		complete_effect = {
+		set_country_flag = UNI_Template_wing
+		clr_country_flag = UNI_Template_scout
+		}
+	}
+
+	UNI_create_alicorn_army1_wing = {
 		icon = GFX_decision_generic_ignite_civil_war
 		days_remove = 100
 		available = {
@@ -10,7 +63,10 @@ UNI_vats = {
 		}
 		
 		visible = {
-			always = yes
+			has_country_flag = UNI_Template_wing
+			NOT = {
+			    has_country_flag = UNI_training_army1
+			}
 		}
 		days_re_enable = 1
 		cost = 50
@@ -24,6 +80,9 @@ UNI_vats = {
 				type = alicorn_equipment
 				amount = -90
 			}
+			hidden_effect = {
+				set_country_flag = UNI_training_army1
+			}
 		}
 
 		remove_effect = {
@@ -31,12 +90,13 @@ UNI_vats = {
 
 			hidden_effect = {
 				load_oob = UNI_alicorns
+				clr_country_flag = UNI_training_army1
 			}
 		}
 
 	}
 
-	UNI_create_alicorn_army2 = {
+	UNI_create_alicorn_army2_wing = {
 		icon = GFX_decision_generic_ignite_civil_war
 		days_remove = 100
 		available = {
@@ -47,7 +107,11 @@ UNI_vats = {
 		}
 		
 		visible = {
-			always = no
+			has_completed_focus = UNI_repair_old_vats
+			has_country_flag = UNI_Template_wing
+			NOT = {
+			    has_country_flag = UNI_training_army2
+			}
 		}
 		days_re_enable = 1
 		cost = 50
@@ -61,6 +125,9 @@ UNI_vats = {
 				type = alicorn_equipment
 				amount = -90
 			}
+			hidden_effect = {
+				set_country_flag = UNI_training_army2
+			}
 		}
 
 		remove_effect = {
@@ -68,17 +135,99 @@ UNI_vats = {
 
 			hidden_effect = {
 				load_oob = UNI_alicorns
+				clr_country_flag = UNI_training_army2
+			}
+		}
+	}
+
+	UNI_create_alicorn_army1_scout = {
+		icon = GFX_decision_generic_ignite_civil_war
+		days_remove = 50
+		available = {
+			has_political_power > 24
+			has_equipment = {
+				alicorn_equipment > 29
+			}
+		}
+		
+		visible = {
+			has_country_flag = UNI_Template_scout
+			NOT = {
+			    has_country_flag = UNI_training_army1
+			}
+		}
+		days_re_enable = 1
+		cost = 25
+
+		ai_will_do = {
+			factor = 20
+		}
+
+		complete_effect = {
+			add_equipment_to_stockpile = {
+				type = alicorn_equipment
+				amount = -30
+			}
+			hidden_effect = {
+				set_country_flag = UNI_training_army1
+			}
+		}
+
+		remove_effect = {
+			custom_effect_tooltip = UNI_alicorn_dunking_tt
+
+			hidden_effect = {
+				load_oob = UNI_alicorn_scout
+				clr_country_flag = UNI_training_army1
 			}
 		}
 
 	}
 
+	UNI_create_alicorn_army2_scout = {
+		icon = GFX_decision_generic_ignite_civil_war
+		days_remove = 50
+		available = {
+			has_political_power > 24
+			has_equipment = {
+				alicorn_equipment > 29
+			}
+		}
+		
+		visible = {
+			has_completed_focus = UNI_repair_old_vats
+			has_country_flag = UNI_Template_scout
+			NOT = {
+			    has_country_flag = UNI_training_army2
+			}
+		}
+		days_re_enable = 1
+		cost = 25
 
+		ai_will_do = {
+			factor = 20
+		}
 
+		complete_effect = {
+			add_equipment_to_stockpile = {
+				type = alicorn_equipment
+				amount = -30
+			}
+			hidden_effect = {
+				set_country_flag = UNI_training_army2
+			}
+		}
 
+		remove_effect = {
+			custom_effect_tooltip = UNI_alicorn_dunking_tt
 
+			hidden_effect = {
+				load_oob = UNI_alicorn_scout
+				clr_country_flag = UNI_training_army2
+			}
+		}
 
-
+	}
 
 }
 
@@ -143,6 +292,267 @@ UNI_borderwars = {
 		}
     }
 }
+
+UNI_New_maripony = {
+	
+	UNI_male_research = {
+		allowed = { original_tag = UNI }
+
+		icon = generic_civil_support
+
+		activation = {
+			has_completed_focus = UNI_RED_research_solution
+			always = yes
+		}
+
+		available = {
+			hidden_trigger = { always = no }
+		}
+
+		days_re_enable = 1
+		selectable_mission = no
+		days_mission_timeout = 180
+		is_good = yes
+		fire_only_once = no
+
+		cancel_trigger = {
+			has_country_flag = UNI_Male_alicorn_finished
+		}
+		remove_effect = {
+		}
+
+		timeout_effect = {
+			add_to_variable = {
+				var = male_research
+				value = 5
+			}
+			clamp_variable = {
+				var = male_research
+				min = 0
+				max = 100
+			}
+			hidden_effect = {
+				UNI_finish_male_research = yes
+			}
+		}
+
+		complete_effect = {
+		}
+	}
+
+	UNI_male_research2 = {
+		allowed = { original_tag = UNI }
+
+		icon = generic_civil_support
+
+		activation = {
+			has_completed_focus = UNI_Reuse_stable2_medicalbay
+			always = yes
+		}
+
+		available = {
+			hidden_trigger = { always = no }
+		}
+
+		days_re_enable = 1
+		selectable_mission = no
+		days_mission_timeout = 180
+		is_good = yes
+		fire_only_once = no
+
+		cancel_trigger = {
+			has_country_flag = UNI_Male_alicorn_finished
+		}
+		remove_effect = {
+		}
+
+		timeout_effect = {
+			add_to_variable = {
+				var = male_research
+				value = 5
+			}
+			clamp_variable = {
+				var = male_research
+				min = 0
+				max = 100
+			}
+			hidden_effect = {
+				UNI_finish_male_research = yes
+			}
+		}
+
+		complete_effect = {
+		}
+	}
+
+	UNI_demand_RED_contribution = {
+	icon = generic_civil_support
+		available = {
+			has_political_power > 24
+			#has_completed_focus = UNI_RED_research_solution
+		}
+		
+		visible = {
+			has_completed_focus = UNI_RED_research_solution
+			NOT = { has_country_flag = UNI_Male_alicorn_finished }
+			always = yes
+		}
+		days_re_enable = 100
+		cost = 25
+
+		ai_will_do = {
+			factor = 20
+		}
+
+		complete_effect = {
+			custom_effect_tooltip = UNI_decrease_trust_RED_tt
+			RED = {
+				country_event = { id = UNI.13 days = 1 }
+			}
+		}
+
+	}
+
+	UNI_lead_eggheads = {
+	icon = generic_civil_support
+		available = {
+			has_political_power > 24
+			#has_completed_focus = UNI_RED_research_solution
+		}
+		
+		visible = {
+			has_completed_focus = UNI_RED_research_solution
+			NOT = { has_country_flag = UNI_Male_alicorn_finished }
+			always = yes
+		}
+		days_remove = 10
+		fire_only_once = no
+		cost = 25
+
+		modifier = {
+			civilian_factory_use = 2
+		}
+
+		ai_will_do = {
+			factor = 20
+		}
+		complete_effect = {
+			add_popularity = { ideology = continuation popularity = 0.03}
+			add_popularity = { ideology = survivalism popularity = 0.02}
+			hidden_effect = {
+				UNI_mind_influences = yes
+			}
+		}
+		remove_effect = {
+		custom_effect_tooltip = UNI_gain_male_research_10_tt
+			add_to_variable = {
+				var = male_research
+				value = 10
+			}
+			clamp_variable = {
+				var = male_research
+				min = 0
+				max = 100
+			}
+		}
+	}
+
+UNI_vat_construction_frame = {
+	icon = generic_civil_support
+		available = {
+			has_political_power > 24
+			has_completed_focus = UNI_stable_vats
+			num_of_civilian_factories_available_for_projects > 1
+		}
+		
+		visible = {
+			has_completed_focus = UNI_stable_vats
+			NOT = {has_country_flag = UNI_vatframe_4_flag}
+		}
+		days_remove = 180
+		fire_only_once = no
+		cost = 25
+
+		modifier = {
+			civilian_factory_use = 2
+		}
+
+		ai_will_do = {
+			factor = 20
+		}
+		complete_effect = {
+			add_resource = { type = composites amount = -5 }
+		}
+		remove_effect = {
+		add_resource = { type = composites amount = -5 }
+			add_to_variable = {
+				var = vat_construction
+				value = 12
+			}
+			clamp_variable = {
+				var = vat_construction
+				min = 0
+				max = 100
+			}
+			hidden_effect = {
+				UNI_raise_vat_contruction_frame = yes
+			}
+		}
+}
+
+UNI_vat_construction_plating = {
+	icon = generic_civil_support
+		available = {
+			has_political_power > 24
+			has_completed_focus = UNI_stable_vats
+			num_of_civilian_factories_available_for_projects > 1
+		}
+		
+		visible = {
+			has_completed_focus = UNI_stable_vats
+			has_country_flag = UNI_vatframe_4_flag
+			NOT = {has_country_flag = UNI_vatplating_2_flag}
+		}
+		days_remove = 180
+		fire_only_once = no
+		cost = 25
+
+		modifier = {
+			civilian_factory_use = 2
+		}
+
+		ai_will_do = {
+			factor = 20
+		}
+		complete_effect = {
+			add_resource = { type = metal amount = -5 }
+		}
+
+		remove_effect = {
+			add_to_variable = {
+				var = vat_construction
+				value = 26
+			}
+			clamp_variable = {
+				var = vat_construction
+				min = 0
+				max = 100
+			}
+			hidden_effect = {
+				UNI_raise_vat_contruction_plating = yes
+			}
+		}
+}
+
+
+
+
+
+}
+
+
+
+
 
 UNI_dunk = {
 	UNI_dunk_peacetime = {
