@@ -1,5 +1,6 @@
 ﻿add_namespace = newmareway
 add_namespace = council_success
+add_namespace = mareway_nobles
 
 ### GUI Events
 	country_event = { ###Chancellor Boost Noble Relations - Success Check
@@ -729,6 +730,287 @@ add_namespace = council_success
 		}
 	}
 
+
+	country_event = { ###Spymaster Council - Success Check
+	 	id = council_success.12
+	 	title = council_success.12.title 
+	 	desc = council_success.12.desc
+		picture = GFX_event_test
+
+		is_triggered_only = yes
+	 	hidden = yes
+
+		option = { #Check
+			name = council_success.12.a
+			if = {
+				limit = { has_country_flag = spymaster_council_base_flag }
+				random_list = {
+					98 = {
+						country_event = {
+	                        id = newmareway.80
+	                        days = 120
+	                        random = 48
+	                        random_days = 30
+	                    }
+					}
+					2 = {
+						random_list = {
+						    34 = {
+						        set_country_flag = MWY_spy_council_serf
+						    }
+						    33 = {
+						        set_country_flag = MWY_spy_council_central
+						    }
+						    33 = {
+						        set_country_flag = MWY_spy_council_army
+						    }
+						}
+						country_event = council_success.13
+					}
+				}
+			}
+		}
+	}
+
+	country_event = { ###Spymaster Council - Crit
+	 	id = council_success.13
+	 	title = council_success.13.title
+	 	desc = council_success.13.desc
+		picture = GFX_event_test
+
+		is_triggered_only = yes
+	 	#fire_only_once = yes
+
+		option = { #Recall Marshal
+			name = council_success.13.a
+			clr_country_flag = spymaster_council_base_flag
+
+			if = {
+				limit = { has_country_flag = spymaster_council_chancellor_flag }
+				clr_country_flag = spymaster_council_chancellor_flag
+
+				if = {
+					limit = { has_country_flag = MWY_spy_council_serf }
+					clr_country_flag = MWY_spy_council_serf
+
+				}
+				else_if = {
+					limit = { has_country_flag = MWY_spy_council_central }
+					clr_country_flag = MWY_spy_council_central
+					
+				}
+				else_if = {
+					limit = { has_country_flag = MWY_spy_council_army }
+					clr_country_flag = MWY_spy_council_army
+					
+				}
+				
+			}
+			else_if = {
+				limit = { has_country_flag = spymaster_council_marshal_flag }
+				clr_country_flag = spymaster_council_marshal_flag
+
+				if = {
+					limit = { has_country_flag = MWY_spy_council_serf }
+					clr_country_flag = MWY_spy_council_serf
+
+				}
+				else_if = {
+					limit = { has_country_flag = MWY_spy_council_central }
+					clr_country_flag = MWY_spy_council_central
+					
+				}
+				else_if = {
+					limit = { has_country_flag = MWY_spy_council_army }
+					clr_country_flag = MWY_spy_council_army
+					
+				}
+				
+			}
+			else_if = {
+				limit = { has_country_flag = spymaster_council_steward_flag }
+				clr_country_flag = spymaster_council_steward_flag
+
+				if = {
+					limit = { has_country_flag = MWY_spy_council_serf }
+					clr_country_flag = MWY_spy_council_serf
+
+				}
+				else_if = {
+					limit = { has_country_flag = MWY_spy_council_central }
+					clr_country_flag = MWY_spy_council_central
+					
+				}
+				else_if = {
+					limit = { has_country_flag = MWY_spy_council_army }
+					clr_country_flag = MWY_spy_council_army
+					
+				}
+				
+			}
+		}
+	}
+
+	country_event = { ###Spymaster Council - Check
+	 	id = newmareway.80
+	 	title = newmareway.80.title 
+	 	desc = newmareway.80.desc
+		picture = GFX_event_test
+
+		is_triggered_only = yes
+	 	hidden = yes
+
+		option = { #Check
+			name = newmareway.80.a
+			if = {
+				limit = { has_country_flag = spymaster_council_base_flag }
+				country_event = newmareway.81
+
+				random_list = {
+				    34 = {
+				        set_country_flag = MWY_spy_council_serf
+				    }
+				    33 = {
+				        set_country_flag = MWY_spy_council_central
+				    }
+				    33 = {
+				        set_country_flag = MWY_spy_council_army
+				    }
+				}
+			}
+		}
+	}
+
+	country_event = { ###Spymaster Council
+	 	id = newmareway.81
+	 	title = newmareway.81.title
+	 	desc = newmareway.81.desc
+		picture = GFX_event_test
+
+		is_triggered_only = yes
+	 	#fire_only_once = yes
+
+		option = { #Recall Marshal
+			name = newmareway.81.a
+			clr_country_flag = spymaster_council_base_flag
+
+			if = {
+				limit = { has_country_flag = spymaster_council_chancellor_flag }
+				clr_country_flag = spymaster_council_chancellor_flag
+
+				if = {
+					limit = { has_country_flag = MWY_spy_council_serf }
+					clr_country_flag = MWY_spy_council_serf
+
+					MWY_spy_council_chan_serf_effect = yes
+
+				}
+				else_if = {
+					limit = { has_country_flag = MWY_spy_council_central }
+					clr_country_flag = MWY_spy_council_central
+
+					MWY_spy_council_chan_centralization_effect = yes
+					
+				}
+				else_if = {
+					limit = { has_country_flag = MWY_spy_council_army }
+					clr_country_flag = MWY_spy_council_army
+					
+					MWY_spy_council_chan_army_effect = yes
+				}
+
+				random_list = {
+					25 = {
+						MWY_lower_grainlands_opinion = yes
+					}
+					75 = {	
+					}
+				}
+				
+			}
+			else_if = {
+				limit = { has_country_flag = spymaster_council_marshal_flag }
+				clr_country_flag = spymaster_council_marshal_flag
+
+				if = {
+					limit = { has_country_flag = MWY_spy_council_serf }
+					clr_country_flag = MWY_spy_council_serf
+
+					MWY_spy_council_mar_serf_effect = yes
+
+				}
+				else_if = {
+					limit = { has_country_flag = MWY_spy_council_central }
+					clr_country_flag = MWY_spy_council_central
+
+					MWY_spy_council_mar_centralization_effect = yes
+					
+				}
+				else_if = {
+					limit = { has_country_flag = MWY_spy_council_army }
+					clr_country_flag = MWY_spy_council_army
+
+					MWY_spy_council_mar_army_effect = yes
+					
+				}
+
+				if = {
+					limit = { has_country_flag = MWY_marshal_flag_gatormaw }
+					random_list = {
+						25 = {
+							MWY_lower_radigator_opinion = yes
+						}
+						75 = {	
+						}
+					}
+				}
+				
+			}
+			else_if = {
+				limit = { has_country_flag = spymaster_council_steward_flag }
+				clr_country_flag = spymaster_council_steward_flag
+
+				if = {
+					limit = { has_country_flag = MWY_spy_council_serf }
+					clr_country_flag = MWY_spy_council_serf
+
+					MWY_spy_council_stew_serf_effect = yes
+
+				}
+				else_if = {
+					limit = { has_country_flag = MWY_spy_council_central }
+					clr_country_flag = MWY_spy_council_central
+
+					MWY_spy_council_stew_centralization_effect = yes
+					
+				}
+				else_if = {
+					limit = { has_country_flag = MWY_spy_council_army }
+					clr_country_flag = MWY_spy_council_army
+
+					MWY_spy_council_stew_army_effect = yes
+					
+				}
+
+				random_list = {
+					25 = {
+						if = {
+							limit = { has_country_flag = MWY_steward_flag_sunflower }
+							MWY_lower_amethyst_opinion = yes
+						}
+						else = {
+							MWY_lower_peninsula_opinion = yes
+						}
+					}
+					75 = {
+					}
+				}
+				
+			}
+		}
+	}
+
+
 	country_event = { ###Serf Law Cooldown
 	 	id = newmareway.19
 	 	title = newmareway.19.title
@@ -786,7 +1068,7 @@ country_event = { ###Noble Coup - No Civil War
 
 	option = { #Recall Marshal
 		name = newmareway.22.a
-		retire_country_leader = yes
+		#retire_country_leader = yes
 		retire_ideology_leader = continuation
 		set_politics = {
 			ruling_party = continuation
@@ -1255,7 +1537,7 @@ country_event = { ###Shifting the Blame
 	}
 
 	option = { #Blame Serfs
-		name = newmareway.35.b
+		name = newmareway.36.b
 		add_stability = -0.05
 		add_popularity = {
 		    ideology = continuation
@@ -1264,7 +1546,7 @@ country_event = { ###Shifting the Blame
 	}
 
 	option = { #Queen Failed
-		name = newmareway.35.b
+		name = newmareway.36.b
 		trigger = {
 			has_country_flag = MWY_queen_big_opti_flag
 		}
@@ -1523,9 +1805,29 @@ country_event = { ###New Way
 	is_triggered_only = yes
  	fire_only_once = yes
 
-	option = { #Free Law!
+	option = { #Switch party to visionary
 		name = newmareway.46.a
-		
+		set_politics = {
+			ruling_party = visionary
+		}
+		add_popularity = {
+		    ideology = visionary
+		    popularity = 0.05
+		}
+		hidden_effect = {
+			if = {
+				limit = { has_country_flag = MWY_queen_status_quo_flag }
+				add_country_leader_trait = queen_status_quo_trait
+			}
+			else_if = {
+				limit = { has_country_flag = MWY_queen_small_opti_flag }
+				add_country_leader_trait = queen_small_opti_trait
+			}
+			else_if = {
+				limit = { has_country_flag = MWY_queen_big_opti_flag }
+				add_country_leader_trait = queen_big_opti_trait
+			}
+		}
 	}
 }
 
@@ -1566,6 +1868,19 @@ country_event = { ###Mareway Development Council
 
 	option = { #Develop Industrial Potential
 		name = newmareway.48.b
+		549 = {	
+			add_extra_state_shared_building_slots = 2	
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+			}
+		}
 		
 	}
 
@@ -1573,6 +1888,24 @@ country_event = { ###Mareway Development Council
 		name = newmareway.48.c
 		trigger = {
 			has_completed_focus = MWY_qw_four_year_plan
+		}
+		549 = {	
+			add_extra_state_shared_building_slots = 3	
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+			add_building_construction = {
+				type = arms_factory
+				level = 2
+				instant_build = yes
+			}
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
 		}
 	}
 
@@ -1727,6 +2060,817 @@ country_event = { ###Cuteceanera
 		    popularity = 0.05
 		}
 		add_political_power = 5
+		
+	}
+}
+
+country_event = { ###Fresh POV
+ 	id = newmareway.55
+ 	title = newmareway.55.title
+ 	desc = newmareway.55.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Raider GF
+		trigger = {
+			country_exists = ERA
+			NOT = {
+				has_war_with = ERA
+			}
+		}
+
+		name = newmareway.55.a
+		add_political_power = -25
+		add_popularity = {
+		    ideology = destruction
+		    popularity = 0.05
+		}
+		add_stability = -0.10
+
+		ERA = {
+			every_unit_leader = {
+				limit = {
+					has_id = 6902
+				}
+				set_nationality = MWY
+			}
+			hidden_effect = {
+				country_event = newmareway.56
+			}
+		}
+
+		add_war_support = 0.05
+		set_country_flag = MWY_fresh_pov_raider_gf
+		
+	}
+
+	option = { #Old Talon
+		name = newmareway.55.b
+		
+		create_corps_commander = {
+			name = "Tag Greasebeak"
+			picture = "Barb.tga"
+			traits = { merc_commander intelligent_trait griffon_race_trait }
+			skill = 2
+			attack_skill = 1
+			defense_skill = 1
+			planning_skill = 5
+			logistics_skill = 1
+			id = 549006
+		}
+		custom_effect_tooltip = MWY_tag_stats_tt
+
+		add_war_support = 0.05
+		set_country_flag = MWY_fresh_pov_talon
+	}
+}
+
+country_event = { ###Pink Peony leaves - ERA
+ 	id = newmareway.56
+ 	title = newmareway.56.title
+ 	desc = newmareway.56.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Oh well
+		name = newmareway.56.a
+		add_war_support = -0.01
+		
+	}
+}
+
+country_event = { ###Peony Raid - MWY - On Win
+ 	id = newmareway.57
+ 	title = newmareway.57.title
+ 	desc = newmareway.57.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.57.a
+		army_experience = 25
+		add_political_power = 50
+		add_war_support = 0.10
+		add_popularity = {
+		    ideology = visionary
+		    popularity = 0.10
+		}
+	}
+}
+
+country_event = { ###Peony Raid - MWY - On Lose
+ 	id = newmareway.58
+ 	title = newmareway.58.title
+ 	desc = newmareway.58.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.58.a
+		army_experience = 5
+		add_popularity = {
+		    ideology = visionary
+		    popularity = -0.03
+		}
+	}
+}
+
+country_event = { ###Peony Raid - MWY - On Cancel
+ 	id = newmareway.59
+ 	title = newmareway.59.title
+ 	desc = newmareway.59.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.59.a
+		add_political_power = -25
+	}
+}
+
+country_event = { ###Peony Raid - ERA - On Win
+ 	id = newmareway.60
+ 	title = newmareway.60.title
+ 	desc = newmareway.60.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.60.a
+		army_experience = 10
+		add_political_power = 25
+	}
+}
+
+country_event = { ###Peony Raid - ERA - On Lose
+ 	id = newmareway.61
+ 	title = newmareway.61.title
+ 	desc = newmareway.61.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.61.a
+		add_manpower = -100
+		add_stability = -0.15
+	}
+}
+
+country_event = { ###Peony Raid - ERA - On Cancel
+ 	id = newmareway.62
+ 	title = newmareway.62.title
+ 	desc = newmareway.62.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.62.a
+		add_political_power = -25
+	}
+}
+
+country_event = { ###Talon Wargames
+ 	id = newmareway.63
+ 	title = newmareway.63.title
+ 	desc = newmareway.63.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.63.a
+		army_experience = 15
+		add_war_support 0.10
+		every_army_leader = {
+			limit = { has_id = 549006 }
+			add_skill_level = 1
+		}
+	}
+}
+
+country_event = { ###Famine Recovery
+ 	id = newmareway.64
+ 	title = newmareway.64.title
+ 	desc = newmareway.64.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.64.a
+		swap_ideas = {
+			remove_idea = MWY_serf_famine
+			add_idea = MWY_famine_recovery
+		}
+	}
+}
+
+country_event = { ###Meet with Counts
+ 	id = newmareway.65
+ 	title = newmareway.65.title
+ 	desc = newmareway.65.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.65.a
+		add_political_power = -100
+		add_popularity = {
+		    ideology = visionary
+		    popularity = 0.05
+		}
+	}
+}
+
+country_event = { ###Rug Pulled
+ 	id = newmareway.66
+ 	title = newmareway.66.title
+ 	desc = newmareway.66.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.66.a
+
+		custom_effect_tooltip = MWY_set_centralization_law_4_tt
+
+		MWY_high_central_effect = yes
+        hidden_effect = {
+            MWY_reset_centralization_laws_frames = yes
+            set_variable = { centralization_laws_var = 4 }
+            set_variable = { centralization_laws_button_4_frame_var = 2 }
+            MWY_centralization_law_cooldown_effect = yes
+            add_political_power = -50
+        }
+
+		custom_effect_tooltip = MWY_nobles_will_remember_tt
+	}
+}
+
+country_event = { ###Grand Tour 1 - Peninsula
+ 	id = newmareway.67
+ 	title = newmareway.67.title
+ 	desc = newmareway.67.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		trigger = {
+			NOT = {
+				has_completed_focus = MWY_qw_peninsula_invest
+			}
+		}
+		name = newmareway.67.a
+		hidden_effect = {
+			country_event = {
+				id = newmareway.68
+				days = 2
+				random = 24
+			}
+		}
+	}
+
+	option = { #Peninsula Investments
+		trigger = {
+			has_completed_focus = MWY_qw_peninsula_invest
+		}
+		name = newmareway.67.b
+		MWY_raise_peninsula_opinion = yes
+		hidden_effect = {
+			country_event = {
+				id = newmareway.68
+				days = 2
+				random = 24
+			}
+		}
+	}
+}
+
+country_event = { ###Grand Tour 2 - Noble Meeting
+ 	id = newmareway.68
+ 	title = newmareway.68.title
+ 	desc = newmareway.68.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.68.a
+		hidden_effect = {
+			country_event = {
+				id = newmareway.69
+				days = 7
+				random = 24
+			}
+		}
+	}
+
+
+}
+
+country_event = { ###Grand Tour 3 - Grainlands & Amethyst
+ 	id = newmareway.69
+ 	title = newmareway.69.title
+ 	desc = newmareway.69.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		trigger = {
+			NOT = {
+				has_completed_focus = MWY_qw_magic_of_friendship
+			}
+		}
+		name = newmareway.69.a
+		hidden_effect = {
+			country_event = {
+				id = newmareway.70
+				days = 7
+				random = 24
+			}
+		}
+	}
+
+	option = { #Magic of Friendship - Grainlands
+		trigger = {
+			has_completed_focus = MWY_qw_magic_of_friendship
+		}
+		name = newmareway.69.b
+		MWY_raise_grainlands_opinion = yes
+		hidden_effect = {
+			country_event = {
+				id = newmareway.70
+				days = 7
+				random = 24
+			}
+		}
+	}
+
+	option = { #Magic of Friendship - Amethyst
+		trigger = {
+			has_completed_focus = MWY_qw_magic_of_friendship
+		}
+		name = newmareway.69.c
+		MWY_raise_amethyst_opinion = yes
+		hidden_effect = {
+			country_event = {
+				id = newmareway.70
+				days = 7
+				random = 24
+			}
+		}
+	}
+}
+
+country_event = { ###Grand Tour 4 - Radigator & Swampy
+ 	id = newmareway.70
+ 	title = newmareway.70.title
+ 	desc = newmareway.70.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.70.a
+	}
+
+	option = { #Gatormaw
+		trigger = {
+			has_army_manpower = { size > 3000 }    			
+		}
+		name = newmareway.70.b
+		MWY_raise_radigator_opinion = yes
+	}
+}
+
+country_event = { ###Grand Tour End - Civil War
+ 	id = newmareway.71
+ 	title = newmareway.71.title
+ 	desc = newmareway.71.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.71.a
+		hidden_effect = {
+			country_event = newmareway.23
+		}
+	}
+}
+
+country_event = { ###Grand Tour End - Good Ending
+ 	id = newmareway.72
+ 	title = newmareway.72.title
+ 	desc = newmareway.72.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.72.a
+		MWY_raise_grainlands_opinion = yes
+		MWY_raise_amethyst_opinion = yes
+		MWY_raise_radigator_opinion = yes
+		MWY_raise_swampy_opinion = yes
+		MWY_raise_peninsula_opinion = yes
+	}
+}
+
+country_event = { ###Strongwing Revolt - Fail
+ 	id = newmareway.73
+ 	title = newmareway.73.title
+ 	desc = newmareway.73.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.73.a
+		add_stability = 0.10
+		every_unit_leader = {
+			limit = {
+				has_id = 549001
+			}
+			retire = yes
+		}
+		add_popularity = {
+		    ideology = survivalism
+		    popularity = -0.50
+		}
+		set_country_flag = MWY_strongwing_revolt_flag
+		if = {
+			limit = {
+				has_idea = MWY_marshal_strongwing
+			}
+			hidden_effect = {
+	            MWY_clear_current_marshal = yes
+	            set_country_flag = MWY_marshal_flag_gatormaw
+	            MWY_set_mar_gatormaw_law_approval = yes
+	            MWY_mar_pick_cooldown_effect = yes
+	            set_variable = { mwy_mar_pick_menu_var = 0 }
+	        }
+	        add_ideas = MWY_marshal_gatormaw
+	    }
+	}
+}
+
+country_event = { ###Strongwing Revolt - Full Success
+ 	id = newmareway.74
+ 	title = newmareway.74.title
+ 	desc = newmareway.74.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #
+		name = newmareway.74.a
+		add_stability = -0.10
+		add_war_support = 0.15
+		add_popularity = {
+		    ideology = survivalism
+		    popularity = 0.50
+		}
+		set_politics = {
+			ruling_party = survivalism
+		}
+		if = {
+			limit = {
+				has_idea = MWY_marshal_strongwing
+			}
+			hidden_effect = {
+	            MWY_clear_current_marshal = yes
+	            set_country_flag = MWY_marshal_flag_gatormaw
+	            MWY_set_mar_gatormaw_law_approval = yes
+	            MWY_mar_pick_cooldown_effect = yes
+	            set_variable = { mwy_mar_pick_menu_var = 0 }
+	        }
+	        add_ideas = MWY_marshal_gatormaw
+	    }
+	}
+}
+
+country_event = { ###Strongwing Revolt - Civil War Setup
+ 	id = newmareway.75
+ 	title = newmareway.75.title
+ 	desc = newmareway.75.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	#fire_only_once = yes
+ 	hidden = yes
+
+	option = { #
+		name = newmareway.75.a
+		hidden_effect = {
+			MWY_noble_civil_war_state_flag_setup = yes
+			country_event = newmareway.76
+		}
+	}
+}
+
+country_event = { ###Strongwing Revolt - Civil War Start
+ 	id = newmareway.75
+ 	title = newmareway.75.title
+ 	desc = newmareway.75.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+ 	immediate = {
+ 		hidden_effect = {
+	 		MWY_noble_civil_war_state_setup = yes
+			MWN = {
+				transfer_state = 553
+				every_state = {
+					limit = { is_core_of = MWY }
+					add_core_of = MWN
+				}
+				set_capital = 553
+				inherit_technology = MWY
+				declare_war_on = {
+					target = MWY
+					type = annex_everything
+				}
+			}
+			553 = {
+				teleport_armies = {
+					limit = { tag = MWY }
+				}
+			}
+			MWY_noble_civil_war_coast_breakaway = yes
+			set_global_flag = MWY_strongwing_cw_flag
+			set_country_flag = MWY_strongwing_revolt_flag
+		}
+ 	}
+
+	option = { #Queen
+		name = newmareway.75.a
+		
+		
+	}
+	option = { #Strongwing
+		name = newmareway.75.b
+		MWN = { 
+			change_tag_from = ROOT
+		}
+	}
+}
+
+country_event = { ###ERA - Forgiveness
+ 	id = newmareway.76
+ 	title = newmareway.76.title
+ 	desc = newmareway.76.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Lol No
+		name = newmareway.76.a
+		MWY = {
+			country_event = {
+				id = newmareway.77
+				days = 3
+				random = 12
+			}
+		}
+	}
+
+	option = { #Sure
+		name = newmareway.76.b
+		custom_effect_tooltip = MWY_ERA_annex_tt
+		hidden_effect = {
+			MWY = {
+				country_event = {
+					id = newmareway.78
+					days = 3
+					random = 12
+				}
+			}
+			set_country_flag = ERA_accepts_MWY_forgiveness_flag 
+		}
+	}
+}
+
+country_event = { ###ERA declines forgiveness
+ 	id = newmareway.77
+ 	title = newmareway.77.title
+ 	desc = newmareway.77.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #aww...
+		name = newmareway.77.a
+		
+	}
+}
+
+country_event = { ###ERA accepts forgiveness
+ 	id = newmareway.78
+ 	title = newmareway.78.title
+ 	desc = newmareway.78.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #yay - no cw
+		trigger = {
+			NOT = { country_exists = MWN }
+		}
+		name = newmareway.78.a
+		ERA = {
+			every_unit_leader = {
+				limit = {
+					has_id = 6901
+				}
+				set_nationality = RED
+			}
+			change_tag_from = ROOT
+		}
+		annex_country = {
+		    target = ERA
+		    transfer_troops = yes
+		}
+
+	}
+
+	option = { #yay - cw
+		trigger = {
+			country_exists = MWN
+		}
+		set_country_flag = MWY_ERA_annex_after_war_flag
+		name = newmareway.78.b
+		add_to_war = { 
+		    targeted_alliance = ERA 
+		    enemy = MWN 
+		    hostility_reason = asked_to_join
+		}
+		
+	}
+}
+
+country_event = { ###ERA joins after war
+ 	id = newmareway.79
+ 	title = newmareway.79.title
+ 	desc = newmareway.79.desc
+	picture = GFX_event_medieval_city_3
+
+	trigger = {
+		has_country_flag = MWY_ERA_annex_after_war_flag
+		has_country_flag = ERA_accepts_MWY_forgiveness_flag
+		NOT = { country_exists = MWN }
+	}
+ 	fire_only_once = yes
+
+	option = { #yay
+		name = newmareway.79.a
+		ERA = {
+			every_unit_leader = {
+				limit = {
+					has_id = 6901
+				}
+				set_nationality = RED
+			}
+			change_tag_from = ROOT
+		}
+		annex_country = {
+		    target = ERA
+		    transfer_troops = yes
+		}
+	}
+}
+
+######################################
+### Next event ID is newmareway.82 ###
+######################################
+
+
+
+### MWN - Mareway Nobles/Noble Revolt ###
+
+country_event = { ###Unthinkable Option
+ 	id = mareway_nobles.1
+ 	title = mareway_nobles.1.title
+ 	desc = mareway_nobles.1.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Count Support
+		name = mareway_nobles.1.a
+		
+	}
+
+	option = { #Merchant Support
+		name = mareway_nobles.1.b
+		
+	}
+}
+
+country_event = { ###The Power of the Few
+ 	id = mareway_nobles.2
+ 	title = mareway_nobles.2.title
+ 	desc = mareway_nobles.2.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Personal Funding
+		name = mareway_nobles.2.a
+		
+	}
+
+	option = { #Personal Levies
+		name = mareway_nobles.2.b
+		
+	}
+}
+
+country_event = { ###The Power of the Few
+ 	id = mareway_nobles.3
+ 	title = mareway_nobles.3.title
+ 	desc = mareway_nobles.3.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Entrentch Noble Leadership
+		name = mareway_nobles.3.a
+		
+	}
+
+	option = { #Conventional Reforms
+		name = mareway_nobles.3.b
+		
+	}
+}
+
+country_event = { ###The Regency Council
+ 	id = mareway_nobles.4
+ 	title = mareway_nobles.4.title
+ 	desc = mareway_nobles.4.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Peak Democracy
+		name = mareway_nobles.4.a
+		
+	}
+}
+
+country_event = { ###Light's Proposition
+ 	id = mareway_nobles.5
+ 	title = mareway_nobles.5.title
+ 	desc = mareway_nobles.5.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #See you in three months
+		name = mareway_nobles.5.a
 		
 	}
 }
