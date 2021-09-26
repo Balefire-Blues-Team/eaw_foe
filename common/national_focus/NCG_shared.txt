@@ -3322,13 +3322,21 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_smaller_duchies"
-			custom_effect_tooltip = NCG_increase_profit_tt
-				add_to_variable = {
-					var = NCG_free_invest
-					value = 1
-				}
-			swap_ideas = {remove_idea = NCG_MWY_trade_idea add_idea = NCG_MWY_trade_idea2}
-			
+			IF = {
+				limit = { has_country_flag = NCG_MWY_refused_flag }
+				add_political_power = 60
+				custom_effect_tooltip = NCG_smaller_duchies_tt
+			}
+			ELSE_IF = {
+				limit = {has_idea = NCG_MWY_trade_idea}
+				custom_effect_tooltip = NCG_increase_profit_tt
+					add_to_variable = {
+						var = NCG_free_invest
+						value = 1
+					}
+				swap_ideas = {remove_idea = NCG_MWY_trade_idea add_idea = NCG_MWY_trade_idea2}
+			}
+			ELSE = {custom_effect_tooltip = NCG_smaller_duchies_tt2 }
 		}
 }
 
@@ -3897,6 +3905,18 @@ shared_focus = {
 		
 		available_if_capitulated = yes 
 		relative_position_id = NCG_new_ceo
+		available = {
+			OR = {
+			has_idea = NCG_MWY_trade_idea2
+			and = {
+				has_country_flag = NCG_mwy_wavy_waters_flag
+				has_country_flag = NCG_mwy_pale_light_flag
+				has_country_flag = NCG_mwy_gatormaw_flag
+				has_country_flag = NCG_mwy_littleward_flag
+				has_country_flag = NCG_mwy_sunflower_flag
+			}
+			}
+		}
 		prerequisite = { focus = NCG_everfree_integrate }
 		prerequisite = { focus = NCG_trade_manehattan }
 		ai_will_do = {
@@ -3916,6 +3936,16 @@ shared_focus = {
 				ROOT = {
 					grant_wargoals_on_core_states_of_prev = yes
 				}
+			}
+			IF = {
+				limit = {
+					has_country_flag = NCG_mwy_wavy_waters_flag
+					has_country_flag = NCG_mwy_pale_light_flag
+					has_country_flag = NCG_mwy_gatormaw_flag
+					has_country_flag = NCG_mwy_littleward_flag
+					has_country_flag = NCG_mwy_sunflower_flag
+				}
+				MWY = {add_timed_idea = NCG_MWY_uncooperative_nobles_idea days = 60}
 			}
 			
 		}
