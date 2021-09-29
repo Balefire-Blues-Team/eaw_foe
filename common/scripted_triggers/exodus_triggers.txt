@@ -77,6 +77,21 @@ exodus_precalculate_occupier_appeal = { # Called in STATE SCOPE
 		add_to_temp_variable = { occupier_appeal_temp = global.core_has_core }
 	}
 	## Negative Factors
+	if = { # Subtract 0.30 if raider society 
+		limit = { var:global.exodus_new_owner = { has_idea = raider_society } }
+		subtract_from_variable = { occupier_appeal = 0.30 }
+	}
+	if = { # Subtract 0.25 if slaver society 
+		limit = { 
+			var:global.exodus_new_owner = {
+				OR = {
+					has_idea = slaver_society
+					has_country_flag = slavery_allowed
+				}
+			}
+		}
+		subtract_from_variable = { occupier_appeal = 0.25 }
+	}
 	## Mixed / Generic Factors
 	# Add 1/2 stability
 	set_temp_variable = { stab_impact = ROOT.exodus_new_owner:stability }
