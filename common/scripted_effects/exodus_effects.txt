@@ -46,6 +46,23 @@ exodus_calculate_occupier_appeal = { # Called in STATE SCOPE
 		add_to_variable = { occupier_appeal = @core_has_core }
 	}
 	## Negative Factors
+	if = { # Subtract 0.30 if raider society 
+		limit = { var:global.exodus_new_owner = { has_idea = raider_society } }
+		if = { limit = { has_global_flag = exodus_debug } log = "EXODUS - occupier_appeal: raider nation" }
+		subtract_from_variable = { occupier_appeal = 0.30 }
+	}
+	if = { # Subtract 0.25 if slaver society 
+		limit = { 
+			var:global.exodus_new_owner = {
+				OR = {
+					has_idea = slaver_society
+					has_country_flag = slavery_allowed
+				}
+			}
+		}
+		if = { limit = { has_global_flag = exodus_debug } log = "EXODUS - occupier_appeal: slaver nation" }
+		subtract_from_variable = { occupier_appeal = 0.25 }
+	}
 	## Mixed / Generic Factors
 	# Add 1/2 stability
 	set_temp_variable = { stab_impact = global.exodus_new_owner:stability }
@@ -182,16 +199,46 @@ exodus_weight_targets = { # Called in STATE SCOPE
 			if = { limit = { has_global_flag = exodus_debug } log = "EXODUS - weight_states: at war with new owner / in faction with old owner" }
 			multiply_variable = { exodus_national_appeal = 1.45 }
 		}
+		if = { # 1.10 times if open borders
+			limit = { has_idea = open_borders }
+			if = { limit = { has_global_flag = exodus_debug } log = "EXODUS - weight_states: open borders" }
+			multiply_variable = { exodus_national_appeal = 1.10 }
+		}
+		## Negative Factors
 		if = { # 0.2 if war enemy
 			limit = { OR = { has_war_with = var:global.exodus_old_owner is_in_faction_with = var:global.exodus_new_owner } }
 			if = { limit = { has_global_flag = exodus_debug } log = "EXODUS - weight_states: at war with old owner / in faction with new owner" }
 			multiply_variable = { exodus_national_appeal = 0.2 }
 		}
-		## Negative Factors
 		if = { # 0.85 if at war
 			limit = { has_war = yes }
 			if = { limit = { has_global_flag = exodus_debug } log = "EXODUS - weight_states: has war" }
 			multiply_variable = { exodus_national_appeal = 0.85 }
+		}
+		if = { # 0.25 if raider society
+			limit = { has_idea = raider_society }
+			if = { limit = { has_global_flag = exodus_debug } log = "EXODUS - weight_states: raider nation" }
+			multiply_variable = { exodus_national_appeal = 0.25 }
+		}
+		if = { # 0.30 if slaver society
+			limit = {
+				OR = {
+					has_idea = slaver_society
+					has_country_flag = slavery_allowed
+				}
+			}
+			if = { limit = { has_global_flag = exodus_debug } log = "EXODUS - weight_states: slaver nation" }
+			multiply_variable = { exodus_national_appeal = 0.30 }
+		}
+		if = { # 0.95 times if controlled borders
+			limit = { has_idea = open_borders }
+			if = { limit = { has_global_flag = exodus_debug } log = "EXODUS - weight_states: controlled borders" }
+			multiply_variable = { exodus_national_appeal = 0.95 }
+		}
+		if = { # 0.80 times if closed borders
+			limit = { has_idea = open_borders }
+			if = { limit = { has_global_flag = exodus_debug } log = "EXODUS - weight_states: closed borders" }
+			multiply_variable = { exodus_national_appeal = 0.80 }
 		}
 		## Mixed / Generic Factors
 		# Modifiers
