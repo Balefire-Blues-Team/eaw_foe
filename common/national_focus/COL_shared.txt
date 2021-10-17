@@ -6392,8 +6392,10 @@ shared_focus = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_demand_lost_land"
 		transfer_state = 314
 		add_state_core = 314
+		PEN = {remove_state_core = 314}
 		transfer_state = 352
 		add_state_core = 352
+		SOL = {remove_state_core = 352}
 	}
 } 
 
@@ -6462,7 +6464,7 @@ shared_focus = {
 	}
 } 
 
-shared_focus = { 
+shared_focus = {
 	id = COL_institute_of_ghoulish_affairs
 	icon = GFX_goal_generic_foe_skull
 	x = 0
@@ -6479,10 +6481,11 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_institute_of_ghoulish_affairs"
 		add_ideas = COL_ghoulish_institute_idea
+		create_faction = "COL_com_reborn"
 	}
 } 
 
-shared_focus = { 
+shared_focus = {
 	id = COL_ghouls_of_manehattan
 	icon = GFX_goal_generic_foe_skull
 	x = 4
@@ -6491,14 +6494,50 @@ shared_focus = {
 	relative_position_id = COL_overcoming_the_balefire
 	prerequisite = { focus = COL_institute_of_ghoulish_affairs } 
 
-	available_if_capitulated = yes 
+	available_if_capitulated = no 
 	ai_will_do = { 
 		factor = 50
 	} 
 
+	will_lead_to_war_with = TEN
+	will_lead_to_war_with = ABT
+	will_lead_to_war_with = ARB
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_ghouls_of_manehattan"
-		
+		IF = {
+			limit = {TEN = {has_completed_focus = TEN_ghoul_takeover is_ai = yes}}
+			puppet = TEN
+			hidden_effect = {
+				TEN = {country_event = springcouncil.43}
+			}
+		}
+		ELSE = {
+			TEN = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+		ABT = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		ARB = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		IF = {
+			limit = { TEN = {is_ai = yes} }
+			hidden_effect = {
+				every_state = {
+					limit = { OR = {is_core_of = FRI is_core_of = MSR is_core_of = ARB is_core_of = ABT is_core_of = EMP is_core_of = GUT is_core_of = MAR is_core_of = MRA}}
+					add_core_of = TEN
+					add_claim_by = TEN
+				}
+			}
+		}
 	}
 } 
 
@@ -6516,9 +6555,27 @@ shared_focus = {
 		factor = 50
 	} 
 
+	will_lead_to_war_with = MSR
+	will_lead_to_war_with = EMP
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_fall_of_an_empire"
-		
+		MSR = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		ABT = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		if = {
+			limit = {NOT = {TEN = {is_subject_of = ROOT}} any_owned_state = {is_core_of = TEN}}
+			release_puppet = TEN
+			hidden_effect = {
+				TEN = {country_event = springcouncil.43}
+			}
+		}
 	}
 } 
 
@@ -6536,9 +6593,39 @@ shared_focus = {
 		factor = 50
 	} 
 
+	will_lead_to_war_with = FRI
+	will_lead_to_war_with = GUT
+	will_lead_to_war_with = MAR
+	will_lead_to_war_with = MRA
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_secure_southside"
-		
+		FRI = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		GUT = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		MAR = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		MRA = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		if = {
+			limit = {NOT = {TEN = {is_subject_of = ROOT}} any_owned_state = {is_core_of = TEN}}
+			release_puppet = TEN
+			hidden_effect = {
+				TEN = {country_event = springcouncil.43}
+			}
+		}
 	}
 } 
 
@@ -6548,6 +6635,7 @@ shared_focus = {
 	x = 2
 	y = 10
 	cost = 4.29
+	available = {TEN = {is_subject_of = COL}}
 	relative_position_id = COL_overcoming_the_balefire
 	prerequisite = { focus = COL_fall_of_an_empire } 
 	prerequisite = { focus = COL_secure_southside } 
@@ -6559,7 +6647,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_manehattan_reborn"
-		
+		add_offsite_building = { type = arms_factory level = 2 }
+		add_offsite_building = { type = industrial_complex level = 2 }
+		add_offsite_building = { type = dockyard level = 2 }
+		TEN = {
+			add_offsite_building = { type = arms_factory level = 2 }
+			add_offsite_building = { type = industrial_complex level = 2 }
+			add_offsite_building = { type = dockyard level = 2 }
+		}
 	}
 } 
 
@@ -6577,9 +6672,43 @@ shared_focus = {
 		factor = 50
 	} 
 
+	will_lead_to_war_with = PEN
+	will_lead_to_war_with = SOL
+	will_lead_to_war_with = BOR
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_save_eastern_ghouls"
-		
+		IF = {
+			limit = {PEN = {exists = yes is_ai = yes}}
+			puppet = PEN
+			PEN = {set_cosmetic_tag = COL_PEN_ghoul_puppet}
+		}
+		ELSE = {
+			PEN = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+		SOL = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		BOR = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		IF = {
+			limit = { PEN = {is_ai = yes} }
+			hidden_effect = {
+				every_state = {
+					limit = { OR = {is_core_of = PAR is_core_of = BOR is_core_of = JAD is_core_of = LOS is_core_of = PCM is_core_of = ZEX is_core_of = JUD is_core_of = UND is_core_of = WTC is_core_of = NMZ is_core_of = BLN is_core_of = HYD is_core_of = SDO}}
+					add_core_of = PEN
+					add_claim_by = PEN
+				}
+			}
+		}
 	}
 } 
 
@@ -6599,7 +6728,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_recruit_ghouls_across_the_wastes"
-		
+		add_ideas = COL_ghouls_across_wastes
 	}
 } 
 
@@ -6617,9 +6746,32 @@ shared_focus = {
 		factor = 50
 	} 
 
+	will_lead_to_war_with = ALB
+	will_lead_to_war_with = CAN
+	will_lead_to_war_with = NLO
+	will_lead_to_war_with = ARI
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_extinguish_bigots_of_albion"
-		
+		ALB = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		CAN = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		NLO = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		ARI = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 } 
 
@@ -6638,9 +6790,85 @@ shared_focus = {
 		factor = 500
 	} 
 
+	will_lead_to_war_with = PAR
+	will_lead_to_war_with = LOS
+	will_lead_to_war_with = PCM
+	will_lead_to_war_with = ZEX
+	will_lead_to_war_with = JUD
+	will_lead_to_war_with = WTC
+	will_lead_to_war_with = UND
+	will_lead_to_war_with = JAD
+	will_lead_to_war_with = BLN
+	will_lead_to_war_with = HYD
+	will_lead_to_war_with = NMZ
+	will_lead_to_war_with = SDO
+	
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_neighwhere_no_more"
-		
+		PAR = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		LOS = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		PCM = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		ZEX = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		JUD = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		WTC = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		UND = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		BLN = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		HYD = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		SDO = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		JAD = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		NMZ = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		if = {
+			limit = {NOT = {PEN = {is_subject_of = ROOT}} any_owned_state = {is_core_of = PEN}}
+			release_puppet = PEN
+		}
 	}
 } 
 
@@ -6661,7 +6889,15 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_the_knights_reborn"
-		
+		set_technology = {
+				power_armour_tech_level_scientific = 1
+			}
+		add_tech_bonus = {
+			name = power_armor_tech
+			bonus = 0.8
+			uses = 1
+			category = power_armor_tech
+			}
 	}
 } 
 
@@ -6671,6 +6907,7 @@ shared_focus = {
 	x = 0
 	y = 10
 	cost = 4.29
+	available = {PEN = {is_subject_of = COL}}
 	relative_position_id = COL_overcoming_the_balefire
 	prerequisite = { focus = COL_neighwhere_no_more } 
 	prerequisite = { focus = COL_the_knights_reborn } 
@@ -6680,9 +6917,20 @@ shared_focus = {
 		factor = 500
 	} 
 
+	available = {
+		owns_state = 331
+		owns_state = 103
+		owns_state = 119
+		owns_state = 397
+		owns_state = 133
+	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_the_glowing_sea"
-		
+		Core_original_SOL = yes
+		Core_original_ALB = yes
+		Core_original_ARI = yes
+		Core_original_NLO = yes
+		Core_original_CAN = yes
 	}
 } 
 
@@ -6700,9 +6948,32 @@ shared_focus = {
 		factor = 50
 	} 
 
+	will_lead_to_war_with = SLC
+	will_lead_to_war_with = PHE
+	will_lead_to_war_with = NGL
+	will_lead_to_war_with = SML
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_secure_upper_mare"
-		
+		SLC = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		PHE = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		NGL = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		SML = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 } 
 
@@ -6720,9 +6991,44 @@ shared_focus = {
 		factor = 50
 	} 
 
+	will_lead_to_war_with = SKY
+	will_lead_to_war_with = TOL
+	will_lead_to_war_with = DFF
+	will_lead_to_war_with = NGU
+	will_lead_to_war_with = NOO
+	will_lead_to_war_with = WTR
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_liberate_enclave"
-		
+		SKY = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		TOL = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		DFF = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		NGU = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		NOO = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		WTR = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 } 
 
@@ -6740,9 +7046,38 @@ shared_focus = {
 		factor = 50
 	} 
 
+	will_lead_to_war_with = TMS
+	will_lead_to_war_with = DEP
+	will_lead_to_war_with = VOI
+	will_lead_to_war_with = TFL
+	will_lead_to_war_with = NTF
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_secure_nurior_allegiance"
-		
+		TMS = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		DEP = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		VOI = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		TFL = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		NTF = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 } 
 
@@ -6753,6 +7088,12 @@ shared_focus = {
 	y = 10
 	cost = 4.29
 	relative_position_id = COL_overcoming_the_balefire
+	available = {
+		owns_state = 330
+		owns_state = 877
+		owns_state = 268
+		owns_state = 401
+	}
 	prerequisite = { focus = COL_liberate_enclave } 
 	prerequisite = { focus = COL_secure_nurior_allegiance } 
 
@@ -6763,7 +7104,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_the_prosperous_west"
-		#heavily buff subjects
+		Core_original_SKY = yes
+		Core_original_PHE = yes
+		Core_original_SLC = yes
+		Core_original_DEP = yes
 	}
 } 
 
@@ -6785,7 +7129,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_the_future_is_ghoulish"
-		
+		country_event = springcouncil.44
 	}
 } 
 
@@ -6805,7 +7149,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_heal_cursed_flesh"
-		
+		add_ideas = COL_new_ghouls_1
 	}
 } 
 
@@ -6825,7 +7169,19 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_ghoul_medical_studies"
-		
+		add_tech_bonus = {
+			name = magical_tech
+			bonus = 0.5
+			uses = 2
+			category = magical_tech
+			}
+		add_tech_bonus = {
+			name = medical_tech
+			bonus = 0.5
+			uses = 1
+			category = medical_tech
+			}
+		country_event = { id = springcouncil.42 }
 	}
 } 
 
@@ -6845,7 +7201,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_aquire_shaman_knowledge"
-		
+		custom_effect_tooltip = COL_gain_300_magic_ressource_tt
+		hidden_effect = {
+			add_to_variable = {
+				var = COL_magic_ressource
+				value = 300
+			}
+		}
 	}
 } 
 
@@ -6865,7 +7227,82 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_controlled_ghoulification"
-		
+		custom_effect_tooltip = COL_ghoul_army_tt
+			hidden_effect = {
+				if = {
+				    limit = { 
+			            NOT = { 
+						    has_template = "Ghoul-Troopers"
+						}
+					}
+					division_template = {
+	                name = "Ghoul-Troopers"
+	                is_locked = no
+	                    regiments = {
+		                    infantry = { x = 0 y = 0 }
+							infantry = { x = 0 y = 1 }
+							infantry = { x = 1 y = 0 }
+							infantry = { x = 1 y = 1 }
+							infantry = { x = 0 y = 2 }
+							infantry = { x = 0 y = 3 }
+							infantry = { x = 1 y = 2 }
+							infantry = { x = 1 y = 3 }
+							fireteam_infantry = { x = 0 y = 4 }
+							fireteam_infantry = { x = 1 y = 4 }
+	                    }
+                    }
+					support = {
+						fireteam_support = { x = 0 y = 0 }
+						medical_chem_company = { x = 0 y = 1 }
+					}
+				}
+				}
+				140 = { 
+				    create_unit = {
+						division = "name = \"Kuciców Ghoul-Troopers\" division_template = \"Ghoul-Troopers\" start_experience_factor = 0.5 start_equipment_factor = 0.95"
+						owner = ROOT
+					}
+				}
+				318 = { 
+				    create_unit = {
+						division = "name = \"Limua Ghoul-Troopers\" division_template = \"Ghoul-Troopers\" start_experience_factor = 0.5 start_equipment_factor = 0.95"
+						owner = ROOT
+					}
+				}
+				422 = { 
+				    create_unit = {
+						division = "name = \"Smoertbott Ghoul-Troopers\" division_template = \"Ghoul-Troopers\" start_experience_factor = 0.5 start_equipment_factor = 0.95"
+						owner = ROOT
+					}
+				}
+				IF = { limit {owns_state = 292}
+				292 = { 
+				    create_unit = {
+						division = "name = \"Arria Ghoul-Troopers\" division_template = \"Ghoul-Troopers\" start_experience_factor = 0.5 start_equipment_factor = 0.95"
+						owner = ROOT
+					}
+				}}
+				IF = { limit {owns_state = 321}
+				321 = { 
+				    create_unit = {
+						division = "name = \"Stratusburg Ghoul-Troopers\" division_template = \"Ghoul-Troopers\" start_experience_factor = 0.5 start_equipment_factor = 0.95"
+						owner = ROOT
+					}
+				}}
+				IF = { limit {owns_state = 361}
+				361 = { 
+				    create_unit = {
+						division = "name = \"Detrot Ghoul-Troopers\" division_template = \"Ghoul-Troopers\" start_experience_factor = 0.5 start_equipment_factor = 0.95"
+						owner = ROOT
+					}
+				}}
+				IF = { limit {owns_state = 204}
+				204 = { 
+				    create_unit = {
+						division = "name = \"Novochernusk Ghoul-Troopers\" division_template = \"Ghoul-Troopers\" start_experience_factor = 0.5 start_equipment_factor = 0.95"
+						owner = ROOT
+					}
+				}}
 	}
 } 
 
@@ -6886,7 +7323,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_cloned_hydra_glands"
-		
+		swap_ideas = { remove_idea = COL_new_ghouls_1 add_idea = COL_new_ghouls_2 }
 	}
 } 
 
@@ -6906,7 +7343,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_improve_compound_y"
-		
+		add_ideas = mutant_law_COL2
 	}
 } 
 
@@ -6926,7 +7363,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_repair_rotten_brains"
-		
+		add_stability = 0.05
+		every_owned_state = {
+			limit = {is_core_of = ROOT}
+			add_manpower = 50
+		}
 	}
 } 
 
@@ -6946,7 +7387,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_eliminate_degradation_issue"
-		
+		add_stability = 0.10
+		add_war_support = 0.05
+		add_tech_bonus = {
+			name = magical_tech
+			bonus = 1.0
+			uses = 1
+			category = magical_tech
+			}
 	}
 } 
 
@@ -6957,6 +7405,7 @@ shared_focus = {
 	y = 4
 	cost = 4.29
 	relative_position_id = COL_overcoming_the_balefire
+	available = {has_completed_focus = COL_good_as_old}
 	prerequisite = { focus = COL_cloned_hydra_glands focus = COL_improve_compound_y focus = COL_controlled_ghoulification } 
 
 	available_if_capitulated = yes 
@@ -6966,7 +7415,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_artificial_glowing_ones"
-		
+		swap_ideas = {remove_idea = COL_ghoul_forces_3 add_idea = COL_ghoul_forces_4}
 	}
 } 
 
@@ -6989,7 +7438,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_smoothskinned_ghouls"
-		
+		remove_ideas = COL_ghoul_forces_4
+		remove_ideas = COL_new_ghouls_2
+		add_political_power = -50
+		custom_effect_tooltip = COL_super_ghoul_tt
 	}
 } 
 
