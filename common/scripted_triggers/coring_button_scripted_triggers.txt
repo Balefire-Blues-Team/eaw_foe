@@ -4,6 +4,7 @@
 @CORED_POP_DIVISOR = 1.8
 @DISTANCE_DIVISOR = 10
 @CLAIM_MULTIPLIER = 0.75
+@MAX_CORING_COST = 250
 
 add_core_visibility_trigger = {
 	NOT = { has_variable = block_coring_from@ROOT }
@@ -19,30 +20,7 @@ add_core_visibility_trigger = {
 	}
 }
 
-add_core_trigger = {
-	is_owned_and_controlled_by = ROOT
-
-	ROOT = {
-		has_civil_war = no
-		NOT = { has_country_flag = not_allowed_to_core_flag }
-	}
-
-	if = {
-		limit = {
-			NOT = { ROOT = { ignore_adjacency_for_coring = yes } }
-		}
-		OR = {
-			any_neighbor_state = { is_core_of = ROOT }
-			AND = {
-				custom_trigger_tooltip = {
-					tooltip = tt_is_not_in_home_area
-					NOT = { is_in_home_area = yes }
-				}
-				is_coastal = yes
-			}
-		}
-	}
-
+coring_resistance_compliance_trigger = {
 	#States without 'any cores' dont have compliance or resistance, so only check those if a country has this state cored.
 	if = {
 		limit = {
@@ -74,9 +52,44 @@ add_core_trigger = {
 			min = 0
 			max = 100
 		}
-		compliance > required_compliance
+		custom_trigger_tooltip = {
+			tooltip = compliance_greater_then_or_equal_requirement
+			check_variable = {
+				var = compliance
+				value = required_compliance
+				compare = greater_than_or_equals
+			}
+		}
 	}
+}
 
+coring_can_core_trigger = {
+	is_owned_and_controlled_by = ROOT
+	ROOT = {
+		has_civil_war = no
+		NOT = { has_country_flag = not_allowed_to_core_flag }
+	}
+}
+
+coring_adjacency_trigger = {
+	if = {
+		limit = {
+			NOT = { ROOT = { ignore_adjacency_for_coring = yes } }
+		}
+		OR = {
+			any_neighbor_state = { is_core_of = ROOT }
+			AND = {
+				custom_trigger_tooltip = {
+					tooltip = tt_is_not_in_home_area
+					NOT = { is_in_home_area = yes }
+				}
+				is_coastal = yes
+			}
+		}
+	}
+}
+
+coring_political_power_cost_trigger = {
 	hidden_trigger = {
 		# States population.
 		set_temp_variable = { coring_var_state_pop = state_population_k }
@@ -144,6 +157,8 @@ add_core_trigger = {
 		set_temp_variable = { coring_cost_from_modifiers = 1 }
 		add_to_temp_variable = { coring_cost_from_modifiers = ROOT.modifier@core_creation_cost_factor }
 		add_to_temp_variable = { coring_cost_from_modifiers = local_core_creation_cost_factor }
+		add_to_temp_variable = { coring_cost_from_modifiers = coring_cost_targeted_state_factor@ROOT }
+
 		if = {
 			limit = {
 				check_variable = { coring_cost_from_modifiers < 0.05 }
@@ -155,6 +170,7 @@ add_core_trigger = {
 		round_temp_variable = coring_var_coring_cost
 		set_temp_variable = { coring_cost_from_modifiers_for_display = ROOT.modifier@core_creation_cost_factor }
 		add_to_temp_variable = { coring_cost_from_modifiers_for_display = local_core_creation_cost_factor }
+		add_to_temp_variable = { coring_cost_from_modifiers_for_display = coring_cost_from_modifiers }
 		if = {
 			limit = {
 				check_variable = { coring_cost_from_modifiers_for_display < -0.95 }
@@ -162,13 +178,28 @@ add_core_trigger = {
 			set_temp_variable = { coring_cost_from_modifiers_for_display = -0.95 }
 		}
 
-		# Limit the cost to 0-300 range.
+		#Get any increase to your maximum coring cost from modifiers
+		set_temp_variable = { maximum_coring_cost = @MAX_CORING_COST }
+		add_to_temp_variable = { maximum_coring_cost = ROOT.modifier@maxium_core_cost_increase }
+		if = {
+			limit = { check_variable = { maximum_coring_cost < 0 } }
+			set_temp_variable = { maximum_coring_cost = 0 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { maximum_coring_cost > 2000 }
+			}
+			set_temp_variable = { maximum_coring_cost = 2000 }
+		}
+
+		# Limit the cost to 0 and maximum_cost range.
 		if = {
 			limit = { check_variable = { coring_var_coring_cost < 0 } }
 			set_temp_variable = { coring_var_coring_cost = 0 }
-		} else_if = {
-			limit = { check_variable = { coring_var_coring_cost > 300 } }
-			set_temp_variable = { coring_var_coring_cost = 300 }
+		}
+		else_if = {
+			limit = { check_variable = { coring_var_coring_cost > maximum_coring_cost } }
+			set_temp_variable = { coring_var_coring_cost = maximum_coring_cost }
 		}
 
 		coring_efficiency_trigger = yes
