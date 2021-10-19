@@ -56,3 +56,196 @@
 			country_event = bloodyarmy.5
 		}
 	}
+
+#Shatterhorn Raid
+	shared_focus = {
+		id = ERA_shatterhorn_raid
+		icon = GFX_goal_griffon_crown
+		x = 15
+		y = 0
+		cost = 5
+
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ERA_shatterhorn_has_been_stormed_tt
+				hidden_trigger = {
+					has_global_flag = MWY_shatterhorn_storming_flag
+				}
+			}
+		} 
+		#prerequisite = { focus = ERA_blood } 
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ERA_shatterhorn_raid"
+			start_border_war = {
+				change_state_after_war = no
+				attacker = {
+					state = 69
+					num_provinces = 3
+					on_win = bloody_border_war.1
+					on_lose = bloody_border_war.2
+					on_cancel = bloody_border_war.3
+				}
+							
+				defender = {
+					state = 553
+					num_provinces = 4
+					on_win = raiding.6
+					on_lose = raiding.4
+					on_cancel = raiding.5
+				}
+			}
+		}
+	}
+
+	shared_focus = {
+		id = ERA_shatterhorn_won_raid
+		icon = GFX_goal_griffon_crown
+		relative_position_id = ERA_shatterhorn_raid
+		x = -1
+		y = 1
+		cost = 5
+
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ERA_won_shatterhorn_raid_tt
+				hidden_trigger = {
+					has_country_flag = ERA_won_shatterhorn_raid_flag
+				}
+			}
+		} 
+		prerequisite = { focus = ERA_shatterhorn_raid }
+		mutually_exclusive = { focus = ERA_shatterhorn_lost_raid }
+
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ERA_shatterhorn_won_raid"
+			add_war_support = 0.05
+		}
+	}
+
+	shared_focus = {
+		id = ERA_shatterhorn_to_the_victors
+		icon = GFX_goal_griffon_crown
+		relative_position_id = ERA_shatterhorn_won_raid
+		x = -1
+		y = 1
+		cost = 5
+
+		prerequisite = { focus = ERA_shatterhorn_won_raid }
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ERA_to_the_victors"
+			add_equipment_to_stockpile = {
+    			type = ballistic_equipment_1
+    			amount = 500
+    			producer = MWY
+			}
+
+			add_equipment_to_stockpile = {
+    			type = demolitions_equipment_1
+    			amount = 100
+    			producer = MWY
+			}
+		}
+	}
+
+	shared_focus = {
+		id = ERA_shatterhorn_lost_raid
+		icon = GFX_goal_griffon_crown
+		relative_position_id = ERA_shatterhorn_raid
+		x = 1
+		y = 1
+		cost = 5
+
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ERA_lost_shatterhorn_raid_tt
+				hidden_trigger = {
+					has_country_flag = ERA_lost_shatterhorn_raid_flag
+				}
+			}
+		} 
+		prerequisite = { focus = ERA_shatterhorn_raid }
+		mutually_exclusive = { focus = ERA_shatterhorn_won_raid }
+
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ERA_shatterhorn_lost_raid"
+			add_war_support = -0.1
+		}
+	}
+
+	shared_focus = {
+		id = ERA_shatterhorn_try_try_again
+		icon = GFX_goal_griffon_crown
+		relative_position_id = ERA_shatterhorn_lost_raid
+		x = 1
+		y = 1
+		cost = 5
+
+		prerequisite = { focus = ERA_shatterhorn_lost_raid }
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ERA_shatterhorn_try_try_again"
+			custom_effect_tooltip = ERA_shatterhorn_second_chance_tt
+			start_border_war = {
+				change_state_after_war = no
+				attacker = {
+					state = 69
+					num_provinces = 3
+					on_win = bloody_border_war.7
+					on_lose = bloody_border_war.8
+					on_cancel = bloody_border_war.9
+				}
+							
+				defender = {
+					state = 553
+					num_provinces = 4
+					on_win = raiding.6
+					on_lose = raiding.4
+					on_cancel = raiding.5
+				}
+			}
+
+			custom_effect_tooltip = ERA_second_shatterhorn_raid_tt
+		}
+	}
+
+	shared_focus = {
+		id = ERA_shatterhorn_learning_experience
+		icon = GFX_goal_griffon_crown
+		relative_position_id = ERA_shatterhorn_won_raid
+		x = 1
+		y = 1
+		cost = 8.7
+
+		prerequisite = { 
+			focus = ERA_shatterhorn_won_raid
+			focus = ERA_shatterhorn_lost_raid
+		}
+		ai_will_do = { 
+		factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ERA_shatterhorn_learning_experience"
+			army_experience = 20
+			add_war_support = 0.05
+		}
+	}
