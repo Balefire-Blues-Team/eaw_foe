@@ -1,3 +1,4 @@
+@MAX_CORING_COST = 250
 coring_efficiency_trigger = {
 	hidden_trigger = {
 		set_temp_variable = { coring_cost_factor = 1 } #By default, cores at 100 percent efficiency
@@ -20,31 +21,6 @@ coring_efficiency_trigger = {
 		#Unique Efficiency Modifiers
 		#Important thing to note: Use AND if the trigger is complex, then order it by the least expensive identifier first
 
-		#MLT
-		if = {
-			limit = {
-				ROOT = { has_country_flag = core_pacific_ocean_states_for_free }
-				is_coastal_to_the_pacific_ocean = yes
-			}
-			set_temp_variable = { coring_cost_factor = 0 } #Reduced to 0
-		}
-		# LNS
-		if = {
-			limit = {
-				ROOT = { has_country_flag = reduced_texas_coring_cost }
-				is_texan_state = yes
-			}
-			multiply_temp_variable = { coring_cost_factor = 0.8 } # 20% reduction
-		}
-
-		# CMC
-		if = {
-			limit = {
-				ROOT = { has_country_flag = reduced_cmc_coring_cost }
-				is_red_river_economic_zone = yes
-			}
-			multiply_temp_variable = { coring_cost_factor = 0.7 } # 30% reduction
-		}
 
 		#Gui Stuff
 		set_temp_variable = { coring_cost_factor_gui = coring_cost_factor }
@@ -56,14 +32,29 @@ coring_efficiency_trigger = {
 		#Final Core Cost Factor Handling
 		multiply_temp_variable = { coring_var_coring_cost = coring_cost_factor }
 		round_temp_variable = coring_var_coring_cost
+		
+		#Get any increase to your maximum coring cost from modifiers
+		set_temp_variable = { maximum_coring_cost = @MAX_CORING_COST }
+		add_to_temp_variable = { maximum_coring_cost = ROOT.modifier@maxium_core_cost_increase }
+		if = {
+			limit = { check_variable = { maximum_coring_cost < 0 } }
+			set_temp_variable = { maximum_coring_cost = 0 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { maximum_coring_cost > 2000 }
+			}
+			set_temp_variable = { maximum_coring_cost = 2000 }
+		}
 
-		# Limit the cost to 0-300 range.
+		# Limit the cost to 0 and maximum_cost range.
 		if = {
 			limit = { check_variable = { coring_var_coring_cost < 0 } }
 			set_temp_variable = { coring_var_coring_cost = 0 }
-		} else_if = {
-			limit = { check_variable = { coring_var_coring_cost > 300 } }
-			set_temp_variable = { coring_var_coring_cost = 300 }
+		}
+		else_if = {
+			limit = { check_variable = { coring_var_coring_cost > maximum_coring_cost } }
+			set_temp_variable = { coring_var_coring_cost = maximum_coring_cost }
 		}
 	}
 }
