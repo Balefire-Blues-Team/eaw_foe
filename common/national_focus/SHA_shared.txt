@@ -2041,7 +2041,22 @@ shared_focus = {
 		relative_position_id = NCR_make_republic_official
 		cost = 4.38
 		
-		bypass = { MSR = { exists = no }}
+		bypass = { 
+			OR = {
+				NOT = {
+					country_exists = MSR
+				}
+				MSR = { is_in_faction_with = SHA }
+			}
+		}
+
+		available = {
+			NOT = {
+				MSR = {
+					is_in_faction = yes
+				}
+			}
+		}
 
 		prerequisite = {focus = NCR_proposal_216 }
 		ai_will_do = {
@@ -3096,7 +3111,7 @@ shared_focus = {
 		prerequisite = {focus = NCR_sort_out_manehattan }
 		relative_position_id = NCR_commitee_of_expansion
 		available = {
-			TEN = { has_country_flag = TEN_is_enemy_of_NCR }
+			TEN = {OR = { has_country_flag = TEN_is_enemy_of_NCR exists = no }}
 			NOT = {
 				is_puppet = yes
 			}
@@ -3444,14 +3459,9 @@ shared_focus = {
 			NOT = {
 				has_government = destruction
 			}
-			owns_state = 811
-			owns_state = 798
-			owns_state = 32
-			owns_state = 565
-			owns_state = 551
-			owns_state = 550
-			owns_state = 33
-			owns_state = 34
+			LIT = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
 		}
 		ai_will_do = {
 			factor = 500
@@ -3618,7 +3628,7 @@ shared_focus = {
 
 		completion_reward = {
 			Core_original_SPV = yes
-			add_state_core = 481
+			Core_original_UNI = yes
 			set_technology = {
 				tech_ironpaws = 1
 			}
@@ -4300,6 +4310,11 @@ shared_focus = {
 		
 		ai_will_do = {
 			factor = 500
+		}
+		available = {
+			TEN = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
 		}
 		prerequisite = {focus = NCR_flourishing_heartland }
 		relative_position_id = NCR_statehood_debate

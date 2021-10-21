@@ -1,7 +1,8 @@
 ########################
 # Scavenging Decisions #
-#     By Garnithor      #
+#     By Garnithor     #
 ########################
+# Adapted for Balefire Blues by Laundry
 
 
 #@scavcost = -50 # Costs of scavenging
@@ -19,10 +20,6 @@ scavenging_decisions = {
 		allowed = { NOT = { has_dlc = "Waking the Tiger" } }
 		available = {
 			has_manpower > 50
-			#set_temp_variable = {
-			#	caps_diff = @startupscavcost
-			#}
-			#caps_cost_trigger = yes
 		}
 		days_remove = 90
 		modifier = {
@@ -30,8 +27,6 @@ scavenging_decisions = {
 		}
 		complete_effect = {
 			add_manpower = -50
-			#set_temp_variable = { caps_to_add = @startupscavcost }
-			#add_caps = yes
 		}
 		remove_effect = {
 			set_country_flag = scavenging_enabled
@@ -49,11 +44,7 @@ scavenging_decisions = {
 		allowed = { has_dlc = "Waking the Tiger" }
 		available = {
 			has_manpower > 50
-			set_temp_variable = {
-			#	caps_diff = @startupscavcost
-			#}
-			#get_caps_difference = yes
-			#check_variable = { caps_display_temp > 0 }
+			num_of_available_civilian_factories > 1
 		}
 		days_remove = 90
 		modifier = {
@@ -61,8 +52,6 @@ scavenging_decisions = {
 		}
 		complete_effect = {
 			add_manpower = -50
-			#set_temp_variable = { caps_to_add = @startupscavcost }
-			#add_caps = yes
 		}
 		remove_effect = {
 			set_country_flag = scavenging_enabled
@@ -71,169 +60,583 @@ scavenging_decisions = {
 		ai_will_do = { factor = 10 }
 	}
 
-	scavenging_mission_foot = {
+	scavenging_mission_generic_state = {
 		icon = infiltrate_state
 		available = {
-			has_manpower > 100
+			has_manpower > 25
 			has_equipment = {
-				infantry_equipment > 60
+				infantry_equipment > 25
 			}
 			NOT = { has_country_flag = scavenging_underway }
 			NOT = { has_active_mission = scavenging_rescue_crisis }
-			#set_temp_variable = {
-			#	caps_diff = @scavcost
-			#}
-			#caps_cost_trigger = yes
 		}
 		visible = {
 			has_country_flag = scavenging_enabled
+			any_owned_state = {
+				NOT = { has_state_flag = scav_unique_loot_state_flag }
+			}
 		}
 		fixed_random_seed = no
 		days_remove = 90
 		days_re_enable = 30
 		complete_effect = {
-			add_manpower = -50
+			add_manpower = -25
 			set_country_flag = scavenging_underway
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
-				amount = -50
-			}
-			#set_temp_variable = { caps_to_add = @scavcost }
-			#add_caps = yes
-		}
-		remove_effect = {
-			random_list = {
-				50 = { #Found something
-					country_event = scavenge.1
-				}
-				20 = { #Found Nothing
-					country_event = scavenge.2
-				}
-				10 = { #Hasty Retreat
-					country_event = scavenge.3
-				}
-				10 = { #Contact Lost
-					country_event = scavenge.4
-				}
-			}
-		}
-		ai_will_do = { factor = 10 }
-	}
-
-	scavenging_mission_vehicle = {
-		icon = infiltrate_state
-		available = {
-			has_manpower > 100
-			has_equipment = {
-				infantry_equipment > 60
-			}
-			has_equipment = {
-				motorized_equipment > 15
-			}
-			has_tech = bike_tech_1
-			NOT = { has_country_flag = scavenging_underway }
-			NOT = { has_active_mission = scavenging_rescue_crisis }
-			#set_temp_variable = {
-			#	caps_diff = @scavcost
-			#}
-			#caps_cost_trigger = yes
-		}
-		visible = {
-			has_country_flag = scavenging_enabled
-			has_tech = bike_tech_1
-		}
-		fixed_random_seed = no
-		days_remove = 60
-		days_re_enable = 30
-		complete_effect = {
-			add_manpower = -50
-			set_country_flag = scavenging_underway
-			add_equipment_to_stockpile = {
-				type = infantry_equipment
-				amount = -50
-			}
-			add_equipment_to_stockpile = {
-				type = motorized_equipment
-				amount = -10
-			}
-			#set_temp_variable = { caps_to_add = @scavcost }
-			#add_caps = yes
-		}
-		remove_effect = {
-			random_list = {
-				60 = { #Found something
-					country_event = scavenge.5
-				}
-				15 = { #Found Nothing
-					country_event = scavenge.6
-				}
-				15 = { #Hasty Retreat
-					country_event = scavenge.7
-				}
-				10 = { #Contact Lost
-					country_event = scavenge.8
-				}
-			}
-		}
-		ai_will_do = { factor = 10 }
-	}
-
-	scavenging_mission_pa = {
-		icon = infiltrate_state
-		available = {
-			has_manpower > 100
-			has_equipment = {
-				infantry_equipment > 60
-			}
-			has_equipment = {
-				power_armor_equipment > 30
-			}
-			has_tech = stripped_pa_tech
-			NOT = { has_country_flag = scavenging_underway }
-			NOT = { has_active_mission = scavenging_rescue_crisis }
-			#set_temp_variable = {
-			#	caps_diff = @scavcost
-			#}
-			#caps_cost_trigger = yes
-		}
-		visible = {
-			has_country_flag = scavenging_enabled
-			has_tech = stripped_pa_tech
-		}
-		fixed_random_seed = no
-		days_remove = 90
-		days_re_enable = 30
-		complete_effect = {
-			add_manpower = -50
-			set_country_flag = scavenging_underway
-			add_equipment_to_stockpile = {
-				type = infantry_equipment
-				amount = -50
-			}
-			add_equipment_to_stockpile = {
-				type = power_armor_equipment
 				amount = -25
 			}
-			#set_temp_variable = { caps_to_add = @scavcost }
-			#add_caps = yes
 		}
 		remove_effect = {
 			random_list = {
 				60 = { #Found something
-					country_event = scavenge.9
+					country_event = foe_scavenge.1
+					modifier = {
+						add = 5
+						AND = {
+							tag = AJR
+							has_completed_focus = AJR_support_prospectors
+						}
+					}
 				}
 				20 = { #Found Nothing
-					country_event = scavenge.10
+					country_event = foe_scavenge.2
 				}
-				15 = { #Hasty Retreat
-					country_event = scavenge.11
+				10 = { #Hasty Retreat
+					country_event = foe_scavenge.3
 				}
-				5 = { #Contact Lost
-					country_event = scavenge.12
+				10 = { #Contact Lost
+					country_event = foe_scavenge.4
 				}
 			}
 		}
 		ai_will_do = { factor = 10 }
+	}
+
+	scavenging_mission_silverwing_812 = {
+		icon = infiltrate_state
+		available = {
+			has_manpower > 25
+			has_equipment = {
+				infantry_equipment > 25
+			}
+			NOT = { has_country_flag = scavenging_underway }
+			NOT = { has_active_mission = scavenging_rescue_crisis }
+			OR = {
+				owns_state = 812
+				AND = {
+					tag = AJR
+					has_country_flag = AJR_scavenging_up_flag
+					812 = {
+						OWNER = {
+							OR = {
+								has_AJR_expedition = yes
+								has_AJR_embassy = yes
+							}
+							NOT = { tag = AJR }
+						}
+					}
+				}
+			}
+		}
+		visible = {
+			has_country_flag = scavenging_enabled
+			OR = {
+				owns_state = 812
+				AND = {
+					tag = AJR
+					has_country_flag = AJR_scavenging_up_flag
+					812 = {
+						OWNER = {
+							OR = {
+								has_AJR_expedition = yes
+								has_AJR_embassy = yes
+							}
+							NOT = { tag = AJR }
+						}
+					}
+				}
+			}
+		}
+		fixed_random_seed = no
+		days_remove = 90
+		days_re_enable = 30
+		complete_effect = {
+			add_manpower = -25
+			set_country_flag = scavenging_underway
+			set_country_flag = scavenging_silverwing
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = -25
+			}
+		}
+		remove_effect = {
+			random_list = {
+				60 = { #Found something
+					country_event = foe_scavenge.1
+					modifier = {
+						add = 5
+						AND = {
+							tag = AJR
+							has_completed_focus = AJR_support_prospectors
+						}
+					}
+				}
+				20 = { #Found Nothing
+					country_event = foe_scavenge.2
+				}
+				10 = { #Hasty Retreat
+					country_event = foe_scavenge.3
+				}
+				10 = { #Contact Lost
+					country_event = foe_scavenge.4
+				}
+			}
+		}
+		ai_will_do = { factor = 15 }
+	}
+
+	scavenging_mission_gutterville_478 = {
+		icon = infiltrate_state
+		available = {
+			has_manpower > 25
+			has_equipment = {
+				infantry_equipment > 25
+			}
+			NOT = { has_country_flag = scavenging_underway }
+			NOT = { has_active_mission = scavenging_rescue_crisis }
+			OR = {
+				owns_state = 478
+				AND = {
+					tag = AJR
+					has_country_flag = AJR_scavenging_up_flag
+					478 = {
+						OWNER = {
+							OR = {
+								has_AJR_expedition = yes
+								has_AJR_embassy = yes
+							}
+							NOT = { tag = AJR }
+						}
+					}
+				}
+			}
+		}
+		visible = {
+			has_country_flag = scavenging_enabled
+			OR = {
+				owns_state = 478
+				AND = {
+					tag = AJR
+					has_country_flag = AJR_scavenging_up_flag
+					478 = {
+						OWNER = {
+							OR = {
+								has_AJR_expedition = yes
+								has_AJR_embassy = yes
+							}
+							NOT = { tag = AJR }
+						}
+					}
+				}
+			}
+		}
+		fixed_random_seed = no
+		days_remove = 90
+		days_re_enable = 30
+		complete_effect = {
+			add_manpower = -25
+			set_country_flag = scavenging_underway
+			set_country_flag = scavenging_gutterville
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = -25
+			}
+		}
+		remove_effect = {
+			random_list = {
+				60 = { #Found something
+					country_event = foe_scavenge.1
+					modifier = {
+						add = 5
+						AND = {
+							tag = AJR
+							has_completed_focus = AJR_support_prospectors
+						}
+					}
+				}
+				20 = { #Found Nothing
+					country_event = foe_scavenge.2
+				}
+				10 = { #Hasty Retreat
+					country_event = foe_scavenge.3
+				}
+				10 = { #Contact Lost
+					country_event = foe_scavenge.4
+				}
+			}
+		}
+		ai_will_do = { factor = 15 }
+	}
+
+	scavenging_mission_rustwreck_524 = {
+		icon = infiltrate_state
+		available = {
+			has_manpower > 25
+			has_equipment = {
+				infantry_equipment > 25
+			}
+			NOT = { has_country_flag = scavenging_underway }
+			NOT = { has_active_mission = scavenging_rescue_crisis }
+			OR = {
+				owns_state = 524
+				AND = {
+					tag = AJR
+					has_country_flag = AJR_scavenging_up_flag
+					524 = {
+						OWNER = {
+							OR = {
+								has_AJR_expedition = yes
+								has_AJR_embassy = yes
+							}
+							NOT = { tag = AJR }
+						}
+					}
+				}
+			}
+		}
+		visible = {
+			has_country_flag = scavenging_enabled
+			OR = {
+				owns_state = 524
+				AND = {
+					tag = AJR
+					has_country_flag = AJR_scavenging_up_flag
+					524 = {
+						OWNER = {
+							OR = {
+								has_AJR_expedition = yes
+								has_AJR_embassy = yes
+							}
+							NOT = { tag = AJR }
+						}
+					}
+				}
+			}
+		}
+		fixed_random_seed = no
+		days_remove = 90
+		days_re_enable = 30
+		complete_effect = {
+			add_manpower = -25
+			set_country_flag = scavenging_underway
+			set_country_flag = scavenging_rustwreck
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = -25
+			}
+		}
+		remove_effect = {
+			random_list = {
+				60 = { #Found something
+					country_event = foe_scavenge.1
+					modifier = {
+						add = 5
+						AND = {
+							tag = AJR
+							has_completed_focus = AJR_support_prospectors
+						}
+					}
+				}
+				20 = { #Found Nothing
+					country_event = foe_scavenge.2
+				}
+				10 = { #Hasty Retreat
+					country_event = foe_scavenge.3
+				}
+				10 = { #Contact Lost
+					country_event = foe_scavenge.4
+				}
+			}
+		}
+		ai_will_do = { factor = 15 }
+	}
+
+	scavenging_mission_canterlot_180_234 = {
+		icon = infiltrate_state
+		available = {
+			has_manpower > 25
+			has_equipment = {
+				infantry_equipment > 25
+			}
+			NOT = { has_country_flag = scavenging_underway }
+			NOT = { has_active_mission = scavenging_rescue_crisis }
+			OR = {
+				owns_state = 180
+				owns_state = 234
+				AND = {
+					tag = AJR
+					has_country_flag = AJR_scavenging_up_flag
+					180 = {
+						OWNER = {
+							OR = {
+								has_AJR_expedition = yes
+								has_AJR_embassy = yes
+							}
+							NOT = { tag = AJR }
+						}
+					}
+				}
+				AND = {
+					tag = AJR
+					has_country_flag = AJR_scavenging_up_flag
+					234 = {
+						OWNER = {
+							OR = {
+								has_AJR_expedition = yes
+								has_AJR_embassy = yes
+							}
+							NOT = { tag = AJR }
+						}
+					}
+				}
+			}
+		}
+		visible = {
+			has_country_flag = scavenging_enabled
+			OR = {
+				owns_state = 180
+				owns_state = 234
+				AND = {
+					tag = AJR
+					has_country_flag = AJR_scavenging_up_flag
+					180 = {
+						OWNER = {
+							OR = {
+								has_AJR_expedition = yes
+								has_AJR_embassy = yes
+							}
+							NOT = { tag = AJR }
+						}
+					}
+				}
+				AND = {
+					tag = AJR
+					has_country_flag = AJR_scavenging_up_flag
+					234 = {
+						OWNER = {
+							OR = {
+								has_AJR_expedition = yes
+								has_AJR_embassy = yes
+							}
+							NOT = { tag = AJR }
+						}
+					}
+				}
+			}
+		}
+		fixed_random_seed = no
+		days_remove = 90
+		days_re_enable = 30
+		complete_effect = {
+			add_manpower = -25
+			set_country_flag = scavenging_underway
+			set_country_flag = scavenging_canterlot
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = -25
+			}
+		}
+		remove_effect = {
+			random_list = {
+				60 = { #Found something
+					country_event = foe_scavenge.1
+					modifier = {
+						add = 5
+						AND = {
+							tag = AJR
+							has_completed_focus = AJR_support_prospectors
+						}
+					}
+				}
+				20 = { #Found Nothing
+					country_event = foe_scavenge.2
+				}
+				10 = { #Hasty Retreat
+					country_event = foe_scavenge.3
+				}
+				10 = { #Contact Lost
+					country_event = foe_scavenge.4
+				}
+			}
+		}
+		ai_will_do = { factor = 15 }
+	}
+
+	scavenging_mission_cloudsdale_798 = {
+		icon = infiltrate_state
+		available = {
+			has_manpower > 25
+			has_equipment = {
+				infantry_equipment > 25
+			}
+			NOT = { has_country_flag = scavenging_underway }
+			NOT = { has_active_mission = scavenging_rescue_crisis }
+			OR = {
+				owns_state = 798
+				AND = {
+					tag = AJR
+					has_country_flag = AJR_scavenging_up_flag
+					798 = {
+						OWNER = {
+							OR = {
+								has_AJR_expedition = yes
+								has_AJR_embassy = yes
+							}
+							NOT = { tag = AJR }
+						}
+					}
+				}
+			}
+		}
+		visible = {
+			has_country_flag = scavenging_enabled
+			OR = {
+				owns_state = 798
+				AND = {
+					tag = AJR
+					has_country_flag = AJR_scavenging_up_flag
+					798 = {
+						OWNER = {
+							OR = {
+								has_AJR_expedition = yes
+								has_AJR_embassy = yes
+							}
+							NOT = { tag = AJR }
+						}
+					}
+				}
+			}
+		}
+		fixed_random_seed = no
+		days_remove = 90
+		days_re_enable = 30
+		complete_effect = {
+			add_manpower = -25
+			set_country_flag = scavenging_underway
+			set_country_flag = scavenging_cloudsdale
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = -25
+			}
+		}
+		remove_effect = {
+			random_list = {
+				60 = { #Found something
+					country_event = foe_scavenge.1
+					modifier = {
+						add = 5
+						AND = {
+							tag = AJR
+							has_completed_focus = AJR_support_prospectors
+						}
+					}
+				}
+				20 = { #Found Nothing
+					country_event = foe_scavenge.2
+				}
+				10 = { #Hasty Retreat
+					country_event = foe_scavenge.3
+				}
+				10 = { #Contact Lost
+					country_event = foe_scavenge.4
+				}
+			}
+		}
+		ai_will_do = { factor = 15 }
+	}
+
+	scavenging_mission_downtown_filly_538 = {
+		icon = infiltrate_state
+		available = {
+			has_manpower > 25
+			has_equipment = {
+				infantry_equipment > 25
+			}
+			NOT = { has_country_flag = scavenging_underway }
+			NOT = { has_active_mission = scavenging_rescue_crisis }
+			OR = {
+				owns_state = 538
+				AND = {
+					tag = AJR
+					has_country_flag = AJR_scavenging_up_flag
+					538 = {
+						OWNER = {
+							OR = {
+								has_AJR_expedition = yes
+								has_AJR_embassy = yes
+							}
+							NOT = { tag = AJR }
+						}
+					}
+				}
+			}
+		}
+		visible = {
+			has_country_flag = scavenging_enabled
+			OR = {
+				owns_state = 538
+				AND = {
+					tag = AJR
+					has_country_flag = AJR_scavenging_up_flag
+					538 = {
+						OWNER = {
+							OR = {
+								has_AJR_expedition = yes
+								has_AJR_embassy = yes
+							}
+							NOT = { tag = AJR }
+						}
+					}
+				}
+			}
+		}
+		fixed_random_seed = no
+		days_remove = 90
+		days_re_enable = 30
+		complete_effect = {
+			add_manpower = -25
+			set_country_flag = scavenging_underway
+			set_country_flag = scavenging_filly
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = -25
+			}
+		}
+		remove_effect = {
+			random_list = {
+				60 = { #Found something
+					country_event = foe_scavenge.1
+					modifier = {
+						add = 5
+						AND = {
+							tag = AJR
+							has_completed_focus = AJR_support_prospectors
+						}
+					}
+				}
+				20 = { #Found Nothing
+					country_event = foe_scavenge.2
+				}
+				10 = { #Hasty Retreat
+					country_event = foe_scavenge.3
+				}
+				10 = { #Contact Lost
+					country_event = foe_scavenge.4
+				}
+			}
+		}
+		ai_will_do = { factor = 15 }
 	}
 
 	scavenging_rescue_crisis = {
@@ -272,11 +675,11 @@ scavenging_decisions = {
 			has_active_mission = scavenging_rescue_crisis
 		}
 		complete_effect = {
-			add_manpower = -50
+			add_manpower = -25
 			set_country_flag = rescue_team_send
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
-				amount = -50
+				amount = -25
 			}
 		}
 	}
