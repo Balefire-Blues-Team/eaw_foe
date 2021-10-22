@@ -779,3 +779,309 @@ COL_snowsweep_cat = {
 
 
 }
+
+COL_gustonomics_cat = {
+
+	COL_hunger_roads = {
+		icon = railroad
+		cost = 20
+		ai_will_do = {
+			base = 1000
+			
+		}
+		available = {
+			any_owned_state = {
+				infrastructure < 10
+			}
+		}
+
+		visible = {
+			has_completed_focus = COL_gustav_economic_control
+		}
+		modifier = {
+			conscription_factor = -0.05
+		}
+		fire_only_once = no
+
+		days_remove = 60
+		days_re_enable = 40
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COL_hunger_roads"
+			One_random_infrastructure = yes
+		}
+	}
+	
+	COL_poach_researchers = {
+		icon = documents_1
+		cost = 20
+		ai_will_do = {
+			base = 0
+			
+		}
+		available = {
+			always = yes
+		}
+
+		visible = {
+			has_completed_focus = COL_align_politics
+		}
+		modifier = {
+			consumer_goods_factor = 0.03
+			research_speed_factor = 0.10
+		}
+		fire_only_once = no
+
+		days_remove = 100
+		days_re_enable = 50
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COL_poach_researchers"
+			add_stability = -0.04
+		}
+	}
+	
+	COL_order_in_the_factories = {
+		icon = megaphone
+		cost = 25
+		ai_will_do = {
+			base = 1000
+			
+		}
+		available = {
+			has_stability < 0.50
+		}
+
+		visible = {
+			has_completed_focus = COL_gustav_economic_control
+		}
+		modifier = {
+			stability_weekly = 0.005
+			industrial_capacity_factory = 0.05
+		}
+		fire_only_once = no
+
+		days_remove = 75
+		days_re_enable = 50
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COL_order_in_the_factories"
+			add_political_power = -25
+		}
+	}
+	
+	COL_more_war_factories = {
+		icon = bunker
+		custom_cost_trigger = {
+			check_variable = { COL_magic_ressource > 29 }
+		}
+		custom_cost_text = COL_magic_cost_30_tt
+		ai_will_do = {
+			base = 100
+			
+		}
+
+		visible = {
+			has_completed_focus = COL_mobile_war_factories
+		}
+		modifier = {
+			
+			industrial_capacity_factory = -0.05
+			production_speed_buildings_factor = -0.05
+		}
+		fire_only_once = no
+
+		days_remove = 100
+		days_re_enable = 50
+		
+		complete_effect = {
+			custom_effect_tooltip = COL_loose_30_magic_ressource_tt
+			subtract_from_variable = {
+				var = COL_magic_ressource
+				value = 30
+			}
+		}
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COL_order_in_the_factories"
+			add_offsite_building = { type = arms_factory level = 1 }
+		}
+	}
+	
+	COL_building_slots_dec = {
+		icon = hammer
+		cost = 20
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 10
+				any_owned_state = { free_building_slots = { building = industrial_complex size < 1 include_locked = no } }
+			}
+			modifier = {
+				factor = 0
+				num_of_civilian_factories_available_for_projects  < 2
+			}
+		}
+
+		available = {
+			num_of_civilian_factories_available_for_projects  > 1
+		}
+		visible = {
+			always = yes
+		}
+		modifier = {
+			civilian_factory_use = 2
+		}
+
+		days_remove = 50
+		days_re_enable = 50
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COL_building_slots_dec"
+			random_owned_state = {
+				limit = {
+					is_fully_controlled_by = ROOT
+				}
+				add_extra_state_shared_building_slots = 2
+			}
+		}
+	}
+	
+	COL_dockyard_construction = {
+		icon = GFX_decision_generic_construction
+		cost = 40
+		ai_will_do = {
+			base = 10
+		}
+		available = {
+			num_of_civilian_factories_available_for_projects  > 3
+		}
+		modifier = {
+			industrial_capacity_dockyard = -0.05
+			civilian_factory_use = 4
+		}
+		fire_only_once = no
+
+		days_remove = 100
+		days_re_enable = 50
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COL_order_in_the_factories"
+			One_random_dockyard = yes
+		}
+	}
+	
+	COL_seed_new_fields = {
+		icon = flower
+		custom_cost_trigger = {
+			check_variable = { COL_magic_ressource > 9 }
+			has_political_power > 9
+		}
+		custom_cost_text = COL_magic_cost_10_tt
+		ai_will_do = {
+			base = 10
+		}
+		available = {
+			num_of_civilian_factories_available_for_projects  > 1
+		}
+		visible = {has_completed_focus = COL_mineral_extracting_plants}
+		modifier = {
+			local_resources_factor = -0.05
+			civilian_factory_use = 2
+		}
+		fire_only_once = no
+
+		days_remove = 80
+		days_re_enable = 40
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COL_order_in_the_factories"
+			random_owned_state = { add_resource = { type = metal amount = 3 } }
+			random_owned_state = { add_resource = { type = composites amount = 2 } }
+		}
+	}
+	
+	COL_24_propaganda = {
+		icon = GFX_decision_enc_propaganda
+		cost = 60
+		ai_will_do = {
+			base = 100
+		}
+		available = {
+			has_war = yes
+			has_war_support < 0.95
+		}
+		visible = {has_completed_focus = COL_unite_the_nations_history}
+		modifier = {
+			war_support_weekly = 0.01
+		}
+		fire_only_once = no
+
+		days_remove = 80
+		days_re_enable = 40
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COL_24_propaganda"
+			add_stability = -0.04
+		}
+	}
+	
+	COL_more_circuit_printers = {
+		icon = GFX_decision_chip_blue
+		cost = 50
+		ai_will_do = {
+			base = 100
+		}
+		available = {
+			num_of_civilian_factories_available_for_projects  > 5
+		}
+		visible = {has_completed_focus = COL_arcane_circuit_printers}
+		modifier = {
+			civilian_factory_use = 6
+		}
+		fire_only_once = no
+
+		days_remove = 160
+		days_re_enable = 100
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COL_more_circuit_printers"
+			random_owned_state = {limit = {is_core_of = ROOT} add_resource = { type = circuitry amount = 8}}
+		}
+	}
+
+}
+
+
+COL_cornucopia_cat = {
+	COL_dummy = {
+		icon = GFX_decision_generic_construction
+		cost = 40
+		ai_will_do = {
+			base = 10
+		}
+		available = {
+			num_of_civilian_factories_available_for_projects  > 3
+		}
+		modifier = {
+			industrial_capacity_dockyard = -0.05
+			civilian_factory_use = 4
+		}
+		fire_only_once = no
+
+		days_remove = 100
+		days_re_enable = 50
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COL_dummy"
+			One_random_dockyard = yes
+		}
+	}
+
+
+
+
+
+
+
+}
