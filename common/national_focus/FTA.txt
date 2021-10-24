@@ -18,10 +18,6 @@ focus_tree = {
 	id = FTA_cont_focus_tree
 	country = {
 		factor = 0
-		modifier = {
-			add = 10
-			original_tag = FTA
-		}
 	}
 	default = no
 	continuous_focus_position = { x = 0 y = 2000 }
@@ -32,13 +28,9 @@ focus_tree = {
 	shared_focus = FTA_CTFS
 }
 focus_tree = {
-	id = FTA_vis_focus_tree
+	id = FTA_destr_focus_tree
 	country = {
 		factor = 0
-		modifier = {
-			add = 10
-			original_tag = FTA
-		}
 	}
 	default = no
 	continuous_focus_position = { x = 0 y = 2000 }
@@ -46,7 +38,7 @@ focus_tree = {
 	shared_focus = FTA_FTFS
 	shared_focus = FTA_ETFS
 	shared_focus = FTA_PTFS
-	shared_focus = FTA_VTFS
+	shared_focus = FTA_DTFS
 }
 ################
 ###   ARMY   ###
@@ -832,33 +824,24 @@ shared_focus = { #Slums are Cleared
 ###   POLITICS   ###
 ####################
 ##TODO mark for navigation
-shared_focus = { #Old town
+shared_focus = { #Black Fortress
 	id = FTA_PTFS
 	icon = GFX_focus_generic_home_defense
 	x = 0
 	y = 0
-#	relative_position_id = FTA_
 	cost = 5.0
-#	prerequisite = {
-#		focus =
-#	}
-#	available = {
-#
-#	}
-#	mutually_exclusive = {
-#		focus =
-#	}
 	ai_will_do = {
-		factor = 0
+		factor = 100
 	}
 	completion_reward = {
         country_event = { id = ftaevent.100 }
+        add_political_power = 120
 		hidden_effect = {
-			set_country_flag = FTA_keep_digging
+			set_country_flag = FTA_BF_repair_started
 		}
 	}
 }
-shared_focus = { #Black Fortress
+shared_focus = { #How Talons Came
 	id = FTA_PTF1
 	icon = GFX_focus_generic_home_defense
 	x = 0
@@ -868,20 +851,11 @@ shared_focus = { #Black Fortress
 	prerequisite = {
 		focus = FTA_PTFS
 	}
-#	available = {
-#
-#	}
-#	mutually_exclusive = {
-#		focus =
-#	}
 	ai_will_do = {
-		factor = 0
+		factor = 100
 	}
 	completion_reward = {
         country_event = { id = ftaevent.101 }
-		hidden_effect = {
-			set_country_flag = FTA_BF_repair_started
-		}
 	}
 }
 shared_focus = { #Thunder-War
@@ -894,17 +868,14 @@ shared_focus = { #Thunder-War
 	prerequisite = {
 		focus = FTA_PTF1
 	}
-#	available = {
-#
-#	}
-#	mutually_exclusive = {
-#		focus =
-#	}
 	ai_will_do = {
 		factor = 0
 	}
 	completion_reward = {
         country_event = { id = ftaevent.102 }
+		hidden_effect = {
+			set_country_flag = FTA_army_repair_started
+		}
 	}
 }
 shared_focus = { #Keep Greytail as general.
@@ -983,6 +954,7 @@ shared_focus = { #Old Guard
         custom_effect_tooltip = FTA_fair_fights
 		hidden_effect = {
 			set_country_flag = FTA_fleet_tree_unlocked
+			country_event = { id = ftaevent.200 } ## This is the surprise tool which will help us later.
 		}
 	}
 }
@@ -997,9 +969,6 @@ shared_focus = { #New Generation, New Ideas
 		focus = PTF3C1
 		focus = PTF3C2
 	}
-	available = {
-
-	}
 	mutually_exclusive = {
 		focus = FTA_PTF4C1
 	}
@@ -1008,31 +977,22 @@ shared_focus = { #New Generation, New Ideas
 	}
 	completion_reward = {
 	    custom_effect_tooltip = FTA_bald_plans
-        526 = {
-			add_building_construction = {
-			type = industrial_complex
-			level = 2
-			instant_build = yes
-			}	
-		}
 		hidden_effect = {
 			set_country_flag = FTA_fleet_tree_unlocked
+			country_event = { id = ftaevent.200 } ## This is the surprise tool which will help us later.
 		}
 	}
 }
-shared_focus = { #Rebellion - Keep the grip
+shared_focus = { #Keep the grip
 	id = FTA_PTF5C1
 	icon = GFX_focus_generic_home_defense
 	x = -1
 	y = 5
 	relative_position_id = FTA_PTFS
-	cost = 15.0
+	cost = 5.0
 	prerequisite = {
 		focus = PTF4C1
 		focus = PTF4C2
-	}
-	available = {
-
 	}
 	mutually_exclusive = {
 		focus = FTA_PTF5C2
@@ -1041,7 +1001,7 @@ shared_focus = { #Rebellion - Keep the grip
 		factor = 0
 	}
 	completion_reward = {
-        custom_effect_tooltip = FTA_fair_fights
+        add_war_support = 0.1
         526 = {
 			add_building_construction = {
 			type = arms_factory
@@ -1057,23 +1017,20 @@ shared_focus = { #Rebellion - Keep the grip
 			}
 		}
 		hidden_effect = {
-			set_country_flag = FTA_fleet_tree_unlocked
+			set_country_flag = FTA_industry_tree_unlocked
 		}
 	}
 }
-shared_focus = { #Rebellion - Ease the laws.
+shared_focus = { #Ease the laws.
 	id = FTA_PTF5C2
 	icon = GFX_focus_generic_home_defense
 	x = 1
 	y = 5
 	relative_position_id = FTA_PTFS
-	cost = 15.0
+	cost = 5.0
 	prerequisite = {
 		focus = PTF4C1
 		focus = PTF4C2
-	}
-	available = {
-
 	}
 	mutually_exclusive = {
 		focus = FTA_PTF5C1
@@ -1082,7 +1039,7 @@ shared_focus = { #Rebellion - Ease the laws.
 		factor = 0
 	}
 	completion_reward = {
-	    custom_effect_tooltip = FTA_bald_plans
+	    add_stability = 0.1
         526 = {
 			add_building_construction = {
 			type = industrial_complex
@@ -1100,6 +1057,25 @@ shared_focus = { #Rebellion - Ease the laws.
 		hidden_effect = {
 			set_country_flag = FTA_industry_tree_unlocked
 		}
+	}
+}
+shared_focus = { #Crisis solved
+	id = FTA_PTF6
+	icon = GFX_focus_generic_home_defense
+	x = 0
+	y = 6
+	relative_position_id = FTA_PTFS
+	cost = 5.0
+	prerequisite = {
+		focus = PTF5C1
+		focus = PTF5C2
+	}
+	ai_will_do = {
+		factor = 0
+	}
+	completion_reward = {
+        add_political_power = 200
+        country_event = { id = ftaevent.105 }
 	}
 }
 #################################

@@ -1,0 +1,178 @@
+add_namespace = ftaevent
+
+##Lore events, nothing interesting here.
+##Black Fortress.
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event ftaevent.100"}
+ 	id = ftaevent.100
+ 	title = ftaevent.100.t
+ 	desc = ftaevent.100.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = ftaevent.100.a
+		ai_chance = { factor = 1 }
+	}
+}
+##How Talons Came.
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event ftaevent.101"}
+ 	id = ftaevent.101
+ 	title = ftaevent.101.t
+ 	desc = ftaevent.101.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = ftaevent.101.a
+		ai_chance = { factor = 1 }
+	}
+}
+##Thunder-War.
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event ftaevent.102"}
+ 	id = ftaevent.102
+ 	title = ftaevent.102.t
+ 	desc = ftaevent.102.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = ftaevent.102.a
+		ai_chance = { factor = 1 }
+	}
+}
+##End of lore events.
+##Flavour for starting tree.
+##Keep Greytail as general.
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event ftaevent.103"}
+ 	id = ftaevent.103
+ 	title = ftaevent.103.t
+ 	desc = ftaevent.103.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = ftaevent.103.a
+		ai_chance = { factor = 1 }
+	}
+}
+##Appoint Greytail as governor.
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event ftaevent.104"}
+ 	id = ftaevent.104
+ 	title = ftaevent.104.t
+ 	desc = ftaevent.104.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = ftaevent.104.a
+		ai_chance = { factor = 1 }
+	}
+}
+##Ending
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event ftaevent.105"}
+ 	id = ftaevent.105
+ 	title = ftaevent.105.t
+ 	desc = ftaevent.105.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = ftaevent.105.a
+		ai_chance = { factor = 1 }
+		load_focus_tree = FTA_cont_focus_tree
+	}
+	option = {
+		name = ftaevent.105.b
+		ai_chance = {
+		    factor = 1
+	        modifier = {
+            	factor = 0
+            	is_historical_focus_on = yes
+            }
+		}
+        load_focus_tree = FTA_destr_focus_tree
+	}
+}
+
+
+##Rebellion events.
+##Public discontent.
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event ftaevent.200"}
+ 	id = ftaevent.200
+ 	title = ftaevent.200.t
+ 	desc = ftaevent.200.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = ftaevent.200.a
+		ai_chance = { factor = 1 }
+		if {
+            limit = {
+            is_ai = yes
+            has_game_rule = FTA_no_featherbrush
+            }
+            country_event = ftaevent.201
+        }
+    }
+}
+##Rebellion wins - currently a plug if player wants to disable Featherbrush.
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event ftaevent.201"}
+ 	id = ftaevent.201
+ 	title = ftaevent.201t
+ 	desc = ftaevent.201.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = ftaevent.201.a
+		ai_chance = { factor = 1 }
+		retire_country_leader = yes
+		remove_ideas = FTA_talon_mercs
+		set_politics = { ruling_party = survivalism elections_allowed = no }
+		load_focus_tree = gensettlers
+		hidden_effect = {
+		    if {
+		        limit {
+		            NOT = { has_completed_focus = FTA_PTF3C2 }
+		        }
+		        retire_country_leader = yes
+		        create_country_leader = {
+                	name = "Angry Settlers"
+                	desc = "FTA_Settlers_Mob"
+                	#picture = ""
+                	expire = "1965.1.1"
+                	ideology = democratic_surv
+                }
+                clr_country_flag = is_talon_nation
+                set_cosmetic_tag = FTA_Anarchy
+                }
+		    }
+		}
+		hidden_effect = {
+		    if {
+		        limit {
+		            has_completed_focus = FTA_PTF3C2
+		        }
+                clr_country_flag = is_talon_nation
+                set_cosmetic_tag = FTA_Greytail
+		    }
+		}
+	}
+}
