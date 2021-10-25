@@ -1,6 +1,7 @@
 ﻿add_namespace = newmareway
 add_namespace = council_success
 add_namespace = mareway_nobles
+add_namespace = court_affairs
 
 ### GUI Events
 	country_event = { ###Chancellor Boost Noble Relations - Success Check
@@ -1802,6 +1803,7 @@ country_event = { ###Backroom Squabbles
 		add_political_power = 25
 		custom_effect_tooltip = MWY_backroom_realm_law_tt
 		MWY_low_central_effect = yes
+		activate_mission = MWY_court_affairs
         hidden_effect = {
             MWY_reset_centralization_laws_frames = yes
             set_variable = { centralization_laws_var = 2 }
@@ -2786,15 +2788,11 @@ country_event = { ###ERA joins after war
 			change_tag_from = ROOT
 		}
 		annex_country = {
-		    target = ERA
-		    transfer_troops = yes
+			target = ERA
+			transfer_troops = yes
 		}
 	}
 }
-
-######################################
-### Next event ID is newmareway.82 ###
-######################################
 
 country_event = { ###Full Famine Recovery
  	id = newmareway.82
@@ -2813,7 +2811,318 @@ country_event = { ###Full Famine Recovery
 }
 
 
+
+### Affairs of Court Random Events ###
+	country_event = { ###Levies kept up
+		id = court_affairs.1
+		title = court_affairs.1.title
+		desc = court_affairs.1.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+
+		option = { #Keep them up
+			name = court_affairs.1.a
+			ai_chance = {
+				base = 0
+			}
+
+			MWY_lower_all_opinion = yes
+			add_stability = -0.05
+			add_political_power = -50
+		}
+
+		option = { #Lower Levies
+			name = court_affairs.1.b
+			ai_chance = {
+				base = 0
+			}
+			
+			delete_unit_template_and_units = {
+			    division_template = "Commoner Levies"
+			}
+			if = {
+				limit = { has_country_flag = MWY_better_levies_flag }
+				division_template = {
+				    name = "Commoner Levies"
+				    is_locked = yes
+				    regiments = {
+						infantry = { x = 0 y = 0 }
+						infantry = { x = 1 y = 0 }
+						infantry = { x = 0 y = 1 }
+						infantry = { x = 1 y = 1 }
+						infantry = { x = 0 y = 2 }
+						infantry = { x = 1 y = 2 }
+						infantry = { x = 0 y = 3 }
+						infantry = { x = 1 y = 3 }
+					}
+					support = {
+						demolitions_support = { x = 0 y = 0 }
+					}
+				}
+			}
+			else = {
+				division_template = {
+				    name = "Commoner Levies"
+				    is_locked = yes
+				    regiments = {
+						infantry = { x = 0 y = 0 }
+						infantry = { x = 1 y = 0 }
+						militia = { x = 0 y = 1 }
+						militia = { x = 1 y = 1 }
+						militia = { x = 0 y = 2 }
+						militia = { x = 1 y = 2 }
+						militia = { x = 0 y = 3 }
+						militia = { x = 1 y = 3 }
+					}
+				}
+			}
+			clr_country_flag = MWY_raised_levies_flag
+		}
+	}
+
+	country_event = { ###Serf Petition 1 - Sick Peasants
+		id = court_affairs.2
+		title = court_affairs.2.title
+		desc = court_affairs.2.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+
+		option = { #Accept Petition
+			name = court_affairs.2.a
+			ai_chance = {
+				base = 0
+			}
+
+			add_political_power = -50
+		}
+		option = { #Decline Petition
+			name = court_affairs.2.b
+			add_stability = -0.03
+			random_owned_state = {
+				save_current_manpower = yes
+				add_manpower = -100
+				restore_previous_manpower = yes
+			}
+		}
+	}
+	country_event = { ###Serf Petition 2 - Need More Farmhands
+		id = court_affairs.3
+		title = court_affairs.3.title
+		desc = court_affairs.3.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+
+		option = { #Accept Petition
+			name = court_affairs.3.a
+			add_manpower = -50
+		}
+		option = { #Decline Petition
+			name = court_affairs.3.b
+			add_stability = -0.03
+			add_political_power = -25
+		}
+	}
+	country_event = { ###Serf Petition 3 - Banditry
+		id = court_affairs.4
+		title = court_affairs.4.title
+		desc = court_affairs.4.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+
+		option = { #Accept Petition
+			name = court_affairs.4.a
+			add_manpower = -25
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = -25
+			}
+		}
+		option = { #Decline Petition
+			name = court_affairs.4.b
+			add_stability = -0.03
+			add_war_support = -0.03
+		}
+	}
+	country_event = { ###Serf Petition 4 - Serf Rights
+		id = court_affairs.5
+		title = court_affairs.5.title
+		desc = court_affairs.5.desc
+		picture = GFX_event_medieval_city_3
+
+		immediate = {
+			hidden_effect = {
+				MWY_pick_one_random_duchy = yes
+			}
+		}
+
+		is_triggered_only = yes
+
+		option = { #Accept Petition
+			name = court_affairs.5.a
+			MWY_lower_picked_opinion = yes
+		}
+		option = { #Decline Petition
+			name = court_affairs.5.b
+			add_stability = -0.05
+			add_political_power = -100
+		}
+	}
+
+	country_event = { ###Duke Arguments
+		id = court_affairs.6
+		title = court_affairs.6.title
+		desc = court_affairs.6.desc
+		picture = GFX_event_medieval_city_3
+
+		immediate = {
+			hidden_effect = {
+				MWY_pick_two_random_duchy = yes
+			}
+		}
+
+		is_triggered_only = yes
+
+		option = { #Side With Duke 1
+			name = court_affairs.5.a
+			MWY_raise_first_picked_opinion = yes
+			MWY_lower_second_picked_opinion = yes
+			MWY_clr_two_random_duchy = yes
+		}
+		option = { #Side With Duke 2
+			name = court_affairs.5.b
+			MWY_lower_first_picked_opinion = yes
+			MWY_raise_second_picked_opinion = yes
+			MWY_clr_two_random_duchy = yes
+		}
+		option = { #Diffuse the Argument
+			name = court_affairs.5.c
+			add_political_power = -100
+		}
+		option = { #Debug
+			name = court_affairs.5.d
+			trigger = {
+				is_debug = yes
+			}
+			MWY_clr_two_random_duchy = yes
+		}
+	}
+
+	country_event = { ###Nasty Rumors
+		id = court_affairs.7
+		title = court_affairs.7.title
+		desc = court_affairs.7.desc
+		picture = GFX_event_medieval_city_3
+
+		immediate = {
+			hidden_effect = {
+				MWY_pick_one_random_duchy = yes
+			}
+		}
+
+		is_triggered_only = yes
+
+		option = { #Accept Petition
+			name = court_affairs.7.a
+			MWY_lower_picked_opinion = yes
+		}
+	}
+	country_event = { ###Good Gossip
+		id = court_affairs.8
+		title = court_affairs.8.title
+		desc = court_affairs.8.desc
+		picture = GFX_event_medieval_city_3
+
+		immediate = {
+			hidden_effect = {
+				MWY_pick_one_random_duchy = yes
+			}
+		}
+
+		is_triggered_only = yes
+
+		option = { #Accept Petition
+			name = court_affairs.8.a
+			MWY_raise_picked_opinion = yes
+		}
+	}
+
+	country_event = { ###Minor PP Loss
+		id = court_affairs.9
+		title = court_affairs.9.title
+		desc = court_affairs.9.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+
+		option = { #Darn
+			name = court_affairs.9.a
+			add_political_power = -50
+		}
+	}
+	country_event = { ###Major PP Loss
+		id = court_affairs.10
+		title = court_affairs.10.title
+		desc = court_affairs.10.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+
+		option = { #Darn
+			name = court_affairs.10.a
+			add_political_power = -100
+		}
+	}
+
+	country_event = { ###PP Gain
+		id = court_affairs.11
+		title = court_affairs.11.title
+		desc = court_affairs.11.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+
+		option = { #Yay
+			name = court_affairs.11.a
+			add_political_power = 25
+		}
+	}
+	country_event = { ###Adventurers Join
+		id = court_affairs.12
+		title = court_affairs.12.title
+		desc = court_affairs.12.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+
+		option = { #Yay
+			name = court_affairs.12.a
+			add_manpower = 100
+		}
+	}
+	country_event = { ###Good Harvests
+		id = court_affairs.13
+		title = court_affairs.13.title
+		desc = court_affairs.13.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+
+		option = { #Yay
+			name = court_affairs.13.a
+			add_timed_idea = {
+				idea = MWY_good_harvest
+				days = 90
+			}
+		}
+	}
+
+#########################################
 ### MWN - Mareway Nobles/Noble Revolt ###
+#########################################
 
 country_event = { ###Unthinkable Option
  	id = mareway_nobles.1
