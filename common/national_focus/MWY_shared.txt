@@ -304,6 +304,12 @@
 
 		available_if_capitulated = yes
 		prerequisite = { focus = MWY_backroom_squabbles }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = MWY_at_most_25_visonary_tt
+				visionary < 0.26
+			}
+		}
 
 		mutually_exclusive = {
 	        focus = MWY_queens_way
@@ -1876,7 +1882,10 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MWY_sc_pragmatism_not_optimism"
-
+			add_popularity = {
+				ideology = continuation
+				popularity = 0.10
+			}
 		}
 	}
 
@@ -1924,6 +1933,7 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MWY_sc_expand_levy_service"
+			custom_effect_tooltip = MWY_double_levies_tt
 		}
 	}
 
@@ -2299,6 +2309,25 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MWY_sc_focus_on_famine"
+			if = {
+				limit = { has_idea = MWY_low_winter_stores }
+				remove_ideas = MWY_low_winter_stores
+			}
+			else = {
+				swap_ideas = {
+					remove_idea = MWY_serf_famine
+					add_idea = MWY_famine_recovery
+				}
+				custom_effect_tooltip = MWY_famine_recovery_tt
+				hidden_effect = {
+					country_event = {
+						id = newmareway.82
+						days = 250
+						random_days = 10
+						random = 12
+					}
+				}
+			}
 		}
 	}
 
@@ -3413,7 +3442,7 @@
 
 	shared_focus = {
 		id = MWY_nobles_the_ladder
-		icon = GFX_goal_griffon_crown
+		icon = GFX_goal_MWY_pale_light
 		relative_position_id = MWY_nobles_game_of_thrones
 		x = 5
 		y = 2

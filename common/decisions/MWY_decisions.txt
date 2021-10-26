@@ -220,8 +220,142 @@ MWY_levy_cat = {
 		}
 	}
 
+	MWY_court_affairs = {
+		icon = pawn
+
+		selectable_mission = yes
+		days_mission_timeout = 62
+		is_good = yes
+
+		allowed = {
+			always = no
+		}
+
+		cancel_trigger = {
+		}
+		available = {
+			hidden_trigger = {
+				always = no
+			}                                    
+		}
+		activation = {                         
+		#	has_idea = MWY_low_winter_stores
+		}
+
+		timeout_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision MWY_court_affairs"
+			
+			custom_effect_tooltip = MWY_court_affairs_tt
+			hidden_effect = {
+				random_list = {
+					0 = { #Levies raised during peacetime
+						country_event = { days = 1 id = court_affairs.1 }
+						modifier = {
+							add = 100
+							has_country_flag = MWY_raised_levies_flag
+							has_war = no
+						}
+					}
+
+					20 = { #Serf Petition
+						random_list = {
+							25 = { #Disease
+								country_event = { days = 1 id = court_affairs.2 }
+							}
+							25 = { #Farmhands
+								country_event = { days = 1 id = court_affairs.3 }
+							}
+							25 = { #Bandits
+								country_event = { days = 1 id = court_affairs.4 }
+							}
+							25 = { #Serf Rights
+								country_event = { days = 1 id = court_affairs.5 }
+								modifier = {
+									factor = 0
+									check_variable = { serf_laws_var = 1 }
+								}
+							}
+						}
+						modifier = {
+							factor = 0
+							has_country_flag = MWY_raised_levies_flag
+							has_war = no
+						}
+					}
+
+					20 = { #Duke Dissagrements
+						country_event = { days = 1 id = court_affairs.6 }
+						modifier = {
+							factor = 0
+							has_country_flag = MWY_raised_levies_flag
+							has_war = no
+						}
+					}
+
+					20 = { #Rumor Mill
+						random_list = {
+							50 = {
+								country_event = { days = 1 id = court_affairs.7 }
+							}
+							50 = {
+								country_event = { days = 1 id = court_affairs.8 }
+							}
+						}
+						modifier = {
+							factor = 0
+							has_country_flag = MWY_raised_levies_flag
+							has_war = no
+						}
+					}
+
+					20 = { #Political Troubles
+						random_list = {
+							70 = { #Minor
+								country_event = { days = 1 id = court_affairs.9 }
+							}
+							30 = { #Major
+								country_event = { days = 1 id = court_affairs.10 }
+							}
+						}
+						modifier = {
+							factor = 0
+							has_country_flag = MWY_raised_levies_flag
+							has_war = no
+						}
+					}
+
+					15 = { #Positive Effects
+						random_list = {
+							33 = {
+								country_event = { days = 1 id = court_affairs.11 }
+							}
+							33 = {
+								country_event = { days = 1 id = court_affairs.12 }
+							}
+							33 = {
+								country_event = { days = 1 id = court_affairs.13 }
+								modifier = {
+									factor = 0
+									has_idea = MWY_good_harvest
+								}
+							}
+						}
+						modifier = {
+							factor = 0
+							has_country_flag = MWY_raised_levies_flag
+							has_war = no
+						}
+					}
+					
+				}
+
+				activate_mission = MWY_court_affairs
+			}
+		}
+	}
+
 	MWY_famine_crisis = {
-		icon = GFX_decision_megaphone
+		icon = GFX_decision_wheat_bundle
 
 		allowed = {
 			tag = MWY
@@ -229,7 +363,7 @@ MWY_levy_cat = {
 
 		cancel_trigger = {
 			custom_trigger_tooltip = {
-                tooltip = MWY_has_solved_food_store_crisis
+                tooltip = MWY_has_solved_food_store_crisis_tt
                 NOT = { has_idea = MWY_low_winter_stores }
             } 
 		}
@@ -256,7 +390,7 @@ MWY_levy_cat = {
 	}
 
 	mwy_raise_all_levies = {
-		icon = GFX_decision_stable_door
+		icon = GFX_decision_crossed_swords
 		ai_will_do = {
 			base = 0
 		}
@@ -272,7 +406,7 @@ MWY_levy_cat = {
 		#fire_only_once = yes
 
 		complete_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision foe_stability_dec"
+			log = "[GetDateText]: [Root.GetName]: Decision mwy_raise_all_levies"
 			custom_effect_tooltip = MWY_raise_levies_tt
 			hidden_effect = {
 				MWY_raise_all_levies_effect = yes
@@ -282,7 +416,7 @@ MWY_levy_cat = {
 	}
 
 	mwy_disband_all_levies = {
-		icon = GFX_decision_stable_door
+		icon = GFX_decision_crossed_swords
 		ai_will_do = {
 			base = 0
 		}
