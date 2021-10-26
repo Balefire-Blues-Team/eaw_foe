@@ -91,7 +91,10 @@ country_event = {
 	option = {
 		name = ftaevent.105.a
 		ai_chance = { factor = 1 }
-		load_focus_tree = FTA_cont_focus_tree
+		hidden_effect = {
+		    load_focus_tree = FTA_cont_focus_tree
+		}
+		custom_effect_tooltip = FTA_steady_course
 	}
 	option = {
 		name = ftaevent.105.b
@@ -102,7 +105,29 @@ country_event = {
             	is_historical_focus_on = yes
             }
 		}
-        load_focus_tree = FTA_destr_focus_tree
+		hidden_effect = {
+		    set_popularities = {
+                survivalism = 0.1
+                visionary = 0.05
+                destruction = 0.7
+                continuation = 0.15
+            }
+		    set_politics = {
+		        ruling_party = destruction
+		        elections_allowed = no
+		    }
+		    create_country_leader = {
+            	name = "Featherbrush"
+            	picture = "Governor.tga"
+            	expire = "1965.1.1"
+            	ideology = slaver
+            	traits = {
+                    featherbrush_veteran_merc
+            	}
+            }
+            load_focus_tree = FTA_destr_focus_tree
+		}
+        custom_effect_tooltip = FTA_start_expansion
 	}
 }
 
@@ -146,8 +171,13 @@ country_event = {
 		retire_country_leader = yes
 		remove_ideas = FTA_talon_mercs
 		set_politics = { ruling_party = survivalism elections_allowed = no }
-		load_focus_tree = gensettlers
 		hidden_effect = {
+		    set_popularities = {
+                survivalism = 0.7
+                visionary = 0.1
+                destruction = 0.1
+                continuation = 0.1
+            }
 		    if {
 		        limit {
 		            NOT = { has_completed_focus = FTA_PTF3C2 }
@@ -156,23 +186,22 @@ country_event = {
 		        create_country_leader = {
                 	name = "Angry Settlers"
                 	desc = "FTA_Settlers_Mob"
-                	#picture = ""
+                	picture = "angry_mob.tga"
                 	expire = "1965.1.1"
                 	ideology = democratic_surv
                 }
                 clr_country_flag = is_talon_nation
                 set_cosmetic_tag = FTA_Anarchy
-                }
-		    }
-		}
-		hidden_effect = {
+                load_focus_tree = gensettlers ##Planned expansion.
+            }
 		    if {
 		        limit {
 		            has_completed_focus = FTA_PTF3C2
 		        }
                 clr_country_flag = is_talon_nation
                 set_cosmetic_tag = FTA_Greytail
+                load_focus_tree = gensettlers ##Planned expansion.
 		    }
-		}
+	    }
 	}
 }
