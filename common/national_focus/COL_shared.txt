@@ -7784,7 +7784,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_robots_to_the_frontlines"
-		
+		add_tech_bonus = {
+			name = robotics_tech
+			bonus = 1.0
+			uses = 4
+			category = robotics_tech
+			}
 	}
 } 
 
@@ -7804,7 +7809,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_repurpose_factory_bots"
-		
+		add_equipment_to_stockpile = { type = light_robot_scrap_equipment amount = 350 producer = OWE }
+		add_equipment_to_stockpile = { type = heavy_robot_industrial_equipment amount = 200 producer = OWE }
 	}
 } 
 
@@ -7824,7 +7830,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_tides_of_chrome_and_steel"
-		
+		add_ideas = COL_tides_of_chrome_and_steel_idea
 	}
 } 
 
@@ -7844,7 +7850,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_plan_operation_snowsweep"
-		
+		custom_effect_tooltip = COL_arcane_circuit_printers_tt
+		create_faction = COL_gustav_faction
 	}
 } 
 
@@ -7859,12 +7866,18 @@ shared_focus = {
 
 	available_if_capitulated = yes 
 	ai_will_do = { 
-		factor = 50
+		factor = 500
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_saboteur_corps"
-		
+		add_ideas = COL_saboteur_corps_idea
+		ROOT = {
+				add_collaboration = {
+					target = ARR
+					value = 0.2
+				}
+			}
 	}
 } 
 
@@ -7881,10 +7894,21 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 50
 	} 
-
+	
+	will_lead_to_war_with = KHA
+	will_lead_to_war_with = ARR
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_reactivate_wartime_factories"
-		
+		KHA = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		ARR = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 } 
 
@@ -7896,15 +7920,27 @@ shared_focus = {
 	cost = 4.29
 	relative_position_id = COL_third_industrial_revolution
 	prerequisite = { focus = COL_plan_operation_snowsweep } 
+	available = {SLC = {exists = yes}}
 
 	available_if_capitulated = yes 
 	ai_will_do = { 
-		factor = 50
+		factor = 500
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_offer_to_the_cabal"
-		
+		ROOT = { add_to_faction = SLC }
+		SLC = {
+			add_state_claim = 395
+			add_state_claim = 210
+			add_state_claim = 386
+			add_state_claim = 118
+			add_state_claim = 152
+		}
+		hidden_effect = { 
+		SLC = { add_ai_strategy = { type = alliance id = "ROOT" value = 200} add_opinion_modifier = { target = ROOT modifier = huge_increase } } 
+		ROOT = { add_ai_strategy = { type = alliance id = "SLC" value = 200} add_opinion_modifier = { target = SLC modifier = huge_increase } }
+		}
 	}
 } 
 
@@ -7917,6 +7953,11 @@ shared_focus = {
 	relative_position_id = COL_third_industrial_revolution
 	prerequisite = { focus = COL_saboteur_corps focus = COL_reactivate_wartime_factories focus = COL_offer_to_the_cabal } 
 
+	available = {
+		KHA = {
+			all_core_land_owned_by_prev_sphere = yes
+		}
+	}
 	available_if_capitulated = yes 
 	ai_will_do = { 
 		factor = 500
@@ -7924,7 +7965,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_industrialize_plundered_land"
-		
+		344 = {
+			add_extra_state_shared_building_slots = 1 add_building_construction = {type = industrial_complex level = 1 instant_build = yes}
+		}
+		Core_original_KHA = yes
 	}
 } 
 
@@ -7936,7 +7980,15 @@ shared_focus = {
 	cost = 4.29
 	relative_position_id = COL_third_industrial_revolution
 	prerequisite = { focus = COL_saboteur_corps focus = COL_reactivate_wartime_factories focus = COL_offer_to_the_cabal } 
-
+	
+	available = {
+		DEC = {
+			all_core_land_owned_by_prev_sphere = yes
+		}
+		AOS = {
+			all_core_land_owned_by_prev_sphere = yes
+		}
+	}
 	available_if_capitulated = yes 
 	ai_will_do = { 
 		factor = 500
@@ -7944,7 +7996,41 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_detrot_direfall_line"
-		
+		361 = {
+			add_core_of = ROOT
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+					type = infrastructure
+					level = 2
+					instant_build = yes
+				}
+		}
+		387 = {
+			add_core_of = ROOT
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+					type = infrastructure
+					level = 2
+					instant_build = yes
+				}
+		}
+		73 = {
+			add_core_of = ROOT
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+					type = infrastructure
+					level = 2
+					instant_build = yes
+				}
+		}
+		357 = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+					type = infrastructure
+					level = 2
+					instant_build = yes
+				}
+		}
 	}
 } 
 
@@ -7956,7 +8042,11 @@ shared_focus = {
 	cost = 4.29
 	relative_position_id = COL_third_industrial_revolution
 	prerequisite = { focus = COL_saboteur_corps focus = COL_reactivate_wartime_factories focus = COL_offer_to_the_cabal } 
-
+	available = {
+		ARR = {
+			all_core_land_owned_by_prev_sphere = yes
+		}
+	}
 	available_if_capitulated = yes 
 	ai_will_do = { 
 		factor = 500
@@ -7964,7 +8054,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_integrate_arrian_industry"
-		
+		Core_original_ARR = yes
+		add_offsite_building = { type = industrial_complex level = 1 }
 	}
 } 
 
@@ -7984,7 +8075,19 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_rise_of_industry"
-		
+		country_event = springcouncil.47
+		hidden_effect = {
+			every_state = {
+				limit = {
+					OR = {
+						is_core_of = TAR
+						is_core_of = DEC
+					}
+					is_owned_by = SLC
+				}
+				add_core_of = SLC
+			}
+		}
 	}
 } 
 
@@ -8004,7 +8107,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_violent_resource_acquisition"
-		
+		add_ideas = old_world_society
+		add_ideas = COL_violent_resource_acquisition_idea
 	}
 } 
 
@@ -8017,13 +8121,32 @@ shared_focus = {
 	relative_position_id = COL_third_industrial_revolution
 	prerequisite = { focus = COL_violent_resource_acquisition } 
 	available_if_capitulated = no 
+	bypass = {
+		NOV = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+		DSB = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+	}
 	ai_will_do = { 
 		factor = 50
 	} 
 
+	will_lead_to_war_with = NOV
+	will_lead_to_war_with = DSB
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_reclaiming_the_two_cities"
-		
+		NOV = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		DSB = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 } 
 
@@ -8034,6 +8157,14 @@ shared_focus = {
 	y = 9
 	cost = 4.29
 	relative_position_id = COL_third_industrial_revolution
+	available = {
+		NOV = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+		DSB = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+	}
 	prerequisite = { focus = COL_reclaiming_the_two_cities } 
 	available_if_capitulated = no 
 	ai_will_do = { 
@@ -8042,7 +8173,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_restore_industrial_integration"
-		
+		Core_original_DSB = yes
+		add_state_core = 251
+		add_state_core = 264
+		add_state_core = 204
 	}
 } 
 
@@ -8052,6 +8186,20 @@ shared_focus = {
 	x = -6
 	y = 8
 	cost = 4.29
+	bypass = {
+		NOO = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+		NGU = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+		DFF = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+		WTR = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+	}
 	relative_position_id = COL_third_industrial_revolution
 	prerequisite = { focus = COL_reclaiming_the_two_cities } 
 	available_if_capitulated = no 
@@ -8059,9 +8207,32 @@ shared_focus = {
 		factor = 50
 	} 
 
+	will_lead_to_war_with = NOO
+	will_lead_to_war_with = NGU
+	will_lead_to_war_with = DFF
+	will_lead_to_war_with = WTR
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_march_into_neigharan_mountains"
-		
+		NOO = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		NGU = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		DFF = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		WTR = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 } 
 
@@ -8071,6 +8242,11 @@ shared_focus = {
 	x = -6
 	y = 10
 	cost = 4.29
+	available = {
+		DFF = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+	}
 	relative_position_id = COL_third_industrial_revolution
 	prerequisite = { focus = COL_march_into_neigharan_mountains } 
 	available_if_capitulated = no 
@@ -8080,7 +8256,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_plundering_the_mountain_wonders"
-		
+		Core_original_DFF = yes
+		301 = {
+			add_resource = {type = composites amount = 20}
+			add_resource = {type = energy amount = 20}
+		}
 	}
 } 
 
@@ -8091,6 +8271,11 @@ shared_focus = {
 	y = 9
 	cost = 4.29
 	relative_position_id = COL_third_industrial_revolution
+	available = {
+		NOO = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+	}
 	prerequisite = { focus = COL_march_into_neigharan_mountains } 
 	available_if_capitulated = no 
 	ai_will_do = { 
@@ -8099,7 +8284,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_offer_jobs_to_noocracy"
-		
+		Core_original_NOO = yes
+		add_tech_bonus = {
+			name = robotics_tech
+			bonus = 1.5
+			uses = 2
+			ahead_reduction = 4
+			category = robotics_tech
+			}
 	}
 } 
 
@@ -8112,6 +8304,17 @@ shared_focus = {
 	relative_position_id = COL_third_industrial_revolution
 	prerequisite = { focus = COL_plundering_the_mountain_wonders } 
 	prerequisite = { focus = COL_offer_jobs_to_noocracy } 
+	available = {
+		NOO = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+		NGU = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+		DFF = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+	}
 	available_if_capitulated = no 
 	ai_will_do = { 
 		factor = 50
@@ -8119,7 +8322,18 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_carve_apart_mointains"
-		#lots of ressources in the mountains
+		860 = {
+			add_resource = {type = metal amount = 16}
+			add_resource = {type = energy amount = 8}
+		}
+		706 = {
+			add_resource = {type = metal amount = 18}
+			add_resource = {type = energy amount = 6}
+		}
+		864 = {
+			add_resource = {type = crystal amount = 26}
+			add_resource = {type = energy amount = 8}
+		}
 	}
 } 
 
@@ -8131,14 +8345,42 @@ shared_focus = {
 	cost = 4.29
 	relative_position_id = COL_third_industrial_revolution
 	prerequisite = { focus = COL_reclaiming_the_two_cities } 
+	bypass = {
+		SKY = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+		TOL = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+		SOS = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+	}
 	available_if_capitulated = no 
 	ai_will_do = { 
 		factor = 50
 	} 
 
+	will_lead_to_war_with = TOL
+	will_lead_to_war_with = SKY
+	will_lead_to_war_with = SOS
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_smashing_the_enclave"
-		
+		SKY = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		SOS = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		TOL = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 } 
 
@@ -8149,6 +8391,11 @@ shared_focus = {
 	y = 10
 	cost = 4.29
 	relative_position_id = COL_third_industrial_revolution
+	available = {
+		SKY = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+	}
 	prerequisite = { focus = COL_smashing_the_enclave } 
 	available_if_capitulated = no 
 	ai_will_do = { 
@@ -8157,7 +8404,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_integrate_cloud_industry"
-		
+		add_state_core = 877
+		add_offsite_building = { type = arms_factory level = 2 }
+		add_offsite_building = { type = industrial_complex level = 2 }
 	}
 } 
 
@@ -8168,6 +8417,11 @@ shared_focus = {
 	y = 9
 	cost = 4.29
 	relative_position_id = COL_third_industrial_revolution
+	available = {
+		SOS = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+	}
 	prerequisite = { focus = COL_smashing_the_enclave } 
 	available_if_capitulated = no 
 	ai_will_do = { 
@@ -8176,9 +8430,186 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_integrate_cloud_industry"
-		#Sosan Puppet-State with big Navy-buffs
+		hidden_effect = {
+		SOS = {
+			transfer_state = 353
+			transfer_state = 28
+		}
+		IF = {
+			limit = {COL = {owns_state = 276}}
+			SOS = {
+				transfer_state = 276
+				add_state_core = 276
+			}
+		}
+		ELSE = {
+			SOS = {
+				add_state_core = 276
+			}
+		}
+		IF = {
+			limit = {COL = {owns_state = 272}}
+			SOS = {
+				transfer_state = 272
+				add_state_core = 272
+			}
+		}
+		ELSE = {
+			SOS = {
+				add_state_core = 272
+			}
+		}
+		IF = {
+			limit = {COL = {owns_state = 875}}
+			SOS = {
+				transfer_state = 875
+				add_state_core = 875
+			}
+		}
+		ELSE = {
+			SOS = {
+				add_state_core = 875
+			}
+		}
+		IF = {
+			limit = {COL = {owns_state = 340}}
+			SOS = {
+				transfer_state = 340
+				add_state_core = 340
+			}
+		}
+		ELSE = {
+			SOS = {
+				add_state_core = 340
+			}
+		}
+		IF = {
+			limit = {COL = {owns_state = 226}}
+			SOS = {
+				transfer_state = 226
+				add_state_core = 226
+			}
+		}
+		ELSE = {
+			SOS = {
+				add_state_core = 226
+			}
+		}
+		IF = {
+			limit = {COL = {owns_state = 472}}
+			SOS = {
+				transfer_state = 472
+				add_state_core = 472
+			}
+		}
+		ELSE = {
+			SOS = {
+				add_state_core = 472
+			}
+		}
+		IF = {
+			limit = {COL = {owns_state = 433}}
+			SOS = {
+				transfer_state = 433
+				add_state_core = 433
+			}
+		}
+		ELSE = {
+			SOS = {
+				add_state_core = 433
+			}
+		}
+		IF = {
+			limit = {COL = {owns_state = 27}}
+			SOS = {
+				transfer_state = 27
+				add_state_core = 27
+			}
+		}
+		ELSE = {
+			SOS = {
+				add_state_core = 27
+			}
+		}
+		}
+		set_autonomy = {
+			target = SOS
+			autonomous_state = autonomy_gustavian_puppet
+		}
+		SOS = {
+			set_cosmetic_tag = SOS_COL_gustav_puppet
+			add_popularity = {
+				ideology = visionary
+				popularity = 1
+			}
+			set_politics = { ruling_party = visionary elections_allowed = no }
+			add_ideas = COL_SOS_super_navy
+		}
+		hidden_effect = {
+			COL = {
+				SOS = { transfer_technology = yes }
+			}
+			hidden_effect = { ROOT = { add_ai_strategy = { type = alliance id = "SOS" value = 200} add_opinion_modifier = { target = SOS modifier = huge_increase } } }
+			hidden_effect = { SOS = { add_ai_strategy = { type = alliance id = "ROOT" value = 200} add_opinion_modifier = { target = ROOT modifier = huge_increase } } }
+			SOS = {
+				Two_random_dockyards = yes
+				Two_random_dockyards = yes
+				Two_random_dockyards = yes
+				set_capital = 28
+				division_template = {
+	                name = "Technocratic Army"
+	                is_locked = no
+	                    regiments = {
+		                    infantry = { x = 0 y = 0 }
+							infantry = { x = 0 y = 1 }
+							infantry = { x = 1 y = 0 }
+							infantry = { x = 1 y = 1 }
+							infantry = { x = 0 y = 2 }
+							infantry = { x = 1 y = 2 }
+							infantry = { x = 1 y = 3 }
+							infantry = { x = 1 y = 4 }
+							infantry = { x = 0 y = 3 }
+							infantry = { x = 0 y = 4 }
+	                    }
+                }
+				28 = {
+					create_unit = {
+						division = "name = \"New Sosan Army\" division_template = \"Technocratic Army\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+						owner = SOS
+					}
+					create_unit = {
+						division = "name = \"New Sosan Army\" division_template = \"Technocratic Army\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+						owner = SOS
+					}
+					create_unit = {
+						division = "name = \"New Sosan Army\" division_template = \"Technocratic Army\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+						owner = SOS
+					}
+					create_unit = {
+						division = "name = \"New Sosan Army\" division_template = \"Technocratic Army\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+						owner = SOS
+					}
+					create_unit = {
+						division = "name = \"New Sosan Army\" division_template = \"Technocratic Army\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+						owner = SOS
+					}
+					create_unit = {
+						division = "name = \"New Sosan Army\" division_template = \"Technocratic Army\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+						owner = SOS
+					}
+					create_unit = {
+						division = "name = \"New Sosan Army\" division_template = \"Technocratic Army\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+						owner = SOS
+					}
+					create_unit = {
+						division = "name = \"New Sosan Army\" division_template = \"Technocratic Army\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+						owner = SOS
+					}
+				}
+			}
+		}
 	}
-} 
+}
 
 shared_focus = {
 	id = COL_start_up_the_drill_again
@@ -8188,7 +8619,7 @@ shared_focus = {
 	cost = 4.29
 	relative_position_id = COL_third_industrial_revolution
 	prerequisite = { focus = COL_remake_the_sosan_navy } 
-	prerequisite = { focus = COL_integrate_cloud_industry } 
+	prerequisite = { focus = COL_integrate_cloud_industry }	
 	available_if_capitulated = no 
 	ai_will_do = { 
 		factor = 50
@@ -8196,7 +8627,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_start_up_the_drill_again"
-		
+		878 = {
+			add_core_of = COL
+			add_resource = {type = metal amount = 30}
+			add_resource = {type = crystal amount = 10}
+		}
 	}
 } 
 
@@ -8208,14 +8643,36 @@ shared_focus = {
 	cost = 4.29
 	relative_position_id = COL_third_industrial_revolution
 	prerequisite = { focus = COL_violent_resource_acquisition } 
+	bypass = {
+		PHE = { all_core_land_owned_by_prev_sphere = yes }
+		NGL = { all_core_land_owned_by_prev_sphere = yes }
+		SML = { all_core_land_owned_by_prev_sphere = yes }
+	}
 	available_if_capitulated = no 
 	ai_will_do = { 
 		factor = 50
 	} 
 
+	will_lead_to_war_with = PHE
+	will_lead_to_war_with = NGL
+	will_lead_to_war_with = SML
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_marching_southwards"
-		
+		PHE = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		NGL = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		SML = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 } 
 
@@ -8227,6 +8684,11 @@ shared_focus = {
 	cost = 4.29
 	relative_position_id = COL_third_industrial_revolution
 	prerequisite = { focus = COL_marching_southwards } 
+	available = {
+		PHE = { all_core_land_owned_by_prev_sphere = yes }
+		NGL = { all_core_land_owned_by_prev_sphere = yes }
+		SML = { all_core_land_owned_by_prev_sphere = yes }
+	}
 	available_if_capitulated = no 
 	ai_will_do = { 
 		factor = 50
@@ -8234,6 +8696,26 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_industry_for_the_trianle_cities"
+		268 = {
+			add_core_of = COL
+			add_building_construction = {
+					type = arms_factory
+					level = 1
+					instant_build = yes
+				}
+		}
+		402 = {
+			add_core_of = COL
+			add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+		}
+		379 = {
+			add_core_of = COL
+			add_extra_state_shared_building_slots = 3
+		}
 		
 	}
 } 
@@ -8246,14 +8728,43 @@ shared_focus = {
 	cost = 4.29
 	relative_position_id = COL_third_industrial_revolution
 	prerequisite = { focus = COL_marching_southwards } 
+	bypass = {
+		TMS = { all_core_land_owned_by_prev_sphere = yes }
+		DEP = { all_core_land_owned_by_prev_sphere = yes }
+		VOI = { all_core_land_owned_by_prev_sphere = yes }
+		TFL = { all_core_land_owned_by_prev_sphere = yes }
+	}
 	available_if_capitulated = no 
 	ai_will_do = { 
 		factor = 50
 	} 
 
+	will_lead_to_war_with = TMS
+	will_lead_to_war_with = DEP
+	will_lead_to_war_with = VOI
+	will_lead_to_war_with = TFL
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_smashing_nurior"
-		
+		TMS = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		DEP = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		VOI = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		TFL = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 } 
 
@@ -8265,14 +8776,28 @@ shared_focus = {
 	cost = 4.29
 	relative_position_id = COL_third_industrial_revolution
 	prerequisite = { focus = COL_smashing_nurior } 
+	available = {
+		TMS = { all_core_land_owned_by_prev_sphere = yes }
+		DEP = { all_core_land_owned_by_prev_sphere = yes }
+		VOI = { all_core_land_owned_by_prev_sphere = yes }
+		TFL = { all_core_land_owned_by_prev_sphere = yes }
+	}
 	available_if_capitulated = no 
 	ai_will_do = { 
 		factor = 50
 	} 
 
+	will_lead_to_war_with = NTF
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_riverside_industrial_belt"
-		
+		Core_original_TMS = yes
+		add_state_core = 341
+		add_state_core = 833
+		NTF = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 } 
 
@@ -8284,14 +8809,69 @@ shared_focus = {
 	cost = 4.29
 	relative_position_id = COL_third_industrial_revolution
 	prerequisite = { focus = COL_marching_southwards } 
+	bypass = {
+		NII = { all_core_land_owned_by_prev_sphere = yes }
+		FLB = { all_core_land_owned_by_prev_sphere = yes }
+		MOU = { all_core_land_owned_by_prev_sphere = yes }
+		QEU = { all_core_land_owned_by_prev_sphere = yes }
+		SUN = { all_core_land_owned_by_prev_sphere = yes }
+		KNT = { all_core_land_owned_by_prev_sphere = yes }
+	}
 	available_if_capitulated = no 
 	ai_will_do = { 
 		factor = 50
 	} 
 
+	will_lead_to_war_with = NII
+	will_lead_to_war_with = FLB
+	will_lead_to_war_with = MOU
+	will_lead_to_war_with = QEU
+	will_lead_to_war_with = SUN
+	will_lead_to_war_with = KNT
+	will_lead_to_war_with = SHP
+	will_lead_to_war_with = HTK
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_clear_out_hollow_shades"
-		
+		NII = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		FLB = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		MOU = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		QEU = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		SUN = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		KNT = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		SHP = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		HTK = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 } 
 
@@ -8303,6 +8883,10 @@ shared_focus = {
 	cost = 4.29
 	relative_position_id = COL_third_industrial_revolution
 	prerequisite = { focus = COL_marching_southwards } 
+	available = {
+		SHP = { all_core_land_owned_by_prev_sphere = yes }
+		QEU = { all_core_land_owned_by_prev_sphere = yes }
+	}
 	available_if_capitulated = no 
 	ai_will_do = { 
 		factor = 50
@@ -8310,7 +8894,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_picking_through_the_laboratory"
-		
+		Core_original_SHP = yes
+		826 = {
+			add_core_of = COL
+			add_resource = {type = advanced amount = 8}
+		}
+		409 = {
+			add_resource = {type = advanced amount = 8}
+		}
 	}
 } 
 
@@ -8322,14 +8913,36 @@ shared_focus = {
 	cost = 4.29
 	relative_position_id = COL_third_industrial_revolution
 	prerequisite = { focus = COL_violent_resource_acquisition } 
+	bypass = {
+		SOL = { all_core_land_owned_by_prev_sphere = yes }
+		PEN = { all_core_land_owned_by_prev_sphere = yes }
+		BOR = { all_core_land_owned_by_prev_sphere = yes }
+	}
 	available_if_capitulated = no 
 	ai_will_do = { 
 		factor = 50
 	} 
 
+	will_lead_to_war_with = SOL
+	will_lead_to_war_with = PEN
+	will_lead_to_war_with = BOR
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_reclaiming_the_eastern_border"
-		
+		SOL = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		PEN = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		BOR = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 } 
 
@@ -8341,6 +8954,11 @@ shared_focus = {
 	cost = 4.29
 	relative_position_id = COL_third_industrial_revolution
 	prerequisite = { focus = COL_reclaiming_the_eastern_border } 
+	available = {
+		SOL = { all_core_land_owned_by_prev_sphere = yes }
+		PEN = { all_core_land_owned_by_prev_sphere = yes }
+		BOR = { all_core_land_owned_by_prev_sphere = yes }
+	}
 	available_if_capitulated = no 
 	ai_will_do = { 
 		factor = 50
@@ -8348,7 +8966,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_connect_them_to_the_grid"
-		
+		Core_original_BOR = yes
+		add_state_core = 314
+		add_state_core = 352
 	}
 } 
 
@@ -8360,14 +8980,43 @@ shared_focus = {
 	cost = 4.29
 	relative_position_id = COL_third_industrial_revolution
 	prerequisite = { focus = COL_reclaiming_the_eastern_border } 
+	bypass = {
+		CAN = { all_core_land_owned_by_prev_sphere = yes }
+		NLO = { all_core_land_owned_by_prev_sphere = yes }
+		ARI = { all_core_land_owned_by_prev_sphere = yes }
+		ALB = { all_core_land_owned_by_prev_sphere = yes }
+	}
 	available_if_capitulated = no 
 	ai_will_do = { 
 		factor = 50
 	} 
 
+	will_lead_to_war_with = CAN
+	will_lead_to_war_with = NLO
+	will_lead_to_war_with = ARI
+	will_lead_to_war_with = ALB
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_seizing_albion_coast"
-		
+		CAN = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		NLO = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		ARI = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		ALB = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 } 
 
@@ -8379,6 +9028,9 @@ shared_focus = {
 	cost = 4.29
 	relative_position_id = COL_third_industrial_revolution
 	prerequisite = { focus = COL_seizing_albion_coast } 
+	available = {
+		ALB = { all_core_land_owned_by_prev_sphere = yes }
+	}
 	available_if_capitulated = no 
 	ai_will_do = { 
 		factor = 50
@@ -8386,7 +9038,20 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_salvaging_the_silver_city"
-		
+		103 = {
+			add_core_of = COL
+			add_resource = {type = metal amount = 4}
+			add_resource = {type = composites amount = 4}
+			add_resource = {type = circuitry amount = 4}
+			add_resource = {type = advanced amount = 4}
+		}
+		76 = {
+			add_core_of = COL
+			add_resource = {type = metal amount = 4}
+			add_resource = {type = composites amount = 4}
+			add_resource = {type = circuitry amount = 4}
+			add_resource = {type = advanced amount = 4}
+		}
 	}
 } 
 
@@ -8398,6 +9063,12 @@ shared_focus = {
 	cost = 4.29
 	relative_position_id = COL_third_industrial_revolution
 	prerequisite = { focus = COL_seizing_albion_coast } 
+	available = {
+		CAN = { all_core_land_owned_by_prev_sphere = yes }
+		NLO = { all_core_land_owned_by_prev_sphere = yes }
+		ARI = { all_core_land_owned_by_prev_sphere = yes }
+		ALB = { all_core_land_owned_by_prev_sphere = yes }
+	}
 	available_if_capitulated = no 
 	ai_will_do = { 
 		factor = 50
@@ -8405,7 +9076,115 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_create_an_independant_trade_block"
-		
+		hidden_effect = {
+			CAN = {
+				transfer_state = 133
+				transfer_state = 420
+				transfer_state = 414
+				transfer_state = 404
+				transfer_state = 397
+				transfer_state = 383
+				transfer_state = 119
+				transfer_state = 385
+				transfer_state = 834
+			}
+			IF = {
+				limit = {COL = {owns_state = 47}}
+				CAN = {
+					transfer_state = 47
+					add_state_core = 47
+				}
+			}
+			IF = {
+				limit = {COL = {owns_state = 57}}
+				CAN = {
+					transfer_state = 57
+					add_state_core = 57
+				}
+			}
+			IF = {
+				limit = {COL = {owns_state = 601}}
+				CAN = {
+					transfer_state = 601
+					add_state_core = 601
+				}
+			}
+		}
+		set_autonomy = {
+			target = CAN
+			autonomous_state = autonomy_gustavian_puppet
+		}
+		CAN = {
+			set_cosmetic_tag = CAN_COL_gustav_puppet
+			add_popularity = {
+				ideology = visionary
+				popularity = 1
+			}
+			set_politics = { ruling_party = visionary elections_allowed = no }
+		}
+		hidden_effect = {
+			COL = {
+				CAN = { transfer_technology = yes }
+			}
+			hidden_effect = { ROOT = { add_ai_strategy = { type = alliance id = "CAN" value = 200} add_opinion_modifier = { target = CAN modifier = huge_increase } } }
+			hidden_effect = { CAN = { add_ai_strategy = { type = alliance id = "ROOT" value = 200} add_opinion_modifier = { target = ROOT modifier = huge_increase } } }
+			CAN = {
+				Two_random_dockyards = yes
+				Two_random_dockyards = yes
+				Two_random_dockyards = yes
+				set_capital = 119
+				division_template = {
+	                name = "Technocratic Army"
+	                is_locked = no
+	                    regiments = {
+		                    infantry = { x = 0 y = 0 }
+							infantry = { x = 0 y = 1 }
+							infantry = { x = 1 y = 0 }
+							infantry = { x = 1 y = 1 }
+							infantry = { x = 0 y = 2 }
+							infantry = { x = 1 y = 2 }
+							infantry = { x = 1 y = 3 }
+							infantry = { x = 1 y = 4 }
+							infantry = { x = 0 y = 3 }
+							infantry = { x = 0 y = 4 }
+	                    }
+                }
+				119 = {
+					create_unit = {
+						division = "name = \"New EET Army\" division_template = \"Technocratic Army\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+						owner = CAN
+					}
+					create_unit = {
+						division = "name = \"New EET Army\" division_template = \"Technocratic Army\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+						owner = CAN
+					}
+					create_unit = {
+						division = "name = \"New EET Army\" division_template = \"Technocratic Army\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+						owner = CAN
+					}
+					create_unit = {
+						division = "name = \"New EET Army\" division_template = \"Technocratic Army\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+						owner = CAN
+					}
+					create_unit = {
+						division = "name = \"New EET Army\" division_template = \"Technocratic Army\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+						owner = CAN
+					}
+					create_unit = {
+						division = "name = \"New EET Army\" division_template = \"Technocratic Army\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+						owner = CAN
+					}
+					create_unit = {
+						division = "name = \"New EET Army\" division_template = \"Technocratic Army\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+						owner = CAN
+					}
+					create_unit = {
+						division = "name = \"New EET Army\" division_template = \"Technocratic Army\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+						owner = CAN
+					}
+				}
+			}
+		}
 	}
 } 
 
@@ -8425,7 +9204,15 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_the_knights_of_industry"
-		
+		set_technology = {
+				power_armour_tech_level_scientific = 1
+			}
+		add_tech_bonus = {
+			name = power_armor_bonus
+			bonus = 0.8
+			uses = 2
+			category = power_armor_tech
+			}
 	}
 } 
 
@@ -8437,14 +9224,47 @@ shared_focus = {
 	cost = 4.29
 	relative_position_id = COL_third_industrial_revolution
 	prerequisite = { focus = COL_reclaiming_the_eastern_border } 
+	bypass = {
+		PAR = { all_core_land_owned_by_prev_sphere = yes }
+		LOS = { all_core_land_owned_by_prev_sphere = yes }
+		SDO = { all_core_land_owned_by_prev_sphere = yes }
+		NMZ = { all_core_land_owned_by_prev_sphere = yes }
+		WTC = { all_core_land_owned_by_prev_sphere = yes }
+		BLN = { all_core_land_owned_by_prev_sphere = yes }
+		HYD = { all_core_land_owned_by_prev_sphere = yes }
+		UND = { all_core_land_owned_by_prev_sphere = yes }
+		ZEX = { all_core_land_owned_by_prev_sphere = yes }
+		JUD = { all_core_land_owned_by_prev_sphere = yes }
+	}
 	available_if_capitulated = no 
 	ai_will_do = { 
 		factor = 50
 	} 
 
+	will_lead_to_war_with = PAR
+	will_lead_to_war_with = LOS
+	will_lead_to_war_with = SDO
+	will_lead_to_war_with = NMZ
+	will_lead_to_war_with = WTC
+	will_lead_to_war_with = BLN
+	will_lead_to_war_with = HYD
+	will_lead_to_war_with = UND
+	will_lead_to_war_with = ZEX
+	will_lead_to_war_with = JUD
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_subjugating_hornsmith"
-		
+		declare_war_on = { type = annex_everything target = PAR }
+		declare_war_on = { type = annex_everything target = LOS }
+		declare_war_on = { type = annex_everything target = SDO }
+		declare_war_on = { type = annex_everything target = NMZ }
+		declare_war_on = { type = annex_everything target = WTC }
+		declare_war_on = { type = annex_everything target = BLN }
+		declare_war_on = { type = annex_everything target = HYD }
+		declare_war_on = { type = annex_everything target = UND }
+		declare_war_on = { type = annex_everything target = ZEX }
+		declare_war_on = { type = annex_everything target = JUD }
+		declare_war_on = { type = annex_everything target = PCM }
+		declare_war_on = { type = annex_everything target = JAD }
 	}
 } 
 
@@ -8456,6 +9276,9 @@ shared_focus = {
 	cost = 4.29
 	relative_position_id = COL_third_industrial_revolution
 	prerequisite = { focus = COL_subjugating_hornsmith } 
+	available = {
+		UND = { all_core_land_owned_by_prev_sphere = yes }
+	}
 	available_if_capitulated = no 
 	ai_will_do = { 
 		factor = 50
@@ -8463,7 +9286,17 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_using_the_underground_network"
-		
+		Core_original_UND = yes
+		every_owned_state = {
+			limit = {is_core_of = UND}
+			add_extra_state_shared_building_slots = 3
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			add_resource = {type = advanced amount = 6}
+		}
 	}
 } 
 
@@ -8482,7 +9315,97 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_form_the_griffonia_expeditionary_corps"
-		#puppet with lands from mizazh, Whitecoats, Seadogs, Hydra and the precedence-state
+		hidden_effect = {
+			NMZ = {
+				transfer_state = 188
+				transfer_state = 845
+				transfer_state = 406
+				transfer_state = 389
+				transfer_state = 342
+				transfer_state = 843
+				transfer_state = 256
+				transfer_state = 416
+				transfer_state = 425
+				transfer_state = 84
+				transfer_state = 296
+			}
+		}
+		set_autonomy = {
+			target = NMZ
+			autonomous_state = autonomy_gustavian_puppet
+		}
+		NMZ = {
+			set_cosmetic_tag = NMZ_COL_gustav_puppet
+			add_popularity = {
+				ideology = visionary
+				popularity = 1
+			}
+			set_politics = { ruling_party = visionary elections_allowed = no }
+			add_ideas = COL_NMZ_puppet_idea
+		}
+		hidden_effect = {
+			COL = {
+				NMZ = { transfer_technology = yes }
+			}
+			hidden_effect = { ROOT = { add_ai_strategy = { type = alliance id = "NMZ" value = 200} add_opinion_modifier = { target = NMZ modifier = huge_increase } } }
+			hidden_effect = { NMZ = { add_ai_strategy = { type = alliance id = "ROOT" value = 200} add_opinion_modifier = { target = ROOT modifier = huge_increase } } }
+			NMZ = {
+				Two_random_dockyards = yes
+				Two_random_dockyards = yes
+				Two_random_arms_factory = yes
+				set_capital = 416
+				division_template = {
+	                name = "Technocratic Army"
+	                is_locked = no
+	                    regiments = {
+		                    infantry = { x = 0 y = 0 }
+							infantry = { x = 0 y = 1 }
+							infantry = { x = 1 y = 0 }
+							infantry = { x = 1 y = 1 }
+							infantry = { x = 0 y = 2 }
+							infantry = { x = 1 y = 2 }
+							infantry = { x = 1 y = 3 }
+							infantry = { x = 1 y = 4 }
+							infantry = { x = 0 y = 3 }
+							infantry = { x = 0 y = 4 }
+	                    }
+                }
+				416 = {
+					create_unit = {
+						division = "name = \"Griffonian Expeditionary Corps\" division_template = \"Technocratic Army\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+						owner = NMZ
+					}
+					create_unit = {
+						division = "name = \"Griffonian Expeditionary Corps\" division_template = \"Technocratic Army\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+						owner = NMZ
+					}
+					create_unit = {
+						division = "name = \"Griffonian Expeditionary Corps\" division_template = \"Technocratic Army\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+						owner = NMZ
+					}
+					create_unit = {
+						division = "name = \"Griffonian Expeditionary Corps\" division_template = \"Technocratic Army\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+						owner = NMZ
+					}
+					create_unit = {
+						division = "name = \"Griffonian Expeditionary Corps\" division_template = \"Technocratic Army\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+						owner = NMZ
+					}
+					create_unit = {
+						division = "name = \"Griffonian Expeditionary Corps\" division_template = \"Technocratic Army\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+						owner = NMZ
+					}
+					create_unit = {
+						division = "name = \"Griffonian Expeditionary Corps\" division_template = \"Technocratic Army\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+						owner = NMZ
+					}
+					create_unit = {
+						division = "name = \"Griffonian Expeditionary Corps\" division_template = \"Technocratic Army\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+						owner = NMZ
+					}
+				}
+			}
+		}
 	}
 } 
 
@@ -8502,7 +9425,15 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_adopt_orchard_robotics"
-		
+		set_technology = {
+				robot_ultra_sentinel_tech = 1
+			}
+		add_tech_bonus = {
+			name = robotics_tech
+			bonus = 1.0
+			uses = 2
+			category = robotics_tech
+			}
 	}
 } 
 
@@ -8523,7 +9454,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_connect_the_ais"
-		#Creates a massive AI-controlled Buffer-state, that fill get big buffs to robotics.
+		add_state_core = 339
+		add_state_core = 832
+		add_research_slot = 1
 	}
 } 
 
