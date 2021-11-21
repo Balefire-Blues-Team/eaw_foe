@@ -133,18 +133,39 @@ STT_phial_matrix_cat = {
 }
 
 STT_moudry_purple_revolution = {
-	STT_pick_random_country = {
-		icon = GFX_decision_generic_research
+	STT_random_countries = {
+		icon = GFX_decision_stable_door
 		cost = 0
 		ai_will_do = {
 			base = 0
 			modifier = {
 			}
 		}
-
-		available = {
+		allowed = {
+			tag = STT
+		}
+		
+		target_array = neighbors
+		
+		target_root_trigger = {
+			original_tag = STT
+		}
+		
+		target_trigger = {
+			FROM = {
+				is_neighbor_of = ROOT
+				num_of_controlled_states < ROOT.num_of_controlled_states * 5
+			}
 		}
 		visible = {
+			NOT = {
+				any_country = {
+					has_country_flag = random_country_select
+				}
+			}
+		}
+		available = {
+			has_war = no
 		}
 		modifier = {
 		}
@@ -152,26 +173,340 @@ STT_moudry_purple_revolution = {
 		days_remove = 0
 
 		complete_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision STT_pick_random_country"
+			log = "[GetDateText]: [Root.GetName]: Decision STT_random_countries"
 			if = {
 				limit = {
-					any_neighbor_country = {
-						has_variable = Random_Country
+					any_country = {
+						has_country_flag = random_country_select
 					}
 				}
-				clear_variable = Random_Country
-				random_neighbor_country = {		
-					set_variable = {
-						var = Random_Country
-						value = THIS.id
+				hidden_effect = {
+					every_country = {
+						clr_country_flag = random_country_select
 					}
 				}
 			}
+			if = {
+				limit = {
+					any_country = {		
+						NOT = {
+							has_country_flag = random_country_select
+						}
+					}
+				}
+				FROM = {		
+					set_country_flag = random_country_select
+				}
+			}			
+		}
+		remove_effect = {
+		}
+	}
+	
+	STT_destab_pop = {
+		icon = GFX_decision_eng_propaganda_campaigns
+		cost = 125
+		ai_will_do = {
+			base = 0
+			modifier = {
+			}
+		}
+		
+		allowed = {
+			tag = STT
+		}
+		
+		target_root_trigger = {
+			original_tag = STT
+		}
+		
+		target_trigger = {
+			FROM = {
+				has_country_flag = random_country_select
+			}
+		}
+		visible = {
+		}
+		available = {
+		}
+		modifier = {
+			FROM = {
+				stability_weekly = -0.50
+			}
+		}
+
+		days_remove = 1
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision STT_destab_pop"
+			if = {
+				limit = {
+					NOT = {
+						has_variable = destab_pop
+					}
+				}
+				set_variable = { destab_pop = 0 }
+				add_to_variable = {
+					var = destab_pop
+					value = 1
+				}
+			}
 			else = {
-				random_neighbor_country = {		
-					set_variable = {
-						var = Random_Country
-						value = THIS.id
+				add_to_variable = {
+					var = destab_pop
+					value = 1
+				}
+			}
+			
+			##Flags
+			
+			if = {
+				limit = {
+					NOT = {
+						AND = {
+							has_country_flag = depop_1
+							has_country_flag = depop_2
+							has_country_flag = depop_3
+						}
+					}
+				}
+				set_country_flag = depop_1
+			}
+			if = {
+				limit = {
+					has_country_flag = depop_1
+				}
+				clr_country_flag = depop_1
+				set_country_flag = depop_2
+			}
+			if = {
+				limit = {
+					has_country_flag = depop_2
+				}
+				clr_country_flag = depop_2
+				set_country_flag = depop_3
+			}
+			
+		}
+		remove_effect = {
+		}
+	}
+	
+	STT_spread_rumours = {
+		icon = GFX_decision_eng_propaganda_campaigns
+		cost = 125
+		ai_will_do = {
+			base = 0
+			modifier = {
+			}
+		}
+		
+		allowed = {
+			tag = STT
+		}
+		
+		target_root_trigger = {
+			original_tag = STT
+		}
+		
+		target_trigger = {
+			FROM = {
+				has_country_flag = random_country_select
+			}
+		}
+		visible = {
+		}
+		available = {
+		}
+		modifier = {
+		}
+
+		days_remove = 1
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision STT_spread_rumours"
+			if = {
+				limit = {
+					NOT = {
+						has_variable = bad_rumours
+					}
+				}
+				set_variable = { bad_rumours = 0 }
+				add_to_variable = {
+					var = bad_rumours
+					value = 1
+				}
+			}
+			else = {
+				add_to_variable = {
+					var = bad_rumours
+					value = 1
+				}
+			}
+			##Flags
+			
+			if = {
+				limit = {
+					NOT = {
+						AND = {
+							has_country_flag = rumor_1
+							has_country_flag = rumor_2
+							has_country_flag = rumor_3
+						}
+					}
+				}
+				set_country_flag = rumor_1
+			}
+			if = {
+				limit = {
+					has_country_flag = rumor_1
+				}
+				clr_country_flag = rumor_1
+				set_country_flag = rumor_2
+			}
+			if = {
+				limit = {
+					has_country_flag = rumor_2
+				}
+				clr_country_flag = rumor_2
+				set_country_flag = rumor_3
+			}
+		}
+		remove_effect = {
+		}
+	}
+
+	STT_shoot_morale = {
+		icon = GFX_decision_eng_propaganda_campaigns
+		cost = 125
+		ai_will_do = {
+			base = 0
+			modifier = {
+			}
+		}
+		
+		allowed = {
+			tag = STT
+		}
+		
+		target_root_trigger = {
+			original_tag = STT
+		}
+		
+		target_trigger = {
+			FROM = {
+				has_country_flag = random_country_select
+			}
+		}
+		visible = {
+		}
+		available = {
+		}
+		modifier = {
+			FROM = {
+				war_support_weekly = -0.50
+			}
+		}
+
+		days_remove = 1
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision STT_shoot_morale"
+			if = {
+				limit = {
+					NOT = {
+						has_variable = morale_down
+					}
+				}
+				set_variable = { morale_down = 0 }
+				add_to_variable = {
+					var = morale_down
+					value = 1
+				}
+			}
+			else = {
+				add_to_variable = {
+					var = morale_down
+					value = 1
+				}
+			}
+			##Flags
+			
+			if = {
+				limit = {
+					NOT = {
+						AND = {
+							has_country_flag = morale_1
+							has_country_flag = morale_2
+							has_country_flag = morale_3
+						}
+					}
+				}
+				set_country_flag = morale_1
+			}
+			if = {
+				limit = {
+					has_country_flag = morale_1
+				}
+				clr_country_flag = morale_1
+				set_country_flag = morale_2
+			}
+			if = {
+				limit = {
+					has_country_flag = morale_2
+				}
+				clr_country_flag = morale_2
+				set_country_flag = morale_3
+			}
+		}
+		remove_effect = {
+		}
+	}
+	
+	STT_civil_gaming = {
+		icon = GFX_decision_pony_skull
+		cost = 200
+		ai_will_do = {
+			base = 0
+			modifier = {
+			}
+		}
+		
+		allowed = {
+			tag = STT
+		}
+		
+		target_root_trigger = {
+			original_tag = STT
+		}
+		
+		target_trigger = {
+			FROM = {
+				has_country_flag = random_country_select
+			}
+		}
+		visible = {
+		}
+		available = {
+		}
+		modifier = {
+		}
+
+		days_remove = 0
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision STT_civil_gaming"
+			if = {
+				limit = {
+					FROM = {
+						has_country_flag = random_country_select
+					}
+				}
+				FROM = {
+					start_civil_war = {
+						ideology = visionary
+						size = 0.5
+						only_own_territory = yes
 					}
 				}
 			}
@@ -180,18 +515,27 @@ STT_moudry_purple_revolution = {
 		}
 	}
 	
-	STT_test_bitch = {
-		icon = GFX_decision_generic_research
+	STT_go_back = {
 		cost = 0
 		ai_will_do = {
 			base = 0
 			modifier = {
 			}
 		}
-
-		available = {
+		target_root_trigger = {
+		}
+		
+		target_trigger = {
+			FROM = {
+				has_country_flag = random_country_select
+			}
 		}
 		visible = {
+			FROM = {
+				has_country_flag = random_country_select
+			}
+		}
+		available = {
 		}
 		modifier = {
 		}
@@ -199,27 +543,15 @@ STT_moudry_purple_revolution = {
 		days_remove = 0
 
 		complete_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision STT_pick_random_country"
+			log = "[GetDateText]: [Root.GetName]: Decision STT_go_back"
 			if = {
 				limit = {
-					FER = {
-						has_variable = Random_Country
+					FROM = {
+						has_country_flag = random_country_select
 					}
 				}
-				annex_country = {
-					target = GUT
-					transfer_troops = yes
-				}
-			}
-			if = {
-				limit = {
-					MUD = {
-						has_variable = Random_Country
-					}
-				}
-				annex_country = {
-					target = RED
-					transfer_troops = yes
+				FROM = {
+					clr_country_flag = random_country_select
 				}
 			}
 		}
