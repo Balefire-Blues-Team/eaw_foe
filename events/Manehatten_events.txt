@@ -294,6 +294,11 @@ country_event = {
 		    popularity = 0.35
 		}
 		set_country_flag = steel_hooves_wins_MSR
+		hidden_effect = {
+			MSR_char_steelhooves = {
+				set_character_name = MSR_char_steelhooves_elder_name
+			}
+		}
 	}
 	option = { #River Autumn
 		name = MSR.6.c
@@ -441,35 +446,33 @@ country_event = { #River's Coup
 		name = MSR_elections.4.a
 		ai_chance = { factor = 50}
 		
-		kill_country_leader = yes
 		add_stability = -0.35
 		add_war_support = -0.35
 		add_political_power = -50
 
-		create_country_leader = {
-			name = "Elder Steel Hooves"
-			picture = "SteelHooves.tga"
-			expire = "1965.1.1"
-			ideology = steel_ranger_cont
-			traits = {
-		
+		add_country_leader_role  = {
+			character = MSR_char_steelhooves
+			promote_leader = yes
+			country_leader = {
+				desc="POLITICS_STEELHOOVES_DESC"
+				ideology=steel_ranger_cont
+				expire="1965.1.1.1"
+				id=-1
 			}
 		}
-		create_country_leader = {
-			name = "Elder River Autumn"
-			desc = "POLITICS_RIVERAUTUMN_DESC"
-			picture = "ScribeRiverAutumn.tga"
-			expire = "1965.1.1"
+
+		promote_character = {
+			character = MSR_char_river_autumn
 			ideology = river_autumn_ideology
-			traits = {
-				
-			}
 		}
 		set_party_name = { 
 		    ideology = visionary 
 		    long_name = MSR_visionary_party_river 
 		    name = MSR_visionary_party_river 
 		}
+
+		retire_character = MSR_char_cottage_cheese
+		
 		set_politics = {
 			ruling_party = visionary
 		}
@@ -952,14 +955,11 @@ country_event = {
 		custom_effect_tooltip = MSR_Upload_success_tt
 		custom_effect_tooltip = RED_new_focus_tree_tt
 		hidden_effect = {
-			retire_country_leader = yes
-			create_country_leader = {
-				name = "Elder Cottage Cheese"
-				desc = "POLITICS_COTTAGEGOD_DESC"
-				picture = "GFX_Green_Cheese_animated"
-				expire = "1965.1.1"
-				ideology = steel_ranger_cont
-				traits = {
+			MSR_char_cottage_cheese = {
+				set_portraits = {
+					civilian = {
+						large="GFX_Green_Cheese_animated"
+					}
 				}
 			}
 			clr_country_flag = MSR_crusader_decisions_available
@@ -987,14 +987,19 @@ country_event = {
 		custom_effect_tooltip = MSR_Upload_failiure_tt
 		custom_effect_tooltip = RED_new_focus_tree_tt
 		hidden_effect = {
-			retire_country_leader = yes
-			create_country_leader = {
-				name = "Elder Cottage Cheese"
-				desc = "POLITICS_COTTAGEFAIL_DESC"
-				picture = "GFX_Red_Cheese_animated"
-				expire = "1965.1.1"
-				ideology = steel_ranger_cont
-				traits = {
+			MSR_char_cottage_cheese = {
+				set_portraits = {
+					civilian = {
+						large="GFX_Red_Cheese_animated"
+					}
+				}
+				remove_trait = {
+					ideology = steel_ranger_cont
+					trait = msr_cottage_trait
+				}
+				add_trait = {
+					ideology = steel_ranger_cont
+					trait = msr_cottage_fail_trait
 				}
 			}
 			clr_country_flag = MSR_crusader_decisions_available
@@ -1781,17 +1786,7 @@ country_event = { #Reinforcements from Hoofington
 
  	option = { #Huzzah
  		name = MSR_aj_rangers.8.a
- 		create_corps_commander = {
-			name = "Paladin Sugar Toffee"
-			portrait_path = "gfx/leaders/Generic/foe_generic_pony_5.tga"
-			traits = { enduring_trait hoof_veteran_trait pony_race_trait }
-			skill = 2
-			attack_skill = 2
-			defense_skill = 2
-			planning_skill = 3
-			logistics_skill = 2
-			id = 88851
-		}
+ 		recruit_character = MSR_char_sugar_toffee
 		custom_effect_tooltip = MSR_toffee_stats_tt
 		custom_effect_tooltip = MSR_hoofington_oob_tt
  		hidden_effect = {
@@ -2120,16 +2115,15 @@ country_event = { #Major Napalm & Old Guard volunteer
  		name = MSR_aj_rangers.20.a
  		add_manpower = 157
  		add_war_support = 0.05
- 		create_corps_commander = {
-			name = "Major Napalm"
-			picture = "Napalm.tga"
+		add_corps_commander_role = {
+			character = MSR_char_major_napalm
 			traits = { charismatic_trait pony_race_trait old_guard }
 			skill = 2
 			attack_skill = 4
 			defense_skill = 1
-			planning_skill = 1
+			planning_skill = 2
 			logistics_skill = 1
-			id = 88852
+			legacy_id = 88852
 		}
 		custom_effect_tooltip = MSR_napalm_stats_tt
  	}
@@ -2220,6 +2214,12 @@ country_event = {
 		complete_national_focus = MSR_Passing_The_Torch
 
 		hidden_effect = {
+			MSR_char_steelhooves = {
+				set_character_name = MSR_char_steelhooves_paladin_name
+			}
+			MSR_char_crossroads = {
+				set_character_name = MSR_char_crossroads_elder_name
+			}
 			clr_global_flag = msr_steelhooves_flag
 			set_global_flag = msr_crossroads_flag
 		}
@@ -4341,29 +4341,31 @@ country_event = {
 		}
  		MSR = { set_cosmetic_tag = MSR_new_enclave }
 
- 		create_country_leader = {
-			name = "Grand Marshal River Autumn"
-			desc = "POLITICS_GRANDMARSHALRIVER_DESC"
-			picture = "MarshalRiverAutumn.tga"
-			expire = "1965.1.1"
-			ideology = river_autumn_ideology
-			traits = {
-				
-			}
-		}
- 		create_field_marshal = {
-			name = "River Autumn"
-			picture = "MarshalRiverAutumn.tga"
+		add_field_marshal_role = {
+			character = MSR_char_river_autumn
 			traits = { river_unit_leader_trait intelligent_trait charismatic_trait pony_race_trait }
 			skill = 2
 			attack_skill = 1
 			defense_skill = 1
 			planning_skill = 3
 			logistics_skill = 2
-			female = yes
-			id = 88847
+			legacy_id = 88847
 		}
 		custom_effect_tooltip = MSR_river_stats_tt
+
+		hidden_effect = {
+			MSR_char_river_autumn = {
+				set_character_name = MSR_char_river_autumn_marshal_name
+				set_portraits = {
+					army = {
+						large="gfx/leaders/MSR/MarshalRiverAutumn.tga"
+					}
+					civilian = {
+						large="gfx/leaders/MSR/MarshalRiverAutumn.tga"
+					}
+				}
+			}
+		}
  	}
 }
 
@@ -4583,33 +4585,33 @@ country_event = {
 		name = MSR_fsr.1.a
 		ai_chance = { factor = 50 }
 		hidden_effect = { load_oob = "MSR_fillydelphia_remnants" }
-		IF = {
+		if = {
 			limit = { has_global_flag = fsr_blueberry_flag }
 			custom_effect_tooltip = MSR_blueberry_tt
 			hidden_effect = {
-			set_country_flag = MSR_blueberry_advisor_flag
-			}
-			else_if = {
+				set_country_flag = MSR_blueberry_advisor_flag
+			}			
+		}
+		else_if = {
 			limit = { has_global_flag = msr_strawberry_flag }
 			custom_effect_tooltip = MSR_strawberry_tt
 			hidden_effect = {
-			set_country_flag = MSR_strawberry_advisor_flag
-			create_corps_commander = {
-				name = "Strawberry Lemonade"
-				picture = "Strawberry_Lemonade.tga"
-				traits = { charismatic_trait lucky_trait agile_trait }
-				skill = 1
-				attack_skill = 2
-				defense_skill = 2
-				planning_skill = 2
-				logistics_skill = 1
-				id = 777032
+				set_country_flag = MSR_strawberry_advisor_flag
+					create_corps_commander = {
+						name = "Strawberry Lemonade"
+						picture = "Strawberry_Lemonade.tga"
+						traits = { charismatic_trait lucky_trait agile_trait }
+						skill = 1
+						attack_skill = 2
+						defense_skill = 2
+						planning_skill = 2
+						logistics_skill = 1
+						id = 777032
+					}
 			}
-			}
-			}
-			else = {
+		}
+		else = {
 			custom_effect_tooltip = MSR_fsr_remnants_tt
-			}
 		}
 	}
 }
