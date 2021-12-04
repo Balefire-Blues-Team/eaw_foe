@@ -760,7 +760,7 @@ shared_focus = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_new_government"
 			if = {
 				limit = {
-				has_country_leader = { ruling_only = yes name = "General Featherfall" }
+					NEV_char_featherfall = { is_country_leader = yes }
 				}
 				country_event = { id = cloudsdale.21 }
 			}
@@ -772,13 +772,13 @@ shared_focus = {
 			}
 			else_if = {
 				limit = {
-				has_country_leader = { ruling_only = yes name = "Autumn Leaf" }
+					NEV_char_autumnleaf = { is_country_leader = yes }
 				}
 				country_event = { id = cloudsdale.23 }
 			}
 			else_if = {
 				limit = {
-				has_country_leader = { ruling_only = yes name = "Tornado" }
+					NEV_char_tornado = { is_country_leader = yes }
 				}
 				country_event = { id = cloudsdale.24 }
 			}
@@ -984,6 +984,10 @@ shared_focus = {
 				limit = { has_idea = partial_economic_mobilisation }
 				add_ideas = war_economy
 			}
+			else_if = {
+				limit = { has_idea = undisturbed_isolation }
+				add_ideas = civilian_economy
+			}
 			add_offsite_building = { type = arms_factory level = 2 }
 		}
 }
@@ -1182,7 +1186,7 @@ shared_focus = {
 			FSR = {
 				country_event = { id = cloudsdale.30 }
 			}
-			RED = {
+			EYE = {
 				country_event = { id = cloudsdale.30 }
 			}
 			
@@ -1688,7 +1692,7 @@ shared_focus = {
 		} 
 		
 		will_lead_to_war_with = FSR
-		will_lead_to_war_with = RED
+		will_lead_to_war_with = EYE
 		will_lead_to_war_with = SHA
 		will_lead_to_war_with = MAN
 		will_lead_to_war_with = LRA
@@ -1967,7 +1971,7 @@ shared_focus = {
 				}
 				declare_war_on = { 
 					type = annex_everything 
-					target = RED
+					target = EYE
 				}
 				declare_war_on = { 
 					type = annex_everything 
@@ -2133,17 +2137,17 @@ shared_focus = {
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_con_old_return"
 			add_political_power = 10
-			create_field_marshal = {
-				name = "Tornado"
-				picture = "Tornado.tga"
-				traits = { cloudsdale_commander charismatic_trait perceptive_trait intelligent_trait }
+			add_field_marshal_role = {
+				character = NEV_char_tornado
+				traits = { cloudsdale_commander charismatic_trait perceptive_trait intelligent_trait pony_race_trait }
 				skill = 5
-				attack_skill = 4
+				attack_skill = 5
 				defense_skill = 3
-				planning_skill = 4
-				logistics_skill = 2
-				id = 19799
+				planning_skill = 5
+				logistics_skill = 3
+				legacy_id = 19799
 			}
+			custom_effect_tooltip = NEV_tornado_stats_tt
 		}
 }
 
@@ -2314,6 +2318,8 @@ shared_focus = {
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_con_old_friends"
 			custom_effect_tooltip = unlocks_new_high_command_tt
+			recruit_character = NEV_char_dornmare
+			recruit_character = NEV_char_thunderblitz
 		}
 }
 
@@ -2334,6 +2340,8 @@ shared_focus = {
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_con_new_blood"
 			custom_effect_tooltip = unlocks_new_advisors_tt
+			recruit_character = NEV_char_shadowhooves
+			recruit_character = NEV_char_wallbreaker
 		}
 }
 
@@ -4403,10 +4411,10 @@ shared_focus = {
 		ai_will_do = { 
 		factor = 50
 		} 
-		will_lead_to_war_with = RED
+		will_lead_to_war_with = EYE
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_con_kill_red"
-			RED = {
+			EYE = {
 				ROOT = {
 					grant_wargoals_on_core_states_of_prev = yes
 				}
@@ -4424,7 +4432,7 @@ shared_focus = {
 		mutually_exclusive = { focus = NEV_con_free_red }
 		cost = 4.38
 		available_if_capitulated = yes 
-		available = { RED = {exists = no}}
+		available = { EYE = {exists = no}}
 		prerequisite = { focus = NEV_con_kill_red }
 		ai_will_do = { 
 		factor = 100
@@ -4432,7 +4440,7 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_con_burn_red"
-			every_owned_state = {limit = {is_core_of = RED} add_manpower = -400}
+			every_owned_state = {limit = {is_core_of = EYE} add_manpower = -400}
 		}
 }
 
@@ -4523,8 +4531,8 @@ shared_focus = {
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_con_remorse_red"
 			save_current_manpower = yes
-			every_owned_state = {limit = {is_core_of = RED} add_manpower = -400}
-			every_owned_state = {limit = {is_core_of = RED} add_extra_state_shared_building_slots = 2}
+			every_owned_state = {limit = {is_core_of = EYE} add_manpower = -400}
+			every_owned_state = {limit = {is_core_of = EYE} add_extra_state_shared_building_slots = 2}
 			restore_previous_manpower = yes
 		}
 }
@@ -4607,7 +4615,7 @@ shared_focus = {
 		mutually_exclusive = { focus = NEV_con_burn_red }
 		cost = 6.43
 		available_if_capitulated = yes 
-		available = { RED = {exists = no}}
+		available = { EYE = {exists = no}}
 		prerequisite = { focus = NEV_con_kill_red }
 		ai_will_do = { 
 		factor = 100
@@ -4801,7 +4809,7 @@ shared_focus = {
 		relative_position_id = NEV_new_government
 		cost = 2.86
 		allow_branch = {
-		has_country_leader = { ruling_only = yes name = "Senator Seafire" }
+			NEV_char_seafire = { is_country_leader = yes }
 		}
 		available_if_capitulated = yes 
 		prerequisite = { focus = NEV_new_government }
