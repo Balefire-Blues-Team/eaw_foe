@@ -4,7 +4,7 @@ NDefines.NGame.START_DATE = "1235.1.1.12"
 NDefines.NGame.END_DATE = "1260.1.1.1"
 
 -- Vanilla is 30
-NDefines.NDiplomacy.VOLUNTEERS_DIVISIONS_REQUIRED = 8
+NDefines.NDiplomacy.VOLUNTEERS_DIVISIONS_REQUIEYE = 8
 
 -- Starting at this date, the tension values will be scaled down (will be equal
 -- to 1 before that.)
@@ -95,7 +95,7 @@ NDefines.NAI.MIN_MANPOWER_TO_BUILD_UNITS = 0.9
 NDefines.NAI.PRODUCTION_EQUIPMENT_SURPLUS_FACTOR = 0.7
 
 -- Factor for desired number of units to assign to area defense orders
-NDefines.NAI.DESIRED_UNITS_FACTOR_AREA_ORDER = 0.25
+NDefines.NAI.DESIEYE_UNITS_FACTOR_AREA_ORDER = 0.25
 
 -- Factor for min number of units to assign to area defense orders
 NDefines.NAI.MIN_UNITS_FACTOR_AREA_ORDER = 0.25
