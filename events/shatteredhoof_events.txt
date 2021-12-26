@@ -537,9 +537,9 @@ country_event = {
 				limit = {is_owned_by = ROOT}
 				set_state_flag = do_not_decimate
 			}
+			
 		}
 	}
-	
 	option = {
 	ai_chance = { factor = 0 }
 		name = shatteredhoof_ncr.1.b
@@ -565,28 +565,37 @@ country_event = {
 	ai_chance = { factor = 10 }
 		name = shatteredhoof_ncr.2.a
 		set_cosmetic_tag = NCR_cosmetic
-		set_province_name = { id = 4308 name = "New Canterlot"}
+		set_province_name = { id = 4308 name = "New Canterlot" }
 		every_country = {
-				limit = { has_country_flag = agreed_to_join_ncr_flag}
-			If = {
+			limit = { has_country_flag = agreed_to_join_ncr_flag }
+			if = {
 				limit = {SHA = {is_ai = no}}
 			
-				SHA = { annex_country = { target = prev transfer_troops = yes }}
+				SHA = { annex_country = { target = prev transfer_troops = yes } }
 			}
 			else_if = {
 				limit = {SHA = {is_ai = yes}}
 			
-				SHA = { annex_country = { target = prev transfer_troops = no }}
+				SHA = { annex_country = { target = prev transfer_troops = no } }
 			}
 			every_state = {
-					limit = {
-						is_core_of = prev
-					}
-					add_claim_by = SHA
-					add_core_of = SHA
+				limit = {
+					is_core_of = prev
 				}
+				add_claim_by = SHA
+				add_core_of = SHA
+			}
+		}
+		if = {
+			limit = { MAN = { has_country_flag = agreed_to_join_ncr_flag } }
+			MAN = { MAN_char_Ember_Eclipse = { set_nationality = SHA } }
+		}
+		if = {
+			limit = { RAF = { has_country_flag = agreed_to_join_ncr_flag } }
+			RAF = { RAF_char_iron_hoof = { set_nationality = SHA } }
 		}
 		hidden_effect = {
+			
 			808 = { 
 				set_state_name = "New Canterlot"
 			}
