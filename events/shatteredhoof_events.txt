@@ -315,14 +315,7 @@ country_event = {
 			set_country_flag = SHA_LRA_prison_colony
 			LRA = {
 				set_cosmetic_tag = LRA_prison_colony
-				create_country_leader = {
-						name = "Local Council"
-						desc = "foreign_rule"
-						picture = ""
-						expire = "1965.1.1"
-						ideology = rebuilder
-						traits = {}
-				}
+				recruit_character = SHA_LRA_char_Local_Council
 				add_popularity = {
 					ideology = visionary
 					popularity = 1
@@ -537,9 +530,9 @@ country_event = {
 				limit = {is_owned_by = ROOT}
 				set_state_flag = do_not_decimate
 			}
+			
 		}
 	}
-	
 	option = {
 	ai_chance = { factor = 0 }
 		name = shatteredhoof_ncr.1.b
@@ -565,30 +558,40 @@ country_event = {
 	ai_chance = { factor = 10 }
 		name = shatteredhoof_ncr.2.a
 		set_cosmetic_tag = NCR_cosmetic
-		set_province_name = { id = 4308 name = "New Canterlot"}
+		set_province_name = { id = 4308 name = SHA_NCanterlot }
 		every_country = {
-				limit = { has_country_flag = agreed_to_join_ncr_flag}
-			If = {
+			limit = { has_country_flag = agreed_to_join_ncr_flag }
+			if = {
 				limit = {SHA = {is_ai = no}}
 			
-				SHA = { annex_country = { target = prev transfer_troops = yes }}
+				SHA = { annex_country = { target = prev transfer_troops = yes } }
 			}
 			else_if = {
 				limit = {SHA = {is_ai = yes}}
 			
-				SHA = { annex_country = { target = prev transfer_troops = no }}
+				SHA = { annex_country = { target = prev transfer_troops = no } }
 			}
 			every_state = {
-					limit = {
-						is_core_of = prev
-					}
-					add_claim_by = SHA
-					add_core_of = SHA
+				limit = {
+					is_core_of = prev
 				}
+				add_claim_by = SHA
+				add_core_of = SHA
+			}
 		}
+		if = {
+			limit = { MAN = { has_country_flag = agreed_to_join_ncr_flag } }
+			MAN = { MAN_char_Ember_Eclipse = { set_nationality = SHA } }
+		}
+		if = {
+			limit = { RAF = { has_country_flag = agreed_to_join_ncr_flag } }
+			RAF = { RAF_char_iron_hoof = { set_nationality = SHA } }
+		}
+		recruit_character = SHA_char_nero
 		hidden_effect = {
+			
 			808 = { 
-				set_state_name = "New Canterlot"
+				set_state_name = SHA_NCanterlot
 			}
 			country_event = {
 					id = shatteredhoof_ncr.4
@@ -2219,14 +2222,7 @@ country_event = {
 			puppet = TEN
 		}
 		retire_country_leader = yes
-		create_country_leader = {
-			name = "Governor Highrise"
-			picture = 
-			expire = "1965.1.1"
-			ideology = ncr_urp
-			desc = 
-			traits = {  }
-		}
+		recruit_character = SHA_TEN_char_Governor_Highrise_name
 		drop_cosmetic_tag = yes
 		set_cosmetic_tag = TEN_NCR_state
 	}
