@@ -58,6 +58,8 @@ shared_focus = {
 
 } 
 
+### Army Tree ###
+
 shared_focus = { 
 	id = CAL_restructure_expedition
 	icon = GFX_goal_CAL_reorg
@@ -186,9 +188,9 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_scavenge_university"
 		army_experience = 65
-		add_tech_bonus = {
+		add_doctrine_cost_reduction = {
 			name = doctrine_bonus
-			bonus = 0.5
+			cost_reduction = 0.5
 			uses = 3
 			category = land_doctrine
 			}
@@ -203,6 +205,7 @@ shared_focus = {
 	y = 1
 	cost = 1
 	prerequisite = { focus = CAL_restructure_expedition }
+	available = {has_completed_focus = CAL_our_own_imp}
 	available_if_capitulated = yes 
 	relative_position_id = CAL_restructure_expedition
 	ai_will_do = { 
@@ -280,10 +283,10 @@ shared_focus = {
 				tech_unicorn = 1
 			}
 		add_tech_bonus = {
-			name = race_tech_bonus
-			bonus = 1.0
-			uses = 2
-			category = race_tech
+			name = unicorn_tech_bonus
+			bonus = 0.8
+			uses = 3
+			category = unicorn_tech
 			}
 	}
 } 
@@ -293,7 +296,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_improve_design
 	x = 0
 	y = 3
-	cost = 1
+	cost = 8.58
 	prerequisite = { focus = CAL_joint_mage_companies }
 	prerequisite = { focus = CAL_scavenge_university }
 	available_if_capitulated = yes 
@@ -304,7 +307,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_improved_designs"
-		
+		add_tech_bonus = {
+			name = alicorn_tech_bonus
+			bonus = 1.5
+			uses = 3
+			category = alicorn_tech
+			}
 	}
 } 
 
@@ -324,7 +332,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_magical_thought_suppression"
-		
+		swap_ideas = { remove_idea = CAL_undying_soldiers_idea add_idea = CAL_undying_soldiers_idea2}
 	}
 } 
 
@@ -344,7 +352,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_elevate_the_worthy"
-		
+		add_equipment_to_stockpile = { type = alicorn_equipment_1 amount = 400 producer = OWE }
 	}
 } 
 
@@ -358,12 +366,20 @@ shared_focus = {
 	available_if_capitulated = yes 
 	relative_position_id = CAL_restructure_expedition
 	ai_will_do = { 
-		factor = 110
+		factor = 100
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_personal_command"
-		
+		add_field_marshal_role = {
+			Character = CAL_char_Nightseer_dest
+			traits = {perceptive_trait enduring_trait agile_trait alicorn_commander}
+			skill = 4
+			attack_skill = 6
+			defense_skill = 6
+			planning_skill = 6
+			logistics_skill = 6
+		}
 	}
 } 
 
@@ -376,6 +392,13 @@ shared_focus = {
 	prerequisite = { focus = CAL_personal_command }
 	prerequisite = { focus = CAL_elevate_the_worthy }
 	prerequisite = { focus = CAL_magical_thought_suppression }
+	available = {
+		OR = {
+			has_tech = tech_alicorn_blue
+			has_tech = tech_alicorn_green
+			has_tech = tech_alicorn_purple
+		}
+	}
 	available_if_capitulated = yes 
 	relative_position_id = CAL_restructure_expedition
 	ai_will_do = { 
@@ -384,9 +407,250 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_black_green_purple"
+		custom_effect_tooltip = CAL_improved_designs_tt
+		IF = {
+			limit = { has_tech = tech_alicorn_blue }
+			set_technology = {
+				tech_alicorn_green = 1
+			}
+			set_technology = {
+				tech_alicorn_purple = 1
+			}
+		}
+		ELSE_IF = {
+			limit = { has_tech = tech_alicorn_green }
+			set_technology = {
+				tech_alicorn_blue = 1
+			}
+			set_technology = {
+				tech_alicorn_purple = 1
+			}
+		}
+		ELSE_IF = {
+			limit = { has_tech = tech_alicorn_purple }
+			set_technology = {
+				tech_alicorn_green = 1
+			}
+			set_technology = {
+				tech_alicorn_blue = 1
+			}
+		}
+	}
+} 
+
+
+### Political Tree ###
+
+shared_focus = { 
+	id = CAL_search_the_city
+	icon = GFX_goal_CAL_canterlot
+	x = 8
+	y = 9
+	cost = 1
+
+	available_if_capitulated = yes 
+	ai_will_do = { 
+		factor = 110
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus CAL_search_the_city"
 		
 	}
 } 
+
+shared_focus = { 
+	id = CAL_explosives_mwt
+	icon = GFX_goal_CAL_canterlot
+	x = -2
+	y = 1
+	cost = 1
+	prerequisite = { focus = CAL_search_the_city }
+	relative_position_id = CAL_search_the_city
+	available_if_capitulated = yes 
+	ai_will_do = { 
+		factor = 110
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus CAL_explosives_mwt"
+		
+	}
+} 
+
+shared_focus = { 
+	id = CAL_blueprints_mom
+	icon = GFX_goal_CAL_canterlot
+	x = 0
+	y = 1
+	cost = 1
+	prerequisite = { focus = CAL_search_the_city }
+	relative_position_id = CAL_search_the_city
+	available_if_capitulated = yes 
+	ai_will_do = { 
+		factor = 110
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus CAL_blueprints_mom"
+		
+	}
+} 
+
+shared_focus = { 
+	id = CAL_security_codes_moi
+	icon = GFX_goal_CAL_canterlot
+	x = 2
+	y = 1
+	cost = 1
+	prerequisite = { focus = CAL_search_the_city }
+	relative_position_id = CAL_search_the_city
+	available_if_capitulated = yes 
+	ai_will_do = { 
+		factor = 110
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus CAL_security_codes_moi"
+		
+	}
+}
+
+shared_focus = { 
+	id = CAL_assault_stable_city
+	icon = GFX_goal_CAL_canterlot
+	x = 0
+	y = 2
+	cost = 1
+	prerequisite = { focus = CAL_explosives_mwt }
+	prerequisite = { focus = CAL_blueprints_mom }
+	prerequisite = { focus = CAL_security_codes_moi }
+	relative_position_id = CAL_search_the_city
+	available_if_capitulated = yes 
+	ai_will_do = { 
+		factor = 110
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus CAL_assault_stable_city"
+		
+	}
+}
+
+shared_focus = { 
+	id = CAL_ghoul_compliance
+	icon = GFX_goal_CAL_canterlot
+	x = -2
+	y = 3
+	cost = 1
+	prerequisite = { focus = CAL_assault_stable_city }
+	relative_position_id = CAL_search_the_city
+	available_if_capitulated = yes 
+	ai_will_do = { 
+		factor = 1100
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus CAL_ghoul_compliance"
+		
+	}
+}
+
+shared_focus = { 
+	id = CAL_loot_stable_riches
+	icon = GFX_goal_CAL_canterlot
+	x = 2
+	y = 3
+	cost = 1
+	prerequisite = { focus = CAL_assault_stable_city }
+	relative_position_id = CAL_search_the_city
+	available_if_capitulated = yes 
+	ai_will_do = { 
+		factor = 110
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus CAL_loot_stable_riches"
+		
+	}
+}
+
+shared_focus = { 
+	id = CAL_breach_mas_hub
+	icon = GFX_goal_CAL_canterlot
+	x = 0
+	y = 3
+	cost = 1
+	prerequisite = { focus = CAL_assault_stable_city }
+	relative_position_id = CAL_search_the_city
+	available_if_capitulated = yes 
+	ai_will_do = { 
+		factor = 110
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus CAL_breach_mas_hub"
+		
+	}
+}
+
+shared_focus = { 
+	id = CAL_our_own_imp
+	icon = GFX_goal_CAL_canterlot
+	x = -1
+	y = 4
+	cost = 1
+	prerequisite = { focus = CAL_breach_mas_hub }
+	relative_position_id = CAL_search_the_city
+	available_if_capitulated = yes 
+	ai_will_do = { 
+		factor = 110
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus CAL_our_own_imp"
+		
+	}
+}
+
+shared_focus = { 
+	id = CAL_delve_into_archives
+	icon = GFX_goal_CAL_canterlot
+	x = 1
+	y = 4
+	cost = 1
+	prerequisite = { focus = CAL_breach_mas_hub }
+	relative_position_id = CAL_search_the_city
+	available_if_capitulated = yes 
+	ai_will_do = { 
+		factor = 110
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus CAL_delve_into_archives"
+		
+	}
+}
+
+shared_focus = { 
+	id = CAL_a_world_of_my_own_design
+	icon = GFX_goal_CAL_canterlot
+	x = 0
+	y = 5
+	cost = 1
+	prerequisite = { focus = CAL_our_own_imp }
+	prerequisite = { focus = CAL_delve_into_archives }
+	relative_position_id = CAL_search_the_city
+	available_if_capitulated = yes 
+	ai_will_do = { 
+		factor = 110
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus CAL_a_world_of_my_own_design"
+		
+	}
+}
 
 
 
