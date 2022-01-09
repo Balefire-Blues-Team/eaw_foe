@@ -46,5 +46,5 @@ dependencies={
 }
 picture="thumbnail.png"
 supported_version="1.11.*"
-path="C:/Users/flynn/Documents/Paradox Interactive/Hearts of Iron IV/mod/balefire_blues"
+path="mod/balefire_blues"
 remote_file_id="2307988796"
