@@ -65,7 +65,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_reorg
 	x = 10
 	y = 1
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_dangers_of_canterlot }
 	available_if_capitulated = yes 
 	relative_position_id = CAL_dangers_of_canterlot
@@ -83,10 +83,10 @@ shared_focus = {
 
 shared_focus = { 
 	id = CAL_corrall_ghouls
-	icon = GFX_goal_CAL_canterlot
+	icon = GFX_goal_CAL_corrall_Ghouls
 	x = -2
 	y = 1
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_restructure_expedition }
 	available_if_capitulated = yes 
 	relative_position_id = CAL_restructure_expedition
@@ -132,10 +132,10 @@ shared_focus = {
 
 shared_focus = { 
 	id = CAL_loot_depots
-	icon = GFX_goal_CAL_canterlot
+	icon = GFX_goal_CAL_loot_depots
 	x = -3
 	y = 2
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_corrall_ghouls }
 	available_if_capitulated = yes 
 	relative_position_id = CAL_restructure_expedition
@@ -154,10 +154,10 @@ shared_focus = {
 
 shared_focus = { 
 	id = CAL_undying_soldiers
-	icon = GFX_goal_CAL_canterlot
+	icon = GFX_goal_CAL_canterlot_ghouls
 	x = -3
 	y = 3
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_loot_depots }
 	available_if_capitulated = yes 
 	relative_position_id = CAL_restructure_expedition
@@ -174,10 +174,10 @@ shared_focus = {
 
 shared_focus = { 
 	id = CAL_scavenge_university
-	icon = GFX_goal_CAL_canterlot
+	icon = GFX_goal_CAL_canterlot_university
 	x = -1
 	y = 2
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_corrall_ghouls }
 	available_if_capitulated = yes 
 	relative_position_id = CAL_restructure_expedition
@@ -203,7 +203,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_new_alicorns
 	x = 2
 	y = 1
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_restructure_expedition }
 	available = {has_completed_focus = CAL_our_own_imp}
 	available_if_capitulated = yes 
@@ -227,7 +227,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_raid_border
 	x = 3
 	y = 2
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_new_alicorns }
 	available_if_capitulated = yes 
 	relative_position_id = CAL_restructure_expedition
@@ -246,10 +246,10 @@ shared_focus = {
 
 shared_focus = { 
 	id = CAL_alicorns_officers
-	icon = GFX_goal_CAL_canterlot
+	icon = GFX_goal_CAL_alicorn_officers
 	x = 3
 	y = 3
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_raid_border }
 	available_if_capitulated = yes 
 	relative_position_id = CAL_restructure_expedition
@@ -266,10 +266,10 @@ shared_focus = {
 
 shared_focus = { 
 	id = CAL_joint_mage_companies
-	icon = GFX_goal_CAL_canterlot
+	icon = GFX_goal_CAL_joint_mages
 	x = 1
 	y = 2
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_new_alicorns }
 	available_if_capitulated = yes 
 	relative_position_id = CAL_restructure_expedition
@@ -321,7 +321,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -2
 	y = 4
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_improved_designs }
 	prerequisite = { focus = CAL_undying_soldiers }
 	available_if_capitulated = yes 
@@ -341,7 +341,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 2
 	y = 4
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_improved_designs }
 	prerequisite = { focus = CAL_alicorns_officers }
 	available_if_capitulated = yes 
@@ -361,7 +361,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 0
 	y = 4
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_improved_designs }
 	available_if_capitulated = yes 
 	relative_position_id = CAL_restructure_expedition
@@ -388,7 +388,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_alicorns
 	x = 0
 	y = 5
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_personal_command }
 	prerequisite = { focus = CAL_elevate_the_worthy }
 	prerequisite = { focus = CAL_magical_thought_suppression }
@@ -446,7 +446,17 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 8
 	y = 9
-	cost = 1
+	cost = 5.72
+	available = {
+		has_completed_focus = CAL_dangers_of_canterlot
+		OR = {
+			And = {
+				is_historical_focus_on = no
+				is_ai = yes
+			}
+			is_ai = no
+		}
+	}
 
 	available_if_capitulated = yes 
 	ai_will_do = { 
@@ -455,7 +465,25 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_search_the_city"
-		
+		capital_scope = { add_resource = {type = advanced amount = 6}}
+		random_list = {
+				25 = {
+					army_experience = 20
+				}
+				25 = {
+					add_offsite_building = { type = industrial_complex level = 1 }
+				}
+				25 = {
+					add_equipment_to_stockpile = { type = ballistic_equipment_3 amount = 250 producer = OWE }
+				}
+				25 = {
+					add_tech_bonus = {
+						bonus = 0.5
+						uses = 2
+						category = industry
+					}
+				}
+			}
 	}
 } 
 
@@ -464,7 +492,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -2
 	y = 1
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_search_the_city }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
@@ -474,7 +502,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_explosives_mwt"
-		
+		add_equipment_to_stockpile = { type = explosive_demolitions_equipment_2 amount = 300 producer = OWE }
+		set_technology = {demolitions_weaponry_tech = 1}
 	}
 } 
 
@@ -483,7 +512,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 0
 	y = 1
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_search_the_city }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
@@ -493,7 +522,17 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_blueprints_mom"
-		
+		add_political_power = 50
+		add_tech_bonus = {
+			bonus = 1.0
+			uses = 1
+			category = production_tech
+		}
+		add_tech_bonus = {
+			bonus = 1.0
+			uses = 1
+			category = tool_tech
+		}
 	}
 } 
 
@@ -502,7 +541,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 2
 	y = 1
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_search_the_city }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
@@ -512,7 +551,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_security_codes_moi"
-		
+		set_technology = {electronics_tech_level_scientific = 1}
+		add_tech_bonus = {
+			bonus = 1.0
+			uses = 1
+			category = electronics
+		}
 	}
 }
 
@@ -521,7 +565,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 0
 	y = 2
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_explosives_mwt }
 	prerequisite = { focus = CAL_blueprints_mom }
 	prerequisite = { focus = CAL_security_codes_moi }
@@ -530,10 +574,15 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 110
 	} 
-
+	will_lead_to_war_with = SCI
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_assault_stable_city"
-		
+		SCI = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		add_stability = -0.05
 	}
 }
 
@@ -542,7 +591,8 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -2
 	y = 3
-	cost = 1
+	cost = 5.72
+	available = {owns_state = 180}
 	prerequisite = { focus = CAL_assault_stable_city }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
@@ -552,7 +602,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_ghoul_compliance"
-		
+		180 = { add_compliance = 50 }
 	}
 }
 
@@ -561,7 +611,8 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 2
 	y = 3
-	cost = 1
+	cost = 5.72
+	available = {owns_state = 180}
 	prerequisite = { focus = CAL_assault_stable_city }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
@@ -571,7 +622,29 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_loot_stable_riches"
-		
+		180 = {
+			remove_building = {
+   				type = arms_factory
+    			level = 1
+				}
+			remove_building = {
+   				type = industrial_complex
+    			level = 1
+				}
+			add_resource = {type = metal amount = -5 }
+			add_resource = {type = energy amount = -5}
+			add_resource = {type = circuitry amount = -3}
+			add_resource = {type = advanced amount = -3}
+		}
+		capital_scope = {
+			add_extra_state_shared_building_slots = 2 
+			add_building_construction = { type = industrial_complex instant_build = yes level = 1}
+			add_building_construction = { type = arms_factory instant_build = yes level = 1}
+			add_resource = {type = metal amount = 7}
+			add_resource = {type = energy amount = 7}
+			add_resource = {type = circuitry amount = 5}
+			add_resource = {type = advanced amount = 5}
+		}
 	}
 }
 
@@ -580,7 +653,8 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 0
 	y = 3
-	cost = 1
+	cost = 5.72
+	available = {owns_state = 180}
 	prerequisite = { focus = CAL_assault_stable_city }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
@@ -590,7 +664,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_breach_mas_hub"
-		
+		country_event = canterlot_ali.4
 	}
 }
 
@@ -599,7 +673,8 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -1
 	y = 4
-	cost = 1
+	cost = 5.72
+	available = {has_completed_focus = CAL_reorganize_army}
 	prerequisite = { focus = CAL_breach_mas_hub }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
@@ -609,7 +684,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_our_own_imp"
-		
+		swap_ideas = {remove_idea = CAL_unreplenishable_losses2 add_idea = CAL_unreplenishable_losses3}
 	}
 }
 
@@ -618,7 +693,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 1
 	y = 4
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_breach_mas_hub }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
@@ -628,7 +703,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_delve_into_archives"
-		
+		country_event = canterlot_ali.5
 	}
 }
 
@@ -637,7 +712,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 0
 	y = 5
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_our_own_imp }
 	prerequisite = { focus = CAL_delve_into_archives }
 	relative_position_id = CAL_search_the_city
@@ -645,10 +720,14 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 110
 	} 
-
+	will_lead_to_war_with = GLY
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_a_world_of_my_own_design"
-		
+		GLY = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 }
 
@@ -657,7 +736,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -1
 	y = 6
-	cost = 1
+	cost = 5.72
 	mutually_exclusive = { focus = CAL_i_am_nightseer }
 	prerequisite = { focus = CAL_a_world_of_my_own_design }
 	relative_position_id = CAL_search_the_city
@@ -677,7 +756,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -1
 	y = 7
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_i_am_goddess }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
@@ -696,7 +775,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 1
 	y = 6
-	cost = 1
+	cost = 5.72
 	mutually_exclusive = { focus = CAL_i_am_goddess }
 	prerequisite = { focus = CAL_a_world_of_my_own_design }
 	relative_position_id = CAL_search_the_city
@@ -716,7 +795,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 1
 	y = 7
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_i_am_nightseer }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
@@ -735,7 +814,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 0
 	y = 8
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_misstress_of_stars }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
@@ -754,7 +833,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -2
 	y = 9
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_bend_to_my_will }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
@@ -773,7 +852,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -3
 	y = 10
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_greatest_city }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
@@ -792,7 +871,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -1
 	y = 10
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_greatest_city }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
@@ -811,7 +890,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -4
 	y = 11
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_spread_our_might }
 	prerequisite = { focus = CAL_riches_of_canterlot }
 	relative_position_id = CAL_search_the_city
@@ -831,7 +910,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -2
 	y = 11
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_spread_our_might }
 	prerequisite = { focus = CAL_riches_of_canterlot }
 	relative_position_id = CAL_search_the_city
@@ -851,7 +930,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 0
 	y = 9
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_bend_to_my_will }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
@@ -870,7 +949,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 0
 	y = 11
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_dip_conquered }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
@@ -889,7 +968,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -1
 	y = 12
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_subjugate_raiders }
 	prerequisite = { focus = CAL_strike_doglantis }
 	relative_position_id = CAL_search_the_city
@@ -909,7 +988,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -3
 	y = 12
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_rebuild_palace }
 	prerequisite = { focus = CAL_strike_doglantis }
 	relative_position_id = CAL_search_the_city
@@ -929,7 +1008,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -2
 	y = 13
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_great_crystal_road }
 	prerequisite = { focus = CAL_alicorns_on_every_mountain }
 	relative_position_id = CAL_search_the_city
@@ -949,7 +1028,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 2
 	y = 9
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_bend_to_my_will }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
@@ -968,7 +1047,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 1
 	y = 10
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_expand_railway }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
@@ -987,7 +1066,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 3
 	y = 10
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_expand_railway }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
@@ -1006,7 +1085,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 2
 	y = 11
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_expand_arsenal }
 	prerequisite = { focus = CAL_think_to_victory }
 	relative_position_id = CAL_search_the_city
@@ -1026,7 +1105,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 4
 	y = 11
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_expand_arsenal }
 	prerequisite = { focus = CAL_think_to_victory }
 	relative_position_id = CAL_search_the_city
@@ -1046,7 +1125,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 1
 	y = 12
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_subjugate_raiders }
 	prerequisite = { focus = CAL_crack_stable_2 }
 	relative_position_id = CAL_search_the_city
@@ -1066,7 +1145,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 3
 	y = 12
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_sweet_apple_bastion }
 	prerequisite = { focus = CAL_crack_stable_2 }
 	relative_position_id = CAL_search_the_city
@@ -1086,7 +1165,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 2
 	y = 13
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_foster_compliance }
 	prerequisite = { focus = CAL_build_up_region }
 	relative_position_id = CAL_search_the_city
@@ -1106,7 +1185,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 0
 	y = 13
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_subjugate_raiders }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
@@ -1125,7 +1204,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 0
 	y = 14
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_mistress_loyal_subjects }
 	prerequisite = { focus = CAL_mistress_industry }
 	prerequisite = { focus = CAL_final_battle }
@@ -1146,7 +1225,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 0
 	y = 15
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_star_strikes_goddess }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
@@ -1165,7 +1244,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -2
 	y = 1
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_star_shall_gleam }
 	relative_position_id = CAL_star_shall_gleam
 	available_if_capitulated = yes 
@@ -1184,7 +1263,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -3
 	y = 2
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_magic_unequaled }
 	relative_position_id = CAL_star_shall_gleam
 	available_if_capitulated = yes 
@@ -1203,7 +1282,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -1
 	y = 2
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_magic_unequaled }
 	relative_position_id = CAL_star_shall_gleam
 	available_if_capitulated = yes 
@@ -1222,7 +1301,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -2
 	y = 3
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_serve_misstress }
 	prerequisite = { focus = CAL_procure_wastes }
 	relative_position_id = CAL_star_shall_gleam
@@ -1242,7 +1321,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 2
 	y = 1
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_star_shall_gleam }
 	relative_position_id = CAL_star_shall_gleam
 	available_if_capitulated = yes 
@@ -1261,7 +1340,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 1
 	y = 2
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_knowledge_stars }
 	relative_position_id = CAL_star_shall_gleam
 	available_if_capitulated = yes 
@@ -1280,7 +1359,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 3
 	y = 2
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_knowledge_stars }
 	relative_position_id = CAL_star_shall_gleam
 	available_if_capitulated = yes 
@@ -1299,7 +1378,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 2
 	y = 3
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_open_up_society }
 	prerequisite = { focus = CAL_incomparable_intellect }
 	relative_position_id = CAL_star_shall_gleam
@@ -1319,7 +1398,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 0
 	y = 1
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_star_shall_gleam }
 	relative_position_id = CAL_star_shall_gleam
 	available_if_capitulated = yes 
@@ -1338,7 +1417,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 0
 	y = 3
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_reorganize_army }
 	relative_position_id = CAL_star_shall_gleam
 	available_if_capitulated = yes 
@@ -1357,7 +1436,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -2
 	y = 4
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_all_shall_serve }
 	relative_position_id = CAL_star_shall_gleam
 	available_if_capitulated = yes 
@@ -1376,7 +1455,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 2
 	y = 4
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_all_shall_serve }
 	relative_position_id = CAL_star_shall_gleam
 	available_if_capitulated = yes 
@@ -1395,7 +1474,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 0
 	y = 4
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_all_shall_serve }
 	relative_position_id = CAL_star_shall_gleam
 	available_if_capitulated = yes 
@@ -1414,7 +1493,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 0
 	y = 5
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_their_inferiority }
 	relative_position_id = CAL_star_shall_gleam
 	available_if_capitulated = yes 
@@ -1433,7 +1512,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 0
 	y = 6
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_my_perfection }
 	relative_position_id = CAL_star_shall_gleam
 	available_if_capitulated = yes 
@@ -1452,7 +1531,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -7
 	y = 15
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_star_strikes_goddess }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
@@ -1471,7 +1550,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -1
 	y = 1
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_southwards_march }
 	relative_position_id = CAL_southwards_march
 	available_if_capitulated = yes 
@@ -1490,7 +1569,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -2
 	y = 2
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_bring_dogs_to_heel }
 	relative_position_id = CAL_southwards_march
 	available_if_capitulated = yes 
@@ -1509,7 +1588,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 0
 	y = 2
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_southwards_march }
 	relative_position_id = CAL_southwards_march
 	available_if_capitulated = yes 
@@ -1528,7 +1607,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 1
 	y = 1
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_southwards_march }
 	relative_position_id = CAL_southwards_march
 	available_if_capitulated = yes 
@@ -1547,7 +1626,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 2
 	y = 2
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_finish_what_uni_started }
 	relative_position_id = CAL_southwards_march
 	available_if_capitulated = yes 
@@ -1566,7 +1645,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -2
 	y = 3
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_canine_subjugation }
 	prerequisite = { focus = CAL_over_the_canterine }
 	relative_position_id = CAL_southwards_march
@@ -1586,7 +1665,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -2
 	y = 4
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_conquer_the_talons }
 	relative_position_id = CAL_southwards_march
 	available_if_capitulated = yes 
@@ -1605,7 +1684,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 0
 	y = 3
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_over_the_canterine }
 	relative_position_id = CAL_southwards_march
 	available_if_capitulated = yes 
@@ -1624,7 +1703,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 0
 	y = 4
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_attack_gorge }
 	relative_position_id = CAL_southwards_march
 	available_if_capitulated = yes 
@@ -1643,7 +1722,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 2
 	y = 3
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_over_the_canterine }
 	prerequisite = { focus = CAL_retool_industry }
 	relative_position_id = CAL_southwards_march
@@ -1663,7 +1742,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 2
 	y = 4
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_decimate_raiders }
 	relative_position_id = CAL_southwards_march
 	available_if_capitulated = yes 
@@ -1682,7 +1761,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 0
 	y = 5
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_spoils_of_destruction }
 	prerequisite = { focus = CAL_blood_for_misstress }
 	prerequisite = { focus = CAL_mercenaries_of_the_misstress }
@@ -1703,7 +1782,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 8
 	y = 15
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_star_strikes_goddess }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
@@ -1722,7 +1801,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 1
 	y = 1
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_prepare_against_red }
 	relative_position_id = CAL_prepare_against_red
 	available_if_capitulated = yes 
@@ -1741,7 +1820,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 1
 	y = 2
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_lay_rail_tracks }
 	relative_position_id = CAL_prepare_against_red
 	available_if_capitulated = yes 
@@ -1760,7 +1839,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 3
 	y = 2
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_lay_rail_tracks }
 	relative_position_id = CAL_prepare_against_red
 	available_if_capitulated = yes 
@@ -1779,7 +1858,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 2
 	y = 3
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_sabotage_fillydelphia }
 	prerequisite = { focus = CAL_endless_promises }
 	relative_position_id = CAL_prepare_against_red
@@ -1799,7 +1878,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 3
 	y = 4
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_totally_free_city }
 	relative_position_id = CAL_prepare_against_red
 	available_if_capitulated = yes 
@@ -1818,7 +1897,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -1
 	y = 1
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_prepare_against_red }
 	relative_position_id = CAL_prepare_against_red
 	available_if_capitulated = yes 
@@ -1837,7 +1916,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -1
 	y = 2
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_fortify_ponyville }
 	relative_position_id = CAL_prepare_against_red
 	available_if_capitulated = yes 
@@ -1856,7 +1935,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -3
 	y = 2
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_fortify_ponyville }
 	relative_position_id = CAL_prepare_against_red
 	available_if_capitulated = yes 
@@ -1875,7 +1954,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -2
 	y = 3
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_frontline_supply }
 	prerequisite = { focus = CAL_arms_industry }
 	relative_position_id = CAL_prepare_against_red
@@ -1895,7 +1974,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -3
 	y = 4
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_divide_and_conquer }
 	relative_position_id = CAL_prepare_against_red
 	available_if_capitulated = yes 
@@ -1914,7 +1993,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 0
 	y = 3
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_frontline_supply }
 	prerequisite = { focus = CAL_endless_promises }
 	relative_position_id = CAL_prepare_against_red
@@ -1934,7 +2013,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = -1
 	y = 4
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_replace_dead_master }
 	relative_position_id = CAL_prepare_against_red
 	available_if_capitulated = yes 
@@ -1953,7 +2032,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 1
 	y = 4
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_replace_dead_master }
 	relative_position_id = CAL_prepare_against_red
 	available_if_capitulated = yes 
@@ -1972,7 +2051,7 @@ shared_focus = {
 	icon = GFX_goal_CAL_canterlot
 	x = 0
 	y = 5
-	cost = 1
+	cost = 5.72
 	prerequisite = { focus = CAL_tame_everfree }
 	prerequisite = { focus = CAL_enslave_tribals }
 	relative_position_id = CAL_prepare_against_red
