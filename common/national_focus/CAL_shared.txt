@@ -674,7 +674,7 @@ shared_focus = {
 	x = -1
 	y = 4
 	cost = 5.72
-	available = {has_completed_focus = CAL_reorganize_army}
+	available = {has_completed_focus = CAL_restructure_expedition}
 	prerequisite = { focus = CAL_breach_mas_hub }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
@@ -789,7 +789,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_i_am_nightseer"
-		
+		hidden_effect = {
+			set_country_flag = CAL_startstruck_unlock_flag
+		}
 	}
 }
 
@@ -808,7 +810,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_misstress_of_stars"
-		
+		swap_ruler_traits = { remove = deranged_alicorn add = mistress_of_stars }
+		custom_effect_tooltip = CAL_new_conscription_tt
+		hidden_effect = {
+			swap_ideas = { remove_idea = canterlot_unity add_idea = starstruck_guardians}
+		}
 	}
 }
 
@@ -827,7 +833,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_bend_to_my_will"
-		
+		Core_original_SCI = yes
+		Core_original_GLY = yes
 	}
 }
 
@@ -846,7 +853,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_greatest_city"
-		
+		capital_scope = {
+			set_building_level = {
+				type = infrastructure
+				level = 10
+				instant_build = yes
+			}
+			add_extra_state_shared_building_slots = 2 add_building_construction = { type = industrial_complex instant_build = yes level = 1}
+		}
 	}
 }
 
@@ -865,7 +879,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_riches_of_canterlot"
-		
+		capital_scope = {
+			add_extra_state_shared_building_slots = 2 add_building_construction = { type = arms_factory instant_build = yes level = 1}
+			add_resource = { type = metal amount = 8}
+			add_resource = { type = composites amount = 8}
+			add_resource = { type = circuitry amount = 4}
+			add_resource = { type = advanced amount = 4}
+		}
 	}
 }
 
@@ -884,7 +904,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_spread_our_might"
-		
+		capital_scope = {
+			add_building_construction = {
+					type = air_base
+					level = 4
+					instant_build = yes
+				}
+		}
+		air_experience = 50
 	}
 }
 
@@ -904,7 +931,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_rebuild_palace"
-		
+		add_stability = 0.05
+		custom_effect_tooltip = CAL_palace_tt
 	}
 }
 
@@ -922,9 +950,14 @@ shared_focus = {
 		factor = 110
 	} 
 
+	will_lead_to_war_with = CCD
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_strike_doglantis"
-		
+		CCD = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 }
 
@@ -943,7 +976,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_dip_conquered"
-		
+		add_ideas = CAL_alicorn_dipping
 	}
 }
 
@@ -959,10 +992,14 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 110
 	} 
-
+	will_lead_to_war_with = PRA
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_subjugate_raiders"
-		
+		PRA = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 }
 
@@ -974,6 +1011,11 @@ shared_focus = {
 	cost = 5.72
 	prerequisite = { focus = CAL_subjugate_raiders }
 	prerequisite = { focus = CAL_strike_doglantis }
+	available = {
+		CCD = {
+			all_core_land_owned_by_prev_sphere = yes
+		}
+	}
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
 	ai_will_do = { 
@@ -982,7 +1024,17 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_great_crystal_road"
-		
+		build_railway = {
+			level = 2
+			build_only_on_allied = no
+			controller_priority = {
+				base = 1
+			}
+			fallback = yes
+			path = { 8748 4896 8726 2029 12717 2461 15120 476 11091 5934 12852 3020 3886 8760 8740 13238 3591 14551 2537 12599 5711  }
+			start_province = 4561
+			target_province = 5711
+		}
 	}
 }
 
@@ -994,6 +1046,11 @@ shared_focus = {
 	cost = 5.72
 	prerequisite = { focus = CAL_rebuild_palace }
 	prerequisite = { focus = CAL_strike_doglantis }
+	available = {
+		CCD = {
+			all_core_land_owned_by_prev_sphere = yes
+		}
+	}
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
 	ai_will_do = { 
@@ -1002,7 +1059,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_alicorns_on_every_mountain"
-		
+		every_owned_state = {
+			limit = {is_core_of = CCD}
+			add_compliance = 0.40
+		}
 	}
 }
 
@@ -1139,7 +1199,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_foster_compliance"
-		
+		every_owned_state = {
+			limit = {OR = {is_core_of = PRA is_core_of = STA}}
+			add_compliance = 0.40
+		}
 	}
 }
 
