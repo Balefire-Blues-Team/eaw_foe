@@ -290,7 +290,7 @@ country_event = {
 
 	trigger = {
 		tag = SHA
-		has_country_leader = {name = "Gawdyna Grimfeathers" ruling_only = yes}
+		has_country_leader = {character = SHA_char_Gawd ruling_only = yes}
 		has_full_control_of_state = 575
 	}
  	fire_only_once = yes
@@ -315,14 +315,7 @@ country_event = {
 			set_country_flag = SHA_LRA_prison_colony
 			LRA = {
 				set_cosmetic_tag = LRA_prison_colony
-				create_country_leader = {
-						name = "Local Council"
-						desc = "foreign_rule"
-						picture = ""
-						expire = "1965.1.1"
-						ideology = rebuilder
-						traits = {}
-				}
+				recruit_character = SHA_LRA_char_Local_Council
 				add_popularity = {
 					ideology = visionary
 					popularity = 1
@@ -353,7 +346,7 @@ country_event = {
 country_event = {
  	id = shatteredhoof.10
  	title = shatteredhoof.10.t
- 	desc = {text = shatteredhoof.10.d.gawd trigger = {has_country_leader = {name = "Gawdyna Grimfeathers" ruling_only = yes}}}
+ 	desc = {text = shatteredhoof.10.d.gawd trigger = {has_country_leader = {character = SHA_char_Gawd ruling_only = yes}}}
 	desc = {text = shatteredhoof.10.d.topaz trigger = {has_country_leader = {name = "Mr. Topaz" ruling_only = yes}}}
 
 	picture = GFX_event_test
@@ -364,7 +357,7 @@ country_event = {
 	option = {
 	ai_chance = { factor = 10 }
 	trigger = {
-		has_country_leader = {name = "Gawdyna Grimfeathers" ruling_only = yes}
+		has_country_leader = {character = SHA_char_Gawd ruling_only = yes}
 		has_game_rule = {
             rule = SHA_no_NCR_rule
             option = YES_NCR
@@ -415,17 +408,9 @@ country_event = {
 		set_politics = { ruling_party = visionary elections_allowed = no }
 		add_popularity = { ideology = visionary popularity = 0.20 }
 		remove_ideas = SHA_secret_dragon
-		create_corps_commander = {
-			name = "Little Gear"
-			picture = "Little_Gear.tga"
-			traits = { intelligent_trait charismatic_trait }
-			id = 11110
-			skill = 2
-			attack_skill = 4
-			defense_skill = 1
-			planning_skill = 1
-			logistics_skill = 1
-		}
+		recruit_character = SHA_char_littlegear
+		retire_character = SHA_char_deadeyes
+		
 	}
 	
 }
@@ -545,9 +530,9 @@ country_event = {
 				limit = {is_owned_by = ROOT}
 				set_state_flag = do_not_decimate
 			}
+			
 		}
 	}
-	
 	option = {
 	ai_chance = { factor = 0 }
 		name = shatteredhoof_ncr.1.b
@@ -573,30 +558,40 @@ country_event = {
 	ai_chance = { factor = 10 }
 		name = shatteredhoof_ncr.2.a
 		set_cosmetic_tag = NCR_cosmetic
-		set_province_name = { id = 4308 name = "New Canterlot"}
+		set_province_name = { id = 4308 name = SHA_NCanterlot }
 		every_country = {
-				limit = { has_country_flag = agreed_to_join_ncr_flag}
-			If = {
+			limit = { has_country_flag = agreed_to_join_ncr_flag }
+			if = {
 				limit = {SHA = {is_ai = no}}
 			
-				SHA = { annex_country = { target = prev transfer_troops = yes }}
+				SHA = { annex_country = { target = prev transfer_troops = yes } }
 			}
 			else_if = {
 				limit = {SHA = {is_ai = yes}}
 			
-				SHA = { annex_country = { target = prev transfer_troops = no }}
+				SHA = { annex_country = { target = prev transfer_troops = no } }
 			}
 			every_state = {
-					limit = {
-						is_core_of = prev
-					}
-					add_claim_by = SHA
-					add_core_of = SHA
+				limit = {
+					is_core_of = prev
 				}
+				add_claim_by = SHA
+				add_core_of = SHA
+			}
 		}
+		if = {
+			limit = { MAN = { has_country_flag = agreed_to_join_ncr_flag } }
+			MAN = { MAN_char_Ember_Eclipse = { set_nationality = SHA } }
+		}
+		if = {
+			limit = { RAF = { has_country_flag = agreed_to_join_ncr_flag } }
+			RAF = { RAF_char_iron_hoof = { set_nationality = SHA } }
+		}
+		recruit_character = SHA_char_nero
 		hidden_effect = {
+			
 			808 = { 
-				set_state_name = "New Canterlot"
+				set_state_name = SHA_NCanterlot
 			}
 			country_event = {
 					id = shatteredhoof_ncr.4
@@ -660,16 +655,6 @@ country_event = {
 			add_ideas = limited_conscription
 			add_ideas = war_economy
 			remove_ideas = NCR_early_joint_exercise
-			create_field_marshal = {
-                name = "Steel Wall"
-                picture = "Steel_Wall.tga"
-                traits = { enduring_trait }
-                skill = 4
-                attack_skill = 2
-                defense_skill = 5
-                planning_skill = 3
-                logistics_skill = 2
-            }
 		}
 	}
 }
@@ -727,16 +712,19 @@ country_event = {
 			survivalism = 0
 			visionary = 100
 		}
-		hidden_effect = {
-		retire_country_leader = yes
-		}
-		create_country_leader = {
-			name = "President Gawdyna Grimfeather"
-			picture = "GFX_Gawd_animated"
-			expire = "1965.1.1"
+		remove_country_leader_role = {
+			character = SHA_char_Gawd
 			ideology = ncr_urp
-			desc = "POLITICS_Gawdyna_DESC"
-			traits = { gawd_president_trait gawd_trait }	
+		}
+		add_country_leader_role = {
+			Character = SHA_char_Gawd
+			Promote_leader = yes
+			Country_leader = {
+				ideology = ncr_urp
+				desc = "POLITICS_Gawdyna_DESC"
+				expire = “1965.1.1.1”
+				traits = { gawd_president_trait gawd_trait }
+			}
 		}
 		hidden_effect = { country_event = { id = shatteredhoof_ncr.7 days = 5}}
 	}
@@ -757,13 +745,26 @@ country_event = {
 		name = shatteredhoof_ncr.7.a
 		
 		set_party_name = { ideology = continuation long_name = EAP_long name = EAP_short }
-		create_country_leader = {
-			name = "General Olive Branch"
-			picture = "OliveBranch.tga"
-			expire = "1965.1.1"
-			ideology = ncr_eap
-			desc = "POLITICS_Olive_Branch_DESC"
-			traits = {  }	
+		add_country_leader_role = {
+			Character = SHA_char_olive_branch
+			Promote_leader = yes
+			Country_leader = {
+				ideology = ncr_eap
+				desc = "POLITICS_Olive_Branch_DESC"
+				expire = “1965.1.1.1”
+				traits = {
+					
+				}
+			}
+		}
+		add_corps_commander_role = {
+			Character = SHA_char_olive_branch
+			traits = { intelligent_trait enduring_trait pony_race_trait}
+			skill = 4
+			attack_skill = 2
+			defense_skill = 1
+			planning_skill = 2
+			logistics_skill = 5
 		}
 		add_popularity = { ideology = continuation popularity = 0.30 }
 		hidden_effect = { country_event = { id = shatteredhoof_ncr.8 days = 5}}
@@ -785,13 +786,17 @@ country_event = {
 		name = shatteredhoof_ncr.8.a
 		
 		set_party_name = { ideology = survivalism long_name = UfPC_long name = UfPC_short }
-		create_country_leader = {
-			name = "Govenor Rock Solid"
-			picture = "Rock_Solid.tga"
-			expire = "1965.1.1"
-			ideology = ncr_upc
-			desc = "POLITICS_Rock_Solid_DESC"
-			traits = {  }	
+		add_country_leader_role = {
+			Character = SHA_char_rock_solid
+			Promote_leader = yes
+			Country_leader = {
+				ideology = ncr_upc
+				desc = "POLITICS_Rock_Solid_DESC"
+				expire = “1965.1.1.1”
+				traits = {
+					
+				}
+			}
 		}
 		add_popularity = { ideology = survivalism popularity = 0.10 }
 		add_popularity = { ideology = continuation popularity = -0.05 }
@@ -814,13 +819,17 @@ country_event = {
 		name = shatteredhoof_ncr.9.a
 		
 		set_party_name = { ideology = destruction long_name = PL_long name = PL_short }
-		create_country_leader = {
-			name = "Marshal Steel Wall"
-			picture = "Steel_Wall.tga"
-			expire = "1965.1.1"
-			ideology = ncr_pl
-			desc = "POLITICS_Steel_Wall_DESC"
-			traits = {  }	
+		add_country_leader_role = {
+			Character = SHA_char_steel_wall
+			Promote_leader = yes
+			Country_leader = {
+				ideology = ncr_pl
+				desc = "POLITICS_Steel_Wall_DESC"
+				expire = “1965.1.1.1”
+				traits = {
+					
+				}
+			}
 		}
 		add_popularity = { ideology = destruction popularity = 0.05 }
 		#hidden_effect = { country_event = { id = shatteredhoof_ncr.10 days = 50}}#
@@ -952,39 +961,9 @@ country_event = {
 		name = shatteredhoof_ncr.14.b
 		add_stability = -0.1
 		add_manpower = 2000
-		create_corps_commander = {
-			name = "Sentinel Dusk"
-			picture = "gen_enclave_2.tga"
-			traits = { cloudsdale_commander enduring_trait lucky_trait}
-			#id = 9789
-			skill = 2
-			attack_skill = 2
-			defense_skill = 3
-			planning_skill = 1
-			logistics_skill = 1
-		}
-		create_corps_commander = {
-			name = "Frozen Mint"
-			picture = "Frozen_Mint.tga"
-			traits = { cloudsdale_commander strong_trait enduring_trait }
-			#id = 9787
-			skill = 1
-			attack_skill = 1
-			defense_skill = 1
-			planning_skill = 1
-			logistics_skill = 2
-		}
-		create_corps_commander = {
-			name = "Silent Night"
-			picture = "gen_enclave_1.tga"
-			traits = { cloudsdale_commander intelligent_trait agile_trait}
-			#id = 9790
-			skill = 2
-			attack_skill = 2
-			defense_skill = 1
-			planning_skill = 2
-			logistics_skill = 2
-		}
+		recruit_character = NEV_char_sentineldusk
+		recruit_character = NEV_char_silentnight
+		recruit_character = NEV_char_frozenmint
 		add_popularity = { ideology = destruction popularity = 0.08 }
 		custom_effect_tooltip = NCR_enclave_pardoned_tt
 		hidden_effect = { set_country_flag = NCR_enclave_pardoned_flag}
@@ -1039,21 +1018,21 @@ country_event = {
 		modifier = {
 			factor = 1000
 			has_country_leader = {
-				name = "Homage"
+				character = TEN_char_homage
 				ruling_only = yes
 			}
 		}
 		modifier = {
 			factor = 9
 			has_country_leader = {
-				name = "The Twilight Society"
+				character = TEN_char_twilight_society
 				ruling_only = yes
 			}
 		}
 		modifier = {
 			factor = 4
 			has_country_leader = {
-				name = "Chief Grim Star"
+				character = TEN_char_grimstar
 				ruling_only = yes
 			}
 		}
@@ -1283,7 +1262,7 @@ country_event = {
 		modifier = {
 			factor = 0.1
 			has_country_leader = {
-				name = "Chief Grim Star"
+				character = TEN_char_grimstar
 				ruling_only = yes
 			}
 		}
@@ -1325,14 +1304,14 @@ country_event = {
 		modifier = {
 			factor = 0
 			has_country_leader = {
-				name = "Homage"
+				character = TEN_char_homage
 				ruling_only = yes
 			}
 		}
 		modifier = {
 			factor = 0.5
 			has_country_leader = {
-				name = "The Twilight Society"
+				character = TEN_char_twilight_society
 				ruling_only = yes
 			}
 		}
@@ -1770,14 +1749,14 @@ country_event = {
 		modifier = {
 			factor = 999
 			has_country_leader = {
-				name = "Chief Grim Star"
+				character = TEN_char_grimstar
 				ruling_only = yes
 			}
 		}
 		modifier = {
 			factor = 999
 			has_country_leader = {
-				name = "The Twilight Society"
+				character = TEN_char_twilight_society
 				ruling_only = yes
 			}
 		}
@@ -1796,7 +1775,7 @@ country_event = {
 	trigger { 
 		TEN = { 
 			has_country_leader = {
-				name = "Homage"
+				character = TEN_char_homage
 				ruling_only = yes 
 			}
 		}
@@ -2243,14 +2222,7 @@ country_event = {
 			puppet = TEN
 		}
 		retire_country_leader = yes
-		create_country_leader = {
-			name = "Governor Highrise"
-			picture = 
-			expire = "1965.1.1"
-			ideology = ncr_urp
-			desc = 
-			traits = {  }
-		}
+		recruit_character = SHA_TEN_char_Governor_Highrise_name
 		drop_cosmetic_tag = yes
 		set_cosmetic_tag = TEN_NCR_state
 	}
@@ -2302,36 +2274,11 @@ country_event = {
 		custom_effect_tooltip = NCR_wasteland_volunteers_arrived_tt
 		show_ideas_tooltip = flaperon_barron
 		show_ideas_tooltip = NCR_Gallant
-		create_corps_commander = {
-			name = "Clank"
-			picture = "Clank.tga"
-			traits = { perceptive_trait lucky_trait }
-			skill = 2
-			attack_skill = 2
-			defense_skill = 2
-			planning_skill = 3
-			logistics_skill = 1
-		}
-		create_corps_commander = {
-			name = "Bright Cargo"
-			picture = "Bright_Cargo.tga"
-			traits = { intelligent_trait enduring_trait }
-			skill = 2
-			attack_skill = 1
-			defense_skill = 2
-			planning_skill = 2
-			logistics_skill = 3
-		}
-		create_corps_commander = {
-			name = "Gallant Aegis"
-			picture = "gallant_aegis.tga"
-			traits = { charismatic_trait agile_trait }
-			skill = 2
-			attack_skill = 1
-			defense_skill = 1
-			planning_skill = 3
-			logistics_skill = 3
-		}
+		recruit_character = SHA_char_clank
+		recruit_character = SHA_char_brightcargo
+		recruit_character = SHA_char_gallantaegis
+		recruit_character = SHA_char_flaperon
+		recruit_character = SHA_char_Gallant
 		hidden_effect = {set_country_flag = NCR_wasteland_volunteers_arrived}
 	}
 	
@@ -2346,7 +2293,7 @@ country_event = {
 
 	trigger = {
 		original_tag = SHA
-		has_war_with = RED
+		has_war_with = EYE
 		surrender_progress > 0.35
 	}
  	fire_only_once = yes
@@ -2372,7 +2319,7 @@ country_event = {
 
 	trigger = {
 		original_tag = SHA
-		has_war_with = RED
+		has_war_with = EYE
 	}
  	fire_only_once = yes
 	mean_time_to_happen = {
