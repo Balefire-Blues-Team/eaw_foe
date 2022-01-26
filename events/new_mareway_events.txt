@@ -1088,6 +1088,7 @@ country_event = { ###Noble Coup - Civil War Setup
 
 	option = { #Recall Marshal
 		name = newmareway.23.a
+		MWY_noble_civil_war_state_flag_clear = yes
 		MWY_noble_civil_war_state_flag_setup = yes
 		
 		country_event = newmareway.24
@@ -1117,6 +1118,7 @@ country_event = { ###Noble Civil War Start
 					target = MWY
 					type = annex_everything
 				}
+				MWY_noble_civil_war_army_setup = yes
 			}
 			MWY_noble_civil_war_coast_breakaway = yes
 			set_global_flag = MWY_noble_cw_flag
@@ -2856,10 +2858,603 @@ country_event = { ###Self Defense Training 2
 			logistics_skill = 2
 		}
 		custom_effect_tooltip = MWY_star_gazer_stats_tt
+
+		set_global_flag = MWY_star_gazer_is_trained
+	}
+}
+
+country_event = { ### EYE - Mareway's Offer
+ 	id = newmareway.85
+ 	title = newmareway.85.title
+ 	desc = newmareway.85.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Accept
+		name = newmareway.85.a
+		ai_chance = {
+			base = 50
+			modifier = {
+				add = 25
+				has_country_leader = { 
+					ruling_only = yes
+					character = EYE_char_red_eye
+				}
+			}
+			modifier = {
+				add = -5
+				check_variable = {
+                    era_blood_mane_sanity_var = 1
+				}
+			}
+			modifier = {
+				add = 5
+				check_variable = {
+                    era_blood_mane_sanity_var > 1
+				}
+			}
+			modifier = {
+				add = 5
+				check_variable = {
+                    era_blood_mane_sanity_var > 2
+				}
+			}
+			modifier = {
+				add = 5
+				check_variable = {
+                    era_blood_mane_sanity_var > 3
+				}
+			}
+			modifier = {
+				add = 5
+				check_variable = {
+                    era_blood_mane_sanity_var > 4
+				}
+			}
+			modifier = {
+				factor = 0
+				has_country_leader = { 
+					ruling_only = yes
+					character = EYE_char_chainlink
+				}
+			}
+		}
+		diplomatic_relation = {
+			country = ERA
+			relation = non_aggression_pact
+			active = no
+		}
+		EYE = { add_to_faction = MWY }
+		MWY = {
+			country_event = {
+				id = newmareway.86
+				days = 1
+				random = 48
+			}
+		}
+		hidden_effect = {
+			set_country_flag = EYE_broke_ERA_alliance
+			set_country_flag = EYE_alliance_with_mwy
+		}
+	}
+
+	option = { #Decline
+		name = newmareway.85.b
+		ai_chance = {
+			base = 50
+			modifier = {
+				add = -25
+				has_country_leader = { 
+					ruling_only = yes
+					character = EYE_char_red_eye
+				}
+			}
+			modifier = {
+				add = 5
+				check_variable = {
+                    era_blood_mane_sanity_var = 1
+				}
+			}
+			modifier = {
+				add = -5
+				check_variable = {
+                    era_blood_mane_sanity_var > 1
+				}
+			}
+			modifier = {
+				add = -5
+				check_variable = {
+                    era_blood_mane_sanity_var > 2
+				}
+			}
+			modifier = {
+				add = -5
+				check_variable = {
+                    era_blood_mane_sanity_var > 3
+				}
+			}
+			modifier = {
+				add = -5
+				check_variable = {
+                    era_blood_mane_sanity_var > 4
+				}
+			}
+		}
+		MWY = {
+			country_event = {
+				id = newmareway.87
+				days = 1
+				random = 48
+			}
+		}
+	}
+}
+
+country_event = { ### EYE Accepts
+ 	id = newmareway.86
+ 	title = newmareway.86.title
+ 	desc = newmareway.86.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { 
+		name = newmareway.86.a
+		add_war_support = 0.10
+		add_stability = -0.05
+	}
+}
+
+country_event = { ### EYE Declines
+ 	id = newmareway.87
+ 	title = newmareway.87.title
+ 	desc = newmareway.87.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { 
+		name = newmareway.87.a
+		add_political_power = -50
+		add_stability = -0.05
+	}
+}
+
+country_event = { ### The Calm Before the Storm
+ 	id = newmareway.88
+ 	title = newmareway.88.title
+ 	desc = newmareway.88.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { 
+		name = newmareway.88.a
+		add_war_support = 0.15
+		add_stability = 0.10
+	}
+}
+
+country_event = { ### Conscription Scheme
+ 	id = newmareway.89
+ 	title = newmareway.89.title
+ 	desc = newmareway.89.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { #Marshal
+		name = newmareway.89.a
+		if = {
+			limit = { has_country_flag = MWY_marshal_flag_strongwing }
+			custom_effect_tooltip = MWY_go_to_strongwing_tt
+			hidden_effect = {
+				country_event = {
+					id = newmareway.90
+					days = 1
+					random = 48
+				}
+			}
+		}
+		if = {
+			limit = { has_country_flag = MWY_marshal_flag_gatormaw }
+			custom_effect_tooltip = MWY_go_to_gatormaw_tt
+			hidden_effect = {
+				country_event = {
+					id = newmareway.91
+					days = 1
+					random = 48
+				}
+			}
+		}
+	}
+
+	option = { #Spymaster
+		name = newmareway.89.b
+		if = {
+			limit = { has_country_flag = MWY_spy_flag_red_widow }
+			custom_effect_tooltip = MWY_go_to_red_widow_tt
+			hidden_effect = {
+				country_event = {
+					id = newmareway.92
+					days = 1
+					random = 48
+				}
+			}
+		}
+		if = {
+			limit = { has_country_flag = MWY_spy_flag_light }
+			custom_effect_tooltip = MWY_go_to_pale_light_tt
+			hidden_effect = {
+				country_event = {
+					id = newmareway.93
+					days = 1
+					random = 48
+				}
+			}
+		}
+	}
+
+	option = {
+		name = newmareway.89.c
+		custom_effect_tooltip = MWY_do_conscription_alone_tt
+		add_political_power = -25
+		hidden_effect = {
+			country_event = {
+				id = newmareway.94
+				days = 1
+				random = 48
+			}
+		}
+	}
+}
+
+country_event = { ### Conscription Scheme - Marshal - Strongwing
+ 	id = newmareway.90
+ 	title = newmareway.90.title
+ 	desc = newmareway.90.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = newmareway.90.a
+		add_political_power = -150
+
+		custom_effect_tooltip = MWY_strongwing_supports_army_law_4_tt
+		hidden_effect = {
+			set_country_flag = MWY_strongwing_always_support_army_law_4
+			set_variable = { army_laws_button_4_mar_var = 3 }
+			
+			MWY_calc_all_laws_approval = yes
+		}
+	}
+}
+
+country_event = { ### Conscription Scheme - Marshal - Gatormaw
+ 	id = newmareway.91
+ 	title = newmareway.91.title
+ 	desc = newmareway.91.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = newmareway.91.a
+		add_political_power = -50
+
+		custom_effect_tooltip = MWY_gatormaw_supports_army_law_4_tt
+		hidden_effect = {
+			set_country_flag = MWY_gatormaw_always_support_army_law_4
+			set_variable = { army_laws_button_4_mar_var = 3 }
+			
+			MWY_calc_all_laws_approval = yes
+		}
+	}
+}
+
+country_event = { ### Conscription Scheme - Spymaster - Red Widow
+ 	id = newmareway.92
+ 	title = newmareway.92.title
+ 	desc = newmareway.92.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = newmareway.92.a
+		add_political_power = -100
+
+		custom_effect_tooltip = MWY_widow_supports_army_law_4_tt
+		hidden_effect = {
+			set_country_flag = MWY_widow_always_support_army_law_4
+			set_variable = { army_laws_button_4_spy_var = 3 }
+
+			MWY_calc_all_laws_approval = yes
+		}
+	}
+}
+
+country_event = { ### Conscription Scheme - Spymaster - Pale Light
+ 	id = newmareway.93
+ 	title = newmareway.93.title
+ 	desc = newmareway.93.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = newmareway.93.a
+		add_political_power = -25
+
+		custom_effect_tooltip = MWY_light_supports_army_law_4_tt
+		hidden_effect = {
+			set_country_flag = MWY_light_always_support_army_law_4
+			set_variable = { army_laws_button_4_spy_var = 3 }
+			
+			MWY_calc_all_laws_approval = yes
+		}
+	}
+}
+
+country_event = { ### Conscription Scheme - Do it Alone
+ 	id = newmareway.93
+ 	title = newmareway.93.title
+ 	desc = newmareway.93.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = newmareway.93.a
+		
+	}
+}
+
+country_event = { ### Conscription Scheme - Marshal - Strongwing pt 2
+ 	id = newmareway.94
+ 	title = newmareway.94.title
+ 	desc = newmareway.94.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = newmareway.94.a
+		add_timed_idea = {
+			idea = MWY_recovering_from_conscription
+			days = 365
+		}
+		custom_effect_tooltip = MWY_set_army_law_4_tt
+		add_ideas = serf_conscript_law
+		MWY_army_laws_4_opinion_effect = yes
+		hidden_effect = {
+			MWY_reset_army_laws_frames = yes
+			set_variable = { army_laws_var = 4 }
+			set_variable = { army_laws_button_4_frame_var = 2 }
+			MWY_army_law_cooldown_effect = yes
+			add_political_power = -50
+		}
+	}
+}
+
+country_event = { ### Conscription Scheme - Marshal - Gatormaw pt 2
+ 	id = newmareway.95
+ 	title = newmareway.95.title
+ 	desc = newmareway.95.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = newmareway.95.a
+		add_manpower = -300
+		custom_effect_tooltip = MWY_set_army_law_4_tt
+		add_ideas = serf_conscript_law
+		MWY_army_laws_4_opinion_effect = yes
+		hidden_effect = {
+			MWY_reset_army_laws_frames = yes
+			set_variable = { army_laws_var = 4 }
+			set_variable = { army_laws_button_4_frame_var = 2 }
+			MWY_army_law_cooldown_effect = yes
+			add_political_power = -50
+		}
+	}
+}
+
+country_event = { ### Conscription Scheme - Spymaster - Red Widow pt 2
+ 	id = newmareway.96
+ 	title = newmareway.96.title
+ 	desc = newmareway.96.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = newmareway.96.a
+		custom_effect_tooltip = MWY_glow_supports_army_law_4_tt
+		MWY_lower_grainlands_opinion = yes
+		hidden_effect = {
+			set_country_flag = MWY_glow_always_support_army_law_4
+			set_variable = { army_laws_button_4_chan_var = 3 }
+			
+			MWY_calc_all_laws_approval = yes
+		}
+	}
+
+	option = {
+		name = newmareway.96.b
+		custom_effect_tooltip = MWY_stew_supports_army_law_4_tt
+		if = {
+			limit = { has_country_flag = MWY_steward_flag_wavy_waters }
+			MWY_lower_peninsula_opinion = yes
+			hidden_effect = {
+				set_country_flag = MWY_waters_always_support_army_law_4
+				set_variable = { army_laws_button_4_stew_var = 3 }
+				
+				MWY_calc_all_laws_approval = yes
+			}
+		}
+		if = {
+			limit = { has_country_flag = MWY_steward_flag_sunflower }
+			MWY_lower_amethyst_opinion = yes
+			hidden_effect = {
+				set_country_flag = MWY_sunflower_always_support_army_law_4
+				set_variable = { army_laws_button_4_stew_var = 3 }
+				
+				MWY_calc_all_laws_approval = yes
+			}
+		}
+	}
+}
+
+country_event = { ### Conscription Scheme - Spymaster - Pale Light pt 2
+ 	id = newmareway.97
+ 	title = newmareway.97.title
+ 	desc = newmareway.97.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = newmareway.97.a
+		add_stability = -0.10
+		custom_effect_tooltip = MWY_set_army_law_4_tt
+		add_ideas = serf_conscript_law
+		MWY_army_laws_4_opinion_effect = yes
+		hidden_effect = {
+			MWY_reset_army_laws_frames = yes
+			set_variable = { army_laws_var = 4 }
+			set_variable = { army_laws_button_4_frame_var = 2 }
+			MWY_army_law_cooldown_effect = yes
+			add_political_power = -50
+		}
+	}
+}
+
+country_event = { ### Conscription Scheme - Do it Alone pt 2
+ 	id = newmareway.98
+ 	title = newmareway.98.title
+ 	desc = newmareway.98.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = newmareway.98.a
+
+		custom_effect_tooltip = MWY_set_army_law_4_tt
+		add_ideas = serf_conscript_law
+		hidden_effect = {
+			MWY_reset_army_laws_frames = yes
+			set_variable = { army_laws_var = 4 }
+			set_variable = { army_laws_button_4_frame_var = 2 }
+			MWY_army_law_cooldown_effect = yes
+			add_political_power = -50
+		}
+
+		MWY_lower_all_opinion = yes
+	}
+}
+
+country_event = { ### Punished Star Gazer
+ 	id = newmareway.99
+ 	title = newmareway.99.title
+ 	desc = newmareway.99.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { 
+		name = newmareway.99.a
+		ai_chance = {
+			base = 100
+		}
+		country_event = {
+			id = newmareway.101
+			days = 3
+		}
+	}
+
+	option = { 
+		name = newmareway.99.b
+		ai_chance = {
+			base = 0
+		}
+		add_stability = 0.01
 	}
 }
 
 
+country_event = { ### Star Gazer Escapes
+ 	id = newmareway.100
+ 	title = newmareway.100.title
+ 	desc = newmareway.100.desc
+	picture = GFX_event_medieval_city_3
+
+	trigger = {
+		tag = ERA
+		owns_state = 549
+		has_global_flag = WY_star_gazer_is_trained
+		MWY = { exists = no }
+	}
+	mean_time_to_happen = {
+		days = 15
+	}
+ 	fire_only_once = yes
+
+	option = { 
+		name = newmareway.100.a
+		add_stability = -0.01
+		set_global_flag = MWY_star_gazer_escaped
+		hidden_effect = {
+			if = {
+				limit = { has_global_flag = SHA_NCR_formed_flag }
+				SHA = {
+					country_event = {
+						id = newmareway.99
+						days = 59
+						random = 48
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = { ### Punished Star Gazer
+ 	id = newmareway.101
+ 	title = newmareway.101.title
+ 	desc = newmareway.101.desc
+	picture = GFX_event_medieval_city_3
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = { 
+		name = newmareway.101.a
+
+		recruit_character = MWY_char_punished_star_gazer
+		custom_effect_tooltip = MWY_punished_star_gazer_stats_tt
+	}
+}
 
 ### Affairs of Court Random Events ###
 	country_event = { ###Levies kept up

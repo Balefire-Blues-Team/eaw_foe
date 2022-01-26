@@ -976,7 +976,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_dip_conquered"
-		add_ideas = CAL_alicorn_dipping
+		remove_ideas = CAL_unreplenishable_losses3
+		swap_ideas = { remove_idea = normies_law_none add_idea = normies_law_allowed}
 	}
 }
 
@@ -1082,7 +1083,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_mistress_loyal_subjects"
-		
+		add_ideas = CAL_alicorn_dipping
 	}
 }
 
@@ -1101,7 +1102,25 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_expand_railway"
-		
+		build_railway = {
+			level = 2
+			build_only_on_allied = no
+			controller_priority = {
+				base = 1
+			}
+			fallback = yes
+			path = { 12891 13413 }
+			start_province = 4561
+			target_province = 8767
+		}
+		801 = {
+				add_building_construction = {
+				type = supply_node
+				province = 8767
+				level = 1
+				instant_build = yes
+				}
+			}
 	}
 }
 
@@ -1120,7 +1139,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_think_to_victory"
-		
+		add_research_slot = 1
 	}
 }
 
@@ -1139,7 +1158,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_expand_arsenal"
-		
+		set_technology = {
+				infantry_tech_level_scientific = 1
+				support_tech_level_scientific = 1
+			}
 	}
 }
 
@@ -1149,6 +1171,7 @@ shared_focus = {
 	x = 2
 	y = 11
 	cost = 5.72
+	
 	prerequisite = { focus = CAL_expand_arsenal }
 	prerequisite = { focus = CAL_think_to_victory }
 	relative_position_id = CAL_search_the_city
@@ -1157,9 +1180,14 @@ shared_focus = {
 		factor = 110
 	} 
 
+	will_lead_to_war_with = STA
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_crack_stable_2"
-		
+		STA = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 }
 
@@ -1169,6 +1197,7 @@ shared_focus = {
 	x = 4
 	y = 11
 	cost = 5.72
+	available = {owns_state = 476}
 	prerequisite = { focus = CAL_expand_arsenal }
 	prerequisite = { focus = CAL_think_to_victory }
 	relative_position_id = CAL_search_the_city
@@ -1179,7 +1208,25 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_sweet_apple_bastion"
-		
+		build_railway = {
+			level = 2
+			build_only_on_allied = no
+			controller_priority = {
+				base = 1
+			}
+			fallback = yes
+			path = {  }
+			start_province = 380
+			target_province = 6206
+		}
+		476 = {
+			add_building_construction = {
+				type = bunker
+				province = 6206
+				level = 5
+				instant_build = yes
+				}
+		}
 	}
 }
 
@@ -1189,6 +1236,7 @@ shared_focus = {
 	x = 1
 	y = 12
 	cost = 5.72
+	available = {owns_state = 735}
 	prerequisite = { focus = CAL_subjugate_raiders }
 	prerequisite = { focus = CAL_crack_stable_2 }
 	relative_position_id = CAL_search_the_city
@@ -1222,7 +1270,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_build_up_region"
-		
+		every_owned_state = {
+			limit = {OR = {is_core_of = PRA is_core_of = STA}}
+			add_extra_state_shared_building_slots = 1 add_building_construction = {type = infrastructure level = 1 instant_build = yes}
+		}
+		65 = {
+			add_building_construction = {type = industrial_complex level = 1 instant_build = yes}
+		}
 	}
 }
 
@@ -1242,7 +1296,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_mistress_industry"
-		
+		Two_random_arms_factory = yes
+		One_random_industrial_complex = yes
 	}
 }
 
@@ -1252,16 +1307,28 @@ shared_focus = {
 	x = 0
 	y = 13
 	cost = 5.72
+	available = {
+		any_neighbor_country = {
+			tag = UNI
+		}
+	}
+	bypass = {
+		owns_state = 518
+	}
 	prerequisite = { focus = CAL_subjugate_raiders }
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes 
 	ai_will_do = { 
 		factor = 110
 	} 
-
+	will_lead_to_war_with = UNI
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_final_battle"
-		
+		UNI = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 }
 
@@ -1271,6 +1338,9 @@ shared_focus = {
 	x = 0
 	y = 14
 	cost = 5.72
+	available = {
+		owns_state = 518
+	}
 	prerequisite = { focus = CAL_mistress_loyal_subjects }
 	prerequisite = { focus = CAL_mistress_industry }
 	prerequisite = { focus = CAL_final_battle }
@@ -1282,7 +1352,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_star_strikes_goddess"
-		
+		country_event = canterlot_ali.10
 	}
 }
 
@@ -1301,7 +1371,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_star_shall_gleam"
-		
+		add_stability = 0.10
 	}
 }
 
@@ -1320,7 +1390,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_magic_unequaled"
-		
+		add_ideas = CAL_unequaled_magic_idea
 	}
 }
 
@@ -1339,7 +1409,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_serve_misstress"
-		
+		swap_ideas = { remove_idea = CAL_unequaled_magic_idea add_idea = CAL_unequaled_magic_idea2 }
 	}
 }
 
@@ -1358,7 +1428,19 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_procure_wastes"
-		
+		set_technology = {
+			tools_tech_level_scientific = 1
+			exploitation_tech_level_scientific = 1
+		}
+		capital_scope = {
+			add_resource = {type = metal amount = 4}
+			add_resource = {type = water amount = 4}
+			add_resource = {type = energy amount = 4}
+			add_resource = {type = composites amount = 4}
+			add_resource = {type = circuitry amount = 4}
+			add_resource = {type = advanced amount = 4}
+			add_resource = {type = crystals amount = 4}
+		}
 	}
 }
 
@@ -1378,7 +1460,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_stellar_wisdom"
-		
+		swap_ideas = { remove_idea = CAL_unequaled_magic_idea2 add_idea = CAL_unequaled_magic_idea3 }
 	}
 }
 
@@ -1397,7 +1479,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_knowledge_stars"
-		
+		swap_ideas = { remove_idea = wasteland_research_base add_idea = advanced_research_base}
 	}
 }
 
@@ -1416,7 +1498,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_open_up_society"
-		
+		swap_ideas = { remove_idea = open_stable_society add_idea = slaver_society }
+		set_country_flag = slavery_allowed
+		custom_effect_tooltip = foe_10_gain_slave_tt
+			add_to_variable = {
+				var = foe_slaves_var
+				value = 10
+			}
 	}
 }
 
@@ -1435,7 +1523,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_incomparable_intellect"
-		
+		add_country_leader_trait = CAL_unstable_genius
 	}
 }
 
@@ -1455,7 +1543,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_astral_insight"
-		
+		add_stability = -0.15
+		two_random_infrastructure = yes
+		One_random_arms_factory = yes
+		One_random_industrial_complex = yes
+		one_random_infrastructure = yes
+		add_offsite_building = { type = industrial_complex level = 1 }
+		add_offsite_building = { type = arms_factory level = 1 }
 	}
 }
 
@@ -1474,7 +1568,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_reorganize_army"
-		
+		custom_effect_tooltip = CAL_allow_coring_tt
+		clear_country_flag = coring_button_hidden
 	}
 }
 
@@ -1493,7 +1588,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_all_shall_serve"
-		
+		add_country_leader_trait = CAL_all_shall_serve
 	}
 }
 
