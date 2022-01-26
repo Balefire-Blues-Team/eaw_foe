@@ -5,7 +5,7 @@
 
 ## Exodus Input Calculations ##
 # Core Vars #
-@core_refugee_base = 0.08
+@core_refugee_base = 0.06
 @core_nomadicity = 2
 @core_occupier_modifier = 0.8
 @core_has_core = 0.85
@@ -88,7 +88,7 @@ exodus_calculate_nomadicity = { # Called in STATE SCOPE
 	if = { # Multiply by 0.75 if the state has already suffered an exodus
 		limit = { has_state_flag = has_had_exodus }
 		if = { limit = { has_global_flag = exodus_debug } log = "EXODUS - nomadicity: has had an exodus" }
-		multiply_variable = { nomadicity = 0.75 }
+		multiply_variable = { nomadicity = 0.50 }
 	}
 	## Mixed / Generic Factors
 	# Add modifier from old occupier's ideas etc
@@ -271,7 +271,7 @@ exodus_weight_targets = { # Called in STATE SCOPE
 exodus_remove_from_target = {
 	var:global.exodus_target_state = {
 		if = { limit = { has_global_flag = exodus_debug } log = "EXODUS - remove_from_target: REMOVING [?global.exodus_state_refugees] REFUGEES" }
-		set_state_flag = { flag = has_had_exodus days = 365 }
+		set_state_flag = { flag = has_had_exodus days = 700 }
 		set_temp_variable = { temp_remove_neg = var:global.exodus_state_refugees }
 		multiply_temp_variable = { temp_remove_neg = -1 }
 		var:global.exodus_old_owner = { save_current_manpower = yes }
