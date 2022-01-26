@@ -55,25 +55,31 @@ EYE_division_limiter_stage_1 = { #Red Eye plz stop spamming units
 	enable = {
 		original_tag = EYE
 		AND = {
-			NOT = { ai_wants_divisions < 125 }
-			has_army_size = { size > 125 }
-			num_of_factories > 124
+			NOT = { ai_wants_divisions < 75 }
+			has_army_size = { size > 75 }
+			num_of_factories > 90
 		}
 	}
 	abort = {
 		OR = {
-			ai_wants_divisions < 175
-			has_army_size = { size < 175 }
+			ai_wants_divisions < 75
+			has_army_size = { size < 75 }
 			#num_of_factories < 124
-			SHA = {
-				has_army_size = { size > 125 }
+			AND = {
+				SHA = {
+					has_army_size = { size > 75 }
+				}
+				date > 1240.06.01
 			}
-			NEV = {
-				has_army_size = { size > 125 }
+			AND = {
+				NEV = {
+					has_army_size = { size > 75 }
+				}
+				date > 1240.06.01
 			}
 			any_country = {
 				has_war_with = EYE
-				has_army_size = { size > 125 }
+				has_army_size = { size > 75 }
 			}
 		}
 	}
@@ -360,7 +366,10 @@ EYE_be_nice_to_ERA = {
 		original_tag = EYE
 	}
 	abort = {
-		has_country_flag = bloody_attack_betrayal
+		OR = {
+			has_country_flag = bloody_attack_betrayal
+			has_country_flag = EYE_broke_ERA_alliance
+		}
 	}
 
 	ai_strategy = {
@@ -373,7 +382,10 @@ EYE_be_nice_to_ERA = {
 EYE_fuck_ERA = { 
 	enable = {
 		original_tag = EYE
-		has_country_flag = bloody_attack_betrayal
+		OR = {	
+			has_country_flag = bloody_attack_betrayal
+			has_country_flag = EYE_broke_ERA_alliance
+		}
 	}
 	abort = {
 		ERA = { exists = no }
@@ -383,6 +395,22 @@ EYE_fuck_ERA = {
 		type = antagonize
 		id = ERA
 		value = 40
+	}
+}
+
+EYE_be_nice_to_MWY = { 
+	enable = {
+		original_tag = EYE
+		has_country_flag = EYE_alliance_with_mwy
+	}
+	abort = {
+		MWY = { exists = no }
+	}
+
+	ai_strategy = {
+		type = befriend
+		id = MWY
+		value = 200
 	}
 }
 
