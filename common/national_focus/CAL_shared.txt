@@ -1632,7 +1632,22 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_focus_greater_matters"
-		
+		hidden_effect = {
+			remove_advisor_role = {character = "CAL_char_Nightseer_cont" slot = political_advisor}
+			remove_advisor_role = {character = "CAL_char_Nightseer_dest" slot = political_advisor}
+			remove_advisor_role = {character = "CAL_char_Nightseer_visi" slot = political_advisor}
+			remove_advisor_role = {character = "CAL_char_Nightseer_surv" slot = political_advisor}
+		}
+		recruit_character = CAL_char_cognitor
+		recruit_character = CAL_char_fortisopus
+		recruit_character = CAL_char_pecunitorem
+		recruit_character = CAL_char_indagatore
+		hidden_effect = {
+			add_ideas = CAL_cognitor
+			add_ideas = CAL_fortisopus
+			add_ideas = CAL_pecunitorem
+			add_ideas = CAL_indagatore
+		}
 	}
 }
 
@@ -1749,6 +1764,7 @@ shared_focus = {
 	x = -2
 	y = 2
 	cost = 5.72
+	available = {owns_state = 528}
 	prerequisite = { focus = CAL_bring_dogs_to_heel }
 	relative_position_id = CAL_southwards_march
 	available_if_capitulated = yes 
@@ -1758,7 +1774,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_canine_subjugation"
-		
+		every_owned_state = {
+			limit = {is_core_of = EVR}
+			add_compliance = 50
+		}
+		add_state_core = 475
 	}
 }
 
@@ -1768,6 +1788,7 @@ shared_focus = {
 	x = 0
 	y = 2
 	cost = 5.72
+	available = {owns_state = 511 REP = {exists = no}}
 	prerequisite = { focus = CAL_southwards_march }
 	relative_position_id = CAL_southwards_march
 	available_if_capitulated = yes 
@@ -1777,7 +1798,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_over_the_canterine"
-		
+		country_event = canterlot_ali.15
 	}
 }
 
@@ -1812,6 +1833,11 @@ shared_focus = {
 	y = 2
 	cost = 5.72
 	prerequisite = { focus = CAL_finish_what_uni_started }
+	available = {
+		REP = {
+				all_core_land_owned_by_prev_sphere = yes
+			}
+	}
 	relative_position_id = CAL_southwards_march
 	available_if_capitulated = yes 
 	ai_will_do = { 
@@ -1820,7 +1846,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_retool_industry"
-		
+		511 = {
+			remove_building = { type = industrial_complex level = 3}
+			add_building_construction = { type = arms_factory level = 2 instant_build = yes}
+		}
+		One_random_arms_factory = yes
+		One_random_arms_factory = yes
+		One_random_arms_factory = yes
 	}
 }
 
@@ -1837,10 +1869,14 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 110
 	} 
-
+	will_lead_to_war_with = FTA
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_conquer_the_talons"
-		
+		FTA = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 }
 
@@ -1851,6 +1887,11 @@ shared_focus = {
 	y = 4
 	cost = 5.72
 	prerequisite = { focus = CAL_conquer_the_talons }
+	available = {	
+		FTA = {
+			all_core_land_owned_by_prev_sphere = yes
+		}
+	}
 	relative_position_id = CAL_southwards_march
 	available_if_capitulated = yes 
 	ai_will_do = { 
@@ -1859,7 +1900,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_mercenaries_of_the_misstress"
-		
+		add_manpower = 400
+		every_owned_state = {
+			limit = {is_core_of = FTA}
+			transfer_state_to = REP
+			add_core_of = REP
+		}
 	}
 }
 
@@ -1875,10 +1921,14 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 110
 	} 
-
+	will_lead_to_war_with = GOR
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_attack_gorge"
-		
+		GOR = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 }
 
@@ -1889,6 +1939,11 @@ shared_focus = {
 	y = 4
 	cost = 5.72
 	prerequisite = { focus = CAL_attack_gorge }
+	available = {	
+		GOR = {
+			all_core_land_owned_by_prev_sphere = yes
+		}
+	}
 	relative_position_id = CAL_southwards_march
 	available_if_capitulated = yes 
 	ai_will_do = { 
@@ -1897,7 +1952,51 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_blood_for_misstress"
-		
+		REP = {
+		division_template = {
+	        name = "Bloody Stars"
+	        is_locked = no
+	        regiments = {
+		    infantry = { x = 0 y = 0 }
+			infantry = { x = 0 y = 1 }
+			infantry = { x = 1 y = 0 }
+			infantry = { x = 1 y = 1 }
+			infantry = { x = 0 y = 2 }
+			infantry = { x = 1 y = 2 }
+	        }
+        }
+		}
+		330 = {
+			create_unit = {
+						division = "name = \"1st Bloodsworn\" division_template = \"Bloody Stars\" start_experience_factor = 0.25 start_equipment_factor = 1.0"
+						owner = REP
+					}
+			create_unit = {
+						division = "name = \"1st Bloodsworn\" division_template = \"Bloody Stars\" start_experience_factor = 0.25 start_equipment_factor = 1.0"
+						owner = REP
+					}
+			create_unit = {
+						division = "name = \"1st Bloodsworn\" division_template = \"Bloody Stars\" start_experience_factor = 0.25 start_equipment_factor = 1.0"
+						owner = REP
+					}
+			create_unit = {
+						division = "name = \"1st Bloodsworn\" division_template = \"Bloody Stars\" start_experience_factor = 0.25 start_equipment_factor = 1.0"
+						owner = REP
+					}
+			create_unit = {
+						division = "name = \"1st Bloodsworn\" division_template = \"Bloody Stars\" start_experience_factor = 0.25 start_equipment_factor = 1.0"
+						owner = REP
+					}
+			create_unit = {
+						division = "name = \"1st Bloodsworn\" division_template = \"Bloody Stars\" start_experience_factor = 0.25 start_equipment_factor = 1.0"
+						owner = REP
+					}
+		}
+		every_owned_state = {
+			limit = {is_core_of = GOR}
+			transfer_state_to = REP
+			add_core_of = REP
+		}
 	}
 }
 
@@ -1914,10 +2013,14 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 110
 	} 
-
+	will_lead_to_war_with = PBN
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_decimate_raiders"
-		
+		PBN = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 }
 
@@ -1928,6 +2031,11 @@ shared_focus = {
 	y = 4
 	cost = 5.72
 	prerequisite = { focus = CAL_decimate_raiders }
+	available = {	
+		PBN = {
+			all_core_land_owned_by_prev_sphere = yes
+		}
+	}
 	relative_position_id = CAL_southwards_march
 	available_if_capitulated = yes 
 	ai_will_do = { 
@@ -1936,7 +2044,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_spoils_of_destruction"
-		
+		add_timed_idea = {idea = FSR_pile_of_caps days = 180}
+		every_owned_state = {
+			limit = {is_core_of = PBN}
+			transfer_state_to = REP
+			add_core_of = REP
+		}
 	}
 }
 
@@ -1957,7 +2070,36 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_glisten_appleloosa"
-		
+		army_experience = 50
+		Two_random_arms_factory = yes
+		REP = {
+			army_experience = 50
+			Two_random_arms_factory = yes
+		}
+		every_owned_state = {
+			limit = {
+				OR = {
+					is_core_of = LIT
+					is_core_of = MAS
+					is_core_of = NAP
+					is_core_of = OAP
+					is_core_of = ROK
+				}
+			}
+			transfer_state_to = REP
+		}
+		every_state = {
+			limit = {
+				OR = {
+					is_core_of = LIT
+					is_core_of = MAS
+					is_core_of = NAP
+					is_core_of = OAP
+					is_core_of = ROK
+				}
+			}
+			add_claim_by = REP
+		}
 	}
 }
 
