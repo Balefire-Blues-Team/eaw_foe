@@ -2118,7 +2118,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_prepare_against_red"
-		
+		country_event = canterlot_ali.16
 	}
 }
 
@@ -2128,6 +2128,11 @@ shared_focus = {
 	x = 1
 	y = 1
 	cost = 5.72
+	available = {
+		controls_state = 492
+		controls_state = 512
+		controls_state = 593
+	}
 	prerequisite = { focus = CAL_prepare_against_red }
 	relative_position_id = CAL_prepare_against_red
 	available_if_capitulated = yes 
@@ -2137,7 +2142,25 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_lay_rail_tracks"
-		
+		build_railway = {
+			level = 2
+			build_only_on_allied = no
+			controller_priority = {
+				base = 1
+			}
+			fallback = yes
+			start_province = 8860
+			target_province = 15769
+		}
+		492 = {
+			add_building_construction = { type = infrastructure instant_build = yes level = 2}
+		}
+		513 = {
+			add_building_construction = { type = infrastructure instant_build = yes level = 2}
+		}
+		505 = {
+			add_building_construction = { type = infrastructure instant_build = yes level = 2}
+		}
 	}
 }
 
@@ -2156,7 +2179,20 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_endless_promises"
-		
+		if = {
+			limit = {RED = {exists = yes}}
+			add_collaboration = {
+				target = RED
+				value = 0.3
+			}
+		}
+		if = {
+			limit = {FSR = {exists = yes}}
+			add_collaboration = {
+				target = FSR
+				value = 0.3
+			}
+		}
 	}
 }
 
@@ -2166,6 +2202,9 @@ shared_focus = {
 	x = 3
 	y = 2
 	cost = 5.72
+	bypass = {
+		owns_state = 532
+	}
 	prerequisite = { focus = CAL_lay_rail_tracks }
 	relative_position_id = CAL_prepare_against_red
 	available_if_capitulated = yes 
@@ -2175,7 +2214,46 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_sabotage_fillydelphia"
-		
+		532 = {
+			damage_building = {
+				type = infrastructure
+				damage = 2
+			}
+			damage_building = {
+				type = arms_factory
+				damage = 3
+			}
+		}
+		48 = {
+			damage_building = {
+				type = infrastructure
+				damage = 2
+			}
+			damage_building = {
+				type = arms_factory
+				damage = 3
+			}
+		}
+		45 = {
+			damage_building = {
+				type = infrastructure
+				damage = 2
+			}
+			damage_building = {
+				type = arms_factory
+				damage = 3
+			}
+		}
+		538 = {
+			damage_building = {
+				type = infrastructure
+				damage = 2
+			}
+			damage_building = {
+				type = arms_factory
+				damage = 3
+			}
+		}
 	}
 }
 
@@ -2185,6 +2263,12 @@ shared_focus = {
 	x = 2
 	y = 3
 	cost = 5.72
+	available = {
+		owns_state = 525
+		owns_state = 532
+		owns_state = 48
+		owns_state = 45
+	}
 	prerequisite = { focus = CAL_sabotage_fillydelphia }
 	prerequisite = { focus = CAL_endless_promises }
 	relative_position_id = CAL_prepare_against_red
@@ -2195,7 +2279,51 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_totally_free_city"
-		
+		SSR = {
+			transfer_state = 525
+			transfer_state = 532
+			transfer_state = 48
+			transfer_state = 45
+			drop_cosmetic_tag = yes
+			set_cosmetic_tag = CAL_SSR_empyrea_cosm
+		}
+		puppet = SSR
+		532 = {set_state_name = "Nightseer's Factories"
+			set_province_name = {
+				id = 9017
+				name = CAL_nightfac_name
+			}
+			set_province_name = {
+				id = 9048
+				name = CAL_empcrat_name
+			}
+		}
+		525 = {set_state_name = "Empyrea Approach"}
+		45 = {set_state_name = "Empyrea Fun-Farm"}
+		If = {
+			limit = {owns_state = 542}
+			SSR = {transfer_state = 542 add_state_core = 542}
+		}
+		If = {
+			limit = {owns_state = 536}
+			SSR = {transfer_state = 536 add_state_core = 536}
+		}
+		If = {
+			limit = {owns_state = 545}
+			SSR = {transfer_state = 545 add_state_core = 545}
+		}
+		If = {
+			limit = {owns_state = 538}
+			SSR = {transfer_state = 538 add_state_core = 538}
+		}
+		hidden_effect = {
+			SSR = {
+				add_state_core = 525
+				add_state_core = 532
+				add_state_core = 48
+				add_state_core = 45
+			}
+		}
 	}
 }
 
@@ -2214,7 +2342,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_industrial_integration"
-		
+		Two_random_arms_factory = yes
+		Two_random_industrial_complex = yes
+		SSR = {
+			Two_random_arms_factory = yes
+			Two_random_industrial_complex = yes
+		}
 	}
 }
 
@@ -2224,6 +2357,7 @@ shared_focus = {
 	x = -1
 	y = 1
 	cost = 5.72
+	bypass = {owns_state = 593}
 	prerequisite = { focus = CAL_prepare_against_red }
 	relative_position_id = CAL_prepare_against_red
 	available_if_capitulated = yes 
@@ -2233,7 +2367,54 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_fortify_ponyville"
-		
+		477 = {
+				add_building_construction = {
+				type = bunker
+				province = 12091
+				level = 4
+				instant_build = yes
+				}
+				add_building_construction = {
+				type = bunker
+				province = 8807
+				level = 4
+				instant_build = yes
+				}
+				add_building_construction = {
+				type = bunker
+				province = 6207
+				level = 4
+				instant_build = yes
+				}
+				add_building_construction = { type = infrastructure instant_build = yes level = 1}
+			}
+		65 = {
+				add_building_construction = {
+				type = bunker
+				province = 8860
+				level = 4
+				instant_build = yes
+				}
+				add_building_construction = {
+				type = bunker
+				province = 13675
+				level = 4
+				instant_build = yes
+				}
+				add_building_construction = {
+				type = bunker
+				province = 2682
+				level = 4
+				instant_build = yes
+				}
+				add_building_construction = {
+				type = bunker
+				province = 14482
+				level = 4
+				instant_build = yes
+				}
+				add_building_construction = { type = infrastructure instant_build = yes level = 1}
+			}
 	}
 }
 
@@ -2252,7 +2433,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_frontline_supply"
-		
+		add_ideas = CAL_frontline_supply_idea
 	}
 }
 
@@ -2271,7 +2452,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_arms_industry"
-		
+		One_random_arms_factory = yes
+		One_random_arms_factory = yes
+		One_random_arms_factory = yes
 	}
 }
 
@@ -2281,6 +2464,7 @@ shared_focus = {
 	x = -2
 	y = 3
 	cost = 5.72
+	available = {owns_state = 473 owns_state = 529}
 	prerequisite = { focus = CAL_frontline_supply }
 	prerequisite = { focus = CAL_arms_industry }
 	relative_position_id = CAL_prepare_against_red
@@ -2291,7 +2475,26 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_divide_and_conquer"
-		
+		country_event = canterlot_ali.17
+		FLT = {
+			CAL = {
+			every_owned_state = {
+				limit = {
+					OR = {
+						is_core_of = FLT
+						is_core_of = SSC
+					}
+				}
+				transfer_state_to = FLT
+				add_core_of = FLT
+			}
+			}
+			transfer_state = 498
+			add_state_core = 498
+			drop_cosmetic_tag = yes
+			set_cosmetic_tag = CAL_FLT_eclipse_cult_cosm
+		}
+		puppet = FLT
 	}
 }
 
@@ -2310,7 +2513,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_all_must_worship"
-		
+		every_country = {
+			limit = {is_subject_of = CAL}
+			add_ideas = CAL_tithe_idea
+		}
 	}
 }
 
@@ -2320,6 +2526,9 @@ shared_focus = {
 	x = 0
 	y = 3
 	cost = 5.72
+	available = {
+		owns_state = 593
+	}
 	prerequisite = { focus = CAL_frontline_supply }
 	prerequisite = { focus = CAL_endless_promises }
 	relative_position_id = CAL_prepare_against_red
@@ -2330,7 +2539,26 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_replace_dead_master"
-		
+		CAT = {
+			add_state_core = 593
+			add_state_core = 513
+			add_state_core = 505
+			add_state_core = 492
+			add_state_core = 533
+			add_state_core = 510
+			add_state_core = 523
+
+			transfer_state = 593
+			transfer_state = 513
+			transfer_state = 505
+			transfer_state = 492
+			transfer_state = 533
+			transfer_state = 510
+			transfer_state = 523
+			drop_cosmetic_tag = yes
+			set_cosmetic_tag = CAL_CAT_children_cosm
+		}
+		puppet = CAT
 	}
 }
 
@@ -2349,7 +2577,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_tame_everfree"
-		
+		every_state = {
+			limit = {
+				OR = {is_core_of = CAT is_core_of = EVR}
+			}
+			add_manpower = 500
+			add_extra_state_shared_building_slots = 2
+		}
 	}
 }
 
@@ -2368,7 +2602,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_enslave_tribals"
-		
+		CAT = {
+			Two_random_industrial_complex = yes
+			Two_random_arms_factory = yes
+			Two_random_infrastructure = yes
+			One_random_infrastructure = yes
+		}
 	}
 }
 
@@ -2388,27 +2627,17 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_let_them_serve"
-		
+		every_state = {
+			limit = {is_core_of = CAT}
+			add_core_of = CAL
+		}
+		Core_original_EVR = yes
+		annex_country = {
+			target = CAT
+			transfer_troops = yes
+		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ### Generics ###
