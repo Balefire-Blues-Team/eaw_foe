@@ -161,17 +161,7 @@ country_event = { ###Trottingham Reinforcements
 			factor = 30
 		}
 
-		create_corps_commander = {
-			name = "Paladin Crumb Pudding"
-			portrait_path = "gfx/leaders/Generic/foe_generic_pony_5.tga"
-			traits = { agile_trait trottingham_veteran_trait pony_race_trait }
-			skill = 2
-			attack_skill = 2
-			defense_skill = 2
-			planning_skill = 2
-			logistics_skill = 3
-			id = 55001
-		}
+		recruit_character = AJR_char_crumb_pudding
 		custom_effect_tooltip = AJR_pudding_stats_tt
 		custom_effect_tooltip = AJR_trottingham_oob_tt
  		hidden_effect = {
@@ -310,7 +300,7 @@ country_event = { ###Work With NCR
 			if = {
 				limit = {
 					NEV = {
-						has_country_leader = { ruling_only = yes name = "Senator Seafire" }
+						has_country_leader = { ruling_only = yes character = NEV_char_seafire }
 						has_completed_focus = NEV_vis_cloudsdale_republic
 					}
 				}
@@ -531,7 +521,7 @@ country_event = { ###NCR Declines
 			if = {
 				limit = {
 					NEV = {
-						has_country_leader = { ruling_only = yes name = "Senator Seafire" }
+						has_country_leader = { ruling_only = yes character = NEV_char_seafire }
 						has_completed_focus = NEV_vis_cloudsdale_republic
 					}
 				}
@@ -654,7 +644,7 @@ country_event = { ###Raider Round-Up
 			factor = 80
 		}
 
-		set_province_name = { id = 8720 name = "New Orangedale"}
+		set_province_name = { id = 8720 name = AJR_New_Orangedale}
 		save_current_manpower = yes
 		469 = {
 			add_manpower = -867
@@ -715,7 +705,7 @@ country_event = { ###Matter of Knights
 
 		trigger = {
 			has_country_leader = {
-			    name = "Elder Crossroads"
+			    character = MSR_char_crossroads_elder
 			    ruling_only = yes
 			}
 		}
@@ -895,7 +885,7 @@ country_event = { ###MAR - Annex into AJR
 			modifier = {
 				factor = 0
 				TEN = {
-					has_country_leader = { ruling_only = yes name = "Chief Grim Star" }
+					has_country_leader = { ruling_only = yes character = TEN_char_grimstar }
 				}
 			}
 		}
@@ -1315,19 +1305,12 @@ country_event = { ###Summerfield Conference
 			add_state_core = 44
 		}
 
-		if = {
-			limit = {
-				has_dlc = "Together for Victory"
-			}
-			set_autonomy = {
-				target = SFL
-				autonomous_state = autonomy_puppet
-				freedom_level = 0.65
-			}
+		set_autonomy = {
+			target = SFL
+			autonomous_state = autonomy_puppet
+			freedom_level = 0.25
 		}
-		else = {
-			puppet = SFL
-		}
+		ROOT = { puppet = SFL }
 
 		SFL = {
 			set_popularities = {
@@ -1436,26 +1419,26 @@ country_event = { ###Steelhooves is Dead
 			factor = 50
 		}
 		
-		kill_country_leader = yes
-		every_unit_leader = {
-			limit = {
-				has_id = 88844
-			}
-			retire = yes
-		}
 		add_stability = -0.15
 
-		create_country_leader = {
-			name = "Elder Crossroads"
-			picture = "Crossroads.tga"
-			expire = "1965.1.1"
-			ideology = protector
-			traits = {
-
+		add_country_leader_role  = {
+			character = MSR_char_crossroads
+			promote_leader = yes
+			country_leader = {
+				desc="POLITICS_CROSSROADS_DESC"
+				ideology=protector
+				expire="1965.1.1.1"
+				id=-1
 			}
 		}
 
 		set_country_flag = AJR_steelhooves_dead_flag
+		hidden_effect = {
+			retire_character = MSR_char_steelhooves
+			var:global.MSR_crossroads_char_var = {
+				set_character_name = MSR_char_crossroads_elder_name
+			}
+		}
 	}
 }
 

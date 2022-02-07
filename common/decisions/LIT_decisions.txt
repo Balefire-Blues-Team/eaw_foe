@@ -196,7 +196,6 @@ LIT_weather_factory_category = {
 		visible = {
 			has_full_control_of_state = 550
 		}
-		available = {has_political_power > 19}
 		days_remove = 200
 		days_re_enable = 100
 		complete_effect = {
@@ -232,7 +231,7 @@ LIT_weather_factory_category = {
 		visible = {
 			has_full_control_of_state = 550
 		}
-		available = {has_political_power > 24 num_of_civilian_factories_available_for_projects > 1}
+		available = {num_of_civilian_factories_available_for_projects > 1}
 		days_remove = 100
 		days_re_enable = 100
 		modifier = {
@@ -283,7 +282,6 @@ LIT_weather_factory_category = {
 		visible = {
 			has_full_control_of_state = 550
 		}
-		available = {has_political_power > 24}
 		days_remove = 150
 		days_re_enable = 150
 		complete_effect = {
@@ -324,8 +322,16 @@ LIT_weather_factory_category = {
 			has_full_control_of_state = 550
 		}
 		available = {
-			has_political_power > 49
-			has_country_flag = LIT_skies_are_free_flag
+			custom_trigger_tooltip = {
+				tooltip = LIT_skies_are_free_tt
+				hidden_trigger = {
+					OR = {
+						has_country_flag = LIT_skies_are_free_flag
+						has_country_flag = LIT_NEV_rejected_flag
+						has_country_flag = LIT_NEV_accepted_flag
+					}
+				}
+			}
 		}
 		days_remove = 150
 		days_re_enable = 150
@@ -363,8 +369,16 @@ LIT_weather_factory_category = {
 			has_full_control_of_state = 550
 		}
 		available = {
-			has_political_power > 79
-			has_country_flag = LIT_skies_are_free_flag
+			custom_trigger_tooltip = {
+				tooltip = LIT_skies_are_free_tt
+				hidden_trigger = {
+					OR = {
+						has_country_flag = LIT_skies_are_free_flag
+						has_country_flag = LIT_NEV_rejected_flag
+						has_country_flag = LIT_NEV_accepted_flag
+					}
+				}
+			}
 			has_war = yes
 		}
 		days_remove = 150
@@ -482,7 +496,7 @@ LIT_NEV_resistance_category = {
 			}
 			set_province_name = {
 				id = 4308
-				name = "Junction Ruins"
+				name = LIT_Junction_Ruins
 			}
 			808 = {
 				add_manpower = -5942
@@ -656,7 +670,7 @@ LIT_NEV_resistance_category = {
 		}
 			set_province_name = {
 				id = 1084
-				name = "Shattered Hoof Ruins"
+				name = LIT_SHA_Ruins
 			}
 			610 = {
 				add_manpower = -5052
@@ -1014,7 +1028,7 @@ LIT_NEV_resistance_category = {
 			custom_effect_tooltip = LIT_NEV_resistance_tt
 			set_province_name = {
 				id = 2511
-				name = "Leslie Ruins"
+				name = LIT_Leslie_Ruins
 			}
 			575 = {
 			set_building_level = {
@@ -1341,28 +1355,28 @@ LIT_NEV_resistance_category = {
 			add_stability = -0.10
 			set_province_name = {
 				id = 4503
-				name = "New Mango Ruins"
+				name = LIT_MAN_Ruins
 			}
 			795 = {
 				add_manpower = -5402
 			}
 			set_province_name = {
 				id = 3139
-				name = "Wingburg Ruins"
+				name = LIT_Wingburg_Ruins
 			}
 			608 = {
 				add_manpower = -1042
 			}
 			set_province_name = {
 				id = 3909
-				name = "Hayderson Ruins"
+				name = LIT_Hayderson_Ruins
 			}
 			594 = {
 				add_manpower = -1031
 			}
 			set_province_name = {
 				id = 13541
-				name = "Selene Ruins"
+				name = LIT_Selene_Ruins
 			}
 			220 = {
 				add_manpower = -1464
@@ -3162,7 +3176,18 @@ LIT_hook_MAN_category = {
 		}
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision LIT_hook_MAN_three"
-			release_puppet = MAN
+			MAN = {
+				transfer_state = 608
+				transfer_state = 795
+				transfer_state = 594
+				transfer_state = 220
+			}
+			set_autonomy = {
+				target = MAN
+				autonomous_state = autonomy_puppet
+				freedom_level = 0.25
+			}
+			ROOT = { puppet = MAN }
 			add_stability = 0.05
 			add_war_support = -0.05
 			hidden_effect = {
@@ -3170,15 +3195,7 @@ LIT_hook_MAN_category = {
 			}
 			MAN = {
 				hidden_effect = {
-					create_country_leader = {
-						name = "Ember Eclipse"
-						picture = "delta.tga"
-						expire = "1965.1.1"
-						ideology = raider
-						traits = {
-						batpony_leader
-						}
-					}
+					recruit_character = LIT_MAN_char_Ember_Eclipse
 					add_ideas = {
 						MAN_batcong_government
 					}
@@ -3731,7 +3748,13 @@ LIT_hook_SHA_category = {
 				tag = LIT
 			}
 			available = {
-				has_global_flag = LIT_steelwall_rebellion_flag
+			AND = {
+				has_country_flag = LIT_steelwall_countdown_flag
+				NOT = {
+					has_global_flag = LIT_steelwall_rebellion_flag
+				}
+			}
+				
 			}
 			activation = {
 			AND = {
@@ -3746,7 +3769,6 @@ LIT_hook_SHA_category = {
 			timeout_effect = {
 				country_event = {
 					id = LIT_steelwall.1
-					days = 7
 				}
 			}
 		}
