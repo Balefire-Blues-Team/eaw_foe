@@ -3882,7 +3882,7 @@
 
 	shared_focus = {
 		id = MWY_nobles_the_shield
-		icon = GFX_goal_griffon_crown
+		icon = GFX_goal_MWY_ring_strongwing
 		relative_position_id = MWY_nobles_the_ladder
 		x = 1
 		y = 1
@@ -3926,7 +3926,7 @@
 
 	shared_focus = {
 		id = MWY_nobles_the_spider
-		icon = GFX_goal_griffon_crown
+		icon = GFX_goal_MWY_ring_red_widow
 		relative_position_id = MWY_nobles_the_ladder
 		x = -2
 		y = 2
@@ -3948,7 +3948,7 @@
 
 	shared_focus = {
 		id = MWY_nobles_the_mirror
-		icon = GFX_goal_griffon_crown
+		icon = GFX_goal_MWY_ring_bright_glow
 		relative_position_id = MWY_nobles_the_ladder
 		x = 0
 		y = 2
@@ -3974,7 +3974,7 @@
 
 	shared_focus = {
 		id = MWY_nobles_the_star
-		icon = GFX_goal_griffon_crown
+		icon = GFX_goal_MWY_ring_star_gazer
 		relative_position_id = MWY_nobles_the_ladder
 		x = 2
 		y = 2
@@ -5022,8 +5022,13 @@
 			factor = 300
 		} 
 
+		will_lead_to_war_with = NCG
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MWY_nobles_go_for_broke"
+			create_wargoal = {
+				type = annex_everything
+				target = NCG
+			}
 		}
 	}
 
@@ -5105,7 +5110,118 @@
 			factor = 300
 		} 
 
+		will_lead_to_war_with = ERA
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MWY_nobles_end_the_rivalry"
+			create_wargoal = {
+				type = annex_everything
+				target = ERA
+			}
+		}
+	}
+
+	shared_focus = {
+		id = MWY_nobles_work_with_SHA
+		icon = GFX_goal_griffon_crown
+		relative_position_id = MWY_nobles_a_new_new_mareway
+		x = -1
+		y = 1
+		cost = 3
+		
+		prerequisite = { 
+			focus = MWY_nobles_a_new_new_mareway
+		}
+		mutually_exclusive = {
+			focus = MWY_nobles_safeguard_independence
+		}
+		ai_will_do = { 
+			factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MWY_nobles_work_with_SHA"
+			SHA = {
+				country_event = mareway_nobles.9
+			}
+		}
+	}
+
+	shared_focus = {
+		id = MWY_nobles_safeguard_independence
+		icon = GFX_goal_griffon_crown
+		relative_position_id = MWY_nobles_a_new_new_mareway
+		x = 1
+		y = 1
+		cost = 3
+		
+		prerequisite = { 
+			focus = MWY_nobles_a_new_new_mareway
+		}
+		mutually_exclusive = {
+			focus = MWY_nobles_work_with_SHA
+		}
+		ai_will_do = { 
+			factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MWY_nobles_safeguard_independence"
+
+		}
+	}
+
+	shared_focus = {
+		id = MWY_nobles_sky_power
+		icon = GFX_goal_griffon_crown
+		relative_position_id = MWY_nobles_a_new_new_mareway
+		x = 0
+		y = 2
+		cost = 6
+		
+		prerequisite = { 
+			focus = MWY_nobles_work_with_SHA
+			focus = MWY_nobles_safeguard_independence
+		}
+		available = {
+			OR = {
+				AND = {
+					is_in_faction_with = SHA
+					OR = {
+						any_allied_country = {
+							owns_state = 696
+						}
+						NEV = {
+							is_puppet_of = SHA
+						}
+					}
+				}
+				AND = {
+					NOT = {
+						country_exists = NEV
+					}
+					owns_state = 696
+				}
+				NEV = {
+					is_puppet_of = ROOT
+				}
+			}
+		}
+		ai_will_do = { 
+			factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MWY_nobles_sky_power"
+			army_experience = 15
+			set_technology = {
+				power_armour_tech_level_settler = 1
+				x01_pa_tech = 1
+				x02_pa_tech = 1
+			}
+			hidden_effect = {
+				set_technology = {
+					power_armor_equipment_1 = 1
+				}
+			}
 		}
 	}
