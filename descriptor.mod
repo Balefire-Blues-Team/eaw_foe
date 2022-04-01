@@ -1,4 +1,4 @@
-version="1.2"
+version="Beta"
 replace_path="common/ai_focuses"
 replace_path="common/ai_peace"
 replace_path="common/ai_strategy"
@@ -46,4 +46,4 @@ dependencies={
 	"Equestria at War"
 }
 picture="thumbnail.png"
-supported_version="1.10.*"
+supported_version="1.11.*"
