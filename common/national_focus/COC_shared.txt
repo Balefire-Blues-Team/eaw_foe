@@ -2380,16 +2380,27 @@ shared_focus = {
 	cost = 4.29
 
 	available_if_capitulated = yes 
+	available = {
+		has_army_manpower = {size > 5000}
+		num_of_military_factories > 20
+	}
 	relative_position_id = COC_hetpone_start
 	prerequisite = {focus = COC_send_in_voysko}
 	prerequisite = {focus = COC_offer_to_hornsmith}
 	ai_will_do = { 
 		factor = 30
 	} 
-
+	will_lead_to_war_with = ARR
+	will_lead_to_war_with = KHA
+	will_lead_to_war_with = DEC
+	will_lead_to_war_with = AOS
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_demand_reunification"
-		
+		ARR = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
 	}
 }
 
@@ -2462,6 +2473,7 @@ shared_focus = {
 	cost = 4.29
 
 	available_if_capitulated = yes 
+	available = {has_army_manpower ={size > 4000}}
 	relative_position_id = COC_hetpone_start
 	prerequisite = {focus = COC_send_in_voysko}
 	ai_will_do = { 
@@ -2470,7 +2482,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_seize_borderstates"
-		
+		transfer_state = 314
+		transfer_state = 352
 	}
 }
 
@@ -2482,6 +2495,11 @@ shared_focus = {
 	cost = 4.29
 
 	available_if_capitulated = yes 
+	available = {
+		ARR = {
+			all_core_land_owned_by_prev_sphere = yes
+		}
+	}
 	relative_position_id = COC_hetpone_start
 	prerequisite = {focus = COC_demand_reunification}
 	ai_will_do = { 
@@ -2490,7 +2508,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_reclaim_arria"
-		
+		Core_original_ARR = yes
 	}
 }
 
@@ -2502,6 +2520,11 @@ shared_focus = {
 	cost = 4.29
 
 	available_if_capitulated = yes 
+	available = {
+		KHA = {
+			all_core_land_owned_by_prev_sphere = yes
+		}
+	}
 	relative_position_id = COC_hetpone_start
 	prerequisite = {focus = COC_demand_reunification}
 	ai_will_do = { 
@@ -2510,7 +2533,20 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_exterminate_yaks"
-		
+		add_stability = -0.04
+		every_owned_state = {
+			limit = {is_core_of = KHA}
+			add_manpower = -1000
+		}
+		Core_original_KHA = yes
+		every_country = {
+			limit = {is_neighbor_of = COC}
+			add_to_variable = {
+				var = unassimilated_refugees
+				value = 1000
+			}
+		}
+		custom_effect_tooltip = COC_yak_refugee_tt
 	}
 }
 
@@ -2522,6 +2558,11 @@ shared_focus = {
 	cost = 4.29
 
 	available_if_capitulated = yes 
+	available = {
+		DEC = {
+			all_core_land_owned_by_prev_sphere = yes
+		}
+	}
 	relative_position_id = COC_hetpone_start
 	prerequisite = {focus = COC_reclaim_arria}
 	ai_will_do = { 
@@ -2530,7 +2571,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_restore_detrot"
-		
+		Core_original_DEC = yes
+		361 = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {type = arms_factory level = 2 instant_build = yes}
+		}
 	}
 }
 
@@ -2542,6 +2587,11 @@ shared_focus = {
 	cost = 4.29
 
 	available_if_capitulated = yes 
+	available = {
+		AOS = {
+			all_core_land_owned_by_prev_sphere = yes
+		}
+	}
 	relative_position_id = COC_hetpone_start
 	prerequisite = {focus = COC_exterminate_yaks}
 	ai_will_do = { 
@@ -2550,28 +2600,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_root_out_cult"
-		
-	}
-}
-
-shared_focus = { 
-	id = COC_experimental_settlement
-	icon = GFX_goal_generic_foe_skull
-	x = 0
-	y = 5
-	cost = 4.29
-
-	available_if_capitulated = yes 
-	relative_position_id = COC_hetpone_start
-	prerequisite = {focus = COC_reclaim_arria}
-	prerequisite = {focus = COC_exterminate_yaks}
-	ai_will_do = { 
-		factor = 30
-	} 
-
-	completion_reward = {
-		log = "[GetDateText]: [Root.GetName]: Focus COC_experimental_settlement"
-		
+		Core_original_AOS = yes
 	}
 }
 
