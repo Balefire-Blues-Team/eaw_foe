@@ -1,37 +1,32 @@
 EYE_fund_bloody_army = {
 	EYE_bloody_army_attack = {
 		icon = GFX_decision_generic_ignite_civil_war
-		cost = 50
+		cost = 40
 		ai_will_do = {
-			base = 5
+			base = 0
 			modifier = {
-				add = 15
-				ERA = { check_variable = { ERA_war_readiness_var > 59 } }
+				add = 100
+				OR = {
+					has_decision = EYE_bloody_army_manpower
+					has_decision = EYE_bloody_army_guns
+				}
 			}
 			modifier = {
-				add = 25
-				ERA = { check_variable = { ERA_war_readiness_var > 74 } }
+				add = 500
+				AND = {
+					has_decision = EYE_bloody_army_manpower
+					has_decision = EYE_bloody_army_guns
+				}
 			}
 			modifier = {
-				factor = 3
-				ERA = { has_army_manpower = { size > 2999 } }
+				factor = 0
+				has_army_manpower = { size > 2499 }
 			}
 		}
 		fire_only_once = yes
 		is_good = yes
-		available = {
-			ERA = { exists = yes }
-			MWY = { exists = yes }
-			custom_trigger_tooltip = {
-				tooltip = EYE_ERA_at_least_50_war_prep_tt
-				hidden_trigger = {
-					ERA = { check_variable = { ERA_war_readiness_var > 49 } }
-				}
-			}
-		}
 		visible = {
 			has_completed_focus = EYE_bloody_army
-			has_completed_focus = EYE_bloody_army_stern
 		}
 		modifier = {
 		}
@@ -52,48 +47,34 @@ EYE_fund_bloody_army = {
 	EYE_bloody_army_manpower = {
 		icon = GFX_decision_rifles
 		available = {
-			ERA = { exists = yes }
-			MWY = { exists = yes }
-			has_manpower > 250
-			custom_trigger_tooltip = {
-				tooltip = EYE_has_not_sent_ERA_troops_3
-				hidden_trigger = {
-					NOT = { check_variable = { EYE_sent_EYE_troops_var = 3 } }
-				}
-			}
+			has_manpower > 500
 		}
 		cost = 50
 		ai_will_do = {
-			base = 5
+			base = 0
 			modifier = {
-				add = 50
-				has_manpower > 300
+				add = 10
+				has_manpower > 550
 			}
 		}
 		fire_only_once = yes
 		is_good = yes
 		visible = {
 			has_completed_focus = EYE_bloody_army
-			has_completed_focus = EYE_bloody_army_stern
 		}
 		highlight_states = {
 			state = 69
 		}
 		modifier = {
 		}
-		days_remove = 50
+		days_remove = 5
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision remove EYE_bloody_army_manpower"
-			add_to_variable = { EYE_sent_EYE_troops_var = 1 }
-			clamp_variable = {
-				var = EYE_sent_EYE_troops_var
-				min = 0
-				max = 3
-			}
-			add_manpower = -250
-			custom_effect_tooltip = EYE_ERA_increase_war_readiness_5_tt
+
+			add_manpower = -500
+
 			ERA = {
-				country_event = bloodyarmy_EYE_support.1
+				add_manpower = 500
 			}
 		}
 	}
@@ -101,56 +82,38 @@ EYE_fund_bloody_army = {
 	EYE_bloody_army_guns = {
 		icon = GFX_decision_rifles
 		available = {
-			ERA = { exists = yes }
-			MWY = { exists = yes }
 			has_equipment = {
-    			infantry_equipment > 50
-			}
-			custom_trigger_tooltip = {
-				tooltip = EYE_has_not_sent_ERA_guns_3
-				hidden_trigger = {
-					NOT = { check_variable = { EYE_sent_EYE_guns_var = 3 } }
-				}
+    			infantry_equipment > 250
 			}
 		}
 		cost = 35
 		ai_will_do = {
-			base = 5
+			base = 0
 			modifier = {
-				add = 20
+				add = 10
 				has_equipment = {
     				infantry_equipment > 300
 				}
 			}
 		}
-		#fire_only_once = yes
+		fire_only_once = yes
 		is_good = yes
 		visible = {
 			has_completed_focus = EYE_bloody_army
-			has_completed_focus = EYE_bloody_army_stern
 		}
 		highlight_states = {
 			state = 69
 		}
 		modifier = {
 		}
-		days_remove = 50
+		days_remove = 5
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision remove EYE_bloody_army_guns"
-			add_to_variable = { EYE_sent_EYE_guns_var = 1 }
-			clamp_variable = {
-				var = EYE_sent_EYE_guns_var
-				min = 0
-				max = 3
-			}
+
 			send_equipment = {
     			equipment = infantry_equipment
    				amount = 250
     			target = ERA
-			}
-			custom_effect_tooltip = EYE_ERA_increase_war_readiness_5_tt
-			ERA = {
-				country_event = bloodyarmy_EYE_support.2
 			}
 		}
 	}
