@@ -1,477 +1,784 @@
 add_namespace = bloodyarmy
+add_namespace = bloodyarmy_EYE_support
 add_namespace = bloody_border_war
 
-country_event = { ### Attack New Mareway
- 	id = bloodyarmy.1
- 	title = bloodyarmy.1.title
- 	desc = bloodyarmy.1.desc
-	picture = GFX_event_test
+### General Events
+	
 
-	is_triggered_only = yes
- 	fire_only_once = yes
+	country_event = { ### New Mareway Beaten
+		id = bloodyarmy.2
+		title = bloodyarmy.2.title
+		desc = bloodyarmy.2.desc
+		picture = GFX_event_test
 
-	option = { #Attack
-		name = bloodyarmy.1.a
-		ai_chance = {
-			base = 20
-			modifier = {
-				add = 30
-				has_army_manpower = { size > 1499 }
+		trigger = {
+			has_country_flag = bloody_attack
+			controls_state = 549
+			MWY = {
+				exists = no
+			}
+			NOT = {
+				has_global_flag = redeye_is_dead
 			}
 		}
-		
-		declare_war_on = {
-   			target = MWY
-   			type = annex_everything
+		fire_only_once = yes
+
+		option = { #Uphold the deal
+			name = bloodyarmy.2.a
+			ai_chance = {
+				base = 30
+			}
+			
+			EYE = {
+				country_event = {
+					id = redeye.42
+					days = 1
+					random = 2
+				}
+			}
 		}
-		EYE = {
+		option = { #Fuck you Red Eye
+			name = bloodyarmy.2.b
+			ai_chance = { 
+				base = 10
+				modifier = {
+					add = 30
+					has_army_manpower = { size > 3999 }
+				}
+			}
+
+			EYE = {
+				country_event = {
+					id = redeye.43
+					days = 1
+					random = 2
+				}
+			}
+		}
+	}
+
+	country_event = { ###Past Glories
+		id = bloodyarmy.3
+		title = bloodyarmy.3.title
+		desc = bloodyarmy.3.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		option = { #Flatlanders
+			name = bloodyarmy.3.a
+			add_war_support = 0.10
+			add_tech_bonus = {
+				bonus = 0.30
+				uses = 2
+				category = agriculture_tech
+			}
+
+		}
+		option = { #Jasmine
+			name = bloodyarmy.3.b
+			add_war_support = 0.05
+			army_experience = 15
+		}
+		option = { #Neocastle
+			name = bloodyarmy.3.c
+			add_war_support = -0.10
+			add_research_slot = 1
+		}
+	}
+
+	country_event = { ###Wounded, but not Defeated
+		id = bloodyarmy.4
+		title = bloodyarmy.4.title
+		desc = bloodyarmy.4.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		option = { #Winning over the Serfs
+			name = bloodyarmy.4.a
+			69 = {
+				add_manpower = 500
+				add_extra_state_shared_building_slots = 2
+			}
+			805 = {
+				add_manpower = 750
+				add_extra_state_shared_building_slots = 3
+			}
+		}
+		option = { #Solidifying the Army
+			name = bloodyarmy.4.b
+			custom_effect_tooltip = ERA_spawn_ex_knights_tt
+			add_equipment_to_stockpile = {
+				type = ballistic_equipment_1
+				amount = 100
+				producer = MWY
+			}
+			ERA_increase_war_readiness_5 = yes
 			hidden_effect = {
-				set_country_flag =  EYE_bloody_attack
+				69 = {
+					create_unit = {
+						division = "name = \"Disgruntled Kights\" division_template = \"Ex-Knights\" start_experience_factor = 0.75" 
+						owner = ERA
+					}
+				}
 			}
 		}
-
-		hidden_effect = {
-			set_country_flag =  bloody_attack
+		option = { #Settling down
+			name = bloodyarmy.4.c
+			69 = {
+				add_extra_state_shared_building_slots = 2
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+				add_building_construction = {
+					type = arms_factory
+					level = 1
+					instant_build = yes
+				}
+			}
+			805 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
 		}
 	}
-	option = { #Decline
-		name = bloodyarmy.1.b
-		ai_chance = { 
-			base = 5
-			modifier = {
-				add = 145
-				NOT = { has_government = destruction }
-			}
-		}
 
-		diplomatic_relation = {
-		    country = EYE
-		    relation = non_aggression_pact
-		    active = no
-		}
+	country_event = { ###A Visit From Auntie
+		id = bloodyarmy.5
+		title = bloodyarmy.5.title
+		desc = bloodyarmy.5.desc
+		picture = GFX_event_medieval_city_3
 
-		EYE = {
-			country_event = {
-    			id = redeye.10
-    			days = 1
-    			random = 2
-			}
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		option = { #Stay sane
+			name = bloodyarmy.5.a
+			add_stability = -0.01
+		}
+		option = { #Lose sanity
+			name = bloodyarmy.5.b
+
+			custom_effect_tooltip = ERA_lose_one_sanity_tt
 			hidden_effect = {
-				set_country_flag = bloody_attack_betrayal
+				ERA_decrease_sanity_effect = yes
 			}
 		}
+		option = { #Lose double sanity
+			name = bloodyarmy.5.c
 
-		hidden_effect = {
-			set_country_flag = ERA_bloody_attack_betrayal
-		}
-	}
-}
-
-country_event = { ### New Mareway Beaten
- 	id = bloodyarmy.2
- 	title = bloodyarmy.2.title
- 	desc = bloodyarmy.2.desc
-	picture = GFX_event_test
-
-	trigger = {
-		has_country_flag = bloody_attack
-		controls_state = 549
-		MWY = {
-			exists = no
-		}
-		NOT = {
-			has_global_flag = redeye_is_dead
-		}
-	}
- 	fire_only_once = yes
-
-	option = { #Uphold the deal
-		name = bloodyarmy.2.a
-		ai_chance = {
-			base = 30
-		}
-		
-		EYE = {
-			country_event = {
-    			id = redeye.42
-    			days = 1
-    			random = 2
+			custom_effect_tooltip = ERA_lose_two_sanity_tt
+			hidden_effect = {
+				ERA_decrease_sanity_effect = yes
+				ERA_decrease_sanity_effect = yes
 			}
 		}
 	}
-	option = { #Fuck you Red Eye
-		name = bloodyarmy.2.b
-		ai_chance = { 
-			base = 10
-			modifier = {
-				add = 30
-				has_army_manpower = { size > 3999 }
-			}
-		}
 
-		EYE = {
-			country_event = {
-    			id = redeye.43
-    			days = 1
-    			random = 2
-			}
-		}
-	}
-}
+	country_event = { ###Shatterhorn News
+		id = bloodyarmy.6
+		title = bloodyarmy.6.title
+		desc = bloodyarmy.6.desc
+		picture = GFX_event_ponies_in_battle
 
-country_event = { ###Past Glories
- 	id = bloodyarmy.3
- 	title = bloodyarmy.3.title
- 	desc = bloodyarmy.3.desc
-	picture = GFX_event_medieval_city_3
+		is_triggered_only = yes
+		fire_only_once = yes
 
-	is_triggered_only = yes
- 	fire_only_once = yes
-
-	option = { #Flatlanders
-		name = bloodyarmy.3.a
-	 
- 	}
-	option = { #Jasmine
-		name = bloodyarmy.3.b
-		
-	}
-	option = { #Neocastle
-		name = bloodyarmy.3.c
-		
-	}
-}
-
-country_event = { ###Wounded, but not Defeated
- 	id = bloodyarmy.4
- 	title = bloodyarmy.4.title
- 	desc = bloodyarmy.4.desc
-	picture = GFX_event_medieval_city_3
-
-	is_triggered_only = yes
- 	fire_only_once = yes
-
-	option = { #Winning over the Serfs
-		name = bloodyarmy.4.a
-	 
- 	}
-	option = { #Solidifying the Army
-		name = bloodyarmy.4.b
-
-	}
-	option = { #Settling down
-		name = bloodyarmy.4.c
-
-	}
-}
-
-country_event = { ###A Visit From Auntie
- 	id = bloodyarmy.5
- 	title = bloodyarmy.5.title
- 	desc = bloodyarmy.5.desc
-	picture = GFX_event_medieval_city_3
-
-	is_triggered_only = yes
- 	fire_only_once = yes
-
-	option = { #Stay sane
-		name = bloodyarmy.5.a
-	 
- 	}
-	option = { #Lose sanity
-		name = bloodyarmy.5.b
-
-		custom_effect_tooltip = ERA_lose_one_sanity_tt
-		hidden_effect = {
-			ERA_decrease_sanity_effect = yes
-		}
-	}
-	option = { #Lose double sanity
-		name = bloodyarmy.5.c
-
-		custom_effect_tooltip = ERA_lose_two_sanity_tt
-		hidden_effect = {
-			ERA_decrease_sanity_effect = yes
-			ERA_decrease_sanity_effect = yes
-		}
-	}
-}
-
-country_event = { ###Shatterhorn News
- 	id = bloodyarmy.6
- 	title = bloodyarmy.6.title
- 	desc = bloodyarmy.6.desc
-	picture = GFX_event_medieval_city_3
-
-	is_triggered_only = yes
- 	fire_only_once = yes
-
-	option = { #Prepare my retinue!
-		name = bloodyarmy.6.a
-		
- 	}
-}
-
-country_event = { ###Great Revolt News
- 	id = bloodyarmy.7
- 	title = bloodyarmy.7.title
- 	desc = bloodyarmy.7.desc
-	picture = GFX_event_medieval_city_3
-
-	is_triggered_only = yes
- 	fire_only_once = yes
-
-	option = { #Curious...
-		name = bloodyarmy.7.a
-		
- 	}
-}
-
-country_event = { ###Sunnyshore Wins News
- 	id = bloodyarmy.8
- 	title = bloodyarmy.8.title
- 	desc = bloodyarmy.8.desc
-	picture = GFX_event_medieval_city_3
-
-	is_triggered_only = yes
- 	fire_only_once = yes
-
-	option = { #That's Unexpected
-		name = bloodyarmy.8.a
-		complete_national_focus = ERA_sunnyshore_wins
- 	}
-}
-
-country_event = { ###Upholding the Deal
- 	id = bloodyarmy.9
- 	title = bloodyarmy.9.title
- 	desc = bloodyarmy.9.desc
-	picture = GFX_event_medieval_city_3
-
-	is_triggered_only = yes
- 	fire_only_once = yes
-
-	option = { #Support Red Eye
-		name = bloodyarmy.9.a
-		ai_chance = {
-			base = 50
-		}
-		complete_national_focus = ERA_strengthen_the_alliance
-		set_country_flag = ERA_stay_allied_with_EYE_flag
- 	}
-
-	option = { #Subvert Red Eye
-		name = bloodyarmy.9.a
-		ai_chance = {
-			base = 50
-			modifier = {
-				factor = 0
-				is_historical_focus_on = yes
-			}
-		}
-		complete_national_focus = ERA_subvert_the_alliance
-		set_country_flag = ERA_subvert_alliance_with_EYE_flag
- 	}
-}
-
-country_event = { ### ERA - Win Shatterhorn BW
- 	id = bloody_border_war.1
- 	title = bloody_border_war.1.title
- 	desc = bloody_border_war.1.desc
-	picture = GFX_event_medieval_city_3
-
-	is_triggered_only = yes
- 	fire_only_once = yes
-
-	 immediate = {
-		hidden_effect = {
-			if = {
-				limit = { has_event_target = raided_state }
-				set_variable = { temp_loot = raided_state.industrial_complex_level }
-				add_to_variable = { temp_loot = raided_state.arms_factory_level }
-			}
-			else = {
-				set_variable = { temp_loot = FROM.FROM.FROM.industrial_complex_level }
-				add_to_variable = { temp_loot = FROM.FROM.FROM.arms_factory_level }
-			}
-			clamp_variable = {
-				var = temp_loot
-				min = 2
-				max = 6
-			}
-			add_to_variable = { loot = temp_loot }
+		option = { #Prepare my retinue!
+			name = bloodyarmy.6.a
+			
 		}
 	}
 
-	option = { 
-		name = bloody_border_war.1.a
-		custom_effect_tooltip = loot_tp
-		hidden_effect = {
-			clear_variable = temp_loot
-		}
-		set_country_flag = ERA_won_shatterhorn_raid_flag
- 	}
-}
+	country_event = { ###Great Revolt News
+		id = bloodyarmy.7
+		title = bloodyarmy.7.title
+		desc = bloodyarmy.7.desc
+		picture = GFX_event_medieval_city_3
 
-country_event = { ### ERA - Lose Shatterhorn BW
- 	id = bloody_border_war.2
- 	title = bloody_border_war.2.title
- 	desc = bloody_border_war.2.desc
-	picture = GFX_event_medieval_city_3
+		is_triggered_only = yes
+		fire_only_once = yes
 
-	is_triggered_only = yes
- 	fire_only_once = yes
-
-	option = { 
-		name = bloody_border_war.2.a
-		add_manpower = -200
-		set_country_flag = ERA_lost_shatterhorn_raid_flag
- 	}
-}
-
-country_event = { ### ERA - Cancel Shatterhorn BW
- 	id = bloody_border_war.3
- 	title = bloody_border_war.3.title
- 	desc = bloody_border_war.3.desc
-	picture = GFX_event_medieval_city_3
-
-	is_triggered_only = yes
- 	fire_only_once = yes
-
-	option = { 
-		name = bloody_border_war.3.a
-		set_country_flag = ERA_lost_shatterhorn_raid_flag
- 	}
-}
-
-country_event = { ### MWY - Win Shatterhorn BW
- 	id = bloody_border_war.4
- 	title = bloody_border_war.4.title
- 	desc = bloody_border_war.4.desc
-	picture = GFX_event_medieval_city_3
-
-	is_triggered_only = yes
- 	fire_only_once = yes
-
-	option = { 
-		name = bloody_border_war.4.a
-		
- 	}
-}
-
-country_event = { ### MWY - Lose Shatterhorn BW
- 	id = bloody_border_war.5
- 	title = bloody_border_war.5.title
- 	desc = bloody_border_war.5.desc
-	picture = GFX_event_medieval_city_3
-
-	is_triggered_only = yes
- 	fire_only_once = yes
-
-	option = { 
-		name = bloody_border_war.5.a
-		
- 	}
-}
-
-country_event = { ### MWY - Cancel Shatterhorn BW
- 	id = bloody_border_war.6
- 	title = bloody_border_war.6.title
- 	desc = bloody_border_war.6.desc
-	picture = GFX_event_medieval_city_3
-
-	is_triggered_only = yes
- 	fire_only_once = yes
-
-	option = { 
-		name = bloody_border_war.6.a
-		
- 	}
-}
-
-country_event = { ### ERA - Win 2nd Shatterhorn BW
- 	id = bloody_border_war.7
- 	title = bloody_border_war.7.title
- 	desc = bloody_border_war.7.desc
-	picture = GFX_event_medieval_city_3
-
-	is_triggered_only = yes
- 	fire_only_once = yes
-
-	 immediate = {
-		hidden_effect = {
-			if = {
-				limit = { has_event_target = raided_state }
-				set_variable = { temp_loot = raided_state.industrial_complex_level }
-				add_to_variable = { temp_loot = raided_state.arms_factory_level }
-			}
-			else = {
-				set_variable = { temp_loot = FROM.FROM.FROM.industrial_complex_level }
-				add_to_variable = { temp_loot = FROM.FROM.FROM.arms_factory_level }
-			}
-			clamp_variable = {
-				var = temp_loot
-				min = 4
-				max = 6
-			}
-			add_to_variable = { loot = temp_loot }
+		option = { #Curious...
+			name = bloodyarmy.7.a
+			
 		}
 	}
 
-	option = { 
-		name = bloody_border_war.7.a
-		custom_effect_tooltip = loot_tp
-		hidden_effect = {
-			clear_variable = temp_loot
+	country_event = { ###Sunnyshore Wins News
+		id = bloodyarmy.8
+		title = bloodyarmy.8.title
+		desc = bloodyarmy.8.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		option = { #That's Unexpected
+			name = bloodyarmy.8.a
+			complete_national_focus = ERA_sunnyshore_wins
 		}
-		add_political_power = 50
-		add_war_support = 0.05
+	}
 
-		add_equipment_to_stockpile = {
-			type = ballistic_equipment_1
-			amount = 150
-			producer = MWY
+	country_event = { ###Upholding the Deal
+		id = bloodyarmy.9
+		title = bloodyarmy.9.title
+		desc = bloodyarmy.9.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		option = { #Support Red Eye
+			name = bloodyarmy.9.a
+			ai_chance = {
+				base = 50
+			}
+			complete_national_focus = ERA_strengthen_the_alliance
+			set_country_flag = ERA_stay_allied_with_EYE_flag
 		}
 
-		add_equipment_to_stockpile = {
-			type = demolitions_equipment_1
-			amount = 25
-			producer = MWY
+		option = { #Subvert Red Eye
+			name = bloodyarmy.9.b
+			ai_chance = {
+				base = 50
+				modifier = {
+					factor = 0
+					is_historical_focus_on = yes
+				}
+			}
+			complete_national_focus = ERA_subvert_the_alliance
+			set_country_flag = ERA_subvert_alliance_with_EYE_flag
 		}
- 	}
-}
+	}
 
-country_event = { ### ERA - Lose Shatterhorn BW
- 	id = bloody_border_war.8
- 	title = bloody_border_war.8.title
- 	desc = bloody_border_war.8.desc
-	picture = GFX_event_medieval_city_3
+	country_event = { ### EYE - ERA Requests Land
+		id = bloodyarmy.10
+		title = bloodyarmy.10.title
+		desc = bloodyarmy.10.desc
+		picture = GFX_event_medieval_city_3
 
-	is_triggered_only = yes
- 	fire_only_once = yes
+		is_triggered_only = yes
+		fire_only_once = yes
 
-	option = { 
-		name = bloody_border_war.8.a
-		add_manpower = -300
-		add_political_power = -50
-		add_war_support = -0.10
- 	}
-}
+		option = { #Support Red Eye
+			name = bloodyarmy.10.a
+			ai_chance = {
+				base = 50
+			}
+			custom_effect_tooltip = EYE_transfer_state_669_tt
+			ERA = {
+				country_event = {
+					id = bloodyarmy.11
+					days = 3
+				}
+			}
+		}
 
-country_event = { ### ERA - Cancel Shatterhorn BW
- 	id = bloody_border_war.9
- 	title = bloody_border_war.9.title
- 	desc = bloody_border_war.9.desc
-	picture = GFX_event_medieval_city_3
+		option = { #Subvert Red Eye
+			name = bloodyarmy.10.b
+			ai_chance = {
+				base = 10
+				modifier = {
+					add = 15
+					ERA = { has_completed_focus = ERA_subvert_the_alliance }
+				}
+			}
+			ERA = {
+				country_event = {
+					id = bloodyarmy.12
+					days = 3
+				}
+			}
+		}
+	}
 
-	is_triggered_only = yes
- 	fire_only_once = yes
+	country_event = { ###EYE Gives Us Land
+		id = bloodyarmy.11
+		title = bloodyarmy.11.title
+		desc = bloodyarmy.11.desc
+		picture = GFX_event_medieval_city_3
 
-	option = { 
-		name = bloody_border_war.9.a
-		add_manpower = -150
-		add_political_power = -25
-		add_war_support = -0.05
- 	}
-}
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		option = { #Very Nice
+			name = bloodyarmy.11.a
+			transfer_state = 669
+			add_state_core = 669
+			hidden_effect = {
+				EYE = {
+					remove_state_core = 669
+				}
+			}
+		}
+	}
+
+	country_event = { ###EYE Declines Our Request
+		id = bloodyarmy.12
+		title = bloodyarmy.12.title
+		desc = bloodyarmy.12.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		option = { #Very Nice
+			name = bloodyarmy.12.a
+			ERA_decrease_war_readiness_5 = yes
+		}
+	}
+
+	country_event = { ###Maredia Wargames - Normal
+		id = bloodyarmy.13
+		title = bloodyarmy.13.title
+		desc = bloodyarmy.13.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		option = { #Very Nice
+			name = bloodyarmy.13.a
+			add_war_support = 0.05
+			ERA_increase_war_readiness_10 = yes
+		}
+	}
+
+	country_event = { ###Maredia Wargames - Massacre
+		id = bloodyarmy.14
+		title = bloodyarmy.14.title
+		desc = bloodyarmy.14.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		option = { #Very Nice
+			name = bloodyarmy.14.a
+			save_current_manpower = yes
+			69 = {
+				add_manpower = -2671
+			}
+			restore_previous_manpower = yes
+			add_stability = -0.25
+			ERA_increase_war_readiness_10 = yes
+		}
+	}
+
+	country_event = { ###Blood Mane's Breakdown
+		id = bloodyarmy.15
+		title = bloodyarmy.15.title
+		desc = bloodyarmy.15.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		option = { #Oh.
+			name = bloodyarmy.15.a
+			
+			set_country_flag = ERA_blood_mane_breakdown_flag
+			mark_focus_tree_layout_dirty = yes
+		}
+	}
+
+	country_event = { ###Blood Mane's Suicide
+		id = bloodyarmy.16
+		title = bloodyarmy.16.title
+		desc = bloodyarmy.16.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		option = { #Oh.
+			name = bloodyarmy.16.a
+			
+			set_country_flag = ERA_blood_mane_suicide_flag
+		}
+	}
+
+
+### Support from EYE
+	country_event = { ###Manpower from EYE
+		id = bloodyarmy_EYE_support.1
+		title = bloodyarmy_EYE_support.1.title
+		desc = bloodyarmy_EYE_support.1.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		#fire_only_once = yes
+
+		option = { #Excellent
+			name = bloodyarmy_EYE_support.1.a
+			add_manpower = 250
+			ERA_increase_war_readiness_5 = yes
+		}
+	}
+
+	country_event = { ###Weapons from EYE
+		id = bloodyarmy_EYE_support.2
+		title = bloodyarmy_EYE_support.2.title
+		desc = bloodyarmy_EYE_support.2.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		#fire_only_once = yes
+
+		option = { #Excellent
+			name = bloodyarmy_EYE_support.2.a
+			custom_effect_tooltip = ERA_recieved_EYE_guns_tt
+			ERA_increase_war_readiness_5 = yes
+		}
+	}
+
+	country_event = { ### Attack New Mareway
+		id = bloodyarmy_EYE_support.3
+		title = bloodyarmy_EYE_support.3.title
+		desc = bloodyarmy_EYE_support.3.desc
+		picture = GFX_event_test
+
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		option = { #Attack
+			name = bloodyarmy_EYE_support.3.a
+			ai_chance = {
+				base = 20
+				modifier = {
+					add = 30
+					has_army_manpower = { size > 1499 }
+				}
+			}
+			
+			declare_war_on = {
+				target = MWY
+				type = annex_everything
+			}
+			EYE = {
+				hidden_effect = {
+					set_country_flag =  EYE_bloody_attack
+				}
+			}
+			bypass_focus = ERA_attack_MWY
+			hidden_effect = {
+				set_country_flag =  bloody_attack
+			}
+		}
+		option = { #Decline
+			name = bloodyarmy_EYE_support.3.b
+			ai_chance = { 
+				base = 5
+				modifier = {
+					add = 145
+					NOT = { has_government = destruction }
+				}
+			}
+
+			diplomatic_relation = {
+				country = EYE
+				relation = non_aggression_pact
+				active = no
+			}
+
+			EYE = {
+				country_event = {
+					id = redeye.10
+					days = 1
+					random = 2
+				}
+				hidden_effect = {
+					set_country_flag = bloody_attack_betrayal
+				}
+			}
+
+			hidden_effect = {
+				set_country_flag = ERA_bloody_attack_betrayal
+			}
+		}
+	}
+
+### Border Wars
+	country_event = { ### ERA - Win Shatterhorn BW
+		id = bloody_border_war.1
+		title = bloody_border_war.1.title
+		desc = bloody_border_war.1.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		immediate = {
+			hidden_effect = {
+				if = {
+					limit = { has_event_target = raided_state }
+					set_variable = { temp_loot = raided_state.industrial_complex_level }
+					add_to_variable = { temp_loot = raided_state.arms_factory_level }
+				}
+				else = {
+					set_variable = { temp_loot = FROM.FROM.FROM.industrial_complex_level }
+					add_to_variable = { temp_loot = FROM.FROM.FROM.arms_factory_level }
+				}
+				clamp_variable = {
+					var = temp_loot
+					min = 2
+					max = 6
+				}
+				add_to_variable = { loot = temp_loot }
+			}
+		}
+
+		option = { 
+			name = bloody_border_war.1.a
+			custom_effect_tooltip = loot_tp
+			hidden_effect = {
+				clear_variable = temp_loot
+			}
+			set_country_flag = ERA_won_shatterhorn_raid_flag
+		}
+	}
+
+	country_event = { ### ERA - Lose Shatterhorn BW
+		id = bloody_border_war.2
+		title = bloody_border_war.2.title
+		desc = bloody_border_war.2.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		option = { 
+			name = bloody_border_war.2.a
+			add_manpower = -200
+			set_country_flag = ERA_lost_shatterhorn_raid_flag
+		}
+	}
+
+	country_event = { ### ERA - Cancel Shatterhorn BW
+		id = bloody_border_war.3
+		title = bloody_border_war.3.title
+		desc = bloody_border_war.3.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		option = { 
+			name = bloody_border_war.3.a
+			set_country_flag = ERA_lost_shatterhorn_raid_flag
+		}
+	}
+
+	country_event = { ### MWY - Win Shatterhorn BW
+		id = bloody_border_war.4
+		title = bloody_border_war.4.title
+		desc = bloody_border_war.4.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		option = { 
+			name = bloody_border_war.4.a
+			
+		}
+	}
+
+	country_event = { ### MWY - Lose Shatterhorn BW
+		id = bloody_border_war.5
+		title = bloody_border_war.5.title
+		desc = bloody_border_war.5.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		option = { 
+			name = bloody_border_war.5.a
+			
+		}
+	}
+
+	country_event = { ### MWY - Cancel Shatterhorn BW
+		id = bloody_border_war.6
+		title = bloody_border_war.6.title
+		desc = bloody_border_war.6.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		option = { 
+			name = bloody_border_war.6.a
+			
+		}
+	}
+
+	country_event = { ### ERA - Win 2nd Shatterhorn BW
+		id = bloody_border_war.7
+		title = bloody_border_war.7.title
+		desc = bloody_border_war.7.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		immediate = {
+			hidden_effect = {
+				if = {
+					limit = { has_event_target = raided_state }
+					set_variable = { temp_loot = raided_state.industrial_complex_level }
+					add_to_variable = { temp_loot = raided_state.arms_factory_level }
+				}
+				else = {
+					set_variable = { temp_loot = FROM.FROM.FROM.industrial_complex_level }
+					add_to_variable = { temp_loot = FROM.FROM.FROM.arms_factory_level }
+				}
+				clamp_variable = {
+					var = temp_loot
+					min = 4
+					max = 6
+				}
+				add_to_variable = { loot = temp_loot }
+			}
+		}
+
+		option = { 
+			name = bloody_border_war.7.a
+			custom_effect_tooltip = loot_tp
+			hidden_effect = {
+				clear_variable = temp_loot
+			}
+			add_political_power = 50
+			add_war_support = 0.05
+
+			add_equipment_to_stockpile = {
+				type = ballistic_equipment_1
+				amount = 150
+				producer = MWY
+			}
+
+			add_equipment_to_stockpile = {
+				type = demolitions_equipment_1
+				amount = 25
+				producer = MWY
+			}
+		}
+	}
+
+	country_event = { ### ERA - Lose Shatterhorn BW
+		id = bloody_border_war.8
+		title = bloody_border_war.8.title
+		desc = bloody_border_war.8.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		option = { 
+			name = bloody_border_war.8.a
+			add_manpower = -300
+			add_political_power = -50
+			add_war_support = -0.10
+		}
+	}
+
+	country_event = { ### ERA - Cancel Shatterhorn BW
+		id = bloody_border_war.9
+		title = bloody_border_war.9.title
+		desc = bloody_border_war.9.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		option = { 
+			name = bloody_border_war.9.a
+			add_manpower = -150
+			add_political_power = -25
+			add_war_support = -0.05
+		}
+	}
+
+	country_event = { ### ERA - Win NCG BW
+		id = bloody_border_war.10
+		title = bloody_border_war.10.title
+		desc = bloody_border_war.10.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		immediate = {
+			hidden_effect = {
+				if = {
+					limit = { has_event_target = raided_state }
+					set_variable = { temp_loot = raided_state.industrial_complex_level }
+					add_to_variable = { temp_loot = raided_state.arms_factory_level }
+				}
+				else = {
+					set_variable = { temp_loot = FROM.FROM.FROM.industrial_complex_level }
+					add_to_variable = { temp_loot = FROM.FROM.FROM.arms_factory_level }
+				}
+				clamp_variable = {
+					var = temp_loot
+					min = 2
+					max = 6
+				}
+				add_to_variable = { loot = temp_loot }
+			}
+		}
+
+		option = { 
+			name = bloody_border_war.10.a
+			custom_effect_tooltip = loot_tp
+			hidden_effect = {
+				clear_variable = temp_loot
+			}
+			ERA_increase_war_readiness_5 = yes
+		}
+	}
+
+	country_event = { ### ERA - Lose NCG BW
+		id = bloody_border_war.11
+		title = bloody_border_war.11.title
+		desc = bloody_border_war.11.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		option = { 
+			name = bloody_border_war.11.a
+			add_manpower = -200
+			ERA_decrease_war_readiness_5 = yes
+		}
+	}
+
+	country_event = { ### ERA - Cancel NCG BW
+		id = bloody_border_war.12
+		title = bloody_border_war.12.title
+		desc = bloody_border_war.12.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		option = { 
+			name = bloody_border_war.12.a
+			ERA_decrease_war_readiness_5 = yes
+		}
+	}
+
+
 
