@@ -2641,9 +2641,33 @@ shared_focus = {
 		factor = 300
 	} 
 
+	every_country = {
+		limit = {has_country_flag = Country_Severyana_Flag}
+		will_lead_to_war_with = PREV
+	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_bloody_the_tundra"
-		
+		custom_effect_tooltip = COC_bloody_tundra_start_tt
+		add_ideas = COC_second_expedition_idea
+		hidden_effect = {
+			every_country = {
+				limit = {has_country_flag = Country_Severyana_Flag}
+				COC = {
+					declare_war_on = {
+						target = PREV
+						type = annex_everything
+					}
+				}
+			}
+			IF = {
+				limit = {is_ai = yes}
+				set_technology = {
+					naval_invasion_tech_2 = 1
+					naval_invasion_tech_3 = 1
+					naval_invasion_tech_4 = 1
+				}
+			}
+		}
 	}
 }
 
@@ -2663,7 +2687,43 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_establish_sattelite_republics"
-		
+		custom_effect_tooltip = COC_sattelite_republics_tt
+		custom_effect_tooltip = COC_prep_bloody_decisions_tt
+		hidden_effect = {
+			EPC = {
+				set_cosmetic_tag = COC_EPC_Northern_puppet
+			}
+			SEN = {
+				set_cosmetic_tag = COC_SEN_Northern_puppet
+			}
+			GCY = {
+				set_cosmetic_tag = COC_GCY_Northern_puppet
+			}
+			CBU = {
+				set_cosmetic_tag = COC_CBU_Northern_puppet
+			}
+			SMT = {
+				set_cosmetic_tag = COC_SMT_Northern_puppet
+			}
+			EXU = {
+				set_cosmetic_tag = COC_EXU_Northern_puppet
+			}
+			NKD = {
+				set_cosmetic_tag = COC_NKD_Northern_puppet
+			}
+			DPC = {
+				set_cosmetic_tag = COC_DPC_Northern_puppet
+			}
+			MFT = {
+				set_cosmetic_tag = COC_MFT_Northern_puppet
+			}
+			CRF = {
+				set_cosmetic_tag = COC_CRF_Northern_puppet
+			}
+			CDI = {
+				set_cosmetic_tag = COC_CDI_Northern_puppet
+			}
+		}
 	}
 }
 
@@ -2676,6 +2736,9 @@ shared_focus = {
 
 	available_if_capitulated = yes 
 	relative_position_id = COC_hetpone_start
+	available = {
+		num_subjects > 2
+	}
 	prerequisite = {focus = COC_establish_sattelite_republics}
 	ai_will_do = { 
 		factor = 30
@@ -2683,7 +2746,43 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_form_collaborator_battalions"
-		
+		every_country = {
+			limite = {is_subject_of = COC}
+			division_template = {
+				name = "Second Northern Expedition Collaborators"
+				is_locked = no
+				regiments = {
+					infantry = { x = 0 y = 0 }
+					infantry = { x = 0 y = 1 }
+					infantry = { x = 0 y = 2 }
+					infantry = { x = 0 y = 3 }
+					infantry = { x = 0 y = 4 }
+					infantry = { x = 1 y = 0 }
+					infantry = { x = 1 y = 1 }
+					infantry = { x = 1 y = 2 }
+					infantry = { x = 1 y = 3 }
+					infantry = { x = 1 y = 4 }
+				}
+				support = {
+					fireteam_support = { x = 0 y = 0 }
+					recon_company = { x = 0 y = 1 }
+				}
+			}
+			capital_scope = {
+				create_unit = {
+					division = "name = \"GNC Collaborators\" division_template = \"Second Northern Expedition Collaborators\" start_experience_factor = 0.45 start_equipment_factor = 0.8"
+					owner = ROOT
+				}
+				create_unit = {
+					division = "name = \"GNC Collaborators\" division_template = \"Second Northern Expedition Collaborators\" start_experience_factor = 0.45 start_equipment_factor = 0.8"
+					owner = ROOT
+				}
+				create_unit = {
+					division = "name = \"GNC Collaborators\" division_template = \"Second Northern Expedition Collaborators\" start_experience_factor = 0.45 start_equipment_factor = 0.8"
+					owner = ROOT
+				}
+			}
+		}
 	}
 }
 
@@ -2699,11 +2798,15 @@ shared_focus = {
 	prerequisite = {focus = COC_bloody_the_tundra}
 	ai_will_do = { 
 		factor = 30
+		modifier = { 
+			factor = 0
+			has_stability > 0.89
+		}
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_uphold_nat_unity"
-		
+		add_stability = 0.10
 	}
 }
 
@@ -2712,18 +2815,93 @@ shared_focus = {
 	icon = GFX_goal_generic_foe_skull
 	x = -4
 	y = 8
-	cost = 4.29
+	cost = 5.72
 
 	available_if_capitulated = yes 
+	available = {
+		OR = {
+			controls_state = 407
+			any_allied_country  = {
+				controls_state = 407
+			}
+		}
+		OR = {
+			controls_state = 232
+			any_allied_country  = {
+				controls_state = 232
+			}
+		}
+		OR = {
+			controls_state = 370
+			any_allied_country  = {
+				controls_state = 370
+			}
+		}
+	}
 	relative_position_id = COC_hetpone_start
 	prerequisite = {focus = COC_bloody_the_tundra}
 	ai_will_do = { 
-		factor = 30
+		factor = 3000
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_fortify_gains"
-		
+		407 = {
+			build_railway = {
+				level = 1
+				build_only_on_allied = no
+				fallback = no
+				start_province = 3484
+				target_province = 10442
+			}
+			add_building_construction = {type = supply_node level = 1 instant_build = yes province = 10442}
+			add_building_construction = {type = bunker level = 3 instant_build = yes province = 10442}
+		}
+		232 = {
+			build_railway = {
+				level = 1
+				build_only_on_allied = no
+				fallback = no
+				start_province = 4566
+				target_province = 10452
+			}
+			add_building_construction = {type = bunker level = 3 instant_build = yes province = 10452}
+		}
+		370 = {
+			build_railway = {
+				level = 1
+				build_only_on_allied = no
+				fallback = no
+				start_province = 7653
+				target_province = 2643
+			}
+			add_building_construction = {type = supply_node level = 1 instant_build = yes province = 2643}
+			add_building_construction = {type = bunker level = 3 instant_build = yes province = 2643}
+		}
+		IF = {
+			limit = {is_ai = yes}
+			build_railway = {
+				level = 1
+				build_only_on_allied = no
+				fallback = no
+				start_province = 10442
+				target_province = 11205
+			}
+			build_railway = {
+				level = 1
+				build_only_on_allied = no
+				fallback = no
+				start_province = 10452
+				target_province = 2403
+			}
+			build_railway = {
+				level = 1
+				build_only_on_allied = no
+				fallback = no
+				start_province = 2643
+				target_province = 6704
+			}
+		}
 	}
 }
 
@@ -2738,12 +2916,12 @@ shared_focus = {
 	relative_position_id = COC_hetpone_start
 	prerequisite = {focus = COC_fortify_gains}
 	ai_will_do = { 
-		factor = 30
+		factor = 3000
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_expand_logistics"
-		
+		add_timed_idea = { idea = COC_expand_logistics_idea days = 300}
 	}
 }
 
@@ -2755,6 +2933,7 @@ shared_focus = {
 	cost = 4.29
 
 	available_if_capitulated = yes 
+	available = {has_idea = COC_into_new_lands_idea}
 	relative_position_id = COC_hetpone_start
 	prerequisite = {focus = COC_uphold_nat_unity}
 	prerequisite = {focus = COC_fortify_gains}
@@ -2764,7 +2943,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_military_railways"
-		
+		swap_ideas = {remove_idea = COC_into_new_lands_idea add_idea = COC_into_new_lands_idea2}
 	}
 }
 
@@ -2776,15 +2955,53 @@ shared_focus = {
 	cost = 4.29
 
 	available_if_capitulated = yes 
+	available = {
+		OR = {
+			controls_state = 407
+			any_allied_country  = {
+				controls_state = 407
+			}
+		}
+		OR = {
+			controls_state = 232
+			any_allied_country  = {
+				controls_state = 232
+			}
+		}
+		OR = {
+			controls_state = 370
+			any_allied_country  = {
+				controls_state = 370
+			}
+		}
+	}
 	relative_position_id = COC_hetpone_start
 	prerequisite = {focus = COC_uphold_nat_unity}
 	ai_will_do = { 
-		factor = 30
+		factor = 3000
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_forward_air_bases"
-		
+		407 = {
+			add_building_construction = {type = air_base level = 4 instant_build = yes}
+		}
+		232 = {
+			add_building_construction = {type = air_base level = 4 instant_build = yes}
+		}
+		370 = {
+			add_building_construction = {type = air_base level = 4 instant_build = yes}
+		}
+		IF = {
+			limit = {is_ai = yes}
+			hidden_effect = {
+			add_equipment_to_stockpile = {
+				type = fighter_equipment_2
+				amount = 250
+				producer = OWE
+			}
+			}
+		}
 	}
 }
 
@@ -2796,15 +3013,29 @@ shared_focus = {
 	cost = 4.29
 
 	available_if_capitulated = yes 
+	available = {
+		OR = {
+			controls_state = 658
+			any_allied_country  = {
+				controls_state = 658
+			}
+		}
+	}
 	relative_position_id = COC_hetpone_start
 	prerequisite = {focus = COC_expand_logistics}
 	ai_will_do = { 
-		factor = 30
+		factor = 3000
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_reprogram_adm"
-		
+		set_technology = { robotics_tech_level_scientific = 1 }
+		add_tech_bonus = {
+			name = robotics_tech
+			bonus = 0.4
+			uses = 2
+			category = robotics_tech
+		}
 	}
 }
 
@@ -2819,12 +3050,12 @@ shared_focus = {
 	relative_position_id = COC_hetpone_start
 	prerequisite = {focus = COC_military_railways focus = COC_forward_air_bases}
 	ai_will_do = { 
-		factor = 30
+		factor = 3000
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_repair_reorganize"
-		
+		add_timed_idea = {idea = COC_repair_reorganize_idea days = 100}
 	}
 }
 
@@ -2845,7 +3076,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_industrialize_territories"
-		
+		every_country = {
+			limit = {is_ally_with = COC NOT = {tag = COC}}
+			One_random_industrial_complex = yes
+			One_random_industrial_complex = yes
+		}
 	}
 }
 
@@ -2866,7 +3101,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_connect_electricity"
-		
+		every_country = {
+			limit = {is_ally_with = COC NOT = {tag = COC}}
+			capital_scope = {
+				add_resource = {type = energy amount = 6}
+			}
+		}
 	}
 }
 
@@ -2887,7 +3127,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_beacon_of_the_north"
-		
+		set_technology = { exploitation_tech_level_scientific = 1 }
+		every_core_state = {
+			add_extra_state_shared_building_slots = 1
+		}
 	}
 }
 
@@ -2907,7 +3150,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_stoke_fervor"
-		
+		add_timed_idea = {idea = COC_stoke_fervor_idea days = 200}
 	}
 }
 
@@ -2919,6 +3162,13 @@ shared_focus = {
 	cost = 4.29
 
 	available_if_capitulated = yes 
+	bypass = {
+		WHJ = {exists = no}
+		EXC = {exists = no}
+		BFS = {exists = no}
+		EIL = {exists = no}
+		LAU = {exists = no}
+	}
 	relative_position_id = COC_hetpone_start
 	prerequisite = {focus = COC_bloody_the_tundra}
 	ai_will_do = { 
@@ -2927,7 +3177,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_push_zebras"
-		
+		add_timed_idea = { idea = COC_push_zebras_idea days = 160}
 	}
 }
 
@@ -2939,6 +3189,9 @@ shared_focus = {
 	cost = 4.29
 
 	available_if_capitulated = yes 
+	available = {
+		controls_state = 432
+	}
 	relative_position_id = COC_hetpone_start
 	prerequisite = {focus = COC_push_zebras}
 	ai_will_do = { 
@@ -2947,7 +3200,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_seize_zebra_navy"
-		
+		custom_effect_tooltip = PLACEHOLDER_tt
+		load_oob = "COC_polga_navy"
 	}
 }
 
@@ -2968,7 +3222,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_24_7_factories"
-		
+		add_ideas = COC_24_7_factories_idea
 	}
 }
 
@@ -2981,15 +3235,21 @@ shared_focus = {
 
 	available_if_capitulated = yes 
 	relative_position_id = COC_hetpone_start
-	prerequisite = {focus = COC_push_zebras}
 	prerequisite = {focus = COC_stoke_fervor}
 	ai_will_do = { 
-		factor = 30
+		factor = 30000000
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_war_religious_duty"
-		
+		IF = {
+			limit = {has_idea = COC_stoke_fervor_idea}
+			modify_timed_idea = {idea = COC_stoke_fervor_idea days = 260}
+		}
+		ELSE ={
+			add_stability = 0.04
+			add_timed_idea = {idea = COC_stoke_fervor_idea days = 100}
+		}
 	}
 }
 
@@ -3009,7 +3269,56 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_operation_seagriffon"
-		
+		add_ideas = COC_operation_seagriffon_idea
+		IF = {
+			limit = {is_ai = yes}
+			division_template = {
+				name = "Seagriffon Division"
+				is_locked = no
+				regiments = {
+					infantry = { x = 0 y = 0 }
+					infantry = { x = 0 y = 1 }
+					infantry = { x = 0 y = 2 }
+					infantry = { x = 0 y = 3 }
+					infantry = { x = 0 y = 4 }
+					infantry = { x = 1 y = 0 }
+					infantry = { x = 1 y = 1 }
+					infantry = { x = 1 y = 2 }
+					infantry = { x = 1 y = 3 }
+					infantry = { x = 1 y = 4 }
+				}
+				support = {
+					fireteam_support = { x = 0 y = 0 }
+					recon_company = { x = 0 y = 1 }
+				}
+			}
+			884 = {
+				create_unit = {
+					division = "name = \"Seagriffon Division\" division_template = \"Seagriffon Division\" start_experience_factor = 0.65 start_equipment_factor = 0.8"
+					owner = COC
+				}
+				create_unit = {
+					division = "name = \"Seagriffon Division\" division_template = \"Seagriffon Division\" start_experience_factor = 0.65 start_equipment_factor = 0.8"
+					owner = COC
+				}
+				create_unit = {
+					division = "name = \"Seagriffon Division\" division_template = \"Seagriffon Division\" start_experience_factor = 0.65 start_equipment_factor = 0.8"
+					owner = COC
+				}
+				create_unit = {
+					division = "name = \"Seagriffon Division\" division_template = \"Seagriffon Division\" start_experience_factor = 0.65 start_equipment_factor = 0.8"
+					owner = COC
+				}
+				create_unit = {
+					division = "name = \"Seagriffon Division\" division_template = \"Seagriffon Division\" start_experience_factor = 0.65 start_equipment_factor = 0.8"
+					owner = COC
+				}
+				create_unit = {
+					division = "name = \"Seagriffon Division\" division_template = \"Seagriffon Division\" start_experience_factor = 0.65 start_equipment_factor = 0.8"
+					owner = COC
+				}
+			}
+		}
 	}
 }
 
@@ -3018,7 +3327,7 @@ shared_focus = {
 	icon = GFX_goal_generic_foe_skull
 	x = 2
 	y = 10
-	cost = 4.29
+	cost = 5.73
 
 	available_if_capitulated = yes 
 	relative_position_id = COC_hetpone_start
@@ -3029,7 +3338,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_integrated_war_industry"
-		
+		every_country = {
+			limit = {is_ally_with = COC }
+			One_random_arms_factory = yes
+			One_random_arms_factory = yes
+		}
 	}
 }
 
@@ -3050,7 +3363,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_reward_voysko"
-		
+		custom_effect_tooltip = COC_extra_agent_tt
+		hidden_effect = {
+			add_ideas = COC_hidden_agent_2_idea
+		}
 	}
 }
 
@@ -3062,6 +3378,7 @@ shared_focus = {
 	cost = 4.29
 
 	available_if_capitulated = yes 
+	available = {has_idea = COC_form_starshyna_idea}
 	relative_position_id = COC_hetpone_start
 	prerequisite = {focus = COC_operation_seagriffon}
 	prerequisite = {focus = COC_integrated_war_industry}
@@ -3071,7 +3388,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_expand_general_staff"
-		
+		swap_ideas = {remove_idea = COC_form_starshyna_idea add_idea = COC_form_starshyna_idea2}
 	}
 }
 
@@ -3083,6 +3400,7 @@ shared_focus = {
 	cost = 4.29
 
 	available_if_capitulated = yes 
+	available = {has_war = no}
 	relative_position_id = COC_hetpone_start
 	prerequisite = {focus = COC_reward_voysko}
 	prerequisite = {focus = COC_expand_general_staff}
@@ -3092,7 +3410,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_demobilization"
-		
+		add_stability = 0.20
+		add_ideas = full_volunteer
 	}
 }
 
@@ -3418,7 +3737,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_into_new_lands"
-		
+		add_ideas = COC_into_new_lands_idea
 	}
 }
 
@@ -3621,7 +3940,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_form_starshyna"
-		
+		add_ideas = COC_form_starshyna_idea
 	}
 }
 
