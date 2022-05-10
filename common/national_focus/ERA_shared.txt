@@ -796,7 +796,14 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_infiltrate_mareway"
-			
+			custom_effect_tooltip = ERA_infiltrate_mareway_tt
+
+			add_collaboration = {
+				target = MWY
+				value = 0.25
+			}
+
+			ERA_increase_war_readiness_10 = yes
 		}
 	}
 
@@ -951,7 +958,7 @@
 
 	shared_focus = {
 		id = ERA_cathedral_advisors
-		icon = GFX_goal_solar_church
+		icon = GFX_goal_EYE_cathedral
 		relative_position_id = ERA_expand_belle_grove
 		x = 0
 		y = 1
@@ -971,7 +978,7 @@
 
 
 		ai_will_do = { 
-		factor = 50
+			factor = 50
 		} 
 
 		completion_reward = {
@@ -1214,11 +1221,11 @@
 				check_variable = { ERA_war_readiness_var > 64 }
 			}
 			modifier = {
-				add = 5
+				add = 10
 				check_variable = { ERA_war_readiness_var > 69 }
 			}
 			modifier = {
-				add = 10
+				add = 15
 				check_variable = { ERA_war_readiness_var > 74 }
 			}
 			modifier = {
@@ -1464,7 +1471,7 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_a_new_queen"
-			
+			country_event = bloodyarmy.20
 		}
 	}
 
@@ -1554,8 +1561,13 @@
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_settling_down"
 			#Cores on all of MWY + cosmetic tag changing the name to New Mareway (keep the Bloody Army's color)
-
-			
+			add_state_core = 553
+			add_state_core = 789
+			add_state_core = 804
+			add_state_core = 187
+			add_state_core = 581
+			add_state_core = 549
+			set_cosmetic_tag = ERA_bloody_mareway_cos
 		}
 	}
 
@@ -1587,7 +1599,42 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_our_end_of_the_deal"
-
+			custom_effect_tooltip = ERA_become_EYE_puppet_tt
+			if = {
+				limit = { has_dlc = "Together for Victory" }
+				EYE = {
+					set_autonomy = {
+						target = ERA
+						autonomy_state = autonomy_puppet
+					}
+				}
+			}
+			else = {
+				EYE = {
+					puppet = ERA
+				}
+			}
+			hidden_effect = {
+				#drop_cosmetic_tag = yes
+				if = {
+					limit = { 
+						EYE = {
+							has_cosmetic_tag = EYE_empire
+						}
+					}
+					set_cosmetic_tag = ERA_EYE_empire_puppet_mareway_cos
+				}
+				else = {
+					set_cosmetic_tag = ERA_EYE_puppet_mareway_cos
+				}
+				set_popularities = {
+					visionary = 45
+					destruction = 55
+				}	
+				set_politics = {
+					ruling_party = destruction
+				}
+			}
 		}
 	}
 
@@ -1736,12 +1783,20 @@
 		cost = 5
 
 		prerequisite = { focus = ERA_blessing_of_conquest }
+		bypass = {
+			NCG = { exists = no }
+		}
 		ai_will_do = { 
 			factor = 100
 		} 
 
+		will_lead_to_war_with = NCG
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_break_the_guilds"
+			declare_war_on = {
+				target = NCG
+				type = annex_everything
+			}
 		}
 	}
 
@@ -1792,6 +1847,13 @@
 
 		prerequisite = { focus = ERA_adopt_fillydelphia_industry }
 		prerequisite = { focus = ERA_break_the_guilds }
+		available = {
+			NCG = { exists = no }
+			OR = {
+				ERA = { owns_state = 747 }
+				any_allied_country = { owns_state = 747 }
+			}
+		}
 		ai_will_do = { 
 			factor = 100
 		} 
