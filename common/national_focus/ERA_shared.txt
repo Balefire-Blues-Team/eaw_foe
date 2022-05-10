@@ -485,7 +485,7 @@
 
 		completion_reward = { 
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_fortune_and_glory"
-
+			country_event = bloodyarmy.21
 		}
 	}
 
@@ -505,6 +505,10 @@
 		completion_reward = { ### Affected By Sanity ###
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_slaver_control"
 			# If sanity is too low, Blood Mane will have some of the slavers hung on a whim, angering Red Eye
+
+			recruit_character = ERA_char_crooked_can
+			custom_effect_tooltip = ERA_can_stats_tt
+			ERA_increase_war_readiness_5 = yes
 		}
 	}
 
@@ -1217,16 +1221,20 @@
 				check_variable = { ERA_war_readiness_var > 59 }
 			}
 			modifier = {
-				add = 5
+				add = 10
 				check_variable = { ERA_war_readiness_var > 64 }
 			}
 			modifier = {
-				add = 10
+				add = 15
 				check_variable = { ERA_war_readiness_var > 69 }
 			}
 			modifier = {
 				add = 15
 				check_variable = { ERA_war_readiness_var > 74 }
+			}
+			modifier = {
+				add = 20
+				check_variable = { ERA_war_readiness_var > 79 }
 			}
 			modifier = {
 				add = 500
@@ -1490,6 +1498,23 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_solve_the_noble_problem"
+			if = {
+				limit = { has_idea = ERA_hostile_resistance_raider_serf_stragglers }
+				swap_ideas = { add_idea = ERA_hostile_resistance_all_three remove_idea = ERA_hostile_resistance_raider_serf_stragglers }
+			}
+			else_if = {
+				limit = { has_idea = ERA_hostile_resistance_raider_serf }
+				swap_ideas = { add_idea = ERA_hostile_resistance_nobles_raider_serf remove_idea = ERA_hostile_resistance_raider_serf }
+			}
+			else_if = {
+				limit = { has_idea = ERA_hostile_resistance_stragglers }
+				swap_ideas = { add_idea = ERA_hostile_resistance_nobles_stragglers remove_idea = ERA_hostile_resistance_stragglers }
+			}
+			else = {
+				swap_ideas = { add_idea = ERA_hostile_resistance_nobles remove_idea = ERA_hostile_resistance }
+			}
+			add_political_power = -100
+			
 		}
 	}
 
@@ -1508,6 +1533,23 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_hunt_down_stragglers"
+			if = {
+				limit = { has_idea = ERA_hostile_resistance_nobles_raider_serf }
+				swap_ideas = { add_idea = ERA_hostile_resistance_all_three remove_idea = ERA_hostile_resistance_nobles_raider_serf }
+			}
+			else_if = {
+				limit = { has_idea = ERA_hostile_resistance_raider_serf }
+				swap_ideas = { add_idea = ERA_hostile_resistance_raider_serf_stragglers remove_idea = ERA_hostile_resistance_raider_serf }
+			}
+			else_if = {
+				limit = { has_idea = ERA_hostile_resistance_nobles }
+				swap_ideas = { add_idea = ERA_hostile_resistance_nobles_stragglers remove_idea = ERA_hostile_resistance_nobles }
+			}
+			else = {
+				swap_ideas = { add_idea = ERA_hostile_resistance_stragglers remove_idea = ERA_hostile_resistance }
+			}
+
+			add_manpower = -250
 		}
 	}
 
@@ -1526,6 +1568,23 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_unite_raiders_and_serfs"
+			if = {
+				limit = { has_idea = ERA_hostile_resistance_nobles_stragglers }
+				swap_ideas = { add_idea = ERA_hostile_resistance_all_three remove_idea = ERA_hostile_resistance_nobles_stragglers }
+			}
+			else_if = {
+				limit = { has_idea = ERA_hostile_resistance_stragglers }
+				swap_ideas = { add_idea = ERA_hostile_resistance_raider_serf_stragglers remove_idea = ERA_hostile_resistance_stragglers }
+			}
+			else_if = {
+				limit = { has_idea = ERA_hostile_resistance_nobles }
+				swap_ideas = { add_idea = ERA_hostile_resistance_nobles_raider_serf remove_idea = ERA_hostile_resistance_stragglers }
+			}
+			else = {
+				swap_ideas = { add_idea = ERA_hostile_resistance_raider_serf remove_idea = ERA_hostile_resistance }
+			}
+			add_ideas = wasteland_society2
+			add_political_power = -200
 		}
 	}
 
@@ -1568,6 +1627,7 @@
 			add_state_core = 581
 			add_state_core = 549
 			set_cosmetic_tag = ERA_bloody_mareway_cos
+			set_capital = { state = 549 }
 		}
 	}
 
@@ -1671,6 +1731,7 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_loyalty"
+			remove_ideas = ERA_hostile_resistance_all_three
 		}
 	}
 
@@ -1729,6 +1790,15 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_blessing_of_conquest"
+			add_state_claim = 556
+			add_state_claim = 806
+			add_state_claim = 597
+			add_state_claim = 747
+
+			custom_effect_tooltip = ERA_EYE_will_give_NCG_tt
+			hidden_effect = {
+				set_country_flag = ERA_wants_NCG_flag
+			}
 		}
 	}
 
@@ -1796,6 +1866,15 @@
 			declare_war_on = {
 				target = NCG
 				type = annex_everything
+			}
+			hidden_effect = {
+				EYE = {
+					add_to_war = { 
+						targeted_alliance = ERA 
+						enemy = NGC 
+						hostility_reason = asked_to_join
+					}
+				}
 			}
 		}
 	}
@@ -1981,6 +2060,10 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_retirement"
+
+			custom_effect_tooltip = ERA_game_end_tt
+
+			country_event = bloodyarmy.23
 		}
 	}
 

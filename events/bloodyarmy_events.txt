@@ -490,13 +490,126 @@ add_namespace = bloody_border_war
 
 		option = { #Very Nice
 			name = bloodyarmy.20.a
-			add_stability = 0.10
 			add_political_power = 50
+			add_ideas = ERA_hostile_resistance
 			ERA_char_blood_mane = {
 				set_character_name = ERA_char_queen_blood_mane_name
 			}
 		}
 	}
+
+	country_event = { ###Fortune and Glory
+		id = bloodyarmy.21
+		title = bloodyarmy.21.title
+		desc = bloodyarmy.21.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		option = { #Here, have some of mine
+			name = bloodyarmy.21.a
+			add_ideas = ERA_redistributing_loot
+			add_political_power = 25
+		}
+
+		option = { #Go Loot Houses lol
+			name = bloodyarmy.21.b
+
+			add_stability = -0.10
+			add_political_power = 50
+
+			custom_effect_tooltip = ERA_lose_one_sanity_tt
+			hidden_effect = {
+				ERA_decrease_sanity_effect = yes
+			}
+		}
+
+		option = { #We don't need loot, we need factories!
+			name = bloodyarmy.21.c
+			add_political_power = -100
+			one_random_arms_factory = yes
+			one_random_industrial_complex = yes
+		}
+	}
+
+	country_event = { ###Give ERA NCG's land
+		id = bloodyarmy.22
+		title = bloodyarmy.22.title
+		desc = bloodyarmy.22.desc
+		picture = GFX_event_medieval_city_3
+
+		fire_only_once = yes
+
+		trigger = {
+			tag = EYE
+			has_country_flag = ERA_wants_NCG_flag
+			country_exists = ERA
+			OR = {
+				owns_state = 556
+				owns_state = 806
+				owns_state = 597
+				owns_state = 747
+			}
+		}
+
+		option = { #Very Nice
+			name = bloodyarmy.22.a
+			every_owned_state = {
+				limit = {
+					OR = {
+						state = 556
+						state = 806
+						state = 597
+						state = 747
+					}
+				}
+				ERA = {
+					transfer_state = PREV
+				}
+			}
+			
+		}
+	}
+
+	country_event = { ###Retirement
+		id = bloodyarmy.23
+		title = bloodyarmy.23.title
+		desc = bloodyarmy.23.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+		fire_only_once = yes
+
+		option = { #Very Nice
+			name = bloodyarmy.23.a
+			add_political_power = 50
+			EYE = {
+				change_tag_from = ERA
+			}
+			EYE = {
+				annex_country = {
+					target = ERA
+					transfer_troops = yes
+				}
+			}
+			hidden_effect = {
+				set_nationality = {
+					target_country = EYE
+					character = ERA_char_blood_mane
+				}
+				set_nationality = {
+					target_country = EYE
+					character = ERA_char_pink_peony
+				}
+				set_nationality = {
+					target_country = EYE
+					character = ERA_char_glittering_lights
+				}
+			}
+		}
+	}
+	
 
 
 ### Support from EYE
@@ -650,6 +763,10 @@ add_namespace = bloody_border_war
 		option = { 
 			name = bloody_border_war.2.a
 			add_manpower = -200
+			custom_effect_tooltip = ERA_lose_one_sanity_tt
+			hidden_effect = {
+				ERA_decrease_sanity_effect = yes
+			}
 			set_country_flag = ERA_lost_shatterhorn_raid_flag
 		}
 	}
