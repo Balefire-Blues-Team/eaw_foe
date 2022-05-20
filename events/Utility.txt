@@ -760,36 +760,39 @@ country_event = {
 	id = utility.9
 	title = utility.9.t
 	desc = utility.9.desc
-	immediate = {log = "[GetDateText]: [Root.GetName]: event utility.9"}
-	trigger = {
-		tag = PHE
-		is_ai = yes
+	immediate = {
+		log = "[GetDateText]: [Root.GetName]: event utility.9"
+		IF = {
+			limit = {
+				has_game_rule = {
+					rule = PHE_great_phoenix_rule 
+					option = YES_PHEONIX
+				}
+			}
+			PHE = {	set_country_flag = PHE_pheonix_rises_flag }
+		}
+		IF = {
+			limit = {
+				has_game_rule = {
+					rule = PHE_great_phoenix_rule 
+					option = RANDOM_PHEONIX
+				}
+			}
+			random_list = {
+				95 = {
+					PHE = { add_manpower = 1 }
+				}
+				5 = {
+					PHE = {	set_country_flag = PHE_pheonix_rises_flag }
+				}
+			}
+		}
 	}
+	is_triggered_only = yes
 	fire_only_once = yes
 	option = {
 		name = utility.9.a
-		ai_chance = { base = 5
-			modifier = {
-				has_game_rule = {
-					rule = PHE_rising_phoenix 
-					option = YES_PHEONIX
-				}
-				add = 99999999
-			}
-		}
-	}
-	option = {
-		name = utility.9.b
-		ai_chance = { base = 95
-			modifier = {
-				has_game_rule = {
-					rule = PHE_rising_phoenix 
-					option = NO_PHEONIX
-				}
-				add = 9999999
-			}
-			set_country_flag = PHE_pheonix_rises_flag
-		}
+		ai_chance = { base = 95 }
 		
 	}
 }
