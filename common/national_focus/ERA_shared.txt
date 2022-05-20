@@ -502,9 +502,8 @@
 		factor = 50
 		} 
 
-		completion_reward = { ### Affected By Sanity ###
+		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_slaver_control"
-			# If sanity is too low, Blood Mane will have some of the slavers hung on a whim, angering Red Eye
 
 			recruit_character = ERA_char_crooked_can
 			custom_effect_tooltip = ERA_can_stats_tt
@@ -525,9 +524,9 @@
 		factor = 50
 		} 
 
-		completion_reward = {
+		completion_reward = {  ### Affected By Sanity ###
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_independent_arms_merchants"
-
+			country_event = bloodyarmy.24
 		}
 	}
 
@@ -618,7 +617,11 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_restart_trade_with_EYE"
-
+			custom_effect_tooltip = ERA_EYE_unlock_decisions_tt
+			add_popularity = {
+				ideology = visionary
+				popularity = 0.10
+			}
 		}
 	}
 
@@ -664,7 +667,13 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_look_for_alternatives"
-
+			add_manpower = 350
+			add_equipment_to_stockpile = {
+    			type = ballistic_equipment_1
+    			amount = 500
+    			producer = NCG
+			}
+			ERA_increase_war_readiness_10 = yes
 		}
 	}
 
@@ -1089,6 +1098,25 @@
 		completion_reward = { ### Affected By Sanity ###
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_slaver_control"
 			# If sanity is too low, Blood Mane will have some of the slavers hung on a whim, angering Red Eye
+
+			add_ideas = ERA_slave_labor
+
+			hidden_effect = {
+				if = {
+					limit = {
+						check_variable = {
+							var = era_blood_mane_sanity_var
+							value = 4
+							compare = greater_than_or_equals
+						}					
+					}
+					country_event = {
+						id = bloodyarmy.27
+						days = 120
+						random = 48
+					}
+				}
+			}
 		}
 	}
 
@@ -1308,7 +1336,10 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_emancipation"
-
+			add_timed_idea = {
+				idea = ERA_serf_volunteers
+				days = 90
+			}
 		}
 	}
 
@@ -1334,7 +1365,14 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_fire_and_fury"
-
+			add_timed_idea = {
+				idea = ERA_total_war_idea
+				days = 60
+			}
+			custom_effect_tooltip = ERA_lose_one_sanity_tt
+			hidden_effect = {
+				ERA_decrease_sanity_effect = yes
+			}
 		}
 	}
 
@@ -1416,6 +1454,7 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_forced_industry"
+			add_stability = -0.10
 			69 = {
 				add_extra_state_shared_building_slots = 1
 				add_building_construction = {
@@ -1457,7 +1496,21 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_captured_supplies"
-
+			add_equipment_to_stockpile = {
+    			type = support_equipment
+    			amount = 50
+    			producer = MWY
+			}
+			add_equipment_to_stockpile = {
+    			type = spec_ops_equipment_1
+    			amount = 150
+    			producer = MWY
+			}
+			add_equipment_to_stockpile = {
+    			type = ballistic_equipment_1
+    			amount = 250
+    			producer = MWY
+			}
 		}
 	}
 
@@ -1768,6 +1821,11 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_adopt_fillydelphia_industry"
+			two_random_industrial_complex = yes
+			one_random_arms_factory = yes
+			set_technology = {
+				tools_tech_level_settler = 1
+			}
 		}
 	}
 
@@ -1821,6 +1879,15 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_southern_guardian"
+			581 = {
+				add_building_construction = {
+					type = bunker
+					level = 3
+					instant_build = yes
+					province = 15656
+				}
+			}
+			add_ideas = ERA_southern_bulwark
 		}
 	}
 
@@ -1841,6 +1908,10 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_changing_for_the_times"
+			swap_ideas = {
+				remove_idea = ERA_army_with_a_state
+				add_idea = ERA_settled_army
+			}
 		}
 	}
 
@@ -1913,6 +1984,12 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_modern_defensive_weapons"
+			add_tech_bonus = {
+				bonus = 0.50
+				uses = 2
+				category = infantry_tech
+			}
+			army_experience = 25
 		}
 	}
 
@@ -1939,6 +2016,10 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_unify_mechanicum_cathedral"
+			set_technology = {
+				electronics_tech_level_settler = 1
+				electronics_tech_level_scientific = 1
+			}
 		}
 	}
 
@@ -1958,6 +2039,7 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_maredia_university"
+			add_research_slot = 1
 		}
 	}
 
@@ -1967,7 +2049,7 @@
 		relative_position_id = ERA_red_eye_knights
 		x = -1
 		y = 1
-		cost = 5
+		cost = 3
 
 		available = {
 			has_war_with = NEV
@@ -1983,6 +2065,10 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_the_menace_above"
+			add_timed_idea = {
+				idea = ERA_enclave_bonus
+				days = 60
+			}
 		}
 	}
 
@@ -1992,7 +2078,7 @@
 		relative_position_id = ERA_red_eye_knights
 		x = 1
 		y = 1
-		cost = 5
+		cost = 3
 
 		available = {
 			has_war_with = SHA
@@ -2008,6 +2094,10 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_the_republican_threat"
+			add_timed_idea = {
+				idea = ERA_NCR_bonus
+				days = 60
+			}
 		}
 	}
 
@@ -2021,13 +2111,14 @@
 
 		mutually_exclusive = { focus = ERA_retirement }
 		available = {
-			SHA = { exists = no }
-			NEV = { exists = no }
+			has_war = no
 		}
 		prerequisite = { focus = ERA_unify_mechanicum_cathedral }
 		prerequisite = { focus = ERA_maredia_university }
-		prerequisite = { focus = ERA_the_menace_above }
-		prerequisite = { focus = ERA_the_republican_threat }
+		prerequisite = { 
+			focus = ERA_the_menace_above 
+			focus = ERA_the_republican_threat
+		}
 		ai_will_do = { 
 			factor = 100
 		} 
@@ -2047,13 +2138,14 @@
 
 		mutually_exclusive = { focus = ERA_equal_partners }
 		available = {
-			SHA = { exists = no }
-			NEV = { exists = no }
+			has_war = no
 		}
 		prerequisite = { focus = ERA_unify_mechanicum_cathedral }
 		prerequisite = { focus = ERA_maredia_university }
-		prerequisite = { focus = ERA_the_menace_above }
-		prerequisite = { focus = ERA_the_republican_threat }
+		prerequisite = { 
+			focus = ERA_the_menace_above 
+			focus = ERA_the_republican_threat
+		}
 		ai_will_do = { 
 			factor = 0
 		} 
@@ -2103,7 +2195,7 @@
 		id = ERA_stab_in_the_back
 		icon = GFX_goal_griffon_crown
 		relative_position_id = ERA_settling_down
-		x = 7
+		x = 8
 		y = 1
 		cost = 2
 
@@ -2128,6 +2220,303 @@
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_stab_in_the_back"
 
+		}
+	}
+
+	
+	shared_focus = {
+		id = ERA_move_maredia_industry
+		icon = GFX_goal_griffon_crown
+		relative_position_id = ERA_stab_in_the_back
+		x = -2
+		y = 1
+		cost = 5
+
+		prerequisite = { focus = ERA_stab_in_the_back }
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ERA_move_maredia_industry"
+		}
+	}
+
+	shared_focus = {
+		id = ERA_peasant_conscripts
+		icon = GFX_goal_griffon_crown
+		relative_position_id = ERA_stab_in_the_back
+		x = 0
+		y = 1
+		cost = 5
+
+		prerequisite = { focus = ERA_stab_in_the_back }
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ERA_peasant_conscripts"
+		}
+	}
+
+	shared_focus = {
+		id = ERA_raid_shipments
+		icon = GFX_goal_griffon_crown
+		relative_position_id = ERA_stab_in_the_back
+		x = 2
+		y = 1
+		cost = 5
+
+		prerequisite = { focus = ERA_stab_in_the_back }
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ERA_raid_shipments"
+		}
+	}
+
+	shared_focus = {
+		id = ERA_reinforce_forts
+		icon = GFX_goal_griffon_crown
+		relative_position_id = ERA_move_maredia_industry
+		x = -1
+		y = 1
+		cost = 5
+
+		prerequisite = { focus = ERA_move_maredia_industry }
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ERA_reinforce_forts"
+		}
+	}
+
+	shared_focus = {
+		id = ERA_knight_amnesty
+		icon = GFX_goal_griffon_crown
+		relative_position_id = ERA_peasant_conscripts
+		x = -1
+		y = 1
+		cost = 5
+
+		prerequisite = {
+			focus = ERA_raid_shipments
+			focus = ERA_move_maredia_industry
+		}
+		prerequisite = { focus = ERA_peasant_conscripts }
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ERA_knight_amnesty"
+		}
+	}
+
+	shared_focus = {
+		id = ERA_war_efforts
+		icon = GFX_goal_griffon_crown
+		relative_position_id = ERA_peasant_conscripts
+		x = 1
+		y = 1
+		cost = 5
+
+		prerequisite = {
+			focus = ERA_raid_shipments
+			focus = ERA_move_maredia_industry
+		}
+		prerequisite = { focus = ERA_peasant_conscripts }
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ERA_war_efforts"
+		}
+	}
+
+	
+
+	shared_focus = {
+		id = ERA_complete_compliance
+		icon = GFX_goal_griffon_crown
+		relative_position_id = ERA_raid_shipments
+		x = 1
+		y = 1
+		cost = 5
+
+		prerequisite = { focus = ERA_raid_shipments }
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ERA_complete_compliance"
+		}
+	}
+
+	shared_focus = {
+		id = ERA_bloody_foals
+		icon = GFX_goal_griffon_crown
+		relative_position_id = ERA_knight_amnesty
+		x = -1
+		y = 1
+		cost = 5
+
+		prerequisite = { focus = ERA_knight_amnesty }
+		bypass = {
+			NCG = { exists = no }
+		}
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		will_lead_to_war_with = NCG
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ERA_bloody_foals"
+		}
+	}
+
+	shared_focus = {
+		id = ERA_strike_first
+		icon = GFX_goal_griffon_crown
+		relative_position_id = ERA_peasant_conscripts
+		x = 0
+		y = 2
+		cost = 5
+
+		prerequisite = { focus = ERA_peasant_conscripts }
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ERA_strike_first"
+		}
+	}
+
+	shared_focus = {
+		id = ERA_rusty_guns
+		icon = GFX_goal_griffon_crown
+		relative_position_id = ERA_war_efforts
+		x = 1
+		y = 1
+		cost = 5
+
+		prerequisite = { focus = ERA_war_efforts }
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ERA_rusty_guns"
+		}
+	}
+
+	shared_focus = {
+		id = ERA_stolen_tech
+		icon = GFX_goal_griffon_crown
+		relative_position_id = ERA_reinforce_forts
+		x = 0
+		y = 2
+		cost = 5
+
+		prerequisite = { focus = ERA_reinforce_forts }
+		prerequisite = { focus = ERA_bloody_foals }
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ERA_stolen_tech"
+		}
+	}
+
+	shared_focus = {
+		id = ERA_army_and_state
+		icon = GFX_goal_griffon_crown
+		relative_position_id = ERA_complete_compliance
+		x = 0
+		y = 2
+		cost = 5
+
+		prerequisite = { focus = ERA_complete_compliance }
+		prerequisite = { focus = ERA_rusty_guns }
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ERA_maredia_university"
+		}
+	}
+
+	shared_focus = {
+		id = ERA_other_threats
+		icon = GFX_goal_griffon_crown
+		relative_position_id = ERA_strike_first
+		x = -1
+		y = 1
+		cost = 3
+
+		prerequisite = { focus = ERA_bloody_foals }
+		prerequisite = { focus = ERA_rusty_guns }
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ERA_other_threats"
+		}
+	}
+
+	shared_focus = {
+		id = ERA_total_war
+		icon = GFX_goal_griffon_crown
+		relative_position_id = ERA_strike_first
+		x = 1
+		y = 1
+		cost = 3
+
+		prerequisite = { focus = ERA_bloody_foals }
+		prerequisite = { focus = ERA_rusty_guns }
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ERA_total_war"
+		}
+	}
+
+	shared_focus = {
+		id = ERA_bloody_empire
+		icon = GFX_goal_griffon_crown
+		relative_position_id = ERA_total_war
+		x = -1
+		y = 1
+		cost = 5
+
+		available = {
+			has_war = no
+		}
+		prerequisite = { focus = ERA_stolen_tech }
+		prerequisite = { focus = ERA_army_and_state }
+		prerequisite = { 
+			focus = ERA_other_threats
+			focus = ERA_total_war
+		}
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus ERA_equal_partners"
 		}
 	}
 
