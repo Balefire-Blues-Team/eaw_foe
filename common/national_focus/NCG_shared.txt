@@ -116,11 +116,10 @@ shared_focus = {
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_flying_survey"
 			air_experience = 20
-			add_tech_bonus = {
-			name = air_doctrine
-			bonus = 1.0
-			uses = 1
-			category = air_doctrine
+			add_doctrine_cost_reduction = {
+				cost_reduction = 0.5
+				uses = 2
+				category = air_doctrine
 			}
 			swap_ideas = { remove_idea = NCG_west_amethyst_resistance add_idea = NCG_west_amethyst_resistance2 }
 			hidden_effect = {
@@ -156,11 +155,10 @@ shared_focus = {
 					instant_build = yes
 				} 
 			}
-			add_tech_bonus = {
-			name = air_doctrine
-			bonus = 1.0
-			uses = 2
-			category = air_doctrine
+			add_doctrine_cost_reduction = {
+				cost_reduction = 0.7
+				uses = 2
+				category = air_doctrine
 			}
 			swap_ideas = { remove_idea = NCG_west_amethyst_resistance2 add_idea = NCG_west_amethyst_resistance3 }
 		}
@@ -524,11 +522,11 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_invest_doctrine"
-			add_tech_bonus = {
-			name = doctrine_bonus
-			bonus = 1.0
-			uses = 3
-			category = land_doctrine
+			army_experience = 20
+			add_doctrine_cost_reduction = {
+				cost_reduction = 0.6
+				uses = 3
+				category = land_doctrine
 			}
 			
 		}
@@ -963,11 +961,10 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_air_land_coord"
-			add_tech_bonus = {
-			name = air_doctrine
-			bonus = 1.25
-			uses = 3
-			category = air_doctrine
+			add_doctrine_cost_reduction = {
+				cost_reduction = 0.6
+				uses = 3
+				category = air_doctrine
 			}
 			
 		}
@@ -1974,7 +1971,7 @@ shared_focus = {
 			owns_state = 804
 		}
 		relative_position_id = NCG_new_ceo
-		prerequisite = { focus = NCG_take_out_mwy }
+		prerequisite = { focus = NCG_moving_central_basin }
 		ai_will_do = {
 		factor = 50
 		} 
@@ -2275,7 +2272,6 @@ shared_focus = {
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_magos_sunforge"
 			custom_effect_tooltip = NCG_locked_advisor_tt
-			add_ideas = NCG_Sunforge_advisor
 			set_country_flag = NCG_sunforge_unlock
 			hidden_effect = {
 				recruit_character = NCG_char_Sunforge
@@ -2507,6 +2503,16 @@ shared_focus = {
 					grant_wargoals_on_core_states_of_prev = yes
 				}
 			}
+			IF = {
+				limit = {is_ai = yes}
+				build_railway = {
+					level = 1
+					build_only_on_allied = no
+					fallback = no
+					start_province = 10862
+					target_province = 6683
+				}
+			}
 			
 		}
 }
@@ -2583,7 +2589,16 @@ shared_focus = {
 					grant_wargoals_on_core_states_of_prev = yes
 				}
 			}
-			
+			IF = {
+				limit = {is_ai = yes}
+				build_railway = {
+					level = 1
+					build_only_on_allied = no
+					fallback = no
+					start_province = 4018
+					target_province = 9147
+				}
+			}
 		}
 }
 
@@ -2641,7 +2656,6 @@ shared_focus = {
 		x = 0
 		y = 6
 		cost = 4.29
-		
 		available_if_capitulated = yes 
 		relative_position_id = NCG_new_ceo
 		prerequisite = { focus = NCG_bog_productivity }
@@ -2653,8 +2667,32 @@ shared_focus = {
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NCG_abduct_ponies"
 			every_owned_state = {
-				limit = {state_population < 10000}
-				add_manpower = 250
+				limit = {is_core_of = NCG}
+				add_manpower = 450
+			}
+			IF = {
+				limit = {is_ai = yes}
+				build_railway = {
+					level = 1
+					build_only_on_allied = no
+					fallback = no
+					start_province = 6683
+					target_province = 9147
+				}
+				build_railway = {
+					level = 1
+					build_only_on_allied = no
+					fallback = no
+					start_province = 6683
+					target_province = 2457
+				}
+				build_railway = {
+					level = 1
+					build_only_on_allied = no
+					fallback = no
+					start_province = 9147
+					target_province = 832
+				}
 			}
 		}
 }
@@ -3310,6 +3348,20 @@ shared_focus = {
 				add_resource = { type = metal amount = 8 }
 				add_resource = { type = energy amount = 5 }
 			}
+			build_railway = {
+					level = 2
+					build_only_on_allied = no
+					fallback = no
+					start_province = 4018
+					target_province = 9147
+				}
+			build_railway = {
+					level = 1
+					build_only_on_allied = no
+					fallback = no
+					start_province = 10862
+					target_province = 9147
+				}
 		}
 }
 
@@ -3963,14 +4015,19 @@ shared_focus = {
 						grant_wargoals_on_core_states_of_prev = yes
 					}
 				}
+			}
 			ELSE_IF = {
-					limit = { has_idea = NCG_MWY_trade_idea }
+				limit = { has_idea = NCG_MWY_trade_idea }
 					MWY = { 
 						country_event = id = neocastle.25
 					}
-				}
-				else = {
-					custom_effect_tooltip = NCG_corporate_takeover_mareway_tt
+				custom_effect_tooltip = NCG_corporate_takeover_mareway_tt
+			}
+			ELSE = {
+				MWY = {
+					ROOT = {
+						grant_wargoals_on_core_states_of_prev = yes
+					}
 				}
 			}
 			

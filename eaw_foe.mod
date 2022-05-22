@@ -45,5 +45,5 @@ dependencies={
 	"Equestria at War"
 }
 picture="thumbnail.png"
-supported_version="1.10.*"
+supported_version="1.11.*"
 path="mod/eaw_foe"
