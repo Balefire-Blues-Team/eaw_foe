@@ -1,13 +1,102 @@
 COC_pol_crisis_cat = {
 	COC_test = {
 		icon = GFX_decision_stable_door
-		cost = 150
+		cost = 100
+		ai_will_do = {
+			base = 0
+		}
+		is_good = no
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = COC_sub_20_loyalist_tt
+                   check_variable = {
+					COC_independant_influence < 20
+				}
+            }
+		}
+		visible = {
+			tag = COC
+		}
+		fire_only_once = yes
+
+		days_remove = 10
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COC_test"
+			custom_effect_tooltip = COC_dissolved_rada_tt
+			random_list = {
+				60 = {
+					custom_effect_tooltip = COC_raise_loyalist_12
+					add_to_variable = {
+						var = COC_independant_influence
+						value = 12
+					}
+					IF = {
+						limit = {
+							check_variable = {
+								COC_izbawi_influence > 10
+							}
+							check_variable = {
+								COC_hetponatist_influence > 10
+							}
+						}
+						custom_effect_tooltip = COC_lower_izbawi_6
+						subtract_from_variable = {
+							var = COC_izbawi_influence
+							value = 6
+						}
+						custom_effect_tooltip = COC_lower_hetpone_6
+						subtract_from_variable = {
+							var = COC_hetponatist_influence
+							value = 6
+						}
+					}
+					ELSE_IF = {
+						limit = {
+							check_variable = {
+								COC_izbawi_influence > 50
+							}
+						}
+						custom_effect_tooltip = COC_lower_izbawi_12
+						subtract_from_variable = {
+							var = COC_izbawi_influence
+							value = 12
+						}
+					}
+					ELSE_IF = {
+						limit = {
+							check_variable = {
+								COC_hetponatist_influence > 50
+							}
+						}
+						custom_effect_tooltip = COC_lower_hetpone_12
+						subtract_from_variable = {
+							var = COC_hetponatist_influence
+							value = 12
+						}
+					}
+					
+				}
+				40 = {
+					custom_effect_tooltip = COC_anarchy_ahead_tt
+					hidden_effect = {
+						OWE = { country_event = utility.7}
+					}
+				}
+			}
+		}
+	}
+	
+	COC_disarm_military = {
+		icon = GFX_decision_stable_door
+		cost = 50
 		ai_will_do = {
 			base = 0
 			
 		}
 		available = {
-			always = no
+			NOT = {
+				has_idea = disarmed_nation
+			}
 		}
 		visible = {
 			tag = COC
@@ -16,8 +105,145 @@ COC_pol_crisis_cat = {
 
 
 		complete_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision COC_test"
+			log = "[GetDateText]: [Root.GetName]: Decision COC_disarm_military"
+			add_ideas = disarmed_nation
+			custom_effect_tooltip = COC_lower_izbawi_power
+			subtract_from_variable = {
+				var = COC_izbawi_power
+				value = 1
+			}
+			custom_effect_tooltip = COC_lower_hetpone_power
+			subtract_from_variable = {
+				var = COC_hetponatist_power
+				value = 1
+			}
+		}
+	}
+	
+	COC_bribe_hetpone_officers = {
+		icon = GFX_decision_stable_door
+		cost = 40
+		ai_will_do = {
+			base = 0
 			
+		}
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = COC_over_15_hetpone_tt
+                   check_variable = {
+					COC_hetponatist_influence > 14
+				}
+            }
+		}
+		visible = {
+			tag = COC
+		}
+		modifier = {
+			consumer_goods_factor = 0.10
+		}
+		fire_only_once = no
+
+		days_remove = 60
+		days_re_enable = 100 
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COC_bribe_hetpone_officers"
+			custom_effect_tooltip = COC_raise_loyalist_8
+			add_to_variable = {
+				var = COC_independant_influence
+				value = 8
+			}
+			custom_effect_tooltip = COC_lower_hetpone_8
+			subtract_from_variable = {
+				var = COC_hetponatist_influence
+				value = 8
+			}
+			custom_effect_tooltip = COC_lower_hetpone_power
+			subtract_from_variable = {
+				var = COC_hetponatist_power
+				value = 1
+			}
+		}
+	}
+	
+	COC_sway_izbawi_members = {
+		icon = GFX_decision_stable_door
+		cost = 20
+		ai_will_do = {
+			base = 0
+			
+		}
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = COC_over_10_izbawi_tt
+                   check_variable = {
+					COC_izbawi_influence > 9
+				}
+            }
+		}
+		visible = {
+			tag = COC
+		}
+		modifier = {
+			stability_weekly = -0.004
+			political_power_cost = 0.20
+		}
+		fire_only_once = no
+
+		days_remove = 60
+		days_re_enable = 60 
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COC_sway_izbawi_members"
+			custom_effect_tooltip = COC_raise_loyalist_6
+			add_to_variable = {
+				var = COC_independant_influence
+				value = 6
+			}
+			custom_effect_tooltip = COC_lower_izbawi_6
+			subtract_from_variable = {
+				var = COC_izbawi_influence
+				value = 6
+			}
+		}
+	}
+	
+	COC_sway_hetponatist_members = {
+		icon = GFX_decision_stable_door
+		cost = 20
+		ai_will_do = {
+			base = 0
+			
+		}
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = COC_over_10_hetpone_tt
+                   check_variable = {
+					COC_hetponatist_influence > 9
+				}
+            }
+		}
+		visible = {
+			tag = COC
+		}
+		modifier = {
+			war_support_weekly = -0.004
+			political_power_cost = 0.20
+		}
+		fire_only_once = no
+
+		days_remove = 60
+		days_re_enable = 60 
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COC_sway_izbawi_members"
+			custom_effect_tooltip = COC_raise_loyalist_6
+			add_to_variable = {
+				var = COC_independant_influence
+				value = 6
+			}
+			custom_effect_tooltip = COC_lower_hetpone_6
+			subtract_from_variable = {
+				var = COC_hetponatist_influences
+				value = 6
+			}
 		}
 	}
 	
