@@ -388,34 +388,87 @@ country_event={
 	option = {
         name = PonyvilleEvent.10.a
 		ai_chance = { factor = 10 }
+
+		PRA = {
+			country_event = { id = PonyvilleEvent.11 }
+		}
 		
-        PRA = {
-			start_civil_war = {
-				ruling_party = continuation
-				ideology = destruction
-				size = 0.3
-				capital = 65
-				states = { 477 65 }
-				keep_political_leader = yes
-			}
-			hidden_effect = {
-				random_other_country = {
-					limit = { 
-			    		original_tag = PRA
-						has_government = continuation
-					}
-					retire_country_leader = yes
-					recruit_character = PRA_char_Shinning_Edge
-					recruit_character = PRA_char_Rusty_Chains
+		PVG = { change_tag_from = PRA }
+
+		hidden_effect = {
+			PRA = {
+
+				retire_character = PRA_char_Prophet_Owt
+				retire_character = PRA_char_Rusty_Chains
+				retire_character = PRA_char_Shinning_Edge
+				retire_character = PRA_char_Chainfire
+
+				476 = {
+    				transfer_state_to = PVG
+  				}
+
+				set_party_name = {
+					ideology = survivalism
+					long_name = PRA_Ponyville_Mayor_Survivalism_Party_name_Long
+					name = PRA_Ponyville_Mayor_Survivalism_Party_name
 				}
 
 				set_party_name = {
-					ideology = destruction
-					long_name = PRA_Raider_party_name_long
-					name = PRA_Raider_party_name
+					ideology = visionary
+					long_name = PRA_Mayor_Visionary_Party_name_Long
+					name = PRA_Mayor_Visionary_Party_name
 				}
 
-				retire_character = PRA_char_The_Mayor
+				set_party_name = {
+					ideology = continuation
+					long_name = PRA_Mayor_continuation_party_name_Long
+					name = PRA_Mayor_continuation_party_name
+				}
+
+				add_popularity = {
+					ideology = destruction
+					popularity = 1
+				}
+
+				add_popularity = {
+					ideology = visionary
+					popularity = -1
+				}
+
+				add_popularity = {
+					ideology = survivalism
+					popularity = -1
+				}
+
+				add_popularity = {
+					ideology = continuation
+					popularity = -1
+				}
+			}  
+
+			PVG = {
+				recruit_character = PRA_char_Shinning_Edge
+				recruit_character = PRA_char_Rusty_Chains
+				recruit_character = PRA_char_Prophet_Owt
+				recruit_character = PRA_char_Chainfire
+
+				PRA_char_Shinning_Edge = {
+					promote_character = {
+						ideology = despotism
+					}
+				}
+
+				PRA_char_Rusty_Chains = {
+					promote_character = {
+						ideology = community
+					}
+				}
+
+				PRA_char_Prophet_Owt = {
+					promote_character = {
+						ideology = democratic_surv
+					}
+				}
 
 				add_country_leader_role = {
   					character = PRA_char_Chainfire
@@ -426,7 +479,77 @@ country_event={
     					traits = { war_industrialist }
 					}
   				}
-			}	
-		}		   
+
+				set_party_name = {
+					ideology = destruction
+					long_name = PRA_Raider_party_name_long
+					name = PRA_Raider_party_name
+				}
+
+				set_party_name = {
+					ideology = survivalism
+					long_name = PRA_Ponyville_Cult_Party_Name_Long
+					name = PRA_Ponyville_Cult_Party_name
+				}
+
+				set_party_name = {
+					ideology = visionary
+					long_name = PRA_Knight_Party_Name_Long
+					name = PRA_Knight_Party_name
+				}
+
+				set_party_name = {
+					ideology = continuation
+					long_name = PRA_Royal_Guard_Party_Name_Long
+					name = PRA_Royal_Guard_Party_name
+				}
+			}
+		} 
+    }  
+}
+
+country_event={
+    immediate = {log = "[GetDateText]: [Root.GetName]: event PonyvilleEvent.11"}
+ 	id = PonyvilleEvent.11
+ 	title = PonyvilleEvent.11.t
+ 	desc = PonyvilleEvent.11.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = no
+	option = {
+        name = PonyvilleEvent.11.a
+		ai_chance = { factor = 10 }
+
+		declare_war_on = {
+    		target = PVG
+    		type = annex_everything
+		} 
+
+		PVG = {
+			create_unit = {
+				division = {
+					name = "Sweet Apple Patrol"
+					location = 6206
+					division_template = "Royal Guard"
+					start_experience_factor = 0.2
+					start_equipment_factor = 0.9
+				}
+			}
+
+			create_unit = {
+    			division = "name = \"Infantry Division\" division_template = \"Infantry Division\" start_experience_factor = 0.5 start_equipment_factor = 0.5 start_manpower_factor = 0.5" 
+				owner = GER
+			}
+
+				create_unit = {
+					division = {
+						name = "Libary Guard Patrol"
+						location = 13124
+						division_template = "Royal Guard"
+						start_experience_factor = 0.2
+						start_equipment_factor = 0.8
+					}
+				}
+		}
     }  
 }
