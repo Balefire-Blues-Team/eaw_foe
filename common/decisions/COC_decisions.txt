@@ -1263,3 +1263,186 @@ COC_modernize_smoerbott_cat = {
 
 
 }
+
+
+COC_fed_debug_cat = {
+	
+	COC_fed_donate_manpower = {
+		icon = generic_construction
+		is_good = yes
+		visible = {
+			is_subject_of = COC
+		}
+		available = {
+			has_manpower > 50
+		}
+		days_re_enable = 100
+		fire_only_once = no
+		cost = 1
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COC_fed_donate_manpower "
+			IF = {
+				limit = {has_manpower > 1050}
+				ROOT = {
+					OVERLORD = {
+						add_manpower = 1000
+					}
+				}
+				add_manpower = -1000
+			}
+			ELSE_IF = {
+				limit = {has_manpower > 850 has_manpower < 1050}
+				ROOT = {
+					OVERLORD = {
+						add_manpower = 800
+					}
+				}
+				add_manpower = -800
+			}
+			ELSE_IF = {
+				limit = {has_manpower > 550 has_manpower < 850}
+				ROOT = {
+					OVERLORD = {
+						add_manpower = 500
+					}
+				}
+				add_manpower = -500
+			}
+			ELSE_IF = {
+				limit = {has_manpower > 250 has_manpower < 550}
+				ROOT = {
+					OVERLORD = {
+						add_manpower = 200
+					}
+				}
+				add_manpower = -200
+			}
+			ELSE_IF = {
+				limit = {has_manpower > 50 has_manpower < 250}
+				ROOT = {
+					OVERLORD = {
+						add_manpower = 50
+					}
+				}
+				add_manpower = -50
+			}
+		}
+		ai_will_do = {
+			factor = 90000
+		}
+	}
+	
+	COC_fed_joined_training = {
+		icon = GFX_decision_army_unicorn
+		cost = 60
+		ai_will_do = {
+			base = 100
+		}
+		visible = {
+			tag = COC
+		}
+		fire_only_once = no
+		is_good = yes
+		days_remove = 100
+		days_re_enable = 250
+
+		modifier = {
+			experience_gain_army = 0.05
+		}
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COC_fed_joined_training"
+			every_country = {
+				limit = {is_in_faction_with = ROOT}
+				army_experience  = 20
+			}
+		}
+	}
+	
+	COC_fed_recruitment_drive = {
+		icon = GFX_decision_megaphone
+		cost = 50
+		ai_will_do = {
+			base = 100
+		}
+		visible = {
+			tag = COC
+		}
+		fire_only_once = no
+		is_good = yes
+		days_remove = 100
+		days_re_enable = 200
+
+		modifier = {
+			political_power_cost = 0.20
+			weekly_manpower = 10
+		}
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COC_fed_joined_training"
+			every_country = {
+				limit = {is_in_faction_with = ROOT NOT = {tag = COC}}
+				add_manpower  = 50
+			}
+		}
+	}
+	
+	COC_civilian_help = {
+		target_array = allies
+		icon = GFX_decision_gear
+		cost = 50
+		available = {
+			has_political_power > 49
+			num_of_civilian_factories_available_for_projects > 4
+		}
+		ai_will_do = {
+			base = 100
+		}
+		fire_only_once = no
+		is_good = yes
+		days_remove = 80
+		days_re_enable = 40
+		
+		modifier = {
+			civilian_factory_use = 5
+			consumer_goods_factor = 0.02
+		}
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COC_civilian_help"
+			FROM = {
+				One_random_industrial_complex = yes
+			}
+		}
+	}
+	
+	COC_military_help = {
+		target_array = allies
+		icon = GFX_decision_rifles
+		cost = 50
+		available = {
+			has_political_power > 49
+			num_of_civilian_factories_available_for_projects > 2
+		}
+		ai_will_do = {
+			base = 100
+		}
+		fire_only_once = no
+		is_good = yes
+		days_remove = 80
+		days_re_enable = 40
+		
+		modifier = {
+			civilian_factory_use = 3
+			consumer_goods_factor = 0.02
+		}
+		
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COC_military_help"
+			FROM = {
+				One_random_arms_factory = yes
+			}
+		}
+	}
+	
+}
