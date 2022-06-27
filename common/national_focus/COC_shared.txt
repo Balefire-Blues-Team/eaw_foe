@@ -4158,6 +4158,9 @@ shared_focus = {
 				set_cosmetic_tag = COC_EPC_federation_puppet
 				add_ideas = limited_conscription
 				set_country_flag = manpower_laws_blocked
+				set_country_flag = is_settler_nation
+				ROOT = { add_ai_strategy = { type = alliance id = "COC" value = 200} add_opinion_modifier = { target = COC modifier = federation_partners } }
+				COC = { add_ai_strategy = { type = alliance id = "ROOT" value = 200} add_opinion_modifier = { target = ROOT modifier = federation_partners } }
 				inherit_technology = COC
 				set_capital = {
 					state = 271 
@@ -4172,6 +4175,9 @@ shared_focus = {
 				set_cosmetic_tag = COC_SEN_federation_puppet
 				add_ideas = limited_conscription
 				set_country_flag = manpower_laws_blocked
+				set_country_flag = is_settler_nation
+				ROOT = { add_ai_strategy = { type = alliance id = "COC" value = 200} add_opinion_modifier = { target = COC modifier = federation_partners } }
+				COC = { add_ai_strategy = { type = alliance id = "ROOT" value = 200} add_opinion_modifier = { target = ROOT modifier = federation_partners } }
 				inherit_technology = COC
 				set_capital = {
 					state = 318 
@@ -4185,6 +4191,9 @@ shared_focus = {
 				set_cosmetic_tag = COC_CDI_federation_puppet
 				add_ideas = limited_conscription
 				set_country_flag = manpower_laws_blocked
+				set_country_flag = is_settler_nation
+				ROOT = { add_ai_strategy = { type = alliance id = "COC" value = 200} add_opinion_modifier = { target = COC modifier = federation_partners } }
+				COC = { add_ai_strategy = { type = alliance id = "ROOT" value = 200} add_opinion_modifier = { target = ROOT modifier = federation_partners } }
 				inherit_technology = COC
 				set_capital = {
 					state = 82 
@@ -4196,6 +4205,9 @@ shared_focus = {
 				set_cosmetic_tag = COC_NKD_federation_puppet
 				add_ideas = limited_conscription
 				set_country_flag = manpower_laws_blocked
+				set_country_flag = is_settler_nation
+				ROOT = { add_ai_strategy = { type = alliance id = "COC" value = 200} add_opinion_modifier = { target = COC modifier = federation_partners } }
+				COC = { add_ai_strategy = { type = alliance id = "ROOT" value = 200} add_opinion_modifier = { target = ROOT modifier = federation_partners } }
 				inherit_technology = COC
 				set_capital = {
 					state = 140 
@@ -4210,12 +4222,16 @@ shared_focus = {
 				set_cosmetic_tag = COC_EXU_federation_puppet
 				add_ideas = limited_conscription
 				set_country_flag = manpower_laws_blocked
+				set_country_flag = is_settler_nation
+				ROOT = { add_ai_strategy = { type = alliance id = "COC" value = 200} add_opinion_modifier = { target = COC modifier = federation_partners } }
+				COC = { add_ai_strategy = { type = alliance id = "ROOT" value = 200} add_opinion_modifier = { target = ROOT modifier = federation_partners } }
 				inherit_technology = COC
 				set_capital = {
 					state = 267 
 					remember_old_capital = no
 				}
 			}
+			COC_recalculate_federation = yes
 		}
 	}
 }
@@ -4236,7 +4252,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_deregulate_civilian_economy"
-		
+		add_stability = -0.15
+		add_war_support = -0.10
+		One_random_industrial_complex = yes
+		One_random_industrial_complex = yes
+		One_random_industrial_complex = yes
+		One_random_industrial_complex = yes
+		One_random_dockyard = yes
+		custom_effect_tooltip = COC_deregulate_civilian_economy_tt
 	}
 }
 
@@ -4256,7 +4279,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_truly_federal_rada"
-		
+		add_ideas = COC_truly_federal_rada_idea
+		country_event = cossacksfree.36
 	}
 }
 
@@ -4276,7 +4300,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_centralize_fed_recruitment"
-		
+		custom_effect_tooltip = COC_everyone_send_soldiers_tt
+		every_country = {
+			limit = {is_ally_with = COC}
+			add_war_support = 0.05
+		}
+		custom_effect_tooltip = COC_centralize_fed_recruitment_tt
+		COC_recalculate_federation = yes
 	}
 }
 
@@ -4288,6 +4318,7 @@ shared_focus = {
 	cost = 4.29
 
 	available_if_capitulated = yes 
+	available = {has_idea = COC_gnf_trade_block_idea}
 	relative_position_id = COC_izbawi_start
 	prerequisite = {focus = COC_deregulate_civilian_economy}
 	ai_will_do = { 
@@ -4296,7 +4327,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_trade_with_west"
-		
+		IF = {
+			limit = {NOV = {exists = yes}}
+			NOV = {country_event = cossacksfree.35}
+		}
+		IF = {
+			limit = {DSB = {exists = yes}}
+			DSB = {country_event = cossacksfree.35}
+		}
 	}
 }
 
@@ -4316,7 +4354,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_governemnt_startup"
-		
+		every_country = {
+			limit = {is_ally_with = COC}
+			add_ideas = COC_gnf_trade_block_idea
+			One_random_infrastructure = yes
+			One_random_infrastructure = yes
+		}
+		One_random_industrial_complex = yes
+		One_random_dockyard = yes
 	}
 }
 
@@ -4328,6 +4373,7 @@ shared_focus = {
 	cost = 4.29
 
 	available_if_capitulated = yes 
+	available = {has_completed_focus = COC_economic_shock_therapy}
 	relative_position_id = COC_izbawi_start
 	prerequisite = {focus = COC_deregulate_civilian_economy}
 	ai_will_do = { 
@@ -4336,7 +4382,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_production_110"
-		
+		add_ideas = COC_give_110_idea
 	}
 }
 
@@ -4356,7 +4402,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_unity_through_autonomy"
-		
+		add_stability = 0.15
 	}
 }
 
@@ -4396,7 +4442,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_personal_freedom"
-		
+		swap_ideas = {remove_idea = COC_truly_federal_rada_idea add_idea = COC_truly_federal_rada_idea2}
 	}
 }
 
@@ -4408,6 +4454,7 @@ shared_focus = {
 	cost = 4.29
 
 	available_if_capitulated = yes 
+	available = {has_completed_focus = COC_restructure_conscription}
 	relative_position_id = COC_izbawi_start
 	mutually_exclusive = {focus = COC_towards_pacifism}
 	prerequisite = {focus = COC_centralize_fed_recruitment}
@@ -4417,7 +4464,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_federalized_military"
-		
+		add_ideas = COC_gnf_federal_military_idea
+		custom_effect_tooltip = COC_federalized_military_tt
+		COC_recalculate_federation = yes
 	}
 }
 
@@ -4429,6 +4478,7 @@ shared_focus = {
 	cost = 4.29
 
 	available_if_capitulated = yes 
+	available = {has_completed_focus = COC_restructure_conscription}
 	relative_position_id = COC_izbawi_start
 	mutually_exclusive = {focus = COC_federalized_military}
 	prerequisite = {focus = COC_centralize_fed_recruitment}
@@ -4438,7 +4488,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_towards_pacifism"
-		
+		add_ideas = peace_corps
+		IF = {
+			limit = {has_idea = war_economy}
+			add_ideas = partial_mobilisation
+		}
 	}
 }
 
