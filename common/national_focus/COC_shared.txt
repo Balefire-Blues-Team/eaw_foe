@@ -4511,7 +4511,7 @@ shared_focus = {
 	relative_position_id = COC_izbawi_start
 	prerequisite = {focus = COC_trade_with_west}
 	ai_will_do = { 
-		factor = 30
+		factor = 30000
 	} 
 
 	completion_reward = {
@@ -4542,12 +4542,25 @@ shared_focus = {
 	relative_position_id = COC_izbawi_start
 	prerequisite = {focus = COC_trade_with_west}
 	ai_will_do = { 
-		factor = 30
+		factor = 300000
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_work_with_the_eec"
-		
+		every_country = {
+			limit = {
+				AND = {
+					is_faction_leader = yes
+					OR = {
+						tag = CAN
+						tag = ABT
+						tag = NLO
+						tag = ARI
+					}
+				}
+			}
+			country_event = cossacksfree.40
+		}
 	}
 }
 
@@ -4568,7 +4581,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_mass_electrification"
-		
+		every_country = {
+			limit = {has_idea = COC_gnf_trade_block_idea}
+			capital_scope = {
+				add_resource = {type = energy amount = 8}
+			}
+		}
 	}
 }
 
@@ -4589,7 +4607,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_haven_for_researchers"
-		
+		add_research_slot = 1
 	}
 }
 
@@ -4610,7 +4628,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_preempt_generational_wealth"
-		
+		add_stability = -0.10
+		add_popularity = {
+			ideology = survivalism
+			popularity = -0.10
+		}
+		swap_ideas = {remove_idea = COC_truly_federal_rada_idea2 add_idea = COC_truly_federal_rada_idea3}
 	}
 }
 
@@ -4631,7 +4654,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_invite_foreign_settlers"
-		
+		every_country = {
+			limit = {
+				is_ally_with = COC
+			}
+			every_core_state = {add_manpower = 300}
+			add_stability = -0.05
+		}
 	}
 }
 
@@ -4651,7 +4680,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_centralize_arms_production"
-		
+		every_country = {
+			limit = {
+				is_ally_with = COC
+			}
+			One_random_arms_factory = yes
+		}
 	}
 }
 
@@ -4663,6 +4697,21 @@ shared_focus = {
 	cost = 4.29
 
 	available_if_capitulated = yes 
+	available = {
+		has_army_manpower = {size > 4000}
+		NOT = {
+			OR = {
+				KHA = {owns_state = 352}
+				AOS = {owns_state = 352}
+			}
+		}
+	}
+	bypass = {
+		EPC = {
+			owns_state = 352
+			owns_state = 314
+		}
+	}
 	relative_position_id = COC_izbawi_start
 	prerequisite = {focus = COC_towards_pacifism focus = COC_federalized_military}
 	ai_will_do = { 
@@ -4671,7 +4720,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_smithsroad_and_carrotsburg"
-		
+		EPC = {
+			transfer_state = 352
+			transfer_state = 314
+		}
 	}
 }
 
@@ -4683,6 +4735,36 @@ shared_focus = {
 	cost = 4.29
 
 	available_if_capitulated = yes 
+	bypass = {
+		PAR = {exists = no}
+		LOS = {exists = no}
+		PEN = {exists = no}
+	}
+	available = {
+		OR = {
+			BLN = {
+				OR = {
+					has_war_with = PAR
+					has_war_with = LOS
+					has_war_with = PEN
+				}
+			}
+			NMZ = {
+				OR = {
+					has_war_with = PAR
+					has_war_with = LOS
+					has_war_with = PEN
+				}
+			}
+			WTC = {
+				OR = {
+					has_war_with = PAR
+					has_war_with = LOS
+					has_war_with = PEN
+				}
+			}
+		}
+	}
 	relative_position_id = COC_izbawi_start
 	prerequisite = {focus = COC_towards_pacifism focus = COC_federalized_military}
 	ai_will_do = { 
@@ -4691,7 +4773,42 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_support_eastern_freedom"
-		
+		IF = {
+			limit = {
+				BLN = {
+					OR = {
+						has_war_with = PAR
+						has_war_with = LOS
+						has_war_with = PEN
+					}
+				}
+			}
+			BLN = {country_event = cossacksfree.43}
+		}
+		IF = {
+			limit = {
+				NMZ = {
+					OR = {
+						has_war_with = PAR
+						has_war_with = LOS
+						has_war_with = PEN
+					}
+				}
+			}
+			NMZ = {country_event = cossacksfree.43}
+		}
+		IF = {
+			limit = {
+				WTC = {
+					OR = {
+						has_war_with = PAR
+						has_war_with = LOS
+						has_war_with = PEN
+					}
+				}
+			}
+			WTC = {country_event = cossacksfree.43}
+		}
 	}
 }
 
@@ -4703,6 +4820,7 @@ shared_focus = {
 	cost = 4.29
 
 	available_if_capitulated = yes 
+	available = {has_tech = spec_ops_equipment_tech_1 }
 	relative_position_id = COC_izbawi_start
 	prerequisite = {focus = COC_towards_pacifism}
 	ai_will_do = { 
@@ -4711,7 +4829,62 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_legions_of_federation"
-		
+		set_technology = {
+			tech_legion = 1
+			tech_legion2 = 1
+		}
+		custom_effect_tooltip = COC_legions_of_federation_tt
+		hidden_effect = {
+			division_template = {
+			name = "Federation-Legion"
+			priority = 99
+			is_locked = no
+			regiments = {
+				legionnaires = { x = 0 y = 0 }
+				legionnaires = { x = 0 y = 1 }
+				legionnaires = { x = 0 y = 2 }
+				legionnaires = { x = 0 y = 3 }
+				legionnaires = { x = 0 y = 4 }
+				
+				legionnaires = { x = 1 y = 0 }
+				legionnaires = { x = 1 y = 1 }
+				legionnaires = { x = 1 y = 2 }
+				fireteam_infantry = { x = 1 y = 3 }
+				fireteam_infantry = { x = 1 y = 4 }
+				
+				legionnaires = { x = 2 y = 0 }
+				legionnaires = { x = 2 y = 1 }
+				legionnaires = { x = 2 y = 2 }
+				demolitions_infantry = { x = 2 y = 3 }
+				demolitions_infantry = { x = 2 y = 4 }
+				
+				legionnaires = { x = 3 y = 0 }
+				legionnaires = { x = 3 y = 1 }
+				legionnaires = { x = 3 y = 2 }
+				legionnaires = { x = 3 y = 3 }
+				legionnaires = { x = 3 y = 4 }
+			}
+			support = {
+				demolitions_support = { x = 0 y = 0 }
+				fireteam_support = { x = 0 y = 2 }
+				medical_chem_company = { x = 0 y = 1 }
+			}
+			}
+			capital_scope = {
+				create_unit = {
+					division = "name = \"1. Federation-Legion\" division_template = \"Federation-Legion\" start_experience_factor = 0.9" 
+					owner = COC
+				}
+				create_unit = {
+					division = "name = \"2. Federation-Legion\" division_template = \"Federation-Legion\" start_experience_factor = 0.9" 
+					owner = COC
+				}
+			}
+		}
+		if = {
+			limit = {is_ai = yes}
+			army_experience = 50
+		}
 	}
 }
 
@@ -4731,7 +4904,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_offer_federation_membership"
-		
+		custom_effect_tooltip = COC_offer_federation_membership_tt
+		every_country = {
+			limit = {has_idea = COC_gnf_trade_block_idea NOT = {is_ally_with = COC}}
+			country_event = cossacksfree.44
+		}
 	}
 }
 
@@ -4914,6 +5091,45 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_sleeping_deathclaw"
 		
+		hidden_effect = {
+			IF = {
+				limit = {is_ai = yes}
+				capital_scope = {
+					create_unit = {
+						division = "name = \"3. Federation-Legion\" division_template = \"Federation-Legion\" start_experience_factor = 0.9" 
+						owner = COC
+					}
+					create_unit = {
+						division = "name = \"4. Federation-Legion\" division_template = \"Federation-Legion\" start_experience_factor = 0.9" 
+						owner = COC
+					}
+					create_unit = {
+						division = "name = \"5. Federation-Legion\" division_template = \"Federation-Legion\" start_experience_factor = 0.9" 
+						owner = COC
+					}
+					create_unit = {
+						division = "name = \"6. Federation-Legion\" division_template = \"Federation-Legion\" start_experience_factor = 0.9" 
+						owner = COC
+					}
+					create_unit = {
+						division = "name = \"7. Federation-Legion\" division_template = \"Federation-Legion\" start_experience_factor = 0.9" 
+						owner = COC
+					}
+					create_unit = {
+						division = "name = \"8. Federation-Legion\" division_template = \"Federation-Legion\" start_experience_factor = 0.9" 
+						owner = COC
+					}
+					create_unit = {
+						division = "name = \"9. Federation-Legion\" division_template = \"Federation-Legion\" start_experience_factor = 0.9" 
+						owner = COC
+					}
+					create_unit = {
+						division = "name = \"10. Federation-Legion\" division_template = \"Federation-Legion\" start_experience_factor = 0.9" 
+						owner = COC
+					}
+				}
+			}
+		}
 	}
 }
 
