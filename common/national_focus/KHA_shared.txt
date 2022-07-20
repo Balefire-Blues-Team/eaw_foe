@@ -1268,6 +1268,7 @@ shared_focus = {
 	cost = 4.38
 	
 	prerequisite = { focus = KHA_opening_3 }
+	available = {AOS = {exists = yes}}
 	available_if_capitulated = yes 
 	ai_will_do = { 
 		factor = 300
@@ -1289,6 +1290,7 @@ shared_focus = {
 	cost = 4.38
 	
 	prerequisite = { focus = KHA_support_the_acolytes }
+	available = {AOS = {exists = yes}}
 	available_if_capitulated = yes 
 	ai_will_do = { 
 		factor = 30
@@ -1296,7 +1298,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_acolyte_infrastructure"
-		
+		AOS = {
+			One_random_infrastructure = yes
+			One_random_infrastructure = yes
+			One_random_infrastructure = yes
+		}
+		KHA_increase_influence_1 = yes
 	}
 }
 
@@ -1309,6 +1316,7 @@ shared_focus = {
 	cost = 4.38
 	
 	prerequisite = { focus = KHA_support_the_acolytes }
+	available = { always = no }
 	available_if_capitulated = yes 
 	ai_will_do = { 
 		factor = 300
@@ -1329,6 +1337,7 @@ shared_focus = {
 	cost = 4.38
 	
 	prerequisite = { focus = KHA_support_the_acolytes }
+	available = {AOS = {exists = yes}}
 	available_if_capitulated = yes 
 	ai_will_do = { 
 		factor = 30
@@ -1336,7 +1345,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_expand_stoneworks"
-		
+		363 = {
+			add_resource = { type = metal amount = 8 }
+			add_resource = { type = composites amount = 4 }
+		}
+		KHA_increase_influence_1 = yes
 	}
 }
 
@@ -1349,6 +1362,7 @@ shared_focus = {
 	cost = 4.38
 	
 	prerequisite = { focus = KHA_acolyte_infrastructure }
+	available = {AOS = {exists = yes}}
 	available_if_capitulated = yes 
 	ai_will_do = { 
 		factor = 30
@@ -1356,7 +1370,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_fund_direfall"
-		
+		387 = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {type = industrial_complex level = 1 instant_build = yes }
+			add_building_construction = {type = arms_factory level = 1 instant_build = yes }
+		}
+		KHA_increase_influence_1 = yes
 	}
 }
 
@@ -1376,7 +1395,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_integrate_remnants"
-		
+		add_state_core = 387
+		add_state_core = 73
+		add_stability = -0.05
 	}
 }
 
@@ -1389,6 +1410,7 @@ shared_focus = {
 	cost = 4.38
 	
 	prerequisite = { focus = KHA_expand_stoneworks }
+	available = {AOS = {exists = yes}}
 	available_if_capitulated = yes 
 	ai_will_do = { 
 		factor = 30
@@ -1396,7 +1418,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_assist_slave_raids"
-		
+		custom_effect_tooltip = KHA_assist_slave_raids_tt
+		AOS = {
+			add_to_variable = {
+				var = foe_slaves_var
+				value = 5
+			}
+		}
+		KHA_increase_influence_1 = yes
 	}
 }
 
@@ -1409,6 +1438,10 @@ shared_focus = {
 	cost = 4.38
 	
 	prerequisite = { focus = KHA_fund_direfall focus = KHA_assist_slave_raids}
+	available = {
+		AOS = {exists = yes}
+		AOS = { owns_state = 352 }
+	}
 	available_if_capitulated = yes 
 	ai_will_do = { 
 		factor = 30
@@ -1416,7 +1449,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_carrotsburg_buildup"
-		
+		352 = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {type = arms_factory level = 2 instant_build = yes }
+		}
+		KHA_increase_influence_1 = yes
 	}
 }
 
@@ -1428,6 +1465,10 @@ shared_focus = {
 	y = 3
 	cost = 4.38
 	
+	available = {
+		AOS = {exists = yes}
+		AOS = { owns_state = 331 }
+	}
 	prerequisite = { focus = KHA_fund_direfall focus = KHA_assist_slave_raids}
 	available_if_capitulated = yes 
 	ai_will_do = { 
@@ -1436,7 +1477,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_rebuild_solaria"
-		
+		331 = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {type = industrial_complex level = 2 instant_build = yes }
+		}
+		KHA_increase_influence_1 = yes
 	}
 }
 
@@ -1448,6 +1493,16 @@ shared_focus = {
 	y = 4
 	cost = 4.38
 	
+	available = { 
+		custom_trigger_tooltip = {
+			tooltip = AOS_fully_loyal_tt
+			AOS = {
+				check_variable = {
+					AOS_khan_loyalty > 9
+				} 
+			}
+		}
+	}
 	prerequisite = { focus = KHA_rebuild_solaria }
 	prerequisite = { focus = KHA_carrotsburg_buildup }
 	available_if_capitulated = no
@@ -1457,7 +1512,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_integrate_acolytes"
-		
+		annex_country = {
+			target = AOS
+			transfer_troops = yes
+		}
+		Every_state = {
+			limit = { is_core_of = AOS }
+			add_core_of = KHA
+		}
 	}
 }
 
@@ -1470,6 +1532,7 @@ shared_focus = {
 	cost = 4.38
 	
 	prerequisite = { focus = KHA_opening_3 }
+	available = {DEC = {exists = yes}}
 	available_if_capitulated = yes 
 	ai_will_do = { 
 		factor = 300
@@ -1530,6 +1593,7 @@ shared_focus = {
 	cost = 4.38
 	
 	prerequisite = { focus = KHA_strengthern_consortium }
+	available = {DEC = {exists = yes}}
 	available_if_capitulated = yes 
 	ai_will_do = { 
 		factor = 30
@@ -1538,6 +1602,7 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_restore_motor_factories"
 		
+		KHA_increase_influence_1 = yes
 	}
 }
 
@@ -1550,6 +1615,7 @@ shared_focus = {
 	cost = 4.38
 	
 	prerequisite = { focus = KHA_strengthern_consortium }
+	available = {DEC = {exists = yes}}
 	available_if_capitulated = yes 
 	ai_will_do = { 
 		factor = 30
@@ -1558,6 +1624,7 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_train_their_troops"
 		
+		KHA_increase_influence_1 = yes
 	}
 }
 
@@ -1570,6 +1637,7 @@ shared_focus = {
 	cost = 4.38
 	
 	prerequisite = { focus = KHA_restore_motor_factories }
+	available = {DEC = {exists = yes}}
 	available_if_capitulated = yes 
 	ai_will_do = { 
 		factor = 30
@@ -1590,6 +1658,7 @@ shared_focus = {
 	cost = 4.38
 	
 	prerequisite = { focus = KHA_train_their_troops }
+	available = {DEC = {exists = yes}}
 	available_if_capitulated = yes 
 	ai_will_do = { 
 		factor = 30
@@ -1609,6 +1678,10 @@ shared_focus = {
 	y = 3
 	cost = 4.38
 	
+	available = {
+		DEC = {exists = yes}
+		DEC = { owns_state = 238 }
+	}
 	prerequisite = { focus = KHA_cantor_line focus = KHA_assist_with_recruitment}
 	available_if_capitulated = yes 
 	ai_will_do = { 
@@ -1630,6 +1703,10 @@ shared_focus = {
 	cost = 4.38
 	
 	prerequisite = { focus = KHA_cantor_line focus = KHA_assist_with_recruitment}
+	available = {
+		DEC = {exists = yes}
+		DEC = { owns_state = 401 }
+	}
 	available_if_capitulated = yes 
 	ai_will_do = { 
 		factor = 30
@@ -1649,6 +1726,16 @@ shared_focus = {
 	y = 4
 	cost = 4.38
 	
+	available = { 
+		custom_trigger_tooltip = {
+			tooltip = DEC_fully_loyal_tt
+			DEC = {
+				check_variable = {
+					DEC_khan_loyalty > 9
+				} 
+			}
+		}
+	}
 	prerequisite = { focus = KHA_grimhold_docks }
 	prerequisite = { focus = KHA_restore_ascension }
 	available_if_capitulated = no 
@@ -1658,7 +1745,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_integrate_consortium"
-		
+		annex_country = {
+			target = DEC
+			transfer_troops = yes
+		}
+		Every_state = {
+			limit = { is_core_of = DEC }
+			add_core_of = KHA
+		}
 	}
 }
 
@@ -1930,6 +2024,16 @@ shared_focus = {
 	y = 4
 	cost = 4.38
 	
+	available = { 
+		custom_trigger_tooltip = {
+			tooltip = ARR_fully_loyal_tt
+			ARR = {
+				check_variable = {
+					ARR_khan_loyalty > 9
+				} 
+			}
+		}
+	}
 	prerequisite = { focus = KHA_underground_construction }
 	prerequisite = { focus = KHA_teach_their_officers }
 	prerequisite = { focus = KHA_help_them_smash }
