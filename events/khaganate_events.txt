@@ -12,6 +12,9 @@ country_event = {
 
 	option = { #Prowess
 		name = khanate.1.a
+		ai_chance = {
+			factor = 50
+		}
 		capital_scope = { 
 			create_unit = {
 				division = "name = \"Yak Warriors\" division_template = \"Yak Warriors\" start_experience_factor = 0.5 start_equipment_factor = 0.7"
@@ -22,11 +25,17 @@ country_event = {
 
 	option = { #Dilligence
 		name = khanate.1.a
+		ai_chance = {
+			factor = 50
+		}
 		One_random_industrial_complex = yes
 	}
 
 	option = { #Size
 		name = khanate.1.a
+		ai_chance = {
+			factor = 50
+		}
 		capital_scope = {
 			add_manpower = 2000
 		}
@@ -45,11 +54,17 @@ country_event = {
 
    option = { #Intimidation
 	   name = khanate.2.a
+	   ai_chance = {
+		factor = 50
+		}
 	   add_political_power = 50
    }
 
    option = { #Plundering
 	   name = khanate.2.a
+	   ai_chance = {
+		factor = 50
+		}
 	   add_manpower = -180
 	   army_experience = 40
    }
@@ -67,6 +82,9 @@ country_event = {
 
    option = { #We WON!
 	   name = khanate.3.a
+	   	ai_chance = {
+			factor = 50
+		}
 	   add_stability = 0.05
 	   country_event = khanate.4
    }
@@ -83,6 +101,9 @@ country_event = {
 	fire_only_once = yes
 
    option = { #We Failed...
+   ai_chance = {
+	factor = 50
+	}
 	   name = khanate.4.a
 	   add_stability = -0.10
    }
@@ -100,6 +121,9 @@ country_event = {
 
    option = { #Stick to Arban
 	   name = khanate.5.a
+	   ai_chance = {
+		factor = 50
+	}
 	   complete_national_focus = KHA_stick_to_arban
 		KHA_increase_horde_lot = yes
 		IF = {
@@ -110,6 +134,9 @@ country_event = {
 
    option = { #Adopt Pony Tactics
 	   name = khanate.5.a
+	   ai_chance = {
+		factor = 50
+	}
    		complete_national_focus = KHA_adopt_pony_tactics
 		add_stability = -0.10
 		KHA_increase_settled_lot = yes
@@ -132,6 +159,9 @@ country_event = {
 
    option = { #Begin the Effort
 	   name = khanate.6.a
+	   ai_chance = {
+		factor = 50
+	}
 	   add_timed_idea = {
 		idea = KHA_military_rejuvination_idea
 		days = 365
@@ -151,12 +181,18 @@ country_event = {
 
    option = { #Permanent Settlements
 	   name = khanate.7.a
+	   ai_chance = {
+		factor = 50
+	}
 	   KHA_increase_settled = yes
 	   one_random_industrial_complex = yes
    }
 
    option = { #Temporary Encampments
 	   name = khanate.7.b
+	   ai_chance = {
+		factor = 50
+	}
 	   KHA_increase_horde = yes
 	   one_random_arms_factory = yes
    }
@@ -174,12 +210,18 @@ country_event = {
 
    option = { #Permanent Settlements
 	   name = khanate.8.a
+	   ai_chance = {
+		factor = 50
+	}
 	   KHA_increase_settled = yes
 	   add_stability = 0.05
    }
 
    option = { #Temporary Encampments
 	   name = khanate.8.b
+	   ai_chance = {
+		factor = 50
+	}
 	   KHA_increase_horde = yes
 	   add_manpower = 300
    }
@@ -197,12 +239,18 @@ country_event = {
 
    option = { #Allow pony-administrators
 	   name = khanate.9.a
+	   ai_chance = {
+		factor = 50
+	}
 	   KHA_increase_settled = yes
 	   add_political_power = 100
    }
 
    option = { #Allow only Yaks
 	   name = khanate.9.b
+	   ai_chance = {
+		factor = 50
+	}
 	   KHA_increase_horde = yes
 	   KHA_increase_influence_2 = yes
    }
@@ -220,6 +268,9 @@ country_event = {
 
    option = { #force them to rebuild
 	   name = khanate.10.a
+	   ai_chance = {
+		factor = 50
+	}
 	   KHA_increase_settled = yes
 	   one_random_arms_factory = yes
 	   one_random_industrial_complex = yes
@@ -227,7 +278,137 @@ country_event = {
 
    option = { #conscript them as auxiliaries
 	   name = khanate.10.b
+	   ai_chance = {
+		factor = 50
+	}
 	   KHA_increase_horde = yes
 	   add_manpower = 400
    }
+}
+
+#Going for the Commonwealth
+country_event = { 
+	id = khanate.11
+	title = khanate.11.t
+	desc = khanate.11.d
+   picture = GFX_event_test
+
+   	is_triggered_only = yes
+	fire_only_once = no
+
+   option = { #let's go to war then
+	   name = khanate.11.a
+	   	ai_chance = {
+			factor = 50
+		}
+   }
+
+   option = { #Ask for a delay
+	   name = khanate.11.b
+	   	trigger = {
+			has_war = yes
+	   	}
+		ai_chance = {
+			factor = 5000
+		}
+		set_country_flag = KHA_ask_for_delay_flag
+		KHA = { country_event = khanate.12 }
+   }
+
+   option = { #Now's the time for betrayal
+	   name = khanate.11.c
+	   	trigger = {
+			OR = {
+				AND = {
+					tag = AOS
+					check_variable = {
+						AOS_khan_loyalty < 4
+					} 
+				}
+				AND = {
+					tag = ARR
+					check_variable = {
+						ARR_khan_loyalty < 4
+					} 
+				}
+				AND = {
+					tag = DEC
+					check_variable = {
+						DEC_khan_loyalty < 4
+					} 
+				}
+			}
+	   	}
+		ai_chance = {
+			factor = 500
+		}
+		set_country_flag = KHA_violent_betrayal_flag
+		leave_faction = yes
+		KHA = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		ROOT = {
+			KHA = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+   }
+}
+
+#Subject asks for delay
+country_event = { 
+	id = khanate.12
+	title = khanate.12.t
+	desc = khanate.12.d
+   picture = GFX_event_test
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+
+   option = { #Ignore them
+	   name = khanate.12.a
+	   ai_chance = {
+		factor = 0
+	}
+	   
+   }
+
+   option = { #accept delay
+	   name = khanate.12.b
+	   ai_chance = {
+		factor = 50
+		}
+		add_timed_idea = {
+			idea = KHA_60_delay_idea
+			days = 60
+		}
+		IF = {
+			limit = {
+				AOS = {
+					has_country_flag = KHA_ask_for_delay_flag
+				}
+			}
+			AOS = { clr_country_flag = KHA_ask_for_delay_flag }
+			AOS_increase_loyalty = yes
+		}
+		IF = {
+			limit = {
+				ARR = {
+					has_country_flag = KHA_ask_for_delay_flag
+				}
+			}
+			ARR = { clr_country_flag = KHA_ask_for_delay_flag }
+			ARR_increase_loyalty = yes
+		}
+		IF = {
+			limit = {
+				DEC = {
+					has_country_flag = KHA_ask_for_delay_flag
+				}
+			}
+			DEC = { clr_country_flag = KHA_ask_for_delay_flag }
+			DEC_increase_loyalty = yes
+		}
 }
