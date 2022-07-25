@@ -3209,7 +3209,7 @@ shared_focus = {
 	relative_position_id = KHA_licking_our_wounds
 	x = 0
 	y = 10
-	cost = 5.71
+	cost = 5.72
 	available = {
 		AND = {
 		has_global_flag = Commonwealth_Civwar_done_flag
@@ -3395,14 +3395,18 @@ shared_focus = {
 	cost = 4.38
 	
 	prerequisite = { focus = KHA_second_war_for_the_commonwealth }
+	available = {
+		has_war = yes
+		NOT = { has_completed_focus = KHA_the_behemoth_crumbles }
+	}
 	available_if_capitulated = yes 
 	ai_will_do = { 
-		factor = 40
+		factor = 400
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_train_replacements"
-		
+		add_ideas = KHA_train_replacements_idea
 	}
 }
 
@@ -3415,14 +3419,31 @@ shared_focus = {
 	cost = 4.38
 	
 	prerequisite = { focus = KHA_second_war_for_the_commonwealth }
+	available = {
+		has_war = yes
+		NOT = { has_completed_focus = KHA_the_behemoth_crumbles }
+		any_controlled_state = {
+			NOT = { is_core_of = KHA }
+		}
+	}
 	available_if_capitulated = yes 
 	ai_will_do = { 
-		factor = 40
+		factor = 400
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_surrender_incentives"
-		
+		every_controlled_state = {
+			limit = { 
+				OR = {
+					is_core_of = COM
+					is_core_of = COL
+					is_core_of = COC
+					is_core_of = COR
+				}
+			}
+			add_compliance = 15
+		}
 	}
 }
 
@@ -3435,14 +3456,19 @@ shared_focus = {
 	cost = 4.38
 	
 	prerequisite = { focus = KHA_second_war_for_the_commonwealth }
+	available = {
+		has_war = yes
+		NOT = { has_completed_focus = KHA_the_behemoth_crumbles }
+		controls_state = 140
+	}
 	available_if_capitulated = yes 
 	ai_will_do = { 
-		factor = 40
+		factor = 4000
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_push_to_victory"
-		
+		add_ideas = KHA_push_to_victory_idea
 	}
 }
 
@@ -3455,14 +3481,19 @@ shared_focus = {
 	cost = 4.38
 	
 	prerequisite = { focus = KHA_second_war_for_the_commonwealth }
+	available = {
+		has_war = yes
+		NOT = { has_completed_focus = KHA_the_behemoth_crumbles }
+	}
 	available_if_capitulated = yes 
 	ai_will_do = { 
-		factor = 40
+		factor = 400
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_backline_to_the_front"
-		
+		add_stability = -0.08
+		add_manpower = 400
 	}
 }
 
@@ -3472,7 +3503,7 @@ shared_focus = {
 	relative_position_id = KHA_licking_our_wounds
 	x = 0
 	y = 12
-	cost = 4.38
+	cost = 2.90
 	
 	prerequisite = { focus = KHA_second_war_for_the_commonwealth }
 	available_if_capitulated = yes 
@@ -3482,7 +3513,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_the_behemoth_crumbles"
-		
+		country_event = khanate.13
 	}
 }
 
