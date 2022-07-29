@@ -3506,6 +3506,20 @@ shared_focus = {
 	cost = 2.90
 	
 	prerequisite = { focus = KHA_second_war_for_the_commonwealth }
+	available = {
+		COM = {
+			all_core_land_owned_by_prev_sphere = yes
+		}
+		COC = {
+			all_core_land_owned_by_prev_sphere = yes
+		}
+		COR = {
+			all_core_land_owned_by_prev_sphere = yes
+		}
+		COL = {
+			all_core_land_owned_by_prev_sphere = yes
+		}
+	}
 	available_if_capitulated = yes 
 	ai_will_do = { 
 		factor = 40
@@ -3527,6 +3541,14 @@ shared_focus = {
 	
 	prerequisite = { focus = KHA_the_behemoth_crumbles }
 	mutually_exclusive = {focus = KHA_the_true_yak_way}
+	available = {
+		custom_trigger_tooltip = {
+			tooltip = KHA_decided_settle_tt
+			check_variable = {
+				KHA_khan_settle_horde > 0
+			}
+		}
+	}
 	available_if_capitulated = yes 
 	ai_will_do = { 
 		factor = 40
@@ -3534,7 +3556,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_adopt_commonwealth_systems"
-		
+		country_event = khanate.14
+		add_stability = -0.20
 	}
 }
 
@@ -3554,7 +3577,21 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_the_olive_branch"
-		
+		custom_effect_tooltip = KHA_ARR_increase_loyalty_5_tt
+		custom_effect_tooltip = KHA_AOS_decrease_loyalty_5_tt
+		hidden_effect = {
+			ARR_increase_loyalty = yes
+			ARR_increase_loyalty = yes
+			ARR_increase_loyalty = yes
+			ARR_increase_loyalty = yes
+			ARR_increase_loyalty = yes
+			AOS_decrease_loyalty = yes
+			AOS_decrease_loyalty = yes
+			AOS_decrease_loyalty = yes
+			AOS_decrease_loyalty = yes
+			AOS_decrease_loyalty = yes
+			AOS = { country_event = { id = khanate.15  days = 10 random_days = 20 }}
+		}
 	}
 }
 
@@ -3574,7 +3611,18 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_gesture_of_good_faith"
-		
+		every_owned_state = {
+			limit = {
+				OR = {
+					is_core_of = COC
+					is_core_of = COR
+					is_core_of = COM
+					is_core_of = COL
+				}
+			}
+			add_compliance = 10
+			add_resistance = -5
+		}
 	}
 }
 
@@ -3594,7 +3642,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_uildveriin_zovlol"
-		
+		add_ideas = KHA_uildveriin_zovlol_idea
 	}
 }
 
@@ -3614,7 +3662,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_repair_whats_broken"
-		
+		add_timed_idea = {
+			idea = KHA_repair_whats_broken_idea
+			days = 600
+		}
 	}
 }
 
@@ -3634,7 +3685,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_wealth_of_fallen"
-		
+		KHA_increase_settling_down = yes
 	}
 }
 
@@ -3654,7 +3705,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_restore_the_palace"
-		
+		add_stability = 0.05
+		add_political_power = 50
 	}
 }
 
@@ -3674,7 +3726,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_retain_current_administration"
-		
+		add_state_core = 140
+		add_stability = 0.04
 	}
 }
 
@@ -3694,7 +3747,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_adopt_equestrian_official_language"
-		
+		KHA_increase_pony_integration = yes
 	}
 }
 
@@ -3714,7 +3767,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_kucykow_military_academy"
-		
+		add_research_slot = 1
+		add_ideas = officer_law_military_academy
 	}
 }
 
@@ -3734,7 +3788,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_establish_tsugluulagchid"
-		
+		add_ideas = KHA_tsugluulagchid_idea
 	}
 }
 
@@ -3754,7 +3808,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_expand_infrastructure"
-		
+		set_technology = { 
+			exploitation_tech_level_settler = 1
+			tools_tech_level_settler = 1
+			habitation_tech_level_settler = 1
+			electronics_tech_level_settler = 1
+		}
 	}
 }
 
@@ -3774,7 +3833,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_encourage_buisness"
-		
+		two_random_industrial_complex = yes
+		one_random_industrial_complex = yes
+		one_random_industrial_complex = yes
 	}
 }
 
@@ -3794,7 +3855,22 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_from_warcamp_to_warforge"
-		
+		344 = {
+			set_state_name = "Great Warforge"
+			add_extra_state_shared_building_slots = 4
+			add_building_construction = {
+				type = arms_factory
+				level = 4
+			}
+			set_province_name = {
+				id = 13068
+				name = KHA_warforge
+			}
+			set_province_name = {
+				id = 8066
+				name = KHA_irontown
+			}
+		}
 	}
 }
 
@@ -3814,13 +3890,19 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_compensate_families"
-		
+		add_political_power = 50
+		every_owned_state = {
+			limit = {
+				NOT = { is_core_of = KHA }
+			}
+			add_compliance = 25
+		}
 	}
 }
 
 shared_focus = {
 	id = KHA_khan_and_emperor
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_commonwealth_crown
 	relative_position_id = KHA_adopt_commonwealth_systems
 	x = 0
 	y = 3
@@ -3835,7 +3917,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus KHA_khan_and_emperor"
-		
+		country_event = khanate.17
 	}
 }
 
@@ -4536,6 +4618,14 @@ shared_focus = {
 	cost = 4.38
 	
 	prerequisite = { focus = KHA_the_behemoth_crumbles }
+	available = {
+		custom_trigger_tooltip = {
+			tooltip = KHA_decided_horde_tt
+			check_variable = {
+				KHA_khan_settle_horde < 1
+			}
+		}
+	}
 	mutually_exclusive = {focus = KHA_adopt_commonwealth_systems}
 	available_if_capitulated = yes 
 	ai_will_do = { 

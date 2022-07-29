@@ -435,12 +435,121 @@ country_event = {
    }
 
    option = { #Settle some Yaks
-	   name = khanate.13.a
+	   name = khanate.13.b
 	   ai_chance = {
 		factor = 50
 		}
 		add_stability = -0.05
 		KHA_increase_settled_lot = yes
 		
+   }
+}
+
+#Becoming a new Commonwealth
+country_event = { 
+	id = khanate.14
+	title = khanate.14.t
+	desc = khanate.14.d
+   picture = GFX_event_test
+
+   is_triggered_only = yes
+	fire_only_once = yes
+
+   option = { #We have much to do
+	   name = khanate.14.a
+	   ai_chance = {
+		factor = 50
+		}
+		add_ideas = KHA_settling_down_1_idea
+		add_ideas = KHA_pony_integration_1_idea
+   }
+}
+
+#Khanate betrays our Deal
+country_event = { 
+	id = khanate.15
+	title = khanate.15.t
+	desc = khanate.15.d
+   picture = GFX_event_test
+
+   is_triggered_only = yes
+	fire_only_once = yes
+
+   option = { #We can't do anything
+	   name = khanate.15.a
+	   ai_chance = {
+		factor = 0
+		}
+		add_stability = -0.10
+   }
+
+   option = { #Then Annihilate them!
+	   name = khanate.15.b
+	   trigger = {
+			AOS = {
+				check_variable = {
+					AOS_khan_loyalty < 5
+				} 
+			}
+	   }
+	   ai_chance = {
+		factor = 100
+		}
+		add_manpower = 500
+		add_equipment_to_stockpile = { type = infantry_equipment_1 amount = 500 producer = OWE }
+		leave_faction = yes
+		remove_ideas = KHA_lack_of_cohesion_idea
+		KHA = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+			country_event = khanate.16
+		}
+   }
+}
+
+#A pact, broken
+country_event = { 
+	id = khanate.16
+	title = khanate.16.t
+	desc = khanate.16.d
+   picture = GFX_event_test
+
+   is_triggered_only = yes
+	fire_only_once = yes
+
+   option = { #They stand no chance
+	   name = khanate.16.a
+	   ai_chance = {
+		factor = 50
+		}
+		add_stability = -0.05
+		add_war_support = -0.10
+   }
+}
+
+#Grimsmasher's Coronation
+country_event = { 
+	id = khanate.17
+	title = khanate.17.t
+	desc = khanate.17.d
+   picture = GFX_event_test
+
+   is_triggered_only = yes
+	fire_only_once = yes
+
+   option = { #Hail the Emperor-Khan
+	   name = khanate.17.a
+	   ai_chance = {
+		factor = 50
+		}
+		set_capital = {
+			state = 140
+		}
+		set_cosmetic_tag = KHA_imperial_khanate_cosm
+		add_country_leader_trait = khan_emperor
+		KHA_char_grimsmasher = {
+			set_character_name = "Emperor Grimsmasher"
+		}
    }
 }
