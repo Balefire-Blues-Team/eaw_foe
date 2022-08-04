@@ -2,7 +2,7 @@
 	shared_focus = {
 		id = MWY_noble_origins
 		icon = GFX_goal_griffon_crown
-		x = 12
+		x = 5
 		y = 0
 		cost = 1
 
@@ -144,7 +144,7 @@
 			}
 			else = {
 				add_popularity = {
-				    ideology = visionary
+				    ideology = ary
 				    popularity = 0.05
 				}
 			}
@@ -372,8 +372,8 @@
 	shared_focus = {
 		id = MWY_qw_new_path
 		icon = GFX_goal_generic_harmony
-		x = 12
-		y = 9
+		x = 23
+		y = 1
 		cost = 1
 
 		ai_will_do = { 
@@ -1937,8 +1937,8 @@
 	shared_focus = {
 		id = MWY_sc_pragmatism_not_optimism
 		icon = GFX_goal_generic_neutrality_focus
-		x = 12
-		y = 9
+		x = 23
+		y = 1
 		cost = 1
 
 		ai_will_do = { 
@@ -3430,6 +3430,351 @@
 			create_wargoal = {
 				type = annex_everything
 				target = ERA
+			}
+		}
+	}
+
+#ERA Integration
+	shared_focus = { 
+		id = MWY_mending_the_divide
+		icon = GFX_goal_MWY_fully_united_mareway
+		x = 10
+		y = 7
+		cost = 3.6
+
+		available = {
+			ERA = { exists = no }
+			owns_state = 69
+			owns_state = 805
+		}
+
+		ai_will_do = { 
+			factor = 300
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MWY_mending_the_divide"
+			add_political_power = 50
+			add_popularity = {
+			    ideology = survivalism
+			    popularity = -0.30
+			}
+		}
+	}
+
+	shared_focus = {
+		id = MWY_cut_out_the_blight
+		icon = GFX_focus_indy_bound_by_blood
+		relative_position_id = MWY_mending_the_divide
+		x = -2
+		y = 1
+		cost = 5
+
+		prerequisite = { focus = MWY_mending_the_divide }
+		available = {
+			has_completed_focus = MWY_stay_the_course
+		}
+
+		mutually_exclusive = {
+	        focus = MWY_raider_rehab
+	    }
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MWY_cut_out_the_blight"
+			add_stability = 0.10
+			add_popularity = {
+			    ideology = destruction
+			    popularity = -0.50
+			}
+			save_current_manpower = yes
+			69 = {
+				add_manpower = -1272
+			}
+			805 = {
+				add_manpower = -736
+			}
+			restore_previous_manpower = yes
+		}
+	}
+
+	shared_focus = {
+		id = MWY_raider_rehab
+		icon = GFX_goal_ELF_friendship
+		relative_position_id = MWY_mending_the_divide
+		x = 3
+		y = 1
+		cost = 5
+
+		prerequisite = { focus = MWY_mending_the_divide }
+		available = {
+			has_completed_focus = MWY_queens_way
+		}
+
+		mutually_exclusive = {
+	        focus = MWY_cut_out_the_blight
+	    }
+
+		ai_will_do = { 
+		factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MWY_raider_rehab"
+			add_stability = -0.15
+			add_popularity = {
+			    ideology = destruction
+			    popularity = 0.05
+			}
+			add_manpower = 250
+		}
+	}
+
+	shared_focus = {
+		id = MWY_enforce_feudal_contracts
+		icon = GFX_goal_crown_and_swords
+		relative_position_id = MWY_cut_out_the_blight
+		x = 0
+		y = 1
+		cost = 7
+
+		prerequisite = { focus = MWY_cut_out_the_blight }
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MWY_enforce_feudal_contracts"
+			every_state = {
+				limit = {
+					is_core_of = ERA
+				}
+				add_core_of = MWY
+			}
+			add_popularity = {
+			    ideology = continuation
+			    popularity = 0.10
+			}
+
+			custom_effect_tooltip = MWY_unlock_ERA_levies_tt
+		}
+	}
+
+	shared_focus = {
+		id = MWY_connect_the_cities
+		icon = GFX_goal_generic_bridge
+		relative_position_id = MWY_mending_the_divide
+		x = 0
+		y = 2
+		cost = 7
+
+		prerequisite = { 
+			focus = MWY_cut_out_the_blight
+			focus = MWY_raider_rehab
+		}
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MWY_connect_the_cities"
+			69 = {
+				set_state_name = STATE_NAME_MAREDIA
+				add_extra_state_shared_building_slots = 3
+				add_building_construction = {
+					type = infrastructure
+					level = 2
+					instant_build = yes
+				}
+				add_manpower = 500
+			}
+			set_province_name = {
+				id = 9114
+				name = PROV_NAME_NEW_MAREDIA
+			}
+			549 = {
+				add_extra_state_shared_building_slots = 2
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+
+		}
+	}
+
+	shared_focus = {
+		id = MWY_invest_in_belle_grove
+		icon = GFX_goal_endless_money
+		relative_position_id = MWY_connect_the_cities
+		x = -1
+		y = 1
+		cost = 7
+
+		prerequisite = { focus = MWY_connect_the_cities }
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MWY_invest_in_belle_grove"
+			805 = {
+				add_extra_state_shared_building_slots = 4
+				add_building_construction = {
+					type = industrial_complex
+					level = 2
+					instant_build = yes
+				}
+				add_building_construction = {
+					type = arms_factory
+					level = 2
+					instant_build = yes
+				}
+			}
+
+		}
+	}
+
+	shared_focus = {
+		id = MWY_maredia_famine_relief
+		icon = GFX_goal_food_various_vegetables
+		relative_position_id = MWY_connect_the_cities
+		x = 1
+		y = 1
+		cost = 7
+
+		prerequisite = { focus = MWY_connect_the_cities }
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MWY_maredia_famine_relief"
+			add_ideas = MWY_plentiful_food
+
+		}
+	}
+
+	shared_focus = {
+		id = MWY_duchies_without_dukes
+		icon = GFX_goal_generic_liberty_statue
+		relative_position_id = MWY_raider_rehab
+		x = -1
+		y = 1
+		cost = 1
+
+		prerequisite = { focus = MWY_raider_rehab }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = MWY_ERA_not_accepted_forgiveness_tt
+				hidden_trigger = {
+					NOT = { has_global_flag = ERA_accepts_MWY_forgiveness_flag }
+				}
+			}
+		}
+
+		mutually_exclusive = {
+	        focus = MWY_golden_star_domain
+	    }
+
+		ai_will_do = { 
+		factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MWY_duchies_without_dukes"
+			add_popularity = {
+			    ideology = visionary
+			    popularity = 0.05
+			}
+		}
+	}
+
+	shared_focus = {
+		id = MWY_golden_star_domain
+		icon = GFX_goal_MWY_blood_mane_flowers
+		relative_position_id = MWY_raider_rehab
+		x = 1
+		y = 1
+		cost = 1
+
+		prerequisite = { focus = MWY_raider_rehab }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = MWY_ERA_accepted_forgiveness_tt
+				hidden_trigger = {
+					has_global_flag = ERA_accepts_MWY_forgiveness_flag
+				}
+			}
+		}
+
+		mutually_exclusive = {
+	        focus = MWY_duchies_without_dukes
+	    }
+
+		ai_will_do = { 
+		factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MWY_golden_star_domain"
+			add_popularity = {
+			    ideology = destruction
+			    popularity = 0.05
+			}
+		}
+	}
+
+	shared_focus = {
+		id = MWY_amnesty_for_bloody_army
+		icon = GFX_goal_generic_foe_pony_soldier
+		relative_position_id = MWY_duchies_without_dukes
+		x = 1
+		y = 1
+		cost = 5
+
+		prerequisite = { 
+			focus = MWY_duchies_without_dukes
+			focus = MWY_golden_star_domain
+		}
+
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = MWY_all_ERA_cores_above_50_comp_tt
+				all_owned_state = {
+					limit = {
+						is_core_of = ERA
+					}
+					compliance > 50
+				}
+			}
+		}
+
+		ai_will_do = { 
+			factor = 100
+		} 
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus MWY_amnesty_for_bloody_army"
+			every_state = {
+				limit = {
+					is_core_of = ERA
+				}
+				add_core_of = MWY
+			}
+			add_manpower = 2000
+			add_equipment_to_stockpile = {
+    			type = ballistic_equipment_1
+    			amount = 2000
+    			producer = ERA
 			}
 		}
 	}
