@@ -1,0 +1,170 @@
+TMS_third_trial_cat = {
+	TMS_cleanse_state_dec = {
+		icon = GFX_decision_category_viirats
+		ai_will_do = {
+			factor = 100
+			
+		}
+		fire_only_once = no
+		is_good = yes
+		
+		visible = {
+			FROM = {
+				NOT = {
+					OR = {
+					has_state_flag = TMS_golden_cleansing_flag
+					is_core_of = TMS
+					}
+                }
+				is_owned_by = TMS
+				#any_neighbor_state = {has_state_flag = NCG_electric_territory_flag }
+			}
+		}
+		available = {
+			FROM = {
+                political_power > 4
+                NOT = {
+                    has_state_flag = TMS_golden_cleansing_flag
+                }
+				is_owned_by = TMS
+            }
+		}
+		target_root_trigger = {
+			has_completed_focus = TMS_accelerate_the_timetable
+        }
+        state_target = yes
+        on_map_mode = map_and_decisions_view  
+		
+		cost = 5
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision TMS_cleanse_state_dec"
+			custom_effect_tooltip = TMS_souls_for_golden_light_tt
+                FROM = {
+					add_state_flag = TMS_golden_cleansing_flag
+					IF = {
+						limit = { FROM = {AND = {state_population < 500 }}}
+						add_manpower = -100
+						TMS = {
+							add_to_variable = {
+							var = golden_sacrifice
+							value = 100
+							}
+						}
+					}
+					ELSE_IF = {
+						limit = { FROM = {AND = {state_population < 1000 state_population > 500}}}
+						add_manpower = -500
+						TMS = {
+							add_to_variable = {
+							var = golden_sacrifice
+							value = 500
+							}
+						}
+					}
+					ELSE_IF = {
+						limit = { FROM = {AND = {state_population < 2000 state_population > 1000}}}
+						add_manpower = -1000
+						TMS = {
+							add_to_variable = {
+							var = golden_sacrifice
+							value = 1000
+							}
+						}
+					}
+					ELSE_IF = {
+						limit = { FROM = {AND = {state_population < 3000 state_population > 2000}}}
+						add_manpower = -1500
+						TMS = {
+							add_to_variable = {
+							var = golden_sacrifice
+							value = 1500
+							}
+						}
+					}
+					ELSE_IF = {
+						limit = { FROM = {AND = {state_population < 4000 state_population > 3000}}}
+						add_manpower = -2000
+						TMS = {
+							add_to_variable = {
+							var = golden_sacrifice
+							value = 2000
+							}
+						}
+					}
+					ELSE_IF = {
+						limit = { FROM = {AND = {state_population < 5000 state_population > 4000}}}
+						add_manpower = -2500
+						TMS = {
+							add_to_variable = {
+							var = golden_sacrifice
+							value = 2500
+							}
+						}
+					}
+					ELSE_IF = {
+						limit = { FROM = {AND = {state_population < 6000 state_population > 5000}}}
+						add_manpower = -3000
+						TMS = {
+							add_to_variable = {
+							var = golden_sacrifice
+							value = 3000
+							}
+						}
+					}
+					ELSE_IF = {
+						limit = { FROM = {AND = {state_population < 10000 state_population > 6000}}}
+						add_manpower = -5000
+						TMS = {
+							add_to_variable = {
+							var = golden_sacrifice
+							value = 5000
+							}
+						}
+					}
+					ELSE_IF = {
+						limit = { FROM = {AND = {state_population < 15000 state_population > 10000}}}
+						add_manpower = -8000
+						TMS = {
+							add_to_variable = {
+							var = golden_sacrifice
+							value = 8000
+							}
+						}
+					}
+					ELSE_IF = {
+						limit = { FROM = {AND = {state_population > 15000}}}
+						add_manpower = -15000
+						TMS = {
+							add_to_variable = {
+							var = golden_sacrifice
+							value = 15000
+							}
+						}
+					}
+                }
+			
+		}
+	}
+	
+	restore_throneroom = {
+		icon = GFX_decision_stable_door
+		cost = 50
+		ai_will_do = {
+			base = 0
+		}
+		available = {
+			has_political_power > 49
+			num_of_civilian_factories_available_for_projects > 1
+		}
+		fire_only_once = yes
+		modifier = {
+			civilian_factory_use = 2
+		}
+		days_remove = 80
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision restore_throneroom"
+			add_stability = 0.10
+		}
+	}
+	
+}
