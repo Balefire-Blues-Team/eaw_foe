@@ -120,7 +120,7 @@ NDefines.NAI.DEPLOY_MIN_TRAINING_PEACE_FACTOR = 0.94
 NDefines.NAI.DEPLOY_MIN_TRAINING_WAR_FACTOR = 0.25
 
 -- If AI has this much manpower he doesn't care about the percentage
-NDefines.NAI.MANPOWER_FREE_USAGE_THRESHOLD = 50000
+NDefines.NAI.MANPOWER_FREE_USAGE_THRESHOLD = 5000
 
 -- The AI will not deploy more units if he goes below this percentage
 NDefines.NAI.MANPOWER_RESERVED_THRESHOLD = 0.25
