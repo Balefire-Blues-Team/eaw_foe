@@ -3,61 +3,30 @@
 
 peace_ai_desires = {
 
-    # Countries the ai should be more unlikely to release in a peace deal
-    unlikely_countries = {
+    take_our_cores = {
+        peace_action_type = { take_states }
+        enable = {
+            ROOT = { tag = ROOT.FROM } #We are negotiating for ourselves
+            ROOT.FROM.FROM.FROM = { is_core_of = ROOT.FROM } #It is ours
+        }
+        ai_desire = 1000
+    }
+
+    take_our_claims = {
+        peace_action_type = { take_states }
+        enable = {
+           always = yes
+        }
+        ai_desire = 100
+    }
+    
+    dont_liberate = {
         peace_action_type = liberate
         enable = {
-            FROM = {
-                is_unlikely_country_tag = yes
-            }
+            always = yes
         }
-        ai_desire = -85  # 85 percent lower desire
+        ai_desire = -850  # 85 percent lower desire
     }
-
-
-    # Countries the ai should be more unlikely to puppet in a peace deal
-    unlikely_countries = {
-        peace_action_type = puppet
-        enable = {
-            FROM = {
-                is_unlikely_country_tag = yes
-            }
-        }
-        ai_desire = -50  # 50 percent lower desire (slightly more keen to puppet than to liberate)
-    }
-
-
-    # Breakaway countries in the Soviet Civil war don't want to liberate stuff
-    # breakaway_country = {
-    #     peace_action_type = { liberate puppet force_government }
-    #     enable = {
-    #        ROOT = { has_country_flag = SOV_breakaway_country_flag }
-    #     }
-    #     ai_desire = -200  # just don't, please
-    # }
-
-
-    # Force gov on visionary preferably
-    survivalism_force_government_on_visionary = {
-        peace_action_type = force_government
-        enable = {
-            ROOT = { has_government = survivalism }
-            ROOT.FROM = { has_government = visionary }
-            ROOT.FROM.FROM.FROM = { NOT = { is_claimed_by = ROOT.FROM } }
-        }
-        ai_desire = 50
-    }
-
-
-    survivalism_owner_does_not_have_core = {
-        peace_action_type = { force_government puppet take_states }
-        enable = {
-            ROOT = { has_government = survivalism }
-            ROOT.FROM.FROM.FROM = { NOT = { is_core_of = ROOT.FROM } }
-        }
-        ai_desire = -50
-    }
-
 
     other_owner_does_not_have_core = {
         peace_action_type = { force_government puppet take_states }
@@ -90,7 +59,7 @@ peace_ai_desires = {
                 }
             }
         }
-        ai_desire = -75
+        ai_desire = -20
     }
 
 
@@ -111,7 +80,7 @@ peace_ai_desires = {
                 tag = ROOT.FROM
             }
         }
-        ai_desire = 10
+        ai_desire = 1000
     }
 
 
@@ -156,28 +125,13 @@ peace_ai_desires = {
     }
 
 
-    democrats_dont_liberate_the_wrong_ideology = {
-        peace_action_type = liberate
-        enable = {
-            ROOT = { has_government = survivalism }
-            ROOT.FROM = {
-                OR = {
-                    has_government = destruction
-                    has_government = visionary
-                }
-            }
-        }
-        ai_desire = -200
-    }
-
-
     dont_puppet_and_force_government = {
         peace_action_type = { puppet }
 
         enable = {
-            FROM.FROM = { pc_is_forced_government_by = ROOT }
+            always = yes
         }
-        ai_desire = -200
+        ai_desire = -2000
     }
 
 
@@ -185,48 +139,10 @@ peace_ai_desires = {
         peace_action_type = { force_government }
 
         enable = {
-            FROM.FROM = { pc_is_puppeted_by = ROOT }
+            always = yes
         }
-        ai_desire = -200
+        ai_desire = -2000
     }
-
-
-    nonaligned_dont_liberate_the_wrong_ideology = {
-        peace_action_type = liberate
-        enable = {
-            ROOT = { has_government = continuation }
-            ROOT.FROM = { NOT = { has_government = continuation } }
-        }
-        ai_desire = -200
-    }
-
-
-    visionary_dont_liberate_the_wrong_ideology = {
-        peace_action_type = liberate
-        enable = {
-            ROOT = { has_government = visionary }
-            ROOT.FROM = { NOT = { has_government = visionary } }
-        }
-        ai_desire = -200
-    }
-
-
-    destruction_dont_liberate_the_wrong_ideology = {
-        peace_action_type = liberate
-        enable = {
-            ROOT = { has_government = destruction }
-            ROOT.FROM = {
-                NOT = {
-                    OR = {
-                        has_government = destruction
-                        has_government = continuation
-                    }
-                }
-            }
-        }
-        ai_desire = -200
-    }
-
 
     dont_force_government_or_puppet_on_non_core = {
         peace_action_type = { puppet force_government }
@@ -236,7 +152,7 @@ peace_ai_desires = {
             }
         }
 
-        ai_desire = -50
+        ai_desire = -5000
     }
 
 
@@ -249,7 +165,7 @@ peace_ai_desires = {
             }
         }
 
-        ai_desire = 10
+        ai_desire = -1000
     }
 
 
@@ -266,7 +182,7 @@ peace_ai_desires = {
             }
         }
 
-        ai_desire = 50
+        ai_desire = -50000
     }
 
 
@@ -282,7 +198,7 @@ peace_ai_desires = {
             }
         }
 
-        ai_desire = 100
+        ai_desire = 1000
     }
 
 
@@ -307,64 +223,8 @@ peace_ai_desires = {
                 }
             }
         }
-        ai_desire = -90
+        ai_desire = -900
     }
-
-
-    non_aligned_should_stick_to_claims = {
-        peace_action_type = take_states
-        enable = {
-            ROOT = { has_government = continuation }
-            ROOT.FROM.FROM.FROM = {
-                NOT = { is_claimed_by = ROOT.FROM }
-                NOT = { is_core_of = ROOT.FROM }
-            }
-        }
-        ai_desire = -50
-    }
-
-
-    wrong_ideology_faction_members_dont_force_gov = {
-        peace_action_type = force_government
-        enable = {
-            ROOT = {
-                NOT = { has_government = survivalism }
-                any_allied_country = {
-                    is_faction_leader = yes
-                    has_government = survivalism
-                }
-            }
-        }
-        ai_desire = -200
-    }
-
-
-    force_gov_puppets = {
-        peace_action_type = force_government
-        enable = {
-            ROOT = {
-                has_government = survivalism
-                ROOT.FROM.FROM = {
-                    NOT = { has_government = survivalism }
-                    is_subject = yes
-                }
-            }
-        }
-        ai_desire = 100
-    }
-
-
-    # dont_resurrect_hitler = {
-    #     peace_action_type = liberate
-    #     enable = {
-    #         ROOT.FROM = {
-    #             original_tag = GER
-    #             has_government = destruction
-    #         }
-    #     }
-    #     ai_desire = -100
-    # }
-
 
     dont_take_states_for_wrong_ideology_allies = {
         peace_action_type = take_states
@@ -381,24 +241,6 @@ peace_ai_desires = {
         ai_desire = -20
     }
 
-
-    # destruction_take_states_germany_sov = {
-    #     peace_action_type = take_states
-    #     enable = {
-    #         ROOT = {
-    #             tag = ROOT.FROM
-    #         }
-    #         ROOT = {
-    #             has_government = destruction
-    #         }
-    #         ROOT.FROM.FROM = {
-    #             tag = SOV
-    #         }
-    #     }
-    #     ai_desire = 25
-    # }
-
-
     prefer_take_states_for_puppets_with_cores = {
         peace_action_type = take_states
         enable = {
@@ -410,7 +252,7 @@ peace_ai_desires = {
                 is_core_of = ROOT.FROM
             }
         }
-        ai_desire = 100
+        ai_desire = 1000
     }
 
 
@@ -424,7 +266,7 @@ peace_ai_desires = {
                 }
             }
         }
-        ai_desire = -100
+        ai_desire = -1000
     }
 
 
