@@ -214,3 +214,4 @@ NDefines.NMilitary.ARMY_FUEL_COST_MULT = 0 --fuel multiplier for all army missio
 
 --NAir
 NDefines.NAir.FUEL_COST_MULT = 0 --fuel multiplier for all air missions
+NDefines.NAir.MIN_PLANE_COUNT_PARADROP = 1 --Actually allow Airplanes to Paradrop
