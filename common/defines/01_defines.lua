@@ -113,7 +113,7 @@ NDefines.NAI.DEPLOY_MIN_TRAINING_PEACE_FACTOR = 0.94
 NDefines.NAI.DEPLOY_MIN_TRAINING_WAR_FACTOR = 0.25
 
 -- If AI has this much manpower he doesn't care about the percentage
-NDefines.NAI.MANPOWER_FREE_USAGE_THRESHOLD = 50000
+NDefines.NAI.MANPOWER_FREE_USAGE_THRESHOLD = 5000
 
 -- The AI will not deploy more units if he goes below this percentage
 NDefines.NAI.MANPOWER_RESERVED_THRESHOLD = 0.25
@@ -207,3 +207,4 @@ NDefines.NMilitary.ARMY_FUEL_COST_MULT = 0 --fuel multiplier for all army missio
 
 --NAir
 NDefines.NAir.FUEL_COST_MULT = 0 --fuel multiplier for all air missions
+NDefines.NAir.MIN_PLANE_COUNT_PARADROP = 10
