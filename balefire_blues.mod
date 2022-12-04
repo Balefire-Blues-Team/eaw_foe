@@ -1,4 +1,4 @@
-version="1.2.13"
+version="1.2.14"
 replace_path="common/ai_peace"
 replace_path="common/ai_strategy"
 replace_path="common/ai_strategy_plans"
