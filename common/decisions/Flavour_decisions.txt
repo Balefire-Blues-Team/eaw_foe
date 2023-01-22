@@ -186,7 +186,181 @@ TMS_gold_morning_cat = {
 
 VOI_blight_cat = {
 
-VOI_cleanse_blight = {
+	VOI_blight_expansion = {
+		icon = GFX_decision_unknown
+		### Never "complete" success
+		activation  = {
+			owns_state = 889
+			has_idea = VOI_blighted_lands_idea
+		}
+		available = {
+			NOT = {
+				has_idea = VOI_blighted_lands_idea
+			}
+		}
+		allowed = {
+			tag = VOI
+		}
+		is_good = NO
+		days_mission_timeout = blight_speed
+		fire_only_once = no
+		###Add points to actual number
+		timeout_effect = {
+			custom_effect_tooltip = VOI_blight_advance_tt
+				
+				###Add points of monthly net
+				
+				add_to_variable = {
+				var = blight_percent
+				value = blight_strength
+				}
+				random_state = {
+					prioritize = {
+						309
+					}
+					limit = {
+						any_neighbor_state = {
+							has_dynamic_modifier = {
+								modifier = VOI_blighted_lands_modifier
+							}
+						}
+						NOT = {
+							has_state_flag = VOI_blight_cleansed_flag
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = VOI_blighted_lands_modifier
+							}
+						}
+						state_population > 1
+					}
+					add_dynamic_modifier = {
+						modifier = VOI_blighted_lands_modifier
+					}
+				}
+			
+		}
+		days_re_enable = 0
+		days_remove = 1
+	}
+
+	VOI_blight_expansion2 = {
+		icon = GFX_decision_unknown
+		### Never "complete" success
+		activation  = {
+			owns_state = 889
+			has_idea = VOI_blighted_lands_idea
+			date > 1236.01.01
+		}  
+		available = {
+			NOT = {
+				has_idea = VOI_blighted_lands_idea
+			}
+		}
+		allowed = {
+			tag = VOI
+		}
+		is_good = NO
+		days_mission_timeout = blight_speed
+		fire_only_once = no
+		###Add points to actual number
+		timeout_effect = {
+			custom_effect_tooltip = VOI_blight_advance_tt
+				
+				###Add points of monthly net
+				
+				add_to_variable = {
+				var = blight_percent
+				value = blight_strength
+				}
+				random_state = {
+					prioritize = {
+						309
+					}
+					limit = {
+						any_neighbor_state = {
+							has_dynamic_modifier = {
+								modifier = VOI_blighted_lands_modifier
+							}
+						}
+						NOT = {
+							has_state_flag = VOI_blight_cleansed_flag
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = VOI_blighted_lands_modifier
+							}
+						}
+						state_population > 1
+					}
+					add_dynamic_modifier = {
+						modifier = VOI_blighted_lands_modifier
+					}
+				}
+		}
+		days_re_enable = 0
+		days_remove = 1
+	}
+
+	VOI_blight_expansion3 = {
+		icon = GFX_decision_unknown
+		### Never "complete" success
+		activation  = {
+			owns_state = 889
+			has_idea = VOI_blighted_lands_idea
+			date > 1237.01.01
+		}
+		available = {
+			NOT = {
+				has_idea = VOI_blighted_lands_idea
+			}
+		}
+		allowed = {
+			tag = VOI
+		}
+		is_good = NO
+		days_mission_timeout = blight_speed
+		fire_only_once = no
+		###Add points to actual number
+		timeout_effect = {
+			custom_effect_tooltip = VOI_blight_advance_tt
+				
+				###Add points of monthly net
+				
+				add_to_variable = {
+				var = blight_percent
+				value = blight_strength
+				}
+				random_state = {
+					prioritize = {
+						309
+					}
+					limit = {
+						any_neighbor_state = {
+							has_dynamic_modifier = {
+								modifier = VOI_blighted_lands_modifier
+							}
+						}
+						NOT = {
+							has_state_flag = VOI_blight_cleansed_flag
+						}
+						NOT = {
+							has_dynamic_modifier = {
+								modifier = VOI_blighted_lands_modifier
+							}
+						}
+						state_population > 1
+					}
+					add_dynamic_modifier = {
+						modifier = VOI_blighted_lands_modifier
+					}
+				}
+		}
+		days_re_enable = 0
+		days_remove = 1
+	}
+
+	VOI_cleanse_blight = {
 		icon = GFX_decision_unknown
 		cost = 150
 		ai_will_do = {
@@ -197,7 +371,18 @@ VOI_cleanse_blight = {
 		available = {
 			has_political_power > 149
 			has_manpower > 249
-			has_army_manpower = { size > 2500 }
+			has_army_manpower = { size > 5000 }
+			custom_trigger_tooltip = {
+				tooltip = VOI_blight_beat_back_tt
+				NOT = {
+					any_owned_state = {
+						state_population > 500
+						has_dynamic_modifier = {
+							modifier = VOI_blighted_lands_modifier
+						}
+					}
+				}
+			}
 		}
 		modifier = {
 			experience_gain_army = 0.25
@@ -209,17 +394,203 @@ VOI_cleanse_blight = {
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision VOI_cleanse_blight"
 			add_manpower = 47
-			874 = {remove_dynamic_modifier = { modifier = VOI_blighted_lands_modifier } }
-			873 = {remove_dynamic_modifier = { modifier = VOI_blighted_lands_modifier } }
-			309 = {remove_dynamic_modifier = { modifier = VOI_blighted_lands_modifier } }
+			every_state = {
+				limit = {
+					has_dynamic_modifier = {
+						modifier = VOI_blighted_lands_modifier
+					}
+					remove_dynamic_modifier = { modifier = VOI_blighted_lands_modifier }
+				}
+			}
 			remove_ideas = VOI_blighted_lands_idea
+		}
+	}
+
+	VOI_cull_blight = {
+		target_array = owned_states
+		icon = GFX_decision_unknown
+		cost = 50
+		ai_will_do = {
+			base = 100
+		}
+		state_target = yes
+		fire_only_once = no
+		is_good = yes
+		on_map_mode = map_and_decisions_view
+		available = {
+			has_political_power > 49
+			has_army_manpower = { size > 1000 }
+			has_manpower > 49 
+			NOT = { has_country_flag = VOI_cleanse_in_progress_flag }
+		}
+		visible = {
+			FROM = {
+				state_population > 500
+				has_dynamic_modifier = {
+					modifier = VOI_blighted_lands_modifier
+				}
+			}
+		}
+		modifier = {
+			experience_gain_army = 0.10
+		}
+		days_remove = 100
+		complete_effect = {
+			add_manpower = -50
+			hidden_effect = {
+				VOI = { set_country_flag = VOI_cleanse_in_progress_flag }
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision VOI_cleanse_blight"
+			add_manpower = 40
+			FROM  = {
+				remove_dynamic_modifier = {
+					modifier = VOI_blighted_lands_modifier
+				}
+			}
+			hidden_effect = {
+				VOI	={clr_country_flag = VOI_cleanse_in_progress_flag}
+			}
+		}
+	}
+
+	VOI_fight_back_darkness = {
+		icon = GFX_decision_unknown
+		cost = 50
+		ai_will_do = {
+			base = 1
+			modifier = { 
+				check_variable = {
+					blight_percent > 50
+				}
+				add = 10
+			}
+			modifier = {
+				check_variable = {
+					blight_percent > 80
+				}
+				add = 10
+			}
+			modifier = {
+				has_equipment = {
+					type = infantry_equipment
+					amount > 1000
+				}
+				has_manpower > 500
+				factor = 10
+			}
+		}
+		fire_only_once = no
+		is_good = yes
+		available = {
+			has_political_power > 24
+			has_army_manpower = { size > 2000 }
+			has_manpower > 99
+			has_equipment = { infantry_equipment > 99 }
+		}
+		visible = {
+			FROM = {
+				state_population > 500
+				has_dynamic_modifier = {
+					modifier = VOI_blighted_lands_modifier
+				}
+			}
+			check_variable = {
+				blight_percent > 25
+			}
+		}
+		days_remove = 40
+		complete_effect = {
+			add_manpower = -100
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = -100
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision VOI_cleanse_blight"
+			add_manpower = 85
+			custom_effect_tooltip = VOI_blight_fought_back_tt
+
+			subtract_from_variable = {
+				var = blight_percent
+				value = 5
+			}
 		}
 	}
 }
 
+VOI_blight_external_cat = {
+
+	VOI_cull_blight_external = {
+		target_array = owned_states
+		icon = GFX_decision_unknown
+		cost = 50
+		ai_will_do = {
+			base = 100
+		}
+		state_target = yes
+		fire_only_once = no
+		is_good = yes
+		on_map_mode = map_and_decisions_view
+		available = {
+			has_political_power > 49
+			has_army_manpower = { size > 1000 }
+			has_manpower > 99 
+			has_equipment = { infantry_equipment > 99 }
+			NOT = { has_country_flag = VOI_cleanse_in_progress_flag }
+		}
+		visible = {
+			FROM = {
+				state_population > 500
+				has_dynamic_modifier = {
+					modifier = VOI_blighted_lands_modifier
+				}
+			}
+		}
+		modifier = {
+			experience_gain_army = 0.10
+		}
+		days_remove = 100
+		complete_effect = {
+			add_manpower = -100
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = -100
+			}
+			hidden_effect = {
+				ROOT = { set_country_flag = VOI_cleanse_in_progress_flag }
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision VOI_cleanse_blight"
+			add_manpower = 85
+			add_equipment_to_stockpile = {
+				type = infantry_equipment
+				amount = 25
+			}
+			FROM  = {
+				remove_dynamic_modifier = {
+					modifier = VOI_blighted_lands_modifier
+				}
+				set_state_flag = {
+					flag = VOI_blight_cleansed_flag
+					days = 300
+				}
+			}
+			hidden_effect = {
+				ROOT = {clr_country_flag = VOI_cleanse_in_progress_flag}
+			}
+		}
+	}
+
+
+}
+
 TAR_open_gates_cat = {
 
-TAR_unleash_hell = {
+	TAR_unleash_hell = {
 		icon = GFX_decision_unknown
 		cost = 100
 		ai_will_do = {
@@ -231,6 +602,7 @@ TAR_unleash_hell = {
 			has_political_power > 99
 			date > 1238.01.01
 		}
+		visible = { original_tag = TAR }
 		
 		complete_effect = {
 			swap_ideas = { remove_idea = TAR_gates_of_tartarus_idea add_idea = TAR_gates_of_tartarus_idea2 }
