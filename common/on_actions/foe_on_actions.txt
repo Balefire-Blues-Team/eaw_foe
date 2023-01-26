@@ -788,4 +788,70 @@ on_actions = {
 			}
 		}
 	}
+	on_weekly_VOI = {
+		effect = {
+			log = "[GetDateText]: ROOT: [Root.GetName] on_weekly_VOI"
+			if = {
+				limit = {VOI = { has_idea = VOI_blighted_lands_idea }}
+				every_state = {
+					limit = { check_variable = { STATE_blight_infect > 99 } }
+					set_variable = {
+						STATE_blight_infect = 1
+					}
+					if = {
+						limit = { has_dynamic_modifier = { modifier = VOI_blighted_lands_modifier } }
+						remove_dynamic_modifier = {
+							modifier = VOI_blighted_lands_modifier
+						}
+						add_dynamic_modifier = {
+							modifier = VOI_blighted_lands_2_modifier
+						}
+					}
+					else_if = {
+						limit = { has_dynamic_modifier = { modifier = VOI_blighted_lands_2_modifier } }
+						remove_dynamic_modifier = {
+							modifier = VOI_blighted_lands_2_modifier
+						}
+						add_dynamic_modifier = {
+							modifier = VOI_blighted_lands_3_modifier
+						}
+					}
+					else_if = {
+						limit = { has_dynamic_modifier = { modifier = VOI_blighted_lands_3_modifier } }
+						damage_building = {
+							type = infrastructure
+							damage = 5
+						}
+						add_manpower = -50
+					}
+				}
+				every_state = {
+					limit = {
+						AND = { 
+							check_variable = { STATE_blight_infect > 0 } 
+							check_variable = { STATE_blight_infect < 100 }
+						}
+					}
+					add_to_variable = {
+						var = STATE_blight_infect
+						value = 7
+					}
+				}
+				every_country = {
+					limit = {
+						NOT = { has_country_flag = VOI_experienced_blight_flag }
+						any_owned_state = {
+							OR = {
+							has_dynamic_modifier = { modifier = VOI_blighted_lands_modifier } 
+							has_dynamic_modifier = { modifier = VOI_blighted_lands_2_modifier } 
+							has_dynamic_modifier = { modifier = VOI_blighted_lands_3_modifier } 
+							}
+						}
+						NOT = { original_tag = VOI }
+					}
+					country_event = flavour.7
+				}
+			}
+		}
+	}
 }
