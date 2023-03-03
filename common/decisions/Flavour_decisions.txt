@@ -257,6 +257,12 @@ VOI_blight_cat = {
 						var = STATE_blight_infect
 						value = 1
 					}
+					owner = {
+						IF = {
+							limit = { NOT = { OR = { has_country_flag = VOI_experienced_blight_flag original_tag = VOI } } }
+							country_event = flavour.7
+						}
+					}
 				}
 			
 		}
@@ -422,7 +428,7 @@ VOI_blight_cat = {
 
 	VOI_cleanse_blight = {
 		icon = GFX_decision_unknown
-		cost = 150
+		cost = 100
 		ai_will_do = {
 			base = 1000
 		}
@@ -430,7 +436,9 @@ VOI_blight_cat = {
 		is_good = yes
 		available = {
 			has_political_power > 149
-			has_manpower > 249
+			has_equipment = {
+				support_equipment > 4999
+			}
 			has_army_manpower = { size > 5000 }
 			custom_trigger_tooltip = {
 				tooltip = VOI_blight_beat_back_tt
@@ -520,7 +528,7 @@ VOI_blight_cat = {
 		modifier = {
 			experience_gain_army = 0.10
 		}
-		days_remove = 100
+		days_remove = 90
 		complete_effect = {
 			add_manpower = -50
 			hidden_effect = {
@@ -544,6 +552,10 @@ VOI_blight_cat = {
 				set_variable = {
 					var = STATE_blight_infect
 					value = 0
+				}
+				set_state_flag = {
+					flag = VOI_blight_cleansed_flag
+					days = 300
 				}
 				}
 			}
@@ -682,7 +694,7 @@ VOI_blight_external_cat = {
 			add_manpower = 85
 			add_equipment_to_stockpile = {
 				type = infantry_equipment
-				amount = 25
+				amount = 65
 			}
 			FROM  = {
 				remove_dynamic_modifier = {
