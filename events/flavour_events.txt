@@ -250,3 +250,219 @@ country_event = {
 	   add_stability = -0.02
    	}
 }
+
+country_event = {
+	id = flavour.8
+	title = flavour.8.t
+	desc = flavour.8.d
+   	picture = GFX_event_test
+
+    fire_only_once = yes
+	trigger = {
+		check_variable = {
+			blight_percent > 7
+		}
+	}
+  	option = {
+	   name = flavour.8.a
+	   ai_chance = { factor = 60}
+		custom_effect_tooltip = VOI_ecrish_a_tt
+	   	subtract_from_variable = {
+			var = blight_percent
+			value = 3
+			}
+   	}
+	   option = {
+		name = flavour.8.b
+		ai_chance = { factor = 40}
+		custom_effect_tooltip = VOI_ecrish_b_tt	
+		add_political_power = -50
+			add_stability = -0.04
+			add_to_variable = {
+				var = blight_percent
+				value = 5
+				}
+			hidden_effect = {
+				set_country_flag = VOI_blightstudies_1
+			}
+		}
+}
+
+country_event = {
+	id = flavour.9
+	title = flavour.9.t
+	desc = flavour.9.d
+   	picture = GFX_event_test
+
+    fire_only_once = yes
+	trigger = {
+		check_variable = {
+			blight_percent > 24
+		}
+		tag = VOI
+	}
+  	option = {
+	   name = flavour.9.a
+	   ai_chance = { factor = 60}
+		custom_effect_tooltip = VOI_blightspeed_increase_tt
+	   	add_to_variable = {
+			var = blight_strength
+			value = 1
+			}
+   	}
+}
+
+country_event = {
+	id = flavour.10
+	title = flavour.10.t
+	desc = flavour.10.d
+   	picture = GFX_event_test
+
+    fire_only_once = yes
+	trigger = {
+		tag = VOI
+		date > 1236.03.01
+	}
+  	option = {
+	   name = flavour.10.a
+	   ai_chance = { factor = 60}
+		custom_effect_tooltip = VOI_blight_increase_6_tt
+	   	add_to_variable = {
+			var = blight_percent
+			value = 6
+			}
+   	}
+}
+
+country_event = {
+	id = flavour.11
+	title = flavour.11.t
+	desc = flavour.11.d
+   	picture = GFX_event_test
+
+    fire_only_once = yes
+	trigger = {
+		tag = VOI
+		date > 1236.05.01
+		has_country_flag = VOI_blightstudies_1
+	}
+  	option = {
+	   name = flavour.11.a
+	   ai_chance = { factor = 40}
+		custom_effect_tooltip = VOI_progress_a_tt
+	   	add_to_variable = {
+			var = blight_percent
+			value = -3
+			}
+   	}
+	option = {
+		name = flavour.11.b
+		ai_chance = { factor = 90}
+		custom_effect_tooltip = VOI_progress_b_tt
+			add_to_variable = {
+			 var = blight_percent
+			 value = 6
+			}
+		add_political_power = -50
+		add_stability = -0.05
+		hidden_effect = {
+			country_event = { event = flavour.12 days = 120 }
+		}
+	}
+}
+
+country_event = {
+	id = flavour.12
+	title = flavour.12.t
+	desc = flavour.12.d
+   	picture = GFX_event_test
+
+    fire_only_once = yes
+	is_triggered_only = yes
+  	option = {
+	   name = flavour.12.a
+	   ai_chance = { factor = 20}
+		custom_effect_tooltip = VOI_progress_a_tt
+	   	add_to_variable = {
+			var = blight_percent
+			value = -3
+			}
+		add_stability = 0.10
+		add_political_power = 100
+		add_manpower = -15
+   	}
+	option = {
+		name = flavour.12.b
+		ai_chance = { factor = 180}
+		custom_effect_tooltip = VOI_synthesis_b_tt
+			add_to_variable = {
+			 var = blight_percent
+			 value = 15
+			}
+		add_stability = -0.15
+		add_political_power = -200
+		add_ideas = VOI_synthesis_project_idea
+		hidden_effect = {
+			set_country_flag = { flag = VOI_synthesis_funding_flag days = 365 }
+		}
+	}
+}
+
+country_event = {
+	id = flavour.13
+	title = flavour.13.t
+	desc = flavour.13.d
+   	picture = GFX_event_test
+
+    fire_only_once = yes
+	trigger = {
+		tag = VOI
+		has_idea = VOI_synthesis_project_idea
+		NOT = {
+			has_country_flag = VOI_synthesis_funding_flag
+		}
+		check_variable = {
+			blight_percent < 100
+		}
+	}
+  	option = {
+	   name = flavour.13.a
+	   ai_chance = { factor = 20}
+		remove_ideas = VOI_blighted_lands_idea
+		swap_ideas = {
+			remove_idea = VOI_synthesis_project_idea
+			add_idea = VOI_synthesis_idea
+		}
+		every_state = {
+			limit = {
+				OR = {
+					has_dynamic_modifier = {
+						modifier = VOI_blighted_lands_modifier
+					}
+					has_dynamic_modifier = {
+						modifier = VOI_blighted_lands_2_modifier
+					}
+					has_dynamic_modifier = {
+						modifier = VOI_blighted_lands_3_modifier
+					}
+					}
+				remove_dynamic_modifier = { modifier = VOI_blighted_lands_modifier }
+				remove_dynamic_modifier = { modifier = VOI_blighted_lands_2_modifier }
+				remove_dynamic_modifier = { modifier = VOI_blighted_lands_3_modifier }
+			}
+		}
+		hidden_effect = {
+			every_country = {
+				limit = {
+					OR = {
+						has_country_flag = VOI_experienced_blight_flag
+						has_country_flag = VOI_blight_assistance_flag
+						is_in_faction_with = VOI
+					}
+				}
+				news_event = flavour.14
+			}
+			
+		}
+   	}
+}
