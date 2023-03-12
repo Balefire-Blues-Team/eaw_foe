@@ -483,9 +483,13 @@ VOI_blight_cat = {
 							modifier = VOI_blighted_lands_3_modifier
 						}
 						}
-					remove_dynamic_modifier = { modifier = VOI_blighted_lands_modifier }
-					remove_dynamic_modifier = { modifier = VOI_blighted_lands_2_modifier }
-					remove_dynamic_modifier = { modifier = VOI_blighted_lands_3_modifier }
+				}
+				remove_dynamic_modifier = { modifier = VOI_blighted_lands_modifier }
+				remove_dynamic_modifier = { modifier = VOI_blighted_lands_2_modifier }
+				remove_dynamic_modifier = { modifier = VOI_blighted_lands_3_modifier }
+				set_variable = {
+					var = STATE_blight_infect
+					value = 0
 				}
 			}
 			remove_ideas = VOI_blighted_lands_idea
@@ -494,6 +498,38 @@ VOI_blight_cat = {
 					has_idea = VOI_synthesis_project_idea
 				}
 				remove_ideas = VOI_synthesis_project_idea
+			}
+			hidden_effect = {
+				every_country = {
+					limit = {
+						OR = {
+							has_country_flag = VOI_experienced_blight_flag
+							has_country_flag = VOI_blight_help_flag
+							tag = KHA
+							tag = DEC
+							tag = NII
+							tag = COM
+							tag = COC
+							tag = COL
+							tag = COR
+							tag = ARI
+							tag = WTC
+							tag = NOV
+							tag = DSB
+							tag = AOS
+							tag = ARR
+							tag = NMZ
+							tag = ALB
+							tag = ARI
+							tag = PHE
+							tag = NLO
+							tag = CAN
+							tag = NGL
+							tag = VOI
+						}
+					}
+					news_event = flavour.19
+				}
 			}
 		}
 	}
@@ -733,6 +769,92 @@ VOI_blight_external_cat = {
 			}
 			hidden_effect = {
 				ROOT = {clr_country_flag = VOI_cleanse_in_progress_flag}
+			}
+		}
+	}
+
+	VOI_send_aid_external = {
+		icon = GFX_decision_unknown
+		cost = 20
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 10
+				has_equipment = {
+					support_equipment > 100
+				}
+			}
+			modifier = {
+				add = 100
+				has_equipment = {
+					support_equipment > 500
+				}
+			}
+		}
+		fire_only_once = no
+		is_good = yes
+		available = {
+			has_political_power > 19
+			has_equipment = {
+				support_equipment > 25
+			}
+		}
+		days_re_enable = 30
+		visible = { has_country_flag = VOI_blight_help_flag }
+		days_remove = 5
+		complete_effect = {
+			send_equipment = {
+				equipment = support_equipment
+				amount = 25
+				target = VOI
+			}
+			add_manpower = -5
+			VOI = { add_manpower = 5 }
+		}
+	}
+
+	VOI_send_aid_massive_external = {
+		icon = GFX_decision_unknown
+		cost = 20
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 10
+				has_equipment = {
+					support_equipment > 500
+				}
+			}
+			modifier = {
+				add = 100
+				has_equipment = {
+					support_equipment > 1000
+				}
+			}
+		}
+		fire_only_once = no
+		is_good = yes
+		available = {
+			has_political_power > 19
+			has_equipment = {
+				support_equipment > 99
+			}
+		}
+		days_re_enable = 30
+		visible = { has_country_flag = VOI_blight_help_flag }
+		days_remove = 5
+		complete_effect = {
+			send_equipment = {
+				equipment = support_equipment
+				amount = 100
+				target = VOI
+			}
+			add_manpower = -20
+			VOI = { 
+				add_manpower = 20 
+				add_opinion_modifier = {
+					target = ROOT
+					modifier = blight_aid
+				}
 			}
 		}
 	}

@@ -309,6 +309,9 @@ country_event = {
 			var = blight_strength
 			value = 1
 			}
+		hidden_effect = {
+			country_event = { id = flavour.16 days = 250 }
+		}
    	}
 }
 
@@ -331,6 +334,14 @@ country_event = {
 			var = blight_percent
 			value = 6
 			}
+		hidden_effect = {
+			IF = {
+				limit = {
+					NOT = { has_country_flag = VOI_blightstudies_1 }
+				}
+				country_event = { id = flavour.15 days = 100 }
+			}
+		}
    	}
 }
 
@@ -449,6 +460,10 @@ country_event = {
 				remove_dynamic_modifier = { modifier = VOI_blighted_lands_modifier }
 				remove_dynamic_modifier = { modifier = VOI_blighted_lands_2_modifier }
 				remove_dynamic_modifier = { modifier = VOI_blighted_lands_3_modifier }
+				set_variable = {
+					var = STATE_blight_infect
+					value = 0
+				}
 			}
 		}
 		hidden_effect = {
@@ -466,3 +481,358 @@ country_event = {
 		}
    	}
 }
+
+news_event = {
+	id = flavour.14
+	title = flavour.14.t
+	desc = flavour.14.d
+   	picture = GFX_event_test
+
+    fire_only_once = no
+	is_triggered_only = yes
+  	option = {
+	   name = flavour.14.a
+	   ai_chance = { factor = 60}
+		IF = {
+			limit = { has_country_flag = VOI_experienced_blight_flag }
+			clr_country_flag = VOI_experienced_blight_flag
+		}
+   	}
+}
+
+country_event = {
+	id = flavour.15
+	title = flavour.15.t
+	desc = flavour.15.d
+   	picture = GFX_event_test
+
+    fire_only_once = yes
+	is_triggered_only = yes
+  	option = {
+	   name = flavour.15.a
+	   ai_chance = { factor = 60}
+		custom_effect_tooltip = VOI_blight_cleanse_capital_tt
+	   	add_to_variable = {
+			var = blight_percent
+			value = -4
+			}
+			add_stability = -0.04
+		capital_scope = {
+			add_manpower = -561
+			remove_dynamic_modifier = {
+				modifier = VOI_blighted_lands_modifier
+			}
+			hidden_effect = {
+			remove_dynamic_modifier = {
+				modifier = VOI_blighted_lands_2_modifier
+			}
+			remove_dynamic_modifier = {
+				modifier = VOI_blighted_lands_3_modifier
+			}
+			set_variable = {
+				var = STATE_blight_infect
+				value = 0
+			}
+			set_state_flag = {
+				flag = VOI_blight_cleansed_flag
+			}
+			}
+		}
+   	}
+}
+
+country_event = {
+	id = flavour.16
+	title = flavour.16.t
+	desc = flavour.16.d
+   	picture = GFX_event_test
+
+    fire_only_once = yes
+	is_triggered_only = yes
+  	option = {
+	   name = flavour.16.a
+	   ai_chance = { factor = 60}
+		custom_effect_tooltip = VOI_blight_wind_tt
+	   	subtract_from_variable = {
+			var = blight_speed
+			value = 15
+		}
+			
+   	}
+}
+
+country_event = {
+	id = flavour.17
+	title = flavour.17.t
+	desc = flavour.17.d
+   	picture = GFX_event_test
+
+    fire_only_once = yes
+	trigger = {
+		tag = VOI
+		NOT = { has_country_flag = VOI_blightstudies_1 }
+		check_variable = {
+			blight_percent > 49
+		}
+	}
+
+  	option = {
+	   	name = flavour.17.a
+	   	ai_chance = { factor = 20}
+		add_stability = 0.15
+		add_political_power = 150
+   	}
+	option = {
+		name = flavour.17.b
+		ai_chance = { factor = 20}
+		add_stability = 0.05
+		add_political_power = 50
+		every_country = {
+			limit = {
+				is_in_faction_with = ROOT
+			}
+			country_event = flavour.18
+		}
+		IF = {
+			limit = {
+				is_ai = yes
+			}
+			add_manpower = 400
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 400
+			}
+		}
+	}
+	option = {
+		name = flavour.17.c
+		ai_chance = { factor = 60}
+		every_country = {
+			limit = {
+				OR = {
+					is_in_faction_with = ROOT
+					has_country_flag = VOI_experienced_blight_flag
+					tag = NII
+					tag = COM
+					tag = COC
+					tag = COL
+					tag = COR
+					tag = ARI
+					tag = WTC
+					tag = NOV
+					tag = DSB
+				}
+				NOT = { tag = VOI }
+			}
+			country_event = flavour.18
+		}
+		IF = {
+			limit = {
+				is_ai = yes
+			}
+			add_manpower = 800
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 800
+			}
+		}
+	}
+}
+
+country_event = {
+	id = flavour.18
+	title = flavour.18.t
+	desc = flavour.18.d
+   	picture = GFX_event_test
+
+    fire_only_once = no
+	is_triggered_only = yes
+  	option = {
+	   name = flavour.18.a
+	   	ai_chance = { factor = 50
+			modifier = {
+				add = 50
+				has_country_flag = VOI_experienced_blight_flag
+			}
+			modifier = {
+				add = 50
+				is_in_faction_with = VOI
+			}
+		}
+		IF = {
+			limit = {
+				NOT = { has_country_flag = VOI_experienced_blight_flag }
+			}
+			set_country_flag = VOI_experienced_blight_flag
+		}
+		set_country_flag = VOI_blight_help_flag
+   	}
+	option = {
+		name = flavour.18.b
+		ai_chance = { factor = 50}
+		add_political_power = 20	 
+	}
+}
+
+news_event = {
+	id = flavour.19
+	title = flavour.19.t
+	desc = flavour.19.d
+   	picture = GFX_event_test
+
+    fire_only_once = no
+	is_triggered_only = yes
+  	option = {
+	   name = flavour.19.a
+	   ai_chance = { factor = 60}
+		IF = {
+			limit = { has_country_flag = VOI_experienced_blight_flag }
+			clr_country_flag = VOI_experienced_blight_flag
+		}
+		IF = {
+			limit = { has_country_flag = VOI_blight_help_flag }
+			clr_country_flag = VOI_blight_help_flag
+			add_stability = 0.04
+		}
+   	}
+}
+
+country_event = {
+	id = flavour.20
+	title = flavour.20.t
+	desc = flavour.20.d
+   	picture = GFX_event_test
+
+    fire_only_once = no
+	trigger = {
+		tag = VOI
+		check_variable = {
+			blight_percent > 99
+		}
+	}
+	immediate = {
+		VOI = {
+			set_cosmetic_tag = VOI_blight_takeover_cosm
+			add_manpower = 3000
+			leave_faction = yes
+		}
+	}
+  	option = {
+	   name = flavour.20.a
+	   ai_chance = { factor = 60}
+		
+		every_country = {
+			limit = {
+				OR = {
+					has_country_flag = VOI_experienced_blight_flag
+					tag = DEP
+					tag = TFL
+					tag = TMS
+				}
+			}
+			ROOT = {
+				declare_war_on = {
+				target = PREV
+				type = annex_everything
+			}
+			}
+		}
+		set_technology = {
+			popup = no
+			COL_undead = 1
+			COL_undead_recycling = 1
+		}
+		division_template = {
+	        name = "Blight Horde"
+	            is_locked = no
+	                regiments = {
+		                skeletons = { x = 0 y = 0 }
+						skeletons = { x = 0 y = 1 }
+						skeletons = { x = 0 y = 2 }
+						skeletons = { x = 0 y = 3 }
+						skeletons = { x = 0 y = 4 }
+						skeletons = { x = 1 y = 0 }
+						skeletons = { x = 1 y = 1 }
+						skeletons = { x = 1 y = 2 }
+						skeletons = { x = 1 y = 3 }
+						skeletons = { x = 1 y = 4 }
+						skeletons = { x = 2 y = 0 }
+						skeletons = { x = 2 y = 1 }
+						skeletons = { x = 2 y = 2 }
+						skeletons = { x = 2 y = 3 }
+						skeletons = { x = 2 y = 4 }
+						skeletons = { x = 3 y = 0 }
+						skeletons = { x = 3 y = 1 }
+						skeletons = { x = 3 y = 2 }
+						skeletons = { x = 3 y = 3 }
+						skeletons = { x = 3 y = 4 }
+	                }
+        }
+		every_state = {
+			limit = {
+				OR = {
+					has_dynamic_modifier = {
+						modifier = VOI_blighted_lands_modifier
+					}
+					has_dynamic_modifier = {
+						modifier = VOI_blighted_lands_2_modifier
+					}
+					has_dynamic_modifier = {
+						modifier = VOI_blighted_lands_3_modifier
+					}
+					}
+			}
+			remove_dynamic_modifier = { modifier = VOI_blighted_lands_modifier }
+			remove_dynamic_modifier = { modifier = VOI_blighted_lands_2_modifier }
+			remove_dynamic_modifier = { modifier = VOI_blighted_lands_3_modifier }
+			set_variable = {
+				var = STATE_blight_infect
+				value = 0
+			}
+			create_unit = {
+				division = "name = \"Blight\" division_template = \"Blight Horde\" start_experience_factor = 0.35 start_equipment_factor = 1.0"
+				owner = VOI
+			}
+			create_unit = {
+				division = "name = \"Blight\" division_template = \"Blight Horde\" start_experience_factor = 0.35 start_equipment_factor = 1.0"					owner = ROOT
+				owner =VOI
+			}
+			create_unit = {
+				division = "name = \"Blight\" division_template = \"Blight Horde\" start_experience_factor = 0.35 start_equipment_factor = 1.0"
+				owner = VOI
+			}
+		}
+		remove_ideas = VOI_blighted_lands_idea
+		IF = {
+			limit = {
+				has_idea = VOI_synthesis_project_idea
+			}
+			remove_ideas = VOI_synthesis_project_idea
+		}
+		news_event = flavour.21
+   	}
+}
+
+news_event = {
+	id = flavour.21
+	title = flavour.21.t
+	desc = flavour.21.d
+   	picture = GFX_event_test
+
+    fire_only_once = no
+	is_triggered_only = yes
+	major = yes
+  	option = {
+	   name = flavour.21.a
+	   ai_chance = { factor = 60}
+		IF = {
+			limit = { has_country_flag = VOI_experienced_blight_flag }
+			clr_country_flag = VOI_experienced_blight_flag
+		}
+		IF = {
+			limit = { has_country_flag = VOI_blight_help_flag }
+			clr_country_flag = VOI_blight_help_flag
+		}
+   	}
+}
+
