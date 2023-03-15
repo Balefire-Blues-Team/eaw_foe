@@ -602,3 +602,73 @@ country_event = {
 		mark_focus_tree_layout_dirty = yes
 	}
 }
+
+country_event = {
+	id = detrotevent.17
+	title = detrotevent.17.t
+	desc = detrotevent.17.d
+
+	trigger = {
+		tag = DEC
+		OR = {
+			has_idea = DEC_deathbloom_raiders_1
+			has_idea = DEC_deathbloom_raiders_1
+		}
+		NOT = { has_idea = DEC_the_consortium_contract }
+	}
+ 	fire_only_once = yes
+	immediate = {
+		359 = {
+			add_core_of = DBB
+			set_demilitarized_zone = no
+			transfer_state_to = DBB
+		}
+		68 = {
+			add_core_of = DBB
+			set_demilitarized_zone = no
+			transfer_state_to = DBB
+		}
+		DBB = {
+			load_oob = DBB_revolt_oob
+		}
+		DEC = {
+			transfer_units_fraction= {
+				target = DBB
+				size = 0.35
+				stockpile_ratio = 0.5
+				army_ratio = 0.35
+				navy_ratio = 0.5
+				air_ratio = 0.5
+			}
+		}
+	}
+
+ 	option = {
+		name = detrotevent.17.a
+		ai_chance = {factor = 100}
+		DBB = { 
+			declare_war_on = {
+				target = DEC
+				type = annex_everything
+			} 
+		}
+		add_stability = -0.20
+		remove_ideas = DEC_deathbloom_raiders_1
+		remove_ideas = DEC_deathbloom_raiders_3
+	}
+
+	option = {
+		name = detrotevent.17.b
+		ai_chance = {factor = 0}
+		add_stability = -0.20
+		remove_ideas = DEC_deathbloom_raiders_1
+		remove_ideas = DEC_deathbloom_raiders_3
+		DBB = { 
+			declare_war_on = {
+				target = DEC
+				type = annex_everything
+			} 
+			change_tag_from = DEC
+		}
+	}
+}
