@@ -3634,7 +3634,7 @@ shared_focus = {
 
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_operation_starswirl"
-		
+		custom_effect_tooltip = DEC_unlock_starswirl_tt
 	}
 }
 
@@ -3654,7 +3654,7 @@ shared_focus = {
 
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_everyone_is_replacable"
-		
+		add_country_leader_trait = hydras_head
 	}
 }
 
@@ -3675,7 +3675,8 @@ shared_focus = {
 
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_offer_to_our_master"
-		
+		custom_effect_tooltip = DEC_request_master_tt
+		KHA = { country_event = detrotevent.42 }
 	}
 }
 
@@ -3695,7 +3696,7 @@ shared_focus = {
 
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_organize_black_market"
-		
+		two_random_arms_factory = yes
 	}
 }
 
@@ -3715,7 +3716,7 @@ shared_focus = {
 
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_international_drug_trade"
-		
+		two_random_industrial_complex = yes
 	}
 }
 
@@ -3727,7 +3728,9 @@ shared_focus = {
 	y = 6
 	cost = 4.38
 
-	 
+	available = {
+		has_completed_focus = DEC_freedom_under_surveillance
+	}
 	prerequisite = { focus = DEC_operation_starswirl } 
 	prerequisite = { focus = DEC_everyone_is_replacable } 
 	ai_will_do = { 
@@ -3736,7 +3739,10 @@ shared_focus = {
 
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_sight_beyond_eyes"
-		
+		swap_ideas = {
+			remove_idea = DEC_the_sterling_society_4_control
+			add_idea = DEC_the_sterling_society_5_control
+		}
 	}
 }
 
@@ -3756,7 +3762,21 @@ shared_focus = {
 
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_eyes_of_the_khan"
-		
+		IF = {
+			limit = {
+				has_country_flag = DEC_fuck_khanate_flag
+			}
+			ARR_decrease_loyalty = yes
+			ARR_decrease_loyalty = yes
+			AOS_decrease_loyalty = yes
+			DEC_decrease_loyalty = yes
+			DEC_decrease_loyalty = yes
+		}
+		ELSE = {
+			DEC_increase_loyalty = yes
+			ARR_increase_loyalty = yes
+			AOS_increase_loyalty = yes
+		}
 	}
 }
 
@@ -3776,7 +3796,31 @@ shared_focus = {
 
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_purveyors_of_unity"
-		
+		IF = {
+			limit = {
+				has_country_flag = DEC_fuck_khanate_flag
+			}
+			add_collaboration = {
+				target = KHA
+				value = 0.25
+			}
+			add_collaboration = {
+				target = AOS
+				value = 0.25
+			}
+			add_collaboration = {
+				target = ARR
+				value = 0.25
+			}
+		}
+		ELSE = {
+			every_country = {
+				limit = {
+					is_ally_with = DEC
+				}
+				add_stability = 0.06
+			}
+		}
 	}
 }
 
@@ -3796,7 +3840,17 @@ shared_focus = {
 
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_faithful_shadows"
-		
+		IF = {
+			limit = {
+				has_country_flag = DEC_fuck_khanate_flag
+			}
+			DEC_decrease_loyalty = yes
+			KHA_decrease_influence_5 = yes
+		}
+		ELSE = {
+			KHA_increase_influence_5 = yes
+			DEC_increase_influence_2 = yes
+		}
 	}
 }
 
@@ -3813,10 +3867,18 @@ shared_focus = {
 	ai_will_do = { 
  		factor = 30
  	}
-
+	will_lead_to_war_with = SLC
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_silent_coup"
-		
+		add_collaboration = {
+			target = SLC
+			value = 0.5
+		}
+		SLC = {
+			DEC = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 }
 
@@ -3836,7 +3898,7 @@ shared_focus = {
 
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_counterintelligence"
-		
+		custom_effect_tooltip = DEC_counterintelligence_tt
 	}
 }
 
@@ -3851,13 +3913,46 @@ shared_focus = {
 	prerequisite = { focus = DEC_purveyors_of_unity } 
 	prerequisite = { focus = DEC_eyes_of_the_khan } 
 	prerequisite = { focus = DEC_faithful_shadows } 
+	available = {
+		OR = {
+			has_war = no
+			is_ai = no
+		}
+		IF = {
+			limit = {
+				has_country_flag = DEC_fuck_khanate_flag
+			}
+			custom_trigger_tooltip = {
+				tooltip = KHA_min_loyalty_tt
+				DEC = {
+					check_variable = {
+						DEC_khan_loyalty = 0
+					}
+				}
+			}
+		}
+	}
 	ai_will_do = { 
  		factor = 30
  	}
-
+	will_lead_to_war_with = KHA
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_most_loyal_servants"
-		
+		IF = {
+			limit = {
+				has_country_flag = DEC_fuck_khanate_flag
+			}
+			leave_faction = yes
+			remove_ideas = KHA_lack_of_cohesion_idea
+			KHA = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+		ELSE = {
+			add_ideas = DEC_khanate_servants_idea
+		}
 	}
 }
 
@@ -3869,6 +3964,11 @@ shared_focus = {
 	y = 7
 	cost = 4.38
 
+	available = {
+		SLC = {	
+			all_core_land_owned_by_prev_sphere = yes
+		}
+	}
 	prerequisite = { focus = DEC_silent_coup } 
 	prerequisite = { focus = DEC_faithful_shadows } 
 	ai_will_do = { 
@@ -3877,7 +3977,7 @@ shared_focus = {
 
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_clear_the_bunkers"
-		
+		core_original_SLC = yes
 	}
 }
 
@@ -3893,10 +3993,14 @@ shared_focus = {
 	ai_will_do = { 
  		factor = 30
  	}
-
+	will_lead_to_war_with = SML
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_friendly_neighbours"
-		
+		SML = {
+			DEC = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 }
 
@@ -3913,10 +4017,14 @@ shared_focus = {
 	ai_will_do = { 
  		factor = 30
  	}
-
+	will_lead_to_war_with = EMP
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_lights_out"
-		
+		EMP = {
+			DEC = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 }
 
@@ -3929,13 +4037,29 @@ shared_focus = {
 	cost = 4.38
 
 	prerequisite = { focus = DEC_most_loyal_servants } 
+	available = {
+		KHA = { all_core_land_owned_by_prev_sphere = yes }
+		has_completed_focus = DEC_sight_beyond_eyes
+	}
 	ai_will_do = { 
  		factor = 30
  	}
-
+	available = {
+		
+	}
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_sterling_ascendant"
-		
+		IF = {
+			limit = {
+				has_country_flag = DEC_fuck_khanate_flag
+			}
+			core_original_KHA = yes
+			core_original_AOS = yes
+		}
+		swap_ideas = {
+			remove_idea = DEC_the_sterling_society_5_control
+			add_idea = DEC_the_sterling_society_6_control
+		}
 	}
 }
 
@@ -3955,7 +4079,26 @@ shared_focus = {
 
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_comprehensive_treaty"
-		
+		IF = {
+			limit = {
+				has_country_flag = DEC_fuck_khanate_flag
+			}
+			AOS = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			ARR = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+		ELSE = {
+			ARR_increase_loyalty = yes
+			AOS_increase_loyalty = yes
+			DEC_increase_influence_2 = yes
+		}
 	}
 }
 
@@ -3971,10 +4114,20 @@ shared_focus = {
 	ai_will_do = { 
  		factor = 30
  	}
-
+	will_lead_to_war_with = RTA
+	will_lead_to_war_with = NGL
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_negotiating_mercenary_contracts"
-		
+		RTA = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		NGL = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 }
 
@@ -3994,7 +4147,8 @@ shared_focus = {
 
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_mirage_treatise"
-		
+		Core_original_SML = yes
+		#Gain Changeling Tech
 	}
 }
 
@@ -4008,13 +4162,84 @@ shared_focus = {
 
 	prerequisite = { focus = DEC_lights_out } 
 	prerequisite = { focus = DEC_sterling_ascendant } 
+	bypass = {
+		KHA = { exists = yes }
+	}
 	ai_will_do = { 
  		factor = 30
  	}
-
+	will_lead_to_war_with = COM
+	will_lead_to_war_with = COR
+	will_lead_to_war_with = COC
+	will_lead_to_war_with = COL
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_peace_in_our_time"
-		
+		IF = {
+			limit = {
+				is_in_faction_with = KHA
+				NOT = { has_country_flag = DEC_fuck_khanate_flag }
+			}
+			KHA = {
+				annex_country = {
+					target = DEC
+				}
+			}
+		}
+		ELSE_IF = {
+			limit = {
+				is_in_faction_with = KHA
+				has_country_flag = DEC_fuck_khanate_flag
+			}
+			add_stability = 0.20
+			two_random_arms_factory = yes
+			two_random_industrial_complex = yes
+		}
+		ELSE_IF = {
+			limit = {
+				has_country_flag = DEC_fuck_khanate_flag
+				KHA = { exists = no }
+			}
+			IF = {
+				limit = {
+					COR = { exists = yes }
+				}
+				COR = {
+					ROOT = {
+						grant_wargoals_on_core_states_of_prev = yes
+					}
+				}
+			}
+			IF = {
+				limit = {
+					COM = { exists = yes }
+				}
+				COM = {
+					ROOT = {
+						grant_wargoals_on_core_states_of_prev = yes
+					}
+				}
+			}
+			IF = {
+				limit = {
+					COC = { exists = yes }
+				}
+				COC = {
+					ROOT = {
+						grant_wargoals_on_core_states_of_prev = yes
+					}
+				}
+			}
+			IF = {
+				limit = {
+					COL = { exists = yes }
+				}
+				COL = {
+					ROOT = {
+						grant_wargoals_on_core_states_of_prev = yes
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -4031,10 +4256,26 @@ shared_focus = {
 	ai_will_do = { 
  		factor = 30
  	}
-
+	will_lead_to_war_with = ARI
+	will_lead_to_war_with = CAN
+	will_lead_to_war_with = NLO
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_breaking_hostile_monopolies"
-		
+		ARI = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		CAN = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		NLO = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 }
 
@@ -4046,6 +4287,11 @@ shared_focus = {
 	y = 9
 	cost = 4.38
 
+	available = {
+		NGL = {
+			all_core_land_owned_by_prev_sphere = yes
+		}
+	}
 	prerequisite = { focus = DEC_clear_the_bunkers } 
 	prerequisite = { focus = DEC_negotiating_mercenary_contracts } 
 	ai_will_do = { 
@@ -4054,7 +4300,23 @@ shared_focus = {
 
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_talon_synergistics"
-		
+		set_technology = { tech_talons = 1 tech_talons2 = 1}
+		every_owned_state = {
+			limit = {
+				OR = {
+					is_core_of = NGL
+					is_core_of = RTA
+				}
+			}
+			add_compliance = 30
+		}
+		add_tech_bonus = {
+			name = robotics_tech
+			bonus = 1.4
+			uses = 1
+			ahead_reduction = 6
+			category = anti_tank_tech
+		}
 	}
 }
 
@@ -4076,7 +4338,8 @@ shared_focus = {
 
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_back_to_shadows"
-		
+		set_cosmetic_tag = DEC_republic_cosm
+		country_event = detrotevent.46
 	}
 }
 
@@ -4095,7 +4358,10 @@ shared_focus = {
 
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_true_beacon"
-		
+		swap_ideas = {
+			remove_idea = DEC_beacon_of_patriotism_idea
+			add_idea = DEC_beacon_of_patriotism2_idea
+		}
 	}
 }
 
@@ -4114,7 +4380,8 @@ shared_focus = {
 
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_federalize_republic"
-		
+		set_variable = { coring_cost_country_factor = -0.40 }
+		custom_effect_tooltip = FOE_30_percent_core_cost_reduction_tt
 	}
 }
 
@@ -4133,7 +4400,7 @@ shared_focus = {
 
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_greatest_army_wastes"
-		
+		add_ideas = DEC_freedom_army_idea
 	}
 }
 
@@ -4152,7 +4419,14 @@ shared_focus = {
 
  	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus DEC_prosperity_ofr_all"
-		
+		every_country = {
+			limit = {
+				is_neighbor_of = DEC
+			}
+			DEC = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 }
 
