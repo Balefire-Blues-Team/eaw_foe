@@ -1679,7 +1679,7 @@
 
 	shared_focus = {
 		id = ERA_settling_down
-		icon = GFX_goal_griffon_crown
+		icon = GFX_goal_ERA_fully_united_mareway_solid
 		relative_position_id = ERA_hunt_down_stragglers
 		x = 0
 		y = 1
@@ -1978,18 +1978,33 @@
 		will_lead_to_war_with = NCG
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_break_the_guilds"
-			declare_war_on = {
-				target = NCG
-				type = annex_everything
+			custom_effect_tooltip = ERA_declare_on_ncg_tt
+			hidden_effect = { 
+				every_other_country = {
+					limit = {
+						has_full_control_of_state = 747 #Neocastle
+					}
+					ERA = {
+						declare_war_on = {
+							target = PREV
+							type = annex_everything
+						}
+						PREV = {
+							save_global_event_target_as = ERA_enemy
+						}
+					}
+				}
+				
 			}
 			hidden_effect = {
 				EYE = {
 					add_to_war = { 
 						targeted_alliance = ERA 
-						enemy = NGC 
+						enemy = event_target:ERA_enemy 
 						hostility_reason = asked_to_join
 					}
 				}
+				clear_global_event_target = ERA_enemy
 			}
 		}
 	}
@@ -2107,6 +2122,9 @@
 			focus = ERA_break_the_guilds
 		}
 		prerequisite = { focus = ERA_red_eye_knights }
+		bypass = {
+			NEV = { exists = no }
+		}
 		ai_will_do = { 
 			factor = 100
 		} 
@@ -2136,6 +2154,9 @@
 			focus = ERA_break_the_guilds
 		}
 		prerequisite = { focus = ERA_red_eye_knights }
+		bypass = {
+			SHA = { exists = no }
+		}
 		ai_will_do = { 
 			factor = 100
 		} 
@@ -2886,12 +2907,26 @@
 		cost = 5
 
 		prerequisite = { focus = ERA_stab_in_the_back }
+		available = {
+			controls_state = 69
+		}
+		bypass = {
+			NOT = { controls_state = 69 }
+		}
 		ai_will_do = { 
 			factor = 100
 		} 
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_move_maredia_industry"
+			69 = {
+				add_building_construction = {
+					type = arms_factory
+					level = -3
+					instant_build = yes
+				}
+			}
+			add_offsite_building = { type = arms_factory level = 3 }
 		}
 	}
 
@@ -2910,6 +2945,9 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_peasant_conscripts"
+			add_ideas = all_adults_serve
+			add_stability = -0.05
+			add_manpower = 500
 		}
 	}
 
@@ -2946,6 +2984,46 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_reinforce_forts"
+			69 = {
+				add_building_construction = {
+					type = bunker
+					level = 2
+					instant_build = yes
+					province = 9125
+				}
+				add_building_construction = {
+					type = bunker
+					level = 2
+					instant_build = yes
+					province = 9114
+				}
+			}
+			553 = {
+				add_building_construction = {
+					type = bunker
+					level = 2
+					instant_build = yes
+					   province = 5327
+				}
+				add_building_construction = {
+					type = bunker
+					level = 2
+					instant_build = yes
+					   province = 10784
+				}
+				add_building_construction = {
+					type = bunker
+					level = 2
+					instant_build = yes
+					   province = 3888
+				}
+				add_building_construction = {
+					type = bunker
+					level = 2
+					instant_build = yes
+					   province = 10471
+				}
+			}
 		}
 	}
 
@@ -2968,6 +3046,7 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_knight_amnesty"
+			add_ideas = ERA_mareway_knights_idea
 		}
 	}
 
@@ -3032,6 +3111,7 @@
 		will_lead_to_war_with = NCG
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_bloody_foals"
+			add_ideas = ERA_child_labor
 		}
 	}
 
@@ -3078,6 +3158,11 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus ERA_rusty_guns"
+			add_equipment_to_stockpile = {
+    			type = infantry_equipment_1
+    			amount = 1000
+    			producer = ERA
+			}
 		}
 	}
 
@@ -3578,7 +3663,7 @@
 		}
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus ERA_Forced recruitment"
+			log = "[GetDateText]: [Root.GetName]: Focus ERA_Forced_recruitment"
 			
 			if = {
 				limit = {

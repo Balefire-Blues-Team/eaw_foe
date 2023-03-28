@@ -702,6 +702,66 @@ on_actions = {
 		}
 	}
 
+	#ROOT is winner #FROM is loser
+	on_peaceconference_ended = {
+		effect = {
+			# PUT EVERYTHING IN THE IF BELOW
+			# THE bypass_on_peaceconference_ended FLAG **HAS** TO BE SET BEFORE CALLING THE white_peace COMMAND AND CLEARED AFTERWARDS
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = bypass_on_peaceconference_ended
+						FROM = { has_country_flag = bypass_on_peaceconference_ended }
+					}
+				}
+				log = "[GetDateText]: ROOT: [Root.GetName] FROM: [From.GetName] on_peaceconference_ended"
+							
+				if = {
+					limit = {
+						tag = MWY
+						has_global_flag = MWY_noble_cw_flag
+						FROM = {
+							tag = MWN
+						}
+						NOT = {
+							MWN = {
+								exists = yes
+								is_subject = no
+							}
+						}
+					}
+					country_event = { 
+						id = newmareway.105
+						days = 3
+					}
+					clr_global_flag = MWY_noble_cw_flag
+				}
+
+				if = { #MWY beats ERA
+					limit = {
+						tag = MWY
+						FROM = {
+							original_tag = ERA
+						}
+						OR = {
+							NOT = {
+								ERA = {
+									exists = yes
+								}
+							}
+							ERA = {
+								is_puppet_of = MWY
+							}
+						}
+					}
+					country_event = { 
+						id = newmareway.106
+					}
+				}
+			}
+		}
+	}
+
 	#FROM is war target
 	on_declare_war = {
 		effect = {
