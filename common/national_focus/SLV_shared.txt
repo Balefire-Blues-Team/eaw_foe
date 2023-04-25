@@ -2780,10 +2780,10 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus SLV_Dangerous_Neighbors"
 		add_political_power = -20
-		add_opinion_modifier = { target = STW modifier = -20 }
-		add_opinion_modifier = { target = RRG modifier = -20 }
-		add_opinion_modifier = { target = SUS modifier = 20 }
-		add_opinion_modifier = { target = STP modifier = 20 }
+		add_opinion_modifier = { target = STW  modifier -20 }
+		add_opinion_modifier = { target = RRG  modifier -20 }
+		add_opinion_modifier = { target = SUS  modifier 20 }
+		add_opinion_modifier = { target = STP  modifier 20 }
 	}
 	
 	ai_will_do = {
@@ -2795,7 +2795,7 @@ shared_focus = {
 	id = SLV_FuckAroundFindOut
 	icon = GFX_goal_resisting_villages
 	x = 6
-	y = 3
+	y = 2
 	relative_position_id = SLV_Local_Politics
 	
 	cost = 5
@@ -2823,10 +2823,10 @@ shared_focus = {
 shared_focus = { 
 	id = SLV_to_the_Dead_Plains
 	icon = GFX_goal_basecamp
-	x = 3
-	y = 4
+	x = 4
+	y = 3
 	relative_position_id = SLV_Local_Politics
-	
+	mutually_exclusive = { focus =  SLV_Our_Friends_From_Beyond }
 	cost = 12
 	prerequisite = { focus = SLV_FuckAroundFindOut } 
 
@@ -2849,12 +2849,34 @@ shared_focus = {
 }
 
 shared_focus = { 
-	id = SLV_Our_Friends_From_Beyond
-	icon = GFX_goal_NCR_River_Patrols
-	x = 9
+	id = SLV_Across_The_River
+	icon = GFX_goal_fire
+	x = 3
 	y = 4
 	relative_position_id = SLV_Local_Politics
 	
+	cost = 6
+	prerequisite = { focus = SLV_to_the_Dead_Plains } 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus SLV_Across_The_River"
+		add_political_power = 100
+		set_autonomy = { target = STP autonomous_state = autonomy_dominion }
+		SLV = { declare_war_on = { target = RRG type = annex_everything } }
+
+	
+	ai_will_do = {
+		factor = 90
+	} }
+}
+
+shared_focus = { 
+	id = SLV_Our_Friends_From_Beyond
+	icon = GFX_goal_NCR_River_Patrols
+	x = 8
+	y = 3
+	relative_position_id = SLV_Local_Politics
+	mutually_exclusive = { focus =  SLV_to_the_Dead_Plains }
 	cost = 12
 	prerequisite = { focus = SLV_FuckAroundFindOut }
 
@@ -2876,6 +2898,29 @@ shared_focus = {
 		factor = 220
 	}
 }
+
+shared_focus = { 
+	id = SLV_Marching_North
+	icon = GFX_goal_fire
+	x = 9
+	y = 4
+	relative_position_id = SLV_Local_Politics
+	
+	cost = 6
+	prerequisite = { focus = SLV_Our_Friends_From_Beyond } 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus SLV_Marching_North"
+		add_political_power = 100
+		set_autonomy = { target = SUS autonomous_state = autonomy_dominion }
+		SLV = { declare_war_on = { target = STW type = annex_everything } }
+	} 
+	
+	ai_will_do = {
+		factor = 90
+	}
+}
+
 
 shared_focus = { 
 	id = SLV_Visionary1
