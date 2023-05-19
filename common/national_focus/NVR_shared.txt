@@ -1,7 +1,7 @@
 ### Opening Focuses
 shared_focus = { 
 	id = NVR_opening_focus
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_stg_socialist_revolution_pony
 	x = 12
 	y = 1
 	cost = 1.43
@@ -13,13 +13,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_opening_focus"
-		
+		country_event = novaya.1
 	}
 } 
 
 shared_focus = { 
 	id = NVR_against_shadows_and_royalists
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_crush_monarchy
 	x = -4
 	y = 1
 	cost = 4.29
@@ -27,19 +27,33 @@ shared_focus = {
 	available_if_capitulated = no 
 	relative_position_id = NVR_opening_focus
 	prerequisite = { focus = NVR_opening_focus } 
+	available = {
+		OR = {
+			NOT = { has_completed_focus = NVR_seizing_the_heart }
+			has_completed_focus = NVR_paint_town_red
+		}
+	}
 	ai_will_do = { 
 		factor = 300
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_against_shadows_and_royalists"
-		
+		add_state_claim = 676
+		add_state_claim = 677
+		add_state_claim = 667
+		add_state_claim = 168
+		add_state_claim = 720
+		add_equipment_to_stockpile = {
+			type = ballistic_equipment_1
+			amount = 250
+		}
 	}
 } 
 
 shared_focus = { 
 	id = NVR_help_from_far_and_wide
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_giving_out_aid
 	x = 0
 	y = 1
 	cost = 4.29
@@ -53,13 +67,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_help_from_far_and_wide"
-		
+		country_event = novaya.2
 	}
 } 
 
 shared_focus = { 
 	id = NVR_seizing_the_heart
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_generic_city
 	x = 4
 	y = 1
 	cost = 4.29
@@ -67,19 +81,29 @@ shared_focus = {
 	available_if_capitulated = no 
 	relative_position_id = NVR_opening_focus
 	prerequisite = { focus = NVR_opening_focus } 
+	available = {
+		OR = {
+			NOT = { has_completed_focus = NVR_against_shadows_and_royalists }
+			has_completed_focus = NVR_push_for_southside
+		}
+	}
 	ai_will_do = { 
 		factor = 300
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_seizing_the_heart"
-		
+		add_state_claim = 733
+		add_state_claim = 732
+		add_state_claim = 159
+		add_state_claim = 729
+		add_manpower = 250
 	}
 } 
 
 shared_focus = { 
 	id = NVR_revive_stotemsk_foundry
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_WNG_steel1
 	x = -6
 	y = 2
 	cost = 4.29
@@ -93,13 +117,22 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_revive_stotemsk_foundry"
-		
+		163 = {
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+			}
+			add_resource = {
+				type = metal
+				amount = 12
+			}
+		}
 	}
 } 
 
 shared_focus = { 
 	id = NVR_prepare_jzemroc_offensive
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_BAT_COM_plans
 	x = -4
 	y = 2
 	cost = 4.29
@@ -113,13 +146,16 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_prepare_jzemroc_offensive"
-		
+		country_event = novaya.3
+		163 = {
+			SEZ_grant_2_state_buildpoint = yes
+		}
 	}
 } 
 
 shared_focus = { 
 	id = NVR_approach_new_stalliongrad
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_free_education
 	x = -2
 	y = 2
 	cost = 4.29
@@ -128,19 +164,22 @@ shared_focus = {
 	relative_position_id = NVR_opening_focus
 	prerequisite = { focus = NVR_against_shadows_and_royalists } 
 	prerequisite = { focus = NVR_help_from_far_and_wide }
+	bypass = {
+		has_war_with = NSU
+	}
 	ai_will_do = { 
 		factor = 30
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_approach_new_stalliongrad"
-		
+		NSU = { country_event = novaya.4 }
 	}
 } 
 
 shared_focus = { 
 	id = NVR_promote_new_officers
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_stg_socialist_officer
 	x = 0
 	y = 2
 	cost = 4.29
@@ -154,13 +193,30 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_promote_new_officers"
-		
+		IF = {
+			limit = {
+				has_idea = NVR_unclear_command_1
+			}
+			swap_ideas = {
+				remove_idea = NVR_unclear_command_1
+				add_idea = NVR_unclear_command_2
+			}
+		}
+		ELSE_IF = {
+			limit = {
+				has_idea = NVR_unclear_command_2
+			}
+			swap_ideas = {
+				remove_idea = NVR_unclear_command_2
+				add_idea = NVR_unclear_command_3
+			}
+		}
 	}
 } 
 
 shared_focus = { 
 	id = NVR_ideological_deserters
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_pioneer_movement
 	x = 2
 	y = 2
 	cost = 4.29
@@ -175,13 +231,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_ideological_deserters"
-		
+		country_event = novaya.7
 	}
 } 
 
 shared_focus = { 
 	id = NVR_clear_streets_prep
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_cooperative_infrastructure
 	x = 4
 	y = 2
 	cost = 4.29
@@ -195,13 +251,17 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_clear_streets_prep"
-		
+		718 = {
+			SEZ_grant_state_buildpoint = yes
+			add_extra_state_shared_building_slots = 1
+		}
+		151 = { add_extra_state_shared_building_slots = 1 }
 	}
 } 
 
 shared_focus = { 
 	id = NVR_overclocked_production
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_swift_industrial_resurgence
 	x = 6
 	y = 2
 	cost = 4.29
@@ -215,13 +275,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_overclocked_production"
-		
+		one_random_arms_factory = yes
+		one_random_industrial_complex = yes
 	}
 } 
 
 shared_focus = { 
 	id = NVR_places_for_families
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_city_of_manehattan
 	x = -7
 	y = 3
 	cost = 4.29
@@ -235,13 +296,15 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_places_for_families"
-		
+		every_owned_state = {
+			add_manpower = 500
+		}
 	}
 }
 
 shared_focus = { 
 	id = NVR_mountains_of_brass
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_lichenfield_gun_manufactories
 	x = -5
 	y = 3
 	cost = 4.29
@@ -255,13 +318,24 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_mountains_of_brass"
-		
+		add_tech_bonus = {
+			name = fireteam_bonus
+			bonus = 0.6
+			uses = 2
+			ahead_reduction = 2
+			category = fireteam_tech
+		}
+		add_equipment_to_stockpile = {
+			type = fireteam_equipment_1
+			amount = 120
+			producer = OWE
+		}
 	}
 }
 
 shared_focus = { 
 	id = NVR_push_for_southside
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_blacksun_invade
 	x = -3
 	y = 3
 	cost = 4.29
@@ -270,19 +344,33 @@ shared_focus = {
 	relative_position_id = NVR_opening_focus
 	prerequisite = { focus = NVR_prepare_jzemroc_offensive }
 	prerequisite = { focus = NVR_approach_new_stalliongrad }
+	bypass = {
+		SDI = { exists = no }
+		NAC = { exists = no }
+	}
 	ai_will_do = { 
 		factor = 30
 	} 
 
+	will_lead_to_war_with = SDI
+	will_lead_to_war_with = NAC
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_push_for_southside"
-		
+		declare_war_on = {
+			target = SDI
+			type = annex_everything
+		}
+		declare_war_on = {
+			target = NAC
+			type = annex_everything
+		}
+		add_war_support = 0.05
 	}
 }
 
 shared_focus = { 
 	id = NVR_reclaim_palace
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_stg_palace
 	x = 0
 	y = 3
 	cost = 4.29
@@ -295,15 +383,20 @@ shared_focus = {
 		factor = 30
 	} 
 
+	will_lead_to_war_with = SEZ
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_reclaim_palace"
-		
+		SEZ = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 }
 
 shared_focus = { 
 	id = NVR_paint_town_red
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_focus_indy_bound_by_blood
 	x = 3
 	y = 3
 	cost = 4.29
@@ -312,19 +405,33 @@ shared_focus = {
 	relative_position_id = NVR_opening_focus
 	prerequisite = { focus = NVR_clear_streets_prep }
 	prerequisite = { focus = NVR_ideological_deserters }
+	bypass = {
+		LEE = { exists = no }
+		RST = { exists = no }
+	}
 	ai_will_do = { 
 		factor = 30
 	} 
 
+	will_lead_to_war_with = LEE
+	will_lead_to_war_with = RST
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_paint_town_red"
-		
+		declare_war_on = {
+			target = LEE
+			type = annex_everything
+		}
+		declare_war_on = {
+			target = RST
+			type = annex_everything
+		}
+		add_war_support = 0.05
 	}
 }
 
 shared_focus = { 
 	id = NVR_turn_metro_guns
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_generic_foe_military_factory_guns
 	x = 5
 	y = 3
 	cost = 4.29
@@ -338,13 +445,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_turn_metro_guns"
-		
+		one_random_arms_factory = yes
+		one_random_arms_factory = yes
 	}
 }
 
 shared_focus = { 
 	id = NVR_one_last_push
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_AJR_industry_expansion
 	x = 7
 	y = 3
 	cost = 4.29
@@ -358,13 +466,17 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_one_last_push"
-		
+		remove_ideas = NVR_every_gun_counts
+		add_timed_idea = {
+			idea = NVR_every_gun_counts_2
+			days = 160
+		}
 	}
 }
 
 shared_focus = { 
 	id = NVR_open_to_all
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_AJR_protect_the_pony
 	x = -6
 	y = 4
 	cost = 4.29
@@ -378,13 +490,17 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_open_to_all"
-		
+		add_ideas = NVR_socialist_refuge_idea
+		swap_ideas = {
+			remove_idea = controlled_borders
+			add_idea = open_borders
+		}
 	}
 }
 
 shared_focus = { 
 	id = NVR_assaulting_the_bridge
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_YAL_internationalist_brigades
 	x = -4
 	y = 4
 	cost = 4.29
@@ -398,13 +514,43 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_assaulting_the_bridge"
-		
+		custom_effect_tooltip = NVR_elite_rodinvale_tt
+		division_template = {
+			name = "Rodinvale Guard"
+			is_locked = no
+				regiments = {
+					infantry = { x = 0 y = 0 }
+					infantry = { x = 0 y = 1 }
+					infantry = { x = 1 y = 0 }
+					infantry = { x = 1 y = 1 }
+					infantry = { x = 0 y = 2 }
+					infantry = { x = 0 y = 3 }
+					infantry = { x = 1 y = 2 }
+					infantry = { x = 1 y = 3 }
+					demolitions_infantry = { x = 0 y = 4 }
+					demolitions_infantry = { x = 1 y = 4 }
+				}
+			support = {
+				demolitions_support = { x = 0 y = 0 }
+				medical_chem_company = { x = 0 y = 1 }
+			}
+		}
+		capital_scope = {
+			create_unit = {
+				division = "name = \"1st Rodinvale Guard\" division_template = \"Rodinvale Guard\" start_experience_factor = 0.55 start_equipment_factor = 1.0"
+				owner = ROOT
+			}
+			create_unit = {
+				division = "name = \"2nd Rodinvale Guard\" division_template = \"Rodinvale Guard\" start_experience_factor = 0.55 start_equipment_factor = 1.0"
+				owner = ROOT
+			}
+		}
 	}
 }
 
 shared_focus = { 
 	id = NVR_use_robots_factories
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_research_military_robotics
 	x = -2
 	y = 4
 	cost = 4.29
@@ -419,13 +565,21 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_use_robots_factories"
-		
+		add_tech_bonus = {
+			name = recon_tech
+			bonus = 0.33
+			uses = 2
+			category = industry
+			}
+		set_technology = {
+			robotics_tech_level_tribal = 1
+		}
 	}
 }
 
 shared_focus = { 
 	id = NVR_have_ai_work
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_AJR_advanced_research
 	x = 0
 	y = 4
 	cost = 4.29
@@ -439,13 +593,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_have_ai_work"
-		
+		add_research_slot = 1
 	}
 }
 
 shared_focus = { 
 	id = NVR_home_sweet_home
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_culture_fest
 	x = 2
 	y = 4
 	cost = 4.29
@@ -454,19 +608,27 @@ shared_focus = {
 	relative_position_id = NVR_opening_focus
 	prerequisite = { focus = NVR_reclaim_palace }
 	prerequisite = { focus = NVR_paint_town_red }
+	available = {
+		owns_state = 658
+	}
 	ai_will_do = { 
 		factor = 30
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_home_sweet_home"
-		
+		set_capital = {
+			state = 658
+		}
+		658 = {
+			SEZ_grant_2_state_buildpoint = yes
+		}
 	}
 }
 
 shared_focus = { 
 	id = NVR_enlighten_the_redeemable
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_stg_universities
 	x = 4
 	y = 4
 	cost = 4.29
@@ -480,13 +642,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_enlighten_the_redeemable"
-		
+		add_stability = 0.08
+		country_event = novaya.8
 	}
 }
 
 shared_focus = { 
 	id = NVR_reaping_the_rewards
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_stg_socialist_industry
 	x = 6
 	y = 4
 	cost = 4.29
@@ -494,19 +657,29 @@ shared_focus = {
 	available_if_capitulated = no 
 	relative_position_id = NVR_opening_focus
 	prerequisite = { focus = NVR_turn_metro_guns focus = NVR_one_last_push }
+	available = {
+		owns_state = 732
+	}
 	ai_will_do = { 
 		factor = 30
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_reaping_the_rewards"
-		
+		732 = {
+			add_manpower = 500
+			SEZ_grant_state_buildpoint = yes
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+			}
+		}
 	}
 }
 
 shared_focus = { 
 	id = NVR_push_industrial_advantage
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_stg_nourishing_the_revolution
 	x = -4
 	y = 5
 	cost = 4.29
@@ -521,13 +694,18 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_push_industrial_advantage"
-		
+		one_random_arms_factory = yes
+		one_random_industrial_complex = yes
+		one_random_dockyard = yes
+		capital_scope = {
+			SEZ_grant_state_buildpoint = yes
+		}
 	}
 }
 
 shared_focus = { 
 	id = NVR_velvet_glove
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_compromise
 	x = -1
 	y = 5
 	cost = 4.29
@@ -543,13 +721,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_velvet_glove"
-		
+		add_country_leader_trait = velvet_glove
 	}
 }
 
 shared_focus = { 
 	id = NVR_iron_hoof
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_EYE_slave_army
 	x = 1
 	y = 5
 	cost = 4.29
@@ -565,13 +743,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_iron_hoof"
-		
+		add_country_leader_trait = iron_hoof
 	}
 }
 
 shared_focus = { 
 	id = NVR_lessons_from_red_army
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_stg_socialist_expansion
 	x = 4
 	y = 5
 	cost = 4.29
@@ -586,13 +764,33 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_lessons_from_red_army"
-		
+		army_experience = 20
+		air_experience = 20
+		navy_experience = 20
+		IF = {
+			limit = {
+				has_idea = NVR_unclear_command_1
+			}
+			swap_ideas = {
+				remove_idea = NVR_unclear_command_1
+				add_idea = NVR_unclear_command_2
+			}
+		}
+		ELSE_IF = {
+			limit = {
+				has_idea = NVR_unclear_command_2
+			}
+			swap_ideas = {
+				remove_idea = NVR_unclear_command_2
+				add_idea = NVR_unclear_command_3
+			}
+		}
 	}
 }
 
 shared_focus = { 
 	id = NVR_new_socialist_republic
-	icon = GFX_goal_generic_foe_skull
+	icon = GFX_goal_stg_socialist_progress
 	x = 0
 	y = 6
 	cost = 4.29
@@ -608,7 +806,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus NVR_new_socialist_republic"
-		
+		country_event = novaya.9
 	}
 }
 
