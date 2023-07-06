@@ -884,6 +884,129 @@ TAR_open_gates_cat = {
 	}
 }
 
+GEN_great_leader_decisions = {
+
+	GEN_expand_industry = {
+		icon = GFX_decision_unknown
+		cost = 10
+		ai_will_do = {
+			base = 1000
+		}
+		fire_only_once = no
+		is_good = yes
+		available = {
+			has_political_power > 9
+			OR = {
+				has_country_leader_with_trait = great_leader_industry_trait
+				has_country_leader_with_trait = legendary_leader_industry_trait
+				has_country_leader_with_trait = mythic_leader_industry_trait
+			}
+		}
+		days_re_enable = 365
+		
+		complete_effect = {
+			add_offsite_building = {
+				type = arms_factory
+				level = 1
+			}
+			add_offsite_building = {
+				type = industrial_complex
+				level = 1
+			}
+		}
+	}
+	GEN_claim_territory = {
+		icon = GFX_decision_unknown
+		cost = 10
+		ai_will_do = {
+			base = 1000
+		}
+		fire_only_once = no
+		is_good = yes
+		available = {
+			has_political_power > 9
+		}
+		days_re_enable = 365
+		
+		complete_effect = {
+			random_neighbor_country = {
+				every_state = {
+					add_claim_by = PREV
+				}
+			}
+			add_manpower = 400
+		}
+	}
+	GEN_gain_wargoal = {
+		icon = GFX_decision_unknown
+		cost = 50
+		ai_will_do = {
+			base = 1000
+		}
+		fire_only_once = no
+		is_good = yes
+		available = {
+			has_political_power > 49
+			OR = {
+				has_country_leader_with_trait = great_leader_military_trait
+				has_country_leader_with_trait = legendary_leader_military_trait
+				has_country_leader_with_trait = mythic_leader_military_trait
+			}
+		}
+		days_re_enable = 365
+		days_remove = 100
+		remove_effect = {
+			random_neighbor_country = {
+				limit = {
+					is_ai = yes
+					is_major = no
+					NOT = { is_in_faction_with = ROOT }
+					NOT = { is_subject_of = ROOT }
+				}
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = infantry_equipment_1
+				amount = 400
+				producer = OWE
+			}
+		}
+	}
+
+	GEN_integrate_state = {
+		icon = GFX_decision_unknown
+		cost = 25
+		ai_will_do = {
+			base = 1000
+		}
+		fire_only_once = no
+		is_good = yes
+		available = {
+			has_political_power > 24
+			any_owned_state = {
+				NOT = { is_core_of = ROOT }
+			}
+			OR = {
+				has_country_leader_with_trait = great_leader_admin_trait
+				has_country_leader_with_trait = legendary_leader_admin_trait
+				has_country_leader_with_trait = mythic_leader_admin_trait
+			}
+		}
+		days_re_enable = 100
+		days_remove = 20
+		remove_effect = {
+			random_owned_state = {
+				limit = {
+					NOT = { is_core_of = ROOT }
+				}
+				add_core_of = ROOT
+			}
+		}
+	}
+}
+
 
 
 
