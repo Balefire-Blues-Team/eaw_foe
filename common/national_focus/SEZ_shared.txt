@@ -484,15 +484,15 @@ shared_focus = {
 
 
 
-
-
-##################################
+########################
+###Post Collapse Foci###
+########################
 
 shared_focus = { 
 	id = SEZ_error_209
 	icon = GFX_goal_generic_foe_skull
-	x = 10
-	y = 2
+	x = 13
+	y = 0
 	cost = 1
 
 	available_if_capitulated = yes 
@@ -604,7 +604,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_create_ai_personas"
-
+		add_manpower = 300
+		add_command_power = 200
 	}
 }
 
@@ -625,7 +626,20 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_shelter_fleeing_civilians"
-
+		if = {
+			limit = {
+				has_global_flag = SEZ_full_granaries
+			}
+			custom_effect_tooltip = SEZ_granaries_full_effect_tt
+			capital_scope = {
+				add_manpower = 9000
+			}
+		}
+		else = {
+			capital_scope = {
+				add_manpower = 6000
+			}
+		}
 	}
 }
 
@@ -645,7 +659,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_activate_archival_servers"
-
+		add_research_slot = 1
 	}
 }
 
@@ -665,7 +679,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_overwrite_factory_protocols"
-
+		add_timed_idea = {
+			idea = SEZ_115_percent_output
+			days = 200
+		}
 	}
 }
 
@@ -686,7 +703,27 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_repurpose_industrial_machinery"
-
+		IF = {
+			limit = {
+				NOT = { has_tech = robot_industrial_robots_tech }
+			}
+			set_technology = {
+				robot_industrial_robots_tech = 1
+			}
+			add_equipment_to_stockpile = {
+				type = heavy_robot_industrial_equipment
+				amount = 50
+				producer = OWE
+			}
+		}
+		else = {
+			add_equipment_to_stockpile = {
+				type = heavy_robot_industrial_equipment
+				amount = 200
+				producer = OWE
+			}
+		}
+		army_experience = 10
 	}
 }
 
@@ -707,7 +744,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_economical_emergency_measures"
-
+		swap_ideas = {
+			remove_idea = undisturbed_isolation
+			add_idea = war_economy
+		}
+		add_stability = -0.10
 	}
 }
 
@@ -727,7 +768,17 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_allow_subroutine_autonomy"
-
+		recruit_character = SEZ_char_ADM_ethics
+		recruit_character = SEZ_char_ADM_strategy
+		recruit_character = SEZ_char_ADM_security
+		recruit_character = SEZ_char_ADM_resources
+		recruit_character = SEZ_char_ADM_communications
+		recruit_character = SEZ_char_ADM_threat_assessment
+		recruit_character = SEZ_char_ADM_reconstruction
+		recruit_character = SEZ_char_ADM_research
+		recruit_character = SEZ_char_ADM_logistics
+		recruit_character = SEZ_char_ADM_compliance
+		recruit_character = SEZ_char_ADM_continuity
 	}
 }
 
@@ -751,7 +802,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_configure_civie_production"
-
+		two_random_industrial_complex = yes
 	}
 }
 
@@ -775,7 +826,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_configure_mili_production"
-
+		two_random_arms_factory = yes
 	}
 }
 
@@ -795,7 +846,18 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_send_spritebots_to_spy"
-
+		add_tech_bonus = {
+			name = robotics_tech
+			bonus = 0.3
+			uses = 2
+			category = industry
+			}
+		add_tech_bonus = {
+			name = robotics_tech
+			bonus = 0.3
+			uses = 2
+			category = electronics
+		}
 	}
 }
 
@@ -815,7 +877,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_adapt_fully_automated_warfare"
-
+		add_doctrine_cost_reduction = {
+    		cost_reduction = 0.8
+    		uses = 2
+    		category = land_doctrine
+		}
+		army_experience = 20
 	}
 }
 
@@ -829,13 +896,19 @@ shared_focus = {
 	available_if_capitulated = yes 
 	relative_position_id = SEZ_error_209
 	prerequisite = { focus = SEZ_allow_subroutine_autonomy }
+	bypass = {
+		OR = {
+			has_idea = limited_conscription
+			has_idea = extensive_conscription
+		}
+	}
 	ai_will_do = { 
 		factor = 30
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_mandatory_conscription_edicts"
-
+		add_ideas = limited_conscription
 	}
 }
 
@@ -855,7 +928,18 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_unlock_moi_labs"
-
+		add_tech_bonus = {
+			name = fireteam_bonus
+			bonus = 0.3
+			uses = 2
+			category = electronics
+		}
+		add_tech_bonus = {
+			name = fireteam_bonus
+			bonus = 0.5
+			uses = 1
+			category = magical_tech
+		}
 	}
 }
 
@@ -875,7 +959,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_bring_tower_full_alert"
-
+		capital_scope = {
+			SEZ_grant_2_state_buildpoint = yes
+		}
 	}
 }
 
@@ -895,7 +981,18 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_overwrite_mwt_blueprints"
-
+		add_tech_bonus = {
+			name = fireteam_bonus
+			bonus = 0.3
+			uses = 2
+			category = robotics_tech
+		}
+		add_tech_bonus = {
+			name = fireteam_bonus
+			bonus = 0.5
+			uses = 1
+			category = infantry_tech
+		}
 	}
 }
 
@@ -915,7 +1012,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_24_hour_production"
-
+		add_ideas = SEZ_optimized_production
 	}
 }
 
@@ -935,7 +1032,25 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_militarized_capital"
-
+			capital_scope = {
+                add_to_variable = {
+                    var = SEZ_defense_dm
+                    value = 0.10
+                }
+				add_to_variable = {
+					var = SEZ_militarization_dm
+					value = 0.10
+				}
+				custom_effect_tooltip = SEZ_upgrade_defense_tt
+				custom_effect_tooltip = SEZ_upgrade_militarization_tt
+				hidden_effect = {
+                	add_building_construction = {
+                    	type = arms_factory
+                   		level = 1
+                	}
+					add_manpower = 500
+				}
+            }
 	}
 }
 
@@ -955,7 +1070,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_centralize_cnc_network"
-
+		recruit_character = SEZ_char_ADM_CnC
+		remove_ideas = SEZ_waiting_for_high_command_idea
 	}
 }
 
@@ -975,7 +1091,36 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_download_combat_engrams"
-
+		SEZ_char_ADM = {
+			add_attack = 1
+			add_defense = 1
+			add_planning = 1
+			add_logistics = 1
+		}
+		add_corps_commander_role = {
+			Character = SEZ_char_ADM_security
+			skill = 3
+			attack_skill = 4
+			defense_skill = 4
+			planning_skill = 1
+			logistics_skill = 0
+		}
+		add_corps_commander_role = {
+			Character = SEZ_char_ADM_strategy
+			skill = 3
+			attack_skill = 1
+			defense_skill = 1
+			planning_skill = 7
+			logistics_skill = 1
+		}
+		add_corps_commander_role = {
+			Character = SEZ_char_ADM_CnC
+			skill = 3
+			attack_skill = 3
+			defense_skill = 3
+			planning_skill = 3
+			logistics_skill = 1
+		}
 	}
 }
 
@@ -995,7 +1140,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_activate_ministry_compliance"
-
+		add_ideas = SEZ_organic_interface_idea
 	}
 }
 
@@ -1015,7 +1160,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_create_simulated_training"
-
+		add_ideas = training_law_military_academy
+		add_ideas = officer_law_military_academy
 	}
 }
 
@@ -1035,7 +1181,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_overclocked_production_lines"
-
+		add_timed_idea = {
+			idea = SEZ_overclocked_production_idea
+			days = 250
+		}
 	}
 }
 
@@ -1055,7 +1204,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_devise_reconquest_scenarios"
-
+		add_research_slot = 1
 	}
 }
 
@@ -1070,13 +1219,17 @@ shared_focus = {
 	relative_position_id = SEZ_error_209
 	prerequisite = { focus = SEZ_centralize_cnc_network focus = SEZ_download_combat_engrams }
 	ai_will_do = { 
-		factor = 30
+		factor = 300
 	} 
 
 	will_lead_to_war_with = NVR
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_operation_redshift"
-
+		NVR = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 }
 
@@ -1091,14 +1244,23 @@ shared_focus = {
 	relative_position_id = SEZ_error_209
 	prerequisite = { focus = SEZ_activate_ministry_compliance focus = SEZ_create_simulated_training }
 	ai_will_do = { 
-		factor = 30
+		factor = 300
 	} 
 
 	will_lead_to_war_with = SDI
 	will_lead_to_war_with = NAC
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_operation_waterline"
-
+		SDI = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		NAC = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 }
 
@@ -1113,14 +1275,23 @@ shared_focus = {
 	relative_position_id = SEZ_error_209
 	prerequisite = { focus = SEZ_overclocked_production_lines focus = SEZ_devise_reconquest_scenarios }
 	ai_will_do = { 
-		factor = 30
+		factor = 300
 	} 
 
 	will_lead_to_war_with = LEE
 	will_lead_to_war_with = RST
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_operation_avalanche"
-
+		LEE = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		RST = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 }
 
@@ -1138,12 +1309,15 @@ shared_focus = {
 		NVR = { all_core_land_owned_by_prev_sphere = yes }
 	}
 	ai_will_do = { 
-		factor = 30
+		factor = 300
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_ideological_reeducation"
-
+		add_state_core = 718
+		add_state_core = 151
+		add_state_core = 163
+		add_war_support = 0.05
 	}
 }
 
@@ -1166,7 +1340,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_conscript_talons"
-
+		678 = { add_compliance = 20 }
+		667 = { add_compliance = 20 }
+		677 = { add_compliance = 20 }
+		set_technology = { tech_talons = 1 }
 	}
 }
 
@@ -1189,7 +1366,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_call_up_army"
-
+		country_event = severyana.18
+		add_state_core = 168
+		add_state_core = 720
 	}
 }
 
@@ -1213,7 +1392,16 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_pow_work_camps"
-
+		732 = { 
+			add_compliance = 10 
+			SEZ_grant_state_buildpoint = yes
+		}
+		733 = { add_compliance = 10 }
+		159 = { 
+			add_compliance = 10 
+			SEZ_grant_state_buildpoint = yes
+		}
+		729 = { add_compliance = 10 }
 	}
 }
 
@@ -1236,7 +1424,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus SEZ_order_restored"
-
+		country_event = severyana.19
 	}
 }
 
