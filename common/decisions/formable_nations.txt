@@ -1818,6 +1818,128 @@ formable_nations = {
 				}
 		}
 	}
+
+	propose_three_tribe_union = {
+		cost = 150
+		allowed = {
+			tag = SFO
+			is_subject = no
+		}
+		available = {
+			date > 1236.06.01
+		}
+		visible = {
+			tag = SFO
+		}
+
+		fire_only_once = yes
+
+		ai_will_do = {
+			base = 200
+		}
+
+		complete_effect = {
+			create_faction = SFO_three_tribes_faction
+			IFT = { country_event = flavour.24 }
+			SHT = { country_event = flavour.24 }
+		}
+	}
+
+	enact_three_tribe_union = {
+		allowed = {
+			tag = SFO
+			is_subject = no
+		}
+		available = {
+			date > 1238.01.01
+			SHT = { all_core_land_owned_by_prev_sphere = yes }
+			IFT = { all_core_land_owned_by_prev_sphere = yes }
+		}
+		visible = {
+			tag = SFO
+			date > 1236.08.01
+		}
+
+		fire_only_once = yes
+
+		ai_will_do = {
+			base = 200
+		}
+
+		complete_effect = {
+			leave_faction = yes
+			set_cosmetic_tag = SFO_tribes_of_seer_cosm
+			IF = {
+				limit = { SHT = { is_subject_of = SFO } }
+				annex_country = {
+					target = SHT
+					transfer_troops = yes
+				}
+			}
+			Core_original_SHT = yes
+			IF = {
+				limit = { IFT = { is_subject_of = SFO } }
+				annex_country = {
+					target = IFT
+					transfer_troops = yes
+				}
+			}
+			Core_original_IFT = yes
+			KZR = { 
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+	}
+
+	unite_konzan = {
+		allowed = {
+			OR = {
+				tag = BRG
+				tag = KZR
+			}
+			is_subject = no
+		}
+		available = {
+			BRG = { all_core_land_owned_by_prev_sphere = yes }
+			KZR = { all_core_land_owned_by_prev_sphere = yes }
+		}
+		visible = {
+			OR = {
+				tag = BRG
+				tag = KZR
+			}
+		}
+
+		fire_only_once = yes
+
+		ai_will_do = {
+			base = 200
+		}
+
+		complete_effect = {
+			IF = {
+				limit = { tag = BRG }
+				core_original_KZR = yes
+			}
+			IF = {
+				limit = { tag = KZR }
+				core_original_BRG = yes
+				set_capital = {
+					state = 521
+					remember_old_capital = no
+				}
+				521 = { set_state_name = "Konzan Bridge" }
+				set_province_name = {
+					id = 10577
+					name = "Konzan"
+				}
+			}
+			add_state_claim = 144
+			add_state_claim = 136
+		}
+	}
 }
 
 
