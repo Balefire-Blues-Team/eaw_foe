@@ -296,6 +296,10 @@ SDI_syndicate_relations_cat = {
 						factor = 1.5
 						has_war = yes
 					}
+					modifier = {
+						factor = 0.5
+						survivalism > 0.6
+					}
 					add_political_power = -20
 					add_popularity = {
 						ideology = survivalism
@@ -346,6 +350,7 @@ SDI_syndicate_relations_cat = {
 				value = 1
 			}
 			add_political_power = -20
+			custom_effect_tooltip = SDI_syndicate_resource_explain_tt
 			add_dynamic_modifier = {
 				modifier = SDI_syndicate_resources_payout_idea
 			}
@@ -357,6 +362,248 @@ SDI_syndicate_relations_cat = {
 				modifier = SDI_syndicate_resources_payout_idea
 			}
 		}
+	}
+	SDI_moar_funding = {
+		icon = industry
+		ai_will_do = {
+			base = 0
+		}
+		visible = {
+			tag = SDI
+		}
+		available = {
+			has_political_power > 9
+			custom_trigger_tooltip = {
+                tooltip = SDI_has_1_invest
+                SDI = {
+					check_variable = {
+						syndicate_invest > 0
+					}
+				}
+            }
+		}
+		custom_cost_trigger = {
+			check_variable = { syndicate_invest > 0 }
+		}
+		custom_cost_text = SDI_invest_cost_1_tt
+		fire_only_once = no
+		is_good = yes
+		
+		modifier = {
+			survivalism_drift = 0.01
+			consumer_goods_factor = -0.05
+		}
+		complete_effect = {
+			subtract_from_variable = {
+				var = syndicate_invest
+				value = 1
+			}
+			add_political_power = -10
+		}
+		days_remove = 60
+		days_re_enable = 20
+	}
+	SDI_shadow_research = {
+		icon = research
+		ai_will_do = {
+			base = 0
+		}
+		visible = {
+			tag = SDI
+			NOT = { has_country_flag = SDI_shadow_research_banned_flag }
+		}
+		available = {
+			has_political_power > 9
+			custom_trigger_tooltip = {
+                tooltip = SDI_has_1_invest
+                SDI = {
+					check_variable = {
+						syndicate_invest > 0
+					}
+				}
+            }
+		}
+		custom_cost_trigger = {
+			check_variable = { syndicate_invest > 0 }
+		}
+		custom_cost_text = SDI_invest_cost_1_tt
+		fire_only_once = no
+		is_good = yes
+		
+		modifier = {
+			visionary_drift = 0.04
+			research_speed_factor = 0.05
+		}
+		complete_effect = {
+			subtract_from_variable = {
+				var = syndicate_invest
+				value = 1
+			}
+			add_political_power = -10
+		}
+		days_remove = 60
+		days_re_enable = 20
+		remove_effect = {
+			custom_effect_tooltip = SDI_increase_balefire_research_tt
+			add_to_variable = {
+				var = shadow_research
+				value = 1
+			}
+		}
+	}
+	SDI_talon_guns_and_armor = {
+		icon = industry
+		ai_will_do = {
+			base = 0
+		}
+		visible = {
+			tag = SDI
+		}
+		available = {
+			has_political_power > 24
+			custom_trigger_tooltip = {
+                tooltip = SDI_has_2_invest
+                SDI = {
+					check_variable = {
+						syndicate_invest > 1
+					}
+				}
+            }
+		}
+		custom_cost_trigger = {
+			check_variable = { syndicate_invest > 1 }
+		}
+		custom_cost_text = SDI_invest_cost_2_tt
+		fire_only_once = no
+		is_good = yes
+		
+		modifier = {
+			continuation_drift = 0.04
+		}
+		complete_effect = {
+			subtract_from_variable = {
+				var = syndicate_invest
+				value = 2
+			}
+			add_political_power = -25
+			add_equipment_to_stockpile = {
+				type = ballistic_equipment_2
+				amount = 100
+				producer = OWE
+			}
+			add_equipment_to_stockpile = {
+				type = support_equipment
+				amount = 50
+				producer = OWE
+			}
+			add_equipment_to_stockpile = {
+				type = anti_tank_equipment_1
+				amount = 25
+				producer = OWE
+			}
+		}
+		days_remove = 60
+		days_re_enable = 20
+	}
+	SDI_gain_sez_invest = {
+		icon = industry
+		ai_will_do = {
+			base = 0
+		}
+		visible = {
+			tag = SDI
+			has_completed_focus = SDI_salvage_monopolization
+		}
+		available = {
+			has_political_power > 24
+			custom_trigger_tooltip = {
+                tooltip = SDI_has_3_invest
+                SDI = {
+					check_variable = {
+						syndicate_invest > 2
+					}
+				}
+            }
+		}
+		custom_cost_trigger = {
+			check_variable = { syndicate_invest > 2 }
+		}
+		custom_cost_text = SDI_invest_cost_3_tt
+		fire_only_once = no
+		is_good = yes
+		
+		modifier = {
+			civilian_factory_use = 1
+		}
+		complete_effect = {
+			subtract_from_variable = {
+				var = syndicate_invest
+				value = 3
+			}
+			add_political_power = -25
+			random_owned_controlled_state = {
+				limit = {
+					OR = {
+						state = 676
+						state = 163
+						state = 677
+						state = 667
+						state = 168
+						state = 720
+						state = 151
+						state = 718
+						state = 658
+						state = 733
+						state = 732
+						state = 159
+						state = 729
+					}
+				}
+				SEZ_grant_state_buildpoint = yes
+			}
+		}
+		days_remove = 60
+		days_re_enable = 40
+	}
+	SDI_mass_industrialization = {
+		icon = industry
+		ai_will_do = {
+			base = 0
+		}
+		visible = {
+			tag = SDI
+			has_completed_focus = SDI_salvage_monopolization
+		}
+		available = {
+			has_political_power > 14
+			custom_trigger_tooltip = {
+                tooltip = SDI_has_3_invest
+                SDI = {
+					check_variable = {
+						syndicate_invest > 2
+					}
+				}
+            }
+		}
+		custom_cost_trigger = {
+			check_variable = { syndicate_invest > 2 }
+		}
+		custom_cost_text = SDI_invest_cost_3_tt
+		fire_only_once = no
+		is_good = yes
+		
+		modifier = {
+			industrial_factory_donations = 5
+		}
+		complete_effect = {
+			subtract_from_variable = {
+				var = syndicate_invest
+				value = 3
+			}
+			add_political_power = -15
+		}
+		days_remove = 140
+		days_re_enable = 20
 	}
 
 }
