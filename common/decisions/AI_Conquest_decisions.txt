@@ -686,6 +686,7 @@ BLA_debug_decisions = {
 					IF = {
 						limit = {
 							RTZ = { is_ai = yes }
+							RTZ = { exists = yes }
 						}
 						puppet = RTZ
 						RTZ = { set_cosmetic_tag = RTZ_BLA_puppet_cosm }
@@ -725,6 +726,7 @@ BLA_debug_decisions = {
 						end_puppet = BAA
 						BAA = { 
 							leave_faction = yes 
+							drop_cosmetic_tag = yes
 							BLA = {
 								BAA = {
 									grant_wargoals_on_core_states_of_prev = yes
@@ -1012,6 +1014,448 @@ PIG_debug_decisions = {
 			}
 		}
 	}
-	
+}
 
+LAU_debug_decisions = {
+	LAU_debug_SRC = {
+		icon = rifles
+		cost = 5
+		ai_will_do = {
+			base = 100
+		}
+
+		available = {
+			date > 1236.06.01
+		}
+		fire_only_once = yes
+
+		days_remove = 20
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision BLA_debug_virgil"
+			SRC = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			IF = {
+				limit = {
+					RVR = { exists = yes is_ai = yes is_subject = no }
+				}
+				RVR = {
+					SRC = {
+						RVR = {
+							grant_wargoals_on_core_states_of_prev = yes
+						}
+					}
+				}
+			}
+			SRC = {
+				add_state_claim = 253
+				add_state_claim = 142
+				add_state_claim = 435
+			}
+		}
+	}
+	LAU_debug_stravropon = {
+		icon = rifles
+		cost = 5
+		ai_will_do = {
+			base = 100
+		}
+
+		available = {
+			owns_state = 417
+			417 = { compliance > 25 }
+		}
+		fire_only_once = yes
+
+		days_remove = 20
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision LAU_debug_stravropon"
+			417 = {
+				add_core_of = LAU
+			}
+			set_province_name = {
+				id = 12128
+				name = "Stravropon"
+			}
+			IF = {
+				limit = {
+					RVR = { exists = yes }
+				}
+				every_state = {
+					limit = {
+						is_owned_by = RVR
+						is_claimed_by = LAU
+					}
+					remove_claim_by = LAU
+					add_compliance = 50
+				}
+				IF = {
+					limit = {
+						has_war_with = RVR
+					}
+					every_controlled_state = {
+						limit = {
+							is_owned_by = RVR
+						}
+						transfer_state_to = LAU
+					}
+					white_peace = RVR
+				}
+			}
+		}
+	}
+	LAU_debug_RVR = {
+		icon = rifles
+		cost = 5
+		ai_will_do = {
+			base = 100
+		}
+
+		available = {
+			owns_state = 417
+			date > 1237.09.01
+		}
+		fire_only_once = yes
+
+		days_remove = 20
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision LAU_debug_RVR"
+			RVR = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+	}
+	LAU_debug_caesarushindi = {
+		icon = rifles
+		cost = 5
+		ai_will_do = {
+			base = 100
+		}
+
+		available = {
+			owns_state = 417
+			date > 1240.01.01
+		}
+		fire_only_once = yes
+
+		days_remove = 20
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision LAU_debug_caesarushindi"
+			EXC = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			EIL = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			BFS = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+	}
+	LAU_debug_empire = {
+		icon = rifles
+		cost = 5
+		ai_will_do = {
+			base = 100
+		}
+
+		available = {
+			owns_state = 329
+			owns_state = 390
+			owns_state = 460
+			date > 1240.06.01
+		}
+		fire_only_once = yes
+
+		days_remove = 20
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision LAU_debug_caesarushindi"
+			WHJ = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			IFT = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			SYT = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+	}
+}
+
+Legion_debug_decisions = {
+	Legion_debug_unification_war = {
+		icon = rifles
+		cost = 50
+		ai_will_do = {
+			base = 100
+		}
+
+		available = {
+			date > 1238.03.01
+			NOT = { owns_state = 253 }
+		}
+		fire_only_once = yes
+
+		days_remove = 20
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision Legion_debug_unification_war"
+			IF = {
+				limit = {
+					original_tag = LAU
+				}
+				EIL = {
+					ROOT = {
+						grant_wargoals_on_core_states_of_prev = yes
+					}
+				}
+				BFS = {
+					ROOT = {
+						grant_wargoals_on_core_states_of_prev = yes
+					}
+				}
+				EXC = {
+					ROOT = {
+						grant_wargoals_on_core_states_of_prev = yes
+					}
+				}
+			}
+			IF = {
+				limit = {
+					original_tag = EXC
+				}
+				EIL = {
+					ROOT = {
+						grant_wargoals_on_core_states_of_prev = yes
+					}
+				}
+				BFS = {
+					ROOT = {
+						grant_wargoals_on_core_states_of_prev = yes
+					}
+				}
+				IF = {  
+					limit = {
+						LAU = { NOT = { owns_state = 253 } }
+					}
+					LAU = {
+						ROOT = {
+							grant_wargoals_on_core_states_of_prev = yes
+						}
+					}
+				}
+			}
+			IF = {
+				limit = {
+					original_tag = EIL
+				}
+				BFS = {
+					ROOT = {
+						grant_wargoals_on_core_states_of_prev = yes
+					}
+				}
+				EXC = {
+					ROOT = {
+						grant_wargoals_on_core_states_of_prev = yes
+					}
+				}
+				IF = {  
+					limit = {
+						LAU = { NOT = { owns_state = 253 } }
+					}
+					LAU = {
+						ROOT = {
+							grant_wargoals_on_core_states_of_prev = yes
+						}
+					}
+				}
+			}
+			IF = {
+				limit = {
+					original_tag = BFS
+				}
+				EIL = {
+					ROOT = {
+						grant_wargoals_on_core_states_of_prev = yes
+					}
+				}
+				EXC = {
+					ROOT = {
+						grant_wargoals_on_core_states_of_prev = yes
+					}
+				}
+				IF = {  
+					limit = {
+						LAU = { NOT = { owns_state = 253 } }
+					}
+					LAU = {
+						ROOT = {
+							grant_wargoals_on_core_states_of_prev = yes
+						}
+					}
+				}
+			}
+		}
+	}
+
+}
+
+SRC_debug_decisions = {
+	LAU_debug_peace_LAU = {
+		icon = rifles
+		ai_will_do = {
+			base = 100
+		}
+
+		available = {
+			has_war_with = LAU
+			has_offensive_war = no
+			controls_state = 253
+			LAU = { is_ai = yes }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision LAU_debug_peace_LAU"
+			random = {
+				chance = 70
+				transfer_state = 253
+				white_peace = LAU
+				every_owned_state = {
+					limit = {
+						is_claimed_by = LAU
+					}
+					remove_claim_by = LAU
+				}
+			}
+		}
+	}
+	LAU_debug_SYT = {
+		icon = rifles
+		ai_will_do = {
+			base = 100
+		}
+
+		available = {
+			owns_state = 253
+			owns_state = 435
+			date > 1238.02.11
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision LAU_debug_SYT"
+			253 = { add_compliance = 30 }
+			142 = { add_compliance = 30 }
+			435 = { add_compliance = 30 }
+			SYT = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+	}
+	LAU_debug_petershoof = {
+		icon = rifles
+		ai_will_do = {
+			base = 100
+		}
+
+		available = {
+			owns_state = 253
+			owns_state = 435
+			owns_state = 149
+			date > 1239.11.11
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision LAU_debug_SYT"
+			LAU = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			EXC = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			EIL = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+			BFS = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+	}
+}
+
+SYT_debug_decisions = {
+	SYT_debug_KZN = {
+		icon = rifles
+		ai_will_do = {
+			base = 100
+		}
+
+		available = {
+			date > 1235.06.01
+			KRZ = { is_ai = yes }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SYT_debug_KZN"
+			random_list ={
+				50 = {
+
+				}
+				30 = {
+					KZR = {
+						ROOT = {
+							grant_wargoals_on_core_states_of_prev = yes
+						}
+					}
+				}
+				20 = {
+					KZR = {
+						ROOT = {
+							grant_wargoals_on_core_states_of_prev = yes
+						}
+					}
+					add_equipment_to_stockpile = {
+						type = ballistic_equipment_2
+						amount = 500
+						producer = OWE
+					}
+				}
+			}
+		}
+	}
 }
