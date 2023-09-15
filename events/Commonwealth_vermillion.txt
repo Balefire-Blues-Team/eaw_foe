@@ -28,7 +28,6 @@ country_event = {
 	option = {
 		name = vermillionists.2.a
 		ai_chance = { factor = 50}
-		custom_effect_tooltip = COR_we_will_join_tt
 		COR = {
 			country_event = {
 				id = vermillionists.3
@@ -40,16 +39,23 @@ country_event = {
 				id = vermillionists.4
 			}
 		}
-		hidden_effect = {
-			set_country_flag = NOV_civwar_join_counter_flag
-			set_country_flag = COR_owes_royalists_to_COR_flag
+		add_manpower = -200
+		send_equipment = {
+			amount = 100
+			target = COR
+			equipment = infantry_equipment
+		}
+		add_political_power = -20
+		reverse_add_opinion_modifier = {
+			target = COR
+			modifier = NOV_COR_treaty
 		}
 	}
 	
 	option = {
 		name = vermillionists.2.b
 		ai_chance = { factor = 0}
-		
+		add_stability = 0.02
 	}
 }
 
@@ -65,8 +71,61 @@ country_event = {
 	option = {
 		name = vermillionists.3.a
 		ai_chance = { factor = 50}
-		set_country_flag = COR_owes_stratusburg_to_NOV_flag
+		set_country_flag = COR_owes_independance_to_NOV_flag
+		reverse_add_opinion_modifier = {
+			target = NOV
+			modifier = NOV_COR_treaty
+		}
+		army_experience = 10
+		division_template = {
+			name = "Novochernusk Intervention Troops"
+			is_locked = yes
+				regiments = {
+					infantry = { x = 0 y = 0 }
+					infantry = { x = 0 y = 1 }
+					infantry = { x = 0 y = 3 }
+					infantry = { x = 1 y = 0 }
+					infantry = { x = 1 y = 1 }
+					infantry = { x = 1 y = 3 }
+					infantry = { x = 0 y = 2 }
+					infantry = { x = 1 y = 2 }
+					infantry = { x = 1 y = 4 }
+					infantry = { x = 0 y = 4 }
+				}
+		}
+		140 = { 
+			create_unit = {
+				division = "name = \"3rd Army Division\" division_template = \"Novochernusk Intervention Troops\" start_experience_factor = 0.25 start_equipment_factor = 1.0"
+				owner = COR
+			}
+			create_unit = {
+				division = "name = \"Thestral Auxiliary\" division_template = \"Novochernusk Intervention Troops\" start_experience_factor = 0.25 start_equipment_factor = 1.0"
+				owner = COR
+			}
+		}
 	}
+}
+
+country_event = {
+	id = vermillionists.3001
+	title = vermillionists.3001.t
+	desc = vermillionists.3001.d
+   picture = GFX_event_test
+
+   is_triggered_only = yes
+	fire_only_once = yes
+
+   option = {
+	   name = vermillionists.3001.a
+	   ai_chance = { factor = 50}
+	   	add_manpower = -144
+		add_equipment_to_stockpile = {
+			type = ballistic_equipment_1
+			amount = 72
+		}
+	   	add_political_power = 50
+		army_experience = 25
+   }
 }
 
 country_event = {
@@ -81,25 +140,8 @@ country_event = {
 	option = {
 		name = vermillionists.4.a
 		ai_chance = { factor = 50}
-		custom_effect_tooltip = COR_we_will_join_tt
-		COM = {
-			country_event = {
-				id = vermillionists.5
-			}
-		}
-		set_country_flag = DSB_civwar_join_counter_flag
-		set_country_flag = DSB_owes_vermillionists_to_COM_flag
-	}
-	
-	option = {
-		name = vermillionists.4.b
-		ai_chance = { factor = 50}
+		add_war_support = 0.04
 		add_political_power = 20
-		COM = {
-			country_event = {
-				id = vermillionists.504
-			}
-		}
 	}
 }
 
@@ -331,15 +373,15 @@ country_event = {
    option = {
 	   name = vermillionists.6.a
 	   ai_chance = { factor = 50}
-	    #load_focus_tree = COC_postwar_focus
-	    #hidden_effect = {
-		#   add_ideas = { COC_economic_ruin_4 }
-		#   add_ideas = { COC_policing_3 }
-		#   add_ideas = { COC_refugees_3 }
-		#   country_event = { id = cossacksfree.6 days = 20}
-		#   add_ideas = low_economic_mobilisation
-		#   add_ideas = limited_conscription
-	    #}
+	   	set_country_flag = COR_postwar_flag
+	    load_focus_tree = COR_postwar_focus
+	    hidden_effect = {
+		    add_ideas = COR_economic_devastation_5
+		    add_ideas = COR_counterrevolutionary_activity_1
+			add_ideas = COC_refugees_3
+		    add_ideas = low_economic_mobilisation
+		    add_ideas = limited_conscription
+	    }
 	    hidden_effect = {
 			set_global_flag = Commonwealth_Civwar_done_flag
 		}
