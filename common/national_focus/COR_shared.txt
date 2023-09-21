@@ -735,6 +735,13 @@ shared_focus = {
 			remove_idea = COM_assembly_of_hearts
 			add_idea = COR_revolutionary_congress
 		}
+		hidden_effect = {
+			country_event = {
+				id = vermillionists.26
+				days = 160
+				random_days = 300
+			}
+		}
 	}
 } 
 
@@ -754,7 +761,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_quell_the_riots"
-		
+		every_owned_state = {
+			limit = {
+				NOT = { is_core_of = COR }
+			}
+			add_resistance = -25
+		}
 		hidden_effect = {
 			country_event = {
 				id = vermillionists.15
@@ -780,7 +792,16 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_formalize_revolutionary_army"
-		
+		add_ideas = COR_revolutionary_army_building
+		add_ideas = limited_conscription
+		delete_unit_template_and_units = {
+			division_template = "Vermillionist Militia"
+			disband = yes
+		}
+		country_event = {
+			id = vermillionists.28
+			days = 3
+		}
 	}
 } 
 
@@ -800,7 +821,30 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_contacts_in_solaria"
-		
+		IF = {
+			limit = {
+				SOL = {
+					exists = yes
+					owns_state = 331
+					is_subject = no
+				}
+			}
+			country_event = vermillionists.29
+		}
+		ELSE_IF = {
+			limit = {
+				OR = { 
+					SOL = {
+						exists = no
+					}
+					SOL = {
+						is_subject = yes
+					}
+				}
+				
+			}
+			country_event = vermillionists.30
+		}
 	}
 } 
 
@@ -820,7 +864,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_first_order_of_business"
-		
+		add_stability = 0.10
+		country_event = vermillionists.31
 	}
 } 
 
@@ -843,7 +888,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_plan_the_economy"
-		
+		add_ideas = COR_planned_economy_1_idea
+		custom_effect_tooltip = COR_consequences_abound_tt
 	}
 } 
 
@@ -866,7 +912,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_restricted_capitalism"
-		
+		add_ideas = COR_restricted_capitalism_1_idea
+		custom_effect_tooltip = COR_consequences_abound_tt
+		add_popularity = {
+			ideology = survivalism
+			popularity = 0.08
+		}
 	}
 } 
 
@@ -1451,7 +1502,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_finish_the_reorganization"
-		
+		swap_ideas = {
+			remove_idea = COR_revolutionary_army_building
+			add_idea = COR_vermillion_army_1_idea
+		}
 	}
 } 
 
