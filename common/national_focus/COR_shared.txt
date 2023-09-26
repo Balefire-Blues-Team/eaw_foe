@@ -741,6 +741,7 @@ shared_focus = {
 				days = 160
 				random_days = 300
 			}
+			set_country_flag = pol_decisions_blocked_flag
 		}
 	}
 } 
@@ -890,6 +891,13 @@ shared_focus = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_plan_the_economy"
 		add_ideas = COR_planned_economy_1_idea
 		custom_effect_tooltip = COR_consequences_abound_tt
+		hidden_effect = {
+			country_event = {
+				id = vermillionists.32
+				days = 100
+				random_days = 60
+			}
+		}
 	}
 } 
 
@@ -918,6 +926,13 @@ shared_focus = {
 			ideology = survivalism
 			popularity = 0.08
 		}
+		hidden_effect = {
+			country_event = {
+				id = vermillionists.35
+				days = 100
+				random_days = 60
+			}
+		}
 	}
 } 
 
@@ -937,7 +952,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_revolution_abroad"
-		
+		add_ideas = COR_revolutionary_interventionism_idea
 	}
 } 
 
@@ -957,7 +972,29 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_found_the_VKDR"
-		
+		IF = {
+			limit = { has_dlc = "La Resistance" }
+			if = {
+				limit = {
+					has_intelligence_agency = no 
+				}
+				custom_effect_tooltip = COL_an_intelligence_agency_tt
+				hidden_effect = {
+					create_intelligence_agency = {
+						name = "VKDR"
+						icon = GFX_intelligence_agency_logo_hlr
+					}
+					upgrade_intelligence_agency = upgrade_anti_partisan
+				}
+			}
+			else = {
+				upgrade_intelligence_agency = upgrade_passive_defense
+				upgrade_intelligence_agency = upgrade_anti_partisan
+			}
+		}
+		ELSE = {
+			add_stability = 0.06
+		}
 		hidden_effect = {
 			country_event = {
 				id = vermillionists.16
@@ -983,7 +1020,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_induct_refugees_into_army"
-		
+		COR_lower_refugees = yes
+		add_manpower = 800
 	}
 } 
 
@@ -1003,7 +1041,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_red_commissars"
-		
+		army_experience = 25
+		recruit_character = COR_char_knicked_ear
+		recruit_character = COR_char_spraycap
 	}
 } 
 
@@ -1017,13 +1057,63 @@ shared_focus = {
 	available_if_capitulated = yes 
 	relative_position_id = COR_triumphant_revolution
 	prerequisite = { focus = COR_contacts_in_solaria } 
+	bypass = {
+		has_completed_focus = COR_strike_the_khaganate
+	}
 	ai_will_do = { 
 		factor = 30
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_red_celestialite_unity"
-		
+		IF = {
+			limit = {
+				SOL = {
+					exists = yes
+					owns_state = 331
+					is_subject = no
+				}
+			}
+			custom_effect_tooltip = COR_align_SOL_tt
+			add_popularity = {
+				ideology = continuation
+				popularity = 0.04
+			}
+			add_opinion_modifier = {
+				target = SOL
+				modifier = Celestialite_unity
+			}
+			set_country_flag = COR_SOL_aligned_flag
+			SOL = {
+				add_popularity = {
+					ideology = continuation
+					popularity = 0.04
+				}
+				add_opinion_modifier = {
+					target = COR
+					modifier = Celestialite_unity
+				}
+			}
+		}
+		ELSE_IF = {
+			limit = {
+				OR = { 
+					SOL = {
+						exists = no
+					}
+					SOL = {
+						is_subject = yes
+					}
+				}
+				
+			}
+			add_popularity = {
+				ideology = continuation
+				popularity = 0.08
+			}
+			Core_original_SOL = yes
+			set_country_flag = COR_SOL_cored_flag
+		}
 	}
 } 
 
@@ -1044,6 +1134,7 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_fate_of_nobles"
 		add_stability = 0.05
+		country_event = vermillionists.38
 	}
 } 
 
@@ -1064,6 +1155,7 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_reward_of_merchants"
 		add_stability = 0.05
+		country_event = vermillionists.39
 	}
 } 
 
@@ -1084,6 +1176,7 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_glory_of_workers"
 		add_stability = 0.05
+		country_event = vermillionists.40
 	}
 } 
 
@@ -1103,7 +1196,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_no_cap_leaves"
-		
+		COR_improve_economy = yes
+		add_ideas = closed_economy
 	}
 } 
 
@@ -1117,13 +1211,33 @@ shared_focus = {
 	available_if_capitulated = yes 
 	relative_position_id = COR_triumphant_revolution
 	prerequisite = { focus = COR_revolution_abroad } 
+	bypass = {
+		SYT = { exists = no }
+	}
 	ai_will_do = { 
 		factor = 30
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_reach_out_Sladkyi"
-		
+		add_tech_bonus = {
+			name = bomber_tech
+			bonus = 0.4
+			uses = 2
+			category = agriculture_tech
+			}
+		add_opinion_modifier = {
+			target = SYT
+			modifier = fellow_marksists
+		}
+		reverse_add_opinion_modifier = {
+			target = SYT
+			modifier = fellow_marksists
+		}
+		SYT = {
+			set_country_flag = COR_helped_us_flag
+			add_ideas = COR_SYT_officer_training_idea
+		}
 	}
 } 
 
@@ -1137,13 +1251,35 @@ shared_focus = {
 	available_if_capitulated = yes 
 	relative_position_id = COR_triumphant_revolution
 	prerequisite = { focus = COR_revolution_abroad } 
+	bypass = {
+		CAN = { exists = no }
+		NLO = { exists = no }
+		ABT = { exists = no }
+	}
 	ai_will_do = { 
 		factor = 30
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_fan_flames_eec"
-		
+		CAN = {
+			add_popularity = {
+				ideology = visionary
+				popularity = 0.10
+			}
+		}
+		NLO = {
+			add_popularity = {
+				ideology = visionary
+				popularity = 0.08
+			}
+		}
+		ABT = {
+			add_popularity = {
+				ideology = visionary
+				popularity = 0.06
+			}
+		}
 	}
 } 
 
@@ -1157,13 +1293,38 @@ shared_focus = {
 	available_if_capitulated = yes 
 	relative_position_id = COR_triumphant_revolution
 	prerequisite = { focus = COR_revolution_abroad } 
+	bypass = {
+		OR = {
+			DEC = { exists = no }
+			DEC = { has_completed_focus = DEC_show_united_strength }
+			DEC = { has_completed_focus = DEC_bring_down_phoenix }
+			DEC = { has_completed_focus = DEC_silver_coins_pocket }
+		}
+	}
 	ai_will_do = { 
 		factor = 30
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_fund_detrot_unions"
-		
+		IF = {
+			limit = {
+				DEC = { has_government = visionary }
+			}
+			DEC = {
+				add_ideas = COR_SYT_officer_training_idea
+				add_stability = 0.10
+			}
+		}
+		ELSE = {
+			DEC = {
+				add_popularity = {
+					ideology = visionary
+					popularity = 0.15
+				}
+				add_political_power = 10
+			}
+		}
 	}
 } 
 
@@ -1186,7 +1347,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_united_in_faith"
-		
+		add_timed_idea = {
+			idea = COR_missionary_revolutionaries_idea
+			days = 500
+		}
+		add_popularity = {
+			ideology = continuation
+			popularity = 0.08
+		}
 	}
 } 
 
@@ -1209,7 +1377,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_integration_incentives"
-		
+		every_owned_state = {
+			limit = {
+				NOT = { is_core_of = COR }
+			}
+			add_compliance = 10
+		}
 	}
 } 
 
@@ -1229,7 +1402,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_fishers_to_sailors"
-		
+		navy_experience = 25
+		add_tech_bonus = {
+			name = naval_tech
+			bonus = 0.8
+			uses = 4
+			category = naval_tech
+		}
+		recruit_character = COR_char_ocean_titan
 	}
 } 
 
@@ -1249,7 +1429,33 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_pegasi_to_pilots"
-		
+		if = {
+			limit = {
+				has_dlc = "By Blood Alone"
+				NOT = { has_tech = biplane_tech }
+			}
+			set_technology = {
+				biplane_tech = 1
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = { has_tech = aerodynamics_tech_1 }
+			}
+			set_technology = {
+				aerodynamics_tech_1 = 1
+			}
+		}
+		else = {
+			add_tech_bonus = {
+				name = recon_tech
+				bonus = 0.3
+				uses = 2
+				category = air_tech
+			}
+		}
+		air_experience = 25
+		recruit_character = COR_char_airsick
 	}
 } 
 
@@ -1269,7 +1475,32 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_restore_military_bases"
-		
+		add_war_support = 0.05
+		240 = {
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+			}
+			add_building_construction = {
+				type = bunker
+				level = 2
+				province = 1803
+			}
+		}
+		245 = {
+			add_building_construction = {
+				type = bunker
+				level = 2
+				province = 7661
+			}
+		}
+		315 = {
+			add_building_construction = {
+				type = bunker
+				level = 2
+				province = 1141
+			}
+		}
 	}
 } 
 
@@ -1289,7 +1520,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_sweep_the_countryside"
-		
+		country_event = vermillionists.42
 	}
 } 
 
@@ -1313,7 +1544,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_pragmatic_revolution"
-		
+		add_ideas = COR_socialist_realism_idea
 	}
 } 
 
@@ -1337,7 +1568,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_dreams_of_utopia"
-		
+		COR_lower_counterrev = yes
+		add_ideas = COR_uncompromising_ideals_idea
 	}
 } 
 
@@ -1358,7 +1590,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_great_compromise"
-		
+		add_ideas = limited_exports
+		add_timed_idea = {
+			idea = COR_reconstruction_compromise_idea
+			days = 600
+		}
 	}
 } 
 
@@ -1378,7 +1614,24 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_red_beacon"
-		
+		capital_scope = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+			}
+			add_building_construction = {
+				type = radar_station
+				level = 1
+				instant_build = yes
+			}
+		}
 	}
 } 
 
@@ -1399,7 +1652,21 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_tractors_for_rural_areas"
-		
+		every_owned_state = {
+			limit = {
+				free_building_slots = {
+					building = industrial_complex
+					size < 3
+				}
+			}
+			add_extra_state_shared_building_slots = 1
+		}
+		add_tech_bonus = {
+			name = recon_tech
+			bonus = 0.8
+			uses = 1
+			category = vehicle_tech
+		}
 	}
 } 
 
@@ -1413,13 +1680,16 @@ shared_focus = {
 	available_if_capitulated = yes 
 	relative_position_id = COR_triumphant_revolution
 	prerequisite = { focus = COR_reach_out_Sladkyi } 
+	bypass = {
+		NVR = { exists = no }
+	}
 	ai_will_do = { 
 		factor = 30
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_shake_hoofs_novaya_rodina"
-		
+		NVR = { country_event = vermillionists.44 }
 	}
 } 
 
@@ -1433,13 +1703,42 @@ shared_focus = {
 	available_if_capitulated = yes 
 	relative_position_id = COR_triumphant_revolution
 	prerequisite = { focus = COR_fund_detrot_unions } 
+	bypass = {
+		TFL = { exists = no }
+		VOI = { exists = no }
+		DEP = { exists = no }
+		TMS = { exists = no }
+	}
 	ai_will_do = { 
 		factor = 30
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_agitate_in_Nurior"
-		
+		TFL = { add_popularity = {
+			ideology = visionary
+			popularity = 0.06
+		} 
+			add_stability = -0.04
+		}
+		VOI = { add_popularity = {
+			ideology = visionary
+			popularity = 0.06
+		} 
+			add_stability = -0.04
+		}
+		DEP = { add_popularity = {
+			ideology = visionary
+			popularity = 0.06
+		} 
+			add_stability = -0.04
+		}
+		TMS = { add_popularity = {
+			ideology = visionary
+			popularity = 0.06
+		} 
+			add_stability = -0.04
+		}
 	}
 } 
 
@@ -1461,7 +1760,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_found_pan_equestian_congress"
-		
+		create_faction = "Pan-Equestrian Congress"
+		custom_effect_tooltip = COR_unlock_decisions_tt
 	}
 } 
 
@@ -1483,6 +1783,7 @@ shared_focus = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_cities_for_the_workers"
 		add_state_core = 422
 		add_state_core = 318
+		add_stability = 0.04
 	}
 } 
 
@@ -1553,7 +1854,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_decree_91"
-		
+		add_stability = 0.04
+		country_event = vermillionists.48
 	}
 } 
 
@@ -1573,7 +1875,17 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_strong_country_united_country"
-		
+		COR_improve_economy = yes
+		every_owned_state = {
+			limit = {
+				infrastructure < 8
+			}
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
 	}
 } 
 
@@ -1619,7 +1931,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_many_eyes_of_vermillion"
-		
+		IF = {
+			limit = { has_dlc = "La Resistance" }
+			add_ideas = VKDR_civilian_agents_idea
+		}
+		ELSE = {
+			add_political_power = 50
+		}
 	}
 }
 
@@ -1639,7 +1957,15 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_mechanize_and_modernize"
-		
+		set_technology = {
+			vehicles_tech_level_scientific = 1
+		}
+		add_tech_bonus = {
+			name = naval_tech
+			bonus = 0.4
+			uses = 2
+			category = apc_tech
+		}
 	}
 }
 
@@ -1683,7 +2009,18 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_radical_land_redistribution"
-		
+		COR_lower_refugees = yes
+		every_owned_state = {
+			add_extra_state_shared_building_slots = 1
+		}
+		add_popularity = {
+			ideology = visionary
+			popularity = 0.04
+		}
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.04
+		}
 	}
 }
 
@@ -1706,7 +2043,34 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_commonwealth_land_management"
-		
+		249 = {
+			add_resource = {
+				type = water
+				amount = 6
+			}
+		}
+		267 = {
+			add_resource = {
+				type = metal
+				amount = 6
+			}
+		}
+		315 = {
+			add_resource = {
+				type = energy
+				amount = 6
+			}
+		}
+		140 = {
+			add_resource = {
+				type = composites
+				amount = 6
+			}
+		}
+		add_popularity = {
+			ideology = survivalism
+			popularity = 0.08
+		}
 	}
 }
 
@@ -1721,13 +2085,23 @@ shared_focus = {
 	relative_position_id = COR_triumphant_revolution
 	prerequisite = { focus = COR_stalwart_no_more }
 	prerequisite = { focus = COR_decree_91 }
+	available = {
+		OR = {
+			has_idea = COR_counterrevolutionary_activity_1
+			has_idea = COR_counterrevolutionary_activity_2
+			has_idea = COR_counterrevolutionary_activity_3
+			has_idea = COR_counterrevolutionary_activity_4
+			has_idea = COR_counterrevolutionary_activity_5
+		}
+	}
 	ai_will_do = { 
 		factor = 30
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_fund_brass_buttons"
-		
+		COR_lower_counterrev = yes
+		country_event = vermillionists.49
 	}
 }
 
@@ -1747,7 +2121,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_funding_the_reconquest"
-		
+		country_event = vermillionists.50
 	}
 }
 
@@ -1767,7 +2141,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_roaring_engines_happy_workers"
-		
+		one_random_industrial_complex = yes
+		one_random_industrial_complex = yes
+		one_random_industrial_complex = yes
 	}
 }
 
@@ -1787,7 +2163,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_enact_red_polga_scheme"
-		
+		one_random_dockyard = yes
+		one_random_dockyard = yes
+		one_random_dockyard = yes
 	}
 }
 
@@ -1808,7 +2186,37 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_commonwealth_development_fund"
-		
+		add_popularity = {
+			ideology = survivalism
+			popularity = 0.06
+		}
+		random_owned_state = {
+			limit = {
+				industrial_complex = 0
+			}
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+			}
+		}
+		random_owned_state = {
+			limit = {
+				industrial_complex = 0
+			}
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+			}
+		}
+		random_owned_state = {
+			limit = {
+				arms_factory = 0
+			}
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+			}
+		}
 	}
 }
 
@@ -1822,13 +2230,55 @@ shared_focus = {
 	available_if_capitulated = yes 
 	relative_position_id = COR_triumphant_revolution
 	prerequisite = { focus = COR_radical_land_redistribution focus = COR_commonwealth_land_management }
+	available = {
+		OR = {
+			has_war = yes
+			has_completed_focus = COR_victory_at_last
+		}
+	}
 	ai_will_do = { 
 		factor = 30
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_prosperity_returns"
-		
+		custom_effect_tooltip = COR_effect_depend_on_party_tt
+		IF = {
+			limit = {
+				survivalism > 0.49
+			}
+			capital_scope = {
+				add_extra_state_shared_building_slots = 2
+				add_manpower = 2000
+				add_building_construction = {
+					type = industrial_complex
+					level = 2
+				}
+				add_building_construction = {
+					type = arms_factory
+					level = 1
+				}
+			}
+		}
+		ELSE_IF = {
+			limit = {
+				continuation > 0.49
+			}
+			add_ideas = COR_shelter_the_needy_idea
+		}
+		ELSE_IF = {
+			limit = {
+				destruction > 0.49
+			}
+			one_random_arms_factory = yes
+			one_random_arms_factory = yes
+			add_manpower = 500
+			army_experience = 15
+		}
+		ELSE = {
+			add_stability = 0.15
+			add_political_power = 50
+		}
 	}
 }
 
@@ -1851,7 +2301,18 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_peoples_war"
-		
+		add_collaboration = {
+			target = ARR
+			value = 0.50
+		}
+		add_collaboration = {
+			target = DEC
+			value = 0.30
+		}
+		add_collaboration = {
+			target = AOS
+			value = 0.10
+		}
 	}
 }
 
@@ -1874,7 +2335,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_war_of_vengeance"
-		
+		add_ideas = COR_vengeance_eternal_idea
 	}
 }
 
@@ -1894,7 +2355,24 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_unshackled_industry"
-		
+		IF = {
+			limit = {
+				has_idea = COR_planned_economy_2_idea
+			}
+			swap_ideas = {
+				remove_idea = COR_planned_economy_2_idea
+				add_idea = COR_planned_economy_3_idea
+			}
+		}
+		ELSE_IF = {
+			limit = {
+				has_idea = COR_restricted_capitalism_2_idea
+			}
+			swap_ideas = {
+				remove_idea = COR_restricted_capitalism_2_idea
+				add_idea = COR_restricted_capitalism_3_idea
+			}
+		}
 	}
 }
 
@@ -1942,9 +2420,42 @@ shared_focus = {
 		}
 	} 
 
+	will_lead_to_war_with = KHA
+	will_lead_to_war_with = DEC
+	will_lead_to_war_with = ARR
+	will_lead_to_war_with = AOS
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_strike_the_khaganate"
-		
+		IF = {
+			limit = {
+				NOT = { DEC = { all_core_land_owned_by_prev_sphere = yes } }
+			}
+			DEC = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+		IF = {
+			limit = {
+				NOT = { ARR = { all_core_land_owned_by_prev_sphere = yes } }
+			}
+			ARR = {
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+		AOS = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		KHA = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 }
 
@@ -1959,7 +2470,7 @@ shared_focus = {
 	relative_position_id = COR_triumphant_revolution
 	prerequisite = { focus = COR_strike_the_khaganate }
 	available = {
-		has_war = yes
+		controls_state = 292
 	}
 	ai_will_do = { 
 		factor = 300
@@ -1967,7 +2478,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_rise_workers_of_arria"
-		
+		Core_original_ARR = yes
 	}
 }
 
@@ -1990,7 +2501,49 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_mobilize_willing_masses"
-		
+		custom_effect_tooltip = COR_20w_infantry_tt
+		division_template = {
+			name = "Army of Liberation"
+			is_locked = no
+				regiments = {
+					infantry = { x = 0 y = 0 }
+					infantry = { x = 0 y = 1 }
+					infantry = { x = 1 y = 0 }
+					infantry = { x = 1 y = 1 }
+					infantry = { x = 0 y = 2 }
+					infantry = { x = 1 y = 2 }
+					infantry = { x = 1 y = 3 }
+					infantry = { x = 1 y = 4 }
+					infantry = { x = 0 y = 3 }
+					infantry = { x = 0 y = 4 }
+				}
+		}
+		140 = {
+			create_unit = {
+				division = "name = \"Liberation army of the Commonwealth\" division_template = \"Army of Liberation\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+				owner = COR
+			}
+			create_unit = {
+				division = "name = \"Liberation army of the Commonwealth\" division_template = \"Army of Liberation\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+				owner = COR
+			}
+			create_unit = {
+				division = "name = \"Liberation army of the Commonwealth\" division_template = \"Army of Liberation\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+				owner = COR
+			}
+			create_unit = {
+				division = "name = \"Liberation army of the Commonwealth\" division_template = \"Army of Liberation\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+				owner = COR
+			}
+			create_unit = {
+				division = "name = \"Liberation army of the Commonwealth\" division_template = \"Army of Liberation\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+				owner = COR
+			}
+			create_unit = {
+				division = "name = \"Liberation army of the Commonwealth\" division_template = \"Army of Liberation\" start_experience_factor = 0.15 start_equipment_factor = 1.0"
+				owner = COR
+			}
+		}
 	}
 }
 
@@ -2013,7 +2566,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_welcome_foreign_support"
-		
+		add_manpower = 400
+		add_equipment_to_stockpile = { type = support_equipment amount = 150 producer = OWE }
+		add_equipment_to_stockpile = { type = explosive_demolitions_equipment_3 amount = 195 producer = OWE }
+		add_equipment_to_stockpile = { type = ballistic_equipment_2 amount = 350 producer = OWE }
+		add_equipment_to_stockpile = { type = ballistic_fireteam_equipment_3 amount = 200 producer = OWE }
 	}
 }
 
@@ -2037,10 +2594,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_total_war_footing"
-		add_stability = -0.06
-		two_random_arms_factory = yes
+		add_stability = -0.08
+		add_offsite_building = {
+			type = arms_factory
+			level = 2
+		}
 		one_random_arms_factory = yes
 		one_random_arms_factory = yes
+		add_ideas = tot_economic_mobilisation
 	}
 }
 
@@ -2080,6 +2641,9 @@ shared_focus = {
 	available_if_capitulated = no 
 	relative_position_id = COR_strike_the_khaganate
 	prerequisite = { focus = COR_victory_at_last }
+	allow_branch = {
+		NOT = { has_country_flag = Vermillion_dead_flag }
+	}
 	ai_will_do = { 
 		factor = 30
 	} 
@@ -2100,13 +2664,26 @@ shared_focus = {
 	available_if_capitulated = no 
 	relative_position_id = COR_strike_the_khaganate
 	prerequisite = { focus = COR_victory_at_last }
+	allow_branch = {
+		NOT = { has_country_flag = Vermillion_dead_flag }
+	}
 	ai_will_do = { 
 		factor = 30
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_begin_arrian_reconstruction"
-		Core_original_ARR = yes
+		292 = {
+			add_manpower = 2000
+			add_building_construction = {
+				type = industrial_complex
+				level = 2
+			}
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+			}
+		}
 	}
 }
 
@@ -2124,9 +2701,20 @@ shared_focus = {
 		factor = 30
 	} 
 
+	will_lead_to_war_with = NOV
+	will_lead_to_war_with = DSB
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COR_the_two_stragglers"
-		
+		NOV = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		DSB = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 }
 
