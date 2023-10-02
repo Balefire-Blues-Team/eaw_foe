@@ -333,6 +333,22 @@ scripted_gui = {
                 }
 
             #Spymaster Actions
+                mwy_spymaster_action_button_1_click = {
+                    MWY_close_all_council_submenu = yes
+                    if = { 
+                        limit = { has_country_flag = spymaster_uncover_plots_flag }
+                        ROOT = {
+                            clr_country_flag = spymaster_uncover_plots_flag
+                            remove_ideas = MWY_spy_uncover_plots_idea
+                        }
+                    }
+                    else = {
+                        MWY_spy_action_cooldown_effect = yes
+                        set_country_flag = spymaster_uncover_plots_flag
+                        add_ideas = MWY_spy_uncover_plots_idea
+                    }
+                }
+
                 mwy_spymaster_action_button_2_click = {
                     if = {
                         limit = { has_country_flag = spymaster_council_base_flag }
@@ -357,6 +373,39 @@ scripted_gui = {
                             ROOT = {
                                 set_variable = { mwy_spy_council_menu_var = 1 }
                             }
+                        }
+                    }
+                }
+
+                mwy_spymaster_action_button_3_click = {
+                    MWY_close_all_council_submenu = yes
+                    if = { 
+                        limit = { has_country_flag = spymaster_ensure_loyalty_flag }
+                        ROOT = {
+                            clr_country_flag = spymaster_ensure_loyalty_flag
+                            remove_ideas = MWY_spy_loyalty_visionary_idea
+                            remove_ideas = MWY_spy_loyalty_continuation_idea
+                            remove_ideas = MWY_spy_loyalty_survivalism_idea
+                        }
+                    }
+                    else = {
+                        if = {
+                            limit = { has_government = visionary }
+                            MWY_spy_action_cooldown_effect = yes
+                            set_country_flag = spymaster_ensure_loyalty_flag
+                            add_ideas = MWY_spy_loyalty_visionary_idea
+                        }
+                        if = {
+                            limit = { has_government = continuation }
+                            MWY_spy_action_cooldown_effect = yes
+                            set_country_flag = spymaster_ensure_loyalty_flag
+                            add_ideas = MWY_spy_loyalty_continuation_idea
+                        }
+                        if = {
+                            limit = { has_government = survivalism }
+                            MWY_spy_action_cooldown_effect = yes
+                            set_country_flag = spymaster_ensure_loyalty_flag
+                            add_ideas = MWY_spy_loyalty_survivalism_idea
                         }
                     }
                 }
@@ -605,11 +654,31 @@ scripted_gui = {
             #Spymaster Buttons
                 mwy_spymaster_action_button_1_click_enabled = {
                     custom_trigger_tooltip = {
+                        tooltip = MWY_spymaster_available_tt
+                        ROOT = {
+                            NOT = {
+                                has_country_flag = spymaster_council_base_flag
+                                has_country_flag = spymaster_ensure_loyalty_flag
+                                has_country_flag = spymaster_poison_flag
+                            }
+                        }
+                    }
+                    custom_trigger_tooltip = {
                         tooltip = MWY_spy_action_cooldown_tt
                         NOT = { has_country_flag = MWY_spy_action_flag }
                     }
                 }
                 mwy_spymaster_action_button_2_click_enabled = {
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_spymaster_available_tt
+                        ROOT = {
+                            NOT = {
+                                has_country_flag = spymaster_uncover_plots_flag
+                                has_country_flag = spymaster_ensure_loyalty_flag
+                                has_country_flag = spymaster_poison_flag
+                            }
+                        }
+                    }
                     custom_trigger_tooltip = {
                         tooltip = MWY_spy_action_cooldown_tt
                         NOT = { has_country_flag = MWY_spy_action_flag }
@@ -617,11 +686,31 @@ scripted_gui = {
                 }
                 mwy_spymaster_action_button_3_click_enabled = {
                     custom_trigger_tooltip = {
+                        tooltip = MWY_spymaster_available_tt
+                        ROOT = {
+                            NOT = {
+                                has_country_flag = spymaster_uncover_plots_flag
+                                has_country_flag = spymaster_council_base_flag
+                                has_country_flag = spymaster_poison_flag
+                            }
+                        }
+                    }
+                    custom_trigger_tooltip = {
                         tooltip = MWY_spy_action_cooldown_tt
                         NOT = { has_country_flag = MWY_spy_action_flag }
                     }
                 }
                 mwy_spymaster_action_button_4_click_enabled = {
+                    custom_trigger_tooltip = {
+                        tooltip = MWY_spymaster_available_tt
+                        ROOT = {
+                            NOT = {
+                                has_country_flag = spymaster_uncover_plots_flag
+                                has_country_flag = spymaster_council_base_flag
+                                has_country_flag = spymaster_ensure_loyalty_flag
+                            }
+                        }
+                    }
                     custom_trigger_tooltip = {
                         tooltip = MWY_spy_action_cooldown_tt
                         NOT = { has_country_flag = MWY_spy_action_flag }
