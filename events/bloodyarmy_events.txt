@@ -1,6 +1,7 @@
 add_namespace = bloodyarmy
 add_namespace = bloodyarmy_EYE_support
 add_namespace = bloody_border_war
+add_namespace = army_affairs
 
 ### General Events
 	
@@ -165,23 +166,22 @@ add_namespace = bloody_border_war
 		option = { #Stay sane
 			name = bloodyarmy.5.a
 			add_stability = -0.01
+
+			activate_mission = ERA_army_affairs
 		}
 		option = { #Lose sanity
 			name = bloodyarmy.5.b
 
-			custom_effect_tooltip = ERA_lose_one_sanity_tt
-			hidden_effect = {
-				ERA_decrease_sanity_effect = yes
-			}
+			ERA_decrease_sanity_effect = yes
+
+			activate_mission = ERA_army_affairs
 		}
 		option = { #Lose double sanity
 			name = bloodyarmy.5.c
 
-			custom_effect_tooltip = ERA_lose_two_sanity_tt
-			hidden_effect = {
-				ERA_decrease_sanity_effect = yes
-				ERA_decrease_sanity_effect = yes
-			}
+			ERA_decrease_2_sanity_effect = yes
+
+			activate_mission = ERA_army_affairs
 		}
 	}
 
@@ -665,6 +665,7 @@ add_namespace = bloody_border_war
 			name = bloodyarmy.25.a
 			add_political_power = 25
 			add_stability = -0.05
+			set_country_flag = ERA_has_killed_arms_dealer
 		}
 	}
 
@@ -1294,5 +1295,296 @@ add_namespace = bloody_border_war
 		}
 	}
 
+### Army Affair Random Events
+	# Glossary:
+	# -Unique: Random event that will only occur once
+	# -Scripted: Event that is guaranteed to occur after a trigger is met (i.e. completion of a focus, capture of territory, etc)
+	# -Scripted Unique: Event that is guaranteed to occur after a trigger is met (i.e. completion of a focus, capture of territory, etc) and will only occur once
+	# -Insanity: Event relating to the Insanity system, most likely a character focused event for Blood Mane
 
+	country_event = { ### Scripted Unique Insanity 1 - Loss at Shatterhorn
+		id = army_affairs.1
+		title = army_affairs.1.title
+		desc = army_affairs.1.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+
+		option = { #
+			name = army_affairs.1.a
+			ai_chance = {
+				base = 10
+			}
+
+			custom_effect_tooltip = ERA_lose_one_sanity_tt
+			hidden_effect = {
+				ERA_decrease_sanity_effect = yes
+			}
+
+			set_country_flag = ERA_unique_insanity_1_flag
+		}
+	}
+
+	country_event = { ### Scripted Unique Insanity 2 - Post Arms Merchant Murder
+		id = army_affairs.2
+		title = army_affairs.2.title
+		desc = army_affairs.2.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+
+		option = { #Accept Petition
+			name = army_affairs.2.a
+			ai_chance = {
+				base = 10
+			}
+
+			army_experience = 5 
+			ERA_decrease_sanity_effect = yes
+
+			set_country_flag = ERA_unique_insanity_2_flag
+		}
+
+		option = { #Accept Petition
+			name = army_affairs.2.b
+			ai_chance = {
+				base = 10
+			}
+
+			add_stability = -0.075
+
+			set_country_flag = ERA_unique_insanity_2_flag
+		}
+	}
+
+	country_event = { ### Unique Insanity 1 - Strong Wing Vision
+		id = army_affairs.3
+		title = army_affairs.3.title
+		desc = army_affairs.3.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+
+		option = { #We must train against knights!
+			name = army_affairs.3.a
+			ai_chance = {
+				base = 10
+			}
+
+			ERA_decrease_sanity_effect = yes
+			ERA_increase_war_readiness_10 = yes
+
+			set_country_flag = ERA_unique_insanity_3_flag
+		}
+
+		option = { #Disregard the vision
+			name = army_affairs.3.b
+			ai_chance = {
+				base = 10
+			}
+
+			add_war_support = -0.05
+
+			set_country_flag = ERA_unique_insanity_3_flag
+		}
+	}
+
+	country_event = { ### Unique Insanity 2 - My Dear Niece
+		id = army_affairs.4
+		title = army_affairs.4.title
+		desc = army_affairs.4.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+
+		option = { #Star Gazer...
+			name = army_affairs.4.a
+			ai_chance = {
+				base = 10
+			}
+
+			ERA_decrease_sanity_effect = yes
+
+			set_country_flag = ERA_unique_insanity_4_flag
+		}
+	}
+
+	country_event = { ### Unique Insanity 3 - Silver Star's 2nd Visit
+		id = army_affairs.5
+		title = army_affairs.5.title
+		desc = army_affairs.5.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+
+		option = { #
+			name = army_affairs.5.a
+			ai_chance = {
+				base = 10
+			}
+
+			ERA_decrease_sanity_effect = yes
+
+			set_country_flag = ERA_unique_insanity_5_flag
+		}
+	}
+
+	country_event = { ### Unique Insanity 4 - Silver Star's 3rd Visit
+		id = army_affairs.6
+		title = army_affairs.6.title
+		desc = army_affairs.6.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+
+		option = { # Bad End
+			name = army_affairs.6.a
+			ai_chance = {
+				base = 10
+			}
+			
+			ERA_decrease_sanity_effect = yes
+
+			set_country_flag = ERA_unique_insanity_6_flag
+		}
+
+		option = { # Good End
+			name = army_affairs.6.b
+			ai_chance = {
+				base = 10
+			}
+			
+			ERA_decrease_sanity_effect = yes
+
+			set_country_flag = ERA_unique_insanity_6_flag
+		}
+	}
+
+	country_event = { ### Unique Insanity 5 - Read a Book
+		id = army_affairs.7
+		title = army_affairs.7.title
+		desc = army_affairs.7.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+
+		option = { # Peace and War by Leo Trotstoy
+			name = army_affairs.7.a
+			ai_chance = {
+				base = 10
+			}
+			
+			ERA_decrease_sanity_effect = yes
+			add_doctrine_cost_reduction = {
+				cost_reduction = 0.5
+				uses = 1
+				category = land_doctrine
+			}
+
+			set_country_flag = ERA_unique_insanity_7_flag
+		}
+
+		option = { #Deerpilled Meeping 
+			name = army_affairs.6.b
+			ai_chance = {
+				base = 10
+			}
+			
+			ERA_increase_sanity_effect = yes
+
+			set_country_flag = ERA_unique_insanity_7_flag
+		}
+	}
+
+	country_event = { ### Unique Insanity 6 - Reflections
+		id = army_affairs.8
+		title = army_affairs.8.title
+		desc = army_affairs.8.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+
+		option = { #Wow, I feel good!
+			name = army_affairs.8.a
+			ai_chance = {
+				base = 10
+			}
+
+			ERA_increase_2_sanity_effect = yes
+
+			set_country_flag = ERA_unique_insanity_8_flag
+		}
+	}
+
+	###
+
+	country_event = { ###Minor PP Loss
+		id = army_affairs.9
+		title = army_affairs.9.title
+		desc = army_affairs.9.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+
+		option = { #Darn
+			name = army_affairs.9.a
+			add_political_power = -25
+		}
+	}
+	country_event = { ###Major PP Loss
+		id = army_affairs.10
+		title = army_affairs.10.title
+		desc = army_affairs.10.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+
+		option = { #Darn
+			name = army_affairs.10.a
+			add_political_power = -50
+		}
+	}
+
+	country_event = { ###PP Gain
+		id = army_affairs.11
+		title = army_affairs.11.title
+		desc = army_affairs.11.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+
+		option = { #Yay
+			name = army_affairs.11.a
+			add_political_power = 25
+		}
+	}
+	country_event = { ###Adventurers Join
+		id = army_affairs.12
+		title = army_affairs.12.title
+		desc = army_affairs.12.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+
+		option = { #Yay
+			name = army_affairs.12.a
+			add_manpower = 100
+		}
+	}
+	country_event = { ###Good Harvests
+		id = army_affairs.13
+		title = army_affairs.13.title
+		desc = army_affairs.13.desc
+		picture = GFX_event_medieval_city_3
+
+		is_triggered_only = yes
+
+		option = { #Yay
+			name = army_affairs.13.a
+			add_timed_idea = {
+				idea = MWY_good_harvest
+				days = 90
+			}
+		}
+	}
 
