@@ -267,10 +267,11 @@ shared_focus = {
 shared_focus = {
 	id = CAL_joint_mage_companies
 	icon = GFX_goal_CAL_joint_mages
-	x = 1
-	y = 2
+	x = 2
+	y = 4
 	cost = 5.72
-	prerequisite = { focus = CAL_new_alicorns }
+	prerequisite = { focus = CAL_improved_designs }
+	prerequisite = { focus = CAL_alicorns_officers }
 	available_if_capitulated = yes
 	relative_position_id = CAL_restructure_expedition
 	ai_will_do = {
@@ -297,7 +298,7 @@ shared_focus = {
 	x = 0
 	y = 3
 	cost = 8.58
-	prerequisite = { focus = CAL_joint_mage_companies }
+	prerequisite = { focus = CAL_elevate_the_worthy }
 	prerequisite = { focus = CAL_scavenge_university }
 	available_if_capitulated = yes
 	relative_position_id = CAL_restructure_expedition
@@ -339,11 +340,10 @@ shared_focus = {
 shared_focus = {
 	id = CAL_elevate_the_worthy
 	icon = GFX_goal_Elevate_the_Worthy
-	x = 2
-	y = 4
+	x = 1
+	y = 2
 	cost = 5.72
-	prerequisite = { focus = CAL_improved_designs }
-	prerequisite = { focus = CAL_alicorns_officers }
+	prerequisite = { focus = CAL_new_alicorns }
 	available_if_capitulated = yes
 	relative_position_id = CAL_restructure_expedition
 	ai_will_do = {
@@ -396,7 +396,7 @@ shared_focus = {
 	y = 5
 	cost = 5.72
 	prerequisite = { focus = CAL_personal_command }
-	prerequisite = { focus = CAL_elevate_the_worthy }
+	prerequisite = { focus = CAL_joint_mage_companies }
 	prerequisite = { focus = CAL_magical_thought_suppression }
 	available = {
 		OR = {
@@ -471,6 +471,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus CAL_search_the_city"
+		IF = {
+			limit = {
+				is_ai = yes
+				is_historical_focus_on = yes
+			}
+			custom_effect_tooltip = CAL_no_tree_historical_tt
+		}
+		ELSE = {
 		capital_scope = { add_resource = {type = advanced amount = 6}}
 		random_list = {
 				25 = {
@@ -490,6 +498,7 @@ shared_focus = {
 					}
 				}
 			}
+		}
 	}
 }
 
@@ -968,6 +977,11 @@ shared_focus = {
 	available = {
 		ai_has_no_other_wars_or_wargoals = yes
 	}
+	bypass = {
+		CCD = {
+			all_core_land_owned_by_prev_sphere = yes
+		}
+	}
 	prerequisite = { focus = CAL_spread_our_might }
 	prerequisite = { focus = CAL_riches_of_canterlot }
 	relative_position_id = CAL_search_the_city
@@ -1014,6 +1028,11 @@ shared_focus = {
 	y = 11
 	cost = 5.72
 	prerequisite = { focus = CAL_dip_conquered }
+	bypass = {
+		PRA = {
+			all_core_land_owned_by_prev_sphere = yes
+		}
+	}
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes
 	ai_will_do = {
@@ -1203,6 +1222,11 @@ shared_focus = {
 	}
 	prerequisite = { focus = CAL_expand_arsenal }
 	prerequisite = { focus = CAL_think_to_victory }
+	bypass = {
+		STA = {
+			all_core_land_owned_by_prev_sphere = yes
+		}
+	}
 	relative_position_id = CAL_search_the_city
 	available_if_capitulated = yes
 	ai_will_do = {
@@ -1337,8 +1361,13 @@ shared_focus = {
 	y = 13
 	cost = 5.72
 	available = {
-		any_neighbor_country = {
-			tag = UNI
+		OR = {
+			any_neighbor_country = {
+				tag = UNI
+			}
+			UNI = {
+				exists = no
+			}
 		}
 	}
 	bypass = {

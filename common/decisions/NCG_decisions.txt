@@ -18,14 +18,72 @@ NCG_investment_yearly_cat = {
 		fire_only_once = no
 		###Add points to actual number
 		timeout_effect = {
-			custom_effect_tooltip = NCG_investment_points_gaintt
-
-				###Add points of yearly net
-
+			IF = {
+				limit = {
+					NOT = { has_government = visionary }
+					num_of_civilian_factories < 12 
+				}
+				custom_effect_tooltip = NCG_increase_profit_tt
 				add_to_variable = {
 					var = NCG_free_invest
 					value = 1
 				}
+			}
+			ELSE_IF = {
+				limit = {
+					NOT = { has_government = visionary }
+					num_of_civilian_factories < 30 
+				}
+				custom_effect_tooltip = NCG_increase_profit_large_tt
+				add_to_variable = {
+					var = NCG_free_invest
+					value = 2
+				}
+			}
+			ELSE_IF = {
+				limit = {
+					NOT = { has_government = visionary }
+					num_of_civilian_factories > 29 
+				}
+				custom_effect_tooltip = NCG_increase_profit_extreme_tt
+				add_to_variable = {
+					var = NCG_free_invest
+					value = 3
+				}
+			}
+			ELSE_IF = {
+				limit = {
+					has_government = visionary
+					num_of_civilian_factories < 12 
+				}
+				custom_effect_tooltip = NCG_increase_profit_alt_tt
+				add_to_variable = {
+					var = NCG_free_invest
+					value = 1
+				}
+			}
+			ELSE_IF = {
+				limit = {
+					has_government = visionary
+					num_of_civilian_factories < 30
+				}
+				custom_effect_tooltip = NCG_increase_profit_large_alt_tt
+				add_to_variable = {
+					var = NCG_free_invest
+					value = 2
+				}
+			}
+			ELSE_IF = {
+				limit = {
+					has_government = visionary
+					num_of_civilian_factories > 29
+				}
+				custom_effect_tooltip = NCG_increase_profit_extreme_alt_tt
+				add_to_variable = {
+					var = NCG_free_invest
+					value = 3
+				}
+			}
 		}
 		days_re_enable = 0
 		days_remove = 1
@@ -1454,13 +1512,17 @@ NCG_electrification_cat = {
 		}
 		available = {
 			FROM = {
-                compliance > 10
+                OR = {
+					compliance > 10
+					is_core_of = NCG
+				}
                 NOT = {
                     has_dynamic_modifier = {
                         modifier = NCG_electric_territory
                     }
                 }
 				is_owned_by = NCG
+				is_controlled_by = NCG
             }
 			num_of_civilian_factories_available_for_projects > 1
 		}
