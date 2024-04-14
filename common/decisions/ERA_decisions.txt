@@ -9,12 +9,55 @@ ERA_sanity_cat = {
 			tag = ERA
 		}
 		available = {
-			always = no
+			hidden_trigger = {
+				always = no
+			}
 		}
 		#fire_only_once = yes
 
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision ERA_war_readiness_dec"
+		}
+	}
+
+	ERA_relieve_stress_dec = {
+		icon = GFX_decision_candle
+		cost = 100
+		ai_will_do = {
+			base = 0
+		}
+		visible = {
+			tag = ERA
+			check_variable = {
+				var = era_relieve_stress_var
+				value = 3
+				compare = less_than
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = ERA_relieve_stress_trigger_tt
+				check_variable = {
+					era_blood_mane_sanity_var > 1
+				}
+			}
+			custom_trigger_tooltip = {
+				tooltip = ERA_relieve_stress_trigger_2_tt
+				check_variable = {
+					var = era_relieve_stress_var
+					value = 3
+					compare = less_than
+				}
+			}			
+		}
+		#fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision ERA_relieve_stress_dec"
+
+			ERA_increase_sanity_effect = yes
+
+			add_to_variable = { era_relieve_stress_var = 1 }
 		}
 	}
 
