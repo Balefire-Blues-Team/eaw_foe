@@ -1,0 +1,323 @@
+add_namespace = rustwreck
+
+
+#Ask LGH to trade
+country_event = {
+ 	id = rustwreck.1
+ 	title = rustwreck.1.t
+ 	desc = rustwreck.1.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+ 	
+	option = { #accept
+		name = rustwreck.1.a 
+		ai_chance = { factor = 90}
+		add_autonomy_score = {
+			value = 150
+		}
+		503 = {
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+			}
+		}
+		add_opinion_modifier = {
+			target = RWK
+			modifier = long_term_trade_partner
+		}
+		RWK = {
+			country_event = rustwreck.2
+		}
+	}
+	option = { #deny
+		name = rustwreck.1.b 
+		ai_chance = { factor = 10}
+		add_stability = 0.05
+		RWK = {
+			country_event = rustwreck.3
+		}
+	}
+}
+
+#LGH accepts trade
+country_event = {
+	id = rustwreck.2
+	title = rustwreck.2.t
+	desc = rustwreck.2.d
+   	picture = GFX_event_test
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #happy
+	   	name = rustwreck.2.a 
+	   	ai_chance = { factor = 90}
+	   	164 = {
+		   add_extra_state_shared_building_slots = 1
+		   add_building_construction = {
+			   type = industrial_complex
+			   level = 1
+		   }
+	   	}
+		add_opinion_modifier = {
+			target = LGH
+			modifier = long_term_trade_partner
+		}
+		build_railway = {
+			start_province = 8985
+			target_province = 503
+			level = 2
+			build_only_on_allied = no
+		}
+   	}
+}
+
+#LGH rejects trade
+country_event = {
+	id = rustwreck.3
+	title = rustwreck.3.t
+	desc = rustwreck.3.d
+   	picture = GFX_event_test
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #sad
+	   	name = rustwreck.3.a 
+	   	ai_chance = { factor = 90}
+	   	164 = {
+		   	add_extra_state_shared_building_slots = 1
+		   	add_manpower = 400
+	   	}
+   	}
+}
+
+#Negotiate with Razorsharks
+country_event = {
+	id = rustwreck.4
+	title = rustwreck.4.t
+	desc = rustwreck.4.d
+   	picture = GFX_event_test
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+   	option = { #wipe out
+	   name = rustwreck.4.a 
+	   ai_chance = { factor = 50}
+	   	add_timed_idea = {
+			idea = RWK_razorshark_campaign_idea
+			days = 160
+	   	}
+	   	set_country_flag = RWK_razorshark_war_flag
+   	}
+   	option = { #pay off
+	   	name = rustwreck.4.b 
+	   	ai_chance = { factor = 50}
+	   	add_timed_idea = {
+			idea = RWK_razorshark_tribute_idea
+			days = 160
+	   	}
+		set_country_flag = RWK_razorshark_caps_flag
+   	}
+	option = { #recruit
+	   	name = rustwreck.4.c
+	   	trigger = {
+			has_completed_focus = RWK_enemies_to_allies
+	   	}
+	   	ai_chance = { factor = 5000}
+		add_stability = -0.08
+		custom_effect_tooltip = RWK_razorshark_recruit_tt
+		hidden_effect = {
+			add_corps_commander_role = {
+				character = RWK_char_stranglevine
+					traits = {
+						pony_race_trait
+						enduring_trait
+						agile_trait
+					}
+					skill = 2
+					attack_skill = 3
+					defense_skill = 1
+					planning_skill = 1
+					logistics_skill = 1
+					legacy_id = 66666
+			}
+			division_template = {
+				name = "Razorsharks"
+				priority = 1
+				regiments = {
+				infantry = { x = 0 y = 0 }
+				infantry = { x = 0 y = 1 }
+				infantry = { x = 0 y = 2 }
+				militia = { x = 1 y = 0 }
+				militia = { x = 1 y = 1 }
+				}
+			}
+			534 = {
+				create_unit = {
+					division = "name = \"Steel Depths\" division_template = \"Razorsharks\" start_experience_factor = 0.3 equip" 
+					owner = RWK
+				}
+				create_unit = {
+					division = "name = \"Bleeding Coral\" division_template = \"Razorsharks\" start_experience_factor = 0.3 equip" 
+					owner = RWK
+				}
+				create_unit = {
+					division = "name = \"The Chum\" division_template = \"Razorsharks\" start_experience_factor = 0.3 equip" 
+					owner = RWK
+				}
+			}
+		}
+		set_country_flag = RWK_razorshark_join_flag
+   }
+}
+
+#Razorshark followup campaign
+country_event = {
+	id = rustwreck.5
+	title = rustwreck.5.t
+	desc = rustwreck.5.d
+   	picture = GFX_event_test
+
+   	trigger = {
+		tag = RWK
+		has_country_flag = RWK_razorshark_war_flag
+		NOT = { has_idea = RWK_razorshark_campaign_idea }
+	}
+	fire_only_once = yes
+	
+  	option = { #noice
+	   	name = rustwreck.5.a 
+	   	ai_chance = { factor = 90}
+		   add_popularity = {
+			ideology = visionary
+			popularity = 0.08
+		}
+		capital_scope = {
+			add_resource = {
+				type = crystals
+				amount = 4
+			}
+			add_resource = {
+				type = circuitry
+				amount = 8
+			}
+			add_resource = {
+				type = metal
+				amount = 10
+			}
+		}
+   	}
+}
+
+#Razorshark followup tribute
+country_event = {
+	id = rustwreck.6
+	title = rustwreck.6.t
+	desc = rustwreck.6.d
+   	picture = GFX_event_test
+
+	trigger = {
+		tag = RWK
+		has_country_flag = RWK_razorshark_caps_flag
+		NOT = { has_idea = RWK_razorshark_tribute_idea }
+	}
+	fire_only_once = yes
+	
+  	option = { #noice
+	   	name = rustwreck.6.a 
+	   	ai_chance = { factor = 90}
+	   	capital_scope = {
+			add_resource = {
+				type = crystals
+				amount = 4
+			}
+			add_resource = {
+				type = circuitry
+				amount = 8
+			}
+			add_resource = {
+				type = metal
+				amount = 10
+			}
+		}
+		custom_effect_tooltip = RWK_razorshark_RAR_tt
+		hidden_effect = {
+			RAR = {
+				division_template = {
+					name = "Razorsharks"
+					priority = 1
+					regiments = {
+					infantry = { x = 0 y = 0 }
+					infantry = { x = 0 y = 1 }
+					infantry = { x = 0 y = 2 }
+					militia = { x = 1 y = 0 }
+					militia = { x = 1 y = 1 }
+					}
+				}
+				add_popularity = {
+					ideology = survivalism
+					popularity = 0.08
+				}
+				534 = {
+					create_unit = {
+						division = "name = \"Steel Depths\" division_template = \"Razorsharks\" start_experience_factor = 0.3 equip" 
+						owner = RAR
+					}
+					create_unit = {
+						division = "name = \"Bleeding Coral\" division_template = \"Razorsharks\" start_experience_factor = 0.3 equip" 
+						owner = RAR
+					}
+					create_unit = {
+						division = "name = \"The Chum\" division_template = \"Razorsharks\" start_experience_factor = 0.3 equip" 
+						owner = RAR
+					}
+				}
+			}
+		}
+   	}
+}
+
+#Razorshark followup conversion
+country_event = {
+	id = rustwreck.7
+	title = rustwreck.7.t
+	desc = rustwreck.7.d
+   	picture = GFX_event_test
+
+   	trigger = {
+		tag = RWK
+		has_country_flag = RWK_razorshark_join_flag
+	}
+	mean_time_to_happen = {
+		days = 80
+	}
+	fire_only_once = yes
+	
+  	option = { #noice
+	   	name = rustwreck.7.a 
+	   	ai_chance = { factor = 90}
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.08
+		}
+	   	capital_scope = {
+			add_resource = {
+				type = crystals
+				amount = 4
+			}
+			add_resource = {
+				type = circuitry
+				amount = 8
+			}
+			add_resource = {
+				type = metal
+				amount = 10
+			}
+		}
+   	}
+}
