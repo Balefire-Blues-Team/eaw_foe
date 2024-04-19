@@ -124,7 +124,7 @@ RWK_economy_cat = {
 		}
 	}
 	RWK_energy_hinterlands_dec = {
-		icon = generic_construction
+		icon = GFX_decision_battery
 		cost = 10
 		ai_will_do = {
 			base = 0
@@ -159,6 +159,79 @@ RWK_economy_cat = {
 				add_resource = {
 					type = energy
 					amount = 2
+				}
+			}
+		}
+	}
+	RWK_scavenge_high_tech_dec = {
+		icon = GFX_decision_chip_green
+		cost = 15
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 20
+				has_political_power > 149
+			}
+		}
+		available = {
+			has_political_power > 14
+		}
+		state_target = any_owned_state
+		target_root_trigger = {
+			has_completed_focus = RWK_treasures_of_past
+		}
+		target_array = RWK.owned_states
+		target_trigger = {
+			FROM = {
+				NOT = { has_state_flag = RWK_scavenge_tech_flag }
+			}
+		}
+		on_map_mode = map_and_decisions_view
+		fire_only_once = no
+		days_remove = 10
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_scavenge_high_tech_dec"
+			FROM = {
+				set_state_flag = RWK_scavenge_tech_flag
+			}
+			random_list = {
+				33 = {
+					
+				}
+				15 = {
+					add_resource = {
+						type = circuitry
+						amount = 1
+						state = 524
+					}
+				}
+				20 = {
+					add_resource = {
+						type = circuitry
+						amount = 3
+						state = 524
+					}
+				}
+				20 = {
+					add_resource = {
+						type = advanced
+						amount = 1
+						state = 524
+					}
+				}
+				10 = {
+					add_resource = {
+						type = advanced
+						amount = 2
+						state = 524
+					}
+				}
+				2 = {
+					add_resource = {
+						type = advanced
+						amount = 8
+						state = 524
+					}
 				}
 			}
 		}
