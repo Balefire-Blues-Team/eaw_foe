@@ -2791,7 +2791,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_sweat_and_bleed"
-		
+		add_timed_idea = {
+			idea = RWK_sweat_bleed_idea
+			days = 400
+		}
 	}
 }
 
@@ -2800,7 +2803,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = 0
 	y = 6
-	cost = 4.29
+	cost = 8.6
 	
 	available_if_capitulated = yes 
 	relative_position_id = RWK_sunrise_development_council
@@ -2813,7 +2816,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_industrializing_sunrise"
-		
+		two_random_arms_factory = yes
+		two_random_dockyards = yes
+		two_random_industrial_complex = yes
 	}
 }
 
@@ -2836,7 +2841,22 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_grand_capital"
-		
+		capital_scope = {
+			add_manpower = 4000
+			add_extra_state_shared_building_slots = 4
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+			}
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+			}
+			add_building_construction = {
+				type = dockyard
+				level = 1
+			}
+		}
 	}
 }
 
@@ -2861,7 +2881,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_crimson_method"
-		
+		swap_ideas = {
+			remove_idea = RWK_servants_of_tide_idea
+			add_idea = RWK_servants_of_tide2_idea
+		}
 	}
 }
 
@@ -2874,6 +2897,14 @@ shared_focus = {
 	
 	available_if_capitulated = yes 
 	relative_position_id = RWK_sunrise_development_council
+	available = {
+		OR = {
+			owns_state = 49
+			owns_state = 515
+			owns_state = 812
+			owns_state = 538
+		}
+	}
 	prerequisite = {
 		focus = RWK_industrializing_sunrise
 	}
@@ -2888,6 +2919,8 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_assimilate_local_cultures"
 		#Rename Decisions and Coring cost reduction
+		set_variable = { coring_cost_country_factor = -0.40 }
+		custom_effect_tooltip = FOE_40_percent_core_cost_reduction_tt
 	}
 }
 
@@ -2912,7 +2945,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_assimilate_local_cultures"
-		
+		swap_ideas = {
+			remove_idea = RWK_build_on_past_idea
+			add_idea = RWK_build_on_past2_idea
+		}
 	}
 }
 
@@ -2925,6 +2961,9 @@ shared_focus = {
 	
 	available_if_capitulated = yes 
 	relative_position_id = RWK_sunrise_development_council
+	available = {
+		owns_state = 49
+	}
 	prerequisite = {
 		focus = RWK_assimilate_local_cultures
 	}
@@ -2934,7 +2973,21 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_foundries_of_summerfield"
-		
+		49 = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = arms_factory
+				level = 2
+			}
+			add_resource = {
+				type = metal
+				amount = 8
+			}
+			add_resource = {
+				type = circuitry
+				amount = 6
+			}
+		}
 	}
 }
 
@@ -2956,7 +3009,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_buy_foreign_expertise"
-		
+		custom_effect_tooltip = RWK_unlock_SDC_tt
+		set_technology = {
+			exploitation_tech_level_scientific = 1
+			habitation_tech_level_scientific = 1
+			tools_tech_level_scientific = 1
+		}
 	}
 }
 
@@ -2969,6 +3027,9 @@ shared_focus = {
 	
 	available_if_capitulated = yes 
 	relative_position_id = RWK_sunrise_development_council
+	available = {
+		owns_state = 461
+	}
 	prerequisite = {
 		focus = RWK_assimilate_local_cultures
 	}
@@ -2978,7 +3039,23 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_rebuild_freeside_powerplant"
-		
+		461 = {
+			add_resource = {
+				type = energy
+				amount = 32
+			}
+			add_extra_state_shared_building_slots = 2
+			add_victory_points = {
+				province = 3070
+				value = 5
+			}
+		}
+		hidden_effect = {
+			set_province_name = {
+				id = 3070
+				name = "Freeside Hydroelectrics"
+			}
+		}
 	}
 }
 
@@ -2991,6 +3068,14 @@ shared_focus = {
 	
 	available_if_capitulated = yes 
 	relative_position_id = RWK_sunrise_development_council
+	available = {
+		OR = {
+			any_allied_country = {
+				owns_state = 812
+			}
+			owns_state = 812
+		}
+	}
 	prerequisite = {
 		focus = RWK_foundries_of_summerfield
 		focus = RWK_buy_foreign_expertise
@@ -3001,7 +3086,67 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_strip_silverwing_bare"
-		
+		IF = {
+			limit = {
+				owns_state = 812
+			}
+			812 = {
+				add_resource = {
+					type = advanced
+					amount = 12
+				}
+				add_resource = {
+					type = circuitry
+					amount = 12
+				}
+				add_resource = {
+					type = composites
+					amount = 12
+				}
+				add_resource = {
+					type = metal
+					amount = 8
+				}
+			}
+		}
+		ELSE = {
+			812 = {
+				add_resource = {
+					type = advanced
+					amount = 6
+				}
+				add_resource = {
+					type = circuitry
+					amount = 6
+				}
+				add_resource = {
+					type = composites
+					amount = 6
+				}
+				add_resource = {
+					type = metal
+					amount = 6
+				}
+			}
+			Capital_scope = {
+				add_resource = {
+					type = advanced
+					amount = 8
+				}
+				add_resource = {
+					type = circuitry
+					amount = 8
+				}
+				add_resource = {
+					type = composites
+					amount = 8
+				}
+				add_resource = {
+					type = metal
+					amount = 8
+				}
+			}
+		}
 	}
 }
 
@@ -3014,6 +3159,14 @@ shared_focus = {
 	
 	available_if_capitulated = yes 
 	relative_position_id = RWK_sunrise_development_council
+	available = {
+		OR = {
+			any_allied_country = {
+				owns_state = 490
+			}
+			owns_state = 490
+		}
+	}
 	prerequisite = {
 		focus = RWK_rebuild_freeside_powerplant
 		focus = RWK_buy_foreign_expertise
@@ -3024,7 +3177,47 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_ever_deeper_mines"
-		
+		IF = {
+			limit = {
+				owns_state = 490
+			}
+			490 = {
+				add_resource = {
+					type = crystals
+					amount = 12
+				}
+				add_resource = {
+					type = composites
+					amount = 12
+				}
+				add_resource = {
+					type = metal
+					amount = 20
+				}
+			}
+		}
+		ELSE = {
+			490 = {
+				add_resource = {
+					type = crystals
+					amount = 12
+				}
+				add_resource = {
+					type = metal
+					amount = 8
+				}
+			}
+			Capital_scope = {
+				add_resource = {
+					type = composites
+					amount = 16
+				}
+				add_resource = {
+					type = metal
+					amount = 16
+				}
+			}
+		}
 	}
 }
 
@@ -3047,7 +3240,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_golden_sun_rises"
-		
+		swap_ideas = {
+			remove_idea = RWK_rebuild_equstria_idea
+			add_idea = RWK_rebuild_equstria_2_idea
+		}
 	}
 }
 
