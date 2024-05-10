@@ -9,12 +9,12 @@ EYE_unit_production = {
 	ai_strategy = {
 		type = role_ratio
 		id = infantry
-		value = 40
+		value = 50
 	}
 	ai_strategy = {
 		type = role_ratio
 		id = suppression
-		value = 20
+		value = 10
 	}
 	ai_strategy = {
 		type = role_ratio
@@ -402,6 +402,9 @@ EYE_be_nice_to_MWY = {
 	enable = {
 		original_tag = EYE
 		has_country_flag = EYE_alliance_with_mwy
+		MWY = {
+			is_in_faction_with = EYE
+		}
 	}
 	abort = {
 		MWY = { exists = no }
@@ -411,6 +414,18 @@ EYE_be_nice_to_MWY = {
 		type = befriend
 		id = MWY
 		value = 200
+	}
+
+	ai_strategy = {
+		type = alliance
+		id = MWY
+		value = 200
+	}
+
+	ai_strategy = {
+		type = ignore_claim
+		id = ERA
+		value = 1000
 	}
 }
 
@@ -481,5 +496,79 @@ EYE_actually_attack_FTR = {
 		type = declare_war
 		id = "FTR"
 		value = 3000
+	}
+}
+
+EYE_prepare_war_with_grv_hit = {
+	enable = {
+		original_tag = EYE
+		focus_progress = {
+			focus = EYE_drums_of_war
+			progress > 0.001
+		}
+	}
+	abort = {
+		OR = {
+			AND = {
+				NOT = { country_exists = GRV }
+				NOT = { country_exists = HIT }
+			}
+			has_war_with = HIT
+			has_war_with = GRV
+		}
+	}
+	ai_strategy = {
+		type = prepare_for_war
+		id = GRV
+		value = 50
+	}
+	ai_strategy = {
+		type = prepare_for_war
+		id = HIT
+		value = 50
+	}
+}
+
+EYE_prepare_war_with_mob = {
+	enable = {
+		original_tag = EYE
+		focus_progress = {
+			focus = EYE_break_the_mob
+			progress > 0.001
+		}
+	}
+	abort = {
+		OR = {
+			AND = {
+				NOT = { country_exists = GUN }
+				NOT = { country_exists = LGH }
+				NOT = { country_exists = APR }
+				NOT = { country_exists = FRT }
+			}
+			has_war_with = GUN
+			has_war_with = LGH
+			has_war_with = APR
+			has_war_with = FRT
+		}
+	}
+	ai_strategy = {
+		type = prepare_for_war
+		id = GUN
+		value = 40
+	}
+	ai_strategy = {
+		type = prepare_for_war
+		id = LGH
+		value = 80
+	}
+	ai_strategy = {
+		type = prepare_for_war
+		id = APR
+		value = 80
+	}
+	ai_strategy = {
+		type = prepare_for_war
+		id = FRT
+		value = 40
 	}
 }
