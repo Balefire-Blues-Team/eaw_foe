@@ -16,10 +16,13 @@ NDefines.NMilitary.UNIT_LEADER_INITIAL_TRAIT_SLOT = {						-- trait slot for 0 l
 	0.0  -- navy general
 }
 
+NDefines.NMilitary.BASE_FEMALE_DIVISIONAL_COMMANDER_CHANCE = 0.5 -- 50% of time by default, female_divisional_commander_chance modifier is additive
 NDefines.NCountry.FEMALE_UNIT_LEADER_BASE_CHANCE = {
 	-- applies as a factor to female unit leader randomization
 	-- the values needs to be zero if you don't actually have random portraits
-	1.0, -- navy leaders
-	1.0, -- army leaders
-	1.0, -- operatives
-}
+	0.5, -- country leaders
+    0.5, -- army leaders
+    0.5, -- navy leaders
+    0.5, -- air leaders
+    0.5, -- operatives
+} --Go Girlbosses! before Apr 5, 2024 random country, army, and navy leaders were set to always be female in code. -Laundry

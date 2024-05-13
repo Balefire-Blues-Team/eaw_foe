@@ -62,6 +62,20 @@ on_actions = {
 				}
  			}
 
+			 CAL = {
+				add_manpower = -500
+				capital_scope = {
+					
+				}
+			}
+
+ 			553 = { set_state_flag = mwy_feudal_realm_state_flag }
+			789 = { set_state_flag = mwy_feudal_realm_state_flag }
+			187 = { set_state_flag = mwy_feudal_realm_state_flag }
+			581 = { set_state_flag = mwy_feudal_realm_state_flag }
+			804 = { set_state_flag = mwy_feudal_realm_state_flag }
+
+
  			# Scav State Flags
  				812 = {
  					set_state_flag = scav_unique_loot_state_flag
@@ -317,6 +331,516 @@ on_actions = {
 		}
 	}
 
+	# ROOT is capitulated country, FROM is winner
+	on_capitulation = {
+		effect = {
+			log = "[GetDateText]: ROOT: [Root.GetName] FROM: [From.GetName] on_capitulation"
+			if = {
+				limit = {
+					has_country_flag = has_mwy_chancellor_flag
+				}
+				clr_country_flag = has_mwy_chancellor_flag
+				remove_opinion_modifier = {
+                    target = MWY
+                    modifier = sent_chancellor
+                }
+                MWY = { clr_country_flag = chancellor_improving_relations_flag }
+            }
+			if = {
+				limit = {
+					AND = {
+						tag = EYE
+						has_country_flag = EYE_FSR_war_flag
+					}
+				}
+				clr_country_flag = EYE_FSR_war_flag
+				IF = {
+					limit = {
+						NOT = {
+							OR = {
+								EYE = { has_completed_focus = EYE_papa_redeye }
+								EYE = { has_completed_focus = EYE_long_march }
+							}
+						}
+					}
+					EYE = { release = FTP }
+				}
+				IF = {
+					limit = {
+						NOT = {
+							OR = {
+								EYE = { has_completed_focus = EYE_birth_nation }
+								EYE = { has_completed_focus = EYE_long_march }
+							}
+						}
+					}
+					EYE = {
+						release = HIT
+						release = GRV
+						release = FTR
+						release = WNF
+					}
+				}
+            }
+			if = {
+				limit = {
+					AND = {
+						tag = EYE
+						has_country_flag = EYE_WNF_extra_war_flag
+						owns_state = 217
+						owns_state = 484
+						owns_state = 451
+					}
+				}
+				clr_country_flag = EYE_WNF_extra_war_flag
+				WNF = {
+					transfer_state = 217
+					transfer_state = 484
+					transfer_state = 451
+				}
+            }
+			if = {
+				limit = {
+					original_tag = EYE
+					has_country_flag = EYE_MOB_war_flag
+				}
+				clr_country_flag = EYE_MOB_war_flag
+				IF = {
+					limit = {
+						NOT = {
+							OR = {
+								EYE = { has_completed_focus = EYE_papa_redeye }
+								EYE = { has_completed_focus = EYE_long_march }
+							}
+						}
+					}
+					EYE = { release = FTP }
+				}
+				IF = {
+					limit = {
+						NOT = {
+							OR = {
+								EYE = { has_completed_focus = EYE_birth_nation }
+								EYE = { has_completed_focus = EYE_long_march }
+							}
+						}
+					}
+					EYE = {
+						release = HIT
+						release = GRV
+						release = FTR
+					}
+				}
+            }
+			if = {
+				limit = {
+					original_tag = EYE
+					has_country_flag = EYE_DUAL_war_flag
+				}
+				clr_country_flag = EYE_DUAL_war_flag
+				IF = {
+					limit = {
+						NOT = {
+							OR = {
+								EYE = { has_completed_focus = EYE_papa_redeye }
+								EYE = { has_completed_focus = EYE_long_march }
+							}
+						}
+					}
+					EYE = { release = FTP }
+				}
+				IF = {
+					limit = {
+						NOT = {
+							OR = {
+								EYE = { has_completed_focus = EYE_birth_nation }
+								EYE = { has_completed_focus = EYE_long_march }
+							}
+						}
+					}
+					EYE = {
+						release = HIT
+						release = GRV
+						release = FTR
+					}
+				}
+				FSR = {
+					transfer_state = 543
+					transfer_state = 558
+					transfer_state = 546
+					transfer_state = 5
+					transfer_state = 85
+					transfer_state = 487
+					transfer_state = 554
+					set_country_flag = FSR_follow_up_war_MOB_flag
+					set_truce = {
+						target = GUN
+						days = 120
+					}
+				}
+				APR = {
+					transfer_state = 498
+				}
+				GUN = {
+					transfer_state = 45
+					transfer_state = 532
+					transfer_state = 48
+					transfer_state = 525
+					set_truce = {
+						target = FSR
+						days = 120
+					}
+				}
+            }
+        }
+	}
+
+	on_monthly_MWY = {
+		effect = {
+			log = "[GetDateText]: ROOT: [Root.GetName] on_monthly_MWY"
+			MWY_calc_all_laws_approval = yes
+			MWY_calc_realm_poor_opinion = yes
+			if = {
+				limit = { NOT = { has_country_flag = MWY_no_levies_flag } }
+				if = {
+					limit = {
+						check_variable = { mwy_grainlands_opinion = 1 }
+						NOT = { has_country_flag = MWY_grainlands_minus_1_levy_flag }
+					}
+					subtract_from_variable = { mwy_grainlands_levy_var = 1 }
+					set_country_flag = MWY_grainlands_minus_1_levy_flag
+				}
+				if = {
+					limit = {
+						check_variable = { mwy_grainlands_opinion > 1 }
+						has_country_flag = MWY_grainlands_minus_1_levy_flag
+					}
+					add_to_variable = { mwy_grainlands_levy_var = 1 }
+					clr_country_flag = MWY_grainlands_minus_1_levy_flag
+				}
+
+				if = {
+					limit = {
+						check_variable = { mwy_amethyst_opinion = 1 }
+						NOT = { has_country_flag = MWY_amethyst_minus_1_levy_flag }
+					}
+					subtract_from_variable = { mwy_amethyst_levy_var = 1 }
+					set_country_flag = MWY_amethyst_minus_1_levy_flag
+				}
+				if = {
+					limit = {
+						check_variable = { mwy_amethyst_opinion > 1 }
+						has_country_flag = MWY_amethyst_minus_1_levy_flag
+					}
+					add_to_variable = { mwy_amethyst_levy_var = 1 }
+					clr_country_flag = MWY_amethyst_minus_1_levy_flag
+				}
+
+				if = {
+					limit = {
+						check_variable = { mwy_radigator_opinion = 1 }
+						NOT = { has_country_flag = MWY_radigator_minus_1_levy_flag }
+					}
+					subtract_from_variable = { mwy_radigator_levy_var = 1 }
+					set_country_flag = MWY_radigator_minus_1_levy_flag
+				}
+				if = {
+					limit = {
+						check_variable = { mwy_radigator_opinion > 1 }
+						has_country_flag = MWY_radigator_minus_1_levy_flag
+					}
+					add_to_variable = { mwy_radigator_levy_var = 1 }
+					clr_country_flag = MWY_radigator_minus_1_levy_flag
+				}
+
+				if = {
+					limit = {
+						check_variable = { mwy_swampy_opinion = 1 }
+						NOT = { has_country_flag = MWY_swampy_minus_1_levy_flag }
+					}
+					subtract_from_variable = { mwy_swampy_levy_var = 1 }
+					set_country_flag = MWY_swampy_minus_1_levy_flag
+				}
+				if = {
+					limit = {
+						check_variable = { mwy_swampy_opinion > 1 }
+						has_country_flag = MWY_swampy_minus_1_levy_flag
+					}
+					add_to_variable = { mwy_swampy_levy_var = 1 }
+					clr_country_flag = MWY_swampy_minus_1_levy_flag
+				}
+
+				if = {
+					limit = {
+						check_variable = { mwy_peninsula_opinion = 1 }
+						NOT = { has_country_flag = MWY_peninsula_minus_1_levy_flag }
+					}
+					subtract_from_variable = { mwy_peninsula_levy_var = 1 }
+					set_country_flag = MWY_peninsula_minus_1_levy_flag
+				}
+				if = {
+					limit = {
+						check_variable = { mwy_peninsula_opinion > 1 }
+						has_country_flag = MWY_peninsula_minus_1_levy_flag
+					}
+					add_to_variable = { mwy_peninsula_levy_var = 1 }
+					clr_country_flag = MWY_peninsula_minus_1_levy_flag
+				}
+
+				if = {
+					limit = {
+						check_variable = { mwy_belle_opinion = 1 }
+						NOT = { has_country_flag = MWY_belle_minus_1_levy_flag }
+					}
+					subtract_from_variable = { mwy_belle_levy_var = 1 }
+					set_country_flag = MWY_belle_minus_1_levy_flag
+				}
+				if = {
+					limit = {
+						check_variable = { mwy_belle_opinion > 1 }
+						has_country_flag = MWY_belle_minus_1_levy_flag
+					}
+					add_to_variable = { mwy_belle_levy_var = 1 }
+					clr_country_flag = MWY_belle_minus_1_levy_flag
+				}
+
+				if = {
+					limit = {
+						check_variable = { mwy_maredia_opinion = 1 }
+						NOT = { has_country_flag = MWY_maredia_minus_1_levy_flag }
+					}
+					subtract_from_variable = { mwy_maredia_levy_var = 1 }
+					set_country_flag = MWY_maredia_minus_1_levy_flag
+				}
+				if = {
+					limit = {
+						check_variable = { mwy_maredia_opinion > 1 }
+						has_country_flag = MWY_maredia_minus_1_levy_flag
+					}
+					add_to_variable = { mwy_maredia_levy_var = 1 }
+					clr_country_flag = MWY_maredia_minus_1_levy_flag
+				}
+
+
+
+				if = {
+					limit = {
+						check_variable = { mwy_grainlands_opinion = 3 }
+						NOT = { has_country_flag = MWY_grainlands_minus_1_levy_flag }
+					}
+					add_to_variable = { mwy_grainlands_levy_var = 1 }
+					set_country_flag = MWY_grainlands_plus_1_levy_flag
+				}
+				if = {
+					limit = {
+						check_variable = { mwy_grainlands_opinion < 3 }
+						has_country_flag = MWY_grainlands_plus_1_levy_flag
+					}
+					subtract_from_variable = { mwy_grainlands_levy_var = 1 }
+					clr_country_flag = MWY_grainlands_plus_1_levy_flag
+				}
+
+				if = {
+					limit = {
+						check_variable = { mwy_amethyst_opinion = 3 }
+						NOT = { has_country_flag = MWY_amethyst_plus_1_levy_flag }
+					}
+					add_to_variable = { mwy_amethyst_levy_var = 1 }
+					set_country_flag = MWY_amethyst_plus_1_levy_flag
+				}
+				if = {
+					limit = {
+						check_variable = { mwy_amethyst_opinion < 3 }
+						has_country_flag = MWY_amethyst_plus_1_levy_flag
+					}
+					subtract_from_variable = { mwy_amethyst_levy_var = 1 }
+					clr_country_flag = MWY_amethyst_plus_1_levy_flag
+				}
+
+				if = {
+					limit = {
+						check_variable = { mwy_radigator_opinion = 3 }
+						NOT = { has_country_flag = MWY_radigator_plus_1_levy_flag }
+					}
+					add_to_variable = { mwy_radigator_levy_var = 1 }
+					set_country_flag = MWY_radigator_plus_1_levy_flag
+				}
+				if = {
+					limit = {
+						check_variable = { mwy_radigator_opinion < 3 }
+						has_country_flag = MWY_radigator_plus_1_levy_flag
+					}
+					subtract_from_variable = { mwy_radigator_levy_var = 1 }
+					clr_country_flag = MWY_radigator_plus_1_levy_flag
+				}
+
+				if = {
+					limit = {
+						check_variable = { mwy_swampy_opinion = 3 }
+						NOT = { has_country_flag = MWY_swampy_plus_1_levy_flag }
+					}
+					add_to_variable = { mwy_swampy_levy_var = 1 }
+					set_country_flag = MWY_swampy_plus_1_levy_flag
+				}
+				if = {
+					limit = {
+						check_variable = { mwy_swampy_opinion < 3 }
+						has_country_flag = MWY_swampy_plus_1_levy_flag
+					}
+					subtract_from_variable = { mwy_swampy_levy_var = 1 }
+					clr_country_flag = MWY_swampy_plus_1_levy_flag
+				}
+
+				if = {
+					limit = {
+						check_variable = { mwy_peninsula_opinion = 3 }
+						NOT = { has_country_flag = MWY_peninsula_plus_1_levy_flag }
+					}
+					add_to_variable = { mwy_peninsula_levy_var = 1 }
+					set_country_flag = MWY_peninsula_plus_1_levy_flag
+				}
+				if = {
+					limit = {
+						check_variable = { mwy_peninsula_opinion < 3 }
+						has_country_flag = MWY_peninsula_plus_1_levy_flag
+					}
+					subtract_from_variable = { mwy_peninsula_levy_var = 1 }
+					clr_country_flag = MWY_peninsula_plus_1_levy_flag
+				}
+
+				if = {
+					limit = {
+						check_variable = { mwy_belle_opinion = 3 }
+						NOT = { has_country_flag = MWY_belle_plus_1_levy_flag }
+					}
+					add_to_variable = { mwy_belle_levy_var = 1 }
+					set_country_flag = MWY_belle_plus_1_levy_flag
+				}
+				if = {
+					limit = {
+						check_variable = { mwy_belle_opinion < 3 }
+						has_country_flag = MWY_belle_plus_1_levy_flag
+					}
+					subtract_from_variable = { mwy_belle_levy_var = 1 }
+					clr_country_flag = MWY_belle_plus_1_levy_flag
+				}
+
+				if = {
+					limit = {
+						check_variable = { mwy_maredia_opinion = 3 }
+						NOT = { has_country_flag = MWY_maredia_plus_1_levy_flag }
+					}
+					add_to_variable = { mwy_maredia_levy_var = 1 }
+					set_country_flag = MWY_maredia_plus_1_levy_flag
+				}
+				if = {
+					limit = {
+						check_variable = { mwy_maredia_opinion < 3 }
+						has_country_flag = MWY_maredia_plus_1_levy_flag
+					}
+					subtract_from_variable = { mwy_maredia_levy_var = 1 }
+					clr_country_flag = MWY_maredia_plus_1_levy_flag
+				}
+
+				clamp_variable = {
+					var = mwy_grainlands_levy_var
+					min = 1
+					max = 6
+				}
+				clamp_variable = {
+					var = mwy_amethyst_levy_var
+					min = 1
+					max = 4
+				}
+				clamp_variable = {
+					var = mwy_radigator_levy_var
+					min = 1
+					max = 3
+				}
+				clamp_variable = {
+					var = mwy_swampy_levy_var
+					min = 1
+					max = 3
+				}
+				clamp_variable = {
+					var = mwy_peninsula_levy_var
+					min = 1
+					max = 3
+				}
+				clamp_variable = {
+					var = mwy_belle_levy_var
+					min = 1
+					max = 4
+				}
+				clamp_variable = {
+					var = mwy_maredia_levy_var
+					min = 1
+					max = 5
+				}
+			}
+		}
+	}
+
+	#ROOT is winner #FROM is loser
+	on_peaceconference_ended = {
+		effect = {
+			# PUT EVERYTHING IN THE IF BELOW
+			# THE bypass_on_peaceconference_ended FLAG **HAS** TO BE SET BEFORE CALLING THE white_peace COMMAND AND CLEARED AFTERWARDS
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = bypass_on_peaceconference_ended
+						FROM = { has_country_flag = bypass_on_peaceconference_ended }
+					}
+				}
+				log = "[GetDateText]: ROOT: [Root.GetName] FROM: [From.GetName] on_peaceconference_ended"
+							
+				if = {
+					limit = {
+						tag = MWY
+						has_global_flag = MWY_noble_cw_flag
+						FROM = {
+							tag = MWN
+						}
+						NOT = {
+							MWN = {
+								exists = yes
+								is_subject = no
+							}
+						}
+					}
+					country_event = { 
+						id = newmareway.105
+						days = 3
+					}
+					clr_global_flag = MWY_noble_cw_flag
+				}
+
+				if = { #MWY beats ERA
+					limit = {
+						tag = MWY
+						FROM = {
+							original_tag = ERA
+						}
+						OR = {
+							NOT = {
+								ERA = {
+									exists = yes
+								}
+							}
+							ERA = {
+								is_puppet_of = MWY
+							}
+						}
+					}
+					country_event = { 
+						id = newmareway.106
+					}
+				}
+			}
+		}
+	}
+
 	#FROM is war target
 	on_declare_war = {
 		effect = {
@@ -408,6 +932,64 @@ on_actions = {
 							country_event = MSR.134
 						}
 					}
+				}
+			}
+		}
+	}
+
+	on_state_control_changed = {
+		effect = {
+			if = {#Mechanicum takes state
+				limit = {
+					696 = { is_owned_by = NEV }
+					original_tag = NCG
+					has_war_with = NEV
+				}
+				if = {#Neighvarro
+					limit = {
+						696 = { is_controlled_by = NCG }
+					}
+					NCG = { country_event = neocastle.31 }
+				}
+			}
+			if = {#Mechanicum takes state
+				limit = {
+					original_tag = NCG
+					any_country = {
+						AND = {
+							owns_state = 532
+							has_war_with = NCG
+						}
+					}
+					OR = {
+						532 = { NOT = { is_owned_by = NCG } }
+					}
+				}
+				if = {#Fillydelphia
+					limit = {
+						532 = { is_controlled_by = NCG }
+					}
+					NCG = { country_event = neocastle.32 }
+				}
+			}
+			if = {#Mechanicum takes state
+				limit = {
+					original_tag = NCG
+					any_country = {
+						AND = {
+							owns_state = 808
+							has_war_with = NCG
+						}
+					}
+					OR = {
+						808 = { NOT = { is_owned_by = NCG } }
+					}
+				}
+				if = {#Juncion R-7
+					limit = {
+						808 = { is_controlled_by = NCG }
+					}
+					NCG = { country_event = neocastle.33 }
 				}
 			}
 		}
