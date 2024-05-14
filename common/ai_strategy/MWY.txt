@@ -2,6 +2,13 @@ MWY_scripted_war_with_ERA = {
 	allowed = {
 		original_tag = MWY
 	}
+	enable = { always = yes }
+	abort = {
+		OR = {
+			has_completed_focus = MWY_sc_finishing_what_was_started
+			ERA = { exists = no }
+		}
+	}
 
 	ai_strategy = {
 		type = declare_war
@@ -25,6 +32,10 @@ MWY_scripted_war_with_ERA = {
 MWY_defend_against_ERA = {
 	allowed = {
 		original_tag = MWY
+	}
+	enable = { always = yes }
+	abort = {
+		ERA = { exists = no }
 	}
 
 	ai_strategy = {
@@ -54,3 +65,85 @@ MWY_defend_against_ERA_raid = {
 		value = 100
 	}
 }
+
+MWY_no_white_peace_era = { 
+	allowed = {
+		original_tag = MWY
+	}
+	enable = {
+		has_war_with = ERA
+	}
+	abort = {
+		ERA = { exists = no }
+	}
+
+	ai_strategy = {
+		type = diplo_action_acceptance
+		id = ERA
+		value = -500
+		target = peace_proposal
+	}
+	ai_strategy = {
+		type = diplo_action_desire
+		id = ERA
+		value = -500
+		target = peace_proposal
+	}
+}
+
+MWY_stay_with_red_eye = {
+	allowed = {
+		tag = MWY
+	}
+	enable = {
+		is_ally_with  = EYE
+	}
+	abort = {
+		EYE = { exists = no }
+	}
+
+	ai_strategy = {
+		type = befriend
+		id = EYE
+		value = 200
+	}
+
+	ai_strategy = {
+		type = alliance
+		id = EYE
+		value = 200
+	}
+
+	ai_strategy = {
+		type = protect
+		id = EYE
+		value = 200
+	}
+}
+
+MWY_unit_production = {
+	allowed = {
+		tag = MWY
+	}
+	enable = { always = yes }
+	abort = { always = no }
+
+	ai_strategy = {
+		type = template_prio
+		id = mareway_inf
+		value = 60
+	}
+
+	ai_strategy = {
+		type = role_ratio
+		id = mareway_knights
+		value = 30
+	}
+
+	ai_strategy = {
+		type = role_ratio
+		id = suppression
+		value = 10
+	}
+}
+	
