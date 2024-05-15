@@ -2,6 +2,7 @@ add_namespace = redeye
 add_namespace = redeye_stablize
 add_namespace = redeye_borderwar
 add_namespace = redeye_stabletec #Cut
+add_namespace = redeye_debug
 
 ##Birth Of A Monster
 country_event = {
@@ -163,8 +164,8 @@ country_event = {
 		name = redeye.3.c
 		ai_chance = { factor = 60}
 
-		recruit_character = EYE_char_henri
-		custom_effect_tooltip = EYE_dawnfeather_stats_tt
+		set_country_flag = EYE_add_char_kayden_flag
+		custom_effect_tooltip = EYE_kayden_stats_tt
 		set_country_flag = EYE_talon_army_flag
 	}
 }
@@ -1004,7 +1005,7 @@ country_event = { #The Great Revolt
  	id = redeye.30
  	title = redeye.30.title
  	desc = redeye.30.desc
-	picture = GFX_event_test
+	picture = GFX_event_foe_fillydelphia_battle
  	fire_only_once = yes
  	mean_time_to_happen = { days = 7 }
 
@@ -2842,14 +2843,15 @@ country_event = { #EYE sends us guns - ERA
  	id = redeye.98
  	title = redeye.98.title
  	desc = redeye.98.desc
-	picture = GFX_event_test
+	picture = GFX_event_griffon_with_gun
 
 	is_triggered_only = yes
  	fire_only_once = yes
 
 	option = {
 		name = redeye.98.a
-		ai_chance = { factor = 50}
+		ai_chance = { factor = 50 }
+		custom_effect_tooltip = ERA_recieved_500_EYE_guns_tt
 	}
 }
 
@@ -2857,7 +2859,7 @@ country_event = { #EYE sends us talons - ERA
  	id = redeye.99
  	title = redeye.99.title
  	desc = redeye.99.desc
-	picture = GFX_event_test
+	picture = GFX_event_griffon_with_gun
 
 	is_triggered_only = yes
  	fire_only_once = yes
@@ -3960,6 +3962,10 @@ country_event = { #Cancel Take Filly Banks
 		add_political_power = -25
 		hidden_effect = {
 			set_country_flag = { flag = EYE_defeat_in_border_war days = 120 value = 1 }
+			add_to_variable = {
+			    var = EYE_lose_sr_var
+			    value = 1
+			}
 		}
 	}
 }
@@ -4079,6 +4085,10 @@ country_event = { #Cancel Take South End
 		add_political_power = -25
 		hidden_effect = {
 			set_country_flag = { flag = EYE_defeat_in_border_war days = 120 value = 1 }
+			add_to_variable = {
+			    var = EYE_lose_sr_var
+			    value = 1
+			}
 		}
 	}
 }
@@ -4178,7 +4188,7 @@ country_event = { #Lose Take Downtown
 			add_to_variable = {
 			    var = EYE_lose_sr_var
 			    value = 1
-			}
+			} 
 		}
 	}
 }
@@ -4199,6 +4209,10 @@ country_event = { #Cancel Take Downtown
 		add_political_power = -25
 		hidden_effect = {
 			set_country_flag = { flag = EYE_defeat_in_border_war days = 120 value = 1 }
+			add_to_variable = {
+			    var = EYE_lose_sr_var
+			    value = 1
+			}
 		}
 	}
 }
@@ -4361,7 +4375,8 @@ country_event = {
 		ai_chance = { factor = 10 }
 
 		remove_ideas = fractured_comm
-		recruit_character = EYE_char_parcel_stamp
+		has_country_flag = EYE_add_char_parcel_stamp_flag
+		custom_effect_tooltip = EYE_parcel_stamp_recruitment_tt
 
 		hidden_effect = {
 			add_to_variable = {var = EYE_stabilizing value = 1}
@@ -4773,5 +4788,140 @@ country_event = {
 
 		add_research_slot = 1
 
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#####DEBUG EVENTS########
+
+#Check FSR War
+country_event = { 
+	id = redeye_debug.1
+	immediate = {log = "[Root.GetName]: event redeye_debug.1"}#Auto-logging
+	title = redeye_debug.1
+	desc = redeye_debug.1
+	picture = GFX_event_pony_soldiers_sunset
+
+	hidden = yes
+	fire_only_once = yes
+	trigger = {
+		tag = EYE
+		has_war_with = FSR
+	}
+
+
+	option = {
+		name = redeye_debug.1.a
+		IF = {
+			limit = {
+				has_country_flag = EYE_MOB_war_flag
+			}
+			clr_country_flag = EYE_MOB_war_flag
+			set_country_flag = EYE_DUAL_war_flag
+		}
+		ELSE = {
+			set_country_flag = EYE_FSR_war_flag
+		}
+	}
+}
+
+#Check MOB War
+country_event = { 
+	id = redeye_debug.2
+	immediate = {log = "[Root.GetName]: event redeye_debug.2"}#Auto-logging
+	title = redeye_debug.2
+	desc = redeye_debug.2
+	picture = GFX_event_pony_soldiers_sunset
+
+	hidden = yes
+	fire_only_once = yes
+	trigger = {
+		tag = EYE
+		has_war_with = GUN
+	}
+
+
+	option = {
+		name = redeye_debug.2.a
+		IF = {
+			limit = {
+				has_country_flag = EYE_FSR_war_flag
+			}
+			clr_country_flag = EYE_FSR_war_flag
+			set_country_flag = EYE_DUAL_war_flag
+		}
+		ELSE = {
+			set_country_flag = EYE_MOB_war_flag
+		}
+		IF = {
+			limit = {
+				has_war_with = WNF
+				WNF = { is_in_faction_with = GUN }
+			}
+			set_country_flag = EYE_WNF_extra_war_flag
+		}
+	}
+}
+
+#Check War End
+country_event = { 
+	id = redeye_debug.3
+	immediate = {log = "[Root.GetName]: event redeye_debug.3"}
+	title = redeye_debug.3
+	desc = redeye_debug.3
+	picture = GFX_event_pony_soldiers_sunset
+
+	hidden = yes
+	fire_only_once = no
+	trigger = {
+		tag = EYE
+		has_war = no
+		OR = {
+			has_country_flag = EYE_DUAL_war_flag
+			has_country_flag = EYE_MOB_war_flag
+			has_country_flag = EYE_FSR_war_flag
+		}
+	}
+
+
+	option = {
+		name = redeye_debug.3.a
+		IF = {
+			limit = {
+				has_country_flag = EYE_MOB_war_flag
+			}
+			clr_country_flag = EYE_MOB_war_flag
+		}
+		IF = {
+			limit = {
+				has_country_flag = EYE_DUAL_war_flag
+			}
+			clr_country_flag = EYE_DUAL_war_flag
+		}
+		IF = {
+			limit = {
+				has_country_flag = EYE_FSR_war_flag
+			}
+			clr_country_flag = EYE_FSR_war_flag
+		}
+		IF = {
+			limit = {
+				has_country_flag = EYE_WNF_extra_war_flag
+			}
+			clr_country_flag = EYE_WNF_extra_war_flag
+		}
 	}
 }

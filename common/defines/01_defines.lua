@@ -26,13 +26,6 @@ NDefines.NCountry.BASE_FUEL_GAIN = 0							-- base amount of fuel gained hourly,
 NDefines.NCountry.BASE_FUEL_CAPACITY = 0.1						-- base amount of fuel capacity
 
 NDefines.NMilitary.BASE_CAPTURE_EQUIPMENT_RATIO = 0.3
-NDefines.NMilitary.TRAINING_MAX_LEVEL = 10
-NDefines.NMilitary.DEPLOY_TRAINING_MAX_LEVEL = 5
-NDefines.NMilitary.UNIT_EXP_LEVELS = {0.02,	0.04,	0.06,	0.08,	0.1,	0.14,	0.18,	0.22,	0.26,	0.3,	0.39,	0.48,	0.57,	0.66,	0.75,	0.78,	0.81,	0.84,	0.87,	0.9}		-- Experience needed to progress to the next level
-NDefines.NMilitary.EXPERIENCE_COMBAT_FACTOR = 0.05
-NDefines.NMilitary.ARMY_EXP_BASE_LEVEL = 5
-
-NDefines.NCountry.POPULATION_YEARLY_GROWTH_BASE = 0.04			-- basic population growth per year, used for monthly manpower gain
 
 --------------------
 -- AI battleplans --
@@ -120,7 +113,7 @@ NDefines.NAI.DEPLOY_MIN_TRAINING_PEACE_FACTOR = 0.94
 NDefines.NAI.DEPLOY_MIN_TRAINING_WAR_FACTOR = 0.25
 
 -- If AI has this much manpower he doesn't care about the percentage
-NDefines.NAI.MANPOWER_FREE_USAGE_THRESHOLD = 50000
+NDefines.NAI.MANPOWER_FREE_USAGE_THRESHOLD = 5000
 
 -- The AI will not deploy more units if he goes below this percentage
 NDefines.NAI.MANPOWER_RESERVED_THRESHOLD = 0.25
@@ -212,5 +205,12 @@ NDefines.NNavy.FUEL_COST_MULT = 0 --fuel multiplier for all naval missions
 --NMilitary
 NDefines.NMilitary.ARMY_FUEL_COST_MULT = 0 --fuel multiplier for all army missions
 
+NDefines.NMilitary.TRAINING_MAX_LEVEL = 10
+NDefines.NMilitary.DEPLOY_TRAINING_MAX_LEVEL = 5
+NDefines.NMilitary.UNIT_EXP_LEVELS = {0.02,	0.04,	0.06,	0.08,	0.1,	0.14,	0.18,	0.22,	0.26,	0.3,	0.39,	0.48,	0.57,	0.66,	0.75,	0.78,	0.81,	0.84,	0.87,	0.9}	-- Experience needed to progress to the next level  --more granular unit xp
+NDefines.NMilitary.EXPERIENCE_COMBAT_FACTOR = 0.05
+NDefines.NMilitary.ARMY_EXP_BASE_LEVEL = 5
+
 --NAir
 NDefines.NAir.FUEL_COST_MULT = 0 --fuel multiplier for all air missions
+NDefines.NAir.MIN_PLANE_COUNT_PARADROP = 10

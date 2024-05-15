@@ -47,8 +47,6 @@ on_actions = {
 				}
 			}
 
-
-
 			OWE = {
  				set_variable = {
 					var = lightbringer_status_var
@@ -63,8 +61,8 @@ on_actions = {
     				value = 0
 				}
  			}
-			
-			CAL = {
+
+			 CAL = {
 				add_manpower = -500
 				capital_scope = {
 					
@@ -76,6 +74,7 @@ on_actions = {
 			187 = { set_state_flag = mwy_feudal_realm_state_flag }
 			581 = { set_state_flag = mwy_feudal_realm_state_flag }
 			804 = { set_state_flag = mwy_feudal_realm_state_flag }
+
 
  			# Scav State Flags
  				812 = {
@@ -172,7 +171,17 @@ on_actions = {
 						country_event = utility.7
 					}
 				}
-			#
+
+				#Make AI produce Air
+				every_country = {
+					if = {
+						limit = {
+							is_ai = yes
+						}
+						air_experience = 20
+					}
+				}
+			
 				
 		}
 	}
@@ -210,7 +219,7 @@ on_actions = {
 									has_id = 59311
 									has_id = 59312
 									has_id = 59313
-									has_id = 59312									
+									has_id = 59314									
 								}
 							}
 						}
@@ -336,6 +345,152 @@ on_actions = {
                     modifier = sent_chancellor
                 }
                 MWY = { clr_country_flag = chancellor_improving_relations_flag }
+            }
+			if = {
+				limit = {
+					AND = {
+						tag = EYE
+						has_country_flag = EYE_FSR_war_flag
+					}
+				}
+				clr_country_flag = EYE_FSR_war_flag
+				IF = {
+					limit = {
+						NOT = {
+							OR = {
+								EYE = { has_completed_focus = EYE_papa_redeye }
+								EYE = { has_completed_focus = EYE_long_march }
+							}
+						}
+					}
+					EYE = { release = FTP }
+				}
+				IF = {
+					limit = {
+						NOT = {
+							OR = {
+								EYE = { has_completed_focus = EYE_birth_nation }
+								EYE = { has_completed_focus = EYE_long_march }
+							}
+						}
+					}
+					EYE = {
+						release = HIT
+						release = GRV
+						release = FTR
+						release = WNF
+					}
+				}
+            }
+			if = {
+				limit = {
+					AND = {
+						tag = EYE
+						has_country_flag = EYE_WNF_extra_war_flag
+						owns_state = 217
+						owns_state = 484
+						owns_state = 451
+					}
+				}
+				clr_country_flag = EYE_WNF_extra_war_flag
+				WNF = {
+					transfer_state = 217
+					transfer_state = 484
+					transfer_state = 451
+				}
+            }
+			if = {
+				limit = {
+					original_tag = EYE
+					has_country_flag = EYE_MOB_war_flag
+				}
+				clr_country_flag = EYE_MOB_war_flag
+				IF = {
+					limit = {
+						NOT = {
+							OR = {
+								EYE = { has_completed_focus = EYE_papa_redeye }
+								EYE = { has_completed_focus = EYE_long_march }
+							}
+						}
+					}
+					EYE = { release = FTP }
+				}
+				IF = {
+					limit = {
+						NOT = {
+							OR = {
+								EYE = { has_completed_focus = EYE_birth_nation }
+								EYE = { has_completed_focus = EYE_long_march }
+							}
+						}
+					}
+					EYE = {
+						release = HIT
+						release = GRV
+						release = FTR
+					}
+				}
+            }
+			if = {
+				limit = {
+					original_tag = EYE
+					has_country_flag = EYE_DUAL_war_flag
+				}
+				clr_country_flag = EYE_DUAL_war_flag
+				IF = {
+					limit = {
+						NOT = {
+							OR = {
+								EYE = { has_completed_focus = EYE_papa_redeye }
+								EYE = { has_completed_focus = EYE_long_march }
+							}
+						}
+					}
+					EYE = { release = FTP }
+				}
+				IF = {
+					limit = {
+						NOT = {
+							OR = {
+								EYE = { has_completed_focus = EYE_birth_nation }
+								EYE = { has_completed_focus = EYE_long_march }
+							}
+						}
+					}
+					EYE = {
+						release = HIT
+						release = GRV
+						release = FTR
+					}
+				}
+				FSR = {
+					transfer_state = 543
+					transfer_state = 558
+					transfer_state = 546
+					transfer_state = 5
+					transfer_state = 85
+					transfer_state = 487
+					transfer_state = 554
+					set_country_flag = FSR_follow_up_war_MOB_flag
+					set_truce = {
+						target = GUN
+						days = 120
+					}
+				}
+				APR = {
+					transfer_state = 498
+				}
+				GUN = {
+					transfer_state = 45
+					transfer_state = 532
+					transfer_state = 48
+					transfer_state = 525
+					set_truce = {
+						target = FSR
+						days = 120
+					}
+				}
             }
         }
 	}
@@ -626,6 +781,66 @@ on_actions = {
 		}
 	}
 
+	#ROOT is winner #FROM is loser
+	on_peaceconference_ended = {
+		effect = {
+			# PUT EVERYTHING IN THE IF BELOW
+			# THE bypass_on_peaceconference_ended FLAG **HAS** TO BE SET BEFORE CALLING THE white_peace COMMAND AND CLEARED AFTERWARDS
+			if = {
+				limit = {
+					NOT = {
+						has_country_flag = bypass_on_peaceconference_ended
+						FROM = { has_country_flag = bypass_on_peaceconference_ended }
+					}
+				}
+				log = "[GetDateText]: ROOT: [Root.GetName] FROM: [From.GetName] on_peaceconference_ended"
+							
+				if = {
+					limit = {
+						tag = MWY
+						has_global_flag = MWY_noble_cw_flag
+						FROM = {
+							tag = MWN
+						}
+						NOT = {
+							MWN = {
+								exists = yes
+								is_subject = no
+							}
+						}
+					}
+					country_event = { 
+						id = newmareway.105
+						days = 3
+					}
+					clr_global_flag = MWY_noble_cw_flag
+				}
+
+				if = { #MWY beats ERA
+					limit = {
+						tag = MWY
+						FROM = {
+							original_tag = ERA
+						}
+						OR = {
+							NOT = {
+								ERA = {
+									exists = yes
+								}
+							}
+							ERA = {
+								is_puppet_of = MWY
+							}
+						}
+					}
+					country_event = { 
+						id = newmareway.106
+					}
+				}
+			}
+		}
+	}
+
 	#FROM is war target
 	on_declare_war = {
 		effect = {
@@ -717,6 +932,64 @@ on_actions = {
 							country_event = MSR.134
 						}
 					}
+				}
+			}
+		}
+	}
+
+	on_state_control_changed = {
+		effect = {
+			if = {#Mechanicum takes state
+				limit = {
+					696 = { is_owned_by = NEV }
+					original_tag = NCG
+					has_war_with = NEV
+				}
+				if = {#Neighvarro
+					limit = {
+						696 = { is_controlled_by = NCG }
+					}
+					NCG = { country_event = neocastle.31 }
+				}
+			}
+			if = {#Mechanicum takes state
+				limit = {
+					original_tag = NCG
+					any_country = {
+						AND = {
+							owns_state = 532
+							has_war_with = NCG
+						}
+					}
+					OR = {
+						532 = { NOT = { is_owned_by = NCG } }
+					}
+				}
+				if = {#Fillydelphia
+					limit = {
+						532 = { is_controlled_by = NCG }
+					}
+					NCG = { country_event = neocastle.32 }
+				}
+			}
+			if = {#Mechanicum takes state
+				limit = {
+					original_tag = NCG
+					any_country = {
+						AND = {
+							owns_state = 808
+							has_war_with = NCG
+						}
+					}
+					OR = {
+						808 = { NOT = { is_owned_by = NCG } }
+					}
+				}
+				if = {#Juncion R-7
+					limit = {
+						808 = { is_controlled_by = NCG }
+					}
+					NCG = { country_event = neocastle.33 }
 				}
 			}
 		}

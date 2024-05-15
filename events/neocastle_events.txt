@@ -601,7 +601,7 @@ country_event = {
 		}
 		Core_original_NCG = yes
 		add_stability = -0.08
-		add_timed_idea = { NCG_guilds_influence_idea days = 300}
+		add_timed_idea = { idea = NCG_guilds_influence_idea days = 300}
 	}
 	
 	option = {
@@ -682,14 +682,14 @@ country_event = {
 			uses = 1
 			category = energy_weapon_tech
 		}
-		ERA = {country_event = neocastle.18}
+		NCG = {country_event = neocastle.18}
 	}
 	
 	option = {
 		name = neocastle.17.b
 		ai_chance = { base = 50 }
 		add_political_power = 10
-		ERA = {country_event = neocastle.19}
+		NCG = {country_event = neocastle.19}
 	}
 	
 }
@@ -855,12 +855,21 @@ country_event = {
 			}
 		806 = {
 			add_resource = {
-					type = metal amount = 16
+					type = metal amount = 40
 				}
 			add_resource = {
-					type = energy amount = 48
+					type = energy amount = 120
 				}
+			add_resource = {
+				type = composites
+				amount = 20
+			}
 		}
+		custom_effect_tooltip = NCG_increase_profit_large_tt
+			add_to_variable = {
+				var = NCG_free_invest
+				value = 2
+			}
 		hidden_effect = {
 			747 = {
 			add_resource = {
@@ -1590,6 +1599,7 @@ country_event = {
 		name = neocastleflavor.11.a
 		country_event = {
 			id = neocastleflavor.12
+			days = 5
 		}
 		custom_effect_tooltip = NCG_mechanicum_coup1_tt
 		add_popularity = {
@@ -1641,6 +1651,7 @@ country_event = {
 		set_technology = {
 			habitation_tech_level_scientific = 1
 		}
+
 	}
 }
 
@@ -1669,97 +1680,101 @@ country_event = {
 
 	option = { 
 		name = neocastle_creator.3.a
-			every_owned_state = {
+			random_owned_state = {
 				limit = {has_resources_amount = {
 						resource = metal
 						amount > 4
 					}
 					is_capital = no
 					}
-				destroy_resource = {
+				add_resource = {
 					type = metal
-					amount = 5
+					amount = -5
 				}
 				747 = {add_resource = {type = metal amount = 5}}
 			}
-			every_owned_state = {
+			random_owned_state = {
 				limit = {has_resources_amount = {
 						resource = water
 						amount > 4
 					}
 					is_capital = no
 					}
-				destroy_resource = {
-					type = water
-					amount = 5
-				}
+					add_resource = {
+						type = water
+						amount = -5
+					}
 				747 = {add_resource = {type = water amount = 5}}
 			}
-			every_owned_state = {
+			random_owned_state = {
 				limit = {has_resources_amount = {
 						resource = energy
 						amount > 4
 					}
 					is_capital = no
 					}
-				destroy_resource = {
-					type = energy
-					amount = 5
-				}
+					add_resource = {
+						type = energy
+						amount = -5
+					}
 				747 = {add_resource = {type = energy amount = 5}}
 			}
-			every_owned_state = {
+			random_owned_state = {
 				limit = {has_resources_amount = {
 						resource = composites
 						amount > 4
 					}
 					is_capital = no
 					}
-				destroy_resource = {
-					type = composites
-					amount = 5
-				}
+					add_resource = {
+						type = composites
+						amount = -5
+					}
 				747 = {add_resource = {type = composites amount = 5}}
 			}
-			every_owned_state = {
+			random_owned_state = {
 				limit = {has_resources_amount = {
 						resource = circuitry
 						amount > 4
 					}
 					is_capital = no
 					}
-				destroy_resource = {
-					type = circuitry
-					amount = 5
-				}
+					add_resource = {
+						type = circuitry
+						amount = -5
+					}
 				747 = {add_resource = {type = circuitry amount = 5}}
 			}
-			every_owned_state = {
+			random_owned_state = {
 				limit = {has_resources_amount = {
 						resource = advanced
 						amount > 4
 					}
 					is_capital = no
 					}
-				destroy_resource = {
-					type = advanced
-					amount = 5
-				}
+					add_resource = {
+						type = advanced
+						amount = -5
+					}
 				747 = {add_resource = {type = advanced amount = 5}}
 			}
-			every_owned_state = {
+			random_owned_state = {
 				limit = {has_resources_amount = {
 						resource = crystals
 						amount > 4
 					}
 					is_capital = no
 					}
-				destroy_resource = {
-					type = crystals
-					amount = 5
-				}
+					add_resource = {
+						type = crystals
+						amount = -5
+					}
 				747 = {add_resource = {type = crystals amount = 5}}
 			}
+		747 = { add_victory_points = {
+			province = 4264
+			value = 2
+		} }
 		country_event = {id = neocastle_creator.3 days = 30}
 	}
 }
@@ -1793,6 +1808,11 @@ country_event = {
 				type = annex_everything 
 				target = SHA 
 			}
+		SHA = {
+			every_owned_state = {
+				add_claim_by = NCG
+			}
+		}
 		LRA = {
 				ROOT = {
 					grant_wargoals_on_core_states_of_prev = yes
@@ -1815,4 +1835,221 @@ country_event = {
 			}
 		SHA = {add_ideas = NCG_sabotage_idea}
 	}
+}
+
+#Mechanicum - Fall of Neighvarro
+country_event = {
+	id = neocastle.31
+	title = neocastle.31.t
+	desc = neocastle.31.d
+
+    trigger = {
+		tag = NCG
+		controls_state = 696
+   	}
+	fire_only_once = yes
+
+   option = {
+		name = neocastle.31.a
+		696 = { 
+			add_compliance = 50
+			set_state_name = "Halls of Enhancement"
+			hidden_effect = {
+				set_province_name = {
+					id = 15735
+					name = "Halls of Enhancement"
+				}
+			}    
+		}
+   }	
+}
+
+#Mechanicum - Fall of Fillydelphia
+country_event = {
+	id = neocastle.32
+	title = neocastle.32.t
+	desc = neocastle.32.d
+
+    trigger = {
+		tag = NCG
+		controls_state = 532
+   	}
+	fire_only_once = yes
+
+   option = {
+		name = neocastle.32.a
+		division_template = {
+			name = "Fillydelphia Servitors"
+			priority = 1
+			regiments = {
+			infantry = { x = 0 y = 0 }
+			infantry = { x = 0 y = 1 }
+			infantry = { x = 0 y = 2 }
+			infantry = { x = 0 y = 3 }
+			infantry = { x = 0 y = 4 }
+			infantry = { x = 1 y = 0 }
+			infantry = { x = 1 y = 1 }
+			infantry = { x = 1 y = 2 }
+			infantry = { x = 1 y = 3 }
+			infantry = { x = 1 y = 4 }
+			}
+		}  
+		532 = {
+			set_state_name = "Altar of Perfection"
+			hidden_effect = {
+				set_province_name = {
+					id = 9017
+					name = "Altar of Perfection"
+				}
+			}
+			create_unit = {
+				division = "name = \"1st Slave-Conversion\" division_template = \"Fillydelphia Servitors\" start_experience_factor = 0.3" 
+				owner = NCG
+			}
+			create_unit = {
+				division = "name = \"2nd Slave-Conversion\" division_template = \"Fillydelphia Servitors\" start_experience_factor = 0.3" 
+				owner = NCG
+			}
+			create_unit = {
+				division = "name = \"3rd Slave-Conversion\" division_template = \"Fillydelphia Servitors\" start_experience_factor = 0.3" 
+				owner = NCG
+			}
+			create_unit = {
+				division = "name = \"1st Slaver-Servitors\" division_template = \"Fillydelphia Servitors\" start_experience_factor = 0.3" 
+				owner = NCG
+			}
+		}
+   }	
+}
+
+#Mechanicum - Fall of Shattered Hoof
+country_event = {
+	id = neocastle.33
+	title = neocastle.33.t
+	desc = neocastle.33.d
+
+   	trigger = {
+		tag = NCG
+		controls_state = 808
+   	}
+	fire_only_once = yes
+
+   option = {
+		name = neocastle.33.a
+		add_manpower = 1000
+		808 = { 
+			add_building_construction = {
+				type = circuitry_generator
+				level = 2
+			}
+			add_manpower = -1000
+			set_state_name = "Gloriana"
+			hidden_effect = {
+				set_province_name = {
+					id = 4308
+					name = "Gloriana"
+				}
+				set_province_name = {
+					id = 15759
+					name = "Temple of Steel"
+				}
+			}    
+		}
+   }	
+}
+
+#Mechanicum - Epilogue 1
+country_event = {
+	id = neocastle.34
+	title = neocastle.34.t
+	desc = neocastle.34.d
+
+    trigger = {
+		tag = NCG
+		has_completed_focus = NCG_wrap_wires
+		owns_state = 696
+		owns_state = 532
+		owns_state = 808
+		has_war = no
+	}
+	fire_only_once = yes
+
+   option = {
+		name = neocastle.34.a
+		every_owned_state = {
+			add_building_construction = {
+				type = bunker
+				level = 8
+				instant_build = yes
+				province = {
+					all_provinces = yes
+					limit_to_border = yes
+				}
+			}
+			add_building_construction = {
+				type = bunker2
+				level = 2
+				instant_build = yes
+				province = {
+					all_provinces = yes
+					limit_to_border = yes
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = neocastle.35
+				days = 20
+			}
+		}
+   }	
+}
+
+#Mechanicum - Epilogue 2
+country_event = {
+	id = neocastle.35
+	title = neocastle.35.t
+	desc = neocastle.35.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   option = {
+		name = neocastle.35.a
+		set_stability = 100
+		set_war_support = 100
+		set_province_name = {
+			id = 4264
+			name = "Salvation"
+		}
+		add_victory_points = {
+			province = 11845
+			value = 10
+		}
+		hidden_effect = {
+			set_province_name = {
+				id = 11845
+				name = "Crib of the Allmind"
+			}
+			country_event = {
+				id = neocastle.36
+				days = 20
+			}
+		}
+   }	
+}
+
+#Mechanicum - Epilogue 3
+country_event = {
+	id = neocastle.36
+	title = neocastle.36.t
+	desc = neocastle.36.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   option = {
+		name = neocastle.36.a
+		custom_effect_tooltip = NCG_machanicum_epilogue_tt
+   }	
 }

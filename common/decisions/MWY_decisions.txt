@@ -25,6 +25,7 @@ MWY_realms_debug_cat = {
 		icon = GFX_decision_stable_door
 		ai_will_do = {
 			base = 0
+			
 		}
 		visible = {
 			#has_ideas = closed_stable_society
@@ -125,7 +126,7 @@ MWY_realms_debug_cat = {
 
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision foe_stability_dec"
-			has_country_flag = chancellor_appeasing_nobles_base_flag
+			set_country_flag = chancellor_appeasing_nobles_base_flag
 		}
 	}
 
@@ -225,6 +226,7 @@ MWY_levy_cat = {
 
 		days_mission_timeout = 160
 		timeout_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision MWY_noble_revolt_mission"
 			if = {
 				limit = { check_variable = { realm_poor_opinion_count_var = 5 } }
 				country_event = newmareway.22
@@ -397,6 +399,7 @@ MWY_levy_cat = {
 
 		days_mission_timeout = 81
 		timeout_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision MWY_famine_crisis"
 			country_event = newmareway.38
 			swap_ideas = {
 				remove_idea = MWY_low_winter_stores
@@ -409,10 +412,26 @@ MWY_levy_cat = {
 		icon = GFX_decision_crossed_swords
 		ai_will_do = {
 			base = 0
+			modifier = {
+				has_war = yes
+				add = 10
+			}
+			modifier = {
+				has_war_with = ERA
+				add = 25
+			}
+			modifier = {
+				any_country = {
+					has_war_with = MWY
+					has_army_size = { size > 29 }
+				}
+				add = 999
+			}
 		}
 
 		available = {
 			has_war = yes
+			NOT = { has_country_flag = MWY_raised_levies_flag }
 		}
 
 		visible = {
@@ -436,6 +455,10 @@ MWY_levy_cat = {
 		icon = GFX_decision_crossed_swords
 		ai_will_do = {
 			base = 0
+			modifier = {
+				has_war = no
+				add = 999
+			}
 		}
 
 		available = {
@@ -452,7 +475,7 @@ MWY_levy_cat = {
 		#fire_only_once = yes
 
 		complete_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision foe_stability_dec"
+			log = "[GetDateText]: [Root.GetName]: Decision mwy_disband_all_levies"
 			delete_unit_template_and_units = {
 			    division_template = "Commoner Levies"
 			}
@@ -493,6 +516,77 @@ MWY_levy_cat = {
 				}
 			}
 			clr_country_flag = MWY_raised_levies_flag
+		}
+	}
+
+	mwy_claim_equestria_title = {
+		icon = GFX_decision_category_harmony_cat
+		cost = 300
+		ai_will_do = {
+			base = 0
+		}
+
+		available = {
+			NOT = { country_exists = ERA }
+			OR = {
+				AND = {
+					controls_state = 532
+					controls_state = 696
+				}
+				controls_state = 234
+			}
+		}
+
+		visible = {
+			#has_ideas = closed_stable_society
+			tag = MWY
+		}
+		#fire_only_once = yes set_cosmetic_tag = MWY_central_equestria
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: mwy_claim_equestria_title"
+			drop_cosmetic_tag = yes
+			if = {
+				limit = { has_cosmetic_tag = MWY_NCR_state }
+				drop_cosmetic_tag = yes
+				set_cosmetic_tag = MWY_NCR_central_equestria
+			}
+			else = {
+				set_cosmetic_tag = MWY_central_equestria
+			}
+			add_popularity = {
+				ideology = visionary
+				popularity = 0.10
+			}
+			custom_effect_tooltip = MWY_core_central_equestria
+			hidden_effect = {
+				add_state_core = 532
+				add_state_core = 48
+				add_state_core = 45
+				add_state_core = 538
+				add_state_core = 536
+
+				add_state_core = 234
+				add_state_core = 180
+				add_state_core = 415
+				add_state_core = 801
+
+				add_state_core = 45
+				add_state_core = 477
+				add_state_core = 476
+
+				add_state_core = 295
+				add_state_core = 568
+				add_state_core = 574
+				add_state_core = 793
+				add_state_core = 447
+				add_state_core = 796
+				add_state_core = 696
+				add_state_core = 235
+				add_state_core = 219
+				add_state_core = 809
+				add_state_core = 792
+			}
 		}
 	}
 
@@ -819,9 +913,16 @@ MWY_levy_cat = {
 		days_remove = 30
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision mwy_army_reform_talon_wargames"
-			country_event = newmareway.63
+			#country_event = newmareway.63 CUT
 			set_country_flag = MWY_army_reformer_action_flag
 			hidden_effect = { army_experience = -10 add_command_power = -50 }
+
+			army_experience = 15
+			add_war_support = 0.10
+			every_army_leader = {
+				limit = { has_id = 549006 }
+				add_skill_level = 1
+			}
 		}
 	}
 
@@ -1111,6 +1212,28 @@ MWY_levy_cat = {
 			defense_bonus_against = 0.1
 		}
 	}
+
+	mwy_attack_coastal_realms = {
+		icon = GFX_decision_crossed_swords
+		available = {
+			NOT = {
+				country_exists = MWN
+				has_war_with = MWN
+			}
+		}
+		visible = {
+			country_exists = MWS
+			tag = MWY
+		}
+		ai_will_do = {
+			factor = 1
+		}
+		fire_only_once = yes
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision mwy_attack_coastal_realms"
+			create_wargoal = { type = annex_everything target = MWS }
+		}
+	}
 }
 
 MWN_meetings_cat = {
@@ -1203,7 +1326,7 @@ MWN_branch_office_cat = {
 					NOT = {
 						OR = {
 							has_idea = MWY_miner_branch_idea2
-							has_idea = MWY_mechanium_branch_idea2
+							has_idea = MWY_mechanicum_branch_idea2
 						}
 					}
 				}
@@ -1315,7 +1438,7 @@ MWN_branch_office_cat = {
 					NOT = {
 						OR = {
 							has_idea = MWY_builder_branch_idea2
-							has_idea = MWY_mechanium_branch_idea2
+							has_idea = MWY_mechanicum_branch_idea2
 						}
 					}
 				}
@@ -1453,8 +1576,8 @@ MWN_branch_office_cat = {
 		days_remove = 60
 		remove_effect = {
 			swap_ideas = {
-				remove_idea = MWY_mechanium_branch_idea
-				add_idea = MWY_mechanium_branch_idea2
+				remove_idea = MWY_mechanicum_branch_idea
+				add_idea = MWY_mechanicum_branch_idea2
 			}
 		}
 	}
@@ -1509,12 +1632,12 @@ MWN_branch_office_cat = {
 
 		days_remove = 30
 		remove_effect = {
-			add_equipment_to_stockpile = { type = infantry_equipment_4 amount = 150 producer = OWE }
+			add_equipment_to_stockpile = { type = ballistic_equipment_3 amount = 150 producer = OWE }
 		}
 	}
 }
 
-MWN_star_palace_cat = {
+MWY_star_palace_cat = {
 	MWY_palace_demolish_buildings_dec = {
 		icon = generic_construction
 		cost = 100
@@ -1552,7 +1675,8 @@ MWN_star_palace_cat = {
 		visible = {
 			has_completed_focus = MWY_sc_palace_of_the_star
 			tag = MWY
-			has_country_flag = MWY_finished_palace_flag
+			has_country_flag = MWY_can_build_palace_flag
+			NOT = { has_country_flag = MWY_finished_palace_flag }
 		}
 
 		available = {
@@ -1621,7 +1745,6 @@ MWN_star_palace_cat = {
 					province = 9176 #State Border
 				}
 			}
-			set_country_flag = MWY_can_build_palace_flag
 		}
 	}
 
@@ -1635,7 +1758,8 @@ MWN_star_palace_cat = {
 		visible = {
 			has_completed_focus = MWY_sc_palace_of_the_star
 			tag = MWY
-			has_country_flag = MWY_finished_palace_flag
+			has_country_flag = MWY_can_build_palace_flag
+			NOT = { has_country_flag = MWY_finished_palace_flag }
 		}
 
 		available = {
@@ -1679,7 +1803,6 @@ MWN_star_palace_cat = {
 					instant_build = yes
 				}
 			}
-			set_country_flag = MWY_can_build_palace_flag
 		}
 	}
 
@@ -1693,7 +1816,8 @@ MWN_star_palace_cat = {
 		visible = {
 			has_completed_focus = MWY_sc_palace_of_the_star
 			tag = MWY
-			has_country_flag = MWY_finished_palace_flag
+			has_country_flag = MWY_can_build_palace_flag
+			NOT = { has_country_flag = MWY_finished_palace_flag }
 		}
 
 		available = {
@@ -1728,16 +1852,15 @@ MWN_star_palace_cat = {
 		days_remove = 120
 		remove_effect = {
 			clr_country_flag = MWY_building_palace_flag
-			add_to_variable = { MWY_palace_progress_var = 1 }
+			add_to_variable = { MWY_palace_progress_var = 2 }
 			549 = {
-				add_extra_state_shared_building_slots = 1
+				add_extra_state_shared_building_slots = 2
 				add_building_construction = {
 					type = industrial_complex
 					level = 1
 					instant_build = yes
 				}
 			}
-			set_country_flag = MWY_can_build_palace_flag
 		}
 	}
 
@@ -1751,7 +1874,8 @@ MWN_star_palace_cat = {
 		visible = {
 			has_completed_focus = MWY_sc_palace_of_the_star
 			tag = MWY
-			has_country_flag = MWY_finished_palace_flag
+			has_country_flag = MWY_can_build_palace_flag
+			NOT = { has_country_flag = MWY_finished_palace_flag }
 		}
 
 		available = {
@@ -1788,7 +1912,6 @@ MWN_star_palace_cat = {
 			clr_country_flag = MWY_building_palace_flag
 			add_to_variable = { MWY_palace_progress_var = 1 }
 			add_research_slot = 1
-			set_country_flag = MWY_can_build_palace_flag
 		}
 	}
 
@@ -1802,7 +1925,8 @@ MWN_star_palace_cat = {
 		visible = {
 			has_completed_focus = MWY_sc_palace_of_the_star
 			tag = MWY
-			has_country_flag = MWY_finished_palace_flag
+			has_country_flag = MWY_can_build_palace_flag
+			NOT = { has_country_flag = MWY_finished_palace_flag }
 		}
 
 		available = {
@@ -1857,7 +1981,8 @@ MWN_star_palace_cat = {
 		visible = {
 			has_completed_focus = MWY_sc_palace_of_the_star
 			tag = MWY
-			has_country_flag = MWY_finished_palace_flag
+			has_country_flag = MWY_can_build_palace_flag
+			NOT = { has_country_flag = MWY_finished_palace_flag }
 		}
 
 		available = {
@@ -1900,7 +2025,6 @@ MWN_star_palace_cat = {
 					instant_build = yes
 				}
 			}
-			set_country_flag = MWY_can_build_palace_flag
 		}
 	}
 
@@ -1914,7 +2038,8 @@ MWN_star_palace_cat = {
 		visible = {
 			has_completed_focus = MWY_sc_palace_of_the_star
 			tag = MWY
-			has_country_flag = MWY_finished_palace_flag
+			has_country_flag = MWY_can_build_palace_flag
+			NOT = { has_country_flag = MWY_finished_palace_flag }
 		}
 
 		available = {
@@ -1954,7 +2079,6 @@ MWN_star_palace_cat = {
 				add_extra_state_shared_building_slots = 1
 				add_manpower = 200
 			}
-			set_country_flag = MWY_can_build_palace_flag
 		}
 	}
 
