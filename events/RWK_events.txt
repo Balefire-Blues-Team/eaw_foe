@@ -1,4 +1,5 @@
 add_namespace = rustwreck
+add_namespace = rwksailor
 
 
 #Ask LGH to trade
@@ -603,12 +604,20 @@ country_event = {
 			popularity = 0.05
 		}
 		add_political_power = 50
+		set_division_template_lock = {
+			division_template = "Crimson's Warband"
+			is_locked = no
+		}
    	}
 	option = { #Make an example
 	   name = rustwreck.16.b 
 	   ai_chance = { factor = 50 }
 	   	retire_character = RWK_char_Crimson_Waters
 		add_stability = 0.05
+		delete_unit_template_and_units = {
+			division_template = "Crimson's Warband"
+			disband = yes
+		}
     }
 }
 
@@ -672,3 +681,506 @@ country_event = {
 		restore_previous_manpower = yes
    	}
 }
+
+#War or Peace
+country_event = {
+	id = rustwreck.19
+	title = rustwreck.19.t
+	desc = rustwreck.19.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #War
+	   	name = rustwreck.19.a 
+	   	ai_chance = { factor = 50 }
+		add_timed_idea = {
+			idea = RWK_retool_war_idea
+			days = 300
+		}
+		add_popularity = {
+			ideology = survivalism
+			popularity = -0.10
+		}
+   	}
+	option = { #Peace
+		name = rustwreck.19.b
+	   	ai_chance = { factor = 50 }
+	   	add_timed_idea = {
+			idea = RWK_retool_peace_idea
+			days = 300
+		}
+		add_popularity = {
+			ideology = survivalism
+			popularity = 0.05
+		}
+   }
+}
+
+#Borderwar 87 - WIN
+country_event = {
+	id = rustwreck.20
+	title = rustwreck.20.t
+	desc = rustwreck.20.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #Yay
+	   	name = rustwreck.20.a 
+	   	ai_chance = { factor = 50 }
+		transfer_state = 87
+		add_war_support = 0.05
+   	}
+}
+
+#Borderwar 87 - LOSE
+country_event = {
+	id = rustwreck.21
+	title = rustwreck.21.t
+	desc = rustwreck.21.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #damn
+	   	name = rustwreck.21.a 
+	   	ai_chance = { factor = 50 }
+		add_war_support = -0.02
+		235 = {
+			damage_building = {
+				type = infrastructure
+				damage = 4
+			}
+		}
+		army_experience = 5
+		RAR = { add_war_support = 0.02 army_experience = 5}
+   	}
+}
+
+#Borderwar 87 - Tie
+country_event = {
+	id = rustwreck.22
+	title = rustwreck.22.t
+	desc = rustwreck.22.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #damn
+	   	name = rustwreck.22.a 
+	   	ai_chance = { factor = 50 }
+		army_experience = 5
+		RAR = { army_experience = 5 }
+   	}
+}
+
+#Sickness 1 | Foggyness
+country_event = {
+	id = rustwreck.23
+	title = rustwreck.23.t
+	desc = rustwreck.23.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #I just need some Meds
+	   	name = rustwreck.23.a 
+	   	ai_chance = { factor = 50 }
+		add_stability = -0.01
+		hidden_effect = {
+			country_event = {
+				id = rustwreck.24
+				days = 18
+			}
+		}
+   	}
+}
+
+#Sickness 2 | Out of Commission
+country_event = {
+	id = rustwreck.24
+	title = rustwreck.24.t
+	desc = rustwreck.24.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #this will be annoying
+	   	name = rustwreck.24.a 
+	   	ai_chance = { factor = 50 }
+		add_stability = -0.02
+		add_popularity = {
+			ideology = visionary
+			popularity = 0.05
+		}
+		hidden_effect = {
+			country_event = {
+				id = rustwreck.25
+				days = 7
+			}
+		}
+   	}
+}
+
+#Sickness 3 | Diagnosis
+country_event = {
+	id = rustwreck.25
+	title = rustwreck.25.t
+	desc = rustwreck.25.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #Oh No
+	   	name = rustwreck.25.a 
+	   	ai_chance = { factor = 50 }
+		add_country_leader_trait = dying_mind
+		set_country_flag = RWK_admiral_sick_flag
+		hidden_effect = {
+			country_event = {
+				id = rustwreck.26
+				days = 100
+			}
+		}
+   	}
+}
+
+#Sickness 4 | Pain
+country_event = {
+	id = rustwreck.26
+	title = rustwreck.26.t
+	desc = rustwreck.26.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #do it!
+	   	name = rustwreck.26.a 
+	   	ai_chance = { factor = 50 }
+		set_country_flag = RWK_experimental_treatment_flag
+   	}
+	option = { #just let me die
+	   name = rustwreck.26.a 
+	   ai_chance = { factor = 50 }
+		add_days_mission_timeout = {
+			mission = RWK_admiral_feral_countdown
+			days = -20
+		}
+   	}
+}
+
+#Sickness End - Kelp
+country_event = {
+	id = rustwreck.27
+	title = rustwreck.27.t
+	desc = rustwreck.27.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #unexpected
+	   	name = rustwreck.27.a 
+	   	ai_chance = { factor = 50 }
+		country_event = rustwreck.28
+		remove_mission = RWK_admiral_feral_countdown
+   	}
+}
+
+#Council Takeover
+country_event = {
+	id = rustwreck.28
+	title = rustwreck.28.t
+	desc = rustwreck.28.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #unexpected
+	   	name = rustwreck.28.a 
+	   	ai_chance = { factor = 50 }
+		set_politics = {
+			ruling_party = survivalism
+			elections_allowed = no
+		}
+		hidden_effect = {
+			country_event = {
+				id = rustwreck.29
+				days = 6
+			}
+		}
+   	}
+}
+
+#Wavebreaker Compromise
+country_event = {
+	id = rustwreck.29
+	title = rustwreck.29.t
+	desc = rustwreck.29.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+  	option = { #A fruitful partnership
+	   	name = rustwreck.29.a 
+	   	ai_chance = { factor = 50 }
+		set_popularities = {
+			survivalism = 65
+			continuation = 15
+			visionary = 10
+			destruction = 10
+		}
+		set_party_name = {
+			ideology = continuation
+			long_name = RWK_continuation_2_party
+			name = RWK_continuation_2_party
+		}
+		set_party_name = {
+			ideology = visionary
+			long_name = RWK_visionary_2_party
+			name = RWK_visionary_2_party
+		}
+		hidden_effect = {
+			remove_country_leader_role = {
+				character = RWK_char_Admiral_High_Tides
+				ideology = admirality
+			}
+			remove_country_leader_role = {
+				character = RWK_char_Wavebreaker
+				ideology = rebuilder
+			}
+			add_country_leader_role = {
+				character = RWK_char_Wavebreaker
+				promote_leader = yes
+				country_leader = {
+					ideology = admirality
+					expire = "1965.1.1"
+					id = -1
+				}
+			}
+			add_country_leader_role = {
+				character = RWK_char_sailorboi
+				promote_leader = yes
+				country_leader = {
+					ideology = rebuilder
+					expire = "1965.1.1"
+					id = -1
+				}
+			}
+		}
+		hidden_effect = {
+			IF = {
+				limit = {
+					has_completed_focus = RWK_enemies_to_allies
+				}
+			
+				country_event = {
+					id = rustwreck.30
+					days = 6
+				}
+			}
+		}
+   	}
+}
+
+#Crimson Dealings
+country_event = {
+	id = rustwreck.30
+	title = rustwreck.30.t
+	desc = rustwreck.30.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #pfehh
+	   	name = rustwreck.30.a 
+	   	ai_chance = { factor = 50 }
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.05
+		}
+		set_division_template_lock = {
+			division_template = "Crimson's Warband"
+			is_locked = no
+		}
+		every_owned_state = {
+			limit = {
+				has_dynamic_modifier = {
+					modifier = RWK_endtide_influence
+				}
+			}
+			remove_dynamic_modifier = {
+				modifier = RWK_endtide_influence
+			}
+		}
+		every_owned_state = {
+			limit = {
+				has_dynamic_modifier = {
+					modifier = RWK_endtide_stronghold
+				}
+			}
+			remove_dynamic_modifier = {
+				modifier = RWK_endtide_stronghold
+			}
+			add_dynamic_modifier = {
+				modifier = RWK_endtide_stronghold_1
+			}
+		}
+   	}
+}
+
+#Blood or Steel?
+country_event = {
+	id = rustwreck.31
+	title = rustwreck.31.t
+	desc = rustwreck.31.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #Wavebreaker
+	   	name = rustwreck.31.a 
+	   	ai_chance = { factor = 50 }
+		add_popularity = {
+			ideology = continuation
+			popularity = 0.20
+		}
+   	}
+	option = { #Crimson
+	   name = rustwreck.31.b
+	   ai_chance = { factor = 50 }
+	   	add_popularity = {
+			ideology = destruction
+			popularity = 0.20
+		}
+   	}
+}
+
+#The Prodigal Son
+country_event = {
+	id = rustwreck.32
+	title = rustwreck.32.t
+	desc = rustwreck.32.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #Tell us everything!
+	   	name = rustwreck.32.a 
+	   	ai_chance = { factor = 50 }
+		recruit_character = RWK_char_sailorboi
+		#Start Sailorboi events here
+   	}
+}
+
+#Time claims us all
+country_event = {
+	id = rustwreck.33
+	title = rustwreck.33.t
+	desc = rustwreck.33.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #The Bell tolls
+	   	name = rustwreck.33.a 
+	   	ai_chance = { factor = 50 }
+		IF = {
+			limit = {
+				destruction > visionary
+			}
+			country_event = rustwreck.34
+		}
+		ELSE = {
+			country_event = rustwreck.35
+		}
+   	}
+}
+
+#Crimson Wins
+country_event = {
+	id = rustwreck.34
+	title = rustwreck.34.t
+	desc = rustwreck.34.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #May the tide have mercy
+	   	name = rustwreck.34.a 
+	   	ai_chance = { factor = 50 }
+		set_politics = {
+			ruling_party = destruction
+			elections_allowed = no
+		}
+		add_popularity = {
+			ideology = destruction
+			popularity = 30
+		}
+		#Load Focus tree
+   	}
+}
+
+#Wavebreaker Wins
+country_event = {
+	id = rustwreck.35
+	title = rustwreck.35.t
+	desc = rustwreck.35.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #New and old as one
+	   	name = rustwreck.35.a 
+	   	ai_chance = { factor = 50 }
+		remove_country_leader_role = {
+			character = RWK_char_Admiral_High_Tides
+			ideology = admirality
+		}
+		remove_country_leader_role = {
+			character = RWK_char_Wavebreaker
+			ideology = rebuilder
+		}
+		add_country_leader_role = {
+			character = RWK_char_Wavebreaker
+			promote_leader = yes
+			country_leader = {
+				ideology = admirality
+				expire = "1965.1.1"
+				id = -1
+			}
+		}
+		set_party_name = {
+			ideology = continuation
+			long_name = RWK_continuation_3_party
+			name = RWK_continuation_3_party
+		}
+		set_party_name = {
+			ideology = visionary
+			long_name = RWK_visionary_3_party
+			name = RWK_visionary_3_party
+		}
+		add_popularity = {
+			ideology = continuation
+			popularity = 60
+		}
+		#Load Focus tree
+   	}
+}
+

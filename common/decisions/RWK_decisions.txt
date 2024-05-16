@@ -391,5 +391,140 @@ RWK_economy_cat = {
 			}
 		}
 	}
-	
+}
+
+RWK_expansion_cat = {
+	RWK_borderwar_87 = {
+		icon = border_war
+		cost = 50
+		
+		ai_will_do = {
+			factor = 1000
+		}
+		fire_only_once = no
+		is_good = yes
+		
+		available = {
+			has_war = no
+			has_full_control_of_state = 235
+		}
+		
+		visible = {
+			NOT = {
+				owns_state = 87
+			}
+			owns_state = 235
+		}
+
+		days_re_enable = 100
+
+
+		highlight_states = {
+			state = 87
+		}
+		target_array = neighbors
+		target_trigger = {
+			FROM = {
+				owns_state = 87
+			}
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision FSR_take_madagaskar target: [From.GetName]"
+			start_border_war = {
+				change_state_after_war = no
+				attacker = {
+					state = 235
+					num_provinces = 3
+					on_win = rustwreck.20
+					on_lose = rustwreck.21
+					on_cancel = rustwreck.22
+				}
+
+				defender = {
+					state = 87
+					num_provinces = 3
+				}
+			}
+		}
+	}
+}
+
+RWK_sickness_cat = {
+	RWK_admiral_feral_countdown = {
+		allowed = {
+			tag = RWK
+		}
+		available = {
+			always = no
+		}
+		activation = {
+			has_country_flag = RWK_admiral_sick_flag
+		}
+		selectable_mission = no
+		days_mission_timeout = 200
+		timeout_effect = {
+			country_event = {
+				id = LIT_steelwall.1
+			}
+		}
+	}
+	RWK_extend_life_dec = {
+		icon = med_x
+		cost = 10
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 20
+				always = no
+			}
+		}
+		visible = {
+			tag = RWK
+			has_active_mission = RWK_admiral_feral_countdown
+			has_completed_focus = RWK_put_off_inevitable
+		}
+		available = {
+			has_political_power > 9
+		}
+		fire_only_once = no
+		days_re_enable = 19
+		days_remove = 10
+		modifier = {
+			survivalism_drift = 0.50
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_extend_life_dec"
+			add_days_mission_timeout = {
+				mission = RWK_admiral_feral_countdown
+				days = 20
+			}
+		}
+	}
+	RWK_experimental_treatment_dec = {
+		icon = med_x
+		cost = 10
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 20
+				always = no
+			}
+		}
+		visible = {
+			tag = RWK
+			has_active_mission = RWK_admiral_feral_countdown
+			has_completed_focus = RWK_authorize_experimental_treatments
+		}
+		available = {
+			has_political_power > 9
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_experimental_treatment_dec"
+			country_event = rustwreck.27
+		}
+	}
 }

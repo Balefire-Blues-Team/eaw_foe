@@ -17,6 +17,16 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_battle_of_petershoof"
 		country_event = rustwreck.10
+		hidden_effect = {
+			country_event = {
+				id = rustwreck.23
+				days = 110
+			}
+			country_event = {
+				id = rustwreck.32
+				days = 94
+			}
+		}
 	}
 }
 
@@ -75,6 +85,11 @@ shared_focus = {
 	relative_position_id = RWK_battle_of_petershoof
 	prerequisite = {
 		focus = RWK_shelter_on_shore
+	}
+	bypass = {
+		NOT = {
+			has_country_leader_with_trait = ancient_soldier
+		}
 	}
 	ai_will_do = { 
 	factor = 30
@@ -475,7 +490,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_war_and_peace"
-		#Event for either arms-eco or civilian eco temp idea
+		country_event = rustwreck.19
 	}
 }
 
@@ -532,7 +547,16 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_hand_out_boarding_guns"
-
+		add_equipment_to_stockpile = {
+			type = ballistic_equipment_1
+			amount = 250
+			producer = OWE
+		}
+		add_equipment_to_stockpile = {
+			type = support_equipment
+			amount = 50
+			producer = OWE
+		}
 	}
 }
 
@@ -582,7 +606,16 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_bloody_lessons"
-		#minor Spirit for Land and Naval offensives
+		custom_effect_tooltip = RWK_bloody_lesson_tt
+		IF = {
+			limit = {
+				has_completed_focus = RWK_new_warbands
+			}
+			add_ideas = RWK_lesson_join_tide_idea
+		}
+		ELSE = {
+			add_ideas = RWK_lesson_beat_tide_idea
+		}
 	}
 }
 
@@ -597,7 +630,7 @@ shared_focus = {
 	relative_position_id = RWK_battle_of_petershoof
 	prerequisite = {
 		focus = RWK_war_and_peace
-		focus = RWK_new_warbands
+		focus = RWK_nationalize_valkyrie_arms
 	}
 	ai_will_do = { 
 	factor = 30
@@ -664,7 +697,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_across_the_hoofsic"
-		#borderwar for boosterjuice
+		custom_effect_tooltip = RWK_boosterjuice_tt
+		add_war_support = 0.10
 	}
 }
 
@@ -673,21 +707,21 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = -3
 	y = 7
-	cost = 4.29
+	cost = 1.49
 	
 	available_if_capitulated = yes 
 	relative_position_id = RWK_battle_of_petershoof
 	available = {
-		always = no
-		#Only when sick
+		has_country_leader_with_trait = dying_mind
 	}
+	
 	ai_will_do = { 
 	factor = 30
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_put_off_inevitable"
-		
+		custom_effect_tooltip = RWK_extend_life_tt
 	}
 }
 
@@ -706,13 +740,22 @@ shared_focus = {
 	prerequisite = {
 		focus = RWK_generators_for_saltpan
 	}
+	available = {
+		has_country_leader_with_trait = dying_mind
+	}
+	bypass = {
+		NOT = {
+			has_country_leader_with_trait = ancient_soldier
+		}
+	}
 	ai_will_do = { 
 	factor = 30
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_choose_a_successor"
-		
+		add_stability = 0.04
+		country_event = rustwreck.31
 	}
 }
 
@@ -721,7 +764,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = 3
 	y = 7
-	cost = 4.29
+	cost = 1.49
 	
 	available_if_capitulated = yes 
 	relative_position_id = RWK_battle_of_petershoof
@@ -729,13 +772,17 @@ shared_focus = {
 	factor = 30
 	}
 	available = {
-		always = no
-		#Only when sick for over 100 days
+		has_country_leader_with_trait = dying_mind
+		has_country_flag = RWK_experimental_treatment_flag
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_authorize_experimental_treatments"
-		
+		custom_effect_tooltip = RWK_experiment_dec_tt
+		add_timed_idea = {
+			idea = RWK_experimenting_idea
+			days = 100
+		}
 	}
 }
 
@@ -780,6 +827,9 @@ shared_focus = {
 	prerequisite = {
 		focus = RWK_reign_in_spending
 	}
+	available = {
+		has_completed_focus = RWK_choose_a_successor
+	}
 	ai_will_do = { 
 	factor = 30
 	} 
@@ -803,6 +853,9 @@ shared_focus = {
 	prerequisite = {
 		focus = RWK_reign_in_spending
 	}
+	available = {
+		has_completed_focus = RWK_choose_a_successor
+	}
 	ai_will_do = { 
 	factor = 30
 	} 
@@ -824,6 +877,9 @@ shared_focus = {
 	relative_position_id = RWK_reign_in_spending
 	prerequisite = {
 		focus = RWK_reign_in_spending
+	}
+	available = {
+		has_completed_focus = RWK_choose_a_successor
 	}
 	ai_will_do = { 
 	factor = 30
@@ -1451,6 +1507,9 @@ shared_focus = {
 	prerequisite = {
 		focus = RWK_shelter_on_shore
 	}
+	available = {
+		has_completed_focus = RWK_choose_a_successor
+	}
 	ai_will_do = { 
 	factor = 30
 	} 
@@ -1850,6 +1909,9 @@ shared_focus = {
 	prerequisite = {
 		focus = RWK_shelter_on_shore
 	}
+	available = {
+		has_completed_focus = RWK_choose_a_successor
+	}
 	ai_will_do = { 
 	factor = 30
 	} 
@@ -2154,6 +2216,9 @@ shared_focus = {
 	prerequisite = {
 		focus = RWK_sunrise_development_council
 	}
+	available = {
+		has_completed_focus = RWK_choose_a_successor
+	}
 	ai_will_do = { 
 	factor = 30
 	} 
@@ -2188,6 +2253,9 @@ shared_focus = {
 	prerequisite = {
 		focus = RWK_sunrise_development_council
 	}
+	available = {
+		has_completed_focus = RWK_choose_a_successor
+	}
 	ai_will_do = { 
 	factor = 30
 	} 
@@ -2217,6 +2285,9 @@ shared_focus = {
 	relative_position_id = RWK_sunrise_development_council
 	prerequisite = {
 		focus = RWK_sunrise_development_council
+	}
+	available = {
+		has_completed_focus = RWK_choose_a_successor
 	}
 	ai_will_do = { 
 	factor = 30
@@ -2254,6 +2325,9 @@ shared_focus = {
 	relative_position_id = RWK_sunrise_development_council
 	prerequisite = {
 		focus = RWK_sunrise_development_council
+	}
+	available = {
+		has_completed_focus = RWK_choose_a_successor
 	}
 	ai_will_do = { 
 	factor = 30
