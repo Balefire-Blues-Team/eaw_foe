@@ -348,25 +348,49 @@ on_actions = {
             }
 			if = {
 				limit = {
-					original_tag = EYE
-					has_country_flag = EYE_FSR_war_flag
+					AND = {
+						tag = EYE
+						has_country_flag = EYE_FSR_war_flag
+					}
 				}
 				clr_country_flag = EYE_FSR_war_flag
-				EYE = {
-					release = HIT
-					release = GRV
-					release = FTR
-					release = FTP
-					release = WNF
+				IF = {
+					limit = {
+						NOT = {
+							OR = {
+								EYE = { has_completed_focus = EYE_papa_redeye }
+								EYE = { has_completed_focus = EYE_long_march }
+							}
+						}
+					}
+					EYE = { release = FTP }
+				}
+				IF = {
+					limit = {
+						NOT = {
+							OR = {
+								EYE = { has_completed_focus = EYE_birth_nation }
+								EYE = { has_completed_focus = EYE_long_march }
+							}
+						}
+					}
+					EYE = {
+						release = HIT
+						release = GRV
+						release = FTR
+						release = WNF
+					}
 				}
             }
 			if = {
 				limit = {
-					original_tag = EYE
-					has_country_flag = EYE_WNF_extra_war_flag
-					owns_state = 217
-					owns_state = 484
-					owns_state = 451
+					AND = {
+						tag = EYE
+						has_country_flag = EYE_WNF_extra_war_flag
+						owns_state = 217
+						owns_state = 484
+						owns_state = 451
+					}
 				}
 				clr_country_flag = EYE_WNF_extra_war_flag
 				WNF = {
@@ -381,11 +405,31 @@ on_actions = {
 					has_country_flag = EYE_MOB_war_flag
 				}
 				clr_country_flag = EYE_MOB_war_flag
-				EYE = {
-					release = HIT
-					release = GRV
-					release = FTR
-					release = FTP
+				IF = {
+					limit = {
+						NOT = {
+							OR = {
+								EYE = { has_completed_focus = EYE_papa_redeye }
+								EYE = { has_completed_focus = EYE_long_march }
+							}
+						}
+					}
+					EYE = { release = FTP }
+				}
+				IF = {
+					limit = {
+						NOT = {
+							OR = {
+								EYE = { has_completed_focus = EYE_birth_nation }
+								EYE = { has_completed_focus = EYE_long_march }
+							}
+						}
+					}
+					EYE = {
+						release = HIT
+						release = GRV
+						release = FTR
+					}
 				}
             }
 			if = {
@@ -394,11 +438,31 @@ on_actions = {
 					has_country_flag = EYE_DUAL_war_flag
 				}
 				clr_country_flag = EYE_DUAL_war_flag
-				EYE = {
-					release = HIT
-					release = GRV
-					release = FTR
-					release = FTP
+				IF = {
+					limit = {
+						NOT = {
+							OR = {
+								EYE = { has_completed_focus = EYE_papa_redeye }
+								EYE = { has_completed_focus = EYE_long_march }
+							}
+						}
+					}
+					EYE = { release = FTP }
+				}
+				IF = {
+					limit = {
+						NOT = {
+							OR = {
+								EYE = { has_completed_focus = EYE_birth_nation }
+								EYE = { has_completed_focus = EYE_long_march }
+							}
+						}
+					}
+					EYE = {
+						release = HIT
+						release = GRV
+						release = FTR
+					}
 				}
 				FSR = {
 					transfer_state = 543
@@ -408,8 +472,6 @@ on_actions = {
 					transfer_state = 85
 					transfer_state = 487
 					transfer_state = 554
-					add_state_claim = 529
-					add_state_claim = 50
 					set_country_flag = FSR_follow_up_war_MOB_flag
 					set_truce = {
 						target = GUN
@@ -870,6 +932,64 @@ on_actions = {
 							country_event = MSR.134
 						}
 					}
+				}
+			}
+		}
+	}
+
+	on_state_control_changed = {
+		effect = {
+			if = {#Mechanicum takes state
+				limit = {
+					696 = { is_owned_by = NEV }
+					original_tag = NCG
+					has_war_with = NEV
+				}
+				if = {#Neighvarro
+					limit = {
+						696 = { is_controlled_by = NCG }
+					}
+					NCG = { country_event = neocastle.31 }
+				}
+			}
+			if = {#Mechanicum takes state
+				limit = {
+					original_tag = NCG
+					any_country = {
+						AND = {
+							owns_state = 532
+							has_war_with = NCG
+						}
+					}
+					OR = {
+						532 = { NOT = { is_owned_by = NCG } }
+					}
+				}
+				if = {#Fillydelphia
+					limit = {
+						532 = { is_controlled_by = NCG }
+					}
+					NCG = { country_event = neocastle.32 }
+				}
+			}
+			if = {#Mechanicum takes state
+				limit = {
+					original_tag = NCG
+					any_country = {
+						AND = {
+							owns_state = 808
+							has_war_with = NCG
+						}
+					}
+					OR = {
+						808 = { NOT = { is_owned_by = NCG } }
+					}
+				}
+				if = {#Juncion R-7
+					limit = {
+						808 = { is_controlled_by = NCG }
+					}
+					NCG = { country_event = neocastle.33 }
 				}
 			}
 		}

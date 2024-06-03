@@ -291,6 +291,49 @@
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MWY_backroom_squabbles"
 			country_event = newmareway.45
+
+			hidden_effect = {
+				if = {
+					limit = {
+						is_ai = yes
+						OR = {
+							has_game_rule = {
+								rule = MWY_AI_BEHAVIOR
+								option = QUEENSWAY
+							}
+							AND = {
+								is_historical_focus_on = yes
+								NOT = {
+									has_game_rule = {
+										rule = MWY_AI_BEHAVIOR
+										option = STAYTHECOURSE
+									}
+								}
+							}
+						}
+						visionary < 0.3
+					}
+					add_popularity = {
+						ideology = visionary
+						popularity = 0.20
+					}
+				}
+
+				if = {
+					limit = {
+						is_ai = yes
+						has_game_rule = {
+							rule = MWY_AI_BEHAVIOR
+							option = STAYTHECOURSE
+						}
+						visionary > 0.29
+					}
+					add_popularity = {
+						ideology = visionary
+						popularity = -0.10
+					}
+				}
+			}
 		}
 	}
 
@@ -307,7 +350,7 @@
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = MWY_at_most_25_visonary_tt
-				visionary < 0.26
+				visionary < 0.301
 			}
 		}
 
@@ -3588,7 +3631,11 @@
 
 		ai_will_do = { 
 			factor = 100
-		} 
+		}
+
+		select_effect = {
+			set_country_flag = MWY_feudal_maredia_belle_grove_flag
+		}
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MWY_enforce_feudal_contracts"
@@ -3604,6 +3651,7 @@
 			}
 
 			custom_effect_tooltip = MWY_unlock_ERA_levies_tt
+			MWY_add_69_805_as_fuedal_realms = yes
 		}
 	}
 
@@ -3729,8 +3777,12 @@
 	    }
 
 		ai_will_do = { 
-		factor = 100
-		} 
+			factor = 100
+		}
+
+		select_effect = {
+			set_country_flag = MWY_democratic_maredia_belle_grove_flag
+		}
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MWY_duchies_without_dukes"
@@ -3738,6 +3790,7 @@
 			    ideology = visionary
 			    popularity = 0.05
 			}
+			MWY_add_69_805_as_fuedal_realms = yes
 		}
 	}
 
@@ -3764,8 +3817,13 @@
 	    }
 
 		ai_will_do = { 
-		factor = 100
-		} 
+			factor = 100
+		}
+
+		
+		select_effect = {
+			set_country_flag = MWY_blood_mane_maredia_belle_grove_flag
+		}
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MWY_golden_star_domain"
@@ -3773,6 +3831,9 @@
 			    ideology = destruction
 			    popularity = 0.05
 			}
+
+			custom_effect_tooltip = MWY_unlock_ERA_levies_tt
+			MWY_add_69_805_as_fuedal_realms = yes
 		}
 	}
 
@@ -3792,10 +3853,10 @@
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = MWY_all_ERA_cores_above_50_comp_tt
-				all_owned_state = {
-					limit = {
-						is_core_of = ERA
-					}
+				69 = {
+					compliance > 50
+				}
+				805 = {
 					compliance > 50
 				}
 			}
@@ -3803,7 +3864,7 @@
 
 		ai_will_do = { 
 			factor = 100
-		} 
+		}
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MWY_amnesty_for_bloody_army"
@@ -4000,7 +4061,7 @@
 		}
 
 		ai_will_do = { 
-			factor = 25
+			factor = 0
 		} 
 
 		completion_reward = {
@@ -4276,6 +4337,9 @@
 				exists = yes
 			}
 		}
+		bypass = {
+			owns_state = 747
+		}
 
 		ai_will_do = { 
 			factor = 25
@@ -4284,6 +4348,26 @@
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MWY_qw_neocastle_issue"
 			
+			if = {
+				limit = {
+					NCG = {
+						has_country_leader = {
+							character = NCG_char_JEB_Beauteous
+							ruling_only = yes
+						}
+					}
+				}
+
+				custom_effect_tooltip = MWY_ncg_slavers_tt
+				create_wargoal = {
+					type = annex_everything
+					target = NCG
+				}
+			}
+			else = {
+				custom_effect_tooltip = MWY_ncg_not_slavers_tt
+				add_ideas = MWY_NCG_defense_idea
+			}
 		}
 	}
 
@@ -4296,11 +4380,6 @@
 		cost = 5
 
 		prerequisite = { focus = MWY_qw_neocastle_issue }
-		available = { 
-			NCG = {
-				exists = yes
-			}
-		}
 
 		ai_will_do = { 
 			factor = 25
@@ -4388,6 +4467,9 @@
 				exists = yes
 			}
 		}
+		bypass = {
+			owns_state = 747
+		}
 
 		ai_will_do = { 
 			factor = 25
@@ -4418,6 +4500,7 @@
 		available = {
 			SHA = {
 				exists = yes
+				has_government = visionary
 			}
 		}
 
@@ -4957,6 +5040,9 @@
 			focus = MWY_sc_between_giants
 			focus = MWY_sc_align_with_filly
 		}
+		bypass = {
+			NCG = { exists = no }
+		}
 
 		ai_will_do = { 
 			factor = 25
@@ -4980,6 +5066,12 @@
 		cost = 5
 
 		prerequisite = { focus = MWY_sc_eastern_threat }
+		available = {
+			NCG = {
+				exists = no
+			}
+			owns_state = 747
+		}
 
 		ai_will_do = { 
 			factor = 25
@@ -5000,6 +5092,12 @@
 		cost = 5
 
 		prerequisite = { focus = MWY_sc_eastern_threat }
+		available = {
+			NCG = {
+				exists = no
+			}
+			owns_state = 747
+		}
 
 		ai_will_do = { 
 			factor = 25
@@ -5007,6 +5105,7 @@
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MWY_sc_third_city"
+			custom_effect_tooltip = MWY_core_NCG_states_tt
 			every_owned_state = {
 				limit = {
 					is_core_of = NCG
@@ -5351,7 +5450,8 @@
 			cost = 1
 
 			available = {
-				has_completed_focus = MWY_nobles_army_reforms
+				#has_completed_focus = MWY_nobles_army_reforms
+				has_completed_focus = gs_opening3
 
 				has_war_with = MWY
 			}
