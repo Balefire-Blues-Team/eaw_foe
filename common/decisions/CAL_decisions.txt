@@ -131,3 +131,524 @@ CAL_build_palace_cat = {
 	}
 	
 }
+
+CAL_borderwars_cat = {
+
+	CAL_borderwar_CCD = {
+		icon = border_war
+		cost = 50
+
+		available = {
+			FROM = {
+				any_owned_state = {
+					is_controlled_by = FROM
+					any_neighbor_state = {
+						is_fully_controlled_by = ROOT
+					}
+				}
+			}
+		}
+
+		visible = {
+			has_war = no
+			CCD = { exists = no }
+			has_completed_focus = CAL_strike_doglantis
+			NOT = {
+				AND = {
+					owns_state = 475
+					owns_state = 813
+					owns_state = 446
+					owns_state = 74
+				}
+			}
+		}
+
+		target_root_trigger = {
+			tag = CAL
+		}
+		target_array = neighbors
+
+		target_trigger = {
+			FROM = {
+				OR = {
+					owns_state = 475
+					owns_state = 813
+					owns_state = 446
+					owns_state = 74
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_states_trigger = {
+				OR = {
+					state = FROM.defender_state_vs_@ROOT
+					AND = {
+						is_owned_and_controlled_by = FROM
+						any_neighbor_state = { 
+							has_ROOT_at_least_1_div_in_current_state_scope = yes
+							is_fully_controlled_by = ROOT
+						}
+					}
+				}
+			}
+		}
+		
+		days_remove = 10
+		days_re_enable = 60
+
+		ai_will_do = {
+			base = 50
+			modifier = {
+				date > 1237.06.01
+				add = 25
+			}
+			modifier = {
+				date > 1238.01.01
+				factor = 200
+			}
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision CAL_borderwar_CCD"
+			hidden_effect = {
+				FROM = {
+					random_owned_controlled_state = {
+						limit = { 
+							any_neighbor_state = {
+								has_ROOT_at_least_1_div_in_current_state_scope = yes
+								is_fully_controlled_by = ROOT
+							}
+							is_core_of = CCD
+						}
+						save_event_target_as = defender_state
+						set_variable = { FROM.defender_state_vs_@ROOT = id }
+						set_temp_variable = { defender_state_temp = id }
+					}
+				}
+				random_state = {
+					limit = {
+						is_fully_controlled_by = ROOT
+						has_ROOT_at_least_1_div_in_current_state_scope = yes
+						any_neighbor_state = {
+							state = var:FROM.defender_state_vs_@ROOT
+						}
+					}
+					save_event_target_as = attacker_state
+					set_variable = { FROM.attacker_state_vs_@ROOT = id }
+					set_temp_variable = { attacker_state_temp = id }
+				}
+			}
+		}
+		remove_effect = {
+			IF = { 
+				limit = {
+					NOT = { 813 = { is_owned_by = CAL } }
+				}
+				transfer_state = 813
+			}
+			start_border_war = {
+				change_state_after_war = no
+				attacker = {
+					state = var:FROM.attacker_state_vs_@ROOT
+					num_provinces = 4
+					on_win = canterlot_ali.991
+					on_lose = canterlot_ali.995
+					on_cancel = canterlot_ali.996
+				}
+
+				defender = {
+					state = var:FROM.defender_state_vs_@ROOT
+					num_provinces = 4
+					on_win = canterlot_ali.992
+					on_lose = canterlot_ali.993
+					on_cancel = canterlot_ali.994
+				}
+			}
+		}
+	}
+	CAL_borderwar_PRA = {
+		icon = border_war
+		cost = 50
+
+		available = {
+			FROM = {
+				any_owned_state = {
+					is_controlled_by = FROM
+					any_neighbor_state = {
+						is_fully_controlled_by = ROOT
+					}
+				}
+			}
+		}
+
+		visible = {
+			has_war = no
+			PRA = { exists = no }
+			has_completed_focus = CAL_subjugate_raiders
+			NOT = {
+				AND = {
+					owns_state = 477
+					owns_state = 65
+					owns_state = 476
+				}
+			}
+		}
+
+		target_root_trigger = {
+			tag = CAL
+		}
+		target_array = neighbors
+
+		target_trigger = {
+			FROM = {
+				OR = {
+					owns_state = 477
+					owns_state = 65
+					owns_state = 476
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_states_trigger = {
+				OR = {
+					state = FROM.defender_state_vs_@ROOT
+					AND = {
+						is_owned_and_controlled_by = FROM
+						any_neighbor_state = { 
+							has_ROOT_at_least_1_div_in_current_state_scope = yes
+							is_fully_controlled_by = ROOT
+						}
+					}
+				}
+			}
+		}
+		
+		days_remove = 10
+		days_re_enable = 60
+
+		ai_will_do = {
+			base = 50
+			modifier = {
+				date > 1237.06.01
+				add = 25
+			}
+			modifier = {
+				date > 1238.01.01
+				factor = 200
+			}
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision CAL_borderwar_PRA"
+			hidden_effect = {
+				FROM = {
+					random_owned_controlled_state = {
+						limit = { 
+							any_neighbor_state = {
+								has_ROOT_at_least_1_div_in_current_state_scope = yes
+								is_fully_controlled_by = ROOT
+							}
+							is_core_of = PRA
+						}
+						save_event_target_as = defender_state
+						set_variable = { FROM.defender_state_vs_@ROOT = id }
+						set_temp_variable = { defender_state_temp = id }
+					}
+				}
+				random_state = {
+					limit = {
+						is_fully_controlled_by = ROOT
+						has_ROOT_at_least_1_div_in_current_state_scope = yes
+						any_neighbor_state = {
+							state = var:FROM.defender_state_vs_@ROOT
+						}
+					}
+					save_event_target_as = attacker_state
+					set_variable = { FROM.attacker_state_vs_@ROOT = id }
+					set_temp_variable = { attacker_state_temp = id }
+				}
+			}
+		}
+		remove_effect = {
+			start_border_war = {
+				change_state_after_war = no
+				attacker = {
+					state = var:FROM.attacker_state_vs_@ROOT
+					num_provinces = 4
+					on_win = canterlot_ali.991
+					on_lose = canterlot_ali.995
+					on_cancel = canterlot_ali.996
+				}
+
+				defender = {
+					state = var:FROM.defender_state_vs_@ROOT
+					num_provinces = 4
+					on_win = canterlot_ali.992
+					on_lose = canterlot_ali.993
+					on_cancel = canterlot_ali.994
+				}
+			}
+		}
+	}
+	CAL_borderwar_STA = {
+		icon = border_war
+		cost = 50
+
+		available = {
+			FROM = {
+				any_owned_state = {
+					is_controlled_by = FROM
+					any_neighbor_state = {
+						is_fully_controlled_by = ROOT
+					}
+				}
+			}
+		}
+
+		visible = {
+			has_war = no
+			STA = { exists = no }
+			has_completed_focus = CAL_crack_stable_2
+			NOT = {
+				owns_state = 735
+			}
+		}
+
+		target_root_trigger = {
+			tag = CAL
+		}
+		target_array = neighbors
+
+		target_trigger = {
+			FROM = {
+				owns_state = 735
+			}
+		}
+
+		highlight_states = {
+			highlight_states_trigger = {
+				OR = {
+					state = FROM.defender_state_vs_@ROOT
+					AND = {
+						is_owned_and_controlled_by = FROM
+						any_neighbor_state = { 
+							has_ROOT_at_least_1_div_in_current_state_scope = yes
+							is_fully_controlled_by = ROOT
+						}
+					}
+				}
+			}
+		}
+		
+		days_remove = 10
+		days_re_enable = 60
+
+		ai_will_do = {
+			base = 50
+			modifier = {
+				date > 1237.06.01
+				add = 25
+			}
+			modifier = {
+				date > 1238.01.01
+				factor = 200
+			}
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision CAL_borderwar_STA"
+			hidden_effect = {
+				FROM = {
+					random_owned_controlled_state = {
+						limit = { 
+							any_neighbor_state = {
+								has_ROOT_at_least_1_div_in_current_state_scope = yes
+								is_fully_controlled_by = ROOT
+							}
+							is_core_of = STA
+						}
+						save_event_target_as = defender_state
+						set_variable = { FROM.defender_state_vs_@ROOT = id }
+						set_temp_variable = { defender_state_temp = id }
+					}
+				}
+				random_state = {
+					limit = {
+						is_fully_controlled_by = ROOT
+						has_ROOT_at_least_1_div_in_current_state_scope = yes
+						any_neighbor_state = {
+							state = var:FROM.defender_state_vs_@ROOT
+						}
+					}
+					save_event_target_as = attacker_state
+					set_variable = { FROM.attacker_state_vs_@ROOT = id }
+					set_temp_variable = { attacker_state_temp = id }
+				}
+			}
+		}
+		remove_effect = {
+			start_border_war = {
+				change_state_after_war = no
+				attacker = {
+					state = var:FROM.attacker_state_vs_@ROOT
+					num_provinces = 4
+					on_win = canterlot_ali.991
+					on_lose = canterlot_ali.995
+					on_cancel = canterlot_ali.996
+				}
+
+				defender = {
+					state = var:FROM.defender_state_vs_@ROOT
+					num_provinces = 4
+					on_win = canterlot_ali.992
+					on_lose = canterlot_ali.993
+					on_cancel = canterlot_ali.994
+				}
+			}
+		}
+	}
+	CAL_borderwar_UNI = {
+		icon = border_war
+		cost = 50
+
+		available = {
+			FROM = {
+				any_owned_state = {
+					is_controlled_by = FROM
+					any_neighbor_state = {
+						is_fully_controlled_by = ROOT
+					}
+				}
+			}
+		}
+
+		visible = {
+			has_war = no
+			SPV = { exists = no }
+			UNI = { exists = no }
+			has_completed_focus = CAL_final_battle
+			NOT = {
+				AND = {
+					owns_state = 518
+					owns_state = 458
+					owns_state = 134
+					owns_state = 486
+					owns_state = 797
+					owns_state = 481
+				}
+			}
+		}
+
+		target_root_trigger = {
+			tag = CAL
+		}
+		target_array = neighbors
+
+		target_trigger = {
+			FROM = {
+				OR = {
+					owns_state = 518
+					owns_state = 458
+					owns_state = 134
+					owns_state = 486
+					owns_state = 797
+					owns_state = 481
+				}
+			}
+		}
+
+		highlight_states = {
+			highlight_states_trigger = {
+				OR = {
+					state = FROM.defender_state_vs_@ROOT
+					AND = {
+						is_owned_and_controlled_by = FROM
+						any_neighbor_state = { 
+							has_ROOT_at_least_1_div_in_current_state_scope = yes
+							is_fully_controlled_by = ROOT
+						}
+					}
+				}
+			}
+		}
+		
+		days_remove = 10
+		days_re_enable = 60
+
+		ai_will_do = {
+			base = 50
+			modifier = {
+				date > 1237.06.01
+				add = 25
+			}
+			modifier = {
+				date > 1238.01.01
+				factor = 200
+			}
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision CAL_borderwar_UNI"
+			hidden_effect = {
+				FROM = {
+					random_owned_controlled_state = {
+						limit = { 
+							any_neighbor_state = {
+								has_ROOT_at_least_1_div_in_current_state_scope = yes
+								is_fully_controlled_by = ROOT
+							}
+							OR = {
+								is_core_of = SPV
+								is_core_of = UNI
+							}
+						}
+						save_event_target_as = defender_state
+						set_variable = { FROM.defender_state_vs_@ROOT = id }
+						set_temp_variable = { defender_state_temp = id }
+					}
+				}
+				random_state = {
+					limit = {
+						is_fully_controlled_by = ROOT
+						has_ROOT_at_least_1_div_in_current_state_scope = yes
+						any_neighbor_state = {
+							state = var:FROM.defender_state_vs_@ROOT
+						}
+					}
+					save_event_target_as = attacker_state
+					set_variable = { FROM.attacker_state_vs_@ROOT = id }
+					set_temp_variable = { attacker_state_temp = id }
+				}
+			}
+		}
+		remove_effect = {
+			IF = { 
+				limit = {
+					NOT = { 481 = { is_owned_by = CAL } }
+				}
+				transfer_state = 481
+			}
+			start_border_war = {
+				change_state_after_war = no
+				attacker = {
+					state = var:FROM.attacker_state_vs_@ROOT
+					num_provinces = 4
+					on_win = canterlot_ali.991
+					on_lose = canterlot_ali.995
+					on_cancel = canterlot_ali.996
+				}
+
+				defender = {
+					state = var:FROM.defender_state_vs_@ROOT
+					num_provinces = 4
+					on_win = canterlot_ali.992
+					on_lose = canterlot_ali.993
+					on_cancel = canterlot_ali.994
+				}
+			}
+		}
+	}
+}
+	

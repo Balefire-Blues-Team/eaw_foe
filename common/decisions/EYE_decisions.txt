@@ -20,26 +20,28 @@ EYE_fund_bloody_army = {
 		fire_only_once = yes
 		is_good = yes
 		available = {
-			ERA = { exists = yes }
-			MWY = { exists = yes }
-			custom_trigger_tooltip = {
-				tooltip = EYE_ERA_at_least_50_war_prep_tt
-				hidden_trigger = {
-					ERA = { check_variable = { ERA_war_readiness_var > 49 } }
-				}
-			}
+			always = no
+			#ERA = { exists = yes }
+			#MWY = { exists = yes }
+			#custom_trigger_tooltip = {
+			#	tooltip = EYE_ERA_at_least_50_war_prep_tt
+			#	hidden_trigger = {
+			#		ERA = { check_variable = { ERA_war_readiness_var > 49 } }
+			#	}
+			#}
 		}
 		visible = {
-			OR = {
-				OR = {
-					has_completed_focus = EYE_bloody_army
-					has_completed_focus = EYE_bloody_army_stern
-				}
-				ERA = {
-					has_completed_focus = ERA_restart_trade_with_EYE
-				}
-			}
-			NOT = { has_country_flag = EYE_broke_ERA_alliance }
+			always = no
+			#OR = {
+			#	OR = {
+			#		has_completed_focus = EYE_bloody_army
+			#		has_completed_focus = EYE_bloody_army_stern
+			#	}
+			#	ERA = {
+			#		has_completed_focus = ERA_restart_trade_with_EYE
+			#	}
+			#}
+			#NOT = { has_country_flag = EYE_broke_ERA_alliance }
 		}
 		modifier = {
 		}
@@ -210,8 +212,8 @@ EYE_steel_rangers_cat = {
 
 		visible = {
 			country_exists = FSR
-			has_completed_focus = EYE_filly_rangers
-			has_war = no
+			has_country_flag = EYE_can_attack_FSR_flag
+			
 			NOT = {
 				owns_state = 542
 				check_variable = {
@@ -228,17 +230,25 @@ EYE_steel_rangers_cat = {
 		}
 
 		
-		days_re_enable = 60
+		days_re_enable = 50
 
 		ai_will_do = {
 			base = 50
+			modifier = {
+				owns_state = 480
+				factor = 2
+			}
 			modifier = {
 				date > 1237.06.01
 				add = 25
 			}
 			modifier = {
 				date > 1238.01.01
-				factor = 200
+				add = 200
+			}
+			modifier = {
+				has_war = yes
+				factor = 0.7
 			}
 		}
 
@@ -282,8 +292,7 @@ EYE_steel_rangers_cat = {
 
 		visible = {
 			country_exists = FSR
-			has_completed_focus = EYE_filly_rangers
-			has_war = no
+			has_country_flag = EYE_can_attack_FSR_flag
 			NOT = {
 				owns_state = 536
 				check_variable = {
@@ -299,17 +308,25 @@ EYE_steel_rangers_cat = {
 			state = 536
 		}
 
-		days_re_enable = 60
+		days_re_enable = 50
 
 		ai_will_do = {
 			base = 50
+			modifier = {
+				owns_state = 480
+				factor = 2
+			}
 			modifier = {
 				date > 1237.09.01
 				add = 25
 			}
 			modifier = {
 				date > 1238.03.01
-				factor = 200
+				add = 200
+			}
+			modifier = {
+				has_war = yes
+				factor = 0.7
 			}
 		}
 
@@ -342,6 +359,7 @@ EYE_steel_rangers_cat = {
 
 		available = {
 			has_full_control_of_state = 536
+			
 			divisions_in_state = {
 				state = 536
 				size > 0
@@ -353,8 +371,7 @@ EYE_steel_rangers_cat = {
 
 		visible = {
 			country_exists = FSR
-			has_completed_focus = EYE_filly_rangers
-			has_war = no
+			has_country_flag = EYE_can_attack_FSR_flag
 			NOT = {
 				owns_state = 538
 				check_variable = {
@@ -371,17 +388,25 @@ EYE_steel_rangers_cat = {
 		}
 
 		
-		days_re_enable = 60
+		days_re_enable = 50
 
 		ai_will_do = {
 			base = 50
+			modifier = {
+				owns_state = 480
+				factor = 2
+			}
 			modifier = {
 				date > 1238.01.01
 				add = 25
 			}
 			modifier = {
 				date > 1238.06.01
-				factor = 200
+				add = 200
+			}
+			modifier = {
+				has_war = yes
+				factor = 0.7
 			}
 		}
 
@@ -417,7 +442,7 @@ EYE_steel_rangers_cat = {
 
 		visible = {
 			country_exists = FSR
-			has_completed_focus = EYE_filly_rangers
+			has_country_flag = EYE_can_attack_FSR_flag
 		}
 
 		highlight_states = {
@@ -429,13 +454,58 @@ EYE_steel_rangers_cat = {
 		ai_will_do = {
 			base = 40
 			modifier = {
+				owns_state = 480
+				factor = 2
+			}
+			modifier = {
 				date > 1238.01.01
-				add = 20
+				add = 30
 			}
 			modifier = {
 				date > 1238.06.01
 				factor = 10
 			}
+			modifier = {
+                factor = 0.1
+                has_war = yes
+            }
+		}
+
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision EYE_attack_filly_rangers"
+			create_wargoal = {
+    			type = annex_everything
+    			target = FSR
+			}
+		}
+	}
+
+	EYE_ai_attack_filly_rangers = {
+		icon = GFX_decision_generic_ignite_civil_war
+
+		available = {
+			is_ai = yes
+			FSR = {
+				is_ai = yes	
+			}
+		}
+
+		visible = {
+			is_ai = yes
+			country_exists = FSR
+			has_country_flag = EYE_can_attack_FSR_flag
+		}
+
+		highlight_states = {
+			state = 538
+		}
+
+		cost = 150
+
+		ai_will_do = {
+			base = 70
 			modifier = {
                 factor = 0.1
                 has_war = yes
