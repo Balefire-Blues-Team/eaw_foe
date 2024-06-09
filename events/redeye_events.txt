@@ -3,6 +3,7 @@ add_namespace = redeye_stablize
 add_namespace = redeye_borderwar
 add_namespace = redeye_stabletec #Cut
 add_namespace = redeye_debug
+add_namespace = EYEspolsion
 
 ##Birth Of A Monster
 country_event = {
@@ -4958,6 +4959,130 @@ country_event = {
 				has_country_flag = EYE_WNF_extra_war_flag
 			}
 			clr_country_flag = EYE_WNF_extra_war_flag
+		}
+	}
+}
+
+###################
+### EYEsplosion ###
+###################
+
+country_event = { ### State Flag Setup
+ 	id = EYEsplosion.1
+ 	title = EYEsplosion.1.title
+ 	desc = EYEsplosion.1.desc
+ 	picture = GFX_event_test
+
+ 	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = {
+				has_war = yes
+			}
+			### Set owned states occupied by enemey state flags
+			### The Cathedral/Stable 101 is important to CAT's existance
+
+			set_global_flag = EYE_has_war_during_EYEsplosion_flag
+		}
+
+		if = {
+			limit = {
+				OR = {
+					### Owns any South Fillydelphia state
+				}
+			}
+			
+			### Set state flags on owned South Filly states
+		}
+
+		if = {
+			limit = {
+				OR = {
+					### Owns any Sunnyshore state
+				}
+			}
+
+			### Set state flags on owned Sunnyshore states
+		}
+
+		if = {
+			limit = {
+				OR = {
+					### Owns any Foal Mountains state
+				}
+			}
+
+			### Set state flags on owned Foal Mountains states
+		}
+
+		if = {
+			limit = {
+				OR = {
+					### Owns any Eastlands state
+				}
+			}
+
+			### Set state flags on owned Eastlands states
+		}
+	}
+
+ 	option = {
+		name = EYEsplosion.1.a
+		ai_chance = { factor = 50}
+		
+		country_event = EYEsplosion.2
+	}
+}
+
+country_event = { ### Testing Event
+ 	id = EYEsplosion.2
+ 	title = EYEsplosion.2.title
+ 	desc = EYEsplosion.2.desc
+ 	picture = GFX_event_test
+
+ 	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	immediate = {
+		### White peace everyone at war with EYE
+		
+	}
+
+ 	option = {
+		name = EYEsplosion.2.a
+		ai_chance = { factor = 50}
+
+		if = {
+			limit = {
+				EYE_has_war_during_EYEsplosion = yes
+				593 = {
+					NOT = {
+						### Has occupied state flag
+					}
+				}
+			}
+
+
+		}
+		
+		CAT = { # Children of the Cathedral
+			add_state_core = 593
+			add_state_core = 513
+			add_state_core = 505
+			add_state_core = 492
+			add_state_core = 533
+
+			transfer_state = 593
+			transfer_state = 513
+			transfer_state = 505
+			transfer_state = 492
+			transfer_state = 533
+			
+			transfer_technology = yes
 		}
 	}
 }
