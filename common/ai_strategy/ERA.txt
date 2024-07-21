@@ -1,22 +1,24 @@
 ERA_be_nice_to_EYE = { 
-	enable = {
-		original_tag = ERA
+	allowed = {
+		tag = ERA
 	}
+	enable = { always = yes }
 	abort = {
 		has_country_flag = ERA_bloody_attack_betrayal
 	}
 
 	ai_strategy = {
 		type = befriend
-		id = ERA
-		value = 50
+		id = EYE
+		value = 5000
 	}
 }
 
 ERA_scripted_war_with_MWY = { 
-	enable = {
-		original_tag = ERA
+	allowed = {
+		tag = ERA
 	}
+	enable = { always = yes }
 	abort = {
 		has_country_flag = bloody_attack
 	}
@@ -26,18 +28,202 @@ ERA_scripted_war_with_MWY = {
 		id = MWY
 		value = -500
 	}
+
+	ai_strategy = {
+		type = invade
+		id = MWY
+		value = -500
+	}
+
+	ai_strategy = {
+		type = ignore_claim
+		id = MWY
+		value = 1
+	}
+}
+
+ERA_defend_against_MWY = {
+	allowed = {
+		original_tag = ERA
+	}
+	enable = { always = yes }
+	abort = {
+		MWY = { exists = no }
+	}
+	ai_strategy = {
+		type = prepare_for_war
+		id = MWY
+		value = 10
+	}
+}
+
+ERE_prepare_MWY_border_war = {
+	allowed = {
+		original_tag = ERA
+	}
+	enable = {
+		OR = {
+			focus_progress = {
+    			focus = ERA_shatterhorn_raid
+    			progress > 0.01
+			}
+		}
+	}
+	abort = {
+		OR = {
+			has_completed_focus = ERA_shatterhorn_try_try_again
+			has_completed_focus = ERA_shatterhorn_won_raid
+		}
+	}
+
+	ai_strategy = {
+		type = prepare_for_war
+		id = MWY
+		value = 100
+	}
+}
+
+ERE_prepare_MWY_main_war = {
+	allowed = {
+		original_tag = ERA
+	}
+	enable = {
+		OR = {
+			focus_progress = {
+    			focus = ERA_attack_MWY
+    			progress > 0.01
+			}
+		}
+	}
+	abort = {
+		has_war_with = MWY
+	}
+
+	ai_strategy = {
+		type = prepare_for_war
+		id = MWY
+		value = 100
+	}
+}
+
+ERE_prepare_MWY_main_war = { 
+	allowed = {
+		original_tag = ERA
+	}
+	enable = {
+		OR = {
+			focus_progress = {
+    			focus = ERA_break_the_guilds
+    			progress > 0.01
+			}
+		}
+	}
+	abort = {
+		has_war_with = NCG
+	}
+
+	ai_strategy = {
+		type = prepare_for_war
+		id = NCG
+		value = 100
+	}
 }
 
 ERA_bloody_attack_MWY = { 
-	enable = {
+	allowed = {
 		original_tag = ERA
+	}
+	enable = {
 		has_country_flag = bloody_attack
+	}
+	abort = {
+		MWY = { exists = no }
 	}
 
 	ai_strategy = {
 		type = declare_war
 		id = MWY
 		value = 500
+	}
+}
+
+ERA_no_white_peace_mwy = { 
+	allowed = {
+		original_tag = ERA
+	}
+	enable = {
+		has_war_with = MWY
+	}
+	abort = { always = no }
+
+	ai_strategy = {
+		type = diplo_action_acceptance
+		id = MWY
+		value = -500
+		target = peace_proposal
+	}
+	ai_strategy = {
+		type = diplo_action_desire
+		id = MWY
+		value = -500
+		target = peace_proposal
+	}
+}
+
+ERE_MWY_prepare_against_cauterize = { 
+	enable = {
+		OR = {
+			tag = ERA
+			tag = MWY
+		}
+		is_neighbor_of = NEV
+		NEV = {
+			focus_progress = {
+    			focus = NEV_des_launch_cauterize
+    			progress > 0.01
+			}
+		}
+	}
+	abort = {
+		has_war_with = NEV
+	}
+
+	ai_strategy = {
+		type = prepare_for_war
+		id = NEV
+		value = 30
+	}
+}
+
+ERA_unit_production = {
+	allowed = {
+		tag = ERA
+	}
+	enable = { always = yes }
+	abort = { always = no }
+
+	ai_strategy = {
+		type = template_prio
+		id = bloodyinfantry
+		value = 60
+	}
+
+	ai_strategy = {
+		type = role_ratio
+		id = mountaineers
+		value = 20
+	}
+	
+	ai_strategy = {
+		type = role_ratio
+		id = talons
+		value = 10
+	}
+
+	ai_strategy = {
+		type = role_ratio
+		id = mechanized
+		value = 5
 	}
 }
 

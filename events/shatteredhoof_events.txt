@@ -265,18 +265,22 @@ country_event = {
  	fire_only_once = no
 
 	option = {
-	ai_chance = { factor = 10 }
+	ai_chance = { factor = 80 }
 		name = shatteredhoof.8.a
 		SHA = { add_to_faction = ROOT }
 		hidden_effect = { SHA = { add_ai_strategy = { type = alliance id = "ROOT" value = 200} add_opinion_modifier = { target = ROOT modifier = huge_increase } } }
 		hidden_effect = { ROOT = { add_ai_strategy = { type = alliance id = "SHA" value = 200} add_opinion_modifier = { target = SHA modifier = huge_increase } } }
-
 	}
 	
 	option = {
-	ai_chance = { factor = 0 }
+	ai_chance = { factor = 20 }
 		name = shatteredhoof.8.b
-		
+		SHA = {
+			declare_war_on = {
+				target = ROOT
+				type = puppet_wargoal_focus
+			}
+		}
 	}
 		
 }
@@ -380,7 +384,6 @@ country_event = {
 		hidden_effect = { 
 			set_country_flag = NCR_tree_chosen
 			load_focus_tree = ncr_focus 
-			retire_character = SHA_char_deadeyes
 		}
 	}
 	
@@ -573,6 +576,7 @@ country_event = {
 		name = shatteredhoof_ncr.2.a
 		set_cosmetic_tag = NCR_cosmetic
 		set_province_name = { id = 4308 name = SHA_NCanterlot }
+		set_global_flag = SHA_NCR_formed_flag
 		every_country = {
 			limit = { has_country_flag = agreed_to_join_ncr_flag }
 			if = {
@@ -602,10 +606,10 @@ country_event = {
 			RAF = { RAF_char_iron_hoof = { set_nationality = SHA } }
 		}
 		hidden_effect = {
+			recruit_character = SHA_char_nero
 		set_country_flag = SHA_add_char_nero_flag
 		}
 		hidden_effect = {
-			
 			808 = { 
 				set_state_name = SHA_NCanterlot
 			}
@@ -635,15 +639,20 @@ country_event = {
 
 	trigger = { 
 		is_ai = yes 
+		tag = SHA
 		has_war_with = NEV
 	}
  	fire_only_once = yes
 
 	option = {
-	ai_chance = { factor = 10 }
+		ai_chance = { factor = 20 }
 		name = shatteredhoof_ncr.3.a
 		add_manpower = 4000
 		add_equipment_to_stockpile = { type = ballistic_equipment_3 amount = 4000 producer = OWE }
+	}
+	option = {
+		ai_chance = { factor = 80 }
+		name = shatteredhoof_ncr.3.b
 	}
 	
 }
