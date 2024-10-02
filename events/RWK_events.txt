@@ -1404,13 +1404,7 @@ country_event = {
 	desc = rustwreck.43.d
    	picture = GFX_report_event_merchant_ship_01
 
-   	trigger = {
-		tag = RWK
-		has_completed_focus = RWK_raid_jungle_slaves
-	}
-	mean_time_to_happen = {
-		days = 300
-	}
+   	is_triggered_only = yes
 	fire_only_once = yes
 	
   	option = { #Direct investments
@@ -1460,3 +1454,143 @@ country_event = {
    	}
 }
 
+#Rustwreck demands our surrender
+country_event = {
+	id = rustwreck.44
+	title = rustwreck.44.t
+	desc = rustwreck.44.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #We'll never submit!
+	   	name = rustwreck.44.a 
+	   	ai_chance = { factor = 60 }
+		RWK = {
+			country_event = rustwreck.45
+		}
+   	}
+
+	option = { #Let's avoid Bloodshed
+	   name = rustwreck.44.b 
+	   ai_chance = { factor = 40 }
+	   	RWK = {
+			country_event = rustwreck.46
+		}
+   	}
+}
+
+#Stajniopolis refuses surrender
+country_event = {
+	id = rustwreck.45
+	title = rustwreck.45.t
+	desc = rustwreck.45.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #Then they shall die
+	   	name = rustwreck.45.a 
+	   	ai_chance = { factor = 60 }
+		add_state_claim = 790
+		STT = {
+			RWK = {grant_wargoals_on_core_states_of_prev = yes}
+		}
+   	}
+}
+
+#Stajniopolis refuses surrender
+country_event = {
+	id = rustwreck.46
+	title = rustwreck.46.t
+	desc = rustwreck.46.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #Then they shall die
+	   	name = rustwreck.46.a 
+	   	ai_chance = { factor = 60 }
+		annex_country = {
+			target = STT
+		}
+		790 = { add_compliance = 60 }
+   	}
+}
+
+
+#Borderwar Second - WIN
+country_event = {
+	id = rustwreck.47
+	title = rustwreck.47.t
+	desc = rustwreck.47.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #Yay
+	   	name = rustwreck.47.a 
+	   	ai_chance = { factor = 50 }
+		every_state = {
+			limit = {
+				has_state_flag = RWK_borderwar_target
+			}
+			transfer_state_to = RWK
+			clr_state_flag = RWK_borderwar_target
+		}
+   	}
+}
+
+#Borderwar Second - LOSE
+country_event = {
+	id = rustwreck.48
+	title = rustwreck.48.t
+	desc = rustwreck.48.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #damn
+	   	name = rustwreck.48.a 
+	   	ai_chance = { factor = 50 }
+		87 = {
+			damage_building = {
+				type = infrastructure
+				damage = 4
+			}
+		}
+		every_state = {
+			limit = {
+				has_state_flag = RWK_borderwar_target
+			}
+			clr_state_flag = RWK_borderwar_target
+		}
+   	}
+}
+
+#Borderwar Second - Tie
+country_event = {
+	id = rustwreck.49
+	title = rustwreck.49.t
+	desc = rustwreck.49.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #damn
+	   	name = rustwreck.49.a 
+	   	ai_chance = { factor = 50 }
+		   every_state = {
+			limit = {
+				has_state_flag = RWK_borderwar_target
+			}
+			clr_state_flag = RWK_borderwar_target
+		}
+   	}
+}
