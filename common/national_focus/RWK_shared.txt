@@ -4548,7 +4548,16 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_liberators_by_another_name"
-		
+		every_owned_state = {
+			limit = {
+				NOT = { is_core_of = RWK }
+			}
+			add_compliance = 0.20
+		}
+		swap_ideas = {
+			remove_idea = RWK_serve_as_one_2_idea
+			add_idea = RWK_serve_as_one_3_idea
+		}
 	}
 }
 
@@ -4564,13 +4573,30 @@ shared_focus = {
 	prerequisite = {
 		focus = RWK_strong_bodies_strong_minds
 	}
+	available = {
+		has_completed_focus = RWK_bloody_lessons
+	}
 	ai_will_do = { 
 	factor = 30
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_hook_line_sinker"
-		
+		IF = {
+			limit = {
+				has_idea = RWK_lesson_beat_tide_idea
+			}
+			swap_ideas = {
+				remove_idea = RWK_lesson_beat_tide_idea
+				add_idea = RWK_lesson_join_tide_2_idea
+			}
+		}
+		ELSE = {
+			swap_ideas = {
+				remove_idea = RWK_lesson_join_tide_idea
+				add_idea = RWK_lesson_join_tide_2_idea
+			}
+		}
 	}
 }
 
@@ -4595,7 +4621,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_all_comforts_from_faith"
-		
+		add_ideas = RWK_church_provides_idea
 	}
 }
 
@@ -4680,7 +4706,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_enshrine_the_clergy"
-		
+		swap_ideas = {
+			remove_idea = wasteland_society2
+			add_idea = cultlike_society
+		}
 	}
 }
 
@@ -4696,13 +4725,22 @@ shared_focus = {
 	prerequisite = {
 		focus = RWK_only_one_may_reign
 	}
+	available = {
+		has_war = yes
+		NOT = {
+			owns_state = 532
+		}
+	}
 	ai_will_do = { 
 	factor = 300
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_against_all_odds"
-		
+		add_timed_idea = {
+			idea = RWK_crush_the_evil_idea
+			days = 100
+		}
 	}
 }
 
@@ -4724,7 +4762,48 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_pull_raider_strings"
-		
+		custom_effect_tooltip = RWK_raider_converts_tt
+		division_template = {
+			name = "Raider Converts"
+			priority = 1
+			is_locked = no
+			regiments = {
+			infantry = { x = 0 y = 0 }
+			infantry = { x = 0 y = 1 }
+			infantry = { x = 0 y = 2 }
+			infantry = { x = 0 y = 3 }
+			militia = { x = 0 y = 4 }
+			militia = { x = 1 y = 0 }
+			militia = { x = 1 y = 1 }
+			militia = { x = 1 y = 2 }
+			}
+		}
+		49 = {
+			create_unit = {
+				division = "name = \"Raider Converts\" division_template = \"Raider Converts\" start_experience_factor = 0.5" 
+				owner = RWK
+			}
+			create_unit = {
+				division = "name = \"Raider Converts\" division_template = \"Raider Converts\" start_experience_factor = 0.5" 
+				owner = RWK
+			}
+		}
+		461 = {
+			create_unit = {
+				division = "name = \"Raider Converts\" division_template = \"Raider Converts\" start_experience_factor = 0.5" 
+				owner = RWK
+			}
+			create_unit = {
+				division = "name = \"Raider Converts\" division_template = \"Raider Converts\" start_experience_factor = 0.5" 
+				owner = RWK
+			}
+		}
+		58 = {
+			create_unit = {
+				division = "name = \"Raider Converts\" division_template = \"Raider Converts\" start_experience_factor = 0.5" 
+				owner = RWK
+			}
+		}
 	}
 }
 
@@ -4746,7 +4825,21 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_arms_collection"
-		
+		add_equipment_to_stockpile = {
+			type = melee_equipment_2
+			amount = 159
+			producer = OWE
+		}
+		add_equipment_to_stockpile = {
+			type = infantry_equipment_1
+			amount = 336
+			producer = OWE
+		}
+		add_equipment_to_stockpile = {
+			type = ballistic_equipment_1
+			amount = 270
+			producer = OWE
+		}
 	}
 }
 
@@ -4761,6 +4854,19 @@ shared_focus = {
 	relative_position_id = RWK_choose_a_successor
 	prerequisite = {
 		focus = RWK_break_mudburg
+	}
+	available = {
+		OR = {
+			WNF = {
+				exists = yes
+			}
+			FTR = {
+				exists = yes
+			}
+		}
+	}
+	bypass = {
+		owns_state = 479
 	}
 	ai_will_do = { 
 	factor = 300
@@ -4794,13 +4900,26 @@ shared_focus = {
 		focus = RWK_pull_raider_strings
 		focus = RWK_arms_collection
 	}
+	available = {
+		owns_state = 538
+		owns_state = 532
+	}
 	ai_will_do = { 
 	factor = 3000
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_queen_takes_king"
-		
+		country_event = rustwreck.52
+		538 = { add_compliance = 25 }
+		45 = { add_compliance = 25 set_state_name = "Anchorpoint"}
+		48 = { add_compliance = 25 set_state_name = "North End"}
+		536 = { add_compliance = 25 }
+		532 = { add_compliance = 25 set_state_name = "Tidal Heart"}
+		set_province_name = {
+			id = 6474
+			name = "Triumph Avenue"
+		}
 	}
 }
 
@@ -4822,7 +4941,17 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_wars_of_ablation"
-		
+		every_neighbor_country = {
+			limit = {
+				OR = {
+					has_government = destruction
+					has_idea = raider_society
+				}
+			}
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 }
 
