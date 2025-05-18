@@ -23,6 +23,16 @@ country_event = {
 			leave_faction = yes
 		}
 		HIT = { add_to_faction = CCD }
+		add_opinion_modifier = {
+			target = HIT
+			modifier = huge_increase
+		}
+		reverse_add_opinion_modifier = {
+			target = HIT
+			modifier = huge_increase
+		}
+		hidden_effect = { HIT = { add_ai_strategy = { type = alliance id = "ROOT" value = 200} } }
+		hidden_effect = { ROOT = { add_ai_strategy = { type = alliance id = "HIT" value = 200} } }
 	}
 	
 	option = {
@@ -123,12 +133,14 @@ country_event = {
 			}
 		add_ideas = GRV_electric_marvel3
 		one_random_industrial_complex = yes
+		GRV = { country_event = GRV_event.8 }
 	}
 	
 	option = {
 		name = GRV_event.3.b
 		ai_chance = { factor = 70 }
 		GRV = {create_wargoal = { type = annex_everything target = HIT }}
+		GRV = { country_event = GRV_event.9 }
 	}
 	
 }
@@ -167,12 +179,14 @@ country_event = {
 			add_resource = { type = energy amount = 10 }
 			add_resource = { type = crystals amount = 6 }
 		}
+		GRV = { country_event = GRV_event.8 }
 	}
 	
 	option = {
 		name = GRV_event.4.b
 		ai_chance = { factor = 20 }
 		GRV = {create_wargoal = { type = annex_everything target = CCD }}
+		GRV = { country_event = GRV_event.9 }
 	}
 	
 }
@@ -211,12 +225,14 @@ country_event = {
 			add_resource = { type = energy amount = 8 }
 			add_resource = { type = crystals amount = 6 }
 		}
+		GRV = { country_event = GRV_event.8 }
 	}
 	
 	option = {
 		name = GRV_event.5.b
 		ai_chance = { factor = 30 }
 		GRV = {create_wargoal = { type = annex_everything target = FTP }}
+		GRV = { country_event = GRV_event.9 }
 	}
 	
 }
@@ -255,12 +271,14 @@ country_event = {
 			add_resource = { type = energy amount = 8 }
 		}
 		one_random_industrial_complex = yes
+		GRV = { country_event = GRV_event.8 }
 	}
 	
 	option = {
 		name = GRV_event.6.b
 		ai_chance = { factor = 50 }
 		GRV = {create_wargoal = { type = annex_everything target = FTR }}
+		GRV = { country_event = GRV_event.9 }
 	}
 	
 }
@@ -299,14 +317,50 @@ country_event = {
 			add_resource = { type = energy amount = 8 }
 			add_resource = { type = water amount = 8 }
 		}
+		GRV = { country_event = GRV_event.8 }
 	}
 	
 	option = {
 		name = GRV_event.7.b
 		ai_chance = { factor = 50 }
 		GRV = {create_wargoal = { type = annex_everything target = WNF }}
+		GRV = { country_event = GRV_event.9 }
 	}
 	
+}
+
+#PREV Accepts Offer
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event GRV_event.8"}
+ 	id = GRV_event.8
+ 	title = GRV_event.8.t
+ 	desc = GRV_event.8.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = GRV_event.8.a
+		ai_chance = { factor = 20 }
+		
+	}
+}
+
+#PREV Rejects Offer
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event GRV_event.9"}
+ 	id = GRV_event.9
+ 	title = GRV_event.9.t
+ 	desc = GRV_event.9.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = GRV_event.9.a
+		ai_chance = { factor = 20 }
+		
+	}
 }
 
 #Friendship for CCD
@@ -335,6 +389,7 @@ country_event = {
 			FTP = { add_to_faction = CCD }
 			hidden_effect = { FTP = { add_ai_strategy = { type = alliance id = "ROOT" value = 200} add_opinion_modifier = { target = ROOT modifier = huge_increase } } }
 			hidden_effect = { ROOT = { add_ai_strategy = { type = alliance id = "FTP" value = 200} add_opinion_modifier = { target = FTP modifier = huge_increase } }
+			country_event = FTP_event.4
 		}
 		else_if = {
 			limit = {
@@ -343,6 +398,7 @@ country_event = {
 			FTR = { add_to_faction = CCD }
 			hidden_effect = { FTR = { add_ai_strategy = { type = alliance id = "ROOT" value = 200} add_opinion_modifier = { target = ROOT modifier = huge_increase } } }
 			hidden_effect = { ROOT = { add_ai_strategy = { type = alliance id = "FTR" value = 200} add_opinion_modifier = { target = FTR modifier = huge_increase } } }
+			country_event = FTP_event.4
 		}
 		}
 	}
@@ -379,7 +435,7 @@ country_event = {
 	
 	option = {
 		name = FTP_event.2.a
-		ai_chance = { factor = 50 
+		ai_chance = { factor = 70 
 			modifier = {
 				factor = 0
 				tag = WNF
@@ -398,7 +454,7 @@ country_event = {
 			FTP = { add_to_faction = ROOT }
 			hidden_effect = { FTP = { add_ai_strategy = { type = alliance id = "ROOT" value = 200} add_opinion_modifier = { target = ROOT modifier = huge_increase } } }
 			hidden_effect = { ROOT = { add_ai_strategy = { type = alliance id = "FTP" value = 200} add_opinion_modifier = { target = FTP modifier = huge_increase } } }
-
+			country_event = FTP_event.5
 		}
 		else_if = {
 			limit = {
@@ -407,24 +463,26 @@ country_event = {
 			FTR = { add_to_faction = ROOT }
 			hidden_effect = { FTR = { add_ai_strategy = { type = alliance id = "ROOT" value = 200} add_opinion_modifier = { target = ROOT modifier = huge_increase } } }
 			hidden_effect = { ROOT = { add_ai_strategy = { type = alliance id = "FTR" value = 200} add_opinion_modifier = { target = FTR modifier = huge_increase } } }
-
+			country_event = FTP_event.5
 		}
 	}
 	
 	option = {
 		name = FTP_event.2.b
-		ai_chance = { factor = 50 }
+		ai_chance = { factor = 30 }
 		if = {
 			limit = {
 				FTP = { exists = yes }
 			}
 			FTP = {create_wargoal = { type = annex_everything target = ROOT }}
+			country_event = FTP_event.6
 		}
 		else_if = {
 			limit = {
 				FTR = { exists = yes }
 			}
 			FTR = {create_wargoal = { type = annex_everything target = ROOT }}
+			country_event = FTP_event.6
 		}
 	}
 	
@@ -448,26 +506,34 @@ country_event = {
 				FTP = { exists = yes }
 			}
 			FTP = { puppet = ROOT }
-
+			country_event = FTP_event.5
 		}
 		else_if = {
 			limit = {
 				FTR = { exists = yes }
 			}
 			FTR = { puppet = ROOT }
-			
+			country_event = FTP_event.5
 		}
 	}
 	
 	option = {
 		name = FTP_event.3.b
-		ai_chance = { factor = 30 }
+		ai_chance = { factor = 30 
+			modifier = {
+				factor = 0
+				OR = {
+					is_subject_of = FTP
+					is_subject_of = FTR
+				}
+			}}
 		if = {
 			limit = {
 				FTP = { exists = yes }
 			}
 			leave_faction = yes
 			FTP = {create_wargoal = { type = annex_everything target = ROOT }}
+			country_event = FTP_event.6
 		}
 		else_if = {
 			limit = {
@@ -475,9 +541,58 @@ country_event = {
 			}
 			leave_faction = yes
 			FTR = {create_wargoal = { type = annex_everything target = ROOT }}
+			country_event = FTP_event.6
 		}
 	}
 	
+}
+
+#CCD agrees to old alliance
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event FTP_event.4"}
+ 	id = FTP_event.4
+ 	title = FTP_event.4.t
+ 	desc = FTP_event.4.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = FTP_event.4.a
+		ai_chance = { factor = 20 }
+	}
+}
+
+#FTP Generic agree
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event FTP_event.5"}
+ 	id = FTP_event.5
+ 	title = FTP_event.5.t
+ 	desc = FTP_event.5.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = FTP_event.5.a
+		ai_chance = { factor = 20 }
+	}
+}
+
+#FTP generic refuse
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event FTP_event.6"}
+ 	id = FTP_event.6
+ 	title = FTP_event.6.t
+ 	desc = FTP_event.6.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = FTP_event.6.a
+		ai_chance = { factor = 20 }
+	}
 }
 
 
