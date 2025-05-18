@@ -15,18 +15,13 @@ focus_tree = {
 		cost = 1.00
 		x = 12
 		y = 0
-			completion_reward = {
-				country_event = {
-					id = unity_start.1
-				}
-				set_variable = {
-					var = alicorn_specialization
-					value = 0
-				}
-				hidden_effect = {
-					set_country_flag = robot_doctrine_ai
-				}
+		available_if_capitulated = yes
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus unity_start_1"
+			country_event = {
+				id = UNI_start.1
 			}
+		}
 	}
 	focus = {
 		id = unity_start_2
@@ -38,11 +33,12 @@ focus_tree = {
 		x = 0
 		y = 1
 		relative_position_id = unity_start_1
-			completion_reward = {
-				country_event = {
-					id = unity_start.2
-				}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus unity_start_2"
+			country_event = {
+				id = UNI_start.2
 			}
+		}
 
 	}
 	focus = {
@@ -103,23 +99,12 @@ focus_tree = {
 		x = 0
 		y = 1
 		relative_position_id = unity_start_2
-			completion_reward = {
-					if = {
-							limit = {
-									has_global_flag = debug_logs
-								}
-							log = "[GetDateText]: [Root.GetName] wasteland_unity entered"
-						}
-					country_event = {
-							id = unity_start.3
-						}
-					if = {
-							limit = {
-									has_global_flag = debug_logs
-								}
-							log = "[GetDateText]: [Root.GetName] wasteland_unity exited"
-						}
-				}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus unity_start_3"
+			country_event = {
+				id = UNI_start.3
+			}
+		}
 
 	}
 	focus = {
@@ -132,23 +117,12 @@ focus_tree = {
 		x = 0
 		y = 1
 		relative_position_id = unity_start_3
-			completion_reward = {
-					if = {
-							limit = {
-									has_global_flag = debug_logs
-								}
-							log = "[GetDateText]: [Root.GetName] face_off entered"
-						}
-					country_event = {
-							id = unity_start.4
-						}
-					if = {
-							limit = {
-									has_global_flag = debug_logs
-								}
-							log = "[GetDateText]: [Root.GetName] face_off exited"
-						}
-				}
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus unity_start_4"
+			country_event = {
+				id = UNI_start.4
+			}
+		}
 
 	}
 	focus = {
@@ -168,9 +142,28 @@ focus_tree = {
 				}
 			}
 			completion_reward = {
+			log = "[GetDateText]: [Root.GetName]: Focus goddess_1"
 					set_rule = {
 							can_send_volunteers = yes
 						}
+					activate_advisor = UNI_goddess
+					hidden_effect = {
+						set_can_be_fired_in_advisor_role = {
+							character = UNI_goddess
+							value = no
+						}
+						UNI_char_goddess = {
+							add_field_marshal_role = {
+								skill = 6
+								traits = { charismatic_trait lucky_trait alicorn_commander }
+								attack_skill = 4
+								defense_skill = 2
+								planning_skill = 5
+								logistics_skill = 2
+							}
+						}
+					}
+					custom_effect_tooltip = UNI_goddess_1_tt
 				}
 
 	}
@@ -195,7 +188,18 @@ focus_tree = {
 					factor = 1
 				}
 			completion_reward = {
+				if = {
+					limit = {
+					UNI = {
+						has_country_flag = uni_preachers
+					}
+					}
+					add_ideas = UNI_willing_worker_idea
+				}
+				else = {
 					add_ideas = UNI_slave_idea
+				}
+				custom_effect_tooltip = UNI_preacher_change_tt
 				}
 	}
 	focus = {
@@ -231,12 +235,29 @@ focus_tree = {
 	}
 	focus = {
 		id = goddess_canon_reach_out_to_filly
+		immediate = {log = "[GetDateText]: [Root.GetName]: focus goddess_canon_reach_out_to_filly"}
 		icon = GFX_goal_redeye
 		cost = 5.00
 		prerequisite = {
 			focus = goddess_shared_1
 		}
-		allow_branch = {NOT = {has_country_flag = UNI_slaver_tree_flag}}
+		available = {
+			EYE = {
+				has_completed_focus = EYE_crackdown
+			}
+		}
+		bypass = {
+			OR = {
+				EYE = {
+					NOT = {
+						owns_state = 532
+					}
+				}
+				NOT = {
+					country_exists = EYE
+				}
+			}
+		}
 		x = 12
 		y = 7
 			ai_will_do = {
@@ -246,27 +267,8 @@ focus_tree = {
 							factor = 100
 						}
 				}
-		bypass = {
-		EYE = {
-			EYE_char_red_eye = { is_country_leader = no }
-		}
-			}
 			completion_reward = {
-					if = {
-							limit = {
-									has_global_flag = debug_logs
-								}
-							log = "[GetDateText]: [Root.GetName] face_off entered"
-						}
-					country_event = {
-							id = goddess_redeye.1
-						}
-					if = {
-							limit = {
-									has_global_flag = debug_logs
-								}
-							log = "[GetDateText]: [Root.GetName] face_off exited"
-						}
+					country_event = UNI_filly.1
 				}
 	}
 	focus = {
@@ -348,14 +350,35 @@ focus_tree = {
 		x = -3
 		y = 2
 		relative_position_id = goddess_canon_reach_out_to_filly
-		bypass = {
-		EYE = {
-			EYE_char_red_eye = { is_country_leader = no }
-		}
-			}
 		completion_reward = {
-			add_offsite_building = { type = arms_factory level = 1 }
+			custom_effect_tooltip = UNI_EYE_alliance_tt
+			if = {
+				limit = {
+					has_country_flag = unlock_UNI_eye_decisions_flag
+					EYE = {
+						has_country_leader = {
+						character = EYE_char_red_eye
+						ruling_only = yes
+						}
+					}
+				}
+			add_offsite_building = { type = arms_factory level = 2 }
 			custom_effect_tooltip = UNI_EYE_unlock_industry_tt
+			}
+			else = {
+				518 = {
+					add_building_construction = {
+						type = arms_factory 
+						level = 1
+						instant_build = yes
+					}
+				}
+				add_tech_bonus = {
+					bonus = 0.25
+					uses = 2
+					category = industry
+				}
+			}
 		}
 
 	}
@@ -373,24 +396,45 @@ focus_tree = {
 		x = -3
 		y = 3
 		relative_position_id = goddess_canon_reach_out_to_filly
-		bypass = {
-		EYE = {
-			EYE_char_red_eye = { is_country_leader = no }
-		}
-			}
 		completion_reward = {
+			custom_effect_tooltip = UNI_EYE_alliance_tt
+			if = {
+				limit = {
+					has_country_flag = unlock_UNI_eye_decisions_flag
+					EYE = {
+						has_country_leader = {
+						character = EYE_char_red_eye
+						ruling_only = yes
+						}
+					}
+				}
+			custom_effect_tooltip = UNI_EYE_send_alicorns_tt
+				hidden_effect = {
+					EYE = {
+						country_event = UNI_filly.7
+					}
+				}
 			add_research_slot = 1
-			EYE = {
+			}
+			else = {
 				add_tech_bonus = {
-				name = race_tech
-				bonus = 0.8
-				uses = 2
-				category = race_tech
+					bonus = 0.25
+					uses = 2
+					category = electronics
+				}
+				add_tech_bonus = {
+					bonus = 0.25
+					uses = 2 
+					category = race_tech
+				}
+				add_tech_bonus = {
+					bonus = 0.25
+					uses = 2 
+					category = magical_tech
 				}
 			}
 		}
-
-	}
+		}
 	
 	focus = {
 		id = goddess_canon_interventionism
@@ -405,31 +449,54 @@ focus_tree = {
 		x = -3
 		y = 4
 		relative_position_id = goddess_canon_reach_out_to_filly
-		bypass = {
-		EYE = {
-			EYE_char_red_eye = { is_country_leader = no }
-		}
-			}
 		completion_reward = {
-			army_experience = 15
+			custom_effect_tooltip = UNI_EYE_alliance_tt
+			if = {
+				limit = {
+					has_country_flag = unlock_UNI_eye_decisions_flag
+					EYE = {
+						has_country_leader = {
+						character = EYE_char_red_eye
+						ruling_only = yes
+						}
+					}
+				}
 			custom_effect_tooltip = UNI_increase_trust_EYE_tt
-			custom_effect_tooltip = UNI_increase_infl_EYE_tt
 			hidden_effect = {
 				add_to_variable = {
 					var = UNI_EYE_trust
-					value = 2
+					value = 1
 				}
-
 				add_to_variable = {
 					var = UNI_EYE_infl
-					value = 2
+					value = 1
 				}
 			}
+			custom_effect_tooltip = UNI_increase_infl_EYE_tt
+			army_experience = 30
+			add_doctrine_cost_reduction = {
+				cost_reduction = 0.5
+				uses = 1
+				category = land_doctrine
+			}
 			EYE = {
+				army_experience = 30
+				add_doctrine_cost_reduction = {
+					cost_reduction = 0.5
+					uses = 1
+					category = land_doctrine
+				}
+			}
+			}
+			else = {
 				army_experience = 15
+				add_doctrine_cost_reduction = {
+					cost_reduction = 0.25
+					uses = 1
+					category = land_doctrine
+				}
 			}
 		}
-
 	}
 	
 	focus = {
@@ -439,21 +506,45 @@ focus_tree = {
 		prerequisite = {
 			focus = goddess_canon_interventionism
 		}
+		bypass = {
+			NOT = {
+				country_exists = EYE
+			}
+		}
 		ai_will_do = {
 			factor = 20
 		}
 		x = -3
 		y = 5
 		relative_position_id = goddess_canon_reach_out_to_filly
-		bypass = {
-		EYE = {
-			EYE_char_red_eye = { is_country_leader = no }
-		}
-			}
 		completion_reward = {
-			country_event = {
-					id = goddess_redeye.2005
+			custom_effect_tooltip = UNI_EYE_alliance_tt
+			if = {
+				limit = {
+					has_country_flag = unlock_UNI_eye_decisions_flag
+					EYE = {
+						has_country_leader = {
+						character = EYE_char_red_eye
+						ruling_only = yes
+						}
+					}
 				}
+			custom_effect_tooltip = UNI_increase_trust_EYE_tt
+			hidden_effect = {
+				add_to_variable = {
+					var = UNI_EYE_trust
+					value = 1
+				}
+				add_to_variable = {
+					var = UNI_EYE_infl
+					value = 1
+				}
+			}
+			custom_effect_tooltip = UNI_increase_infl_EYE_tt
+			}
+			else = {
+				add_ideas = UNI_EYE_prepare_for_war
+			}
 		}
 
 	}
@@ -472,6 +563,12 @@ focus_tree = {
                         UNI_EYE_trust > 10
                     }
             }
+			EYE = {
+				has_country_leader = {
+				character = EYE_char_red_eye
+				ruling_only = yes
+				}
+			}
 		}
 		ai_will_do = {
 			factor = 20
@@ -488,7 +585,7 @@ focus_tree = {
 			add_manpower = 400
 		}
 
-	}
+		}
 	
 	focus = {
 		id = goddess_canon_OAP_trade
@@ -634,6 +731,11 @@ focus_tree = {
 		prerequisite = {
 			focus = goddess_canon_seize_hope
 		}
+		available = {
+			UNI = {
+				controls_state = 507
+			}
+		}
 		ai_will_do = {
 			factor = 20
 		}
@@ -643,9 +745,47 @@ focus_tree = {
 		
 		
 		completion_reward = {
-			swap_ideas = { remove_idea = UNI_army_weakness add_idea = UNI_army_weakness2}
+			custom_effect_tooltip = UNI_preacher_change_tt
+			if = {
+				limit = {
+					UNI = {
+						has_country_flag = uni_preachers
+					}
+				}
+				507 = {
+					add_compliance = 30
+					add_resistance_target = -30
+					add_manpower = -100
+				}
+				add_manpower = 100
+				add_equipment_to_stockpile = {
+					type = alicorn_equipment_0
+					amount = 100
+					producer = UNI
+				}
+				swap_ideas = {
+					remove_idea = UNI_willing_worker_idea
+					add_idea = UNI_willing_worker_idea_2
+				}
+			}
+			else = {
+				507 = {
+					add_compliance = 10
+					add_resistance_target = -10
+					add_manpower = -300
+				}
+				add_manpower = 300
+				add_equipment_to_stockpile = {
+					type = alicorn_equipment_0
+					amount = 100
+					producer = UNI
+				}
+				swap_ideas = {
+					remove_idea = UNI_slave_idea
+					add_idea = UNI_slave_idea_2
+				}
+			}
 		}
-
 	}
 	
 	focus = {
@@ -665,12 +805,7 @@ focus_tree = {
 		
 		completion_reward = {
 			army_experience = 25
-			add_doctrine_cost_reduction = {
-				name = land_doctrine
-				cost_reduction = 0.5
-				uses = 3
-				category = land_doctrine
-			}
+			add_ideas = UNI_warrior_idea
 		}
 
 	}
@@ -717,10 +852,10 @@ focus_tree = {
 		
 		
 		completion_reward = {
-			remove_ideas = UNI_army_weakness2
-			country_event = {
-					id = goddess_redeye.2004
-				}
+			swap_ideas = {
+				remove_idea = UNI_warrior_idea
+				add_idea = UNI_warrior_idea_2
+			}
 		}
 
 	}
@@ -763,10 +898,6 @@ focus_tree = {
 					division = "name = \"3rd New Breed\" division_template = \"The New Breed\" start_experience_factor = 0.03 start_equipment_factor = 1.0"
 					owner = UNI
 				}
-				create_unit = {
-					division = "name = \"4th New Breed\" division_template = \"The New Breed\" start_experience_factor = 0.03 start_equipment_factor = 1.0"
-					owner = UNI
-				}
 			}
 		}
 
@@ -798,7 +929,6 @@ focus_tree = {
 			add_political_power = 50
 			add_war_support = 0.1
 			set_country_flag = unity_political_progress
-			add_research_slot = 1
 		}
 
 	}
@@ -813,6 +943,12 @@ focus_tree = {
 		available = {
 		country_exists = NEV
 		}
+		bypass = {
+			NOT = {
+				country_exists = NEV
+				country_exists = EYE
+			}
+		}
 		mutually_exclusive = {focus = goddess_canon_stick_redeye}
 		ai_will_do = {
 			factor = 20
@@ -820,12 +956,6 @@ focus_tree = {
 		x = -2
 		y = 8
 		relative_position_id = goddess_canon_reach_out_to_filly
-		bypass = {
-		NOT = {
-			country_exists = NEV
-		}
-		}
-		
 		completion_reward = {
 			NEV = {
 				country_event = {
@@ -846,7 +976,17 @@ focus_tree = {
 		}
 		available = {
 			EYE = { 
-				EYE_char_red_eye = { is_country_leader = yes }
+				has_country_leader = {
+				character = EYE_char_red_eye
+				ruling_only = yes
+				}
+			}
+			country_exists = EYE
+		}
+		bypass = {
+			NOT = {
+				country_exists = NEV
+				country_exists = EYE
 			}
 		}
 		mutually_exclusive = {focus = goddess_canon_harbinger}
@@ -885,23 +1025,40 @@ focus_tree = {
 			focus = goddess_canon_stick_redeye
 			focus = goddess_canon_harbinger
 		}
+		available = {
+			OR = {
+				has_country_flag = lightbringer_new_unity_flag
+				has_global_flag = lightbringer_dead_flag
+				has_global_flag = littlepip_fucking_murdered_redeye
+				has_global_flag = redeye_is_dead
+			}
+		}
 		ai_will_do = {
 			factor = 20
 		}
 		x = 0
 		y = 9
 		relative_position_id = goddess_canon_reach_out_to_filly
-		bypass = {
-		EYE = {
-			EYE_char_red_eye = { is_country_leader = no }
-		}
-			}	
+		will_lead_to_war_with = EYE	
+		will_lead_to_war_with = FSR
 		completion_reward = {
-			EYE = {
-				country_event = {
-					id = goddess_redeye.3
+			if = {
+				limit = {
+					country_exists = EYE
 				}
-			}			
+			EYE = {
+					country_event = {
+						id = UNI_filly.8
+					}
+				}	
+			}
+			else = {
+				EYE = {
+					ROOT = {
+						grant_wargoals_on_core_states_of_prev = yes
+					}
+			}
+			}
 		}
 
 	}
@@ -1330,6 +1487,11 @@ focus_tree = {
 		x = 0
 		y = 2
 		relative_position_id = goddess_1
+		bypass = {
+			UNI = {
+				controls_state = 458
+			}
+		}
 		
 		will_lead_to_war_with = SPV
 			completion_reward = {
