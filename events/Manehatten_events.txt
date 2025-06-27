@@ -2769,26 +2769,15 @@ country_event = {
 
  	option = { #Do Nothing
  		name = MSR_arbu.1.a
-
- 		add_political_power = 25
+		add_political_power = 25
 	}
 
-	option = { #Wargoal
+	option = { #Investigate
  		name = MSR_arbu.1.b
- 		if = {
- 			limit = {
- 				ARB = {
- 					is_in_faction_with = MSR
- 				}
- 			}
- 			remove_from_faction = ARB
- 		}
-
- 		create_wargoal = {
-		    type = annex_everything
-		    target = ARB
+		country_event = {
+			id = MSR_arbu.2
+			days = 30
 		}
-
 	}
 }
 
@@ -2803,8 +2792,60 @@ country_event = {
  	fire_only_once = yes
 
  	trigger = {
+ 		is_triggered_only = yes
+ 	}
+
+ 	option = { #InvestigationEnds
+ 		name = MSR_arbu.2.a
+ 		if = {
+ 			limit = {
+ 				ARB = {
+ 					is_in_faction_with = MSR
+					NOT = {
+						is_subject_of = MSR
+					}
+ 				}
+ 			}
+ 			remove_from_faction = ARB
+			create_wargoal = {
+				type = annex_everything
+				target = ARB
+			}
+ 		}
+		if_else = {
+			limit = {
+				ARB = {
+					is_subject_of = MSR
+				}
+			}
+			MSR = {
+				annex_country = ARB
+			}
+		}
+		else = {
+			create_wargoal = {
+				type = annex_everything
+				target = ARB
+			}
+		}
+		set_country_flag = MSR_arbu_cannibals_known
+	}
+}
+
+#Arbu Occupation/Investigation 3
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_arbu.3"}
+ 	id = MSR_arbu.3
+ 	title = MSR_arbu.3.title
+ 	desc = MSR_arbu.3.desc
+	picture = GFX_event_test
+
+ 	fire_only_once = yes
+
+ 	trigger = {
  		original_tag = MSR
  		ARB = { exists = no }
+		has_country_flag = MSR_arbu_cannibals_known
  		has_completed_focus = MSR_Investigate_Arbu
  		owns_state = 642
  	}
@@ -4176,7 +4217,7 @@ country_event = {
  	fire_only_once = yes
 
  	option = {
- 		name = MSR.125.a
+ 		name = MSR.126.a
  		add_stability = -0.05
  	}
 }
@@ -4193,7 +4234,7 @@ country_event = {
  	fire_only_once = yes
 
  	option = {
- 		name = MSR.125.a
+ 		name = MSR.127.a
  		add_stability = -0.10
  		add_manpower = -500
  		add_ideas = msr_purged_military_staff
@@ -4234,7 +4275,7 @@ country_event = {
  	fire_only_once = yes
 
  	option = {
- 		name = MSR.125.a
+ 		name = MSR.128.a
  		add_popularity = {
 		    ideology = visionary
 		    popularity = -0.01
