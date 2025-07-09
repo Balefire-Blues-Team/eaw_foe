@@ -409,7 +409,7 @@ NCR_incite_ranger_uprising_cat = {
 	
 	NCR_launch_ranger_coup = {
 		icon = steel
-		is_good = yes
+		#is_good = yes #Don't do anything as this isn't a mission - @Deez
 		available = {
 			has_political_power > 29
 		}
@@ -450,7 +450,7 @@ NCR_incite_ranger_uprising_cat = {
 						ideology = visionary
 						popularity = 0.50
 					}
-					recruit_character = OAP_char_Farsight
+					recruit_character = OAP_char_Farsight #Character already recruited in history file of OAP, but I think the code is meant to fix the character disappearing during civil war so gonna leave this here, might fix later - @Deez
 					promote_character = OAP_char_Farsight
 					declare_war_on = {
 						target = OAP
@@ -464,8 +464,8 @@ NCR_incite_ranger_uprising_cat = {
 						target = SHA
 						modifier = huge_increase
 					}
-					add_ai_strategy = { type = alliance id = "SHA" value = 200}
-					SHA = {add_ai_strategy = { type = alliance id = "ROOT" value = 200}}
+					add_ai_strategy = { type = alliance id = SHA value = 200} #Remove "" from SHA - @Deez
+					SHA = {add_ai_strategy = { type = alliance id = ROOT value = 200}} #removed "" from ROOT @Deez
 					load_focus_tree = OAP_ranger_tree
 					SHA = { add_to_faction = ROOT }
 				}
@@ -1746,14 +1746,25 @@ NCR_industrial_decisions = {
 	
 	NCR_railway_apple_east = {
 		icon = generic_construction
-		is_good = yes
+		#is_good = yes #Not working since this ain't mission - @Deez
 		visible = {has_completed_focus = NCR_appleloosa_railway_hub}
 		available = {
-			all_state = {
-				limit = {
-					is_core_of = ROK
+			#all_state = { #This is so unoptimized, optimized below - @Deez
+			#	if = {
+			#		limit = {
+			#			is_core_of = ROK
+			#		}
+			#		is_owned_by = SHA
+			#	}
+			#	#limit = { #This don't work, fixed with above - @Deez
+			#	#	is_core_of = ROK
+			#	#}
+			#	#	is_owned_by = SHA
+			#}
+			ROK = {
+				all_core_state = {
+					is_owned_and_controlled_by = SHA
 				}
-					is_owned_by = SHA
 			}
 			has_political_power > 49
 			num_of_civilian_factories_available_for_projects > 2
@@ -1766,11 +1777,21 @@ NCR_industrial_decisions = {
 		cost = 50
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NCR_railway_apple_east "
-			every_state = {
-				limit = {
-					is_core_of = ROK
+			#every_state = { #Optimized below - @Deez
+			#	limit = {
+			#		is_core_of = ROK
+			#	}
+			#	add_extra_state_shared_building_slots = 1 add_building_construction = { type = infrastructure instant_build = yes level = 1}
+			#}
+			ROK = {
+				every_core_state = {
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = { 
+						type = infrastructure 
+						instant_build = yes 
+						level = 1
+					}
 				}
-				add_extra_state_shared_building_slots = 1 add_building_construction = { type = infrastructure instant_build = yes level = 1}
 			}
 		}
 
@@ -1781,18 +1802,20 @@ NCR_industrial_decisions = {
 	
 	NCR_railway_apple_west = {
 		icon = generic_construction
-		is_good = yes
+		#is_good = yes #nope this ain't mission - @Deez
 		visible = {has_completed_focus = NCR_appleloosa_railway_hub}
 		available = {
-			all_state = {
-				limit = {
-					OR = {
-					is_core_of = OAP
-					is_core_of = LIT
-					}
-				}
-					is_owned_by = SHA
-			}
+			#all_state = { #Optimized below - @Deez
+			#	limit = {
+			#		OR = {
+			#		is_core_of = OAP
+			#		is_core_of = LIT
+			#		}
+			#	}
+			#		is_owned_by = SHA
+			#}
+			OAP = { all_core_state = { is_owned_and_controlled_by = SHA } }
+			LIT = { all_core_state = { is_owned_and_controlled_by = SHA } }
 			has_political_power > 49
 			num_of_civilian_factories_available_for_projects > 4
 		}
@@ -1804,14 +1827,37 @@ NCR_industrial_decisions = {
 		cost = 50
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NCR_railway_apple_west "
-			every_state = {
-				limit = {
-					OR = {
-					is_core_of = OAP
-					is_core_of = LIT
+			#every_state = { #Optimized below - @Deez
+			#	limit = {
+			#		OR = {
+			#		is_core_of = OAP
+			#		is_core_of = LIT
+			#		}
+			#	}
+			#	add_extra_state_shared_building_slots = 1 add_building_construction = { type = infrastructure instant_build = yes level = 1}
+			#}
+			OAP = {
+				every_core_state = {
+					if = {
+						limit = { NOT = { is_core_of = LIT } } #To prevent edge cases where the states get double bonus due to being a core of both tag - @Deez
+						add_extra_state_shared_building_slots = 1 
+						add_building_construction = { 
+							type = infrastructure 
+							instant_build = yes 
+							level = 1
+						}
 					}
 				}
-				add_extra_state_shared_building_slots = 1 add_building_construction = { type = infrastructure instant_build = yes level = 1}
+			}
+			LIT = {
+				every_core_state = {
+					add_extra_state_shared_building_slots = 1 
+					add_building_construction = { 
+						type = infrastructure 
+						instant_build = yes 
+						level = 1
+					}
+				}
 			}
 		}
 
@@ -1822,18 +1868,20 @@ NCR_industrial_decisions = {
 	
 	NCR_railway_apple_north = {
 		icon = generic_construction
-		is_good = yes
+		#is_good = yes #Nope ain't working in mission chief - @Deez
 		visible = {has_completed_focus = NCR_appleloosa_railway_hub}
 		available = {
-			all_state = {
-				limit = {
-					OR = {
-					is_core_of = FTA
-					is_core_of = PBN
-					}
-				}
-					is_owned_by = SHA
-			}
+			#all_state = { #Optimized below - @Deez
+			#	limit = {
+			#		OR = {
+			#		is_core_of = FTA
+			#		is_core_of = PBN
+			#		}
+			#	}
+			#		is_owned_by = SHA
+			#}
+			FTA = { all_core_state = { is_owned_and_controlled_by = SHA } }
+			PBN = { all_core_state = { is_owned_and_controlled_by = SHA } }
 			has_political_power > 49
 			num_of_civilian_factories_available_for_projects > 3
 		}
@@ -1845,14 +1893,37 @@ NCR_industrial_decisions = {
 		cost = 50
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NCR_railway_apple_north "
-			every_state = {
-				limit = {
-					OR = {
-					is_core_of = FTA
-					is_core_of = PBN
+			#every_state = {
+			#	limit = {
+			#		OR = {
+			#		is_core_of = FTA
+			#		is_core_of = PBN
+			#		}
+			#	}
+			#	add_extra_state_shared_building_slots = 1 add_building_construction = { type = infrastructure instant_build = yes level = 1}
+			#}
+			FTA = {
+				every_core_state = {
+					if = {
+						limit = { NOT = { is_core_of = PBN } } #To prevent edge cases where the states get double bonus due to being a core of both tag - @Deez
+						add_extra_state_shared_building_slots = 1 
+						add_building_construction = { 
+							type = infrastructure 
+							instant_build = yes 
+							level = 1
+						}
 					}
 				}
-				add_extra_state_shared_building_slots = 1 add_building_construction = { type = infrastructure instant_build = yes level = 1}
+			}
+			PBN = {
+				every_core_state = {
+					add_extra_state_shared_building_slots = 1 
+					add_building_construction = { 
+						type = infrastructure 
+						instant_build = yes 
+						level = 1
+					}
+				}
 			}
 		}
 
@@ -1863,15 +1934,17 @@ NCR_industrial_decisions = {
 	
 	NCR_hayseed_coastal_1 = {
 		icon = generic_construction
-		is_good = yes
+		#is_good = yes #Ain't working chief, ain't a mission - @Deez
 
 		available = {
-			all_state = {
-				limit = {
-					is_core_of = HSW
-					
-				}
-					is_owned_by = SHA
+			#all_state = { #Optimized below - @Deez
+			#	limit = {
+			#		is_core_of = HSW
+			#	}
+			#		is_owned_by = SHA
+			#}
+			HSW = {
+				all_core_state = { is_owned_and_controlled_by = SHA }
 			}
 			has_political_power > 49
 			num_of_civilian_factories_available_for_projects > 3
@@ -1887,14 +1960,27 @@ NCR_industrial_decisions = {
 		cost = 50
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NCR_hayseed_coastal_1 "
-			every_state = {
-				limit = {
-					AND = {
-					is_core_of = HSW
-					is_coastal = yes
+			#every_state = { #Optimized below - @Deez
+			#	limit = {
+			#		AND = {
+			#		is_core_of = HSW
+			#		is_coastal = yes
+			#		}
+			#	}
+			#	add_extra_state_shared_building_slots = 1 add_building_construction = { type = dockyard instant_build = yes level = 1}
+			#}
+			HSW = {
+				every_core_state = {
+					if = {
+						limit = { is_coastal = yes }
+						add_extra_state_shared_building_slots = 1 
+						add_building_construction = { 
+							type = dockyard 
+							instant_build = yes 
+							level = 1
+						}
 					}
 				}
-				add_extra_state_shared_building_slots = 1 add_building_construction = { type = dockyard instant_build = yes level = 1}
 			}
 			set_country_flag = NCR_hayseed_coast_dev_1
 		}
@@ -1906,14 +1992,17 @@ NCR_industrial_decisions = {
 	
 	NCR_hayseed_coastal_2 = {
 		icon = generic_construction
-		is_good = yes
+		#is_good = yes #Not a mission, won't work sadly - @Deez
 
 		available = {
-			all_state = {
-				limit = {
-					is_core_of = HSW
-				}
-					is_owned_by = SHA
+			#all_state = { #Optimized below - @Deez
+			#	limit = {
+			#		is_core_of = HSW
+			#	}
+			#		is_owned_by = SHA
+			#}
+			HSW = {
+				all_core_state = { is_owned_and_controlled_by = SHA }
 			}
 			has_political_power > 49
 			num_of_civilian_factories_available_for_projects > 3
@@ -1930,14 +2019,28 @@ NCR_industrial_decisions = {
 		cost = 50
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NCR_hayseed_coastal_2 "
-			every_state = {
-				limit = {
-					AND = {
-					is_core_of = HSW
-					is_coastal = yes
+			#every_state = { #Optimized below - @Deez
+			#	limit = {
+			#		AND = {
+			#		is_core_of = HSW
+			#		is_coastal = yes
+			#		}
+			#	}
+			#	add_extra_state_shared_building_slots = 3 add_building_construction = { type = infrastructure instant_build = yes level = 1} add_manpower =1000
+			#}
+			HSW = {
+				every_core_state = {
+					if = {
+						limit = { is_coastal = yes }
+						add_extra_state_shared_building_slots = 3 
+						add_building_construction = { 
+							type = infrastructure 
+							instant_build = yes 
+							level = 1
+						} 
+						add_manpower = 1000
 					}
 				}
-				add_extra_state_shared_building_slots = 3 add_building_construction = { type = infrastructure instant_build = yes level = 1} add_manpower =1000
 			}
 			clr_country_flag = NCR_hayseed_coast_dev_1
 			set_country_flag = NCR_hayseed_coast_dev_2
@@ -1950,14 +2053,17 @@ NCR_industrial_decisions = {
 	
 	NCR_hayseed_coastal_3 = {
 		icon = generic_construction
-		is_good = yes
+		#is_good = yes #Man if only these work for normal decisions... - @Deez
 
 		available = {
-			all_state = {
-				limit = {
-					is_core_of = HSW
-				}
-					is_owned_by = SHA
+			#all_state = { #Optimized Below - @Deez
+			#	limit = {
+			#		is_core_of = HSW
+			#	}
+			#		is_owned_by = SHA
+			#}
+			HSW = {
+				all_core_state = { is_owned_and_controlled_by = SHA }
 			}
 			has_political_power > 49
 			num_of_civilian_factories_available_for_projects > 3
@@ -1975,7 +2081,18 @@ NCR_industrial_decisions = {
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NCR_hayseed_coastal_3 "
 			574 = {
-				add_extra_state_shared_building_slots = 2 add_building_construction = { type = dockyard instant_build = yes level = 1} add_building_construction = { type = industrial_complex instant_build = yes level = 1} add_manpower =1000
+				add_extra_state_shared_building_slots = 2 
+				add_building_construction = { 
+					type = dockyard 
+					instant_build = yes 
+					level = 1
+				} 
+				add_building_construction = { 
+					type = industrial_complex 
+					instant_build = yes 
+					level = 1
+				} 
+				add_manpower = 1000
 			}
 			clr_country_flag = NCR_hayseed_coast_dev_2
 		}
@@ -1987,14 +2104,17 @@ NCR_industrial_decisions = {
 	
 	NCR_hayseed_walkerland_1 = {
 		icon = generic_construction
-		is_good = yes
+		#is_good = yes #I wonder when will these work for normal decision....NEVER - @Deez
 
 		available = {
-			all_state = {
-				limit = {
-					is_core_of = HSW
-				}
-					is_owned_by = SHA
+			#all_state = { #Optimized below
+			#	limit = {
+			#		is_core_of = HSW
+			#	}
+			#		is_owned_by = SHA
+			#}
+			HSW = {
+				all_core_state = { is_owned_and_controlled_by = SHA }
 			}
 			has_political_power > 49
 			num_of_civilian_factories_available_for_projects > 3
@@ -2010,14 +2130,22 @@ NCR_industrial_decisions = {
 		cost = 50
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NCR_hayseed_walkerland_1 "
-			every_state = {
-				limit = {
-					AND = {
-					is_core_of = HSW
-					is_coastal = no
+			#every_state = { #Optimized below - @Deez
+			#	limit = {
+			#		AND = {
+			#		is_core_of = HSW
+			#		is_coastal = no
+			#		}
+			#	}
+			#	add_extra_state_shared_building_slots = 1
+			#}
+			HSW = {
+				every_core_state = {
+					if = {
+						limit = { is_coastal = no }
+						add_extra_state_shared_building_slots = 1
 					}
 				}
-				add_extra_state_shared_building_slots = 1
 			}
 			793 = {
 				add_resource = { type = composites amount = 12}
@@ -2031,14 +2159,17 @@ NCR_industrial_decisions = {
 	}
 	NCR_hayseed_walkerland_2 = {
 		icon = generic_construction
-		is_good = yes
+		#is_good = yes #IS GOOD IS BAD IS GOOD IS BAD NOT WORKING IF IT AINT MISSION - @Deez
 
 		available = {
-			all_state = {
-				limit = {
-					is_core_of = HSW
-				}
-					is_owned_by = SHA
+			#all_state = { #Optimized below - @Deez
+			#	limit = {
+			#		is_core_of = HSW
+			#	}
+			#		is_owned_by = SHA
+			#}
+			HSW = {
+				all_core_state = { is_owned_and_controlled_by = SHA }
 			}
 			has_political_power > 49
 			num_of_civilian_factories_available_for_projects > 3
@@ -2055,16 +2186,29 @@ NCR_industrial_decisions = {
 		cost = 50
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NCR_hayseed_walkerland_1 "
-			every_state = {
-				limit = {
-					AND = {
-					is_core_of = HSW
-					is_coastal = no
+			#every_state = { #Optimized below - @Deez
+			#	limit = {
+			#		AND = {
+			#		is_core_of = HSW
+			#		is_coastal = no
+			#		}
+			#	}
+			#	add_extra_state_shared_building_slots = 3 add_building_construction = { type = infrastructure instant_build = yes level = 1} add_manpower =200
+			#}
+			HSW = {
+				every_core_state = {
+					if = {
+						limit = { is_coastal = no }
+						add_extra_state_shared_building_slots = 3 
+						add_building_construction = { 
+							type = infrastructure 
+							instant_build = yes 
+							level = 1
+						} 
+						add_manpower = 200
 					}
 				}
-				add_extra_state_shared_building_slots = 3 add_building_construction = { type = infrastructure instant_build = yes level = 1} add_manpower =200
 			}
-			
 			clr_country_flag = NCR_hayseed_walker_dev_1
 		}
 
@@ -2075,14 +2219,17 @@ NCR_industrial_decisions = {
 	
 	NCR_hayseed_cultland_1 = {
 		icon = generic_construction
-		is_good = yes
+		#is_good = yes #HAHAHAHAHAHA - @Deez
 
 		available = {
-			all_state = {
-				limit = {
-					is_core_of = HSC
-				}
-					is_owned_by = SHA
+			#all_state = { #Optimized below
+			#	limit = {
+			#		is_core_of = HSC
+			#	}
+			#		is_owned_by = SHA
+			#}
+			HSC = {
+				all_core_state = { is_owned_and_controlled_by = SHA }
 			}
 			has_political_power > 49
 			num_of_civilian_factories_available_for_projects > 3
@@ -2098,14 +2245,22 @@ NCR_industrial_decisions = {
 		cost = 50
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NCR_hayseed_cultland_1 "
-			every_state = {
-				limit = {
-					AND = {
-					is_core_of = HSC
-					is_coastal = no
+			#every_state = { #Optimized below
+			#	limit = {
+			#		AND = {
+			#		is_core_of = HSC
+			#		is_coastal = no
+			#		}
+			#	}
+			#	add_extra_state_shared_building_slots = 1
+			#}
+			HSC = {
+				every_core_state = {
+					if = {
+						limit = { is_coastal = no }
+						add_extra_state_shared_building_slots = 1
 					}
 				}
-				add_extra_state_shared_building_slots = 1
 			}
 			792 = {
 				add_resource = { type = composites amount = 10}
@@ -2120,14 +2275,17 @@ NCR_industrial_decisions = {
 	
 	NCR_hayseed_cultland_2 = {
 		icon = generic_construction
-		is_good = yes
+		#is_good = yes #NONONONONOWAITWAITWAIT - @Deez
 
 		available = {
-			all_state = {
-				limit = {
-					is_core_of = HSC
-				}
-					is_owned_by = SHA
+			#all_state = { #Optimized Below
+			#	limit = {
+			#		is_core_of = HSC
+			#	}
+			#		is_owned_by = SHA
+			#}
+			HSC = {
+				all_core_state = { is_owned_and_controlled_by = SHA }
 			}
 			has_political_power > 49
 			num_of_civilian_factories_available_for_projects > 3
@@ -2144,14 +2302,27 @@ NCR_industrial_decisions = {
 		cost = 50
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NCR_hayseed_cultland_2 "
-			every_state = {
-				limit = {
-					AND = {
-					is_core_of = HSC
-					is_coastal = no
+			#every_state = { #Optimized below - @Deez
+			#	limit = {
+			#		AND = {
+			#		is_core_of = HSC
+			#		is_coastal = no
+			#		}
+			#	}
+			#	add_extra_state_shared_building_slots = 3 add_building_construction = { type = infrastructure instant_build = yes level = 1}
+			#}
+			HSC = {
+				every_core_state = {
+					if = {
+						limit = { is_coastal = no }
+						add_extra_state_shared_building_slots = 3 
+						add_building_construction = { 
+							type = infrastructure 
+							instant_build = yes 
+							level = 1
+						}
 					}
 				}
-				add_extra_state_shared_building_slots = 3 add_building_construction = { type = infrastructure instant_build = yes level = 1}
 			}
 			792 = {
 				add_resource = { type = composites amount = 10}
@@ -2167,14 +2338,17 @@ NCR_industrial_decisions = {
 	
 	NCR_hayseed_cultland_3 = {
 		icon = generic_construction
-		is_good = yes
+		#is_good = yes #No - @Deez
 
 		available = {
-			all_state = {
-				limit = {
-					is_core_of = HSC
-				}
-					is_owned_by = SHA
+			#all_state = { #Optimized below - @Deez
+			#	limit = {
+			#		is_core_of = HSC
+			#	}
+			#		is_owned_by = SHA
+			#}
+			HSC = {
+				all_core_state = { is_owned_and_controlled_by = SHA }
 			}
 			has_political_power > 49
 			num_of_civilian_factories_available_for_projects > 3
@@ -2191,7 +2365,6 @@ NCR_industrial_decisions = {
 		cost = 50
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NCR_hayseed_cultland_3 "
-			
 			792 = {
 				add_resource = { type = composites amount = 14}
 			}
@@ -2205,7 +2378,7 @@ NCR_industrial_decisions = {
 	
 	NCR_mine_gorges_1 = {
 		icon = steel
-		is_good = yes
+		#is_good = yes #Nah - @Deez
 
 		available = {
 			has_full_control_of_state = 303
@@ -2227,7 +2400,6 @@ NCR_industrial_decisions = {
 			303 = {
 				add_resource = { type = metal amount = 16}
 			}
-			
 		}
 
 		ai_will_do = {
@@ -2237,7 +2409,7 @@ NCR_industrial_decisions = {
 	
 	NCR_mine_gorges_2 = {
 		icon = steel
-		is_good = yes
+		#is_good = yes #Nope - @Deez
 
 		available = {
 			has_full_control_of_state = 303
@@ -2273,7 +2445,7 @@ NCR_industrial_decisions = {
 	
 	NCR_mine_gorges_3 = {
 		icon = steel
-		is_good = yes
+		#is_good = yes #Nah - @Deez
 
 		available = {
 			has_full_control_of_state = 303
@@ -2313,18 +2485,20 @@ NCR_industrial_decisions = {
 	
 	NCR_railway_northside = {
 		icon = generic_construction
-		is_good = yes
+		#is_good = yes #Nope - @Deez
 
 		available = {
-			all_state = {
-				limit = {
-					OR = {
-					is_core_of = RAF
-					is_core_of = NCG
-					}
-				}
-					is_owned_by = SHA
-			}
+			#all_state = { #Optimized below - @Deez
+			#	limit = {
+			#		OR = {
+			#		is_core_of = RAF
+			#		is_core_of = NCG
+			#		}
+			#	}
+			#		is_owned_by = SHA
+			#}
+			RAF = { all_core_state = { is_owned_and_controlled_by = SHA } }
+			NCG = { all_core_state = { is_owned_and_controlled_by = SHA } }
 			has_political_power > 49
 			num_of_civilian_factories_available_for_projects > 9
 		}
@@ -2339,14 +2513,37 @@ NCR_industrial_decisions = {
 		cost = 50
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NCR_railway_northside "
-			every_state = {
-				limit = {
-					OR = {
-					is_core_of = RAF
-					is_core_of = NCG
+			#every_state = { #Optimized below
+			#	limit = {
+			#		OR = {
+			#		is_core_of = RAF
+			#		is_core_of = NCG
+			#		}
+			#	}
+			#	add_extra_state_shared_building_slots = 1 add_building_construction = { type = infrastructure instant_build = yes level = 2}
+			#}
+			RAF = {
+				every_core_state = {
+					if = {
+						limit = { NOT = { is_core_of = NCG } } #Prevent edge cases where a states get double bonuses due to being a core of both nation
+						add_extra_state_shared_building_slots = 1 
+						add_building_construction = { 
+							type = infrastructure 
+							instant_build = yes 
+							level = 2
+						}
 					}
 				}
-				add_extra_state_shared_building_slots = 1 add_building_construction = { type = infrastructure instant_build = yes level = 2}
+			}
+			NCG = {
+				every_core_state = {
+					add_extra_state_shared_building_slots = 1 
+					add_building_construction = { 
+						type = infrastructure 
+						instant_build = yes 
+						level = 2
+					}
+				}
 			}
 		}
 
@@ -2357,19 +2554,22 @@ NCR_industrial_decisions = {
 	
 	NCR_railway_southside = {
 		icon = generic_construction
-		is_good = yes
+		#is_good = yes #Nope - @Deez
 
 		available = {
-			all_state = {
-				limit = {
-					OR = {
-					is_core_of = HSC
-					is_core_of = HSW
-					is_core_of = NEV
-					}
-				}
-					is_owned_by = SHA
-			}
+			#all_state = { #optimized below - @Deez
+			#	limit = {
+			#		OR = {
+			#		is_core_of = HSC
+			#		is_core_of = HSW
+			#		is_core_of = NEV
+			#		}
+			#	}
+			#		is_owned_by = SHA
+			#}
+			HSC = { all_core_state = { is_owned_and_controlled_by = SHA } }
+			HSW = { all_core_state = { is_owned_and_controlled_by = SHA } }
+			NEV = { all_core_state = { is_owned_and_controlled_by = SHA } }
 			has_political_power > 49
 			num_of_civilian_factories_available_for_projects > 9
 		}
@@ -2384,15 +2584,61 @@ NCR_industrial_decisions = {
 		cost = 50
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NCR_railway_southside "
-			every_state = {
-				limit = {
-					OR = {
-					is_core_of = HSC
-					is_core_of = HSW
-					is_core_of = NEV
+			#every_state = { #Optimized below - @Deez
+			#	limit = {
+			#		OR = {
+			#		is_core_of = HSC
+			#		is_core_of = HSW
+			#		is_core_of = NEV
+			#		}
+			#	}
+			#	add_extra_state_shared_building_slots = 1 add_building_construction = { type = infrastructure instant_build = yes level = 2}
+			#}
+			HSC = {
+				every_core_state = {
+					if = {
+						limit = { #Prevent egde cases - @Deez
+							NOT = {
+								is_core_of = HSW
+								is_core_of = NEV
+							}
+						}
+						add_extra_state_shared_building_slots = 1 
+						add_building_construction = { 
+							type = infrastructure 
+							instant_build = yes 
+							level = 2
+						}
 					}
 				}
-				add_extra_state_shared_building_slots = 1 add_building_construction = { type = infrastructure instant_build = yes level = 2}
+			}
+			HSW = {
+				every_core_state = {
+					if = {
+						limit = { #Prevent egde cases - @Deez
+							NOT = {
+								is_core_of = HSC
+								is_core_of = NEV
+							}
+						}
+						add_extra_state_shared_building_slots = 1 
+						add_building_construction = { 
+							type = infrastructure 
+							instant_build = yes 
+							level = 2
+						}
+					}
+				}
+			}
+			NEV = {
+				every_core_state = {
+					add_extra_state_shared_building_slots = 1 
+					add_building_construction = { 
+						type = infrastructure 
+						instant_build = yes 
+						level = 2
+					}
+				}
 			}
 		}
 
@@ -2403,16 +2649,19 @@ NCR_industrial_decisions = {
 	
 	NCR_railway_heartland = {
 		icon = generic_construction
-		is_good = yes
+		#is_good = yes #NADAWDAW - @Deez
 
 		available = {
-			all_state = {
-				limit = {
-					OR = {
-					is_core_of = SHA
-					}
-				}
-					is_owned_by = SHA
+			#all_state = { #Optimized below - @Deez
+			#	limit = {
+			#		OR = {
+			#		is_core_of = SHA
+			#		}
+			#	}
+			#		is_owned_by = SHA
+			#}
+			all_core_state = { #The Root core states - @Deez
+				is_owned_and_controlled_by = SHA
 			}
 			has_political_power > 49
 			num_of_civilian_factories_available_for_projects > 9
@@ -2428,13 +2677,21 @@ NCR_industrial_decisions = {
 		cost = 50
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NCR_railway_heartland "
-			every_state = {
-				limit = {
-					OR = {
-					is_core_of = SHA
-					}
+			#every_state = { #Optimized below - @Deez
+			#	limit = {
+			#		OR = {
+			#		is_core_of = SHA
+			#		}
+			#	}
+			#	add_extra_state_shared_building_slots = 1 add_building_construction = { type = infrastructure instant_build = yes level = 1}
+			#}
+			every_core_state = {
+				add_extra_state_shared_building_slots = 1 
+				add_building_construction = { 
+					type = infrastructure 
+					instant_build = yes 
+					level = 1
 				}
-				add_extra_state_shared_building_slots = 1 add_building_construction = { type = infrastructure instant_build = yes level = 1}
 			}
 		}
 
