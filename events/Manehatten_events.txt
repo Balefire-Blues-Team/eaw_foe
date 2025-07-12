@@ -10,6 +10,7 @@ add_namespace = MSR_crossroads
 add_namespace = MSR_arbu
 add_namespace = MSR_elections
 add_namespace = MSR_fsr
+add_namespace = MSR_chemevent
 ################
 ####Defaults####
 ################
@@ -824,15 +825,24 @@ country_event = {
 			
 			random_list = {
 				30 = {
-					country_event = { id = MSR.201 days = 20 }
+					country_event = { id = MSR.201 days = 30 }
 				}
 				70 = {
-					country_event = { id = MSR.202 days = 20 }
+					country_event = { id = MSR.202 days = 30 }
 				}
 			}
 		
 		}
-		else = { country_event = { id = MSR.203 days = 20 } }
+		else = { country_event = { id = MSR.203 days = 30 } }
+		if = {
+			limit = {
+				NOT = has_country_flag = canterlotchaosflag
+			}
+			country_event = {
+				id = MSR_chemevent.7
+				days = 14
+				}
+			}
 		}
 
 	}
@@ -4643,6 +4653,287 @@ country_event = {
 		}
 	}
 }
+
+###Finally implementing Chem's new events.###
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_chemevent.1"}
+ 	id = MSR_chemevent.1
+ 	title = MSR_chemevent.1.t
+ 	desc = MSR_chemevent.1.desc
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = MSR_chemevent.1.a
+		ai_chance = { factor = 30}
+			swap_ideas = {
+				remove_idea = msr_no_organization
+				add_idea = msr_army_of_freedom
+			}
+	}	 
+}
+
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_chemevent.2"}
+ 	id = MSR_chemevent.2
+ 	title = MSR_chemevent.2.t
+ 	desc = MSR_chemevent.2.desc
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = MSR_chemevent.2.a
+		ai_chance = { factor = 30}
+			if = {
+				limit = {
+					OR = {
+						has_completed_focus = MSR_Product_For_Civilians
+						has_completed_focus = MSR_Guns_For_Soldiers
+					}
+				}
+				MSR_remove_labor_turmoil = yes
+				MSR_remove_building_turmoil = yes
+				if = {
+					limit = { has_completed_focus = MSR_Product_For_Civilians }
+					add_ideas = msr_ra_new_economy_civ
+				}
+				else_if = {
+					limit = { has_completed_focus = MSR_Guns_For_Soldiers }
+					add_ideas = msr_ra_new_economy_mil
+				}
+			}
+			else = {
+				custom_effect_tooltip = MSR_industrial_heartland_reborn_tt
+			}
+	}	 
+}
+
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_chemevent.3"}
+ 	id = MSR_chemevent.3
+ 	title = MSR_chemevent.3.t
+ 	desc = MSR_chemevent.3.desc
+	picture = GFX_event_test
+ 	fire_only_once = yes
+	trigger = {
+		AND = {
+			original_tag = MSR
+			has_government = destruction
+			owns_state = 21
+			has_war = no
+			has_completed_focus = MSR_Dinner_In_Tenpony
+			NOT = {
+				country_exists = TEN
+			}
+		}
+	}
+	option = {
+		name = MSR_chemevent.3.a
+		ai_chance = { factor = 30}
+		add_war_support = 0.05
+	}
+}
+
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_chemevent.4"}
+ 	id = MSR_chemevent.4
+ 	title = MSR_chemevent.4.t
+ 	desc = MSR_chemevent.4.desc
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = MSR_chemevent.4.a
+		ai_chance = { factor = 30}
+		add_ideas = msr_ra_warmongering
+		hidden_effect = {
+			country_event = {
+				id = MSR.chemevent.5
+				days = 30
+			}
+		}
+	}	 
+}
+
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_chemevent.5"}
+ 	id = MSR_chemevent.5
+ 	title = MSR_chemevent.5.t
+ 	desc = MSR_chemevent.5.desc
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = MSR_chemevent.5.a
+		ai_chance = { factor = 30}
+		hidden_effect = {
+			country_event = {
+				id = MSR_chemevent.6
+				days = 30
+			}
+		}
+	}	 
+}
+
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_chemevent.6"}
+ 	id = MSR_chemevent.6
+ 	title = MSR_chemevent.6.t
+ 	desc = MSR_chemevent.6.desc
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = MSR_chemevent.6.a
+		ai_chance = { factor = 30}
+
+	}	 
+}
+
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_chemevent.7"}
+ 	id = MSR_chemevent.7
+ 	title = MSR_chemevent.7.t
+ 	desc = MSR_chemevent.7.desc
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = MSR_chemevent.7.a
+		ai_chance = { factor = 30}
+		hidden_effect = {
+			set_country_flag = canterlotchaosflag
+		}
+		add_manpower = -1
+	}	 
+}
+
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_chemevent.8"}
+ 	id = MSR_chemevent.8
+ 	title = MSR_chemevent.8.t
+ 	desc = MSR_chemevent.8.desc
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = MSR_chemevent.8.a
+		ai_chance = { factor = 30}
+		every_owned_state = {
+				add_extra_state_shared_building_slots = 2
+			}
+		add_political_power = 200
+	}	 
+}
+
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_chemevent.9"}
+ 	id = MSR_chemevent.9
+ 	title = MSR_chemevent.9.t
+ 	desc = MSR_chemevent.9.desc
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = MSR_chemevent.9.a
+		ai_chance = { factor = 30}
+		add_stability = 0.05
+	}	 
+}
+
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_chemevent.10"}
+ 	id = MSR_chemevent.10
+ 	title = MSR_chemevent.10.t
+ 	desc = MSR_chemevent.10.desc
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = MSR_chemevent.10.a
+		ai_chance = { factor = 30}
+		army_experience = 5
+		add_war_support = 0.05
+	}	 
+}
+
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_chemevent.11"}
+ 	id = MSR_chemevent.11
+ 	title = MSR_chemevent.11.t
+ 	desc = MSR_chemevent.11.desc
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = MSR_chemevent.11.a
+		ai_chance = { factor = 30}
+		add_political_power = 10
+	}	 
+}
+
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_chemevent.12"}
+ 	id = MSR_chemevent.12
+ 	title = MSR_chemevent.12.t
+ 	desc = MSR_chemevent.12.desc
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = MSR_chemevent.12.a
+		ai_chance = { factor = 30}
+			swap_ideas = {
+				remove_idea = MSR_rally_rangers_idea_4
+				add_idea = MSR_rally_rangers_idea_5
+			}
+	}	 
+}
+
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_chemevent.13"}
+ 	id = MSR_chemevent.13
+ 	title = MSR_chemevent.13.t
+ 	desc = MSR_chemevent.13.desc
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = MSR_chemevent.13.a
+		ai_chance = { factor = 30}
+		add_ideas = unwavering_vision_idea
+	}	 
+}
+
+country_event = {
+	immediate = {log = "[GetDateText]: [Root.GetName]: event MSR_chemevent.14"}
+ 	id = MSR_chemevent.14
+ 	title = MSR_chemevent.14.t
+ 	desc = MSR_chemevent.14.desc
+	picture = GFX_event_test
+	is_triggered_only = yes
+ 	fire_only_once = yes
+	
+	option = {
+		name = MSR_chemevent.14.a
+		ai_chance = { factor = 30}
+		add_ideas = reasonable_view_idea
+	}	 
+}
+
+
 
 ###############################
 ###Example Focus/tree switch###
