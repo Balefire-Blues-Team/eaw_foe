@@ -46,6 +46,6 @@ dependencies={
 	"Equestria at War"
 }
 picture="thumbnail.png"
-supported_version="1.14.*"
+supported_version="1.16.*"
 path="mod/balefire_blues"
 remote_file_id="2307988796"
