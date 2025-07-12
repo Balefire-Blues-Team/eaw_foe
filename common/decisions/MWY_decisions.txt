@@ -542,12 +542,13 @@ MWY_levy_cat = {
 			tag = MWY
 		}
 		fire_only_once = yes
-
+		
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: mwy_claim_equestria_title"
 			drop_cosmetic_tag = yes
 			if = {
 				limit = { has_cosmetic_tag = MWY_NCR_state }
+				drop_cosmetic_tag = yes
 				set_cosmetic_tag = MWY_NCR_central_equestria
 			}
 			else = {
@@ -1020,6 +1021,36 @@ MWY_levy_cat = {
 		}
 	}
 
+	mwy_army_ai_bypass_decision = {
+		icon = GFX_decision_stable_door
+		ai_will_do = {
+			base = 1000
+		}
+		cost = 0
+
+		visible = {
+			has_completed_focus = MWY_qw_fresh_pov
+			tag = MWY
+			is_ai = yes
+		}
+		fire_only_once = yes
+
+		days_remove = 30
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision mwy_army_serf_conscription_decision"
+			custom_effect_tooltip = MWY_set_army_law_4_tt
+			add_ideas = serf_conscript_law
+            MWY_army_laws_4_opinion_effect = yes
+            hidden_effect = {
+                MWY_reset_army_laws_frames = yes
+                set_variable = { army_laws_var = 4 }
+                set_variable = { army_laws_button_4_frame_var = 2 }
+                MWY_army_law_cooldown_effect = yes
+                add_political_power = -50
+            }
+		}
+	}
+
 	mwy_army_reform_prepare_warplan_red = {
 		icon = GFX_decision_stable_door
 		ai_will_do = {
@@ -1035,7 +1066,7 @@ MWY_levy_cat = {
 		available = {
             has_army_experience > 5
             command_power > 30
-            is_neighbor_of = RED
+            is_neighbor_of = EYE
 		}
 
 		visible = {
@@ -1134,7 +1165,7 @@ MWY_levy_cat = {
 		fire_only_once = yes
 		days_remove = 180
 		targeted_modifier = {
-			tag = RED
+			tag = EYE
 			attack_bonus_against = 0.1
 			defense_bonus_against = 0.1
 		}
@@ -2067,7 +2098,7 @@ MWY_star_palace_cat = {
 			custom_trigger_tooltip = {
 				tooltip = MWY_built_3_palace_tt
 				hidden_trigger = {
-					check_variable = { MWY_palace_progress_var = 3 }
+					check_variable = { MWY_palace_progress_var > 2 }
 				}
 			}
 		}
