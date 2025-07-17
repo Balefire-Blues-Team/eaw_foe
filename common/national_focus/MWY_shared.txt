@@ -291,6 +291,49 @@
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MWY_backroom_squabbles"
 			country_event = newmareway.45
+
+			hidden_effect = {
+				if = {
+					limit = {
+						is_ai = yes
+						OR = {
+							has_game_rule = {
+								rule = MWY_AI_BEHAVIOR
+								option = QUEENSWAY
+							}
+							AND = {
+								is_historical_focus_on = yes
+								NOT = {
+									has_game_rule = {
+										rule = MWY_AI_BEHAVIOR
+										option = STAYTHECOURSE
+									}
+								}
+							}
+						}
+						visionary < 0.3
+					}
+					add_popularity = {
+						ideology = visionary
+						popularity = 0.20
+					}
+				}
+
+				if = {
+					limit = {
+						is_ai = yes
+						has_game_rule = {
+							rule = MWY_AI_BEHAVIOR
+							option = STAYTHECOURSE
+						}
+						visionary > 0.29
+					}
+					add_popularity = {
+						ideology = visionary
+						popularity = -0.10
+					}
+				}
+			}
 		}
 	}
 
@@ -3810,10 +3853,10 @@
 		available = {
 			custom_trigger_tooltip = {
 				tooltip = MWY_all_ERA_cores_above_50_comp_tt
-				all_owned_state = {
-					limit = {
-						is_core_of = ERA
-					}
+				69 = {
+					compliance > 50
+				}
+				805 = {
 					compliance > 50
 				}
 			}
@@ -4018,7 +4061,7 @@
 		}
 
 		ai_will_do = { 
-			factor = 25
+			factor = 0
 		} 
 
 		completion_reward = {
@@ -4305,6 +4348,26 @@
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus MWY_qw_neocastle_issue"
 			
+			if = {
+				limit = {
+					NCG = {
+						has_country_leader = {
+							character = NCG_char_JEB_Beauteous
+							ruling_only = yes
+						}
+					}
+				}
+
+				custom_effect_tooltip = MWY_ncg_slavers_tt
+				create_wargoal = {
+					type = annex_everything
+					target = NCG
+				}
+			}
+			else = {
+				custom_effect_tooltip = MWY_ncg_not_slavers_tt
+				add_ideas = MWY_NCG_defense_idea
+			}
 		}
 	}
 
@@ -4317,11 +4380,6 @@
 		cost = 5
 
 		prerequisite = { focus = MWY_qw_neocastle_issue }
-		available = { 
-			NCG = {
-				exists = yes
-			}
-		}
 
 		ai_will_do = { 
 			factor = 25

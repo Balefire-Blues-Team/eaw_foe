@@ -1,4 +1,4 @@
-version="1.2.14"
+version="1.3.1"
 replace_path="common/ai_peace"
 replace_path="common/ai_strategy"
 replace_path="common/ai_strategy_plans"
@@ -40,12 +40,12 @@ tags={
 	"National Focuses"
 	"Map"
 }
-name="EaW/OWB - Balefire Blues"
+name="Balefire Blues"
 dependencies={
 	"Old World Blues"
 	"Equestria at War"
 }
 picture="thumbnail.png"
-supported_version="1.12.*"
-path="mod/balefire_blues"
-remote_file_id="2307988796"
+supported_version="1.16.*"
+path="C:/Users/User/Documents/Paradox Interactive/Hearts of Iron IV/mod/balefire_blues"
+remote_file_id="3259212795"

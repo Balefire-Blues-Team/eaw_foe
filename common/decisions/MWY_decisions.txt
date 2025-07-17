@@ -25,6 +25,7 @@ MWY_realms_debug_cat = {
 		icon = GFX_decision_stable_door
 		ai_will_do = {
 			base = 0
+			
 		}
 		visible = {
 			#has_ideas = closed_stable_society
@@ -125,7 +126,7 @@ MWY_realms_debug_cat = {
 
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision foe_stability_dec"
-			has_country_flag = chancellor_appeasing_nobles_base_flag
+			set_country_flag = chancellor_appeasing_nobles_base_flag
 		}
 	}
 
@@ -225,6 +226,7 @@ MWY_levy_cat = {
 
 		days_mission_timeout = 160
 		timeout_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision MWY_noble_revolt_mission"
 			if = {
 				limit = { check_variable = { realm_poor_opinion_count_var = 5 } }
 				country_event = newmareway.22
@@ -397,6 +399,7 @@ MWY_levy_cat = {
 
 		days_mission_timeout = 81
 		timeout_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision MWY_famine_crisis"
 			country_event = newmareway.38
 			swap_ideas = {
 				remove_idea = MWY_low_winter_stores
@@ -409,6 +412,21 @@ MWY_levy_cat = {
 		icon = GFX_decision_crossed_swords
 		ai_will_do = {
 			base = 0
+			modifier = {
+				has_war = yes
+				add = 10
+			}
+			modifier = {
+				has_war_with = ERA
+				add = 25
+			}
+			modifier = {
+				any_country = {
+					has_war_with = MWY
+					has_army_size = { size > 29 }
+				}
+				add = 999
+			}
 		}
 
 		available = {
@@ -437,6 +455,10 @@ MWY_levy_cat = {
 		icon = GFX_decision_crossed_swords
 		ai_will_do = {
 			base = 0
+			modifier = {
+				has_war = no
+				add = 999
+			}
 		}
 
 		available = {
@@ -453,7 +475,7 @@ MWY_levy_cat = {
 		#fire_only_once = yes
 
 		complete_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision foe_stability_dec"
+			log = "[GetDateText]: [Root.GetName]: Decision mwy_disband_all_levies"
 			delete_unit_template_and_units = {
 			    division_template = "Commoner Levies"
 			}
@@ -519,8 +541,8 @@ MWY_levy_cat = {
 			#has_ideas = closed_stable_society
 			tag = MWY
 		}
-		#fire_only_once = yes set_cosmetic_tag = MWY_central_equestria
-
+		fire_only_once = yes
+		
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: mwy_claim_equestria_title"
 			drop_cosmetic_tag = yes
@@ -1304,7 +1326,7 @@ MWN_branch_office_cat = {
 					NOT = {
 						OR = {
 							has_idea = MWY_miner_branch_idea2
-							has_idea = MWY_mechanium_branch_idea2
+							has_idea = MWY_mechanicum_branch_idea2
 						}
 					}
 				}
@@ -1416,7 +1438,7 @@ MWN_branch_office_cat = {
 					NOT = {
 						OR = {
 							has_idea = MWY_builder_branch_idea2
-							has_idea = MWY_mechanium_branch_idea2
+							has_idea = MWY_mechanicum_branch_idea2
 						}
 					}
 				}
@@ -1554,8 +1576,8 @@ MWN_branch_office_cat = {
 		days_remove = 60
 		remove_effect = {
 			swap_ideas = {
-				remove_idea = MWY_mechanium_branch_idea
-				add_idea = MWY_mechanium_branch_idea2
+				remove_idea = MWY_mechanicum_branch_idea
+				add_idea = MWY_mechanicum_branch_idea2
 			}
 		}
 	}
@@ -1610,7 +1632,7 @@ MWN_branch_office_cat = {
 
 		days_remove = 30
 		remove_effect = {
-			add_equipment_to_stockpile = { type = infantry_equipment_4 amount = 150 producer = OWE }
+			add_equipment_to_stockpile = { type = ballistic_equipment_3 amount = 150 producer = OWE }
 		}
 	}
 }
@@ -2076,7 +2098,7 @@ MWY_star_palace_cat = {
 			custom_trigger_tooltip = {
 				tooltip = MWY_built_3_palace_tt
 				hidden_trigger = {
-					check_variable = { MWY_palace_progress_var = 3 }
+					check_variable = { MWY_palace_progress_var > 2 }
 				}
 			}
 		}
