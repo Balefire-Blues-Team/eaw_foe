@@ -6,6 +6,7 @@ MSR_crusader_cat = {
 			base = 0
 
 		}
+		
 
 		available = {
 			custom_trigger_tooltip = {
@@ -34,6 +35,7 @@ MSR_crusader_cat = {
 		}
 		visible = {
 			has_country_flag = MSR_crusader_decisions_available
+			NOT = { has_country_flag = MSR_located_crusader_flag }
 		}
 		#fire_only_once = yes
 
@@ -73,6 +75,7 @@ MSR_crusader_cat = {
 		visible = {
 			has_country_flag = MSR_crusader_decisions_available
 			has_country_flag = MSR_dark_magic_flag
+	    NOT = { has_country_flag = MSR_found_black_book }
 		}
 		fire_only_once = yes
 
@@ -343,10 +346,6 @@ MSR_marshall_plan_cat = {
 			
             num_of_available_civilian_factories > 3
 		}
-
-		visible = {
-			has_completed_focus = MSR_Manehattan_Recovery_Program
-		}
 		target_trigger = {
 			FROM = {
 				is_in_faction_with = MSR
@@ -434,7 +433,6 @@ MSR_border_wars_cat = {
 			}			
 		}
 		visible = {
-			has_completed_focus = MSR_cw_secure_our_position
 			owns_state = 646
 			NOT = {
 				owns_state = 66
@@ -472,126 +470,126 @@ MSR_border_wars_cat = {
 	}
 }
 
-MSR_stirring_up_trouble_cat = {
-	MSR_arm_slave_rebels = {
-		icon = GFX_decision_rifles
-
-		available = {
-			country_exists = EYE
-			NOT = { has_war_with = EYE }
-			has_equipment = {
-    			infantry_equipment > 300
-			}
-
-			custom_trigger_tooltip = {
-    			tooltip = not_arm_slaves_cooldown_tt		
-    			hidden_trigger = {
-    				NOT = { 
-					    has_country_flag = MSR_arm_slaves_cooldown
-            		}
-				}
-			}
-
-			custom_trigger_tooltip = {
-    			tooltip = MSR_arm_slaves_5_tt		
-    			#hidden_trigger = {
-    				NOT = { 
-					   check_variable = { MSR_EYE_unrest_var > 4 }
-            		}
-				#}
-			}
-		}
-
-		visible = {
-			has_completed_focus = MSR_Stirring_Up_Trouble
-		}
-
-		highlight_states = {
-			state = 532
-		}
-
-		cost = 75
-		days_remove = 60
-
-		remove_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision remove MSR_arm_slave_rebels"
-
-			custom_effect_tooltip = msr_arm_slaves_tt
-			hidden_effect = {
-				if = {
-					limit = { check_variable = { MSR_EYE_unrest_var = 0 } }
-					set_country_flag = completed_MSR_arm_slave_rebels_flag
-				}
-				add_to_variable = { MSR_EYE_unrest_var = 1 } 
-				send_equipment = {
-    				equipment = infantry_equipment
-   					amount = 300
-    				target = OWE
-				}
-				set_country_flag = MSR_arm_slaves_cooldown
-				country_event = {
-					id = MSR.133
-					days = 30
-					random = 48
-				}
-			}
-		}
-	}
-
-	MSR_set_arm_slaves_0 = {
-		icon = GFX_decision_generic_ignite_civil_war
-		cost = 0
-		#fire_only_once = yes
-		is_good = yes
-		available = {
-			#is_debug = yes
-		}
-		visible = {
-			is_debug = yes
-		}
-		modifier = {
-		}
-		complete_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision remove MSR_set_arm_slaves_0"
-			set_variable = { MSR_EYE_unrest_var = 0 }
-		}
-	}
-
-	MSR_set_arm_slaves_1 = {
-		icon = GFX_decision_generic_ignite_civil_war
-		cost = 0
-		#fire_only_once = yes
-		is_good = yes
-		available = {
-			#is_debug = yes
-		}
-		visible = {
-			is_debug = yes
-		}
-		modifier = {
-		}
-		complete_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision remove MSR_set_arm_slaves_1"
-			set_variable = { MSR_EYE_unrest_var = 1 }
-		}
-	}
-
-	MSR_set_arm_slaves_5 = {
-		icon = GFX_decision_generic_ignite_civil_war
-		cost = 0
-		#fire_only_once = yes
-		is_good = yes
-		available = {
-			#is_debug = yes
-		}
-		visible = {
-			is_debug = yes
-		}
-		modifier = {
-		}
-		complete_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision remove MSR_set_arm_slaves_5"
-			set_variable = { MSR_EYE_unrest_var = 5 }
-		}
-	}
-}
+#MSR_stirring_up_trouble_cat = {
+#	MSR_arm_slave_rebels = {
+#		icon = GFX_decision_rifles
+#
+#		available = {
+#			country_exists = EYE
+#			NOT = { has_war_with = EYE }
+#			has_equipment = {
+#   			infantry_equipment > 300
+#			}
+#
+#			custom_trigger_tooltip = {
+#   			tooltip = not_arm_slaves_cooldown_tt		
+#  			hidden_trigger = {
+# 				NOT = { 
+#				    has_country_flag = MSR_arm_slaves_cooldown
+#       		}
+#			}
+#			}
+#
+#			custom_trigger_tooltip = {
+#   			tooltip = MSR_arm_slaves_5_tt		
+#    			#hidden_trigger = {
+#    				NOT = { 
+#					   check_variable = { MSR_EYE_unrest_var > 4 }
+#            		}
+#				#}
+#			}
+#		}
+#
+#		visible = {
+#			has_completed_focus = MSR_Stirring_Up_Trouble
+#		}
+#
+#		highlight_states = {
+#			state = 532
+#		}
+#
+#		cost = 75
+#		days_remove = 60
+#
+#		remove_effect = {
+#			log = "[GetDateText]: [Root.GetName]: Decision remove MSR_arm_slave_rebels"
+#
+#			custom_effect_tooltip = msr_arm_slaves_tt
+#			hidden_effect = {
+#				if = {
+#					limit = { check_variable = { MSR_EYE_unrest_var = 0 } }
+#					set_country_flag = completed_MSR_arm_slave_rebels_flag
+#				}
+#				add_to_variable = { MSR_EYE_unrest_var = 1 } 
+#				send_equipment = {
+#   				equipment = infantry_equipment
+#   					amount = 300
+#    				target = OWE
+#				}
+#				set_country_flag = MSR_arm_slaves_cooldown
+#				country_event = {
+#					id = MSR.133
+#					days = 30
+#					random = 48
+#				}
+#			}
+#		}
+#	}
+#
+#	MSR_set_arm_slaves_0 = {
+#		icon = GFX_decision_generic_ignite_civil_war
+#		cost = 0
+#		#fire_only_once = yes
+#		is_good = yes
+#		available = {
+#			#is_debug = yes
+#		}
+#		visible = {
+#			is_debug = yes
+#		}
+#		modifier = {
+#		}
+#		complete_effect = {
+#			log = "[GetDateText]: [Root.GetName]: Decision remove MSR_set_arm_slaves_0"
+#			set_variable = { MSR_EYE_unrest_var = 0 }
+#		}
+#	}
+#
+#	MSR_set_arm_slaves_1 = {
+#		icon = GFX_decision_generic_ignite_civil_war
+#		cost = 0
+#		#fire_only_once = yes
+#		is_good = yes
+#		available = {
+#			#is_debug = yes
+#		}
+#		visible = {
+#			is_debug = yes
+#		}
+#		modifier = {
+#		}
+#		complete_effect = {
+#			log = "[GetDateText]: [Root.GetName]: Decision remove MSR_set_arm_slaves_1"
+#			set_variable = { MSR_EYE_unrest_var = 1 }
+#		}
+#	}
+#
+#	MSR_set_arm_slaves_5 = {
+#		icon = GFX_decision_generic_ignite_civil_war
+#		cost = 0
+#		#fire_only_once = yes
+#		is_good = yes
+#		available = {
+#			#is_debug = yes
+#		}
+#		visible = {
+#			is_debug = yes
+#		}
+#		modifier = {
+#		}
+#		complete_effect = {
+#			log = "[GetDateText]: [Root.GetName]: Decision remove MSR_set_arm_slaves_5"
+#			set_variable = { MSR_EYE_unrest_var = 5 }
+#		}
+#	}
+# }
