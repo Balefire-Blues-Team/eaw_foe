@@ -9,12 +9,6 @@ RWK_economy_cat = {
 				has_political_power > 199
 			}
 		}
-		visible = {
-			tag = RWK
-		}
-		available = {
-			has_political_power > 39
-		}
 		fire_only_once = no
 		days_re_enable = 200
 
@@ -38,12 +32,6 @@ RWK_economy_cat = {
 				has_political_power > 199
 			}
 		}
-		visible = {
-			tag = RWK
-		}
-		available = {
-			has_political_power > 39
-		}
 		fire_only_once = no
 		days_re_enable = 200
 
@@ -66,12 +54,6 @@ RWK_economy_cat = {
 				add = 20
 				has_political_power > 199
 			}
-		}
-		visible = {
-			tag = RWK
-		}
-		available = {
-			has_political_power > 39
 		}
 		fire_only_once = no
 		days_re_enable = 400
@@ -101,7 +83,6 @@ RWK_economy_cat = {
 			has_completed_focus = RWK_buy_foreign_expertise
 		}
 		available = {
-			has_political_power > 99
 			num_of_civilian_factories_available_for_projects > 9
 		}
 		fire_only_once = yes
@@ -132,7 +113,6 @@ RWK_economy_cat = {
 			has_completed_focus = RWK_buy_foreign_expertise
 		}
 		available = {
-			has_political_power > 99
 			num_of_civilian_factories_available_for_projects > 4
 		}
 		fire_only_once = yes
@@ -163,7 +143,6 @@ RWK_economy_cat = {
 			has_completed_focus = RWK_buy_foreign_expertise
 		}
 		available = {
-			has_political_power > 99
 			num_of_civilian_factories_available_for_projects > 9
 		}
 		fire_only_once = yes
@@ -194,7 +173,6 @@ RWK_economy_cat = {
 			has_completed_focus = RWK_buy_foreign_expertise
 		}
 		available = {
-			has_political_power > 99
 			num_of_civilian_factories_available_for_projects > 9
 		}
 		fire_only_once = yes
@@ -225,7 +203,6 @@ RWK_economy_cat = {
 			has_completed_focus = RWK_buy_foreign_expertise
 		}
 		available = {
-			has_political_power > 99
 			num_of_civilian_factories_available_for_projects > 9
 		}
 		fire_only_once = yes
@@ -251,14 +228,11 @@ RWK_economy_cat = {
 				has_political_power > 149
 			}
 		}
-		available = {
-			has_political_power > 29
-		}
 		state_target = any_owned_state
 		target_root_trigger = {
 			has_completed_focus = RWK_connect_hinterlands
 		}
-		target_array = RWK.owned_states
+		target_array = any
 		target_trigger = {
 			FROM = {
 				infrastructure < 6
@@ -288,14 +262,11 @@ RWK_economy_cat = {
 				has_political_power > 149
 			}
 		}
-		available = {
-			has_political_power > 9
-		}
 		state_target = any_owned_state
 		target_root_trigger = {
 			has_completed_focus = RWK_connect_hinterlands
 		}
-		target_array = RWK.owned_states
+		target_array = any
 		target_trigger = {
 			FROM = {
 				NOT = { has_state_flag = RWK_powerline_flag }
@@ -328,14 +299,11 @@ RWK_economy_cat = {
 				has_political_power > 149
 			}
 		}
-		available = {
-			has_political_power > 14
-		}
 		state_target = any_owned_state
 		target_root_trigger = {
 			has_completed_focus = RWK_treasures_of_past
 		}
-		target_array = RWK.owned_states
+		target_array = any
 		target_trigger = {
 			FROM = {
 				NOT = { has_state_flag = RWK_scavenge_tech_flag }
@@ -448,6 +416,117 @@ RWK_expansion_cat = {
 			}
 		}
 	}
+	RWK_borderwar_470 = {
+		icon = border_war
+		cost = 50
+		
+		ai_will_do = {
+			factor = 1000
+		}
+		fire_only_once = no
+		is_good = yes
+		
+		available = {
+			has_war = no
+			has_full_control_of_state = 87
+		}
+		
+		visible = {
+			NOT = {
+				owns_state = 470
+			}
+			owns_state = 87
+			has_completed_focus = RWK_spread_the_faith
+		}
+
+		days_re_enable = 30
+
+
+		highlight_states = {
+			state = 470
+		}
+		target_array = neighbors
+		target_trigger = {
+			FROM = {
+				owns_state = 470
+			}
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_borderwar_470 target: [From.GetName]"
+			470 = { set_state_flag = RWK_borderwar_target }
+			start_border_war = {
+				change_state_after_war = no
+				attacker = {
+					state = 87
+					num_provinces = 3
+					on_win = rustwreck.47
+					on_lose = rustwreck.48
+					on_cancel = rustwreck.49
+				}
+
+				defender = {
+					state = 470
+					num_provinces = 3
+				}
+			}
+		}
+	}
+	RWK_borderwar_648 = {
+		icon = border_war
+		cost = 50
+		
+		ai_will_do = {
+			factor = 1000
+		}
+		fire_only_once = no
+		
+		available = {
+			has_war = no
+			has_full_control_of_state = 508
+		}
+		
+		visible = {
+			NOT = {
+				owns_state = 648
+			}
+			owns_state = 508
+			has_completed_focus = RWK_spread_the_faith
+		}
+
+		days_re_enable = 30
+
+
+		highlight_states = {
+			state = 648
+		}
+		target_array = neighbors
+		target_trigger = {
+			FROM = {
+				owns_state = 648
+			}
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_borderwar_648 target: [From.GetName]"
+			648 = { set_state_flag = RWK_borderwar_target }
+			start_border_war = {
+				change_state_after_war = no
+				attacker = {
+					state = 508
+					num_provinces = 3
+					on_win = rustwreck.47
+					on_lose = rustwreck.48
+					on_cancel = rustwreck.49
+				}
+
+				defender = {
+					state = 648
+					num_provinces = 3
+				}
+			}
+		}
+	}
 }
 
 RWK_sickness_cat = {
@@ -464,9 +543,7 @@ RWK_sickness_cat = {
 		selectable_mission = no
 		days_mission_timeout = 200
 		timeout_effect = {
-			country_event = {
-				id = LIT_steelwall.1
-			}
+			country_event = rustwreck.33
 		}
 	}
 	RWK_extend_life_dec = {
@@ -483,9 +560,6 @@ RWK_sickness_cat = {
 			tag = RWK
 			has_active_mission = RWK_admiral_feral_countdown
 			has_completed_focus = RWK_put_off_inevitable
-		}
-		available = {
-			has_political_power > 9
 		}
 		fire_only_once = no
 		days_re_enable = 19
@@ -517,14 +591,1600 @@ RWK_sickness_cat = {
 			has_active_mission = RWK_admiral_feral_countdown
 			has_completed_focus = RWK_authorize_experimental_treatments
 		}
-		available = {
-			has_political_power > 9
-		}
 		fire_only_once = yes
 
 		complete_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision RWK_experimental_treatment_dec"
 			country_event = rustwreck.27
+		}
+	}
+}
+
+RWK_tidebound_cat = {
+	RWK_saltpan_low_countdown = {
+		icon = endtide_flag
+		allowed = {
+			tag = RWK
+		}
+		available = {
+			always = no
+		}
+		activation = {
+			has_country_flag = RWK_saltpan_low_target_flag
+			NOT = {
+				203 = { state_population > 10000 }
+				524 = { state_population > 15000 }
+			}
+		}
+		selectable_mission = no
+		is_good = yes
+		fire_only_once = no
+		days_mission_timeout = 30
+		timeout_effect = {
+			IF = {
+				limit = {
+					any_owned_state = {
+						NOT = {
+							has_state_flag = No_saltpan_conference
+						}
+						state_population > 15000
+					}
+				}
+				random_owned_controlled_state = {
+					limit = {
+						NOT = {
+							has_state_flag = No_saltpan_conference
+						}
+						state_population > 15000
+					}
+					add_manpower = -1000
+				}
+				IF = {
+					limit = {
+						AND = {
+							203 = { state_population < 10000 }
+							524 = { state_population < 15000 }
+						}
+					}
+					203 = { add_manpower = 500 }
+					524 = { add_manpower = 500 }
+				}
+				ELSE_IF = {
+					limit = {
+						AND = {
+							203 = { state_population < 10000 }
+							524 = { state_population > 15000 }
+						}
+					}
+					203 = { add_manpower = 1000 }
+				}
+				ELSE_IF = {
+					limit = {
+						AND = {
+							203 = { state_population > 10000 }
+							524 = { state_population < 15000 }
+						}
+					}
+					524 = { add_manpower = 1000 }
+				}
+			}
+			ELSE_IF = {
+				limit = {
+					any_owned_state = {
+						NOT = {
+							has_state_flag = No_saltpan_conference
+						}
+						state_population > 10000
+					}
+				}
+				random_owned_controlled_state = {
+					limit = {
+						NOT = {
+							has_state_flag = No_saltpan_conference
+						}
+						state_population > 10000
+					}
+					add_manpower = -500
+				}
+				IF = {
+					limit = {
+						AND = {
+							203 = { state_population < 10000 }
+							524 = { state_population < 15000 }
+						}
+					}
+					203 = { add_manpower = 250 }
+					524 = { add_manpower = 250 }
+				}
+				ELSE_IF = {
+					limit = {
+						AND = {
+							203 = { state_population < 10000 }
+							524 = { state_population > 15000 }
+						}
+					}
+					203 = { add_manpower = 500 }
+				}
+				ELSE_IF = {
+					limit = {
+						AND = {
+							203 = { state_population > 10000 }
+							524 = { state_population < 15000 }
+						}
+					}
+					524 = { add_manpower = 500 }
+				}
+			}
+			ELSE_IF = {
+				limit = {
+					any_owned_state = {
+						NOT = {
+							has_state_flag = No_saltpan_conference
+						}
+						state_population > 6000
+					}
+				}
+				random_owned_controlled_state = {
+					limit = {
+						NOT = {
+							has_state_flag = No_saltpan_conference
+						}
+						state_population > 6000
+					}
+					add_manpower = -200
+				}
+				IF = {
+					limit = {
+						AND = {
+							203 = { state_population < 10000 }
+							524 = { state_population < 15000 }
+						}
+					}
+					203 = { add_manpower = 100 }
+					524 = { add_manpower = 100 }
+				}
+				ELSE_IF = {
+					limit = {
+						AND = {
+							203 = { state_population < 10000 }
+							524 = { state_population > 15000 }
+						}
+					}
+					203 = { add_manpower = 200 }
+				}
+				ELSE_IF = {
+					limit = {
+						AND = {
+							203 = { state_population > 10000 }
+							524 = { state_population < 15000 }
+						}
+					}
+					524 = { add_manpower = 200 }
+				}
+			}
+			ELSE = {
+				custom_effect_tooltip = RWK_not_enough_pop_to_steal_tt
+			}
+
+			IF = {
+				limit = {
+					OR = {
+					524 = { 
+						free_building_slots = {
+							building = industrial_complex
+							size > 0
+						}
+					}
+					203 = { 
+						free_building_slots = {
+							building = industrial_complex
+							size > 0
+						}
+					}
+					}
+					any_owned_state = {
+						NOT = {
+							has_state_flag = No_saltpan_conference
+						}
+						OR = {
+							industrial_complex > 3
+							arms_factory > 3
+						}
+					}
+				}
+				random_owned_controlled_state = {
+					limit = {
+						NOT = {
+							has_state_flag = No_saltpan_conference
+						}
+						OR = {
+							industrial_complex > 3
+							arms_factory > 3
+						}
+					}
+					IF = {
+						limit = {
+							industrial_complex > 3
+						}
+						remove_building = {
+							type = industrial_complex
+							level = 1
+						}
+						RWK = {set_country_flag = RWK_complex_removed_flag}
+					}
+					ELSE_IF = {
+						limit = {
+							arms_factory > 3
+						}
+						remove_building = {
+							type = arms_factory
+							level = 1
+						}
+						RWK = {set_country_flag = RWK_arms_removed_flag}
+					}
+				}
+				IF = {
+					limit = {
+						524 = { 
+							free_building_slots = {
+								building = industrial_complex
+								size > 0
+							}
+						}
+						has_country_flag = RWK_complex_removed_flag
+					}
+					524 = {
+						add_building_construction = {
+							type = industrial_complex
+							level = 1
+						}
+						add_extra_state_shared_building_slots = 1
+					}
+					clr_country_flag = RWK_complex_removed_flag
+				}
+				ELSE_IF = {
+					limit = {
+						524 = { 
+							free_building_slots = {
+								building = industrial_complex
+								size > 0
+							}
+						}
+						has_country_flag = RWK_arms_removed_flag
+					}
+					524 = {
+						add_building_construction = {
+							type = arms_factory
+							level = 1
+						}
+						add_extra_state_shared_building_slots = 1
+					}
+					clr_country_flag = RWK_arms_removed_flag
+				}
+				ELSE_IF = {
+					limit = {
+						203 = { 
+							free_building_slots = {
+								building = industrial_complex
+								size > 0
+							}
+						}
+						has_country_flag = RWK_arms_removed_flag
+					}
+					203 = {
+						add_building_construction = {
+							type = arms_factory
+							level = 1
+						}
+						add_extra_state_shared_building_slots = 1
+					}
+					clr_country_flag = RWK_arms_removed_flag
+				}
+				ELSE_IF = {
+					limit = {
+						203 = { 
+							free_building_slots = {
+								building = industrial_complex
+								size > 0
+							}
+						}
+						has_country_flag = RWK_complex_removed_flag
+					}
+					203 = {
+						add_building_construction = {
+							type = industrial_complex
+							level = 1
+						}
+						add_extra_state_shared_building_slots = 1
+					}
+					clr_country_flag = RWK_complex_removed_flag
+				}
+			}
+		}
+	}
+
+	RWK_saltpan_medium_countdown = {
+		icon = endtide_flag
+		allowed = {
+			tag = RWK
+		}
+		available = {
+			always = no
+		}
+		activation = {
+			has_country_flag = RWK_saltpan_medium_target_flag
+			203 = { state_population < 18000 }
+			524 = { state_population < 25000 }
+		}
+		selectable_mission = no
+		is_good = yes
+		fire_only_once = no
+		days_mission_timeout = 30
+		timeout_effect = {
+			IF = {
+				limit = {
+					any_owned_state = {
+						NOT = {
+							has_state_flag = No_saltpan_conference
+						}
+						state_population > 15000
+					}
+				}
+				random_owned_controlled_state = {
+					limit = {
+						NOT = {
+							has_state_flag = No_saltpan_conference
+						}
+						state_population > 15000
+					}
+					add_manpower = -1000
+				}
+				IF = {
+					limit = {
+						AND = {
+							203 = { state_population < 18000 }
+							524 = { state_population < 25000 }
+						}
+					}
+					203 = { add_manpower = 500 }
+					524 = { add_manpower = 500 }
+				}
+				ELSE_IF = {
+					limit = {
+						AND = {
+							203 = { state_population < 18000 }
+							524 = { state_population > 25000 }
+						}
+					}
+					203 = { add_manpower = 1000 }
+				}
+				ELSE_IF = {
+					limit = {
+						AND = {
+							203 = { state_population > 18000 }
+							524 = { state_population < 25000 }
+						}
+					}
+					524 = { add_manpower = 1000 }
+				}
+			}
+			ELSE_IF = {
+				limit = {
+					any_owned_state = {
+						NOT = {
+							has_state_flag = No_saltpan_conference
+						}
+						state_population > 10000
+					}
+				}
+				random_owned_controlled_state = {
+					limit = {
+						NOT = {
+							has_state_flag = No_saltpan_conference
+						}
+						state_population > 10000
+					}
+					add_manpower = -500
+				}
+				IF = {
+					limit = {
+						AND = {
+							203 = { state_population < 18000 }
+							524 = { state_population < 25000 }
+						}
+					}
+					203 = { add_manpower = 250 }
+					524 = { add_manpower = 250 }
+				}
+				ELSE_IF = {
+					limit = {
+						AND = {
+							203 = { state_population < 18000 }
+							524 = { state_population > 25000 }
+						}
+					}
+					203 = { add_manpower = 500 }
+				}
+				ELSE_IF = {
+					limit = {
+						AND = {
+							203 = { state_population > 18000 }
+							524 = { state_population < 25000 }
+						}
+					}
+					524 = { add_manpower = 500 }
+				}
+			}
+			ELSE_IF = {
+				limit = {
+					any_owned_state = {
+						NOT = {
+							has_state_flag = No_saltpan_conference
+						}
+						state_population > 6000
+					}
+				}
+				random_owned_controlled_state = {
+					limit = {
+						NOT = {
+							has_state_flag = No_saltpan_conference
+						}
+						state_population > 6000
+					}
+					add_manpower = -200
+				}
+				IF = {
+					limit = {
+						AND = {
+							203 = { state_population < 18000 }
+							524 = { state_population < 25000 }
+						}
+					}
+					203 = { add_manpower = 100 }
+					524 = { add_manpower = 100 }
+				}
+				ELSE_IF = {
+					limit = {
+						AND = {
+							203 = { state_population < 18000 }
+							524 = { state_population > 25000 }
+						}
+					}
+					203 = { add_manpower = 200 }
+				}
+				ELSE_IF = {
+					limit = {
+						AND = {
+							203 = { state_population > 18000 }
+							524 = { state_population < 25000 }
+						}
+					}
+					524 = { add_manpower = 200 }
+				}
+			}
+			ELSE = {
+				custom_effect_tooltip = RWK_not_enough_pop_to_steal_tt
+			}
+
+			IF = {
+				limit = {
+					OR = {
+					524 = { 
+						free_building_slots = {
+							building = industrial_complex
+							size > 0
+						}
+					}
+					203 = { 
+						free_building_slots = {
+							building = industrial_complex
+							size > 0
+						}
+					}
+					}
+					any_owned_state = {
+						NOT = {
+							has_state_flag = No_saltpan_conference
+						}
+						OR = {
+							industrial_complex > 3
+							arms_factory > 3
+						}
+					}
+				}
+				random_owned_controlled_state = {
+					limit = {
+						NOT = {
+							has_state_flag = No_saltpan_conference
+						}
+						OR = {
+							industrial_complex > 3
+							arms_factory > 3
+						}
+					}
+					IF = {
+						limit = {
+							industrial_complex > 3
+						}
+						remove_building = {
+							type = industrial_complex
+							level = 1
+						}
+						RWK = {set_country_flag = RWK_complex_removed_flag}
+					}
+					ELSE_IF = {
+						limit = {
+							arms_factory > 3
+						}
+						remove_building = {
+							type = arms_factory
+							level = 1
+						}
+						RWK = {set_country_flag = RWK_arms_removed_flag}
+					}
+				}
+				IF = {
+					limit = {
+						524 = { 
+							free_building_slots = {
+								building = industrial_complex
+								size > 0
+							}
+						}
+						has_country_flag = RWK_complex_removed_flag
+					}
+					524 = {
+						add_building_construction = {
+							type = industrial_complex
+							level = 1
+						}
+						add_extra_state_shared_building_slots = 1
+					}
+					clr_country_flag = RWK_complex_removed_flag
+				}
+				ELSE_IF = {
+					limit = {
+						524 = { 
+							free_building_slots = {
+								building = industrial_complex
+								size > 0
+							}
+						}
+						has_country_flag = RWK_arms_removed_flag
+					}
+					524 = {
+						add_building_construction = {
+							type = arms_factory
+							level = 1
+						}
+						add_extra_state_shared_building_slots = 1
+					}
+					clr_country_flag = RWK_arms_removed_flag
+				}
+				ELSE_IF = {
+					limit = {
+						203 = { 
+							free_building_slots = {
+								building = industrial_complex
+								size > 0
+							}
+						}
+						has_country_flag = RWK_arms_removed_flag
+					}
+					203 = {
+						add_building_construction = {
+							type = arms_factory
+							level = 1
+						}
+						add_extra_state_shared_building_slots = 1
+					}
+					clr_country_flag = RWK_arms_removed_flag
+				}
+				ELSE_IF = {
+					limit = {
+						203 = { 
+							free_building_slots = {
+								building = industrial_complex
+								size > 0
+							}
+						}
+						has_country_flag = RWK_complex_removed_flag
+					}
+					203 = {
+						add_building_construction = {
+							type = industrial_complex
+							level = 1
+						}
+						add_extra_state_shared_building_slots = 1
+					}
+					clr_country_flag = RWK_complex_removed_flag
+				}
+			}
+		}
+	}
+
+	RWK_saltpan_high_countdown = {
+		icon = endtide_flag
+		allowed = {
+			tag = RWK
+		}
+		available = {
+			always = no
+		}
+		activation = {
+			has_country_flag = RWK_saltpan_high_target_flag
+			203 = { state_population < 25000 }
+			524 = { state_population < 40000 }
+		}
+		selectable_mission = no
+		is_good = yes
+		fire_only_once = no
+		days_mission_timeout = 30
+		timeout_effect = {
+			IF = {
+				limit = {
+					any_owned_state = {
+						NOT = {
+							has_state_flag = No_saltpan_conference
+						}
+						state_population > 15000
+					}
+				}
+				random_owned_controlled_state = {
+					limit = {
+						NOT = {
+							has_state_flag = No_saltpan_conference
+						}
+						state_population > 15000
+					}
+					add_manpower = -1000
+				}
+				IF = {
+					limit = {
+						AND = {
+							203 = { state_population < 25000 }
+							524 = { state_population < 40000 }
+						}
+					}
+					203 = { add_manpower = 500 }
+					524 = { add_manpower = 500 }
+				}
+				ELSE_IF = {
+					limit = {
+						AND = {
+							203 = { state_population < 25000 }
+							524 = { state_population > 40000 }
+						}
+					}
+					203 = { add_manpower = 1000 }
+				}
+				ELSE_IF = {
+					limit = {
+						AND = {
+							203 = { state_population > 25000 }
+							524 = { state_population < 40000 }
+						}
+					}
+					524 = { add_manpower = 1000 }
+				}
+			}
+			ELSE_IF = {
+				limit = {
+					any_owned_state = {
+						NOT = {
+							has_state_flag = No_saltpan_conference
+						}
+						state_population > 10000
+					}
+				}
+				random_owned_controlled_state = {
+					limit = {
+						NOT = {
+							has_state_flag = No_saltpan_conference
+						}
+						state_population > 10000
+					}
+					add_manpower = -500
+				}
+				IF = {
+					limit = {
+						AND = {
+							203 = { state_population < 25000 }
+							524 = { state_population < 40000 }
+						}
+					}
+					203 = { add_manpower = 250 }
+					524 = { add_manpower = 250 }
+				}
+				ELSE_IF = {
+					limit = {
+						AND = {
+							203 = { state_population < 25000 }
+							524 = { state_population > 40000 }
+						}
+					}
+					203 = { add_manpower = 500 }
+				}
+				ELSE_IF = {
+					limit = {
+						AND = {
+							203 = { state_population > 25000 }
+							524 = { state_population < 40000 }
+						}
+					}
+					524 = { add_manpower = 500 }
+				}
+			}
+			ELSE_IF = {
+				limit = {
+					any_owned_state = {
+						NOT = {
+							has_state_flag = No_saltpan_conference
+						}
+						state_population > 6000
+					}
+				}
+				random_owned_controlled_state = {
+					limit = {
+						NOT = {
+							has_state_flag = No_saltpan_conference
+						}
+						state_population > 6000
+					}
+					add_manpower = -200
+				}
+				IF = {
+					limit = {
+						AND = {
+							203 = { state_population < 25000 }
+							524 = { state_population < 40000 }
+						}
+					}
+					203 = { add_manpower = 100 }
+					524 = { add_manpower = 100 }
+				}
+				ELSE_IF = {
+					limit = {
+						AND = {
+							203 = { state_population < 25000 }
+							524 = { state_population > 40000 }
+						}
+					}
+					203 = { add_manpower = 200 }
+				}
+				ELSE_IF = {
+					limit = {
+						AND = {
+							203 = { state_population > 25000 }
+							524 = { state_population < 40000 }
+						}
+					}
+					524 = { add_manpower = 200 }
+				}
+			}
+			ELSE = {
+				custom_effect_tooltip = RWK_not_enough_pop_to_steal_tt
+			}
+
+			IF = {
+				limit = {
+					OR = {
+					524 = { 
+						free_building_slots = {
+							building = industrial_complex
+							size > 0
+						}
+					}
+					203 = { 
+						free_building_slots = {
+							building = industrial_complex
+							size > 0
+						}
+					}
+					}
+					any_owned_state = {
+						NOT = {
+							has_state_flag = No_saltpan_conference
+						}
+						OR = {
+							industrial_complex > 3
+							arms_factory > 3
+						}
+					}
+				}
+				random_owned_controlled_state = {
+					limit = {
+						NOT = {
+							has_state_flag = No_saltpan_conference
+						}
+						OR = {
+							industrial_complex > 3
+							arms_factory > 3
+						}
+					}
+					IF = {
+						limit = {
+							industrial_complex > 3
+						}
+						remove_building = {
+							type = industrial_complex
+							level = 1
+						}
+						RWK = {set_country_flag = RWK_complex_removed_flag}
+					}
+					ELSE_IF = {
+						limit = {
+							arms_factory > 3
+						}
+						remove_building = {
+							type = arms_factory
+							level = 1
+						}
+						RWK = {set_country_flag = RWK_arms_removed_flag}
+					}
+				}
+				IF = {
+					limit = {
+						524 = { 
+							free_building_slots = {
+								building = industrial_complex
+								size > 0
+							}
+						}
+						has_country_flag = RWK_complex_removed_flag
+					}
+					524 = {
+						add_building_construction = {
+							type = industrial_complex
+							level = 1
+						}
+						add_extra_state_shared_building_slots = 1
+					}
+					clr_country_flag = RWK_complex_removed_flag
+				}
+				ELSE_IF = {
+					limit = {
+						524 = { 
+							free_building_slots = {
+								building = industrial_complex
+								size > 0
+							}
+						}
+						has_country_flag = RWK_arms_removed_flag
+					}
+					524 = {
+						add_building_construction = {
+							type = arms_factory
+							level = 1
+						}
+						add_extra_state_shared_building_slots = 1
+					}
+					clr_country_flag = RWK_arms_removed_flag
+				}
+				ELSE_IF = {
+					limit = {
+						203 = { 
+							free_building_slots = {
+								building = industrial_complex
+								size > 0
+							}
+						}
+						has_country_flag = RWK_arms_removed_flag
+					}
+					203 = {
+						add_building_construction = {
+							type = arms_factory
+							level = 1
+						}
+						add_extra_state_shared_building_slots = 1
+					}
+					clr_country_flag = RWK_arms_removed_flag
+				}
+				ELSE_IF = {
+					limit = {
+						203 = { 
+							free_building_slots = {
+								building = industrial_complex
+								size > 0
+							}
+						}
+						has_country_flag = RWK_complex_removed_flag
+					}
+					203 = {
+						add_building_construction = {
+							type = industrial_complex
+							level = 1
+						}
+						add_extra_state_shared_building_slots = 1
+					}
+					clr_country_flag = RWK_complex_removed_flag
+				}
+			}
+		}
+	}
+
+	RWK_assimilate_boosterjuice_87_dec = {
+		icon = endtide_flag
+		cost = 20
+		ai_will_do = {
+			base = 1000
+		}
+		visible = {
+			tag = RWK
+			has_completed_focus = RWK_begin_the_great_syncretism
+			owns_state = 87
+		}
+		available = {
+			owns_state = 87
+			87 = { compliance > 80 }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_assimilate_boosterjuice_87_dec"
+			87 = {
+				add_core_of = RWK
+				set_state_name = "Aphelion"
+			}
+			set_province_name = {
+				id = 8822
+				name = "Aphelion"
+			}
+		}
+	}
+	RWK_assimilate_longturn_471_dec = {
+		icon = endtide_flag
+		cost = 20
+		ai_will_do = {
+			base = 1000
+		}
+		visible = {
+			tag = RWK
+			has_completed_focus = RWK_begin_the_great_syncretism
+			owns_state = 471
+		}
+		available = {
+			owns_state = 471
+			471 = { compliance > 80 }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_assimilate_longturn_471_dec"
+			471 = {
+				add_core_of = RWK
+				set_state_name = "Bloody Shores"
+			}
+		}
+	}
+	RWK_assimilate_nsunrise_58_dec = {
+		icon = endtide_flag
+		cost = 20
+		ai_will_do = {
+			base = 1000
+		}
+		visible = {
+			tag = RWK
+			has_completed_focus = RWK_begin_the_great_syncretism
+			owns_state = 58
+		}
+		available = {
+			owns_state = 58
+			58 = { compliance > 80 }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_assimilate_boosterjuice_87_dec"
+			58 = {
+				add_core_of = RWK
+				set_state_name = "Rainy Banks"
+				set_victory_points = {
+					province = 3134
+					value = 0
+				}
+				add_victory_points = {
+					province = 6510
+					value = 4
+				}
+			}
+			hidden_effect = {
+				set_province_name = {
+					id = 6510
+					name = "Great Cross"
+				}
+			}
+		}
+	}
+	RWK_assimilate_449_dec = {
+		icon = endtide_flag
+		cost = 20
+		ai_will_do = {
+			base = 1000
+		}
+		visible = {
+			tag = RWK
+			has_completed_focus = RWK_begin_the_great_syncretism
+			owns_state = 449
+		}
+		available = {
+			449 = { compliance > 80 }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_assimilate_449_dec"
+			449 = {
+				add_core_of = RWK
+				set_state_name = "Amphidrome"
+			}
+		}
+	}
+	RWK_assimilate_49_dec = {
+		icon = endtide_flag
+		cost = 20
+		ai_will_do = {
+			base = 1000
+		}
+		visible = {
+			tag = RWK
+			has_completed_focus = RWK_begin_the_great_syncretism
+			owns_state = 49
+		}
+		available = {
+			49 = { compliance > 80 }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_assimilate_49_dec"
+			49 = {
+				add_core_of = RWK
+				set_state_name = "Crimsonia"
+			}
+			set_province_name = {
+				id = 8675
+				name = "Crimsonia"
+			}
+			set_province_name = {
+				id = 15156
+				name = "Rusted Altar"
+			}
+		}
+	}
+	RWK_assimilate_816_dec = {
+		icon = endtide_flag
+		cost = 20
+		ai_will_do = {
+			base = 1000
+		}
+		visible = {
+			tag = RWK
+			has_completed_focus = RWK_begin_the_great_syncretism
+			owns_state = 816
+		}
+		available = {
+			816 = { compliance > 80 }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_assimilate_816_dec"
+			816 = {
+				add_core_of = RWK
+				set_state_name = "Blessed Bastion"
+				add_building_construction = {
+					type = bunker
+					level = 6
+					province = 16063
+				}
+			}
+			set_province_name = {
+				id = 16063
+				name = "Blessed Bastion"
+			}
+		}
+	}
+	RWK_assimilate_461_dec = {
+		icon = endtide_flag
+		cost = 20
+		ai_will_do = {
+			base = 1000
+		}
+		visible = {
+			tag = RWK
+			has_completed_focus = RWK_begin_the_great_syncretism
+			owns_state = 461
+		}
+		available = {
+			461 = { compliance > 80 }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_assimilate_461_dec"
+			461 = {
+				add_core_of = RWK
+				set_state_name = "Rite of Obedience"
+			}
+			set_province_name = {
+				id = 1807
+				name = "Scrapyard"
+			}
+		}
+	}
+	RWK_assimilate_462_dec = {
+		icon = endtide_flag
+		cost = 20
+		ai_will_do = {
+			base = 1000
+		}
+		visible = {
+			tag = RWK
+			has_completed_focus = RWK_begin_the_great_syncretism
+			owns_state = 462
+		}
+		available = {
+			462 = { compliance > 80 }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_assimilate_462_dec"
+			462 = {
+				add_core_of = RWK
+				set_state_name = "Rite of Blood"
+			}
+		}
+	}
+	RWK_assimilate_440_dec = {
+		icon = endtide_flag
+		cost = 20
+		ai_will_do = {
+			base = 1000
+		}
+		visible = {
+			tag = RWK
+			has_completed_focus = RWK_begin_the_great_syncretism
+			owns_state = 440
+		}
+		available = {
+			440 = { compliance > 80 }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_assimilate_440_dec"
+			440 = {
+				add_core_of = RWK
+				set_state_name = "Rite of Dilligence"
+				add_building_construction = {
+					type = bunker
+					level = 6
+					province = 8559
+				}
+			}
+			set_province_name = {
+				id = 8559
+				name = "Macintosh Memorial Fortress"
+			}
+		}
+	}
+	RWK_assimilate_790_dec = {
+		icon = endtide_flag
+		cost = 20
+		ai_will_do = {
+			base = 1000
+		}
+		visible = {
+			tag = RWK
+			has_completed_focus = RWK_begin_the_great_syncretism
+			owns_state = 790
+		}
+		available = {
+			790 = { compliance > 80 }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_assimilate_790_dec"
+			790 = {
+				add_core_of = RWK
+				set_state_name = "Sanguina"
+			}
+			set_province_name = {
+				id = 15742
+				name = "Sanguinopolis"
+			}
+		}
+	}
+	RWK_assimilate_448_dec = {
+		icon = endtide_flag
+		cost = 20
+		ai_will_do = {
+			base = 1000
+		}
+		visible = {
+			tag = RWK
+			has_completed_focus = RWK_begin_the_great_syncretism
+			owns_state = 448
+		}
+		available = {
+			448 = { compliance > 80 }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_assimilate_448_dec"
+			448 = {
+				add_core_of = RWK
+				set_state_name = "Omen"
+			}
+		}
+	}
+	RWK_assimilate_612_dec = {
+		icon = endtide_flag
+		cost = 20
+		ai_will_do = {
+			base = 1000
+		}
+		visible = {
+			tag = RWK
+			has_completed_focus = RWK_begin_the_great_syncretism
+			owns_state = 612
+		}
+		available = {
+			
+			612 = { compliance > 80 }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_assimilate_612_dec"
+			612 = {
+				add_core_of = RWK
+				set_state_name = "Scylla"
+			}
+			set_province_name = {
+				id = 13733
+				name = "Vesuvius"
+			}
+		}
+	}
+	RWK_assimilate_459_dec = {
+		icon = endtide_flag
+		cost = 20
+		ai_will_do = {
+			base = 1000
+		}
+		visible = {
+			tag = RWK
+			has_completed_focus = RWK_begin_the_great_syncretism
+			owns_state = 459
+		}
+		available = {
+			
+			459 = { compliance > 80 }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_assimilate_459_dec"
+			459 = {
+				add_core_of = RWK
+				set_state_name = "Bloodburg"
+			}
+			set_province_name = {
+				id = 5961
+				name = "Bloodburg"
+			}
+			set_province_name = {
+				id = 16057
+				name = "Abysston"
+			}
+		}
+	}
+	RWK_assimilate_470_dec = {
+		icon = endtide_flag
+		cost = 20
+		ai_will_do = {
+			base = 1000
+		}
+		visible = {
+			tag = RWK
+			has_completed_focus = RWK_begin_the_great_syncretism
+			owns_state = 470
+		}
+		available = {
+			
+			470 = { compliance > 80 }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_assimilate_470_dec"
+			470 = {
+				add_core_of = RWK
+				set_state_name = "Cold Embrace"
+			}
+		}
+	}
+	RWK_assimilate_791_dec = {
+		icon = endtide_flag
+		cost = 20
+		ai_will_do = {
+			base = 1000
+		}
+		visible = {
+			tag = RWK
+			has_completed_focus = RWK_begin_the_great_syncretism
+			owns_state = 791
+		}
+		available = {
+			
+			791 = { compliance > 80 }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_assimilate_791_dec"
+			791 = {
+				add_core_of = RWK
+				set_state_name = "Carminstad"
+			}
+			set_province_name = {
+				id = 3422
+				name = "Carmine Heights"
+			}
+		}
+	}
+	RWK_assimilate_647_dec = {
+		icon = endtide_flag
+		cost = 20
+		ai_will_do = {
+			base = 1000
+		}
+		visible = {
+			tag = RWK
+			has_completed_focus = RWK_begin_the_great_syncretism
+			owns_state = 647
+		}
+		available = {
+			
+			647 = { compliance > 80 }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_assimilate_647_dec"
+			647 = {
+				add_core_of = RWK
+				set_state_name = "Apogean"
+			}
+			set_province_name = {
+				id = 8826
+				name = "Redwaters"
+			}
+		}
+	}
+	RWK_assimilate_490_dec = {
+		icon = endtide_flag
+		cost = 20
+		ai_will_do = {
+			base = 1000
+		}
+		visible = {
+			tag = RWK
+			has_completed_focus = RWK_begin_the_great_syncretism
+			owns_state = 490
+		}
+		available = {
+			
+			490 = { compliance > 80 }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_assimilate_490_dec"
+			490 = {
+				add_core_of = RWK
+				set_state_name = "Depotheosis"
+			}
+		}
+	}
+	RWK_assimilate_652_dec = {
+		icon = endtide_flag
+		cost = 20
+		ai_will_do = {
+			base = 1000
+		}
+		visible = {
+			tag = RWK
+			has_completed_focus = RWK_begin_the_great_syncretism
+			owns_state = 652
+		}
+		available = {
+			
+			652 = { compliance > 80 }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_assimilate_652_dec"
+			652 = {
+				add_core_of = RWK
+				set_state_name = "Burgund Hills"
+			}
+		}
+	}
+	RWK_assimilate_493_dec = {
+		icon = endtide_flag
+		cost = 20
+		ai_will_do = {
+			base = 1000
+		}
+		visible = {
+			tag = RWK
+			has_completed_focus = RWK_begin_the_great_syncretism
+			owns_state = 493
+		}
+		available = {
+			
+			493 = { compliance > 80 }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_assimilate_493_dec"
+			493 = {
+				add_core_of = RWK
+				set_state_name = "Maniax"
+			}
+			set_province_name = {
+				id = 8920
+				name = "Breakwheel"
+			}
+		}
+	}
+	RWK_assimilate_812_dec = {
+		icon = endtide_flag
+		cost = 20
+		ai_will_do = {
+			base = 1000
+		}
+		visible = {
+			tag = RWK
+			has_completed_focus = RWK_begin_the_great_syncretism
+			owns_state = 812
+		}
+		available = {
+			
+			812 = { compliance > 80 }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_assimilate_812_dec"
+			812 = {
+				add_core_of = RWK
+				set_state_name = "Gehenna"
+			}
+			set_province_name = {
+				id = 8904
+				name = "Tarnished Fortress"
+			}
+		}
+	}
+	RWK_assimilate_648_dec = {
+		icon = endtide_flag
+		cost = 20
+		ai_will_do = {
+			base = 1000
+		}
+		visible = {
+			tag = RWK
+			has_completed_focus = RWK_begin_the_great_syncretism
+			owns_state = 648
+		}
+		available = {
+			
+			648 = { compliance > 80 }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_assimilate_648_dec"
+			648 = {
+				add_core_of = RWK
+				set_state_name = "Brine"
+			}
+			set_province_name = {
+				id = 16030
+				name = "Dreadmall"
+			}
+		}
+	}
+	RWK_assimilate_503_dec = {
+		icon = endtide_flag
+		cost = 20
+		ai_will_do = {
+			base = 1000
+		}
+		visible = {
+			tag = RWK
+			has_completed_focus = RWK_begin_the_great_syncretism
+			owns_state = 503
+		}
+		available = {
+			
+			503 = { compliance > 80 }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_assimilate_503_dec"
+			503 = {
+				add_core_of = RWK
+				set_state_name = "Hadal"
+			}
+		}
+	}
+	RWK_assimilate_653_dec = {
+		icon = endtide_flag
+		cost = 20
+		ai_will_do = {
+			base = 1000
+		}
+		visible = {
+			tag = RWK
+			has_completed_focus = RWK_begin_the_great_syncretism
+			owns_state = 653
+		}
+		available = {
+			
+			653 = { compliance > 80 }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_assimilate_653_dec"
+			653 = {
+				add_core_of = RWK
+				set_state_name = "Ominous Hills"
+			}
+		}
+	}
+	RWK_assimilate_515_dec = {
+		icon = endtide_flag
+		cost = 20
+		ai_will_do = {
+			base = 1000
+		}
+		visible = {
+			tag = RWK
+			has_completed_focus = RWK_begin_the_great_syncretism
+			owns_state = 515
+		}
+		available = {
+			
+			515 = { compliance > 80 }
+		}
+		fire_only_once = yes
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_assimilate_515_dec"
+			515 = {
+				add_core_of = RWK
+				set_state_name = "Umbra"
+			}
+			set_province_name = {
+				id = 4589
+				name = "Umbral Spire"
+			}
+			set_province_name = {
+				id = 16017
+				name = "Shadetown"
+			}
 		}
 	}
 }

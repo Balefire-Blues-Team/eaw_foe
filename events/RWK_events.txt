@@ -609,16 +609,16 @@ country_event = {
 			is_locked = no
 		}
    	}
-	option = { #Make an example
-	   name = rustwreck.16.b 
-	   ai_chance = { factor = 50 }
-	   	retire_character = RWK_char_Crimson_Waters
-		add_stability = 0.05
-		delete_unit_template_and_units = {
-			division_template = "Crimson's Warband"
-			disband = yes
-		}
-    }
+	#option = { #Make an example
+	#   name = rustwreck.16.b 
+	#   ai_chance = { factor = 50 }
+	#   	retire_character = RWK_char_Crimson_Waters
+	#	add_stability = 0.05
+	#	delete_unit_template_and_units = {
+	#		division_template = "Crimson's Warband"
+	#		disband = yes
+	#	}
+    #}
 }
 
 #Preaching in the Outskirts
@@ -869,7 +869,7 @@ country_event = {
 		set_country_flag = RWK_experimental_treatment_flag
    	}
 	option = { #just let me die
-	   name = rustwreck.26.a 
+	   name = rustwreck.26.b 
 	   ai_chance = { factor = 50 }
 		add_days_mission_timeout = {
 			mission = RWK_admiral_feral_countdown
@@ -892,6 +892,7 @@ country_event = {
 	   	name = rustwreck.27.a 
 	   	ai_chance = { factor = 50 }
 		country_event = rustwreck.28
+		clr_country_flag = RWK_admiral_sick_flag
 		remove_mission = RWK_admiral_feral_countdown
    	}
 }
@@ -1054,7 +1055,7 @@ country_event = {
 	   	name = rustwreck.31.a 
 	   	ai_chance = { factor = 50 }
 		add_popularity = {
-			ideology = continuation
+			ideology = visionary
 			popularity = 0.20
 		}
    	}
@@ -1099,9 +1100,10 @@ country_event = {
   	option = { #The Bell tolls
 	   	name = rustwreck.33.a 
 	   	ai_chance = { factor = 50 }
+		clr_country_flag = RWK_admiral_sick_flag
 		IF = {
 			limit = {
-				destruction > visionary
+				destruction>party_popularity@visionary
 			}
 			country_event = rustwreck.34
 		}
@@ -1128,11 +1130,8 @@ country_event = {
 			ruling_party = destruction
 			elections_allowed = no
 		}
-		add_popularity = {
-			ideology = destruction
-			popularity = 30
-		}
-		#Load Focus tree
+		custom_effect_tooltip = RWK_load_more_foci_tt
+		mark_focus_tree_layout_dirty = yes
    	}
 }
 
@@ -1149,13 +1148,16 @@ country_event = {
   	option = { #New and old as one
 	   	name = rustwreck.35.a 
 	   	ai_chance = { factor = 50 }
-		remove_country_leader_role = {
-			character = RWK_char_Admiral_High_Tides
-			ideology = admirality
-		}
-		remove_country_leader_role = {
-			character = RWK_char_Wavebreaker
-			ideology = rebuilder
+		hidden_effect = {
+			set_country_flag = RWK_wavebreaker_continuation_flg
+			remove_country_leader_role = {
+				character = RWK_char_Admiral_High_Tides
+				ideology = admirality
+			}
+			remove_country_leader_role = {
+				character = RWK_char_Wavebreaker
+				ideology = rebuilder
+			}
 		}
 		add_country_leader_role = {
 			character = RWK_char_Wavebreaker
@@ -1177,10 +1179,572 @@ country_event = {
 			name = RWK_visionary_3_party
 		}
 		add_popularity = {
-			ideology = continuation
-			popularity = 60
+			ideology = visionary
+			popularity = -0.40
 		}
-		#Load Focus tree
+		add_popularity = {
+			ideology = continuation
+			popularity = 0.40
+		}
+		add_ideas = RWK_national_mourning_idea
+		
    	}
 }
 
+#Some may die...
+country_event = {
+	id = rustwreck.36
+	title = rustwreck.36.t
+	desc = rustwreck.36.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #So that others may live
+	   	name = rustwreck.36.a 
+	   	ai_chance = { factor = 50 }
+		add_timed_idea = {
+			idea = RWK_recent_takeover_idea
+			days = 300
+		}
+   	}
+}
+
+#Ship Amok!
+country_event = {
+	id = rustwreck.37
+	title = rustwreck.37.t
+	desc = rustwreck.37.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	trigger = {
+		tag = RWK
+		has_idea = RWK_subverting_admirality_idea
+	}
+	fire_only_once = yes
+	mean_time_to_happen = {
+		days = 40
+	}
+	
+  	option = { #A costly Tantrum
+	   	name = rustwreck.37.a 
+	   	ai_chance = { factor = 50 }
+		524 = {
+			add_manpower = -14
+			damage_building = {
+				type = dockyard
+				damage = 12
+			}
+			damage_building = {
+				type = infrastructure
+				damage = 4
+			}
+		}
+		add_stability = -0.02
+   	}
+}
+
+#With friends like these
+country_event = {
+	id = rustwreck.38
+	title = rustwreck.38.t
+	desc = rustwreck.38.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	trigger = {
+		tag = RWK
+		has_completed_focus = RWK_purge_the_admirality
+		NOT = {has_idea = RWK_subverting_admirality_idea}
+	}
+	fire_only_once = yes
+	mean_time_to_happen = {
+		days = 20
+	}
+	
+  	option = { #Maybe this can work
+	   	name = rustwreck.38.a 
+	   	ai_chance = { factor = 50 }
+		RWK_char_Crimson_Waters = {
+			add_logistics = 1
+			gain_xp = 150
+		}
+		RWK_char_Wavebreaker = {
+			add_attack = 1
+			gain_xp = 150
+		}
+   	}
+}
+
+#An Artificial Metropolis
+country_event = {
+	id = rustwreck.39
+	title = rustwreck.39.t
+	desc = rustwreck.39.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #low aims
+	   	name = rustwreck.39.a 
+	   	ai_chance = { factor = 0 }
+		set_country_flag = RWK_saltpan_low_target_flag
+   	}
+	option = { #medium aims
+	   name = rustwreck.39.b
+	   ai_chance = { factor = 50 }
+	   set_country_flag = RWK_saltpan_medium_target_flag
+    }
+    option = { #high aims
+	   	name = rustwreck.39.c
+	   	ai_chance = { factor = 50 }
+		set_country_flag = RWK_saltpan_high_target_flag
+   	}
+	option = { #this seems rather evil
+	   name = rustwreck.39.e
+	   ai_chance = { factor = 0 }
+		203 = {
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+			}
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+			}
+			add_extra_state_shared_building_slots = 2
+		}
+    }
+}
+
+#The next generation
+country_event = {
+	id = rustwreck.40
+	title = rustwreck.40.t
+	desc = rustwreck.40.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	trigger = {
+		tag = RWK
+		has_completed_focus = RWK_begin_the_great_syncretism
+	}
+	mean_time_to_happen = {
+		days = 120
+	}
+	fire_only_once = yes
+	
+  	option = { #Fort Crimson
+	   	name = rustwreck.40.a 
+	   	ai_chance = { factor = 0 }
+		set_province_name = {
+			id = 5310
+			name = "Fort Crimson"
+		}
+   	}
+	option = { #Fort Aestus
+	   name = rustwreck.40.a 
+	   ai_chance = { factor = 0 }
+		set_province_name = {
+			id = 5310
+			name = "Fort Aestus"
+		}
+    }
+	option = { #Fort Hightide
+	   name = rustwreck.40.a 
+	   ai_chance = { factor = 0 }
+		set_province_name = {
+			id = 5310
+			name = "Fort Hightide"
+		}
+    }
+}
+
+#Bloody Business
+country_event = {
+	id = rustwreck.41
+	title = rustwreck.41.t
+	desc = rustwreck.41.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	trigger = {
+		tag = RWK
+		has_completed_focus = RWK_replace_the_cap
+	}
+	mean_time_to_happen = {
+		days = 100
+	}
+	fire_only_once = yes
+	
+  	option = { #What should I do with the rest of the Scrip?
+	   	name = rustwreck.41.a 
+	   	ai_chance = { factor = 0 }
+		
+   	}
+}
+
+#Baltimare Blues
+country_event = {
+	id = rustwreck.42
+	title = rustwreck.42.t
+	desc = rustwreck.42.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	trigger = {
+		tag = RWK
+		has_completed_focus = RWK_raid_jungle_slaves
+	}
+	mean_time_to_happen = {
+		days = 300
+	}
+	fire_only_once = yes
+	
+  	option = { #What a pleasant evening
+	   	name = rustwreck.42.a 
+	   	ai_chance = { factor = 0 }
+		
+   	}
+}
+
+#Agony of Choice
+country_event = {
+	id = rustwreck.43
+	title = rustwreck.43.t
+	desc = rustwreck.43.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #Direct investments
+	   	name = rustwreck.43.a 
+	   	ai_chance = { factor = 10 }
+		one_random_industrial_complex = yes
+		one_random_arms_factory = yes
+		one_random_dockyard = yes
+   	}
+
+	option = { #Buy Blueprints
+	   name = rustwreck.43.b 
+	   ai_chance = { factor = 10 }
+	   add_tech_bonus = {
+		name = industry
+		bonus = 0.6
+		uses = 2
+		category = industry
+		}
+		add_tech_bonus = {
+			name = industry
+			bonus = 0.6
+			uses = 1
+			category = industry
+			}
+		add_tech_bonus = {
+			name = infantry_tech
+			bonus = 0.6
+			uses = 1
+			category = infantry_tech
+			}
+		add_tech_bonus = {
+			name = electronics
+			bonus = 0.6
+			uses = 1
+			category = electronics
+			}
+   	}
+
+   	option = { #Give it to the Ponies
+	   	name = rustwreck.43.c
+	   	ai_chance = { factor = 100 }
+		add_timed_idea = {
+			idea = RWK_give_back_program_idea
+			days = 365
+		}
+   	}
+}
+
+#Rustwreck demands our surrender
+country_event = {
+	id = rustwreck.44
+	title = rustwreck.44.t
+	desc = rustwreck.44.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #We'll never submit!
+	   	name = rustwreck.44.a 
+	   	ai_chance = { factor = 20 }
+		RWK = {
+			country_event = rustwreck.45
+		}
+   	}
+
+	option = { #Let's avoid Bloodshed
+	   name = rustwreck.44.b 
+	   ai_chance = { factor = 80 }
+	   	RWK = {
+			country_event = rustwreck.46
+		}
+   	}
+}
+
+#Stajniopolis refuses surrender
+country_event = {
+	id = rustwreck.45
+	title = rustwreck.45.t
+	desc = rustwreck.45.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #Then they shall die
+	   	name = rustwreck.45.a 
+	   	ai_chance = { factor = 60 }
+		add_state_claim = 790
+		STT = {
+			RWK = {grant_wargoals_on_core_states_of_prev = yes}
+		}
+   	}
+}
+
+#Stajniopolis refuses surrender
+country_event = {
+	id = rustwreck.46
+	title = rustwreck.46.t
+	desc = rustwreck.46.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #Then they shall die
+	   	name = rustwreck.46.a 
+	   	ai_chance = { factor = 60 }
+		annex_country = {
+			target = STT
+		}
+		790 = { add_compliance = 60 }
+   	}
+}
+
+
+#Borderwar Second - WIN
+country_event = {
+	id = rustwreck.47
+	title = rustwreck.47.t
+	desc = rustwreck.47.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #Yay
+	   	name = rustwreck.47.a 
+	   	ai_chance = { factor = 50 }
+		every_state = {
+			limit = {
+				has_state_flag = RWK_borderwar_target
+			}
+			transfer_state_to = RWK
+			clr_state_flag = RWK_borderwar_target
+		}
+   	}
+}
+
+#Borderwar Second - LOSE
+country_event = {
+	id = rustwreck.48
+	title = rustwreck.48.t
+	desc = rustwreck.48.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #damn
+	   	name = rustwreck.48.a 
+	   	ai_chance = { factor = 50 }
+		87 = {
+			damage_building = {
+				type = infrastructure
+				damage = 4
+			}
+		}
+		every_state = {
+			limit = {
+				has_state_flag = RWK_borderwar_target
+			}
+			clr_state_flag = RWK_borderwar_target
+		}
+   	}
+}
+
+#Borderwar Second - Tie
+country_event = {
+	id = rustwreck.49
+	title = rustwreck.49.t
+	desc = rustwreck.49.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #damn
+	   	name = rustwreck.49.a 
+	   	ai_chance = { factor = 50 }
+		   every_state = {
+			limit = {
+				has_state_flag = RWK_borderwar_target
+			}
+			clr_state_flag = RWK_borderwar_target
+		}
+   	}
+}
+
+#Conquest of Silverwing
+country_event = {
+	id = rustwreck.50
+	title = rustwreck.50.t
+	desc = rustwreck.50.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	trigger = {
+		tag = RWK
+		has_government = destruction
+		controls_state = 812
+	}
+	fire_only_once = yes
+	
+  	option = { #pretty cool
+	   	name = rustwreck.50.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#March into Fillydelphia
+country_event = {
+	id = rustwreck.51
+	title = rustwreck.51.t
+	desc = rustwreck.51.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	trigger = {
+		tag = RWK
+		has_government = destruction
+		controls_state = 532
+	}
+	fire_only_once = yes
+	
+  	option = { #much to do
+	   	name = rustwreck.51.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#Checkmate
+country_event = {
+	id = rustwreck.52
+	title = rustwreck.52.t
+	desc = rustwreck.52.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #much to do
+	   	name = rustwreck.52.a 
+	   	ai_chance = { factor = 50 }
+		add_country_leader_trait = victorious_prophet
+   	}
+}
+
+#Those who can be saved
+country_event = {
+	id = rustwreck.53
+	title = rustwreck.53.t
+	desc = rustwreck.53.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #At least some will help us
+	   	name = rustwreck.53.a 
+	   	ai_chance = { factor = 50 }
+		add_stability = -0.05
+   	}
+}
+
+#Fillydelphian Constitution
+country_event = {
+	id = rustwreck.54
+	title = rustwreck.54.t
+	desc = rustwreck.54.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #Technicalities are my favourite
+	   	name = rustwreck.54.a 
+	   	ai_chance = { factor = 50 }
+		add_stability = 0.10
+		clr_country_flag = slavery_allowed
+		set_country_flag = slavery_now_outlawed
+   	}
+}
+
+#Jasmine's finally home
+country_event = {
+	id = rustwreck.55
+	title = rustwreck.55.t
+	desc = rustwreck.55.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #Life can go on
+	   	name = rustwreck.55.a 
+	   	ai_chance = { factor = 50 }
+   	}
+}
+
+#Republic founding
+country_event = {
+	id = rustwreck.56
+	title = rustwreck.56.t
+	desc = rustwreck.56.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #cool
+	   	name = rustwreck.56.a 
+	   	ai_chance = { factor = 50 }
+		set_cosmetic_tag = RWK_united_equestrian_provinces_cosm
+   	}
+}
+
+#A raucous Festival
+country_event = {
+	id = rustwreck.57
+	title = rustwreck.57.t
+	desc = rustwreck.57.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #this is good
+	   	name = rustwreck.57.a 
+	   	ai_chance = { factor = 50 }
+		custom_effect_tooltip = RWK_crimson_thanks_for_playing_tt
+   	}
+}
