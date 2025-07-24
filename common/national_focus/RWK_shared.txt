@@ -5651,6 +5651,8 @@ shared_focus = {
 	factor = 30
 	} 
 
+	will_lead_to_war_with = RAR
+	will_lead_to_war_with = FER
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_proclaim_the_rebirth"
 		set_cosmetic_tag = RWK_cont_celestial_fleet_cosm
@@ -5860,6 +5862,7 @@ shared_focus = {
 					target = RWK
 					modifier = huge_increase
 				}
+				add_ideas = wasteland_society2
 			}
 		}
 	}
@@ -5939,6 +5942,7 @@ shared_focus = {
 					target = RWK
 					modifier = huge_increase
 				}
+				add_ideas = wasteland_society2
 			}
 		}
 	}
@@ -6097,6 +6101,8 @@ shared_focus = {
 	factor = 30
 	} 
 
+	will_lead_to_war_with = EMP
+	will_lead_to_war_with = RTA
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_secure_summerfield"
 		EMP = {
@@ -6132,7 +6138,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_rehabilitative_personality_restructuring"
-		
+		swap_ideas = {
+			remove_idea = RWK_implanted_skills_idea
+			add_idea = RWK_implanted_skills_2_idea
+		}
+		country_event = rustwreck.81
 	}
 }
 
@@ -6153,7 +6163,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_learn_from_the_greats"
-		
+		every_unit_leader = {
+			gain_xp = 200
+			add_defense = 1
+		}
+		add_war_support = 0.05
 	}
 }
 
@@ -6177,7 +6191,17 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_just_like_old_times"
-		
+		swap_ideas = {
+			remove_idea = wasteland_society2
+			add_idea = old_world_society
+		}
+		hidden_effect = {
+			country_event = {
+				id = rustwreck.83
+				days = 10
+				random_days = 50
+			}
+		}
 	}
 }
 
@@ -6198,7 +6222,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_ministry_of_cultural_management"
-		
+		set_variable = { coring_cost_country_factor = -0.40 }
+		custom_effect_tooltip = FOE_40_percent_core_cost_reduction_tt
 	}
 }
 
@@ -6219,7 +6244,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_ministry_of_acquisition"
-		
+		every_country = {
+			limit = {
+				is_in_faction_with = RWK
+			}
+			add_ideas = RWK_universal_meritocracy_idea
+		}
 	}
 }
 
@@ -6240,7 +6270,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_ministry_of_reindustrialization"
-		
+		custom_effect_tooltip = RWK_more_zones_tt
 	}
 }
 
@@ -6258,13 +6288,26 @@ shared_focus = {
 	prerequisite = {
 		focus = RWK_learn_from_the_greats
 	}
+	available = {
+		is_in_faction = yes
+	}
 	ai_will_do = { 
 	factor = 30
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_new_memories_new_age"
-		
+		add_to_tech_sharing_group = RWK_cont_tech_group
+		every_subject_country = {
+			add_to_tech_sharing_group = RWK_cont_tech_group
+			add_stability = 0.05
+		}
+		hidden_effect = {
+			country_event = {
+				id = rustwreck.84
+				days = 11
+			}
+		}
 	}
 }
 
@@ -6289,9 +6332,68 @@ shared_focus = {
 	factor = 30
 	} 
 
+	will_lead_to_war_with = MRA
+	will_lead_to_war_with = MAR
+	will_lead_to_war_with = TEN
+	will_lead_to_war_with = GUT
+	will_lead_to_war_with = FRI
+	will_lead_to_war_with = ARB
+	will_lead_to_war_with = MSR
+	will_lead_to_war_with = ABT
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_opening_salvo"
-		
+		every_state = {
+			limit = {
+				OR = {
+					is_core_of = MRA
+					is_core_of = MAR
+					is_core_of = TEN
+					is_core_of = GUT
+					is_core_of = FRI
+					is_core_of = ARB
+					is_core_of = MSR
+					is_core_of = ABT
+				}
+			}
+			add_claim_by = RWK
+		}
+		declare_war_on = {
+			target = MRA
+			type = annex_everything
+		}
+		declare_war_on = {
+			target = MAR
+			type = annex_everything
+		}
+		declare_war_on = {
+			target = TEN
+			type = annex_everything
+		}
+		declare_war_on = {
+			target = GUT
+			type = annex_everything
+		}
+		declare_war_on = {
+			target = FRI
+			type = annex_everything
+		}
+		declare_war_on = {
+			target = ARB
+			type = annex_everything
+		}
+		declare_war_on = {
+			target = MSR
+			type = annex_everything
+		}
+		IF = {
+			limit = {
+				ABT = { is_in_faction = no }
+			}
+			declare_war_on = {
+				target = ABT
+				type = annex_everything
+			}
+		}
 	}
 }
 
@@ -6315,7 +6417,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_mandated_technology_quotas"
-		
+		capital_scope = {
+			add_resource = {
+				type = advanced
+				amount = 22
+			}
+		}
+		add_stability = -0.06
 	}
 }
 
@@ -6336,7 +6444,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_national_pacification_government"
-		
+		country_event = rustwreck.87
+		swap_ideas = {
+			remove_idea = RWK_sage_level_2_idea
+			add_idea = RWK_sage_level_3_idea
+		}
 	}
 }
 
@@ -6351,13 +6463,73 @@ shared_focus = {
 	prerequisite = {
 		focus = RWK_opening_salvo
 	}
+	available = {
+		MSR = { all_core_land_owned_by_prev_sphere = yes}
+	}
 	ai_will_do = { 
 	factor = 30
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_punish_the_traitors"
-		
+		save_current_manpower = yes
+		19 = {
+			remove_building = {
+				type = industrial_complex
+				level = 2
+			}
+			remove_building = {
+				type = arms_factory
+				level = 3
+			}
+			add_manpower = -2000
+			remove_core_of = MSR
+		}
+		646 = {
+			remove_building = {
+				type = industrial_complex
+				level = 1
+			}
+			remove_building = {
+				type = arms_factory
+				level = 1
+			}
+			add_manpower = -2000
+			remove_core_of = MSR
+		}
+		set_province_name = {
+			id = 8664
+			name = "Berrytown"
+		}
+		54 = {
+			remove_building = {
+				type = industrial_complex
+				level = 2
+			}
+			remove_building = {
+				type = arms_factory
+				level = 1
+			}
+			add_manpower = -2000
+			remove_core_of = MSR
+		}
+		set_province_name = {
+			id = 8614
+			name = "Caramelville"
+		}
+		add_offsite_building = {
+			type = industrial_complex
+			level = 5
+		}
+		add_offsite_building = {
+			type = arms_factory
+			level = 5
+		}
+		capital_scope = {
+			add_manpower = 6000
+		}
+		restore_previous_manpower = yes
+		country_event = rustwreck.88
 	}
 }
 
@@ -6381,7 +6553,16 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_magical_loyalty_programming"
-		
+		swap_ideas = {
+			remove_idea = RWK_implanted_skills_2_idea
+			add_idea = RWK_implanted_skills_3_idea
+		}
+		hidden_effect = {
+			country_event = {
+				id = rustwreck.89
+				days = 25
+			}
+		}
 	}
 }
 
@@ -6402,7 +6583,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_retrofit_carrier_reactors"
-		
+		custom_effect_tooltip = RWK_2_nukes_tt
+		hidden_effect = {
+			add_nuclear_bombs = 2
+		}
 	}
 }
 
@@ -6423,7 +6607,22 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_quantified_usefulness_to_the_state"
-		
+		every_state = {
+			limit = {
+				OR = {
+					is_owned_by = RWK
+					owner = {
+						is_subject_of = RWK
+					}
+				}
+				NOT = { 
+					has_dynamic_modifier = {
+						modifier =  RWK_mass_surveillance
+					} 
+				}
+			}
+			add_dynamic_modifier = RWK_mass_surveillance
+		}
 	}
 }
 
@@ -6445,9 +6644,56 @@ shared_focus = {
 	factor = 30
 	} 
 
+	will_lead_to_war_with = GUN
+	will_lead_to_war_with = FRT
+	will_lead_to_war_with = LGH
+	will_lead_to_war_with = APR
+	will_lead_to_war_with = MUD
+	will_lead_to_war_with = STT
+	will_lead_to_war_with = EYE
+	will_lead_to_war_with = FSR
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_return_order_to_the_west"
-		
+		GUN = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		FRT = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		LGH = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		APR = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		MUD = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		STT = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		EYE = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		FSR = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 }
 
@@ -6468,7 +6714,19 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_inherit_mwt"
-		
+		set_technology = {
+			power_armour_tech_level_scientific = 1
+		}
+		every_allied_country = {
+			set_technology = {
+				power_armour_tech_level_settler = 1
+			}
+		}
+		add_equipment_to_stockpile = {
+			type = power_armor_equipment_3
+			amount = 400
+			producer = OWE
+		}
 	}
 }
 
@@ -6489,7 +6747,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_resurrect_equestrias_heroes"
-		
+		custom_effect_tooltip = RWK_ministry_mares_tt
 	}
 }
 
@@ -6513,7 +6771,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_prepare_for_second_great_war"
-		
+		custom_effect_tooltip = RWK_new_eco_law_tt
+		add_ideas = COL_economic_mobilisation
 	}
 }
 
@@ -6534,7 +6793,18 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_universal_citizenship"
-		
+		add_tech_bonus = {
+			name = race_tech
+			bonus = 0.75
+			uses = 3
+			category = race_tech
+		}
+		set_technology = {
+			tech_pegasi = 1
+			tech_talons = 1
+			tech_legion = 1
+			tech_ironpaws = 1
+		}
 	}
 }
 
@@ -6555,7 +6825,67 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_preserve_the_regime"
-		
+		every_owned_state = {
+			add_building_construction = {
+				type = anti_air_building
+				level = 2
+			}
+			add_building_construction = {
+				type = bunker
+				level = 2
+				instant_build = yes
+				province = { all_provinces = yes limit_to_border = yes}
+			}
+		}
+		203 = {
+			add_building_construction = {
+				type = bunker
+				level = 4
+				instant_build = yes
+				province = { all_provinces = yes }
+			}
+			add_building_construction = {
+				type = coastal_bunker
+				level = 6
+				instant_build = yes
+				province = { all_provinces = yes limit_to_coastal = yes }
+			}
+			add_building_construction = {
+				type = anti_air_building
+				level = 3
+				instant_build = yes
+			}
+		}
+		524 = {
+			add_building_construction = {
+				type = bunker
+				level = 6
+				instant_build = yes
+				province = { all_provinces = yes }
+			}
+			add_building_construction = {
+				type = bunker2
+				level = 2
+				instant_build = yes
+				province = { all_provinces = yes }
+			}
+			add_building_construction = {
+				type = coastal_bunker
+				level = 10
+				instant_build = yes
+				province = { all_provinces = yes limit_to_coastal = yes }
+			}
+			add_building_construction = {
+				type = anti_air_building
+				level = 3
+				instant_build = yes
+			}
+			add_building_construction = {
+				type = radar_station
+				level = 6
+				instant_build = yes
+			}
+		}
 	}
 }
 
@@ -6579,7 +6909,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_learn_from_lunas_mistakes"
-		
+		country_event = rustwreck.90
 	}
 }
 
@@ -6601,9 +6931,74 @@ shared_focus = {
 	factor = 30
 	} 
 
+	will_lead_to_war_with = WNF
+	will_lead_to_war_with = FTR
+	will_lead_to_war_with = FTP
+	will_lead_to_war_with = CCD
+	will_lead_to_war_with = GRV
+	will_lead_to_war_with = HIT
+	will_lead_to_war_with = PRA
+	will_lead_to_war_with = STA
+	will_lead_to_war_with = GLY
+	will_lead_to_war_with = CAL
+	will_lead_to_war_with = SCI
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_reclaim_the_capital"
-		
+		WNF = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		FTR = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		FTP = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		CCD = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		GRV = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		HIT = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		STA = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		PRA = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		GLY = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		CAL = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		SCI = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 }
 
@@ -6625,9 +7020,93 @@ shared_focus = {
 	factor = 30
 	} 
 
+	will_lead_to_war_with = SHA
+	will_lead_to_war_with = LIT
+	will_lead_to_war_with = MAS
+	will_lead_to_war_with = OAP
+	will_lead_to_war_with = UNI
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_destroy_the_upstarts"
-		
+		UNI = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		SPV = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		REP = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		EVR = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		GOR = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		FTA = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		MAS = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		LIT = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		PBN = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		NAP = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		OAP = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		ROK = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		RAF = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		SHA = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		LRA = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		MAN = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 }
 
@@ -6649,9 +7128,50 @@ shared_focus = {
 	factor = 30
 	} 
 
+	will_lead_to_war_with = ERA
+	will_lead_to_war_with = NCG
+	will_lead_to_war_with = MWY
+	will_lead_to_war_with = BOG
+	will_lead_to_war_with = NEV
+	will_lead_to_war_with = HSW
+	will_lead_to_war_with = HSC
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_end_new_cloudsdale"
-		
+		ERA = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		NCG = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		MWY = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		BOG = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		NEV = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		HSW = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		HSC = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 }
 
@@ -6678,7 +7198,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_an_equestrian_navarchy"
-		
+		country_event = rustwreck.94
+		set_cosmetic_tag = RWK_navarchy_cosm
+		set_faction_name = RWK_equestria_faction
 	}
 }
 
