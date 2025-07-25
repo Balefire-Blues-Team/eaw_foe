@@ -7214,7 +7214,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = 0
 	y = 1
-	cost = 1
+	cost = 4.29
 	
 	available_if_capitulated = yes 
 	relative_position_id = RWK_choose_a_successor
@@ -7228,6 +7228,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_civilian_governance_start"
+		country_event = rustwreck.95
+		add_ideas = RWK_SSD_administration_idea
 	}
 }
 
@@ -7237,11 +7239,13 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = -2
 	y = 1
-	cost = 1
+	cost = 4.29
 	
 	available_if_capitulated = yes 
 	relative_position_id = RWK_civilian_governance_start
-
+	available = {
+		owns_state = 87
+	}
 	prerequisite = { focus = RWK_civilian_governance_start }
 
 	ai_will_do = { 
@@ -7250,6 +7254,20 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_civilian_governance_left_1"
+		87 = {
+			add_core_of = RWK
+			set_state_name = "Klopen"
+			set_province_name = {
+				id = 8822
+				name = "Klopenburg"
+			}
+			add_manpower = 2000
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+			}
+		}
 	}
 }
 
@@ -7259,7 +7277,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = -1
 	y = 1
-	cost = 1
+	cost = 4.29
 	
 	available_if_capitulated = yes 
 	relative_position_id = RWK_civilian_governance_left_1
@@ -7272,16 +7290,55 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_civilian_governance_left_2"
+		every_country = {
+			limit = {
+				OR = {
+					is_neighbor_of = RWK
+					tag = SHA
+					tag = TEN
+					AND = {
+						has_government = survivalism
+						OR = {
+							has_idea = wasteland_society
+							has_idea = wasteland_society2
+							has_idea = old_world_society
+						}
+					}
+				}
+			}
+			add_opinion_modifier = {
+				target = RWK
+				modifier = trade_outreach
+			}
+			reverse_add_opinion_modifier = {
+				target = RWK
+				modifier = trade_outreach
+			}
+		}
+		capital_scope = {
+			add_resource = {
+				type = circuitry
+				amount = 4
+			}
+			add_resource = {
+				type = composites
+				amount = 4
+			}
+			add_resource = {
+				type = advanced
+				amount = 4
+			}
+		}
 	}
 }
 
-#Diplomacy Through Trade
+#Our Locial Allies
 shared_focus = {
 	id = RWK_civilian_governance_left_3
 	icon = GFX_goal_generic_megaspell
 	x = 1
 	y = 1
-	cost = 1
+	cost = 4.29
 	
 	available_if_capitulated = yes 
 	relative_position_id = RWK_civilian_governance_left_1
@@ -7294,6 +7351,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_civilian_governance_left_3"
+		STT = { country_event = rustwreck.96 }
+		LGH = { country_event = rustwreck.99 }
 	}
 }
 
@@ -7303,7 +7362,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = 2
 	y = 1
-	cost = 1
+	cost = 4.29
 	
 	available_if_capitulated = yes 
 	relative_position_id = RWK_civilian_governance_start
@@ -7316,6 +7375,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_civilian_governance_right_1"
+		add_research_slot = 1
 	}
 }
 
@@ -7325,7 +7385,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = -1
 	y = 1
-	cost = 1
+	cost = 4.29
 	
 	available_if_capitulated = yes 
 	relative_position_id = RWK_civilian_governance_right_1
@@ -7338,6 +7398,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_civilian_governance_right_2"
+		swap_ideas = {
+			remove_idea = RWK_old_guard_resistance_idea
+			add_idea = RWK_old_guard_resistance_2_idea
+		}
 	}
 }
 
@@ -7347,7 +7411,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = 1
 	y = 1
-	cost = 1
+	cost = 4.29
 	
 	available_if_capitulated = yes 
 	relative_position_id = RWK_civilian_governance_right_1
@@ -7360,6 +7424,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_civilian_governance_right_3"
+		country_event = rustwreck.100
+		add_ideas = trade_hub_law
 	}
 }
 ###Kelp Path Focus Branch###
@@ -7369,7 +7435,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = 1
 	y = 1
-	cost = 1
+	cost = 4.29
 	
 	available_if_capitulated = yes 
 	relative_position_id = RWK_civilian_governance_left_3
@@ -7383,6 +7449,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_civilian_governance_end"
+		add_stability = 0.10
+		country_event = rustwreck.101
 	}
 }
 
@@ -7393,11 +7461,14 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = -6
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_civilian_governance_end
 	allow_branch = { has_country_flag = RWK_civ_gov_kelp_flag }
+	available = {
+		is_in_faction_with = GUN
+	}
 
 	prerequisite = { focus = RWK_civilian_governance_end }
 	mutually_exclusive = { focus = RWK_kelp_mob_right_1 }
@@ -7408,6 +7479,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_mob_left_1"
+		custom_effect_tooltip = RWK_MOB_subversion_tt
+		GUN = { country_event = rustwreck.104 }
+		LGH = { country_event = rustwreck.104 }
+		APR = { country_event = rustwreck.104 }
+		FRT = { country_event = rustwreck.104 }
 	}
 }
 #A Beacon for the Free
@@ -7416,7 +7492,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = -1
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_kelp_mob_left_1
@@ -7429,6 +7505,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_mob_left_2"
+		add_ideas = RWK_all_are_welcome_idea
 	}
 }
 
@@ -7438,11 +7515,14 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = -4
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_civilian_governance_end
 	allow_branch = { has_country_flag = RWK_civ_gov_kelp_flag }
+	available = {
+		NOT = { is_in_faction_with = GUN }
+	}
 
 	prerequisite = { focus = RWK_civilian_governance_end }
 	mutually_exclusive = { focus = RWK_kelp_mob_left_1 }
@@ -7453,6 +7533,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_mob_right_1"
+		add_ideas = RWK_evil_at_our_doorstep_idea
 	}
 }
 #Economic Outreach
@@ -7461,7 +7542,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = 1
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_kelp_mob_right_1
@@ -7474,6 +7555,21 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_mob_right_2"
+		add_collaboration = {
+			target = LGH
+			value = 15
+		}
+		add_collaboration = {
+			target = FRT
+			value = 15
+		}
+		one_random_industrial_complex = yes
+		LGH = {
+			one_random_dockyard = yes
+		}
+		FRT = {
+			one_random_industrial_complex = yes
+		}
 	}
 }
 #Trade with Glowport
@@ -7482,7 +7578,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = 1
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_kelp_mob_left_1
@@ -7498,6 +7594,28 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_mob_shared"
+		653 = {
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+			}
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+			}
+		}
+		164 = {
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+			}
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+			}
+		}
 	}
 }
 #Advocate for Fillydelphia
@@ -7506,7 +7624,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = 1
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_kelp_mob_left_2
@@ -7520,19 +7638,25 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_mob_left_3"
+		custom_effect_tooltip = RWK_wait_on_MOB_tt
 	}
 }
+
 #Deal or no deal
 shared_focus = {
 	id = RWK_kelp_mob_left_4
 	icon = GFX_goal_generic_megaspell
 	x = 0
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_kelp_mob_left_3
-
+	available = {
+		NOT = {
+			GUN = { has_war_with = EYE }
+		}
+	}
 	prerequisite = { focus = RWK_kelp_mob_left_3 }
 	
 	ai_will_do = { 
@@ -7541,6 +7665,32 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_mob_left_4"
+		every_country = {
+			limit = {
+				has_idea = RWK_agitation_for_democracy_idea
+			}
+			country_event = rustwreck.107
+		}
+		leave_faction = yes
+		create_faction = "Sunrise Accord"
+		hidden_effect = {
+			IF = { 
+				limit = {
+					STT = {
+						is_in_faction_with = RWK
+						has_country_flag = RWK_STT_loyalty_flg
+					}
+				}
+				STT = { leave_faction = yes }
+				add_to_faction = STT
+			}
+			GUN = {
+				declare_war_on = {
+					target = RWK
+					type = annex_everything
+				}
+			}
+		}
 	}
 }
 
@@ -7550,7 +7700,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = -1
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_kelp_mob_right_2
@@ -7564,6 +7714,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_mob_right_3"
+		FRT = { add_manpower = -100 add_war_support = -0.05}
+		LGH = { add_manpower = -200 add_war_support = -0.05}
+		APR = { add_manpower = -100 add_war_support = -0.05}
+		add_manpower = 400
+		add_war_support = 0.10
 	}
 }
 #Break the Yoke
@@ -7572,7 +7727,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = 0
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_kelp_mob_right_3
@@ -7582,9 +7737,32 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 30
 	} 
-
+	will_lead_to_war_with = GUN
+	will_lead_to_war_with = LGH
+	will_lead_to_war_with = APR
+	will_lead_to_war_with = FRT
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_mob_right_4"
+		GUN = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		LGH = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		APR = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		FRT = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 }
 ##Core kelp focuses - First Part
@@ -7594,7 +7772,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = -2
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_civilian_governance_end
@@ -7608,6 +7786,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_core_1"
+		remove_ideas = RWK_old_guard_resistance_2_idea
+		country_event = rustwreck.108
 	}
 }
 #Picture perfect health
@@ -7616,7 +7796,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = 0
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_civilian_governance_end
@@ -7630,6 +7810,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_core_2"
+		add_ideas = RWK_public_healthcare_idea
 	}
 }
 #Refuge for all
@@ -7638,7 +7819,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = 2
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_civilian_governance_end
@@ -7652,6 +7833,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_core_3"
+		every_owned_state = {
+			add_manpower = 400
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+			}
+		}
+		one_random_industrial_complex = yes
 	}
 }
 
@@ -7661,7 +7850,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = 1
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_kelp_core_1
@@ -7675,6 +7864,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_core_4"
+		custom_effect_tooltip = RWK_improved_chem_company_tt
+		set_technology = {
+			RWK_mop_grade_health_potions_tech = 1
+			popup = no
+		}
 	}
 }
 
@@ -7684,7 +7878,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = 1
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_kelp_core_2
@@ -7698,6 +7892,18 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_core_5"
+		add_tech_bonus = {
+			name = race_tech
+			bonus = 0.75
+			uses = 3
+			category = race_tech
+		}
+		set_technology = {
+			tech_pegasi = 1
+			tech_talons = 1
+			tech_legion = 1
+			tech_ironpaws = 1
+		}
 	}
 }
 
@@ -7707,13 +7913,16 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = 1
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_kelp_core_4
 
 	prerequisite = { focus = RWK_kelp_core_4 }
 	prerequisite = { focus = RWK_kelp_core_5 }
+	available = {
+		is_faction_leader = yes
+	}
 	
 	ai_will_do = { 
 		factor = 30
@@ -7721,6 +7930,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_core_6"
+		every_country = {
+			limit = {
+				is_in_faction_with = RWK
+			}
+			add_ideas = RWK_brothers_in_arms_idea
+		}
 	}
 }
 ##Kelp Foreign Policies
@@ -7730,7 +7945,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = 4
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_civilian_governance_end
@@ -7742,22 +7957,36 @@ shared_focus = {
 		factor = 30
 	} 
 
+	will_lead_to_war_with = RAR
+	will_lead_to_war_with = FER
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_foreign_1"
+		RAR = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		FER = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 }
 
-#The painful process of rehabilitation - Quite long - @Deez
+#The painful process of rehabilitation
 shared_focus = {
 	id = RWK_kelp_foreign_2
 	icon = GFX_goal_generic_megaspell
 	x = 0
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_kelp_foreign_1
-
+	available = {
+		MRA = { all_core_land_owned_by_prev_sphere = yes }
+	}
 	prerequisite = { focus = RWK_kelp_foreign_1 }
 	
 	ai_will_do = { 
@@ -7766,6 +7995,33 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_foreign_2"
+		country_event = rustwreck.109
+		every_owned_state = {
+			limit = {
+				is_core_of = RAR
+			}
+			add_core_of = RWK
+		}
+		IF = {
+			limit = {
+				is_in_faction_with = STT
+			}
+			every_owned_state = {
+			limit = {
+				is_core_of = FER
+			}
+				transfer_state_to = STT
+				add_core_of = STT
+			}
+		}
+		ELSE = {
+			every_owned_state = {
+			limit = {
+				is_core_of = FER
+			}
+			add_compliance = 30
+			}
+		}
 	}
 }
 #Protectors of the Mare River
@@ -7774,7 +8030,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = -1
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_kelp_foreign_2
@@ -7788,6 +8044,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_foreign_3"
+		country_event = rustwreck.111
+		swap_ideas = {
+			remove_idea = RWK_public_healthcare_idea
+			add_idea = RWK_public_healthcare_2_idea
+		}
 	}
 }
 #The last obstacle to lasting Peace
@@ -7796,7 +8057,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = 1
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_kelp_foreign_2
@@ -7806,9 +8067,14 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 30
 	} 
-
+	will_lead_to_war_with = MRA
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_foreign_4"
+		MRA = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 	}
 }
 #Stable Matters
@@ -7817,7 +8083,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = 1
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_kelp_foreign_3
@@ -7831,6 +8097,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_foreign_5"
+		STT = { country_event = rustwreck.112 }
 	}
 }
 ##Kelp Core focuses - Part 2
@@ -7840,7 +8107,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = -2
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_kelp_core_6
@@ -7853,6 +8120,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_core_7"
+		swap_ideas = {
+			remove_idea = wasteland_research_base
+			add_idea = advanced_research_base
+		}
 	}
 }
 #Prosperity in the West
@@ -7861,7 +8132,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = -1
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_kelp_core_7
@@ -7878,6 +8149,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_core_8"
+		add_country_leader_trait = RWK_liberator_eastlands
 	}
 }
 #The Peace-Corps
@@ -7886,7 +8158,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = 0
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_kelp_core_6
@@ -7899,6 +8171,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_core_9"
+		custom_effect_tooltip = RWK_unique_conscription_tt
+		add_ideas = peace_corps
 	}
 }
 #The Great Renewal
@@ -7907,7 +8181,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = 0
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_kelp_core_9
@@ -7920,6 +8194,17 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_core_10"
+		every_owned_state = {
+			add_manpower = 100
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+			}
+			add_extra_state_shared_building_slots = 3
+		}
+		two_random_industrial_complex = yes
+		two_random_industrial_complex = yes
+		two_random_industrial_complex = yes
 	}
 }
 #Safeguard our Liberty
@@ -7928,7 +8213,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = 2
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_kelp_core_6
@@ -7942,6 +8227,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_core_11"
+		swap_ideas = {
+			remove_idea = RWK_brothers_in_arms_idea
+			add_idea = RWK_brothers_in_arms_2_idea
+		}
 	}
 }
 #One nation under law
@@ -7950,11 +8239,13 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = 1
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_kelp_core_11
-
+	available = {
+		MRA = { all_core_land_owned_by_prev_sphere = yes }
+	}
 	prerequisite = { focus = RWK_kelp_core_11 }
 	prerequisite = { focus = RWK_kelp_foreign_5 }
 	
@@ -7964,6 +8255,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_core_12"
+		every_owned_state = {
+			limit = {
+				is_core_of = MRA
+			}
+			add_core_of = RWK
+		}
 	}
 }
 #Light of the East
@@ -7972,7 +8269,7 @@ shared_focus = {
 	icon = GFX_goal_generic_megaspell
 	x = 0
 	y = 1
-	cost = 1
+	cost = 4.29
 
 	available_if_capitulated = yes
 	relative_position_id = RWK_kelp_core_10
@@ -7987,5 +8284,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_core_end"
+		add_stability = 0.20
+		country_event = rustwreck.115
 	}
 }
