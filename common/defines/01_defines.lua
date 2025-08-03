@@ -4,7 +4,7 @@ NDefines.NGame.START_DATE = "1235.1.1.12"
 NDefines.NGame.END_DATE = "1260.1.1.1"
 
 -- Vanilla is 30
-NDefines.NDiplomacy.VOLUNTEERS_DIVISIONS_REQUIEYE = 8
+NDefines.NDiplomacy.VOLUNTEERS_DIVISIONS_REQUIRED = 8
 
 -- Starting at this date, the tension values will be scaled down (will be equal
 -- to 1 before that.)
