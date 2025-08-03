@@ -170,6 +170,7 @@ NDefines.NNavy.AMPHIBIOUS_LANDING_PENALTY = -0.4				-- amphibious landing penalt
 NDefines.NMilitary.BASE_FORT_PENALTY = -0.08 					   -- fort penalty
 -- research
 NDefines.NTechnology.BASE_YEAR_AHEAD_PENALTY_FACTOR = 1.35		-- Base year ahead penalty
+NDefines.NTechnology.BASE_TECH_COST = 100               --Base Cost in Days for Technology
 NDefines.NAI.RESEARCH_DAYS_BETWEEN_WEIGHT_UPDATE = 7 	-- Refreshes need scores based on country situation.
 NDefines.NAI.RESEARCH_LAND_DOCTRINE_NEED_GAIN_FACTOR = 0.15	-- Multiplies value based on relative military industry size / country size.
 NDefines.NAI.RESEARCH_NAVAL_DOCTRINE_NEED_GAIN_FACTOR = 0.05	-- Multiplies value based on relative naval industry size / country size.
