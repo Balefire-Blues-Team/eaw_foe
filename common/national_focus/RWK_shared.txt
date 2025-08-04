@@ -8173,7 +8173,45 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_kelp_core_9"
 		custom_effect_tooltip = RWK_unique_conscription_tt
-		add_ideas = peace_corps
+		IF = {
+			limit = {
+				has_idea = limited_conscription
+			}
+			swap_ideas = {
+				remove_idea = limited_conscription
+				add_idea = peace_corps
+			}
+		}
+		ELSE_IF = {
+			limit = {
+				has_idea = extensive_conscription
+			}
+			swap_ideas = {
+				remove_idea = extensive_conscription
+				add_idea = peace_corps
+			}
+		}
+		ELSE_IF = {
+			limit = {
+				has_idea = service_by_requirement
+			}
+			swap_ideas = {
+				remove_idea = service_by_requirement
+				add_idea = peace_corps
+			}
+		}
+		ELSE_IF = {
+			limit = {
+				has_idea = all_adults_serve
+			}
+			swap_ideas = {
+				remove_idea = all_adults_serve
+				add_idea = peace_corps
+			}
+		}
+		ELSE = {
+			add_ideas = peace_corps
+		}
 	}
 }
 #The Great Renewal
@@ -8849,6 +8887,12 @@ shared_focus = {
 
 	prerequisite = { focus = RWK_democracy_on_every_level }
 	prerequisite = { focus = RWK_never_another_empire }
+	available = {
+		owns_state = 49
+		owns_state = 816
+		owns_state = 44
+		owns_state = 442
+	}
 
 	ai_will_do = { 
 		factor = 30
@@ -8856,7 +8900,44 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_an_ideal_city"
-		
+		save_current_manpower = yes
+		49 = {
+			add_core_of = RWK
+			add_manpower = 2000
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+			}
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+			}
+		}
+		816 = {
+			add_core_of = RWK
+			add_manpower = 1000
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+			}
+		}
+		44 = {
+			add_core_of = RWK
+			add_manpower = 1000
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+			}
+		}
+		442 = {
+			add_core_of = RWK
+			add_manpower = 1000
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+			}
+		}
+		restore_previous_manpower = yes
 	}
 }
 
@@ -8886,7 +8967,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_long_road_to_trust"
-		
+		#Events for:
+		#The Good, TEN, MAR, FRI, GUT
+		#The Bad, MRA, ARB
+		#The Traitors, MSR
 	}
 }
 
@@ -8906,10 +8990,15 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 30
 	} 
+	available = {
+		RTA = { all_core_land_owned_by_prev_sphere = yes }
+		#NGL = { all_core_land_owned_by_prev_sphere = yes }
+	}
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_those_that_deny_our_ideals"
-		
+		#Events on how to deal with Talons
+		add_political_power = 40
 	}
 }
 
@@ -8931,7 +9020,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_protect_our_friends"
-		
+		set_faction_name = "Grande Sphère de la République"
+		add_stability = 0.05
+		every_allied_country = {
+			add_stability = 0.05
+		}
+		#Portshoof invite event
 	}
 }
 
@@ -8954,7 +9048,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_education_as_right"
-		
+		swap_ideas = {
+			remove_idea = RWK_welfare_2_idea
+			add_idea = RWK_welfare_2_idea
+		}
 	}
 }
 
@@ -8977,7 +9074,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_summerfield_university"
-		
+		swap_ideas = {
+			remove_idea = wasteland_research_base
+			add_idea = advanced_research_base
+		}
 	}
 }
 
@@ -8999,7 +9099,33 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_rebuild_from_bones"
-		
+		39 = {
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+			}
+			add_extra_state_shared_building_slots = 4
+			add_building_construction = {
+				type = industrial_complex
+				level = 2
+			}
+		}
+		every_owned_state = {
+			limit = {
+				OR = {
+					is_core_of = MSR
+					is_core_of = ABT
+					is_core_of = GUT
+					is_core_of = TEN
+					is_core_of = MAR
+				}
+			}
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+			}
+		}
 	}
 }
 
@@ -9022,7 +9148,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_all_who_stand_against_evil"
-		
+		swap_ideas = {
+			remove_idea = RWK_join_good_fight_2_idea
+			add_idea = RWK_join_good_fight_3_idea
+		}
 	}
 }
 
@@ -9047,7 +9176,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_vive_la_republique"
-		
+		#Events for Country-formation; New Capital; Election
 	}
 }
 
@@ -9061,6 +9190,9 @@ shared_focus = {
 	relative_position_id = RWK_civilian_governance_end
 
 	prerequisite = { focus = RWK_vive_la_republique }
+	available = {
+		has_country_flag = RWK_debt_crusher_wins_flg
+	}
 
 	ai_will_do = { 
 		factor = 30
@@ -9068,7 +9200,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_crushing_democracy_enemies"
-		
+		add_ideas = RWK_imperialist_democarcy_idea
 	}
 }
 
@@ -9083,13 +9215,21 @@ shared_focus = {
 
 	prerequisite = { focus = RWK_vive_la_republique }
 
+	available = {
+		has_country_flag = RWK_jacques_wins_flg
+	}
 	ai_will_do = { 
 		factor = 30
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_cementing_our_ideas"
-		
+		add_political_power = 200
+		add_stability = 0.10
+		add_popularity = {
+			ideology = visionary
+			popularity = 0.20
+		}
 	}
 }
 
@@ -9103,6 +9243,9 @@ shared_focus = {
 	relative_position_id = RWK_civilian_governance_end
 
 	prerequisite = { focus = RWK_vive_la_republique }
+	available = {
+		has_country_flag = RWK_black_seas_wins_flg
+	}
 
 	ai_will_do = { 
 		factor = 30
@@ -9110,20 +9253,23 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_turn_inward"
-		
+		add_ideas = RWK_isolationist_democracy_idea
 	}
 }
 
 shared_focus = {
 	id = RWK_path_to_peace
 	icon = GFX_goal_generic_megaspell
-	x = 2
+	x = 6
 	y = 7
 	cost = 4.29
 
 	relative_position_id = RWK_civilian_governance_end
 
 	prerequisite = { focus = RWK_vive_la_republique }
+	available = {
+		has_country_flag = RWK_kelp_wins_flg
+	}
 
 	ai_will_do = { 
 		factor = 30
@@ -9131,7 +9277,46 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_path_to_peace"
-		
+		custom_effect_tooltip = RWK_unique_conscription_tt
+		IF = {
+			limit = {
+				has_idea = limited_conscription
+			}
+			swap_ideas = {
+				remove_idea = limited_conscription
+				add_idea = peace_corps
+			}
+		}
+		ELSE_IF = {
+			limit = {
+				has_idea = extensive_conscription
+			}
+			swap_ideas = {
+				remove_idea = extensive_conscription
+				add_idea = peace_corps
+			}
+		}
+		ELSE_IF = {
+			limit = {
+				has_idea = service_by_requirement
+			}
+			swap_ideas = {
+				remove_idea = service_by_requirement
+				add_idea = peace_corps
+			}
+		}
+		ELSE_IF = {
+			limit = {
+				has_idea = all_adults_serve
+			}
+			swap_ideas = {
+				remove_idea = all_adults_serve
+				add_idea = peace_corps
+			}
+		}
+		ELSE = {
+			add_ideas = peace_corps
+		}
 	}
 }
 
@@ -9150,9 +9335,18 @@ shared_focus = {
 		factor = 30
 	} 
 
+	will_lead_to_war_with = MUD
+	will_lead_to_war_with = STT
+	will_lead_to_war_with = WNF
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_making_friends_by_force"
-		
+		#Event demanding STT annexation
+		MUD = {
+			grant_wargoals_on_core_states_of_prev = yes
+		}
+		WNF = {
+			grant_wargoals_on_core_states_of_prev = yes
+		}
 	}
 }
 
@@ -9173,7 +9367,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_eternal_war_for_liberty"
-		
+		two_random_arms_factory = yes
+		two_random_arms_factory = yes
+		two_random_arms_factory = yes
 	}
 }
 
@@ -9194,7 +9390,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_expand_rebublics_army"
-		
+		swap_ideas = {
+			remove_idea = RWK_join_good_fight_3_idea
+			add_idea = RWK_join_good_fight_3_1_idea
+		}
 	}
 }
 
@@ -9213,9 +9412,28 @@ shared_focus = {
 		factor = 30
 	} 
 
+	will_lead_to_war_with = EYE
+	will_lead_to_war_with = GUN
+	will_lead_to_war_with = APR
+	will_lead_to_war_with = LGH
+	will_lead_to_war_with = FRT
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_fight_back_shadow"
-		
+		EYE = {
+			grant_wargoals_on_core_states_of_prev = yes
+		}
+		GUN = {
+			grant_wargoals_on_core_states_of_prev = yes
+		}
+		LGH = {
+			grant_wargoals_on_core_states_of_prev = yes
+		}
+		APR = {
+			grant_wargoals_on_core_states_of_prev = yes
+		}
+		FRT = {
+			grant_wargoals_on_core_states_of_prev = yes
+		}
 	}
 }
 
@@ -9236,6 +9454,20 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_safeguard_independence"
+		every_owned_state = {
+			add_building_construction = {
+				type = bunker
+				level = 6
+				province = {
+					all_provinces = yes
+					limit_to_border = yes
+				}
+			}
+			add_building_construction = {
+				type = anti_air_building
+				level = 1
+			}
+		}
 		
 	}
 }
@@ -9257,7 +9489,28 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_hometown_advantage"
-		
+		save_current_manpower = yes
+		39 = {
+			add_manpower = 6000
+			add_extra_state_shared_building_slots = 4
+			add_building_construction = {
+				type = industrial_complex
+				level = 2
+			}
+			add_building_construction = {
+				type = arms_factory
+				level = 2
+			}
+			set_building_level = {
+				type = infrastructure
+				level = 10
+			}
+			add_victory_points = {
+				province = 10322
+				value = 10
+			}
+		}
+		restore_previous_manpower = yes
 	}
 }
 
@@ -9278,7 +9531,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_prosperity_of_republic"
-		
+		add_country_leader_trait = RWK_liberator_eastlands
 	}
 }
 
@@ -9299,7 +9552,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_reach_out_hoof_of_friendship"
-		
+		#Event to offer Unification to faction-members
 	}
 }
 
@@ -9319,9 +9572,25 @@ shared_focus = {
 		factor = 30
 	} 
 
+	will_lead_to_war_with = EYE
+	will_lead_to_war_with = GUN
+	will_lead_to_war_with = APR
+	will_lead_to_war_with = LGH
+	will_lead_to_war_with = FRT
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_war_for_the_ring"
-		
+		GUN = {
+			grant_wargoals_on_core_states_of_prev = yes
+		}
+		LGH = {
+			grant_wargoals_on_core_states_of_prev = yes
+		}
+		APR = {
+			grant_wargoals_on_core_states_of_prev = yes
+		}
+		FRT = {
+			grant_wargoals_on_core_states_of_prev = yes
+		}
 	}
 }
 
@@ -9343,7 +9612,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_iron_minister"
-		
+		add_country_leader_trait = RWK_iron_through_and_through
 	}
 }
 
@@ -9381,6 +9650,11 @@ shared_focus = {
 
 	prerequisite = { focus = RWK_expand_rebublics_army }
 	prerequisite = { focus = RWK_fight_back_shadow }
+	bypass = {
+		EYE = { exists = no }
+		NEV = { exists = no }
+		UNI = { exists = no }
+	}
 
 	ai_will_do = { 
 		factor = 30
@@ -9388,7 +9662,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_war_for_light"
-		
+		add_ideas = RWK_standing_tall_idea
 	}
 }
 
@@ -9410,7 +9684,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_let_no_oppressor_in"
-		
+		swap_ideas = {
+			remove_idea = RWK_isolationist_democracy_idea
+			add_idea = RWK_isolationist_democracy_2_idea
+		}
 	}
 }
 
@@ -9432,7 +9709,53 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_more_beautiful_manehattan"
-		
+		478 = {
+			add_manpower = 1000
+			set_state_name = "Marbleville"
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+			}
+		}
+		680 = { add_manpower = 1000 }
+		18 = {
+			add_manpower = 1000
+			set_state_name = "Marigold"
+		}
+		642 = {
+			add_manpower = 1000
+			set_state_name = "Arendale"
+		}
+		set_province_name = {
+			id = 13939
+			name = "Rose-Garden"
+		}
+		19 = {
+			add_manpower = 1000
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+			}
+		}
+		54 = {
+			add_manpower = 1000
+			add_building_construction = {
+				type = dockyard
+				level = 1
+			}
+		}
+		set_province_name = {
+			id = 8666
+			name = "Bucklyn"
+		}
+		set_province_name = {
+			id = 8614
+			name = "Uptown"
+		}
+		set_province_name = {
+			id = 8664
+			name = "Redtown"
+		}
 	}
 }
 
@@ -9454,7 +9777,18 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_rise_from_ashes"
-		
+		add_war_support = -0.10
+		every_owned_state = {
+			add_manpower = 100
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+			}
+			add_extra_state_shared_building_slots = 3
+		}
+		two_random_industrial_complex = yes
+		two_random_industrial_complex = yes
+		two_random_industrial_complex = yes
 	}
 }
 
@@ -9476,7 +9810,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_rise_from_ashes"
-		
+		swap_ideas = {
+			remove_idea = RWK_welfare_3_idea
+			add_idea = RWK_welfare_4_idea
+		}
 	}
 }
 
@@ -9498,7 +9835,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_gunbarrel_republic"
-		
+		swap_ideas = {
+			remove_idea = RWK_imperialist_democarcy_idea
+			add_idea = RWK_imperialist_democarcy_2_idea
+		}
 	}
 }
 
@@ -9520,7 +9860,15 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_beware_all_ye_tyrants"
-		
+		every_country = {
+			limit = {
+				OR = {
+					has_idea = slaver_society
+					has_idea = raider_society
+				}
+			}
+			grant_wargoals_on_core_states_of_prev = yes
+		}
 	}
 }
 
@@ -9542,7 +9890,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_mayor_of_nation"
-		
+		add_country_leader_trait = icon_of_manehattan
 	}
 }
 
@@ -9564,6 +9912,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_towards_brighter_future"
-		
+		#MOP event
+		custom_effect_tooltip = RWK_improved_chem_company_tt
+		set_technology = {
+			RWK_mop_grade_health_potions_tech = 1
+			popup = no
+		}
 	}
 }
