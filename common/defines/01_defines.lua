@@ -186,10 +186,10 @@ NDefines.NAI.RESEARCH_BASE_DAYS = 60					-- AI adds a base number of days when w
 NDefines.NProduction.MIN_POSSIBLE_TRAINING_MANPOWER = 3700	-- minimum amount of units able to be trained
 
 
-NDefines.NAI.UPGRADE_DIVISION_RELUCTANCE = 10	-- (2000) stop randomly upgrading to infantry
+NDefines.NAI.UPGRADE_DIVISION_RELUCTANCE = 2	-- (2000) stop randomly upgrading to infantry
 NDefines.NAI.UPGRADE_PERCENTAGE_OF_FORCES = 0.1
 NDefines.NAI.DIVISION_UPGRADE_MIN_XP = 5										-- Minimum XP before attempting to upgrade a division template.
-NDefines.NAI.UPGRADE_XP_RUSH_UPDATE = 50										-- If XP is above this on the daily tick the AI will attempt to spend it
+NDefines.NAI.UPGRADE_XP_RUSH_UPDATE = 110										-- If XP is above this on the daily tick the AI will attempt to spend it
 
 --NNavy
 NDefines.NNavy.NAVAL_INVASION_PREPARE_HOURS = 64								-- base hours needed to prepare an invasion
