@@ -27,6 +27,29 @@ shared_focus = {
 				days = 94
 			}
 		}
+		hidden_effect = {
+			RWK_char_protege = {
+				set_character_flag = RWK_new_regime_char_flg
+			}
+			RWK_char_charcoal_dust = {
+				set_character_flag = RWK_new_regime_char_flg
+			}
+			RWK_char_parcel_stamp = {
+				set_character_flag = RWK_new_regime_char_flg
+			}
+			RWK_char_doc_slaughter = {
+				set_character_flag = RWK_new_regime_char_flg
+			}
+			RWK_char_paulus_tart = {
+				set_character_flag = RWK_new_regime_char_flg
+			}
+			RWK_char_gearbox = {
+				set_character_flag = RWK_new_regime_char_flg
+			}
+			RWK_char_scarlett_flash = {
+				set_character_flag = RWK_new_regime_char_flg
+			}
+		}
 	}
 }
 
@@ -2518,9 +2541,17 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_sunrise_development_council"
 		custom_effect_tooltip = RWK_unlock_SDC_tt
-		swap_ideas = {
-			remove_idea = export_focus
-			add_idea = free_trade
+		IF = {
+			limit = {
+				NOT = {
+					has_idea = trade_hub_law
+					has_country_leader = RWK_char_Wavebreaker
+				}
+			}
+			add_ideas = free_trade
+		}
+		ELSE = {
+			add_political_power = 50
 		}
 	}
 }
@@ -3411,10 +3442,10 @@ shared_focus = {
 	relative_position_id = RWK_sunrise_development_council
 	available = {
 		OR = {
-			owns_state = 49
-			owns_state = 515
-			owns_state = 812
-			owns_state = 538
+			49 = { is_owned_by_ROOT_or_subject = yes }
+			515 = { is_owned_by_ROOT_or_subject = yes }
+			812 = { is_owned_by_ROOT_or_subject = yes }
+			538 = { is_owned_by_ROOT_or_subject = yes }
 		}
 	}
 	prerequisite = {
@@ -3778,7 +3809,7 @@ shared_focus = {
 		focus = RWK_choose_a_successor
 	}
 	allow_branch = {
-		has_government = destruction
+		has_country_flag = RWK_Crimson_govment_flg
 	}
 	ai_will_do = { 
 	factor = 30
@@ -4499,6 +4530,7 @@ shared_focus = {
 			leave_faction = yes
 		}
 		custom_effect_tooltip = RWK_borderwar_gun_tt
+
 	}
 }
 
@@ -4969,6 +5001,7 @@ shared_focus = {
 	prerequisite = {
 		focus = RWK_queen_takes_king
 	}
+	cancelable = no
 	ai_will_do = { 
 	factor = 300
 	} 
@@ -4976,13 +5009,12 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_old_supporters_new_regime"
 		country_event = rustwreck.53
-		recruit_character = RWK_char_protege
-		recruit_character = RWK_char_charcoal_dust
-		recruit_character = RWK_char_parcel_stamp
-		recruit_character = RWK_char_doc_slaughter
-		recruit_character = RWK_char_paulus_tart
-		recruit_character = RWK_char_gearbox
-		recruit_character = RWK_char_scarlett_flash
+		custom_effect_tooltip = RWK_EYE_turncoats_tt
+		character_list_tooltip = {
+			limit = {
+				has_character_flag = RWK_new_regime_char_flg
+			}
+		}
 	}
 }
 
@@ -5780,6 +5812,9 @@ shared_focus = {
 	prerequisite = {
 		focus = RWK_remove_disruptive_factors
 	}
+	available = {
+		has_idea = RWK_sage_level_1_idea
+	}
 	ai_will_do = { 
 	factor = 30
 	} 
@@ -6042,12 +6077,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_naval_discipline_forever"
-		534 = { add_dynamic_modifier = RWK_mass_surveillance }
-		164 = { add_dynamic_modifier = RWK_mass_surveillance }
-		203 = { add_dynamic_modifier = RWK_mass_surveillance }
-		524 = { add_dynamic_modifier = RWK_mass_surveillance }
-		508 = { add_dynamic_modifier = RWK_mass_surveillance }
-		235 = { add_dynamic_modifier = RWK_mass_surveillance }
+		534 = { add_dynamic_modifier = { modifier = RWK_mass_surveillance }}
+		164 = { add_dynamic_modifier = { modifier = RWK_mass_surveillance }}
+		203 = { add_dynamic_modifier = { modifier = RWK_mass_surveillance }}
+		524 = { add_dynamic_modifier = { modifier = RWK_mass_surveillance }}
+		508 = { add_dynamic_modifier = { modifier = RWK_mass_surveillance }}
+		235 = { add_dynamic_modifier = { modifier = RWK_mass_surveillance }}
 	}
 }
 
@@ -6625,7 +6660,7 @@ shared_focus = {
 					} 
 				}
 			}
-			add_dynamic_modifier = RWK_mass_surveillance
+			add_dynamic_modifier = { modifier = RWK_mass_surveillance }
 		}
 	}
 }
@@ -7991,7 +8026,7 @@ shared_focus = {
 	available_if_capitulated = yes
 	relative_position_id = RWK_kelp_foreign_1
 	available = {
-		MRA = { all_core_land_owned_by_prev_sphere = yes }
+		RAR = { all_core_land_owned_by_prev_sphere = yes }
 	}
 	prerequisite = { focus = RWK_kelp_foreign_1 }
 	
@@ -8531,9 +8566,9 @@ shared_focus = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_deregulate_foreign_trade"
 		IF = {
 			limit = {
-				NOT = { has_idea = export_focus }
+				NOT = { has_idea = free_trade }
 			}
-			add_ideas = export_focus
+			add_ideas = free_trade
 		}
 		two_random_industrial_complex = yes
 		one_random_arms_factory = yes
@@ -9197,6 +9232,28 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_vive_la_republique"
 		country_event = rustwreck.135
+		hidden_effect = {
+			set_party_name = {
+				ideology = survivalism
+				long_name = RWK_survivalism_rep_kelp
+				name = RWK_survivalism_rep_kelp
+			}
+			set_party_name = {
+				ideology = continuation
+				long_name = RWK_continuation_rep_boop
+				name = RWK_continuation_rep_boop
+			}
+			set_party_name = {
+				ideology = visionary
+				long_name = RWK_visionary_rep_jacques
+				name = RWK_visionary_rep_jacques
+			}
+			set_party_name = {
+				ideology = destruction
+				long_name = RWK_destruction_rep_crusher
+				name = RWK_destruction_rep_crusher
+			}
+		}
 	}
 }
 
@@ -9916,7 +9973,7 @@ shared_focus = {
 					has_idea = raider_society
 				}
 			}
-			grant_wargoals_on_core_states_of_prev = yes
+			RWK = {grant_wargoals_on_core_states_of_prev = yes}
 		}
 	}
 }
