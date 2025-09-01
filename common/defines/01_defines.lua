@@ -10,6 +10,8 @@ NDefines.NDiplomacy.VOLUNTEERS_DIVISIONS_REQUIRED = 8
 -- to 1 before that.)
 NDefines.NDiplomacy.TENSION_TIME_SCALE_START_DATE = "1235.1.1.12"
 NDefines.NCountry.BASE_MOBILIZATION_SPEED = 0.015
+NDefines.NDiplomacy.TENSION_NO_CB_WAR = 5
+NDefines.NDiplomacy.TENSION_CB_WAR = 3
 --------------
 -- NCountry --
 --------------
