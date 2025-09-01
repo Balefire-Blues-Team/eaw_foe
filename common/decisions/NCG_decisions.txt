@@ -6,9 +6,13 @@ NCG_investment_yearly_cat = {
 		### Never "complete" success
 		activation  = {
 			tag = NCG
+			NOT = { has_country_flag = NCG_investment_cancel_flag }
 		}
 		available = {
 			always = no
+		}
+		cancel_trigger = {
+			has_country_flag = NCG_investment_cancel_flag
 		}
 		is_good = yes
 		days_mission_timeout = 364
@@ -1497,7 +1501,6 @@ NCG_subvert_mareway_cat = {
 
 	NCG_industrial_aid_to_sunflower = {
 		icon = generic_construction
-		is_good = yes
 
 		available = {
 			has_political_power > 49
@@ -1529,7 +1532,6 @@ NCG_subvert_mareway_cat = {
 
 	NCG_industrial_aid_to_littleward = {
 		icon = generic_construction
-		is_good = yes
 
 		available = {
 			has_political_power > 49
@@ -1561,7 +1563,6 @@ NCG_subvert_mareway_cat = {
 
 	NCG_industrial_aid_to_gatormaw = {
 		icon = generic_construction
-		is_good = yes
 
 		available = {
 			has_political_power > 29
@@ -1593,7 +1594,6 @@ NCG_subvert_mareway_cat = {
 
 	NCG_industrial_aid_to_pale_light = {
 		icon = generic_construction
-		is_good = yes
 
 		available = {
 			has_political_power > 49
@@ -1625,7 +1625,6 @@ NCG_subvert_mareway_cat = {
 
 	NCG_industrial_aid_to_wavy_waters = {
 		icon = generic_construction
-		is_good = yes
 
 		available = {
 			has_political_power > 19
@@ -1655,4 +1654,81 @@ NCG_subvert_mareway_cat = {
 			factor = 190
 		}
 	}
+}
+
+NCG_creator_decision_cat = {
+	NCG_overclock_factories_dec = {
+		icon = generic_construction
+
+		days_remove = 30
+		fire_only_once = no
+		cost = NCG_creator_pp_cost
+		modifier = {
+			industrial_capacity_factory = 1
+		}
+
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NCG_overclock_factories_dec "
+			custom_effect_tooltip = NCG_overclock_cost_increases
+			add_to_variable = {
+				var = NCG_creator_pp_cost
+				value = 30
+			}
+			add_to_variable = {
+				var = NCG_creator_metal_needed
+				value = 8
+			}
+			add_to_variable = {
+				var = NCG_creator_composites_needed
+				value = 6
+			}
+			add_to_variable = {
+				var = NCG_creator_circuitry_needed
+				value = 4
+			}
+		}
+
+		ai_will_do = {
+			factor = 190
+		}
+	}
+
+	NCG_loyalty_enforcement_dec = {
+		icon = generic_construction
+
+		visible = {
+			FROM = {
+				compliance < 60
+				is_owned_by = NCG
+				NOT = { is_core_of = NCG }
+			}
+			has_completed_focus = NCG_vincens
+		}
+		available = {
+			FROM = {
+				is_owned_by = NCG
+				is_controlled_by = NCG
+            }
+		}
+		state_target = yes
+        on_map_mode = map_only
+		fire_only_once = no
+		cost = 30
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NCG_loyalty_enforcement_dec "
+			save_current_manpower = yes
+			FROM = {
+				add_manpower = -50
+				add_compliance = 30
+			}
+			restore_previous_manpower = yes
+		}
+
+		ai_will_do = {
+			factor = 190
+		}
+	}
+
+
 }

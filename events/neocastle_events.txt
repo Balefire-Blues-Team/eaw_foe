@@ -3,7 +3,7 @@ add_namespace = neocastle
 add_namespace = neocastleflavor
 add_namespace = neocastle_creator
 
-country_event = { 
+country_event = {
  	id = neocastle.1
  	title = neocastle.1.t
  	desc = neocastle.1.d
@@ -12,7 +12,7 @@ country_event = {
 	is_triggered_only = yes
  	fire_only_once = yes
 
-	option = { 
+	option = {
 		name = neocastle.1.a
 		add_tech_bonus = {
 			name = industry
@@ -605,6 +605,12 @@ country_event = {
 		}
 		custom_effect_tooltip = NCG_coring_disabled_tt
 		set_country_flag = coring_button_hidden
+		hidden_effect = {
+			country_event = {
+				id = neocastle.37
+				days = 3
+			}
+		}
 	}
 }
 
@@ -619,7 +625,7 @@ country_event = {
 
 	option = { 
 		name = neocastle.11.a
-		add_timed_ideas = {idea = NCG_finance_BOG_idea days = 200}
+		add_timed_idea = {idea = NCG_finance_BOG_idea days = 200}
 		puppet = BOG
 		hidden_effect = {
 			BOG = {
@@ -719,15 +725,15 @@ country_event = {
 		custom_effect_tooltip = NCG_next_nation_buy_tt
 		hidden_effect = {
 			IF = {
-				limit = { tag = SHA RED = {exists = yes}}
-				RED = {country_event = neocastle.15}
+				limit = { tag = SHA EYE = {exists = yes}}
+				EYE = {country_event = neocastle.15}
 			}
 			IF = {
-				limit = { tag = SHA RED = {exists = no} FSR = {exists = yes}}
+				limit = { tag = SHA EYE = {exists = no} FSR = {exists = yes}}
 				FSR = {country_event = neocastle.15}
 			}
 			IF = {
-				limit = { tag = RED MWY = {exists = yes}}
+				limit = { tag = EYE MWY = {exists = yes}}
 				MWY = {country_event = neocastle.15}
 			}
 			IF = {
@@ -1132,18 +1138,23 @@ country_event = {
 			traits = {
 				
 			}
-		}
+		} 
 		set_party_name = { 
 			ideology = visionary 
 			long_name = NCG_creators_party_long 
 			name = NCG_creators_party 
 		}
-		hidden_effect = {
-			set_politics = {
+		set_politics = {
 				ruling_party = visionary
 			}
-			add_ideas = NCG_guild_resistance_1
+		add_ideas = NCG_guild_resistance_1
+		add_ideas = closed_economy
+		set_cosmetic_tag = NCG_aetherist_cosm
+		retire_character = NCG_char_ferrofall
+		retire_character = NCG_char_brick_breaker
+		hidden_effect = {
 			load_focus_tree = NCG_focus_creators
+			clr_country_flag = coring_button_hidden
 		}
 		
 	}	
@@ -1240,7 +1251,6 @@ country_event = {
 
 	is_triggered_only = yes
  	fire_only_once = no
-	fixed_random_seed = no
 	option = { 
 		name = neocastle.997.a
 		set_variable = {
@@ -1248,7 +1258,7 @@ country_event = {
 			value = 0
 		}
 		random_list = {
-			40 = { add_equipment_to_stockpile = { type = infantry_equipment_4 amount = 300 producer = OWE } }
+			40 = { add_equipment_to_stockpile = { type = energy_equipment_4 amount = 300 producer = OWE } }
 			30 = { IF = {
 						limit = {
 							NOT = {has_dynamic_modifier = { modifier = NCG_mil_training_modifier } }
@@ -1754,6 +1764,13 @@ country_event = {
 
 	option = { 
 		name = neocastle_creator.1.a
+		747 = {
+			set_state_name = "Great Work"
+		}
+		set_province_name = {
+			id = 4264
+			name = "Infinite Spire"
+		}
 		set_technology = {
 			habitation_tech_level_scientific = 1
 		}
@@ -1771,6 +1788,11 @@ country_event = {
 
 	option = { 
 		name = neocastle_creator.2.a
+		add_manpower = -167
+		add_political_power = -50
+		remove_dynamic_modifier = {
+				modifier = NCG_corruption_modifier
+			}
 		swap_ideas = { remove_idea = NCG_guild_resistance_1 add_idea = NCG_guild_resistance_2 }
 	}
 }
@@ -1880,8 +1902,16 @@ country_event = {
 		747 = { add_victory_points = {
 			province = 4264
 			value = 2
-		} }
-		country_event = {id = neocastle_creator.3 days = 30}
+		} 
+		}
+		IF = {
+			limit = {
+				NOT = {
+					has_country_flag = NCG_creators_defeated_flg
+				}
+			}
+			country_event = {id = neocastle_creator.3 days = 10}
+		}
 	}
 }
 
@@ -1939,7 +1969,12 @@ country_event = {
 					grant_wargoals_on_core_states_of_prev = yes
 				}
 			}
-		SHA = {add_ideas = NCG_sabotage_idea}
+		SHA = {
+			add_timed_idea = {
+				idea = NCG_sabotage_idea
+				days = 60
+			}
+		}
 	}
 }
 
@@ -1952,6 +1987,7 @@ country_event = {
     trigger = {
 		tag = NCG
 		has_government = visionary
+		NOT = { has_country_flag = NCG_creators_takeover_flag }
 		controls_state = 696
    	}
 	fire_only_once = yes
@@ -1980,6 +2016,7 @@ country_event = {
     trigger = {
 		tag = NCG
 		has_government = visionary
+		NOT = { has_country_flag = NCG_creators_takeover_flag }
 		controls_state = 532
    	}
 	fire_only_once = yes
@@ -2039,6 +2076,7 @@ country_event = {
    	trigger = {
 		tag = NCG
 		has_government = visionary
+		NOT = { has_country_flag = NCG_creators_takeover_flag }
 		controls_state = 808
    	}
 	fire_only_once = yes
@@ -2162,3 +2200,1860 @@ country_event = {
 		custom_effect_tooltip = NCG_machanicum_epilogue_tt
    }	
 }
+
+#The Lodge sends it's regards
+country_event = {
+	id = neocastle.37
+	title = neocastle.37.t
+	desc = neocastle.37.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle.37.a
+		
+   	}	
+	option = {
+		name = neocastle.37.b
+		add_political_power = 20
+		custom_effect_tooltip = NCG_aetherists_path_unlock_tt
+		hidden_effect = {
+			country_event = {
+				id = neocastle.38
+				days = 8
+			}
+		}
+   	}	
+}
+
+#Pirates steal arms shipment
+country_event = {
+	id = neocastle.38
+	title = neocastle.38.t
+	desc = neocastle.38.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle.38.a
+		hidden_effect = {
+			country_event = {
+				id = neocastle.39
+				days = 11
+			}
+		}
+   	}	
+}
+
+#Quiet in the North
+country_event = {
+	id = neocastle.39
+	title = neocastle.39.t
+	desc = neocastle.39.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle.39.a
+		IF = {
+			limit = {
+				has_idea = NCG_west_amethyst_resistance
+			}
+			remove_ideas = NCG_west_amethyst_resistance
+		}
+		ELSE_IF = {
+			limit = {
+				has_idea = NCG_west_amethyst_resistance2
+			}
+			remove_ideas = NCG_west_amethyst_resistance2
+		}
+		ELSE_IF = {
+			limit = {
+				has_idea = NCG_west_amethyst_resistance3
+			}
+			remove_ideas = NCG_west_amethyst_resistance3
+		}
+		ELSE_IF = {
+			limit = {
+				has_idea = NCG_west_amethyst_resistance4
+			}
+			remove_ideas = NCG_west_amethyst_resistance4
+		}
+		hidden_effect = {
+			country_event = {
+				id = neocastle.40
+				days = 18
+			}
+		}
+   	}	
+}
+
+#Static in the Feeds
+country_event = {
+	id = neocastle.40
+	title = neocastle.40.t
+	desc = neocastle.40.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle.40.a
+		add_stability = -0.10
+		hidden_effect = {
+			country_event = {
+				id = neocastle.41
+				days = 1
+			}
+		}
+   	}	
+}
+
+#The Streets weep red
+country_event = {
+	id = neocastle.41
+	title = neocastle.41.t
+	desc = neocastle.41.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle.41.a
+		capital_scope = {
+			damage_building = {
+				type = industrial_complex
+				damage = 1.5
+			}
+			damage_building = {
+				type = arms_factory
+				damage = 0.8
+			}
+			damage_building = {
+				type = infrastructure
+				damage = 4
+			}
+		}
+		add_manpower = -145
+		country_event = neocastle.42
+   	}	
+	option = {
+		name = neocastle.41.b
+		capital_scope = {
+			damage_building = {
+				type = industrial_complex
+				damage = 1.5
+			}
+			damage_building = {
+				type = arms_factory
+				damage = 0.8
+			}
+			damage_building = {
+				type = infrastructure
+				damage = 4
+			}
+		}
+		add_manpower = -145
+		country_event = neocastle.43
+   	}
+}
+
+#At the Eleventh hour
+country_event = {
+	id = neocastle.42
+	title = neocastle.42.t
+	desc = neocastle.42.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle.42.a
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.10
+		}
+   	}	
+}
+
+#Last turn of the Gear
+country_event = {
+	id = neocastle.43
+	title = neocastle.43.t
+	desc = neocastle.43.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle.43.a
+		country_event = neocastle.30
+		hidden_effect = {
+			delete_unit = {
+				disband = yes
+			}
+		}
+   	}	
+}
+
+#Future in Chains
+country_event = {
+	id = neocastle_creator.6
+	title = neocastle_creator.6.t
+	desc = neocastle_creator.6.d
+
+    trigger = {
+		tag = NCG
+		has_completed_focus = NCG_subvertendo
+		controls_state = 808
+	}
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.6.a
+		save_current_manpower = yes
+		808 = {
+			add_manpower = -11000
+			remove_building = {
+				type = industrial_complex
+				level = 5
+			}
+			remove_building = {
+				type = arms_factory
+				level = 2
+			}
+			add_resource = {
+				type = energy
+				amount = -4
+			}
+			add_resource = {
+				type = metal
+				amount = -10
+			}
+			add_resource = {
+				type = composites
+				amount = -5
+			}
+			add_resource = {
+				type = circuitry
+				amount = -5
+			}
+			set_state_name = "The Heap"
+		}
+		set_victory_points = {
+			province = 4308
+			value = 0
+		}
+		749 = {
+			add_manpower = 5000
+			add_resource = {
+				type = energy
+				amount = 4
+			}
+			add_resource = {
+				type = metal
+				amount = 10
+			}
+			add_resource = {
+				type = composites
+				amount = 5
+			}
+			add_resource = {
+				type = circuitry
+				amount = 5
+			}
+		}
+		add_offsite_building = {
+			type = industrial_complex
+			level = 5
+		}
+		add_offsite_building = {
+			type = arms_factory
+			level = 2
+		}
+		restore_previous_manpower = yes
+		hidden_effect = {
+			set_victory_points = {
+				province = 1084
+				value = 5
+			}
+		}
+   	}	
+}
+
+#The Last Generation
+country_event = {
+	id = neocastle_creator.7
+	title = neocastle_creator.7.t
+	desc = neocastle_creator.7.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.7.a
+
+   	}	
+}
+
+#The never-dimming Sun
+country_event = {
+	id = neocastle_creator.8
+	title = neocastle_creator.8.t
+	desc = neocastle_creator.8.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.8.a
+		
+   	}	
+}
+
+#The flesh is pure
+country_event = {
+	id = neocastle_creator.9
+	title = neocastle_creator.9.t
+	desc = neocastle_creator.9.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.9.a
+		add_ideas = NCG_Sunforge
+   	}	
+}
+
+#The Wasteland never changes
+country_event = {
+	id = neocastle_creator.10
+	title = neocastle_creator.10.t
+	desc = neocastle_creator.10.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.10.a
+		
+   	}	
+}
+
+#Deeper Mysteries
+country_event = {
+	id = neocastle_creator.11
+	title = neocastle_creator.11.t
+	desc = neocastle_creator.11.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.11.a
+		
+   	}	
+}
+
+#Empty Pews
+country_event = {
+	id = neocastle_creator.12
+	title = neocastle_creator.12.t
+	desc = neocastle_creator.12.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.12.a
+		
+   	}	
+}
+
+#Cornucopia
+country_event = {
+	id = neocastle_creator.13
+	title = neocastle_creator.13.t
+	desc = neocastle_creator.13.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.13.a
+		
+   	}	
+}
+
+#War for the Skies
+country_event = {
+	id = neocastle_creator.14
+	title = neocastle_creator.14.t
+	desc = neocastle_creator.14.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.14.a
+		capital_scope = {
+			damage_building = {
+				type = infrastructure
+				damage = 3.7
+			}
+			damage_building = {
+				type = industrial_complex
+				damage = 2.1
+			}
+			damage_building = {
+				type = arms_factory
+				damage = 1.9
+			}
+		}
+   	}	
+}
+
+#Thinktank
+country_event = {
+	id = neocastle_creator.15
+	title = neocastle_creator.15.t
+	desc = neocastle_creator.15.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.15.a
+		add_stability = -0.20
+		save_current_manpower = yes
+		capital_scope = {
+			add_manpower = -200
+		}
+		restore_previous_manpower = yes
+		set_research_slots = 5
+   	}	
+}
+
+#Like Ants
+country_event = {
+	id = neocastle_creator.16
+	title = neocastle_creator.16.t
+	desc = neocastle_creator.16.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.16.a
+		
+   	}	
+}
+
+#Gleaming Metal
+country_event = {
+	id = neocastle_creator.17
+	title = neocastle_creator.17.t
+	desc = neocastle_creator.17.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.17.a
+		add_equipment_to_stockpile = {
+			type = light_robot_sprite_equipment
+			amount = 200
+			producer = OWE
+		}
+   	}	
+}
+
+#Necessary Sacrifices
+country_event = {
+	id = neocastle_creator.18
+	title = neocastle_creator.18.t
+	desc = neocastle_creator.18.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.18.a
+		save_current_manpower = yes
+		556 = {
+			add_manpower = -2800
+		}
+		747 = {
+			add_manpower = 2500
+		}
+		restore_previous_manpower = yes
+		set_victory_points = {
+			province = 10862
+			value = 0
+		}
+   	}	
+}
+
+#Only Seven
+country_event = {
+	id = neocastle_creator.19
+	title = neocastle_creator.19.t
+	desc = neocastle_creator.19.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.19.a
+		retire_character = NCG_char_JEB_Beauteous
+		add_popularity = {
+			ideology = destruction
+			popularity = -0.20
+		}
+   	}	
+}
+
+#Incursion
+country_event = {
+	id = neocastle_creator.20
+	title = neocastle_creator.20.t
+	desc = neocastle_creator.20.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.20.a
+		
+   	}	
+}
+
+#MWY Conquest
+country_event = {
+	id = neocastle_creator.21
+	title = neocastle_creator.21.t
+	desc = neocastle_creator.21.d
+
+    trigger = {
+		tag = NCG
+		has_completed_focus = NCG_liberos
+		controls_state = 549
+	}
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.21.a
+		save_current_manpower = yes
+		549 = {
+			add_manpower = -12000
+			remove_building = {
+				type = arms_factory
+				level = 2
+			}
+			remove_building = {
+				type = industrial_complex
+				level = 3
+			}
+		}
+		set_victory_points = {
+			province = 77
+			value = 15
+		}
+		747 = {
+			add_manpower = 10000
+		}
+		add_offsite_building = {
+			type = arms_factory
+			level = 2
+		}
+		add_offsite_building = {
+			type = industrial_complex
+			level = 3
+		}
+		restore_previous_manpower = yes
+   	}	
+}
+
+#REP Conquest
+country_event = {
+	id = neocastle_creator.22
+	title = neocastle_creator.22.t
+	desc = neocastle_creator.22.d
+
+    trigger = {
+		tag = NCG
+		has_completed_focus = NCG_dicens
+		controls_state = 511
+	}
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.22.a
+		save_current_manpower = yes
+		511 = {
+			add_manpower = -6000
+			set_state_name = "Capitol Ruins"
+			remove_building = {
+				type = arms_factory
+				level = 1
+			}
+			remove_building = {
+				type = industrial_complex
+				level = 3
+			}
+		}
+		set_victory_points = {
+			province = 12498
+			value = 0
+		}
+		set_victory_points = {
+			province = 9063
+			value = 5
+		}
+		set_province_name = {
+			id = 9063
+			name = "Capitol Ruins"
+		}
+		747 = {
+			add_manpower = 5000
+		}
+		add_offsite_building = {
+			type = arms_factory
+			level = 1
+		}
+		add_offsite_building = {
+			type = industrial_complex
+			level = 3
+		}
+		restore_previous_manpower = yes
+   	}	
+}
+
+#What is given
+country_event = {
+	id = neocastle_creator.23
+	title = neocastle_creator.23.t
+	desc = neocastle_creator.23.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.23.a
+		add_manpower = -1
+   	}	
+}
+
+#Featherbrush Conquest
+country_event = {
+	id = neocastle_creator.24
+	title = neocastle_creator.24.t
+	desc = neocastle_creator.24.d
+
+    trigger = {
+		tag = NCG
+		has_completed_focus = NCG_terra
+		controls_state = 526
+	}
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.24.a
+		save_current_manpower = yes
+		526 = {
+			add_manpower = -4000
+			set_state_name = "Scorched Hill"
+			remove_building = {
+				type = arms_factory
+				level = 2
+			}
+			remove_building = {
+				type = industrial_complex
+				level = 1
+			}
+		}
+		set_victory_points = {
+			province = 1458
+			value = 0
+		}
+		747 = {
+			add_manpower = 3500
+		}
+		add_offsite_building = {
+			type = arms_factory
+			level = 2
+		}
+		add_offsite_building = {
+			type = industrial_complex
+			level = 1
+		}
+		restore_previous_manpower = yes
+		hidden_effect = {
+			set_victory_points = {
+				province = 9175
+				value = 15
+			}
+		}
+   	}	
+}
+
+#LIT Conquest
+country_event = {
+	id = neocastle_creator.25
+	title = neocastle_creator.25.t
+	desc = neocastle_creator.25.d
+
+    trigger = {
+		tag = NCG
+		has_completed_focus = NCG_de_deserto
+		controls_state = 550
+		controls_state = 563
+	}
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.25.a
+		save_current_manpower = yes
+		550 = {
+			add_manpower = -3500
+			set_state_name = "Cloudless"
+			remove_building = {
+				type = industrial_complex
+				level = 3
+			}
+		}
+		set_victory_points = {
+			province = 9202
+			value = 0
+		}
+		563 = {
+			add_manpower = -8000
+			remove_building = {
+				type = industrial_complex
+				level = 3
+			}
+			remove_building = {
+				type = arms_factory
+				level = 2
+			}
+		}
+		set_victory_points = {
+			province = 2634
+			value = 5
+		}
+		747 = {
+			add_manpower = 10000
+		}
+		add_offsite_building = {
+			type = industrial_complex
+			level = 6
+		}
+		add_offsite_building = {
+			type = arms_factory
+			level = 2
+		}
+		restore_previous_manpower = yes
+   	}	
+}
+
+#MAS Conquest
+country_event = {
+	id = neocastle_creator.26
+	title = neocastle_creator.26.t
+	desc = neocastle_creator.26.d
+
+    trigger = {
+		tag = NCG
+		has_completed_focus = NCG_de_deserto
+		controls_state = 572
+	}
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.26.a
+		save_current_manpower = yes
+		572 = {
+			add_manpower = -6000
+			set_state_name = "Cloudless"
+			remove_building = {
+				type = arms_factory
+				level = 1
+			}
+		}
+		set_victory_points = {
+			province = 9202
+			value = 0
+		}
+		747 = {
+			add_manpower = 5000
+		}
+		add_offsite_building = {
+			type = arms_factory
+			level = 1
+		}
+		restore_previous_manpower = yes
+   	}	
+}
+
+#Endless Lines
+country_event = {
+	id = neocastle_creator.27
+	title = neocastle_creator.27.t
+	desc = neocastle_creator.27.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.27.a
+		
+   	}	
+}
+
+#CAT Conquest
+country_event = {
+	id = neocastle_creator.28
+	title = neocastle_creator.28.t
+	desc = neocastle_creator.28.d
+
+    trigger = {
+		tag = NCG
+		has_completed_focus = NCG_et_terriblis
+		controls_state = 593
+	}
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.28.a
+		save_current_manpower = yes
+		593 = {
+			add_manpower = -3000
+			set_state_name = "Heart of Everfree"
+			remove_building = {
+				type = arms_factory
+				level = 1
+			}
+			remove_building = {
+				type = industrial_complex
+				level = 2
+			}
+		}
+		set_victory_points = {
+			province = 2766
+			value = 0
+		}
+		set_victory_points = {
+			province = 15769
+			value = 0
+		}
+		747 = {
+			add_manpower = 2500
+		}
+		add_offsite_building = {
+			type = arms_factory
+			level = 1
+		}
+		add_offsite_building = {
+			type = arms_factory
+			level = 2
+		}
+		restore_previous_manpower = yes
+   	}	
+}
+
+#Filly Conquest
+country_event = {
+	id = neocastle_creator.28
+	title = neocastle_creator.28.t
+	desc = neocastle_creator.28.d
+
+    trigger = {
+		tag = NCG
+		has_completed_focus = NCG_et_terriblis
+		controls_state = 532
+		controls_state = 48
+		controls_state = 45
+		controls_state = 538
+	}
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.28.a
+		save_current_manpower = yes
+		538 = {
+			add_manpower = -10000
+			remove_building = {
+				type = arms_factory
+				level = 2
+			}
+			remove_building = {
+				type = industrial_complex
+				level = 2
+			}
+		}
+		set_victory_points = {
+			province = 9132
+			value = 10
+		}
+		48 = {
+			add_manpower = -10000
+			remove_building = {
+				type = arms_factory
+				level = 1
+			}
+			remove_building = {
+				type = industrial_complex
+				level = 1
+			}
+		}
+		45 = {
+			add_manpower = -6000
+			remove_building = {
+				type = arms_factory
+				level = 1
+			}
+			remove_building = {
+				type = industrial_complex
+				level = 1
+			}
+		}
+		532 = {
+			add_manpower = -9000
+			remove_building = {
+				type = arms_factory
+				level = 2
+			}
+			remove_building = {
+				type = industrial_complex
+				level = 2
+			}
+		}
+		set_victory_points = {
+			province = 9132
+			value = 10
+		}
+		747 = {
+			add_manpower = 28000
+		}
+		add_offsite_building = {
+			type = arms_factory
+			level = 6
+		}
+		add_offsite_building = {
+			type = arms_factory
+			level = 6
+		}
+		restore_previous_manpower = yes
+   	}	
+}
+
+#UNI Conquest
+country_event = {
+	id = neocastle_creator.30
+	title = neocastle_creator.30.t
+	desc = neocastle_creator.30.d
+
+    trigger = {
+		tag = NCG
+		has_completed_focus = NCG_senex
+		controls_state = 518
+	}
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.30.a
+		save_current_manpower = yes
+		593 = {
+			add_core_of = NCG
+		}
+		add_tech_bonus = {
+			name = unicorn_tech
+			bonus = 2.0
+			uses = 2
+			category = unicorn_tech
+			}
+		restore_previous_manpower = yes
+   	}	
+}
+
+#Canterlot Conquest
+country_event = {
+	id = neocastle_creator.31
+	title = neocastle_creator.31.t
+	desc = neocastle_creator.31.d
+
+    trigger = {
+		tag = NCG
+		has_completed_focus = NCG_senex
+		controls_state = 234
+		controls_state = 180
+	}
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.31.a
+		save_current_manpower = yes
+		234 = {
+			add_manpower = -1000
+			add_resource = {
+				type = advanced
+				amount = -20
+			}
+		}
+		180 = {
+			add_manpower = -3000
+			add_resource = {
+				type = advanced
+				amount = -10
+			}
+		}
+		set_victory_points = {
+			province = 8775
+			value = 5
+		}
+		747 = {
+			add_manpower = 3500
+			add_resource = {
+				type = advanced
+				amount = 30
+			}
+		}
+		restore_previous_manpower = yes
+   	}	
+}
+
+#Tenpony Conquest
+country_event = {
+	id = neocastle_creator.32
+	title = neocastle_creator.32.t
+	desc = neocastle_creator.32.d
+
+    trigger = {
+		tag = NCG
+		has_completed_focus = NCG_urbem
+		controls_state = 21
+	}
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.32.a
+		save_current_manpower = yes
+		21 = {
+			add_manpower = -7000
+			remove_building = {
+				type = industrial_complex
+				level = 2
+			}
+			remove_building = {
+				type = arms_factory
+				level = 2
+			}
+		}
+		set_province_name = {
+			id = 14776
+			name = "Tenpony"
+		}
+		set_victory_points = {
+			province = 14776
+			value = 5
+		}
+		747 = {
+			add_manpower = 6000
+		}
+		add_offsite_building = {
+			type = industrial_complex
+			level = 2
+		}
+		add_offsite_building = {
+			type = arms_factory
+			level = 2
+		}
+		restore_previous_manpower = yes
+   	}	
+}
+
+#Empire Conquest
+country_event = {
+	id = neocastle_creator.33
+	title = neocastle_creator.33.t
+	desc = neocastle_creator.33.d
+
+    trigger = {
+		tag = NCG
+		has_completed_focus = NCG_imperii
+		controls_state = 51
+	}
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.33.a
+		save_current_manpower = yes
+		51 = {
+			add_manpower = -6000
+			set_state_name = "Fallen Tower"
+			remove_building = {
+				type = industrial_complex
+				level = 1
+			}
+			remove_building = {
+				type = arms_factory
+				level = 2
+			}
+		}
+		set_victory_points = {
+			province = 10656
+			value = 0
+		}
+		747 = {
+			add_manpower = 5500
+		}
+		add_offsite_building = {
+			type = industrial_complex
+			level = 1
+		}
+		add_offsite_building = {
+			type = arms_factory
+			level = 2
+		}
+		restore_previous_manpower = yes
+   	}	
+}
+
+#Behold our Divine Work
+country_event = {
+	id = neocastle_creator.34
+	title = neocastle_creator.34.t
+	desc = neocastle_creator.34.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.34.a
+		capital_scope = {
+			add_extra_state_shared_building_slots = 10
+		}
+   	}	
+}
+
+#All the treasures of the World
+country_event = {
+	id = neocastle_creator.35
+	title = neocastle_creator.35.t
+	desc = neocastle_creator.35.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.35.a
+		
+   	}	
+}
+
+#Cleansing the Body
+country_event = {
+	id = neocastle_creator.36
+	title = neocastle_creator.36.t
+	desc = neocastle_creator.36.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.36.a
+		
+   	}	
+}
+
+#Ascent
+country_event = {
+	id = neocastle_creator.37
+	title = neocastle_creator.37.t
+	desc = neocastle_creator.37.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.37.a
+		country_event = neocastle_creator.38
+   	}	
+}
+
+#Ritual
+country_event = {
+	id = neocastle_creator.38
+	title = neocastle_creator.38.t
+	desc = neocastle_creator.38.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.38.a
+		country_event = neocastle_creator.39
+   	}	
+}
+
+#Freedom
+country_event = {
+	id = neocastle_creator.39
+	title = neocastle_creator.39.t
+	desc = neocastle_creator.39.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.39.a
+		set_stability = 0
+		remove_ideas = NCG_infinite_spire_4
+		747 = {
+			add_manpower = -50000
+			add_resource = {
+				type = metal
+				amount = -250
+			}
+			add_resource = {
+				type = energy
+				amount = -250
+			}
+			add_resource = {
+				type = composites
+				amount = -125
+			}
+			add_resource = {
+				type = advanced
+				amount = -75
+			}
+			add_resource = {
+				type = crystals
+				amount = -50
+			}
+			set_state_name = "Fallen Work"
+			damage_building = {
+				type = arms_factory
+				damage = 10
+			}
+			damage_building = {
+				type = industrial_complex
+				damage = 10
+			}
+			damage_building = {
+				type = infrastructure
+				damage = 10
+			}
+		}
+		set_province_name = {
+			id = 4264
+			name = "Broken Spire"
+		}
+		set_victory_points = {
+			province = 4264
+			value = 20
+		}
+		add_offsite_building = {
+			type = arms_factory
+			level = -50
+		}
+		add_offsite_building = {
+			type = industrial_complex
+			level = -50
+		}
+		hidden_effect = {
+			add_ideas = NCG_paralysis_idea
+			set_country_flag = NCG_creators_defeated_flg
+			country_event = {
+				id = neocastle_creator.40
+				days = 10
+			}
+		}
+   	}	
+}
+
+#Scramble
+country_event = {
+	id = neocastle_creator.40
+	title = neocastle_creator.40.t
+	desc = neocastle_creator.40.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.40.a
+		custom_effect_tooltip = NCG_ponies_begin_to_live_again_tt
+		hidden_effect = {
+			every_state = {
+				limit = {
+					OR = {
+						is_core_of = MWY
+						is_core_of = ERA
+					}
+				}
+				remove_core_of = MWY
+				remove_core_of = ERA
+			}
+			MWY = {
+				set_cosmetic_tag = NCG_MWY_post_creator_cosm
+				set_politics = {
+					ruling_party = visionary
+				}
+				transfer_state = 553
+				transfer_state = 549
+				transfer_state = 804
+				transfer_state = 581
+				transfer_state = 568
+				transfer_state = 574
+				transfer_state = 69
+				transfer_state = 669
+				transfer_state = 805
+				transfer_state = 523
+				transfer_state = 502
+				transfer_state = 529
+				transfer_state = 554
+				transfer_state = 487
+				every_owned_state = {
+					add_core_of = MWY
+				}
+				set_capital = {
+					state = 69
+				}
+			}
+			69 = { set_state_name = "Mareida"}
+			set_province_name = {
+				id = 9114
+				name = "Mareida"
+			}
+			set_victory_points = {
+				province = 9114
+				value = 20
+			}
+		}
+		hidden_effect = {
+			every_state = {
+				limit = {
+					OR = {
+						is_core_of = MRA
+						is_core_of = MAR
+						is_core_of = TEN
+						is_core_of = GUT
+						is_core_of = FRI
+						is_core_of = FER
+						is_core_of = RTA
+					}
+				}
+				remove_core_of = MRA
+				remove_core_of = MAR
+				remove_core_of = TEN
+				remove_core_of = GUT
+				remove_core_of = FRI
+				remove_core_of = FER
+				remove_core_of = RTA
+			}
+			MRA = {
+				set_cosmetic_tag = NCG_MRA_post_creator_cosm
+				set_politics = {
+					ruling_party = destruction
+				}
+				transfer_state = 39
+				transfer_state = 478
+				transfer_state = 680
+				transfer_state = 21
+				transfer_state = 18
+				transfer_state = 469
+				transfer_state = 55
+				transfer_state = 58
+				transfer_state = 53
+				transfer_state = 471
+				transfer_state = 449
+				transfer_state = 49
+				transfer_state = 816
+				transfer_state = 461
+				transfer_state = 440
+				transfer_state = 442
+				transfer_state = 815
+				transfer_state = 423
+				every_owned_state = {
+					add_core_of = MRA
+				}
+				set_capital = {
+					state = 39
+				}
+				39 = { set_state_name = "Bone-Fotress" }
+				set_province_name = {
+					id = 10322
+					name = "Bone-Fortress"
+				}
+			}
+		}
+		hidden_effect = {
+			every_state = {
+				limit = {
+					OR = {
+						is_core_of = EMP
+						is_core_of = ABT
+						is_core_of = ARB
+						is_core_of = MSR
+					}
+				}
+				remove_core_of = EMP
+				remove_core_of = ABT
+				remove_core_of = ARB
+				remove_core_of = MSR
+			}
+			MSR = {
+				set_cosmetic_tag = NCG_EMP_post_creator_cosm
+				set_politics = {
+					ruling_party = visionary
+				}
+				transfer_state = 436
+				transfer_state = 44
+				transfer_state = 51
+				transfer_state = 598
+				transfer_state = 66
+				transfer_state = 646
+				transfer_state = 19
+				transfer_state = 54
+				transfer_state = 47
+				transfer_state = 642
+				transfer_state = 15
+				transfer_state = 57
+				transfer_state = 601
+				set_capital = {
+					state = 19
+				}
+				every_owned_state = {
+					add_core_of = MSR
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = neocastle_creator.41
+				days = 20
+			}
+		}
+   	}	
+}
+
+#Idealism
+country_event = {
+	id = neocastle_creator.41
+	title = neocastle_creator.41.t
+	desc = neocastle_creator.41.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.41.a
+			hidden_effect = {
+			every_state = {
+				limit = {
+					OR = {
+						is_core_of = OAP
+						is_core_of = NAP
+						is_core_of = LIT
+						is_core_of = MAS
+						is_core_of = ROK
+						is_core_of = PBN
+						is_core_of = FTA
+						is_core_of = RAF
+					}
+				}
+				remove_core_of = OAP
+				remove_core_of = NAP
+				remove_core_of = LIT
+				remove_core_of = MAS
+				remove_core_of = ROK
+				remove_core_of = PBN
+				remove_core_of = FTA
+				remove_core_of = RAF
+			}
+			NAP = {
+				set_cosmetic_tag = NCG_NAP_post_creator_cosm
+				set_politics = {
+					ruling_party = visionary
+				}
+				transfer_state = 298
+				transfer_state = 563
+				transfer_state = 241
+				transfer_state = 205
+				transfer_state = 587
+				transfer_state = 213
+				transfer_state = 596
+				transfer_state = 67
+				transfer_state = 111
+				transfer_state = 599
+				transfer_state = 36
+				transfer_state = 803
+				transfer_state = 589
+				transfer_state = 564
+				transfer_state = 184
+				transfer_state = 811
+				transfer_state = 798
+				transfer_state = 32
+				transfer_state = 565
+				transfer_state = 551
+				transfer_state = 550
+				transfer_state = 802
+				transfer_state = 34
+				transfer_state = 33
+				transfer_state = 561
+				transfer_state = 192
+				transfer_state = 557
+				transfer_state = 196
+				transfer_state = 548
+				transfer_state = 527
+				transfer_state = 526
+				transfer_state = 161
+				transfer_state = 42
+				transfer_state = 281
+				every_owned_state = {
+					add_core_of = NAP
+				}
+			}
+			hidden_effect = {
+			every_state = {
+				limit = {
+					OR = {
+						is_core_of = SSC
+						is_core_of = EYE
+						is_core_of = FSR
+						is_core_of = SSS
+						is_core_of = FLT
+						is_core_of = RWK
+						is_core_of = LGH
+						is_core_of = GUN
+						is_core_of = APR
+						is_core_of = FRT
+						is_core_of = MUD
+						is_core_of = STT
+						is_core_of = SSR
+					}
+				}
+				remove_core_of = SSC
+				remove_core_of = SSS
+				remove_core_of = EYE
+				remove_core_of = FSR
+				remove_core_of = FLT
+				remove_core_of = RWK
+				remove_core_of = LGH
+				remove_core_of = GUN
+				remove_core_of = APR
+				remove_core_of = FRT
+				remove_core_of = MUD
+				remove_core_of = STT
+				remove_core_of = SSR
+			}
+			SSS = {
+				set_cosmetic_tag = NCG_SSS_post_creator_cosm
+				set_politics = {
+					ruling_party = visionary
+				}
+				transfer_state = 5
+				transfer_state = 85
+				transfer_state = 558
+				transfer_state = 546
+				transfer_state = 50
+				transfer_state = 543
+				transfer_state = 542
+				transfer_state = 545
+				transfer_state = 536
+				transfer_state = 538
+				transfer_state = 512
+				transfer_state = 498
+				transfer_state = 525
+				transfer_state = 532
+				transfer_state = 48
+				transfer_state = 45
+				transfer_state = 653
+				transfer_state = 515
+				transfer_state = 503
+				transfer_state = 652
+				transfer_state = 490
+				transfer_state = 647
+				transfer_state = 493
+				transfer_state = 812
+				transfer_state = 648
+				transfer_state = 508
+				transfer_state = 203
+				transfer_state = 524
+				transfer_state = 534
+				transfer_state = 164
+				transfer_state = 235
+				transfer_state = 87
+				transfer_state = 470
+				transfer_state = 791
+				transfer_state = 462
+				transfer_state = 459
+				transfer_state = 612
+				transfer_state = 448
+				transfer_state = 790
+				every_owned_state = {
+					add_core_of = SSS
+				}
+				set_capital = {
+					state = 538
+				}
+				set_province_name = {
+					id = 9132
+					name = "Liberty"
+				}
+			}
+			
+			country_event = {
+				id = neocastle_creator.42
+				days = 20
+			}
+			}
+   		}	
+	}
+}
+
+#Error
+country_event = {
+	id = neocastle_creator.42
+	title = neocastle_creator.42.t
+	desc = neocastle_creator.42.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.42.a
+		hidden_effect = {
+			every_state = {
+				limit = {
+					OR = {
+						is_core_of = SHA
+						is_core_of = MAN
+						is_core_of = LRA
+						is_core_of = HSC
+						is_core_of = HSW
+						is_core_of = NEV
+					}
+				}
+				remove_core_of = SHA
+				remove_core_of = MAN
+				remove_core_of = LRA
+				remove_core_of = HSC
+				remove_core_of = HSW
+				remove_core_of = NEV
+			}
+			NEV = {
+				set_cosmetic_tag = NCG_NEV_post_creator_cosm
+				set_politics = {
+					ruling_party = survivalism
+				}
+				transfer_state = 592
+				transfer_state = 219
+				transfer_state = 793
+				transfer_state = 447
+				transfer_state = 796
+				transfer_state = 696
+				transfer_state = 809
+				transfer_state = 792
+				every_owned_state = {
+					add_core_of = NEV
+				}
+			}
+			release = GTC
+			release = TPU
+			release = SHC
+			SHC = {
+				transfer_state = 610
+				transfer_state = 808
+				add_state_core = 610
+				add_state_core = 808
+			}
+			release = COT
+			COT = {
+				transfer_state = 794
+				transfer_state = 594
+				transfer_state = 220
+				transfer_state = 795
+				add_state_core = 794
+				add_state_core = 594
+				add_state_core = 220
+				add_state_core = 795
+				set_capital = {
+					state = 795
+				}
+				set_cosmetic_tag = NCG_COT_post_creator_cosm
+			}
+		}
+		hidden_effect = {
+			every_state = {
+				limit = {
+					OR = {
+						is_core_of = WNF
+						is_core_of = HIT
+						is_core_of = FTP
+						is_core_of = FTR
+						is_core_of = CCD
+						is_core_of = GRV
+					}
+				}
+				remove_core_of = WNF
+				remove_core_of = HIT
+				remove_core_of = FTP
+				remove_core_of = FTR
+				remove_core_of = CCD
+				remove_core_of = GRV
+			}
+			HIT = {
+				set_politics = {
+					ruling_party = visionary
+				}
+				transfer_state = 813
+				transfer_state = 475
+				transfer_state = 446
+				transfer_state = 74
+				transfer_state = 410
+				transfer_state = 814
+				transfer_state = 451
+				transfer_state = 479
+				transfer_state = 125
+				transfer_state = 217
+				transfer_state = 484
+				transfer_state = 491
+				transfer_state = 504
+				transfer_state = 78
+				transfer_state = 474
+				transfer_state = 81
+				transfer_state = 483
+				transfer_state = 473
+				transfer_state = 101
+				transfer_state = 480
+				transfer_state = 505
+				transfer_state = 510
+				every_owned_state = {
+					add_core_of = HIT
+				}
+			}
+		}
+		hidden_effect = {
+			every_state = {
+				limit = {
+					OR = {
+						is_core_of = CAL
+						is_core_of = GLY
+						is_core_of = SCI
+						is_core_of = STA
+						is_core_of = PRA
+					}
+				}
+				remove_core_of = CAL
+				remove_core_of = GLY
+				remove_core_of = SCI
+				remove_core_of = STA
+				remove_core_of = PRA
+			}
+			GLY = {
+				set_politics = {
+					ruling_party = visionary
+				}
+				transfer_state = 180
+				transfer_state = 234
+				transfer_state = 415
+				transfer_state = 801
+				transfer_state = 476
+				transfer_state = 735
+				transfer_state = 65
+				transfer_state = 477
+				transfer_state = 492
+				every_owned_state = {
+					add_core_of = GLY
+				}
+			}
+		}
+		hidden_effect = {
+			every_state = {
+				limit = {
+					OR = {
+						is_core_of = SPV
+						is_core_of = UNI
+						is_core_of = REP
+						is_core_of = GOR
+						is_core_of = EVR
+						is_core_of = BOG
+					}
+				}
+				remove_core_of = SPV
+				remove_core_of = UNI
+				remove_core_of = REP
+				remove_core_of = GOR
+				remove_core_of = EVR
+				remove_core_of = BOG
+			}
+			SPV = {
+				set_politics = {
+					ruling_party = destruction
+				}
+				set_cosmetic_tag = NCG_SPV_post_creator_cosm
+				transfer_state = 458
+				transfer_state = 518
+				transfer_state = 134
+				transfer_state = 486
+				transfer_state = 797
+				transfer_state = 481
+				transfer_state = 507
+				transfer_state = 799
+				transfer_state = 72
+				transfer_state = 511
+				transfer_state = 520
+				transfer_state = 303
+				transfer_state = 178
+				transfer_state = 537
+				transfer_state = 528
+				transfer_state = 800
+				transfer_state = 533
+				transfer_state = 513
+				transfer_state = 593
+				every_owned_state = {
+					add_core_of = SPV
+				}
+			}
+		}
+		hidden_effect = {
+			country_event = {
+				id = neocastle_creator.43
+				days = 20
+			}
+		}
+   	}	
+}
+
+#Ever After
+country_event = {
+	id = neocastle_creator.43
+	title = neocastle_creator.43.t
+	desc = neocastle_creator.43.d
+
+    is_triggered_only = yes
+	fire_only_once = yes
+
+   	option = {
+		name = neocastle_creator.43.a
+		custom_effect_tooltip = NCG_aetherist_ending_tt
+		hidden_effect = {
+			set_cosmetic_tag = NCG_aetherist_post_cosm
+			every_core_state = {
+				limit = {
+					NOT = {
+						is_owned_by = NCG
+					}
+				}
+				remove_core_of = NCG
+			}
+		}
+   	}	
+}
+

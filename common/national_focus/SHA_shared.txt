@@ -466,12 +466,10 @@ shared_focus = {
 		ai_will_do = {
 			factor = 500
 		}
-
-		cancel_if_invalid = no
-		available_if_capitulated = no
 		
 		will_lead_to_war_with = LRA
 		completion_reward = {
+			custom_effect_tooltip = SHA_100_day_LRA_conquest_tt
 			LRA = {
 				ROOT = {
 					grant_wargoals_on_core_states_of_prev = yes
@@ -495,15 +493,28 @@ shared_focus = {
 		ai_will_do = {
 			factor = 500
 		}
-
-		cancel_if_invalid = no
-		available_if_capitulated = no
+		available = {
+			OR = {
+				owns_state = 575
+				has_subject = LRA
+				has_country_flag = SHA_failed_conquest_LRA_flg
+			}
+		}
 
 		completion_reward = {
 			create_faction = "Shattered_Hoof_Alliance"
-			MAN = {country_event = {id = shatteredhoof.8}}
-			ROK = {country_event = {id = shatteredhoof.8}}
-			RAF = {country_event = {id = shatteredhoof.8}}
+			IF = {
+				limit = {
+					has_country_flag = SHA_failed_conquest_LRA_flg
+				}
+				declare_war_on = {
+					target = LRA
+					type = puppet_wargoal_focus
+				}
+			}
+			MAN = {country_event = shatteredhoof.8}
+			ROK = {country_event = shatteredhoof.8}
+			RAF = {country_event = shatteredhoof.8}
 		}
 
 } 
@@ -874,6 +885,32 @@ shared_focus = {
 		cost = 4.38
 		prerequisite = { focus = SHA_the_shattered_hoof_alliance focus = SHA_under_new_management }
 		prerequisite = {focus = SHA_full_recovery}
+		available = {
+			OR = {
+				MAN = { 
+					is_in_faction_with = SHA
+				}
+				MAN = { exists = no }
+			}
+			OR = {
+				ROK = { 
+					is_in_faction_with = SHA
+				}
+				MAN = { exists = no }
+			}
+			OR = {
+				RAF = { 
+					is_in_faction_with = SHA
+				}
+				MAN = { exists = no }
+			}
+			OR = {
+				LRA = { 
+					is_in_faction_with = SHA
+				}
+				MAN = { exists = no }
+			}
+		}
 		ai_will_do = {
 			factor = 500
 		}

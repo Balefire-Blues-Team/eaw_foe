@@ -4,7 +4,7 @@ NDefines.NGame.START_DATE = "1235.1.1.12"
 NDefines.NGame.END_DATE = "1260.1.1.1"
 
 -- Vanilla is 30
-NDefines.NDiplomacy.VOLUNTEERS_DIVISIONS_REQUIEYE = 8
+NDefines.NDiplomacy.VOLUNTEERS_DIVISIONS_REQUIRED = 8
 
 -- Starting at this date, the tension values will be scaled down (will be equal
 -- to 1 before that.)
@@ -163,13 +163,14 @@ NDefines.NAI.FASCISTS_ANTAGONIZE_COMMUNISTS = 120
 NDefines.NAI.MIN_ANTAGONIZE_FOR_WARGOAL_JUSTIFICATION = -1000	-- AI countries will not fabricate claims against countries with an antagonization value lower than this.
 NDefines.NDiplomacy.DIPLOMACY_ACCEPT_VOLUNTEERS_BASE = 400	-- Base value of volunteer acceptance (help is welcome)
 NDefines.NDiplomacy.GUARANTEE_COST = 100
-NDefines.NMilitary.EXPERIENCE_LOSS_FACTOR = 4.0	-- Scale to smaller unit sizes
+NDefines.NMilitary.EXPERIENCE_LOSS_FACTOR = 1.0	-- Scale to smaller unit sizes
 NDefines.NMilitary.UNIT_EXPERIENCE_SCALE = 1.0
 NDefines.NMilitary.FIELD_EXPERIENCE_SCALE = 0.08	-- Scale to smaller unit sizes
 NDefines.NNavy.AMPHIBIOUS_LANDING_PENALTY = -0.4				-- amphibious landing penalty
 NDefines.NMilitary.BASE_FORT_PENALTY = -0.08 					   -- fort penalty
 -- research
 NDefines.NTechnology.BASE_YEAR_AHEAD_PENALTY_FACTOR = 1.35		-- Base year ahead penalty
+NDefines.NTechnology.BASE_TECH_COST = 100               --Base Cost in Days for Technology
 NDefines.NAI.RESEARCH_DAYS_BETWEEN_WEIGHT_UPDATE = 7 	-- Refreshes need scores based on country situation.
 NDefines.NAI.RESEARCH_LAND_DOCTRINE_NEED_GAIN_FACTOR = 0.15	-- Multiplies value based on relative military industry size / country size.
 NDefines.NAI.RESEARCH_NAVAL_DOCTRINE_NEED_GAIN_FACTOR = 0.05	-- Multiplies value based on relative naval industry size / country size.
@@ -185,10 +186,10 @@ NDefines.NAI.RESEARCH_BASE_DAYS = 60					-- AI adds a base number of days when w
 NDefines.NProduction.MIN_POSSIBLE_TRAINING_MANPOWER = 3700	-- minimum amount of units able to be trained
 
 
-NDefines.NAI.UPGRADE_DIVISION_RELUCTANCE = 10	-- (2000) stop randomly upgrading to infantry
+NDefines.NAI.UPGRADE_DIVISION_RELUCTANCE = 2	-- (2000) stop randomly upgrading to infantry
 NDefines.NAI.UPGRADE_PERCENTAGE_OF_FORCES = 0.1
 NDefines.NAI.DIVISION_UPGRADE_MIN_XP = 5										-- Minimum XP before attempting to upgrade a division template.
-NDefines.NAI.UPGRADE_XP_RUSH_UPDATE = 50										-- If XP is above this on the daily tick the AI will attempt to spend it
+NDefines.NAI.UPGRADE_XP_RUSH_UPDATE = 110										-- If XP is above this on the daily tick the AI will attempt to spend it
 
 --NNavy
 NDefines.NNavy.NAVAL_INVASION_PREPARE_HOURS = 64								-- base hours needed to prepare an invasion
