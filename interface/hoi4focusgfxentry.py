@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+r"""
 HoI4 Focus GFX entry generator — folder scan + multi-icon + duplicate detection
 
 New in this version

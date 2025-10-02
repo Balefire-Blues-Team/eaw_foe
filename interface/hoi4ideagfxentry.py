@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+r"""
 HoI4 Idea GFX entry generator — folder scan, duplicate detection, safer writes
 
 Based on the original by Yard1; this version adds:
@@ -19,7 +19,7 @@ Since this can be a bit confusing, here's what you need to paste into your comma
 py "C:\Users\User\Documents\Paradox Interactive\Hearts of Iron IV\mod\eaw_foe\interface\hoi4ideagfxentry.py" ^ 
   "C:\Users\User\Documents\Paradox Interactive\Hearts of Iron IV\mod\eaw_foe\interface\foe_ideas.gfx" ^ 
   --icons-dir "C:\Users\User\Documents\Paradox Interactive\Hearts of Iron IV\mod\eaw_foe\gfx\interface\ideas\[YourIdeasFolder]" ^
-  --exts .tga .dds --subdir NCG --recurse
+  --exts .tga .dds --subdir --recurse
 
 Just replace [YourIdeasFolder] with the actual name of the folder you have your ideas in.
 This script is CD-agnostic and works from any base-folder.
