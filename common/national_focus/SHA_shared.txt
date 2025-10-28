@@ -388,11 +388,7 @@ shared_focus = {
 	
 	will_lead_to_war_with = LRA
 	completion_reward = {
-		LRA = {
-			ROOT = {
-				grant_wargoals_on_core_states_of_prev = yes
-			}
-		}
+		LRA = { ROOT = { grant_wargoals_on_core_states_of_prev = yes } }
 	}
 }
 #The Shattered Hoof Alliance
@@ -1093,7 +1089,7 @@ shared_focus = {
 	ai_will_do = { factor = 50 }
 
 	completion_reward = {
-		every_country = {
+		every_other_country = {
 			limit = { is_in_faction_with = SHA }
 			add_ideas = NCR_early_joint_exercise
 		}
@@ -1318,8 +1314,14 @@ shared_focus = {
 
 	completion_reward = {
 		add_stability = -0.1
-		add_offsite_building = { type = arms_factory level = 1 }
-		add_offsite_building = { type = industrial_complex level = 1 }
+		#add_offsite_building = { type = arms_factory level = 1 }
+		#add_offsite_building = { type = industrial_complex level = 1 }
+		random_core_state = {
+			limit = { is_fully_controlled_by = ROOT }
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = { type = arms_factory level = 1 }
+			add_building_construction = { type = industrial_complex level = 1 }
+		}
 		add_equipment_to_stockpile = { type = infantry_equipment_1 amount = 173 producer = SHA }
 	}
 } 
@@ -1438,7 +1440,12 @@ shared_focus = {
 	ai_will_do = { factor = 50 }
 
 	completion_reward = {
-		add_offsite_building = { type = arms_factory level = 2 }
+		#add_offsite_building = { type = arms_factory level = 2 }
+		random_core_state = {
+			limit = { is_fully_controlled_by = ROOT }
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = { type = arms_factory level = 2 }
+		}
 	}
 } 
 #Pull Out All The Stops
@@ -1488,7 +1495,7 @@ shared_focus = {
 	ai_will_do = { factor = 500 }
 
 	completion_reward = {
-		every_country = {
+		every_other_country = {
 			limit = { 
 				is_in_faction_with = SHA 
 				NOT = { original_tag = OAP }
@@ -1537,8 +1544,8 @@ shared_focus = {
 	cost = 4.38
 
 	prerequisite = { focus = NCR_the_first_election }
-	available = { NOT = { has_government = destruction } }
-	cancel_if_invalid = yes
+	#Redundant for now due to these are cut paths - @Deez
+	#available = { NOT = { has_government = destruction } } 
 	
 	ai_will_do = { factor = 500 }
 
@@ -1557,8 +1564,8 @@ shared_focus = {
 	cost = 4.38
 
 	prerequisite = { focus = NCR_the_first_election }
-	available = { NOT = { has_government = destruction } }
-	cancel_if_invalid = yes
+	#Redundant for now due to these are cut paths - @Deez
+	#available = { NOT = { has_government = destruction } }
 
 	ai_will_do = { factor = 500 }
 
@@ -1581,8 +1588,8 @@ shared_focus = {
 	cost = 4.38
 
 	prerequisite = { focus = NCR_curtail_the_generals }
-	available = { NOT = { has_government = survivalism } }
-	cancel_if_invalid = yes
+	#Redundant for now due to these are cut paths - @Deez
+	#available = { NOT = { has_government = survivalism } }
 
 	ai_will_do = { factor = 500 }
 
@@ -1631,10 +1638,9 @@ shared_focus = {
 
 	prerequisite = { focus = NCR_the_first_election }
 	available = {
-		NOT = { has_government = continuation }
+		#NOT = { has_government = continuation } #Redundant for now due to these are cut paths - @Deez
 		owns_state = 696
 	}
-	cancel_if_invalid = yes
 
 	ai_will_do = { factor = 500 }
 
@@ -1656,7 +1662,6 @@ shared_focus = {
 	prerequisite = { focus = NCR_restructuring_the_economy }
 	prerequisite = { focus = NCR_the_enclave_act }
 	available = { has_idea = NCR_refugee_crisis_idea }
-	cancel_if_invalid = yes
 
 	ai_will_do = { factor = 500 }
 
@@ -1701,7 +1706,6 @@ shared_focus = {
 			MSR = { is_in_faction_with = SHA }
 		}
 	}
-	cancel_if_invalid = yes
 	
 	ai_will_do = { factor = 500 }
 
@@ -1720,14 +1724,13 @@ shared_focus = {
 	cost = 4.38
 
 	prerequisite = { focus = NCR_the_steel_rangers }
-	available = { 
+	available = {
 		owns_state = 524
 		owns_state = 545
 		owns_state = 536
 		owns_state = 538
 		FSR = { exists = no }
 	}
-	cancel_if_invalid = yes
 
 	ai_will_do = { factor = 500 }
 
@@ -1750,8 +1753,6 @@ shared_focus = {
 	bypass = { has_idea = followers_of_the_apocalypse_idea }
 	
 	ai_will_do = { factor = 50 }
-
-	cancel_if_invalid = yes
 
 	completion_reward = {
 		#Rewards are the foci we made along the way - @Deez
@@ -1854,7 +1855,7 @@ shared_focus = {
 		add_ideas = NCR_waste_exploitation_1_idea
 	}
 } 
-#Project Rad-Scrub - @Cut Content
+#Project Rad-Scrub - Cut Content for now - @Deez
 #shared_focus = { 
 #	id = NCR_project_rad_scrub
 #	icon = GFX_goal_NCR_project_radscrub
@@ -1907,14 +1908,9 @@ shared_focus = {
 
 	available = { 
 		has_completed_focus = NCR_the_first_election
-		NOT = {
-			OR = {
-				has_war_with = NEV
-				is_puppet = yes
-			}
-		}
+		NOT = { has_war_with = NEV }
+		is_puppet = no
 	}
-	cancel_if_invalid = yes
 
 	ai_will_do = { factor = 50 }
 
@@ -1934,12 +1930,11 @@ shared_focus = {
 	cost = 4.38
 
 	prerequisite = { focus = NCR_commitee_of_expansion }
-	available = { NOT = { is_puppet = yes } }
+	available = { is_puppet = no }
 	bypass = {
 		NAP = { all_core_land_owned_by_prev_sphere = yes }
 		OAP = { all_core_land_owned_by_prev_sphere = yes }
 	}
-	cancel_if_invalid = yes
 
 	ai_will_do = { factor = 50 }
 
@@ -1980,9 +1975,8 @@ shared_focus = {
 	cost = 4.38
 
 	prerequisite = { focus = NCR_appleloosa_old_new }
-	available = { NOT = { is_puppet = yes }  }
+	available = { is_puppet = no  }
 	bypass = { LIT = { all_core_land_owned_by_prev_sphere = yes } }
-	cancel_if_invalid = yes
 
 	ai_will_do = { factor = 50 }
 
@@ -2002,9 +1996,8 @@ shared_focus = {
 	cost = 4.38
 
 	prerequisite = { focus = NCR_commitee_of_expansion }
-	available = { NOT = { is_puppet = yes } }
+	available = { is_puppet = no }
 	bypass = { NCG = { all_core_land_owned_by_prev_sphere = yes } }
-	cancel_if_invalid = yes
 
 	ai_will_do = { factor = 50 }
 
@@ -2024,7 +2017,7 @@ shared_focus = {
 	cost = 4.38
 
 	prerequisite = { focus = NCR_deal_with_the_guilds }
-	available = { NOT = { is_puppet = yes } }
+	available = { is_puppet = no }
 	bypass = {
 		OR = {
 			AND = {
@@ -2035,7 +2028,6 @@ shared_focus = {
 			is_in_faction_with = MWN
 		}
 	}
-	cancel_if_invalid = yes
 	
 	ai_will_do = {
 		factor = 50
@@ -2046,6 +2038,7 @@ shared_focus = {
 	}
 
 	will_lead_to_war_with = MWY
+	will_lead_to_war_with = MWN
 	will_lead_to_war_with = ERA
 	completion_reward = {
 		MWY = { ROOT = { grant_wargoals_on_core_states_of_prev = yes } }
@@ -2074,13 +2067,12 @@ shared_focus = {
 	cost = 4.38
 
 	prerequisite = { focus = NCR_commitee_of_expansion }
-	available = { NOT = { is_puppet = yes } }
+	available = { is_puppet = no }
 	bypass = {
 		BOG = { all_core_land_owned_by_prev_sphere = yes }
 		EVR = { all_core_land_owned_by_prev_sphere = yes }
 		PBN = { all_core_land_owned_by_prev_sphere = yes }
 	}
-	cancel_if_invalid = yes
 
 	ai_will_do = { factor = 50 }
 
@@ -2104,14 +2096,13 @@ shared_focus = {
 	cost = 4.38
 
 	prerequisite = { focus = NCR_trek_through_the_bogs }
-	available = { NOT = { is_puppet = yes } }
+	available = { is_puppet = no }
 	bypass = {
 		REP = { all_core_land_owned_by_prev_sphere = yes }
 		GOR = { all_core_land_owned_by_prev_sphere = yes }
 		FTA = { all_core_land_owned_by_prev_sphere = yes }
 		SPV = { all_core_land_owned_by_prev_sphere = yes }
 	}
-	cancel_if_invalid = yes
 
 	ai_will_do = { factor = 50 }
 
@@ -2147,9 +2138,8 @@ shared_focus = {
 
 	cost = 4.38
 
-	prerequisite = {focus = NCR_sweep_midlands }
-	available = { NOT = { is_puppet = yes } }
-	cancel_if_invalid = yes
+	prerequisite = { focus = NCR_sweep_midlands }
+	available = { is_puppet = no }
 	bypass = {
 		STA = { all_core_land_owned_by_prev_sphere = yes }
 		PRA = { all_core_land_owned_by_prev_sphere = yes }
@@ -2193,13 +2183,12 @@ shared_focus = {
 		focus = NCR_sweep_midlands 
 		focus = NCR_topple_mareway 
 	}
-	available = { NOT = { is_puppet = yes } }
+	available = { is_puppet = no }
 	bypass = {
 		EYE = { all_core_land_owned_by_prev_sphere = yes }
 		FSR = { all_core_land_owned_by_prev_sphere = yes }
 		SSC = { all_core_land_owned_by_prev_sphere = yes }
 	}
-	cancel_if_invalid = yes
 
 	ai_will_do = {
 		factor = 500
@@ -2234,7 +2223,7 @@ shared_focus = {
 	}
 	available = {
 		has_completed_focus = NCR_united_azureway
-		NOT = { is_puppet = yes }
+		is_puppet = no
 	}
 	bypass = {
 		CCD = { all_core_land_owned_by_prev_sphere = yes }
@@ -2244,12 +2233,11 @@ shared_focus = {
 		FTR = { all_core_land_owned_by_prev_sphere = yes }
 		WNF = { all_core_land_owned_by_prev_sphere = yes }
 	}
-	cancel_if_invalid = yes
 
 	ai_will_do = {
 		factor = 50
 		modifier = {
-		factor = 10
+			factor = 10
 			OR = {
 				has_completed_focus = NCR_state_of_canterlot
 				has_completed_focus = NCR_state_of_sunnyshore
@@ -2291,14 +2279,13 @@ shared_focus = {
 			has_completed_focus = NCR_state_of_fillydelphia
 			has_completed_focus = NCR_state_of_foal_mountain
 		}
-		NOT = { is_puppet = yes }
+		is_puppet = no
 	}
-	cancel_if_invalid = yes
 
 	ai_will_do = {
 		factor = 1
 		modifier = {
-		factor = 1000
+			factor = 1000
 			OR = {
 				has_completed_focus = NCR_state_of_fillydelphia
 				has_completed_focus = NCR_state_of_foal_mountain
@@ -2331,13 +2318,12 @@ shared_focus = {
 	
 	prerequisite = { focus = NCR_liberate_fillydelphia }
 	mutually_exclusive = { focus = NCR_pincer_sunrise }
-	available = { NOT = { is_puppet = yes } }
-	cancel_if_invalid = yes
+	available = { is_puppet = no }
 
 	ai_will_do = {
 		factor = 1
 		modifier = {
-		factor = 500
+			factor = 500
 			OR = {
 				has_completed_focus = NCR_state_of_fillydelphia
 				has_completed_focus = NCR_state_of_foal_mountain
@@ -2391,12 +2377,11 @@ shared_focus = {
 		GUN = { all_core_land_owned_by_prev_sphere = yes }
 		LGH = { all_core_land_owned_by_prev_sphere = yes }
 	}
-	cancel_if_invalid = yes
 
 	ai_will_do = {
 		factor = 50
 		modifier = {
-		factor = 10
+			factor = 10
 			has_completed_focus = NCR_flourishing_heartland
 		}
 	}
@@ -2419,7 +2404,7 @@ shared_focus = {
 	mutually_exclusive = { focus = NCR_clean_out_manehattan }
 	available = {
 		TEN = { has_country_flag = TEN_agreed_to_help_NCR }
-		NOT = { is_puppet = yes }
+		is_puppet = no
 	}
 	cancel_if_invalid = yes
 
@@ -2455,9 +2440,8 @@ shared_focus = {
 				exists = no 
 			}
 		}
-		NOT = { is_puppet = yes }
+		is_puppet = no
 	}
-	cancel_if_invalid = yes
 
 	ai_will_do = { factor = 50 }
 	
