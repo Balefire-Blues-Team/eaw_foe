@@ -2406,7 +2406,6 @@ shared_focus = {
 		TEN = { has_country_flag = TEN_agreed_to_help_NCR }
 		is_puppet = no
 	}
-	cancel_if_invalid = yes
 
 	ai_will_do = { factor = 500 }
 	
@@ -2472,498 +2471,403 @@ shared_focus = {
 ###Integration Tree###
 ######################
 
+#The New States
 shared_focus = { 
 	id = NCR_statehood_debate
-		icon = GFX_goal_Yhe_new_states_
-		x = 40
-		y = 2
-		
-		cost = 4.38
-		available = {
-			NOT = {
-				has_government = destruction
-			}
-		}
-		ai_will_do = {
-			factor = 500
-		}
-		available = { has_completed_focus = NCR_the_first_election}
-		cancel_if_invalid = yes
-		available_if_capitulated = no
+	icon = GFX_goal_Yhe_new_states_
+	x = 40
+	y = 2
+	
+	cost = 4.38
+	available = {
+		NOT = { has_government = destruction }
+		has_completed_focus = NCR_the_first_election 
+	}
 
-		completion_reward = {
-			add_political_power = 100
-		}
+	ai_will_do = {
+		factor = 500
+	}
+
+	completion_reward = {
+		add_political_power = 100
+	}
 } 
-
+#Absorbing the Guilds
 shared_focus = { 
 	id = NCR_absorb_guilds_into_doi
-		icon = GFX_goal_Absorbing_the_guilds
-		x = -8
-		y = 1
-		
-		cost = 4.38
-		available = {
-			NOT = {
-				has_government = destruction
-			}
-			NCG = {
-				all_core_land_owned_by_prev_sphere = yes
-			}
-		}
-		ai_will_do = {
-			factor = 500
-		}
-		prerequisite = {focus = NCR_statehood_debate }
-		relative_position_id = NCR_statehood_debate
+	icon = GFX_goal_Absorbing_the_guilds
+	x = -8
+	y = 1
+	relative_position_id = NCR_statehood_debate
+	cost = 4.38
 
-		cancel_if_invalid = yes
-		available_if_capitulated = no
+	prerequisite = { focus = NCR_statehood_debate }
+	available = {
+		NOT = { has_government = destruction }
+		NCG = { all_core_land_owned_by_prev_sphere = yes }
+	}
 
-		completion_reward = {
-			custom_effect_tooltip = available_designer
-			show_ideas_tooltip = NCR_neocastle_construction_advisor
-		}
+	ai_will_do = {
+		factor = 500
+	}
+
+	completion_reward = {
+		custom_effect_tooltip = available_designer
+		show_ideas_tooltip = NCR_neocastle_construction_advisor
+	}
 } 
-
+#Stamp Out Mareway Feudalism
 shared_focus = { 
 	id = NCR_stamp_out_feudalism
-		icon = GFX_goal_Stamp_out_Mareway_feudalism
-		x = -6
-		y = 1
-		
-		cost = 4.38
-		available = {
-			NOT = {
-				has_government = destruction
-			}
-			MWY = {
-				all_core_land_owned_by_prev_sphere = yes
-			}
-		}
-		ai_will_do = {
-			factor = 500
-		}
-		prerequisite = {focus = NCR_statehood_debate }
-		relative_position_id = NCR_statehood_debate
+	icon = GFX_goal_Stamp_out_Mareway_feudalism
+	x = -6
+	y = 1
+	relative_position_id = NCR_statehood_debate
+	cost = 4.38
 
-		cancel_if_invalid = yes
-		available_if_capitulated = no
-
-		completion_reward = {
-			every_state = {
-				limit = { is_core_of = MWY}
-				add_manpower = -50
-			}
+	prerequisite = { focus = NCR_statehood_debate }
+	available = {
+		NOT = { has_government = destruction }
+		MWY = { all_core_land_owned_by_prev_sphere = yes }
+	}
+	bypass = { #Bypass because it would be weird to execute your ally's officials - @Deez
+		OR = {
+			is_in_faction_with = MWY
+			is_in_faction_with = MWN
 		}
+	}
+	
+	ai_will_do = {
+		factor = 500
+	}
+
+	completion_reward = {
+		MWY = { every_core_state = { add_manpower = -50 } }
+	}
 } 
-
+#The State of Mareway
 shared_focus = { 
 	id = NCR_state_of_mareway
-		icon = GFX_goal_The_state_of_Mareway
-		x = -7
-		y = 2
-		
-		cost = 4.38
-		available = {
-			NOT = {
-				has_government = destruction
-			}
-		}
-		ai_will_do = {
-			factor = 500
-		}
-		prerequisite = {focus = NCR_absorb_guilds_into_doi }
-		prerequisite = {focus = NCR_stamp_out_feudalism}
-		relative_position_id = NCR_statehood_debate
+	icon = GFX_goal_The_state_of_Mareway
+	x = -7
+	y = 2
+	relative_position_id = NCR_statehood_debate
+	cost = 4.38
 
-		bypass = {
-			OR = {
-				is_in_faction_with = MWY
-				is_in_faction_with = MWN
-			}
+	prerequisite = { focus = NCR_absorb_guilds_into_doi }
+	prerequisite = { focus = NCR_stamp_out_feudalism }
+	available = { NOT = { has_government = destruction } }
+	bypass = {
+		OR = {
+			is_in_faction_with = MWY
+			is_in_faction_with = MWN
 		}
+	}
 
-		cancel_if_invalid = yes
-		available_if_capitulated = no
+	ai_will_do = {
+		factor = 500
+	}
 
-		completion_reward = {
-			add_political_power = -50
-			Core_original_MWY = yes
-			Core_original_NCG = yes
-		}
+	completion_reward = {
+		add_political_power = -50
+		Core_original_MWY = yes
+		Core_original_NCG = yes
+	}
 } 
-
+#Amnesty for the Bloody Army
 shared_focus = { 
 	id = NCR_amnesty_bloody_army
-		icon = GFX_goal_Amnesty_for_the_bloody_army
-		x = -7
-		y = 3
-		
-		cost = 4.38
-		available = {
-			ERA = {
-				all_core_land_owned_by_prev_sphere = yes
-			}
-		}
-		ai_will_do = {
-			factor = 500
-		}
-		prerequisite = {focus = NCR_state_of_mareway }
-		relative_position_id = NCR_statehood_debate
+	icon = GFX_goal_Amnesty_for_the_bloody_army
+	x = -7
+	y = 3
+	relative_position_id = NCR_statehood_debate
+	cost = 4.38
 
-		cancel_if_invalid = yes
-		available_if_capitulated = no
+	prerequisite = { focus = NCR_state_of_mareway }
+	available = { ERA = { all_core_land_owned_by_prev_sphere = yes } }
 
-		completion_reward = {
-			add_stability = -0.05
-			Core_original_ERA = yes
-		}
+	ai_will_do = {
+		factor = 500
+	}
+
+	completion_reward = {
+		add_stability = -0.05
+		Core_original_ERA = yes
+	}
 } 
-
+#Tear Down the Walls of Neighvarro
 shared_focus = { 
 	id = NCR_fortress_to_city
-		icon = GFX_goal_Teal_down_the_walls_of_Neigwarro
-		x = -4
-		y = 1
-		
-		cost = 4.38
-		available = {
-			has_completed_focus = NCR_the_enclave_act
-			NOT = {
-				has_government = destruction
-			}
-			NEV = {
-				all_core_land_owned_by_prev_sphere = yes
-			}
-		}
-		ai_will_do = {
-			factor = 500
-		}
-		prerequisite = {focus = NCR_statehood_debate }
-		relative_position_id = NCR_statehood_debate
+	icon = GFX_goal_Teal_down_the_walls_of_Neigwarro
+	x = -4
+	y = 1
+	relative_position_id = NCR_statehood_debate
+	cost = 4.38
 
-		cancel_if_invalid = yes
-		available_if_capitulated = no
+	prerequisite = { focus = NCR_statehood_debate }
+	available = {
+		NOT = { has_government = destruction }
+		NEV = { all_core_land_owned_by_prev_sphere = yes }
+		has_completed_focus = NCR_the_enclave_act
+	}
 
-		completion_reward = {
-			696 = {
-				set_building_level = {
-					type = bunker
-					level = 0
-					province = {
-						all_provinces = yes
-					}
-				}
+	ai_will_do = {
+		factor = 500
+	}
+
+	completion_reward = {
+		696 = {
+			set_building_level = {
+				type = bunker
+				level = 0
+				province = { all_provinces = yes }
 			}
 		}
+	}
 } 
-
+#De-Programm the Cultists
 shared_focus = { 
 	id = NCR_de_program_cultists
-		icon = GFX_goal_Deprogramm_the_Cultists
-		x = -2
-		y = 1
-		
-		cost = 4.38
-		available = {
-			NOT = {
-				has_government = destruction
-			}
-			HSC = {
-				all_core_land_owned_by_prev_sphere = yes
-			}
-			HSW = {
-				all_core_land_owned_by_prev_sphere = yes
-			}
-		}
-		ai_will_do = {
-			factor = 500
-		}
-		prerequisite = {focus = NCR_statehood_debate }
-		relative_position_id = NCR_statehood_debate
+	icon = GFX_goal_Deprogramm_the_Cultists
+	x = -2
+	y = 1
+	relative_position_id = NCR_statehood_debate
+	cost = 4.38
 
-		cancel_if_invalid = yes
-		available_if_capitulated = no
+	prerequisite = { focus = NCR_statehood_debate }
+	available = {
+		NOT = { has_government = destruction }
+		HSC = { all_core_land_owned_by_prev_sphere = yes }
+		HSW = { all_core_land_owned_by_prev_sphere = yes }
+	}
 
-		completion_reward = {
-			add_manpower = -300
-		}
+	ai_will_do = {
+		factor = 500
+	}
+
+	completion_reward = {
+		add_manpower = -300
+	}
 } 
-
+#The State of Neighvarro
 shared_focus = { 
 	id = NCR_state_of_neighvarro
-		icon = GFX_goal_The_state_of_Neighvarro
-		x = -3
-		y = 2
-		
-		cost = 4.38
-		available = {
-			has_completed_focus = NCR_the_enclave_act
-			NOT = {
-				has_government = destruction
-			}
-		}
-		ai_will_do = {
-			factor = 500
-		}
-		prerequisite = {focus = NCR_fortress_to_city }
-		prerequisite = {focus = NCR_de_program_cultists}
-		relative_position_id = NCR_statehood_debate
+	icon = GFX_goal_The_state_of_Neighvarro
+	x = -3
+	y = 2
+	relative_position_id = NCR_statehood_debate
+	cost = 4.38
 
-		cancel_if_invalid = yes
-		available_if_capitulated = no
+	prerequisite = { focus = NCR_fortress_to_city }
+	prerequisite = { focus = NCR_de_program_cultists }
+	available = {
+		NOT = { has_government = destruction }
+		has_completed_focus = NCR_the_enclave_act
+	}
 
-		completion_reward = {
-			add_political_power = -50
-			Core_original_HSW = yes
-			Core_original_HSC = yes
-			Core_original_NEV = yes
-		}
+	ai_will_do = {
+		factor = 500
+	}
+
+	completion_reward = {
+		add_political_power = -50
+		Core_original_HSW = yes
+		Core_original_HSC = yes
+		Core_original_NEV = yes
+	}
 } 
-
+#The New Appleloosa Proclamation
 shared_focus = { 
 	id = NCR_new_appleloosa_proclamation
-		icon = GFX_goal_The_New_Apple_proclamation
-		x = 2
-		y = 1
-		
-		cost = 4.38
-		available = {
-			NOT = {
-				has_government = destruction
-			}
-			NAP = {
-				all_core_land_owned_by_prev_sphere = yes
-			}
-		}
-		ai_will_do = {
-			factor = 500
-		}
-		prerequisite = {focus = NCR_statehood_debate }
-		relative_position_id = NCR_statehood_debate
+	icon = GFX_goal_The_New_Apple_proclamation
+	x = 2
+	y = 1
+	relative_position_id = NCR_statehood_debate
+	cost = 4.38
 
-		cancel_if_invalid = yes
-		available_if_capitulated = no
+	prerequisite = { focus = NCR_statehood_debate }
+	available = {
+		NOT = { has_government = destruction }
+		NAP = { all_core_land_owned_by_prev_sphere = yes }
+	}
+	
+	ai_will_do = {
+		factor = 500
+	}
 
-		completion_reward = {
-			add_stability = 0.05
-		}
+	completion_reward = {
+		add_stability = 0.05
+	}
 } 
-
+#Resettle Cloudsdale
 shared_focus = { 
 	id = NCR_re_settle_cloudsdale
-		icon = GFX_goal_Resettle_Cloudsdale
-		x = 4
-		y = 1
-		
-		cost = 4.38
-		available = {
-			NOT = {
-				has_government = destruction
-			}
-			LIT = {
-				all_core_land_owned_by_prev_sphere = yes
-			}
-		}
-		ai_will_do = {
-			factor = 500
-		}
-		prerequisite = {focus = NCR_statehood_debate }
-		relative_position_id = NCR_statehood_debate
+	icon = GFX_goal_Resettle_Cloudsdale
+	x = 4
+	y = 1
+	relative_position_id = NCR_statehood_debate
+	cost = 4.38
 
-		cancel_if_invalid = yes
-		available_if_capitulated = no
+	prerequisite = { focus = NCR_statehood_debate }
+	available = {
+		NOT = { has_government = destruction }
+		LIT = { all_core_land_owned_by_prev_sphere = yes }
+	}
 
-		completion_reward = {
-			811 = { add_manpower = 500 }
-			565 = { add_manpower = 500 }
-			798 = { add_manpower = 2000 set_state_name = "Cloudsdale"}
-			set_province_name = {
-				id = 9272
-				name = LIT_Cloudsdale
-			}
+	ai_will_do = {
+		factor = 500
+	}
+
+	completion_reward = {
+		811 = { add_manpower = 500 }
+		565 = { add_manpower = 500 }
+		798 = { add_manpower = 2000 set_state_name = "Cloudsdale"}
+		set_province_name = {
+			id = 9272
+			name = LIT_Cloudsdale
 		}
+	}
 } 
-
+#The State of Appleloosa
 shared_focus = { 
 	id = NCR_state_of_appleloosa
-		icon = GFX_goal_The_State_of_Applooza
-		x = 3
-		y = 2
-		
-		cost = 4.38
-		available = {
-			NOT = {
-				has_government = destruction
-			}
-		}
-		ai_will_do = {
-			factor = 500
-		}
-		prerequisite = {focus = NCR_new_appleloosa_proclamation }
-		prerequisite = {focus = NCR_re_settle_cloudsdale}
-		relative_position_id = NCR_statehood_debate
+	icon = GFX_goal_The_State_of_Applooza
+	x = 3
+	y = 2
+	relative_position_id = NCR_statehood_debate
+	cost = 4.38
 
-		cancel_if_invalid = yes
-		available_if_capitulated = no
+	prerequisite = { focus = NCR_new_appleloosa_proclamation }
+	prerequisite = { focus = NCR_re_settle_cloudsdale }
+	available = { NOT = { has_government = destruction } }
 
-		completion_reward = {
-			add_political_power = -50
-			Core_original_NAP = yes
-			Core_original_LIT = yes
-		}
+	ai_will_do = {
+		factor = 500
+	}
+
+	completion_reward = {
+		add_political_power = -50
+		Core_original_NAP = yes
+		Core_original_LIT = yes
+	}
 } 
-
+#Erase the False Republic
 shared_focus = { 
 	id = NCR_erase_false_republic
-		icon = GFX_goal_Erase_the_flase_republic
-		x = 6
-		y = 1
-		
-		cost = 4.38
-		available = {
-			NOT = {
-				has_government = destruction
-			}
-			REP = {
-				all_core_land_owned_by_prev_sphere = yes
-			}
-		}
-		ai_will_do = {
-			factor = 500
-		}
-		prerequisite = {focus = NCR_statehood_debate }
-		relative_position_id = NCR_statehood_debate
+	icon = GFX_goal_Erase_the_flase_republic
+	x = 6
+	y = 1
+	relative_position_id = NCR_statehood_debate
+	cost = 4.38
 
-		cancel_if_invalid = yes
-		available_if_capitulated = no
+	prerequisite = { focus = NCR_statehood_debate }
+	available = {
+		NOT = { has_government = destruction }
+		REP = { all_core_land_owned_by_prev_sphere = yes }
+	}
 
-		completion_reward = {
-			add_political_power = -50
-		}
-} 
+	ai_will_do = {
+		factor = 500
+	}
 
+	completion_reward = {
+		add_political_power = -50
+	}
+}
+#Safety for the Ghastly Gorges
 shared_focus = { 
 	id = NCR_make_gorges_safe
-		icon = GFX_goal_Safety_of_the_Glasty_Gorge
-		x = 8
-		y = 1
-		
-		cost = 4.38
-		available = {
-			NOT = {
-				has_government = destruction
-			}
-			GOR = {
-				all_core_land_owned_by_prev_sphere = yes
-			}
-		}
-		ai_will_do = {
-			factor = 500
-		}
-		prerequisite = {focus = NCR_statehood_debate }
-		relative_position_id = NCR_statehood_debate
+	icon = GFX_goal_Safety_of_the_Glasty_Gorge
+	x = 8
+	y = 1
+	relative_position_id = NCR_statehood_debate
+	cost = 4.38
 
-		cancel_if_invalid = yes
-		available_if_capitulated = no
+	prerequisite = { focus = NCR_statehood_debate }
+	available = {
+		NOT = { has_government = destruction }
+		GOR = { all_core_land_owned_by_prev_sphere = yes }
+	}
 
-		completion_reward = {
-			every_state = {
-				limit = {  is_core_of = GOR }
-				add_extra_state_shared_building_slots = 2
-			}
-		}
+	ai_will_do = {
+		factor = 500
+	}
+
+	completion_reward = {
+		GOR = { every_core_state = { add_extra_state_shared_building_slots = 2 } }
+	}
 } 
-
+#The State of Summerdale
 shared_focus = { 
 	id = NCR_state_of_summerdale
-		icon = GFX_goal_The_state_of_summerdale
-		x = 7
-		y = 2
-		
-		cost = 4.38
-		available = {
-			NOT = {
-				has_government = destruction
-			}
-		}
-		ai_will_do = {
-			factor = 500
-		}
-		prerequisite = {focus = NCR_erase_false_republic }
-		prerequisite = {focus = NCR_make_gorges_safe}
-		relative_position_id = NCR_statehood_debate
+	icon = GFX_goal_The_state_of_summerdale
+	x = 7
+	y = 2
+	relative_position_id = NCR_statehood_debate
+	cost = 4.38
 
-		cancel_if_invalid = yes
-		available_if_capitulated = no
+	prerequisite = { focus = NCR_erase_false_republic }
+	prerequisite = { focus = NCR_make_gorges_safe }
+	available = { NOT = { has_government = destruction } }
 
-		completion_reward = {
-			add_political_power = -50
-			Core_original_GOR = yes
-			Core_original_FTA = yes
-			Core_original_PBN = yes
-			Core_original_BOG = yes
-			Core_original_REP = yes
-		}
+	ai_will_do = {
+		factor = 500
+	}
+
+	completion_reward = {
+		add_political_power = -50
+		Core_original_GOR = yes
+		Core_original_FTA = yes
+		Core_original_PBN = yes
+		Core_original_BOG = yes
+		Core_original_REP = yes
+	}
 } 
-
+#Embrace Splendid Valley
 shared_focus = { 
 	id = NCR_embrace_splendid_valley
-		icon = GFX_goal_Embrace_Splendid_Valley
-		x = 7
-		y = 3
-		
-		cost = 4.38
-		available = {
-			SPV = {
-				all_core_land_owned_by_prev_sphere = yes
-			}
-		}
-		ai_will_do = {
-			factor = 500
-		}
-		prerequisite = {focus = NCR_state_of_summerdale }
-		relative_position_id = NCR_statehood_debate
+	icon = GFX_goal_Embrace_Splendid_Valley
+	x = 7
+	y = 3
+	relative_position_id = NCR_statehood_debate
+	cost = 4.38
 
-		cancel_if_invalid = yes
-		available_if_capitulated = no
+	prerequisite = { focus = NCR_state_of_summerdale }
+	available = { SPV = { all_core_land_owned_by_prev_sphere = yes } }
+	
+	ai_will_do = {
+		factor = 500
+	}
 
-		completion_reward = {
-			Core_original_SPV = yes
-			Core_original_UNI = yes
-			set_technology = {
-				tech_ironpaws = 1
-			}
-		}
+	completion_reward = {
+		Core_original_SPV = yes
+		Core_original_UNI = yes
+		set_technology = { tech_ironpaws = 1 }
+	}
 } 
-
+#A United Azureway
 shared_focus = { 
 	id = NCR_united_azureway
-		icon = GFX_goal_A_united_Azureway
-		x = 0
-		y = 3
-		
-		cost = 4.38
-		available = {
-			NOT = {
-				has_government = destruction
-			}
-		}
-		ai_will_do = {
-			factor = 500
-		}
-		prerequisite = {focus = NCR_state_of_mareway focus = NCR_state_of_neighvarro }
-		prerequisite = {focus = NCR_state_of_appleloosa }
-		prerequisite = {focus = NCR_state_of_summerdale }
-		relative_position_id = NCR_statehood_debate
+	icon = GFX_goal_A_united_Azureway
+	x = 0
+	y = 3
+	relative_position_id = NCR_statehood_debate
+	cost = 4.38
+	
+	prerequisite = { focus = NCR_state_of_appleloosa }
+	prerequisite = { focus = NCR_state_of_summerdale }
+	prerequisite = { 
+		focus = NCR_state_of_mareway 
+		focus = NCR_state_of_neighvarro 
+	}
+	available = { NOT = { has_government = destruction } }
 
-		cancel_if_invalid = yes
-		available_if_capitulated = no
+	ai_will_do = {
+	}
 
-		completion_reward = {
-			add_stability = 0.1
-		}
+	completion_reward = {
+		add_stability = 0.1
+	}
 } 
 
 shared_focus = { 
