@@ -49,6 +49,53 @@ shared_focus = {
 			RWK_char_scarlett_flash = {
 				set_character_flag = RWK_new_regime_char_flg
 			}
+			IF = {
+					limit = {
+						OR = {
+							has_game_rule = {
+								rule = RWK_AI_BEHAVIOR
+								option = CIVGOVKELP
+							}
+							is_historical_focus_on = yes
+						}
+					}
+					set_country_flag = RWK_CIVGOVKELP_flag
+				}
+				else_if = {
+					limit = { 
+						has_game_rule = {
+							rule = RWK_AI_BEHAVIOR
+							option = CIVGOVJAQUES
+						}
+					}
+					set_country_flag = RWK_CIVGOVJAQUES_FLAG
+				}
+				else_if = {
+					limit = { 
+						has_game_rule = {
+							rule = RWK_AI_BEHAVIOR
+							option = WAVEBREAKER
+						}
+					}
+					set_country_flag = RWK_WAVEBREAKER_flag
+				}
+				else_if = {
+					limit = { 
+						has_game_rule = {
+							rule = RWK_AI_BEHAVIOR
+							option = CRIMSONCULT
+						}
+					}
+					set_country_flag = RWK_CRIMSONCULT_flag
+				}
+				ELSE = {
+					random_list = {
+						1 = { RWK = {set_country_flag = RWK_CIVGOVKELP_flag }}
+						1 = { RWK = {set_country_flag = RWK_CIVGOVJAQUES_FLAG }}
+						1 = { RWK = {set_country_flag = RWK_WAVEBREAKER_flag }}
+						1 = { RWK = {set_country_flag = RWK_CRIMSONCULT_flag }}
+					}
+				}
 		}
 	}
 }
@@ -115,7 +162,7 @@ shared_focus = {
 		}
 	}
 	ai_will_do = { 
-	factor = 30
+	factor = 300
 	} 
 
 	completion_reward = {
@@ -138,7 +185,7 @@ shared_focus = {
 		focus = RWK_shelter_on_shore
 	}
 	ai_will_do = { 
-	factor = 30
+	factor = 300
 	} 
 
 	completion_reward = {
@@ -194,7 +241,7 @@ shared_focus = {
 		focus = RWK_meet_with_crimson
 	}
 	ai_will_do = { 
-	factor = 30
+	factor = 300
 	} 
 
 	completion_reward = {
@@ -283,7 +330,7 @@ shared_focus = {
 		focus = RWK_call_captains_to_order
 	}
 	ai_will_do = { 
-	factor = 30
+	factor = 300
 	} 
 
 	completion_reward = {
@@ -314,7 +361,7 @@ shared_focus = {
 		focus = RWK_call_captains_to_order
 	}
 	ai_will_do = { 
-	factor = 30
+	factor = 300
 	} 
 
 	completion_reward = {
@@ -376,7 +423,7 @@ shared_focus = {
 		focus = RWK_issue_of_impressment
 	}
 	ai_will_do = { 
-	factor = 30
+	factor = 300
 	} 
 
 	completion_reward = {
@@ -399,7 +446,7 @@ shared_focus = {
 		focus = RWK_hunt_the_cult
 	}
 	ai_will_do = { 
-	factor = 30
+	factor = 300
 	} 
 
 	completion_reward = {
@@ -513,7 +560,7 @@ shared_focus = {
 		focus = RWK_dissolve_MAS_remnants
 	}
 	ai_will_do = { 
-	factor = 30
+	factor = 300
 	} 
 
 	completion_reward = {
@@ -661,7 +708,7 @@ shared_focus = {
 		focus = RWK_nationalize_valkyrie_arms
 	}
 	ai_will_do = { 
-	factor = 30
+	factor = 300
 	} 
 
 	completion_reward = {
@@ -689,7 +736,7 @@ shared_focus = {
 		focus = RWK_integrate_the_outskirts
 	}
 	ai_will_do = { 
-	factor = 30
+	factor = 300
 	} 
 
 	completion_reward = {
@@ -744,7 +791,15 @@ shared_focus = {
 	}
 	
 	ai_will_do = { 
-	factor = 30
+	factor = 1
+		modifier = {
+			factor = 999
+			has_country_flag = RWK_CIVGOVKELP_flag
+		}
+		modifier = {
+			factor = 999
+			has_country_flag = RWK_CIVGOVJAQUES_FLAG
+		}
 	} 
 
 	completion_reward = {
@@ -777,7 +832,15 @@ shared_focus = {
 		}
 	}
 	ai_will_do = { 
-	factor = 30
+	factor = 99
+		modifier = {
+			factor = 0
+			has_country_flag = RWK_CIVGOVKELP_flag
+		}
+		modifier = {
+			factor = 0
+			has_country_flag = RWK_CIVGOVJAQUES_FLAG
+		}
 	} 
 
 	completion_reward = {
@@ -797,7 +860,15 @@ shared_focus = {
 	available_if_capitulated = yes 
 	relative_position_id = RWK_battle_of_petershoof
 	ai_will_do = { 
-	factor = 30
+	factor = 99
+	modifier = {
+			factor = 0
+			has_country_flag = RWK_WAVEBREAKER_flag
+		}
+	modifier = {
+			factor = 0
+			has_country_flag = RWK_CRIMSONCULT_flag
+		}
 	}
 	available = {
 		has_country_leader_with_trait = dying_mind
@@ -810,6 +881,15 @@ shared_focus = {
 		add_timed_idea = {
 			idea = RWK_experimenting_idea
 			days = 100
+		}
+		hidden_effect = {
+			IF = {
+				limit = { is_ai = yes }
+				add_popularity = {
+					ideology = survivalism
+					popularity = 0.25
+				}
+			}
 		}
 	}
 }
@@ -7192,6 +7272,16 @@ shared_focus = {
 				grant_wargoals_on_core_states_of_prev = yes
 			}
 		}
+		MWN = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		MWS = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
 		BOG = {
 			ROOT = {
 				grant_wargoals_on_core_states_of_prev = yes
@@ -9420,7 +9510,14 @@ shared_focus = {
 	will_lead_to_war_with = WNF
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_making_friends_by_force"
-		STT = { country_event = rustwreck.44 }
+		IF = {
+			limit = { STT = { is_in_faction = RWK } }
+			annex_country = {
+				target = STT
+				transfer_troops = yes
+			}
+			Core_original_STT = yes
+		}
 		MUD = {
 			ROOT = {
 				grant_wargoals_on_core_states_of_prev = yes
