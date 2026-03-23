@@ -101,6 +101,8 @@ set_variable = { NCG_death_merchant = 0 }
 set_variable = { NCG_build_infl = 0 }
 set_variable = { NCG_mine_infl = 0 }
 set_variable = { NCG_mech_infl = 0 }
+set_variable = { NCG_creator_pp_cost = 30 }
+
 
 set_stability = 0.20
 
@@ -127,6 +129,7 @@ recruit_character = NCG_char_pony_joe
 recruit_character = NCG_char_ferrofall
 recruit_character = NCG_char_bitemark
 recruit_character = NCG_char_garhard_gust
+recruit_character = NCG_char_creators
 
 set_rule = {
 	can_generate_female_aces = yes
@@ -139,4 +142,29 @@ add_opinion_modifier = {
 reverse_add_opinion_modifier = {
     target = LRA
     modifier = ncg_slavers
+}
+
+IF = {
+	limit = {
+		has_dlc = "Man the Guns"
+	}
+    set_technology = {
+        foe_nautics_tech_1 = 1
+        naval_weapons_module_lmg_tech = 1
+		naval_weapons_module_catapult_tech = 1
+        foe_naval_invasion_tech_1 = 1
+    }
+    create_equipment_variant = {
+		name = "River Protection Asset"
+		type = ship_hull_foe_light_1
+		allow_without_tech = yes
+		modules = {
+			fixed_ship_engine_slot = light_ship_oars_module
+			fixed_ship_battery_slot = ship_lmg_module
+			fixed_ship_defense_slot = empty
+			fixed_ship_detection_slot = empty
+			front_1_custom_slot = ship_catapult_module
+		}
+	}
+	set_naval_oob = "NCG_1235_naval"
 }

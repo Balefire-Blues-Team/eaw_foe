@@ -1,4 +1,3 @@
-
 on_actions = {
 
 	on_startup = {
@@ -75,12 +74,8 @@ on_actions = {
 			187 = { set_state_flag = mwy_feudal_realm_state_flag }
 			581 = { set_state_flag = mwy_feudal_realm_state_flag }
 			804 = { set_state_flag = mwy_feudal_realm_state_flag }
-			
-			28 = { set_compliance = 15 set_resistance = 30}
-			353 = { set_compliance = 15 set_resistance = 20 }
-			299 = { set_compliance = 60 }
-			310 = { set_compliance = 45 }
-			
+
+
  			# Scav State Flags
  				812 = {
  					set_state_flag = scav_unique_loot_state_flag
@@ -163,34 +158,6 @@ on_actions = {
 						}
 					}
 				#
-				### Nurior Federation
-					if = {
-						limit = {
-							has_game_rule = {
-								rule = TFL_united_nurior_rule
-								option = YES_NURIOR
-							}
-						}
-						TFL = {
-							annex_country = { target = VOI transfer_troops = yes }
-							annex_country = { target = DEP transfer_troops = yes }
-							annex_country = { target = TMS transfer_troops = yes }
-							set_country_flag = Trottfield_unifier_flag
-							every_state = {
-								limit = {
-									OR = {
-										is_core_of = VOI
-										is_core_of = DEP
-										is_core_of = TMS
-									}
-								}
-								add_claim_by = TFL
-								add_core_of = TFL
-							}
-							set_cosmetic_tag = Nurior_federation
-						}
-					}
-				#
 
 				### SHA Breakup
 				if = {
@@ -214,39 +181,57 @@ on_actions = {
 						air_experience = 20
 					}
 				}
-				
-				###PHE Rising
-				PHE = { country_event = utility.9 }
-				
-				###Great Rulers
-				if = {
-					limit = {
-						has_game_rule = {
-							rule = FOE_great_leaders_rule
-							option = YES_GREAT_LEADERS
-						}
-					}
-					every_country = {
-						limit = {
-							OR = {
-								NOT = {tag = RED}
-								NOT = {tag = SHA}
-								NOT = {tag = COM}
-							}
-							is_ai = yes
-						}
-						country_event = special_rulers.1
-					}
-				}
 
-				###SEZ Setup###
-				SEZ = {
-					add_manpower = -500
-					swap_ideas = {
-						remove_idea = all_adults_serve
-						add_idea = disarmed_nation
+				#Random LRA Buff
+				IF = {
+					limit = {
+						LRA = { is_ai = yes }
+						SHA = { is_ai = yes }
+					}
+					random_list = {
+						50 = {}
+						25 = {
+							LRA = {
+								add_equipment_to_stockpile = {
+									type = infantry_equipment_1
+									amount = 100
+									producer = OWE
+								}
+							}
+						}
+						15 = {
+							LRA = {
+								add_equipment_to_stockpile = {
+									type = infantry_equipment_1
+									amount = 250
+									producer = OWE
+								}
+								add_equipment_to_stockpile = {
+									type = demolitions_equipment_1
+									amount = 150
+									producer = OWE
+								}
+							}
+						}
+						5 = {
+							LRA = {
+								add_equipment_to_stockpile = {
+									type = infantry_equipment_1
+									amount = 500
+									producer = OWE
+								}
+								add_equipment_to_stockpile = {
+									type = demolitions_equipment_1
+									amount = 300
+									producer = OWE
+								}
+								add_manpower = 500
+								add_political_power = 200
+							}
+						}
 					}
 				}
+			
 				
 		}
 	}
@@ -1007,58 +992,6 @@ on_actions = {
 						10 = {
 							country_event = MSR.134
 						}
-					}
-				}
-			}
-		}
-	}
-	on_weekly_VOI = {
-		effect = {
-			log = "[GetDateText]: ROOT: [Root.GetName] on_weekly_VOI"
-			if = {
-				limit = {VOI = { has_idea = VOI_blighted_lands_idea }}
-				every_state = {
-					limit = { check_variable = { STATE_blight_infect > 99 } }
-					set_variable = {
-						STATE_blight_infect = 1
-					}
-					if = {
-						limit = { has_dynamic_modifier = { modifier = VOI_blighted_lands_modifier } }
-						remove_dynamic_modifier = {
-							modifier = VOI_blighted_lands_modifier
-						}
-						add_dynamic_modifier = {
-							modifier = VOI_blighted_lands_2_modifier
-						}
-					}
-					else_if = {
-						limit = { has_dynamic_modifier = { modifier = VOI_blighted_lands_2_modifier } }
-						remove_dynamic_modifier = {
-							modifier = VOI_blighted_lands_2_modifier
-						}
-						add_dynamic_modifier = {
-							modifier = VOI_blighted_lands_3_modifier
-						}
-					}
-					else_if = {
-						limit = { has_dynamic_modifier = { modifier = VOI_blighted_lands_3_modifier } }
-						damage_building = {
-							type = infrastructure
-							damage = 5
-						}
-						add_manpower = -50
-					}
-				}
-				every_state = {
-					limit = {
-						AND = { 
-							check_variable = { STATE_blight_infect > 0 } 
-							check_variable = { STATE_blight_infect < 100 }
-						}
-					}
-					add_to_variable = {
-						var = STATE_blight_infect
-						value = 7
 					}
 				}
 			}

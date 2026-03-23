@@ -4,7 +4,7 @@ NDefines.NGame.START_DATE = "1235.1.1.12"
 NDefines.NGame.END_DATE = "1260.1.1.1"
 
 -- Vanilla is 30
-NDefines.NDiplomacy.VOLUNTEERS_DIVISIONS_REQUIEYE = 8
+NDefines.NDiplomacy.VOLUNTEERS_DIVISIONS_REQUIRED = 8
 
 -- Starting at this date, the tension values will be scaled down (will be equal
 -- to 1 before that.)
@@ -170,6 +170,7 @@ NDefines.NNavy.AMPHIBIOUS_LANDING_PENALTY = -0.4				-- amphibious landing penalt
 NDefines.NMilitary.BASE_FORT_PENALTY = -0.08 					   -- fort penalty
 -- research
 NDefines.NTechnology.BASE_YEAR_AHEAD_PENALTY_FACTOR = 1.35		-- Base year ahead penalty
+NDefines.NTechnology.BASE_TECH_COST = 100               --Base Cost in Days for Technology
 NDefines.NAI.RESEARCH_DAYS_BETWEEN_WEIGHT_UPDATE = 7 	-- Refreshes need scores based on country situation.
 NDefines.NAI.RESEARCH_LAND_DOCTRINE_NEED_GAIN_FACTOR = 0.15	-- Multiplies value based on relative military industry size / country size.
 NDefines.NAI.RESEARCH_NAVAL_DOCTRINE_NEED_GAIN_FACTOR = 0.05	-- Multiplies value based on relative naval industry size / country size.
@@ -185,10 +186,21 @@ NDefines.NAI.RESEARCH_BASE_DAYS = 60					-- AI adds a base number of days when w
 NDefines.NProduction.MIN_POSSIBLE_TRAINING_MANPOWER = 3700	-- minimum amount of units able to be trained
 
 
-NDefines.NAI.UPGRADE_DIVISION_RELUCTANCE = 10	-- (2000) stop randomly upgrading to infantry
+NDefines.NAI.UPGRADE_DIVISION_RELUCTANCE = 2	-- (2000) stop randomly upgrading to infantry
 NDefines.NAI.UPGRADE_PERCENTAGE_OF_FORCES = 0.1
 NDefines.NAI.DIVISION_UPGRADE_MIN_XP = 5										-- Minimum XP before attempting to upgrade a division template.
-NDefines.NAI.UPGRADE_XP_RUSH_UPDATE = 50										-- If XP is above this on the daily tick the AI will attempt to spend it
+NDefines.NAI.UPGRADE_XP_RUSH_UPDATE = 110										-- If XP is above this on the daily tick the AI will attempt to spend it
+
+NDefines.NAI.MIN_FACTORIES_TO_WANT_TO_IMPORT = {  
+        0, -- water 
+        10, -- energy
+        0, -- metal
+        10, -- composites
+        10, -- circuits
+        20, -- advanced
+        30, -- crystals
+    }
+
 
 --NNavy
 NDefines.NNavy.NAVAL_INVASION_PREPARE_HOURS = 64								-- base hours needed to prepare an invasion
