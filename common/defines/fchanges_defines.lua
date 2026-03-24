@@ -1,5 +1,15 @@
 NDefines.NGame.MAP_SCALE_PIXEL_TO_KM = 1.793					-- Yes, we did the math
 
+-- Energy And Production
+NDefines.NGame.ENERGY_RESOURCE = "energy"						-- resource that will give country energy
+NDefines.NProduction.RESOURCE_TO_ENERGY_COEFFICIENT = 25.0		-- How much energy per coal produces
+
+NDefines.NProduction.ENERGY_SCALING_COST_BY_FACTORY_COUNT = 0.0 -- Scales energy cost based on the total number of factories
+NDefines.NProduction.BASE_ENERGY_COST = 1.0					-- How much energy per factory consumes
+NDefines.NProduction.POWERED_FACTORY_SPEED = 5				--Powered factory speed multiplier.
+NDefines.NProduction.POWERED_FACTORY_SPEED_MIL = 5			--Powered factory speed multiplier.
+NDefines.NProduction.POWERED_FACTORY_SPEED_NAV = 3.25		--Powered factory speed multiplier.
+
 NDefines.NProduction.BASE_FACTORY_MAX_EFFICIENCY_FACTOR = 35
 NDefines.NProduction.BASE_FACTORY_START_EFFICIENCY_FACTOR = 7
 NDefines.NProduction.BASE_FACTORY_SPEED = 6 			    	-- Base factory speed multiplier (how much hoi3 style IC each factory gives).
@@ -38,6 +48,7 @@ NDefines.NMilitary.UNIT_DIGIN_CAP = 10							-- how "deep" you can dig you can d
 NDefines.NMilitary.UNIT_DIGIN_SPEED = 0.8							-- how "deep" you can dig a day. vanilla value 1
 
 -- Fuel
+NDefines.NGame.OIL_RESOURCE = "energy"						-- Name of the oil resource
 NDefines.NGame.FUEL_RESOURCE = "energy"							-- resource that will give country fuel
 NDefines.NCountry.FUEL_LEASE_CONVOY_RATIO = 0.00005				-- num convoys needed per fuel land lease
 NDefines.NCountry.STARTING_FUEL_RATIO = 0.1						-- starting fuel ratio compared to max fuel for countries

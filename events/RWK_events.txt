@@ -1,6 +1,75 @@
 add_namespace = rustwreck
+add_namespace = rustwreck_debug
 add_namespace = rwksailor
 
+#Debug Events to test branchs
+#Civ Gov branch
+country_event = { 
+	id = rustwreck_debug.1
+	title = rustwreck_debug.1.title
+	desc = rustwreck_debug.1.desc
+	is_triggered_only = yes
+	option = {
+		name = rustwreck_debug.1.a
+		clr_country_flag = RWK_wavebreaker_continuation_flg
+		clr_country_flag = RWK_Crimson_govment_flg
+		set_country_flag = RWK_civ_gov_flg
+		mark_focus_tree_layout_dirty = yes
+	}
+}
+
+#Kelp Branch
+country_event = { 
+	id = rustwreck_debug.2
+	title = rustwreck_debug.2.title
+	desc = rustwreck_debug.2.desc
+	is_triggered_only = yes
+	option = {
+		name = rustwreck_debug.2.a
+		clr_country_flag = RWK_wavebreaker_continuation_flg
+		clr_country_flag = RWK_Crimson_govment_flg
+		set_country_flag = RWK_civ_gov_flg
+		set_country_flag = RWK_civ_gov_kelp_flag
+		mark_focus_tree_layout_dirty = yes
+	}
+}
+
+#Wavebreaker Branch
+country_event = { 
+	id = rustwreck_debug.3
+	title = rustwreck_debug.3.title
+	desc = rustwreck_debug.3.desc
+	is_triggered_only = yes
+	option = {
+		name = rustwreck_debug.3.a
+		clr_country_flag = RWK_civ_gov_flg
+		clr_country_flag = RWK_civ_gov_kelp_flag
+		clr_country_flag = RWK_Crimson_govment_flg
+		set_country_flag = RWK_wavebreaker_continuation_flg
+		mark_focus_tree_layout_dirty = yes
+	}
+}
+
+#Crimson Branch
+country_event = { 
+	id = rustwreck_debug.4
+	title = rustwreck_debug.4.title
+	desc = rustwreck_debug.4.desc
+	is_triggered_only = yes
+	option = {
+		name = rustwreck_debug.4.a
+		clr_country_flag = RWK_civ_gov_flg
+		clr_country_flag = RWK_civ_gov_kelp_flag
+		clr_country_flag = RWK_wavebreaker_continuation_flg
+		set_politics = {
+			ruling_party = destruction
+			elections_allowed = no
+		}
+		set_country_flag = RWK_Crimson_govment_flg
+		custom_effect_tooltip = RWK_load_more_foci_tt
+		mark_focus_tree_layout_dirty = yes
+	}
+}
 
 #Ask LGH to trade
 country_event = {
@@ -108,7 +177,13 @@ country_event = {
 	
    	option = { #wipe out
 	   name = rustwreck.4.a 
-	   ai_chance = { factor = 50}
+	   ai_chance = { factor = 5
+	   	modifier = {
+			factor = 999
+			has_country_flag = RWK_WAVEBREAKER_flag
+		}
+	   }
+
 	   	add_timed_idea = {
 			idea = RWK_razorshark_campaign_idea
 			days = 160
@@ -117,7 +192,15 @@ country_event = {
    	}
    	option = { #pay off
 	   	name = rustwreck.4.b 
-	   	ai_chance = { factor = 50}
+	   	ai_chance = { factor = 5
+		modifier = {
+			factor = 999
+			has_country_flag = RWK_CIVGOVKELP_flag
+		}
+		modifier = {
+			factor = 999
+			has_country_flag = RWK_CIVGOVJAQUES_FLAG
+		}}
 	   	add_timed_idea = {
 			idea = RWK_razorshark_tribute_idea
 			days = 160
@@ -129,7 +212,11 @@ country_event = {
 	   	trigger = {
 			has_completed_focus = RWK_enemies_to_allies
 	   	}
-	   	ai_chance = { factor = 5000}
+	   	ai_chance = { factor = 5
+		modifier = {
+			factor = 999
+			has_country_flag = RWK_CRIMSONCULT_flag
+		}}
 		add_stability = -0.08
 		custom_effect_tooltip = RWK_razorshark_recruit_tt
 		hidden_effect = {
@@ -503,7 +590,15 @@ country_event = {
 	
   	option = { #Take Crimson Deal
 	   	name = rustwreck.13.a 
-	   	ai_chance = { factor = 80 }
+	   	ai_chance = { factor = 8 
+		modifier = {
+			factor = 999
+			has_country_flag = RWK_CRIMSONCULT_flag
+		}
+		modifier = {
+			factor = 0
+			NOT = {has_country_flag = RWK_CRIMSONCULT_flag}
+		}}
 		add_popularity = {
 			ideology = destruction
 			popularity = 0.05
@@ -513,7 +608,7 @@ country_event = {
    	}
 	option = { #Use the names, no deal
 	   name = rustwreck.13.b
-	   ai_chance = { factor = 50 modifier = { factor = 0 has_country_flag = RWK_destruction_flag }}
+	   ai_chance = { factor = 5 }
 	   	add_popularity = {
 			ideology = destruction
 			popularity = -0.10
@@ -555,7 +650,11 @@ country_event = {
 	
   	option = { #Wavebreaker for planning the assault
 	   	name = rustwreck.15.a 
-	   	ai_chance = { factor = 50 }
+	   	ai_chance = { factor = 5
+		modifier = {
+			factor = 999
+			has_country_flag = RWK_WAVEBREAKER_flag
+		}}
 		add_popularity = {
 			ideology = visionary
 			popularity = 0.05
@@ -573,7 +672,15 @@ country_event = {
    	}
 	   option = { #Kelp, for organizing reconstruction
 	   name = rustwreck.15.b 
-	   ai_chance = { factor = 50 }
+	   ai_chance = { factor = 5
+	    modifier = {
+			factor = 999
+			has_country_flag = RWK_CIVGOVKELP_flag
+		}
+		modifier = {
+			factor = 999
+			has_country_flag = RWK_CIVGOVJAQUES_FLAG
+		}}
 	   	add_popularity = {
 			ideology = survivalism
 			popularity = 0.05
@@ -609,16 +716,16 @@ country_event = {
 			is_locked = no
 		}
    	}
-	option = { #Make an example
-	   name = rustwreck.16.b 
-	   ai_chance = { factor = 50 }
-	   	retire_character = RWK_char_Crimson_Waters
-		add_stability = 0.05
-		delete_unit_template_and_units = {
-			division_template = "Crimson's Warband"
-			disband = yes
-		}
-    }
+	#option = { #Make an example
+	#   name = rustwreck.16.b 
+	#   ai_chance = { factor = 50 }
+	#   	retire_character = RWK_char_Crimson_Waters
+	#	add_stability = 0.05
+	#	delete_unit_template_and_units = {
+	#		division_template = "Crimson's Warband"
+	#		disband = yes
+	#	}
+    #}
 }
 
 #Preaching in the Outskirts
@@ -633,7 +740,11 @@ country_event = {
 	
   	option = { #Let them
 	   	name = rustwreck.17.a 
-	   	ai_chance = { factor = 50 }
+	   	ai_chance = { factor = 1
+		modifier = {
+			factor = 999
+			has_country_flag = RWK_CRIMSONCULT_flag
+		}}
 		add_popularity = {
 			ideology = destruction
 			popularity = 0.05
@@ -646,7 +757,11 @@ country_event = {
    	}
 	option = { #Drive them away
 	   	name = rustwreck.17.b 
-	   	ai_chance = { factor = 0 }
+	   	ai_chance = { factor = 1
+		modifier = {
+			factor = 999
+			NOT = {has_country_flag = RWK_CRIMSONCULT_flag}
+		}}
 	   	add_popularity = {
 			ideology = destruction
 			popularity = -0.05
@@ -694,7 +809,15 @@ country_event = {
 	
   	option = { #War
 	   	name = rustwreck.19.a 
-	   	ai_chance = { factor = 50 }
+	   	ai_chance = { factor = 5 
+		modifier = {
+			factor = 999
+			has_country_flag = RWK_WAVEBREAKER_flag
+		}
+		modifier = {
+			factor = 999
+			has_country_flag = RWK_CRIMSONCULT_flag
+		}}
 		add_timed_idea = {
 			idea = RWK_retool_war_idea
 			days = 300
@@ -706,7 +829,15 @@ country_event = {
    	}
 	option = { #Peace
 		name = rustwreck.19.b
-	   	ai_chance = { factor = 50 }
+	   	ai_chance = { factor = 5 
+		modifier = {
+			factor = 999
+			has_country_flag = RWK_CIVGOVKELP_flag
+		}
+		modifier = {
+			factor = 999
+			has_country_flag = RWK_CIVGOVJAQUES_FLAG
+		}}
 	   	add_timed_idea = {
 			idea = RWK_retool_peace_idea
 			days = 300
@@ -865,12 +996,28 @@ country_event = {
 	
   	option = { #do it!
 	   	name = rustwreck.26.a 
-	   	ai_chance = { factor = 50 }
+	   	ai_chance = { factor = 5 
+		modifier = {
+			factor = 999
+			has_country_flag = RWK_CIVGOVKELP_flag
+		}
+		modifier = {
+			factor = 999
+			has_country_flag = RWK_CIVGOVJAQUES_FLAG
+		}}
 		set_country_flag = RWK_experimental_treatment_flag
    	}
 	option = { #just let me die
 	   name = rustwreck.26.b 
-	   ai_chance = { factor = 50 }
+	   ai_chance = { factor = 5 
+	   modifier = {
+			factor = 999
+			has_country_flag = RWK_WAVEBREAKER_flag
+		}
+		modifier = {
+			factor = 999
+			has_country_flag = RWK_CRIMSONCULT_flag
+		}}
 		add_days_mission_timeout = {
 			mission = RWK_admiral_feral_countdown
 			days = -20
@@ -914,11 +1061,14 @@ country_event = {
 			ruling_party = survivalism
 			elections_allowed = no
 		}
+		custom_effect_tooltip = RWK_load_more_foci_tt
 		hidden_effect = {
 			country_event = {
 				id = rustwreck.29
 				days = 6
 			}
+			set_country_flag = RWK_civ_gov_flg
+			mark_focus_tree_layout_dirty = yes
 		}
    	}
 }
@@ -951,6 +1101,7 @@ country_event = {
 			long_name = RWK_visionary_2_party
 			name = RWK_visionary_2_party
 		}
+		add_ideas = RWK_old_guard_resistance_idea
 		hidden_effect = {
 			remove_country_leader_role = {
 				character = RWK_char_Admiral_High_Tides
@@ -1053,15 +1204,23 @@ country_event = {
 	
   	option = { #Wavebreaker
 	   	name = rustwreck.31.a 
-	   	ai_chance = { factor = 50 }
+	   	ai_chance = { factor = 5 
+		modifier = {
+			factor = 999
+			has_country_flag = RWK_WAVEBREAKER_flag
+		}}
 		add_popularity = {
-			ideology = continuation
+			ideology = visionary
 			popularity = 0.20
 		}
    	}
 	option = { #Crimson
 	   name = rustwreck.31.b
-	   ai_chance = { factor = 50 }
+	   ai_chance = { factor = 5 
+	   modifier = {
+			factor = 999
+			has_country_flag = RWK_CRIMSONCULT_flag
+		}}
 	   	add_popularity = {
 			ideology = destruction
 			popularity = 0.20
@@ -1103,7 +1262,7 @@ country_event = {
 		clr_country_flag = RWK_admiral_sick_flag
 		IF = {
 			limit = {
-				destruction > visionary
+				destruction>party_popularity@visionary
 			}
 			country_event = rustwreck.34
 		}
@@ -1131,6 +1290,7 @@ country_event = {
 			elections_allowed = no
 		}
 		custom_effect_tooltip = RWK_load_more_foci_tt
+		set_country_flag = RWK_Crimson_govment_flg
 		mark_focus_tree_layout_dirty = yes
    	}
 }
@@ -1148,13 +1308,16 @@ country_event = {
   	option = { #New and old as one
 	   	name = rustwreck.35.a 
 	   	ai_chance = { factor = 50 }
-		remove_country_leader_role = {
-			character = RWK_char_Admiral_High_Tides
-			ideology = admirality
-		}
-		remove_country_leader_role = {
-			character = RWK_char_Wavebreaker
-			ideology = rebuilder
+		hidden_effect = {
+			set_country_flag = RWK_wavebreaker_continuation_flg
+			remove_country_leader_role = {
+				character = RWK_char_Admiral_High_Tides
+				ideology = admirality
+			}
+			remove_country_leader_role = {
+				character = RWK_char_Wavebreaker
+				ideology = rebuilder
+			}
 		}
 		add_country_leader_role = {
 			character = RWK_char_Wavebreaker
@@ -1176,9 +1339,16 @@ country_event = {
 			name = RWK_visionary_3_party
 		}
 		add_popularity = {
-			ideology = continuation
-			popularity = 60
+			ideology = visionary
+			popularity = -0.40
 		}
+		add_popularity = {
+			ideology = continuation
+			popularity = 0.40
+		}
+		add_ideas = RWK_national_mourning_idea
+		custom_effect_tooltip = RWK_load_more_foci_tt
+		mark_focus_tree_layout_dirty = yes
    	}
 }
 
@@ -1334,7 +1504,7 @@ country_event = {
 		}
    	}
 	option = { #Fort Aestus
-	   name = rustwreck.40.a 
+	   name = rustwreck.40.b
 	   ai_chance = { factor = 0 }
 		set_province_name = {
 			id = 5310
@@ -1342,7 +1512,7 @@ country_event = {
 		}
     }
 	option = { #Fort Hightide
-	   name = rustwreck.40.a 
+	   name = rustwreck.40.c
 	   ai_chance = { factor = 0 }
 		set_province_name = {
 			id = 5310
@@ -1396,4 +1566,2522 @@ country_event = {
 		
    	}
 }
+
+#Agony of Choice
+country_event = {
+	id = rustwreck.43
+	title = rustwreck.43.t
+	desc = rustwreck.43.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #Direct investments
+	   	name = rustwreck.43.a 
+	   	ai_chance = { factor = 10 }
+		one_random_industrial_complex = yes
+		one_random_arms_factory = yes
+		one_random_dockyard = yes
+   	}
+
+	option = { #Buy Blueprints
+	   name = rustwreck.43.b 
+	   ai_chance = { factor = 10 }
+	   add_tech_bonus = {
+		name = industry
+		bonus = 0.6
+		uses = 2
+		category = industry
+		}
+		add_tech_bonus = {
+			name = industry
+			bonus = 0.6
+			uses = 1
+			category = industry
+			}
+		add_tech_bonus = {
+			name = infantry_tech
+			bonus = 0.6
+			uses = 1
+			category = infantry_tech
+			}
+		add_tech_bonus = {
+			name = electronics
+			bonus = 0.6
+			uses = 1
+			category = electronics
+			}
+   	}
+
+   	option = { #Give it to the Ponies
+	   	name = rustwreck.43.c
+	   	ai_chance = { factor = 100 }
+		add_timed_idea = {
+			idea = RWK_give_back_program_idea
+			days = 365
+		}
+   	}
+}
+
+#Rustwreck demands our surrender
+country_event = {
+	id = rustwreck.44
+	title = rustwreck.44.t
+	desc = rustwreck.44.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #We'll never submit!
+	   	name = rustwreck.44.a 
+	   	ai_chance = { factor = 20 }
+		RWK = {
+			country_event = rustwreck.45
+		}
+   	}
+
+	option = { #Let's avoid Bloodshed
+	   name = rustwreck.44.b 
+	   ai_chance = { factor = 80 }
+	   	RWK = {
+			country_event = rustwreck.46
+		}
+   	}
+}
+
+#Stajniopolis refuses surrender
+country_event = {
+	id = rustwreck.45
+	title = rustwreck.45.t
+	desc = rustwreck.45.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #Then they shall die
+	   	name = rustwreck.45.a 
+	   	ai_chance = { factor = 60 }
+		add_state_claim = 790
+		STT = {
+			RWK = {grant_wargoals_on_core_states_of_prev = yes}
+		}
+   	}
+}
+
+#Stajniopolis refuses surrender
+country_event = {
+	id = rustwreck.46
+	title = rustwreck.46.t
+	desc = rustwreck.46.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #Then they shall die
+	   	name = rustwreck.46.a 
+	   	ai_chance = { factor = 60 }
+		annex_country = {
+			target = STT
+		}
+		790 = { add_compliance = 60 }
+   	}
+}
+
+
+#Borderwar Second - WIN
+country_event = {
+	id = rustwreck.47
+	title = rustwreck.47.t
+	desc = rustwreck.47.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #Yay
+	   	name = rustwreck.47.a 
+	   	ai_chance = { factor = 50 }
+		every_state = {
+			limit = {
+				has_state_flag = RWK_borderwar_target
+			}
+			transfer_state_to = RWK
+			clr_state_flag = RWK_borderwar_target
+		}
+   	}
+}
+
+#Borderwar Second - LOSE
+country_event = {
+	id = rustwreck.48
+	title = rustwreck.48.t
+	desc = rustwreck.48.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #damn
+	   	name = rustwreck.48.a 
+	   	ai_chance = { factor = 50 }
+		87 = {
+			damage_building = {
+				type = infrastructure
+				damage = 4
+			}
+		}
+		every_state = {
+			limit = {
+				has_state_flag = RWK_borderwar_target
+			}
+			clr_state_flag = RWK_borderwar_target
+		}
+   	}
+}
+
+#Borderwar Second - Tie
+country_event = {
+	id = rustwreck.49
+	title = rustwreck.49.t
+	desc = rustwreck.49.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #damn
+	   	name = rustwreck.49.a 
+	   	ai_chance = { factor = 50 }
+		   every_state = {
+			limit = {
+				has_state_flag = RWK_borderwar_target
+			}
+			clr_state_flag = RWK_borderwar_target
+		}
+   	}
+}
+
+#Conquest of Silverwing
+country_event = {
+	id = rustwreck.50
+	title = rustwreck.50.t
+	desc = rustwreck.50.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	trigger = {
+		tag = RWK
+		has_government = destruction
+		controls_state = 812
+	}
+	fire_only_once = yes
+	
+  	option = { #pretty cool
+	   	name = rustwreck.50.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#March into Fillydelphia
+country_event = {
+	id = rustwreck.51
+	title = rustwreck.51.t
+	desc = rustwreck.51.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	trigger = {
+		tag = RWK
+		has_government = destruction
+		controls_state = 532
+	}
+	fire_only_once = yes
+	
+  	option = { #much to do
+	   	name = rustwreck.51.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#Checkmate
+country_event = {
+	id = rustwreck.52
+	title = rustwreck.52.t
+	desc = rustwreck.52.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #much to do
+	   	name = rustwreck.52.a 
+	   	ai_chance = { factor = 50 }
+		add_country_leader_trait = victorious_prophet
+   	}
+}
+
+#Those who can be saved
+country_event = {
+	id = rustwreck.53
+	title = rustwreck.53.t
+	desc = rustwreck.53.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #At least some will help us
+	   	name = rustwreck.53.a 
+	   	ai_chance = { factor = 50 }
+		add_stability = -0.05
+   	}
+}
+
+#Fillydelphian Constitution
+country_event = {
+	id = rustwreck.54
+	title = rustwreck.54.t
+	desc = rustwreck.54.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #Technicalities are my favourite
+	   	name = rustwreck.54.a 
+	   	ai_chance = { factor = 50 }
+		add_stability = 0.10
+		clr_country_flag = slavery_allowed
+		set_country_flag = slavery_now_outlawed
+   	}
+}
+
+#Jasmine's finally home
+country_event = {
+	id = rustwreck.55
+	title = rustwreck.55.t
+	desc = rustwreck.55.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #Life can go on
+	   	name = rustwreck.55.a 
+	   	ai_chance = { factor = 50 }
+   	}
+}
+
+#Republic founding
+country_event = {
+	id = rustwreck.56
+	title = rustwreck.56.t
+	desc = rustwreck.56.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #cool
+	   	name = rustwreck.56.a 
+	   	ai_chance = { factor = 50 }
+		set_cosmetic_tag = RWK_united_equestrian_provinces_cosm
+   	}
+}
+
+#A raucous Festival
+country_event = {
+	id = rustwreck.57
+	title = rustwreck.57.t
+	desc = rustwreck.57.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #this is good
+	   	name = rustwreck.57.a 
+	   	ai_chance = { factor = 50 }
+		custom_effect_tooltip = RWK_crimson_thanks_for_playing_tt
+   	}
+}
+
+#Event for RWK_a_new_admirality
+country_event = {
+	id = rustwreck.58
+	title = rustwreck.58.t
+	desc = rustwreck.58.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.58.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#Event for RWK_a_new_admirality
+country_event = {
+	id = rustwreck.59
+	title = rustwreck.59.t
+	desc = rustwreck.59.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.59.a 
+	   	ai_chance = { factor = 50 }
+		add_advisor_role = {
+			character = RWK_char_Dr_Kelp
+			activate = yes
+			advisor = { 
+				slot = political_advisor
+				cost = 50
+				can_be_fired = no
+				idea_token = RWK_kelp_advisor_token
+				traits = {
+					sdc_chairmare
+				}
+			}
+		}
+   	}
+}
+
+#Last Hurrah
+country_event = {
+	id = rustwreck.60
+	title = rustwreck.60.t
+	desc = rustwreck.60.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.60.a 
+	   	ai_chance = { factor = 50 }
+		add_manpower = -1
+   	}
+}
+
+#Meeting Notes
+country_event = {
+	id = rustwreck.61
+	title = rustwreck.61.t
+	desc = rustwreck.61.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.61.a 
+	   	ai_chance = { factor = 50 }
+   	}
+}
+
+#Moving Fast
+country_event = {
+	id = rustwreck.62
+	title = rustwreck.62.t
+	desc = rustwreck.62.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.62.a 
+	   	ai_chance = { factor = 50 }
+		hidden_effect = {
+			country_event = {
+				days = 50
+				random_days = 200
+				id = rustwreck.63
+			}
+		}
+   	}
+}
+
+#Doppelganger
+country_event = {
+	id = rustwreck.63
+	title = rustwreck.63.t
+	desc = rustwreck.63.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.63.a 
+	   	ai_chance = { factor = 50 }
+   	}
+}
+
+#The Waning Light
+country_event = {
+	id = rustwreck.64
+	title = rustwreck.64.t
+	desc = rustwreck.64.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.64.a 
+	   	ai_chance = { factor = 90 }
+		add_stability = 0.04
+   	}
+	option = { #
+	   	name = rustwreck.64.b
+	   	ai_chance = { factor = 10 }
+		add_stability = -0.04
+		RWK = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+		LGH = {
+			add_stability = -0.10
+			add_war_support = -0.10
+		}
+		653 = {
+			damage_building = {
+				type = infrastructure
+				damage = 29
+			}
+			damage_building = {
+				type = dockyard
+				damage = 4
+			}
+			damage_building = {
+				type = industrial_complex
+				damage = 17
+			}
+			damage_building = {
+				type = arms_factory
+				damage = 8
+			}
+			damage_building = {
+				type = naval_base
+				damage = 20
+			}
+		}
+   	}
+}
+
+#Same Old business
+country_event = {
+	id = rustwreck.65
+	title = rustwreck.65.t
+	desc = rustwreck.65.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.65.a 
+	   	ai_chance = { factor = 50 }
+   	}
+}
+
+#Dangers from Abroad
+country_event = {
+	id = rustwreck.66
+	title = rustwreck.66.t
+	desc = rustwreck.66.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.66.a 
+	   	ai_chance = { factor = 50 }
+		one_random_dockyard = yes
+		add_stability = -0.08
+   	}
+	option = { #
+	   	trigger = {
+			NOT = { has_idea = limited_exports }
+		}
+		name = rustwreck.66.b
+	   	ai_chance = { factor = 50 }
+		add_ideas = limited_exports
+		set_country_flag = RWK_naval_drug_raid_flag
+   	}
+	option = { #
+		trigger = {
+			has_idea = limited_exports
+		}
+	   	name = rustwreck.66.c
+	   	ai_chance = { factor = 50 }
+		add_political_power = 50
+		set_country_flag = RWK_naval_drug_raid_flag
+   	}
+}
+
+#Open Up
+country_event = {
+	id = rustwreck.67
+	title = rustwreck.67.t
+	desc = rustwreck.67.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	trigger = {
+		tag = RWK
+		has_country_flag = RWK_naval_drug_raid_flag
+		has_idea = limited_exports
+	}
+	mean_time_to_happen = {
+		days = 200
+	}
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.67.a 
+	   	ai_chance = { factor = 50 }
+		add_equipment_to_stockpile = {
+			type = convoy_1
+			amount = -1
+		}
+		add_stability = 0.01
+   	}
+}
+
+#Blueprints of a mind
+country_event = {
+	id = rustwreck.68
+	title = rustwreck.68.t
+	desc = rustwreck.68.d
+   	picture = GFX_report_event_merchant_ship_01
+
+    is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.68.a 
+	   	ai_chance = { factor = 50 }
+		hidden_effect = {
+			country_event ={ 
+				id = rustwreck.69
+				days = 150
+			}
+		}
+   	}
+}
+
+#Sage comes online
+country_event = {
+	id = rustwreck.69
+	title = rustwreck.69.t
+	desc = rustwreck.69.d
+   	picture = GFX_report_event_merchant_ship_01
+
+    is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.69.a 
+	   	ai_chance = { factor = 50 }
+		add_ideas = RWK_sage_level_1_idea
+   	}
+}
+
+#The world keeps turning
+country_event = {
+	id = rustwreck.70
+	title = rustwreck.70.t
+	desc = rustwreck.70.d
+   	picture = GFX_report_event_merchant_ship_01
+
+    is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.70.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#The Mares in Blue
+country_event = {
+	id = rustwreck.71
+	title = rustwreck.71.t
+	desc = rustwreck.71.d
+   	picture = GFX_report_event_merchant_ship_01
+
+    is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.71.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#Dusting off old Memories
+country_event = {
+	id = rustwreck.72
+	title = rustwreck.72.t
+	desc = rustwreck.72.d
+   	picture = GFX_report_event_merchant_ship_01
+
+    is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.72.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#Fervor of Youth
+country_event = {
+	id = rustwreck.73
+	title = rustwreck.73.t
+	desc = rustwreck.73.d
+   	picture = GFX_report_event_merchant_ship_01
+
+    is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.73.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#Collecting Stamps
+country_event = {
+	id = rustwreck.74
+	title = rustwreck.74.t
+	desc = rustwreck.74.d
+   	picture = GFX_report_event_merchant_ship_01
+
+    is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.74.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#Past Glories
+country_event = {
+	id = rustwreck.75
+	title = rustwreck.75.t
+	desc = rustwreck.75.d
+   	picture = GFX_report_event_merchant_ship_01
+
+    is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.75.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#On a foundation of Rubble
+country_event = {
+	id = rustwreck.76
+	title = rustwreck.76.t
+	desc = rustwreck.76.d
+   	picture = GFX_report_event_merchant_ship_01
+
+    trigger = {
+		tag = RWK
+		has_completed_focus = RWK_proclaim_the_rebirth
+		owns_state = 49
+	}
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.76.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#Expensive toys
+country_event = {
+	id = rustwreck.77
+	title = rustwreck.77.t
+	desc = rustwreck.77.d
+   	picture = GFX_report_event_merchant_ship_01
+
+    is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.77.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#Fate cast in Numbers
+country_event = {
+	id = rustwreck.78
+	title = rustwreck.78.t
+	desc = rustwreck.78.d
+   	picture = GFX_report_event_merchant_ship_01
+
+    is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.78.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#Better safe than sorry
+country_event = {
+	id = rustwreck.79
+	title = rustwreck.79.t
+	desc = rustwreck.79.d
+   	picture = GFX_report_event_merchant_ship_01
+
+    is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.79.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#Preserved in memory
+country_event = {
+	id = rustwreck.80
+	title = rustwreck.80.t
+	desc = rustwreck.80.d
+   	picture = GFX_report_event_merchant_ship_01
+
+    is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.80.a 
+	   	ai_chance = { factor = 50 }
+		set_province_name = {
+			id = 1326
+			name = "Tidetown"
+		}
+		add_victory_points = {
+			province = 1326
+			value = 10
+		}
+   	}
+}
+
+#False Memories
+country_event = {
+	id = rustwreck.81
+	title = rustwreck.81.t
+	desc = rustwreck.81.d
+   	picture = GFX_report_event_merchant_ship_01
+
+    is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.81.a 
+	   	ai_chance = { factor = 50 }
+		hidden_effect = {
+			country_event = {
+				id = rustwreck.82
+				days = 10
+			}
+		}
+   	}
+}
+
+#Internal Opposition
+country_event = {
+	id = rustwreck.82
+	title = rustwreck.82.t
+	desc = rustwreck.82.d
+   	picture = GFX_report_event_merchant_ship_01
+
+    is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.82.a 
+	   	ai_chance = { factor = 50 }
+		add_stability = -0.05
+		hidden_effect = {
+			country_event = {
+				id = rustwreck.86
+				days = 100
+				random_days = 100
+			}
+		}
+   	}
+}
+
+#White picket fences
+country_event = {
+	id = rustwreck.83
+	title = rustwreck.83.t
+	desc = rustwreck.83.d
+   	picture = GFX_report_event_merchant_ship_01
+
+    is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.83.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#Background Noise
+country_event = {
+	id = rustwreck.84
+	title = rustwreck.84.t
+	desc = rustwreck.84.d
+   	picture = GFX_report_event_merchant_ship_01
+
+    is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.84.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#The Voice of the Wasteland
+country_event = {
+	id = rustwreck.85
+	title = rustwreck.85.t
+	desc = rustwreck.85.d
+   	picture = GFX_report_event_merchant_ship_01
+
+    trigger = {
+		tag = RWK
+		has_completed_focus = RWK_opening_salvo
+		controls_state = 21
+	}
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.85.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#Plans in Shadow
+country_event = {
+	id = rustwreck.86
+	title = rustwreck.86.t
+	desc = rustwreck.86.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.86.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#Democracy is obsolete
+country_event = {
+	id = rustwreck.87
+	title = rustwreck.87.t
+	desc = rustwreck.87.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.87.a 
+	   	ai_chance = { factor = 50 }
+		set_popularities = {
+			continuation = 100
+		}
+		set_party_name = {
+			ideology = continuation
+			long_name = RWK_continuation_pacify_long
+			name = RWK_continuation_pacify_party
+		}
+		set_party_name = {
+			ideology = survivalism
+			long_name = RWK_managed_opposition_long
+			name = RWK_managed_opposition_party
+		}
+		set_party_name = {
+			ideology = destruction
+			long_name = RWK_managed_opposition_long
+			name = RWK_managed_opposition_party
+		}
+		set_party_name = {
+			ideology = visionary
+			long_name = RWK_managed_opposition_long
+			name = RWK_managed_opposition_party
+		}
+   	}
+}
+
+#Cowards in Armor
+country_event = {
+	id = rustwreck.88
+	title = rustwreck.88.t
+	desc = rustwreck.88.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.88.a 
+	   	ai_chance = { factor = 50 }
+		recruit_character = MSR_char_crossroads
+   	}
+}
+
+#Midnight Visitors
+country_event = {
+	id = rustwreck.89
+	title = rustwreck.89.t
+	desc = rustwreck.89.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.89.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#Equality for all
+country_event = {
+	id = rustwreck.90
+	title = rustwreck.90.t
+	desc = rustwreck.90.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.90.a 
+	   	ai_chance = { factor = 50 }
+		swap_ideas = {
+			remove_idea = RWK_universal_meritocracy_idea
+			add_idea = RWK_universal_meritocracy_2_idea
+		}
+		
+   	}
+}
+
+#The factories lie still
+country_event = {
+	id = rustwreck.91
+	title = rustwreck.91.t
+	desc = rustwreck.91.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	trigger = {
+		tag = RWK
+		has_completed_focus = RWK_return_order_to_the_west
+		OR = {
+			owns_state = 532
+			any_subject_country = {
+				owns_state = 532
+			}
+		}
+	}
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.91.a 
+	   	ai_chance = { factor = 50 }
+		hidden_effect = {
+			country_event = {
+				id = rustwreck.92
+				days = 100
+			}
+		}
+   	}
+}
+
+#Now and Forever
+country_event = {
+	id = rustwreck.92
+	title = rustwreck.92.t
+	desc = rustwreck.92.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.92.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#Clear Skies
+country_event = {
+	id = rustwreck.93
+	title = rustwreck.93.t
+	desc = rustwreck.93.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	trigger = {
+		tag = RWK
+		has_completed_focus = RWK_end_new_cloudsdale
+		696 = { is_owned_by_ROOT_or_subject = yes }
+	}
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.93.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#Heavy is the crown
+country_event = {
+	id = rustwreck.94
+	title = rustwreck.94.t
+	desc = rustwreck.94.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.94.a 
+	   	ai_chance = { factor = 50 }
+		custom_effect_tooltip = RWK_wavebreaker_thanks_for_playing_tt
+   	}
+}
+
+#Ending 200 years of Law
+country_event = {
+	id = rustwreck.95
+	title = rustwreck.95.t
+	desc = rustwreck.95.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.95.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#Rustwreck wants an alliance
+country_event = {
+	id = rustwreck.96
+	title = rustwreck.96.t
+	desc = rustwreck.96.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #yes
+	   	name = rustwreck.96.a 
+	   	ai_chance = { factor = 50 }
+		RWK = { country_event = rustwreck.97 }
+		set_country_flag = RWK_STT_loyalty_flg
+		hidden_effect = {
+			add_ai_strategy = {
+				type = alliance
+				id = RWK
+				value = 200
+			}
+		}
+   	}
+	option = { #no
+	   	name = rustwreck.96.a 
+	   	ai_chance = { factor = 0 }
+		RWK = { country_event = rustwreck.98 }
+   	}
+}
+
+#Stajniopolis agrees
+country_event = {
+	id = rustwreck.97
+	title = rustwreck.97.t
+	desc = rustwreck.97.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.97.a 
+	   	ai_chance = { factor = 50 }
+		IF = {
+			limit = {
+				is_in_faction = no
+			}
+			create_faction = "Sunrise Accord"
+		}
+		set_country_flag = RWK_STT_loyalty_flg
+		add_opinion_modifier = {
+			target = STT
+			modifier = huge_increase
+		}
+		reverse_add_opinion_modifier = {
+			target = STT
+			modifier = huge_increase
+		}
+		add_to_faction = STT
+		hidden_effect = {
+			add_ai_strategy = {
+				type = alliance
+				id = STT
+				value = 200
+			}
+		}
+   	}
+}
+
+#Stajniopolis refuses
+country_event = {
+	id = rustwreck.98
+	title = rustwreck.98.t
+	desc = rustwreck.98.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.98.a 
+	   	ai_chance = { factor = 50 }
+		add_war_support = 0.05
+   	}
+}
+
+#In the Lighthouses' shadow
+country_event = {
+	id = rustwreck.99
+	title = rustwreck.99.t
+	desc = rustwreck.99.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.99.a 
+	   	ai_chance = { factor = 50 }
+		set_country_flag = RWK_LGH_secret_ally_flg
+		add_collaboration = {
+			target = LGH
+			value = 10
+		}
+   	}
+}
+
+#From Petershoof to Vanhoover
+country_event = {
+	id = rustwreck.100
+	title = rustwreck.100.t
+	desc = rustwreck.100.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.100.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#Election Day
+country_event = {
+	id = rustwreck.101
+	title = rustwreck.101.t
+	desc = rustwreck.101.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #Kelp Wins
+	   	name = rustwreck.101.a 
+	   	ai_chance = { factor = 5 
+		modifier = {
+			factor = 999
+			has_country_flag = RWK_CIVGOVKELP_flag
+		}}
+		set_country_flag = RWK_civ_gov_kelp_flag
+		custom_effect_tooltip = RWK_load_more_foci_tt
+		country_event = rustwreck.102
+		mark_focus_tree_layout_dirty = yes
+   	}
+	option = { #Jacques Wins
+	   	name = rustwreck.101.b
+	   	ai_chance = { factor = 5 
+		modifier = {
+			factor = 999
+			has_country_flag = RWK_CIVGOVJAQUES_FLAG
+		}}
+		set_country_flag = RWK_civ_gov_jacques_flag
+		custom_effect_tooltip = RWK_load_more_foci_tt
+		country_event = rustwreck.103
+		mark_focus_tree_layout_dirty = yes
+   	}
+}
+
+#Doing away with distractions
+country_event = {
+	id = rustwreck.102
+	title = rustwreck.102.t
+	desc = rustwreck.102.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.102.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#Party like its 1007
+country_event = {
+	id = rustwreck.103
+	title = rustwreck.103.t
+	desc = rustwreck.103.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.103.a 
+	   	ai_chance = { factor = 50 }
+		set_politics = {
+			ruling_party = visionary
+		}
+		add_popularity = {
+			ideology = visionary
+			popularity = 0.25
+		}
+		hidden_effect = {
+			country_event = {
+				id = rustwreck.140
+				days = 5
+			}
+		}
+   	}
+}
+
+#The Movement for Democracy
+country_event = {
+	id = rustwreck.104
+	title = rustwreck.104.t
+	desc = rustwreck.104.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = no
+	
+  	option = { #
+	   	name = rustwreck.104.a 
+	   	ai_chance = { base = 5 
+		modifier = {
+			has_country_flag = RWK_LGH_secret_ally_flg
+			factor = 1000
+		}
+		modifier = {
+			tag = GUN
+			add = -5
+		}
+		}
+		add_ideas = RWK_agitation_for_democracy_idea
+		RWK = {
+			country_event = rustwreck.105
+		}
+   	}
+	option = { #
+	   	name = rustwreck.104.b
+	   	ai_chance = { base = 5 }
+		add_stability = -0.05
+		RWK = {
+			country_event = rustwreck.106
+		}
+   	}
+}
+
+#XXX Accepts agitation
+country_event = {
+	id = rustwreck.105
+	title = rustwreck.105.t
+	desc = rustwreck.105.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = no
+	
+  	option = { #
+	   	name = rustwreck.105.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#XXX Rejects agitation
+country_event = {
+	id = rustwreck.106
+	title = rustwreck.106.t
+	desc = rustwreck.106.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = no
+	
+  	option = { #
+	   	name = rustwreck.106.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#The Call of Freedom
+country_event = {
+	id = rustwreck.107
+	title = rustwreck.107.t
+	desc = rustwreck.107.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = no
+	
+  	option = { #
+	   	name = rustwreck.107.a 
+	   	ai_chance = { factor = 50 }
+		GUN = { end_puppet = PREV }
+		leave_faction = yes
+		RWK = { add_to_faction = PREV }
+		add_opinion_modifier = {
+			target = RWK
+			modifier = huge_increase
+		}
+		reverse_add_opinion_modifier = {
+			target = RWK
+			modifier = huge_increase
+		}
+		declare_war_on = {
+			target = GUN
+			type = annex_everything
+		}
+		hidden_effect = {
+			add_ai_strategy = {
+				type = alliance
+				id = RWK
+				value = 200
+			}
+		}
+   	}
+	option = { #
+	   	name = rustwreck.107.b
+	   	ai_chance = { factor = 50
+			modifier = {
+				has_country_flag = RWK_LGH_secret_ally_flg
+				factor = 0
+			}
+		}
+		add_stability = -0.10
+   	}
+}
+
+#With Friends like these
+country_event = {
+	id = rustwreck.108
+	title = rustwreck.108.t
+	desc = rustwreck.108.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.108.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#A new lease on life
+country_event = {
+	id = rustwreck.109
+	title = rustwreck.109.t
+	desc = rustwreck.109.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.109.a 
+	   	ai_chance = { factor = 50 }
+		
+   	}
+}
+
+#Hidden STT event
+country_event = {
+	id = rustwreck.110
+	title = rustwreck.110.t
+	desc = rustwreck.110.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	trigger = {
+		tag = STT
+		is_in_faction_with = RWK
+		has_country_flag = RWK_STT_loyalty_flg
+		owns_state = 440
+		owns_state = 462
+		NOT = {
+			owns_state = 448
+		}
+	}
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.110.a 
+	   	ai_chance = { factor = 50 }
+		MUD = {
+			ROOT = {
+				grant_wargoals_on_core_states_of_prev = yes
+			}
+		}
+   	}
+}
+
+#Your friend and helper
+country_event = {
+	id = rustwreck.111
+	title = rustwreck.111.t
+	desc = rustwreck.111.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.111.a 
+	   	ai_chance = { factor = 50 }
+		every_country = {
+			limit = {
+				exists = yes
+				OR = {
+					tag = RTA
+					tag = EMP
+					tag = ABT
+					tag = MSR
+					tag = MAR
+					tag = TEN
+					tag = ARB
+					tag = GUT
+					tag = FRI
+				}
+			}
+			add_ideas = RWK_protected_trade_idea
+		}
+   	}
+}
+
+#Rustwreck suggests unification
+country_event = {
+	id = rustwreck.112
+	title = rustwreck.112.t
+	desc = rustwreck.112.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #yes
+	   	name = rustwreck.112.a 
+	   	ai_chance = { base = 50 }
+		RWK = {
+			country_event = rustwreck.113
+		}
+   	}
+	option = { #no
+	   	name = rustwreck.112.b
+	   	ai_chance = { base = 0 }
+		RWK = {
+			country_event = rustwreck.114
+		}
+   	}
+}
+
+#Freeside agrees to unification
+country_event = {
+	id = rustwreck.113
+	title = rustwreck.113.t
+	desc = rustwreck.113.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #SR
+	   	name = rustwreck.113.a 
+	   	ai_chance = { base = 50 }
+		set_cosmetic_tag = RWK_eastlands_republic_cosm
+		annex_country = {
+			target = STT
+			transfer_troops = yes
+		}
+		every_state = {
+			limit = {
+				is_core_of = STT
+			}
+			add_core_of = RWK
+		}
+   	}
+	option = { #USSR
+	   	name = rustwreck.113.b
+	   	ai_chance = { base = 50 }
+		set_cosmetic_tag = RWK_united_sovereign_sunrise_republics_cosm
+		annex_country = {
+			target = STT
+			transfer_troops = yes
+		}
+		every_state = {
+			limit = {
+				is_core_of = STT
+			}
+			add_core_of = RWK
+		}
+   	}
+	option = { #NCR
+	   	name = rustwreck.113.c
+	   	ai_chance = { base = 50 }
+		set_cosmetic_tag = RWK_northwestern_council_republic_cosm
+		annex_country = {
+			target = STT
+			transfer_troops = yes
+		}
+		every_state = {
+			limit = {
+				is_core_of = STT
+			}
+			add_core_of = RWK
+		}
+   	}
+}
+
+#Freeside rejects unification
+country_event = {
+	id = rustwreck.114
+	title = rustwreck.114.t
+	desc = rustwreck.114.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.114.a 
+	   	ai_chance = { base = 50 }
+   	}
+}
+
+#Kelp Victory Event
+country_event = {
+	id = rustwreck.115
+	title = rustwreck.115.t
+	desc = rustwreck.115.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #
+	   	name = rustwreck.115.a 
+	   	ai_chance = { base = 50 }
+		custom_effect_tooltip = RWK_kelp_thanks_for_playing_tt
+   	}
+}
+
+#Welfare for the People Event
+country_event = {
+	id = rustwreck.116
+	title = rustwreck.116.t
+	desc = rustwreck.116.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.116.a 
+	   	ai_chance = { base = 50 }
+		
+   	}
+}
+
+#Education as a Right Event
+country_event = {
+	id = rustwreck.117
+	title = rustwreck.117.t
+	desc = rustwreck.117.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.117.a 
+	   	ai_chance = { base = 50 }
+		
+   	}
+}
+
+#Democracy on every level Event
+country_event = {
+	id = rustwreck.118
+	title = rustwreck.118.t
+	desc = rustwreck.118.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.118.a 
+	   	ai_chance = { base = 50 }
+		
+   	}
+}
+
+#Hoof in Claw in Paw Event
+country_event = {
+	id = rustwreck.119
+	title = rustwreck.119.t
+	desc = rustwreck.119.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.119.a 
+	   	ai_chance = { base = 50 }
+		
+   	}
+}
+
+#Wars of our Forefathers
+country_event = {
+	id = rustwreck.120
+	title = rustwreck.120.t
+	desc = rustwreck.120.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.120.a 
+	   	ai_chance = { base = 50 }
+		add_state_claim = 696
+   	}
+}
+
+#Beacon of Liberty Event
+country_event = {
+	id = rustwreck.121
+	title = rustwreck.121.t
+	desc = rustwreck.121.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.121.a 
+	   	ai_chance = { base = 50 }
+		
+   	}
+}
+
+#Those That Deny Our Ideals Event
+country_event = {
+	id = rustwreck.122
+	title = rustwreck.122.t
+	desc = rustwreck.122.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.122.a 
+	   	ai_chance = { base = 50 }
+		add_stability = 0.10
+		every_state = {
+			limit = {
+				is_core_of = RTA
+			}
+			add_compliance = -10
+			add_resistance = 10
+		}
+		add_ideas = political_effort_censorship
+   	}
+	option = { 
+	   	name = rustwreck.122.b
+	   	ai_chance = { base = 50 }
+		add_stability = -0.10
+		core_original_RTA = yes
+   	}
+}
+
+#Protect Our Friends Event
+country_event = {
+	id = rustwreck.123
+	title = rustwreck.123.t
+	desc = rustwreck.123.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.123.a 
+	   	ai_chance = { base = 50 }
+		RWK = { add_to_faction = ABT }
+		reverse_add_opinion_modifier = {
+			target = RWK
+			modifier = huge_increase
+		}
+		add_opinion_modifier = {
+			target = RWK
+			modifier = huge_increase
+		}
+		hidden_effect = {
+			add_ai_strategy = {
+				type = alliance
+				id = RWK
+				value = 200
+			}
+			RWK = {
+				add_ai_strategy = {
+				type = alliance
+				id = ABT
+				value = 200
+			}
+			}
+		}
+   	}
+	option = { 
+	   	name = rustwreck.123.b
+	   	ai_chance = { base = 0 }
+		RWK = {
+			ABT = { grant_wargoals_on_core_states_of_prev = yes }
+		}
+   	}
+}
+
+#All Who Would Stand Against Evil Event
+country_event = {
+	id = rustwreck.124
+	title = rustwreck.124.t
+	desc = rustwreck.124.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.124.a 
+	   	ai_chance = { base = 50 }
+		
+   	}
+}
+
+#The Gentle Hoof 1
+country_event = {
+	id = rustwreck.125
+	title = rustwreck.125.t
+	desc = rustwreck.125.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.125.a 
+	   	ai_chance = { base = 50 }
+		Core_original_RAR = yes
+		hidden_effect = {
+			remove_state_core = 49
+			remove_state_core = 816
+			country_event = {
+				id = rustwreck.126
+				days = 3
+			}
+		}
+   	}
+}
+
+#The Gentle Hoof 2
+country_event = {
+	id = rustwreck.126
+	title = rustwreck.126.t
+	desc = rustwreck.126.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.126.a 
+	   	ai_chance = { base = 50 }
+		Core_original_FER = yes
+   	}
+}
+
+#An Ideal City Event
+country_event = {
+	id = rustwreck.127
+	title = rustwreck.127.t
+	desc = rustwreck.127.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.127.a 
+	   	ai_chance = { base = 50 }
+		
+   	}
+}
+
+#The Long Road to Trust 1
+country_event = {
+	id = rustwreck.128
+	title = rustwreck.128.t
+	desc = rustwreck.128.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.128.a 
+	   	ai_chance = { base = 50 }
+		Core_original_MSR = yes
+		add_war_support = -0.20
+		hidden_effect = {
+			country_event = {
+				id = rustwreck.129
+				days = 20
+			}
+			country_event = {
+				id = rustwreck.130
+				days = 5
+			}
+		}
+   	}
+	option = { 
+	   	name = rustwreck.128.b
+	   	ai_chance = { base = 50 }
+		every_owned_state = {
+			limit = {
+				is_core_of = MSR
+			}
+			add_compliance = 25
+		}
+		hidden_effect = {
+			country_event = {
+				id = rustwreck.129
+				days = 20
+			}
+			country_event = {
+				id = rustwreck.130
+				days = 5
+			}
+		}
+   	}
+	option = { 
+	   	name = rustwreck.128.c
+	   	ai_chance = { base = 50 }
+		every_owned_state = {
+			limit = {
+				is_core_of = MSR
+			}
+			add_resistance = 15
+		}
+		add_war_support = 0.15
+		hidden_effect = {
+			country_event = {
+				id = rustwreck.130
+				days = 5
+			}
+		}
+   	}
+}
+
+#Steel Ranger Election Event
+country_event = {
+	id = rustwreck.129
+	title = rustwreck.129.t
+	desc = rustwreck.129.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.129.a 
+	   	ai_chance = { base = 50 }
+		
+   	}
+}
+
+#The Long Road to Trust 2
+country_event = {
+	id = rustwreck.130
+	title = rustwreck.130.t
+	desc = rustwreck.130.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.130.a 
+	   	ai_chance = { base = 50 }
+		Core_original_TEN = yes
+		hidden_effect = {
+			country_event = {
+				id = rustwreck.131
+				days = 5
+			}
+		}
+   	}
+}
+
+#The Long Road to Trust 3
+country_event = {
+	id = rustwreck.131
+	title = rustwreck.131.t
+	desc = rustwreck.131.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.131.a 
+	   	ai_chance = { base = 50 }
+		Core_original_FRI = yes
+		hidden_effect = {
+			country_event = {
+				id = rustwreck.132
+				days = 5
+			}
+		}
+   	}
+}
+
+#The Long Road to Trust 4
+country_event = {
+	id = rustwreck.132
+	title = rustwreck.132.t
+	desc = rustwreck.132.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.132.a 
+	   	ai_chance = { base = 50 }
+		every_owned_state = {
+			limit = {
+				is_core_of = ARB
+			}
+			add_compliance = -10
+			add_resistance = 20
+		}
+		add_stability = 0.05
+		hidden_effect = {
+			country_event = {
+				id = rustwreck.133
+				days = 5
+			}
+		}
+   	}
+	option = { 
+	   	name = rustwreck.132.b
+	   	ai_chance = { base = 50 }
+		Core_original_ARB = yes
+		add_stability = -0.05
+		hidden_effect = {
+			country_event = {
+				id = rustwreck.133
+				days = 5
+			}
+		}
+   	}
+}
+
+#The Long Road to Trust 5
+country_event = {
+	id = rustwreck.133
+	title = rustwreck.133.t
+	desc = rustwreck.133.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.133.a 
+	   	ai_chance = { base = 50 }
+		Core_original_MAR = yes
+		hidden_effect = {
+			country_event = {
+				id = rustwreck.134
+				days = 5
+			}
+		}
+   	}
+}
+
+#The Long Road to Trust 6
+country_event = {
+	id = rustwreck.134
+	title = rustwreck.134.t
+	desc = rustwreck.134.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.134.a 
+	   	ai_chance = { base = 50 }
+		Core_original_GUT = yes
+   	}
+}
+
+#Vive La République 1
+country_event = {
+	id = rustwreck.135
+	title = rustwreck.135.t
+	desc = rustwreck.135.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.135.a 
+	   	ai_chance = { base = 50 }
+		set_cosmetic_tag = RWK_jacques_republique_cosm
+		country_event = {
+				id = rustwreck.136
+				days = 5
+			}
+   	}
+}
+
+#Vive La République 2
+country_event = {
+	id = rustwreck.136
+	title = rustwreck.136.t
+	desc = rustwreck.136.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.136.a 
+	   	ai_chance = { base = 50 }
+		524 = { set_state_name = "Ville de la République" }
+		set_province_name = {
+			id = 1326
+			name = "Republic City"
+		}
+		country_event = {
+				id = rustwreck.137
+				days = 5
+			}
+   	}
+	option = { 
+	   	name = rustwreck.136.b
+	   	ai_chance = { base = 50 }
+		set_capital = {
+			state = 39
+		}
+		country_event = {
+				id = rustwreck.137
+				days = 5
+			}
+   	}
+	option = { 
+	   	name = rustwreck.136.c
+	   	ai_chance = { base = 50 }
+		set_capital = {
+			state = 49
+		}
+		country_event = {
+				id = rustwreck.137
+				days = 5
+			}
+   	}
+}
+
+#Vive La République 3
+country_event = {
+	id = rustwreck.137
+	title = rustwreck.137.t
+	desc = rustwreck.137.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.137.a 
+	   	ai_chance = { base = 50 }
+		RWK_char_Mayor_Black_Seas_boop = {
+			add_country_leader_role = {
+				promote_leader = yes
+				country_leader = {
+            		ideology = friendship_city
+            		expire = "1965.1.1"
+            		id = -1
+					traits = {
+						boopable
+					}
+        		}
+			}
+
+		}
+		RWK_char_bonecrusher = {
+			add_country_leader_role = {
+				promote_leader = yes
+				country_leader = {
+					desc = "POLITICS_BONECRUSHER_DESC"
+					ideology = raider
+					expire = "1965.1.1"
+					traits = {
+						mra_bonecrusher_trait
+					}
+					id=-1
+				}
+			}
+		}
+		country_event = {
+				id = rustwreck.138
+				days = 5
+			}
+   	}
+}
+
+#Vive La République 4
+country_event = {
+	id = rustwreck.138
+	title = rustwreck.138.t
+	desc = rustwreck.138.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.138.a 
+	   	ai_chance = { base = 50 }
+		country_event = {
+				id = rustwreck.139
+				days = 5
+			}
+   	}
+}
+
+#Vive La République 5
+country_event = {
+	id = rustwreck.139
+	title = rustwreck.139.t
+	desc = rustwreck.139.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.139.a 
+	   	ai_chance = { base = 50 }
+		set_country_flag = RWK_jacques_wins_flg
+   	}
+	option = { 
+	   	name = rustwreck.139.b
+	   	ai_chance = { base = 50 }
+		set_country_flag = RWK_kelp_wins_flg
+		set_politics = {
+			ruling_party = survivalism
+		}
+		add_popularity = {
+			ideology = survivalism
+			popularity = 0.25
+		}
+   	}
+	option = { 
+	   	name = rustwreck.139.c
+	   	ai_chance = { base = 50 }
+		set_country_flag = RWK_black_seas_wins_flg
+		set_politics = {
+			ruling_party = continuation
+		}
+   	}
+	option = { 
+	   	name = rustwreck.139.e
+	   	ai_chance = { base = 50 }
+		set_country_flag = RWK_debt_crusher_wins_flg
+		set_politics = {
+			ruling_party = destruction
+		}
+		hidden_effect = {
+			
+		}
+   	}
+}
+
+#Crimson Coalition Event
+country_event = {
+	id = rustwreck.140
+	title = rustwreck.140.t
+	desc = rustwreck.140.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.140.a 
+	   	ai_chance = { base = 50 }
+		
+   	}
+}
+
+#Debt Crusher Tree event
+country_event = {
+	id = rustwreck.141
+	title = rustwreck.141.t
+	desc = rustwreck.141.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.141.a 
+	   	ai_chance = { base = 50 }
+		
+   	}
+}
+
+#Debt Crusher Ending event
+country_event = {
+	id = rustwreck.142
+	title = rustwreck.142.t
+	desc = rustwreck.142.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.142.a 
+	   	ai_chance = { base = 50 }
+		
+   	}
+}
+
+#Jacques 2nd Term Tree event
+country_event = {
+	id = rustwreck.143
+	title = rustwreck.143.t
+	desc = rustwreck.143.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.143.a 
+	   	ai_chance = { base = 50 }
+		add_political_power = 200
+   	}
+}
+
+#Jacques 2nd term Ending event
+country_event = {
+	id = rustwreck.144
+	title = rustwreck.144.t
+	desc = rustwreck.144.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.144.a 
+	   	ai_chance = { base = 50 }
+		
+   	}
+}
+
+#Black Seas Tree event
+country_event = {
+	id = rustwreck.145
+	title = rustwreck.145.t
+	desc = rustwreck.145.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.145.a 
+	   	ai_chance = { base = 50 }
+		
+   	}
+}
+
+#Black Seas Ending event
+country_event = {
+	id = rustwreck.146
+	title = rustwreck.146.t
+	desc = rustwreck.146.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.146.a 
+	   	ai_chance = { base = 50 }
+		
+   	}
+}
+
+#Dr. Kelp sub-tree event
+country_event = {
+	id = rustwreck.147
+	title = rustwreck.147.t
+	desc = rustwreck.147.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.147.a 
+	   	ai_chance = { base = 50 }
+		
+   	}
+}
+
+#Dr. Kelp sub-Ending event
+country_event = {
+	id = rustwreck.148
+	title = rustwreck.148.t
+	desc = rustwreck.148.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { 
+	   	name = rustwreck.148.a 
+	   	ai_chance = { base = 50 }
+		
+   	}
+}
+
+#Rustwreck suggests unification
+country_event = {
+	id = rustwreck.149
+	title = rustwreck.149.t
+	desc = rustwreck.149.d
+   	picture = GFX_report_event_merchant_ship_01
+
+   	is_triggered_only = yes
+	fire_only_once = yes
+	
+  	option = { #yes
+	   	name = rustwreck.149.a 
+	   	ai_chance = { base = 50 }
+		every_core_state = {
+			add_core_of = RWK
+		}
+		RWK = {
+			annex_country = {
+				target = PREV
+				transfer_troops = yes
+			}
+		}
+   	}
+	option = { #no
+	   	name = rustwreck.149.b
+	   	ai_chance = { base = 0 }
+		
+   	}
+}
+
+
 

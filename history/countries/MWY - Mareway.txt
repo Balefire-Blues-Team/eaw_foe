@@ -7,7 +7,6 @@ oob = MWY_1235
 set_technology = {
 	infantry_tech_level_tribal = 1
     infantry_tech_level_settler = 1
-    power_armour_tech_level_settler = 1
     special_forces_tech_level_tribal = 1
     special_forces_tech_level_settler = 1
     support_tech_level_tribal = 1
@@ -15,19 +14,14 @@ set_technology = {
     vehicles_tech_level_tribal = 1
     vehicles_tech_level_settler = 1
     robotics_tech_level_tribal = 1
-    robotics_tech_level_settler = 1
     air_tech_level_tribal = 1
     air_tech_level_settler = 1
     naval_tech_level_tribal = 1
     naval_tech_level_settler = 1
     tools_tech_level_tribal = 1
-    tools_tech_level_settler = 1
     habitation_tech_level_tribal = 1
-    habitation_tech_level_settler = 1
     exploitation_tech_level_tribal = 1
-    exploitation_tech_level_settler = 1
     electronics_tech_level_tribal = 1
-    electronics_tech_level_settler = 1
 
 	pony_race = 1
 	standard_weaponry_tech = 1
@@ -43,7 +37,30 @@ set_technology = {
 	special_forces_doctrine = 1
 }
 
-set_convoys = 5
+if = {
+	limit = {
+		has_dlc = "Man the Guns"
+	}
+	set_technology = {
+		nautics_tech_1 = 1
+		nautics_tech_2 = 1
+		light_navy_hull_tech_1 = 1
+		medium_navy_hull_tech_1 = 1
+		medium_navy_hull_tech_2 = 1
+		heavy_navy_hull_tech_1 = 1
+		waterproof_sealing_tech = 1
+		multi_deck_construction_tech = 1
+		naval_invasion_tech_1 = 1
+		naval_module_tech = 1
+		naval_weapons_module_tech = 1
+		naval_armour_tech_1 = 1
+		naval_support_module_tech = 1
+		naval_subsurface_module_tech_1 = 1
+		naval_pd_module_tech_1 = 1
+	}
+}
+
+set_convoys = 20
 
 set_popularities = {
 	survivalism = 29
@@ -60,7 +77,7 @@ set_politics = {
 
 add_ideas = {
 	civilian_economy
-	volunteer_only
+	token_retinue_law
 	pony_race
 	wasteland_society2
 	wasteland_research_base
@@ -68,6 +85,7 @@ add_ideas = {
 	mutant_law_all_nonviolent
 	controlled_borders
 	political_effort_state_press
+
 	MWY_wasteland_feudalism
 	MWY_decentralized_country
 	MWY_low_winter_stores
@@ -148,9 +166,14 @@ country_event = {
 	id = newmareway.25
 	days = 45
 }
-add_political_power = 100
+#country_event = {
+#	id = newmareway.49
+#	days = 1
+#}
 
-set_stability = 0.60
+
+set_stability = 0.30
+set_war_support = 0.05
 
 set_country_flag = is_settler_nation
 
@@ -194,4 +217,29 @@ create_country_leader = {
 
 set_rule = {
 	can_generate_female_aces = yes
+}
+
+IF = {
+	limit = {
+		has_dlc = "Man the Guns"
+	}
+    set_technology = {
+        foe_nautics_tech_1 = 1
+        naval_weapons_module_lmg_tech = 1
+		naval_weapons_module_catapult_tech = 1
+        foe_naval_invasion_tech_1 = 1
+    }
+    create_equipment_variant = {
+		name = "Patrol Vessel"
+		type = ship_hull_foe_light_1
+		allow_without_tech = yes
+		modules = {
+			fixed_ship_engine_slot = light_ship_oars_module
+			fixed_ship_battery_slot = ship_lmg_module
+			fixed_ship_defense_slot = empty
+			fixed_ship_detection_slot = empty
+			front_1_custom_slot = ship_catapult_module
+		}
+	}
+	set_naval_oob = "MWY_1235_naval"
 }
