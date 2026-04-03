@@ -1897,17 +1897,14 @@ shared_focus = {
 
 	available = {
 		owns_state = 53
+		NOT = {
+			country_exists = FET
+		}
 	}
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_fetlock_autonomy"
-
-    	release = FET
-    	set_autonomy = {
-           	target = FET
-           	autonomous_state = autonomy_puppet
-           	freedom_level = 0.5
-        }
+    	release_puppet = FET
 	}
 }
 
@@ -1929,14 +1926,33 @@ shared_focus = {
 	}
 
 	available = {
+		OR = {
+			MAR = {
+				is_in_faction_with = TEN
+			}
+			TEN = {
+				owns_state = 18
+			}
+		}
 	}
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_create_neutral_zone"
-
-		TEN = {
+		
+		if = {
+			limit = {
+				MAR = {
+					is_in_faction = TEN
+				}	
+			}
+			TEN = {
 			puppet = MAR
+			}
 		}
+		else = {
+			release_puppet = MAR
+		}
+
 
 		hidden_effect = {
 			MAR = {
@@ -1961,6 +1977,11 @@ shared_focus = {
 
 	available_if_capitulated = Yes
 	prerequisite = { focus = TEN_create_neutral_zone }
+	available = {
+		469 = {
+			is_controlled_by_ROOT_or_ally = yes
+		}
+	}
 	ai_will_do = { 
 		factor = 10 
 	} 
@@ -1986,8 +2007,18 @@ shared_focus = {
 	prerequisite = { focus = TEN_loot_raider_base }
 	ai_will_do = { 
 		factor = 10 
-	} 
-
+	}
+	available = {
+		21 = {
+			is_controlled_by_ROOT_or_ally = yes
+		}
+		469 = {
+			is_controlled_by_ROOT_or_ally = yes
+		}
+		18 = {
+			is_controlled_by_ROOT_or_ally = yes
+		}
+	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_settle_orangedale"
 
@@ -2017,7 +2048,11 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 10
 	} 
-
+	available = {
+		469 = {
+			is_controlled_by_ROOT_or_ally = yes
+		}
+	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_scavenge_program"
 
@@ -2619,6 +2654,16 @@ shared_focus = {
 				uses = 1
 				category = production_tech
 		}
+		680 = {
+			add_extra_state_shared_building_slots = 2
+
+			add_building_construction = {
+				type = industrial_complex
+				level = 2
+				instant_build = yes
+			}
+		}
+		
 	}
 }
 
@@ -2645,6 +2690,10 @@ shared_focus = {
 				type = composites 
 				amount = 4
 			}
+			add_resource = {
+				type = metal
+				amount = 6
+			}
 		}
 
 	}
@@ -2657,7 +2706,7 @@ shared_focus = {
 	relative_position_id = TEN_midtown_forge
 	x = 0
 	y = 1
-	cost = 10
+	cost = 5
 
 	available_if_capitulated = yes
 	prerequisite = { focus = TEN_midtown_forge }
@@ -2699,6 +2748,16 @@ shared_focus = {
 
 		custom_effect_tooltip = available_designer
 		show_ideas_tooltip = Midtown_Arms
+		
+		680 = {
+			add_extra_state_shared_building_slots = 2
+
+			add_building_construction = {
+				type = arms_factory
+				level = 2
+				instant_build = yes
+			}
+		}
 	}
 }
 
@@ -2725,6 +2784,10 @@ shared_focus = {
 				bonus = 1
 				uses = 1
 				category = habitation_tech
+		}
+		
+		680 = {
+			add_extra_state_shared_building_slots = 3
 		}
 
 	}
@@ -3577,6 +3640,7 @@ shared_focus = {
 		add_state_core = 39
 		add_state_core = 469
 		add_state_core = 55
+		add_state_core = 53
 		if = {
 			limit = {
 				NOT = {
@@ -6087,7 +6151,12 @@ shared_focus = {
 	cost = 5
 
 	available = {
-
+		country_exists = NEN
+	}
+	bypass = {
+		NOT = {
+			country_event = NEN
+		}
 	}
 
 	available_if_capitulated = yes
@@ -6137,7 +6206,14 @@ shared_focus = {
 	x = -2
 	y = 1
 	cost = 5
-
+	available = {
+		country_exists = NEN
+	}
+	bypass = {
+		NOT = {
+			country_event = NEN
+		}
+	}
 	available_if_capitulated = yes
 	prerequisite = { focus = TEN_enclave_attack }
 	ai_will_do = { 
@@ -6169,6 +6245,14 @@ shared_focus = {
 	mutually_exclusive = { 
         focus = TEN_defend_river
     }
+	available = {
+		country_exists = NEN
+	}
+	bypass = {
+		NOT = {
+			country_event = NEN
+		}
+	}
 
 	available_if_capitulated = yes
 	prerequisite = { focus = TEN_rooftop_AA}
@@ -6261,7 +6345,12 @@ shared_focus = {
 				is_subject_of = TEN
 			}
 		}
-
+		country_exists = NEN
+	}
+	bypass = {
+		NOT = {
+			country_exists = NEN
+		}
 	}
 
 	mutually_exclusive = { 
@@ -6342,6 +6431,11 @@ shared_focus = {
 		}
 
 	}
+	bypass = {
+		NOT = {
+			country_exists = NEN
+		}
+	}
 
 	available_if_capitulated = yes
 	prerequisite = { focus = TEN_across_the_river }
@@ -6366,6 +6460,14 @@ shared_focus = {
 	cost = 5
 
 	available_if_capitulated = yes
+	available = {
+		country_exists = NEN
+	}
+	bypass = {
+		NOT = {
+			country_event = NEN
+		}
+	}
 	prerequisite = { focus = TEN_defend_river }
 	ai_will_do = { 
 		factor = 10
@@ -6388,6 +6490,14 @@ shared_focus = {
 	cost = 5
 
 	available_if_capitulated = yes
+	available = {
+		country_exists = NEN
+	}
+	bypass = {
+		NOT = {
+			country_event = NEN
+		}
+	}
 	prerequisite = { focus = TEN_enclave_attack }
 	ai_will_do = { 
 		factor = 10
@@ -6414,6 +6524,14 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 10
 	} 
+	available = {
+		country_exists = NEN
+	}
+	bypass = {
+		NOT = {
+			country_event = NEN
+		}
+	}
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_gun_for_everypony"
@@ -6435,13 +6553,30 @@ shared_focus = {
 	prerequisite = { focus = TEN_emergency_recruitment }
 	ai_will_do = { 
 		factor = 10
-	} 
+	}
+	bypass = {
+		39 = {
+			is_controlled_by_ROOT_or_ally = yes
+		}
+	}
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_twin_city_alliance"
 
-		FRI = { 
-			country_event = { id = TEN.58 } 
+		if = {
+			limit = {
+				country_exists = FRI
+			}
+			FRI = { 
+				country_event = { id = TEN.58 } 
+			}
+			else = {
+				FRI = {
+					ROOT = {
+						grant_wargoals_on_core_states_of_prev = yes
+					}
+				}			
+			}
 		}
 	}
 }
