@@ -10120,6 +10120,11 @@ shared_focus = {
 	cost = 0
 	relative_position_id = COL_sky_high_ambitions 
 	prerequisite = { focus = COL_our_own_cloudships }  
+	available = {
+		has_deployed_air_force_size = {
+    		size > 250
+		}
+	}
 
 	available_if_capitulated = yes 
 	ai_will_do = { 
@@ -10128,7 +10133,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_contest_the_skies"
-		
+		add_ideas = COL_contesting_cloudlayer_idea
 	}
 } 
 
@@ -10141,6 +10146,12 @@ shared_focus = {
 	relative_position_id = COL_sky_high_ambitions
 	prerequisite = { focus = COL_invest_in_our_own_pa } 
 	prerequisite = { focus = COL_destroy_sppt focus = COL_council_of_progress } 	
+	bypass = {
+		KHA = {all_cores_owned_by_ROOT_or_subject = yes}
+		ARR = {all_cores_owned_by_ROOT_or_subject = yes}
+		DEC = {all_cores_owned_by_ROOT_or_subject = yes}
+		AOS = {all_cores_owned_by_ROOT_or_subject = yes}
+	}
 
 	available_if_capitulated = yes 
 	ai_will_do = { 
@@ -10149,7 +10160,35 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_secure_our_position"
-		
+		country_event = springcouncil_purple.10
+		every_state = {
+			limit = {
+				OR = {
+					is_core_of = KHA
+					is_core_of = ARR
+					is_core_of = DEC
+					is_core_of = AOS
+				}
+			}
+			add_claim_by = COL
+		}
+		add_war_support = 0.15
+		declare_war_on = {
+			target = KHA
+			type = annex_everything
+		}
+		declare_war_on = {
+			target = ARR
+			type = annex_everything
+		}
+		declare_war_on = {
+			target = DEC
+			type = annex_everything
+		}
+		declare_war_on = {
+			target = AOS
+			type = annex_everything
+		}
 	}
 } 
 
@@ -10161,6 +10200,9 @@ shared_focus = {
 	cost = 0
 	relative_position_id = COL_sky_high_ambitions
 	prerequisite = { focus = COL_secure_our_position } 	
+	available = {
+		DEC = {all_cores_owned_by_ROOT_or_subject = yes}
+	}
 
 	available_if_capitulated = yes 
 	ai_will_do = { 
@@ -10169,7 +10211,16 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_smash_the_triad"
-		Core_original_DET = yes
+		save_current_manpower = yes
+		every_owned_state = {
+			limit = {
+				is_core_of = DEC
+			}
+			add_manpower = -50
+		}
+		restore_previous_manpower = yes
+		add_stability = -0.04
+		Core_original_DEC = yes
 	}
 } 
 
@@ -10189,7 +10240,34 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_rebuild_detrot"
-		
+		68 = {
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+			}
+			add_extra_state_shared_building_slots = 1
+		}
+		359 = {
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+			}
+			add_extra_state_shared_building_slots = 1
+		}
+		152 = {
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+			}
+			add_extra_state_shared_building_slots = 2
+		}
+		361 = {
+			add_building_construction = {
+				type = arms_factory
+				level = 3
+			}
+			add_extra_state_shared_building_slots = 5
+		}
 	}
 } 
 
@@ -10201,6 +10279,10 @@ shared_focus = {
 	cost = 0
 	relative_position_id = COL_sky_high_ambitions
 	prerequisite = { focus = COL_secure_our_position } 	
+	available = {
+		KHA = {all_cores_owned_by_ROOT_or_subject = yes}
+		AOS = {all_cores_owned_by_ROOT_or_subject = yes}
+	}
 
 	available_if_capitulated = yes 
 	ai_will_do = { 
@@ -10209,6 +10291,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_offer_reconciliation"
+		country_event = springcouncil_purple.13
 		Core_original_KHA = yes
 		Core_original_AOS = yes
 	}
@@ -10230,7 +10313,17 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_restore_direfall"
-		#we were wrong to salt the earth here
+		country_event = springcouncil_purple.14
+		every_state = {
+			limit = {
+				is_core_of = AOS
+			}
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+			}
+		}
 	}
 } 
 
@@ -10264,6 +10357,8 @@ shared_focus = {
 	prerequisite = { focus = COL_four_cities_once_more } 	
 	prerequisite = { focus = COL_contest_the_skies } 	
 	prerequisite = { focus = COL_territorial_self_governance } 	
+	prerequisite = { focus = COL_restore_direfall }
+	prerequisite = { focus = COL_rebuild_detrot }
 
 	available_if_capitulated = yes 
 	ai_will_do = { 
@@ -10272,7 +10367,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_proclaim_grand_limuan_republic"
-		
+		country_event = springcouncil_purple.15
+		set_cosmetic_tag = COL_limuan_republic_cosm
 	}
 } 
 
