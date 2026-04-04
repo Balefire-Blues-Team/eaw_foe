@@ -618,19 +618,8 @@ shared_focus = {
 	cost = 20
 
 	available = {
-		threat > 0.99
-		NOT = {
-			TEN_char_grimstar = { is_country_leader = yes }
-		}
-		has_idea = TEN_grimstar_advisor
-		OR = {
-			country_exists = EYE
-			country_exists = UNI
-			country_exists = FSR
-			country_exists = SHA
-			country_exists = MSR
-			country_exists = NEV
-		}
+		threat > 0.80
+		has_completed_focus = TEN_research_slot
 	}
 
 	available_if_capitulated = yes
@@ -2998,7 +2987,6 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_evening_curfew"
 		add_ideas = TEN_evening_curfew_1
-		custom_effect_tooltip = TEN_evening_curfew_tt
 	}
 }
 
@@ -3400,6 +3388,7 @@ shared_focus = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_Manehattan_Overstallion"
 		custom_effect_tooltip = TEN_unlock_conscription_laws_tt
 		country_event = { id = TEN.76 }
+		remove_ideas = TEN_evening_curfew_1
 	}
 }
 
@@ -5112,6 +5101,7 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_Tenpony_military"
 		army_experience = 10
+		add_manpower = 100
 	}
 }
 
@@ -5125,6 +5115,14 @@ shared_focus = {
 
 	available_if_capitulated = yes
 	prerequisite = { focus = TEN_Tenpony_military}
+	
+	available = {
+		has_character = TEN_char_grimstar
+		OR = {
+			has_completed_focus = TEN_real_society
+			has_completed_focus = TEN_security_coup
+		}
+	}
 
 	mutually_exclusive = { 
         focus = TEN_society_doctrine
@@ -5141,12 +5139,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_grim_star_doctrine"
-		add_tech_bonus = {
-				name = cat_elite_army_bonus
-				bonus = 1
-				uses = 2
-				category = cat_elite_army
-		}
+		add_ideas = TEN_military_doctrine_grim1_idea
 	}
 }
 
@@ -5172,6 +5165,7 @@ shared_focus = {
 				uses = 2
 				category = training_tech
 		}
+		add_ideas = TEN_military_doctrine_grim2_idea
 	}
 }
 
@@ -5197,6 +5191,7 @@ shared_focus = {
 				uses = 2
 				category = medical_tech
 		}
+		add_ideas = TEN_military_doctrine_grim3_idea
 	}
 }
 
@@ -5216,11 +5211,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_energy_weapon_research "
-		add_tech_bonus = {
-				name = energy_weapon_tech
-				bonus = 0.5
-				uses = 2
-				category = energy_weapon_tech
+		add_ideas = TEN_military_doctrine_grim4_idea
+		set_technology = {
+				energy_weaponry_tech_1 = 1
 		}
 	}
 }
@@ -5241,12 +5234,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_special_forces"
-		add_tech_bonus = {
-				name = specops_tech_bonus
-				bonus = 0.5
-				uses = 2
-				category = specops_tech
-		}
+		add_ideas = TEN_military_doctrine_grim5_idea
 	}
 }
 
@@ -5267,7 +5255,17 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_life_over_territory"
-		add_ideas = TEN_grimstar_doctrine
+		hidden_effect = {
+			remove_ideas = {
+				TEN_military_doctrine_grim1_idea
+				TEN_military_doctrine_grim2_idea
+				TEN_military_doctrine_grim3_idea
+				TEN_military_doctrine_grim4_idea
+				TEN_military_doctrine_grim5_idea
+			}
+			add_ideas = TEN_military_doctrine_grimcombo_idea
+		}
+		custom_effect_tooltip = TEN_military_combineideas_tt
 	}
 }
 
@@ -5281,6 +5279,9 @@ shared_focus = {
 
 	available_if_capitulated = yes
 	prerequisite = { focus = TEN_Tenpony_military }
+	available = {
+		has_completed_focus = TEN_real_society
+	}
 
 	mutually_exclusive = { 
         focus = TEN_grim_star_doctrine
@@ -5296,12 +5297,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_society_doctrine"
-		add_tech_bonus = {
-				name = cat_grand_army_bonus
-				bonus = 1
-				uses = 2
-				category = cat_grand_army
-		}
+		add_ideas = TEN_military_doctrine_twisoc1_idea
 	}
 }
 
@@ -5381,6 +5377,7 @@ shared_focus = {
 				uses = 2
 				category = fireteam_tech
 		}
+		add_ideas = TEN_military_doctrine_twisoc2_idea
 	}
 }
 
@@ -5406,6 +5403,7 @@ shared_focus = {
 				uses = 2
 				category = ballistic_weapon_tech
 		}
+		add_ideas = TEN_military_doctrine_twisoc3_idea
 	}
 }
 
@@ -5425,12 +5423,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_unicorn_research"
-		add_tech_bonus = {
-				name = unicorn_tech_bonus
-				bonus = 0.5
-				uses = 2
-				category = unicorn_tech
+		set_technology = {
+			tech_pony_unicorns = 1
+			tech_pony_magical_infantry = 1
 		}
+		add_ideas = TEN_military_doctrine_twisoc4_idea
 	}
 }
 
@@ -5451,7 +5448,16 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_defense_above_all"
-		add_ideas = TEN_societydoctrine
+		custom_effect_tooltip = TEN_military_combineideas_tt
+		hidden_effect = {
+			add_ideas = TEN_military_doctrine_twisoccombo_idea
+			remove_ideas = {
+				TEN_military_doctrine_twisoc1_idea
+				TEN_military_doctrine_twisoc2_idea
+				TEN_military_doctrine_twisoc3_idea
+				TEN_military_doctrine_twisoc4_idea
+			}
+		}
 	}
 }
 
@@ -5480,11 +5486,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_privitized_military"
-		add_tech_bonus = {
-				name = cat_automated_warfare_bonus
-				bonus = 1
-				uses = 2
-				category = cat_automated_warfare
+		add_ideas = TEN_military_doctrine_privatemil1_idea
+		set_technology = {
+			tech_talons = 1
 		}
 	}
 }
@@ -5505,12 +5509,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_robot_research"
-		add_tech_bonus = {
-				name = robotics_tech_bonus
-				bonus = 0.5
-				uses = 2
-				category = robotics_tech
-		}
+		add_ideas = TEN_military_doctrine_privatemil2_idea
 	}
 }
 
@@ -5530,12 +5529,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_demolition_research"
-		add_tech_bonus = {
-				name = demolition_tech_bonus
-				bonus = 0.5
-				uses = 2
-				category = demolition_tech
-		}
+		add_ideas = TEN_military_doctrine_privatemil3_idea
 	}
 }
 
@@ -5555,12 +5549,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_infantry_equipment"
-		add_tech_bonus = {
-				name = ballistic_weapon_tech_bonus
-				bonus = 0.5
-				uses = 2
-				category = ballistic_weapon_tech
-		}
+		add_ideas = TEN_military_doctrine_privatemil4_idea
 	}
 }
 
@@ -5599,7 +5588,16 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: focus TEN_quantity_above_quality"
-		add_ideas = TEN_quantityabove
+		custom_effect_tooltip = TEN_military_combineideas_tt
+		hidden_effect = {
+			add_ideas = TEN_military_doctrine_privatemilcombo_idea
+			remove_ideas = {
+				TEN_military_doctrine_privatemil1_idea
+				TEN_military_doctrine_privatemil2_idea
+				TEN_military_doctrine_privatemil3_idea
+				TEN_military_doctrine_privatemil4_idea
+			}
+		}
 
 	}
 }
