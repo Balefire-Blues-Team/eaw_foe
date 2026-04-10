@@ -197,6 +197,17 @@ NDefines.NAI.UPGRADE_PERCENTAGE_OF_FORCES = 0.1
 NDefines.NAI.DIVISION_UPGRADE_MIN_XP = 5										-- Minimum XP before attempting to upgrade a division template.
 NDefines.NAI.UPGRADE_XP_RUSH_UPDATE = 110										-- If XP is above this on the daily tick the AI will attempt to spend it
 
+NDefines.NAI.MIN_FACTORIES_TO_WANT_TO_IMPORT = {  
+        0, -- water 
+        10, -- energy
+        0, -- metal
+        10, -- composites
+        10, -- circuits
+        20, -- advanced
+        30, -- crystals
+    }
+
+
 --NNavy
 NDefines.NNavy.NAVAL_INVASION_PREPARE_HOURS = 64								-- base hours needed to prepare an invasion
 
