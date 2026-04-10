@@ -6,10 +6,12 @@ NDefines.NGame.END_DATE = "1260.1.1.1"
 -- Vanilla is 30
 NDefines.NDiplomacy.VOLUNTEERS_DIVISIONS_REQUIRED = 8
 
--- Starting at this date, the tension values will be scaled down (will be equal
+-- Starting at this date the tension values will be scaled down (will be equal
 -- to 1 before that.)
 NDefines.NDiplomacy.TENSION_TIME_SCALE_START_DATE = "1235.1.1.12"
 NDefines.NCountry.BASE_MOBILIZATION_SPEED = 0.015
+NDefines.NDiplomacy.TENSION_NO_CB_WAR = 5
+NDefines.NDiplomacy.TENSION_CB_WAR = 3
 --------------
 -- NCountry --
 --------------
@@ -22,7 +24,7 @@ NDefines.NCountry.FUEL_LAND_LEASE_RATIO = 0					-- multiplier for guel gain that
 NDefines.NCountry.FUEL_LEASE_CONVOY_RATIO = 0.00005				-- num convoys needed per fuel land lease 
 NDefines.NCountry.STARTING_FUEL_RATIO = 0						-- starting fuel ratio compared to max fuel for countries
 NDefines.NCountry.BASE_FUEL_GAIN_PER_OIL = 0						-- base amount of fuel gained hourly per excess oil
-NDefines.NCountry.BASE_FUEL_GAIN = 0							-- base amount of fuel gained hourly, independent of excess oil
+NDefines.NCountry.BASE_FUEL_GAIN = 0							-- base amount of fuel gained hourly independent of excess oil
 NDefines.NCountry.BASE_FUEL_CAPACITY = 0.1						-- base amount of fuel capacity
 
 NDefines.NMilitary.BASE_CAPTURE_EQUIPMENT_RATIO = 0.3
@@ -30,7 +32,7 @@ NDefines.NMilitary.BASE_CAPTURE_EQUIPMENT_RATIO = 0.3
 --------------------
 -- AI battleplans --
 --------------------
--- The lower this number is, the longer the AI will hold the line before
+-- The lower this number is the longer the AI will hold the line before
 -- sending them to the fallback line.
 NDefines.NAI.FALLBACK_LOSING_FACTOR = 0.0
 
@@ -143,15 +145,15 @@ NDefines.NAI.TRADEABLE_FACTORIES_FRACTION = 1
 NDefines.NAI.MAX_UNITS_FACTOR_INVASION_ORDER = 0.5				-- Factor for max number of units to assign to naval invasion orders
 NDefines.NAI.MIN_UNITS_FACTOR_INVASION_ORDER = 0.1
 ----------------------
-NDefines.NAI.COMBINED_ARMS_LEVEL = 1							-- 0 = Never, 1 = Infantry/Artillery, 2 = Go wild
-NDefines.NAI.MICRO_POCKET_SIZE = 10						-- Pockets with a size equal to or lower than this will be mocroed by the AI, for efficiency.
+NDefines.NAI.COMBINED_ARMS_LEVEL = 1							-- 0 = Never 1 = Infantry/Artillery 2 = Go wild
+NDefines.NAI.MICRO_POCKET_SIZE = 10						-- Pockets with a size equal to or lower than this will be mocroed by the AI for efficiency.
 NDefines.NAI.MAX_MICRO_ATTACKS_PER_ORDER = 32
 
 -- AI Diplomacy
 NDefines.NAI.GENERATE_WARGOAL_THREAT_BASELINE = 0.0
 NDefines.NAI.DIPLOMACY_SEND_MAX_FACTION = 0.5
 NDefines.NAI.FORCE_FACTOR_AGAINST_EXTRA_MINOR = 0.4			-- AI considers generating wargoals against minors below this % of force compared to themselves to get at a bigger enemy.
-NDefines.NAI.MAX_EXTRA_WARGOAL_GENERATION = 2				-- AI may want to generate wargoals against weak minors to get at larger enemy, but never more that this at any given time.
+NDefines.NAI.MAX_EXTRA_WARGOAL_GENERATION = 2				-- AI may want to generate wargoals against weak minors to get at larger enemy but never more that this at any given time.
 NDefines.NAI.WARGOAL_GENERATION_STRENGTH_FACTOR = 1.5	-- Desire to generate wargoal effected negatevely if actor strength is less than this factor of target strength
 NDefines.NAI.DECLARE_WAR_RELATIVE_FORCE_FACTOR = 0.4	-- Weight of relative force between nations that consider going to war
 NDefines.NAI.DECLARE_WAR_NOT_NEIGHBOR_FACTOR = 0.25		-- Multiplier applied before force factor if country is not neighbor with the one it is considering going to war
@@ -184,7 +186,11 @@ NDefines.NAI.RESEARCH_BASE_DAYS = 60					-- AI adds a base number of days when w
 
 -- production
 NDefines.NProduction.MIN_POSSIBLE_TRAINING_MANPOWER = 3700	-- minimum amount of units able to be trained
+NDefines.NProduction.BASE_FACTORY_START_EFFICIENCY_FACTOR = 5	-- Base start efficiency for factories expressed in %.
+NDefines.NProduction.BASE_FACTORY_MAX_EFFICIENCY_FACTOR = 35
+NDefines.NProduction.BASE_FACTORY_EFFICIENCY_GAIN = 0.8
 
+NDefines.NDiplomacy.EMBARGO_COST = 5
 
 NDefines.NAI.UPGRADE_DIVISION_RELUCTANCE = 2	-- (2000) stop randomly upgrading to infantry
 NDefines.NAI.UPGRADE_PERCENTAGE_OF_FORCES = 0.1
@@ -226,3 +232,17 @@ NDefines.NMilitary.ARMY_EXP_BASE_LEVEL = 5
 --NAir
 NDefines.NAir.FUEL_COST_MULT = 0 --fuel multiplier for all air missions
 NDefines.NAir.MIN_PLANE_COUNT_PARADROP = 10
+
+
+NDefines.NTrade.DISTANCE_TRADE_FACTOR = -0.02				-- Trade factor is modified by distance times this
+NDefines.NTrade.RELATION_TRADE_FACTOR = 1					-- Trade factor is modified by Opinion value times this	ALLOW_TRADE_CUT_OFF = 0
+NDefines.NTrade.MONTH_TRADE_FACTOR = 2						-- Each month a trade gets this much boost to it's trade factor
+NDefines.NTrade.MAX_MONTH_TRADE_FACTOR = 50				-- This is the maximum bonus that can be gained from time
+NDefines.NTrade.BASE_TRADE_FACTOR = 20						-- This is the base trade factor
+NDefines.NTrade.PUPPET_MASTER_TRADE_FACTOR = 400			-- This is priority for puppet master
+NDefines.NTrade.PUPPET_TRADE_FACTOR = 0					-- This is unpriority for puppets
+NDefines.NTrade.BASE_LAND_TRADE_RANGE = 500
+NDefines.NTrade.PARTY_SUPPORT_TRADE_FACTOR = 50			-- Trade factor bonus at the other side having 100 % party popularity for my party
+NDefines.NTrade.ANTI_MONOPOLY_TRADE_FACTOR_THRESHOLD = 0.5	-- What percentage of resources has to be sold to the buyer for the anti-monopoly factor to take effect
+NDefines.NTrade.ANTI_MONOPOLY_TRADE_FACTOR = -100			-- This is added to the factor value when anti-monopoly threshold is exceeded
+NDefines.NTrade.NAVAL_ROUTE_ACCESS_AVOID_COST_MULT = 1		-- Naval pathfinding should avoid certain regions that you mark. High "cost multiplier" will make it less willingly go through a specific region.

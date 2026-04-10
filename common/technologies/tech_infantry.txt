@@ -21,19 +21,25 @@ technologies = {
 	@Row_specops = 10
 	@Row_specopsmiddle = 12
 	@Row_power = 14
+	@Row_extra = 16
 
 
 	#-------------------------
-	# Infantry Training
+	# Infantry Weaponry
 	#-------------------------
-
-	# warrior class
-	unit_training_tech_1 = {
-
-		training_time_army_factor = -0.03
+	#Medieval Weapons
+	melee_weaponry_tech_1 = {
+		enable_subunits = {
+			militia
+			infantry
+		}
+		
+		enable_equipments = {
+			melee_equipment_1
+		}
 
 		path = {
-			leads_to_tech = unit_training_tech_2
+			leads_to_tech = standard_weaponry_tech
 			research_cost_coeff = 1
 		}
 
@@ -46,7 +52,7 @@ technologies = {
 		xp_boost_cost = 50
 		xp_research_bonus = 0.5
 
-		start_year = 1235
+		start_year = 1230
 		folder = {
 			name = fallout_infantry_folder
 			position = { x = @Row_train y = @Col_1 }
@@ -54,26 +60,23 @@ technologies = {
 
 		categories = {
 			infantry_tech
-			training_tech
+			melee_weapon_tech
 		}
 
 		ai_will_do = {
-			factor = 1
-			modifier = {
-				factor = 3
-				date > "1236.1.1"
-			}
+			factor = 10
 		}
 	}
 
-	# militia training
-	unit_training_tech_2 = {
-		category_all_infantry = {
-			defense = 0.06
+	# Muskets
+	standard_weaponry_tech = {
+		
+		enable_equipments = {
+			infantry_equipment_1
 		}
-
+		
 		path = {
-			leads_to_tech = unit_training_tech_3
+			leads_to_tech = ballistic_weaponry_tech_1
 			research_cost_coeff = 1
 		}
 
@@ -85,35 +88,92 @@ technologies = {
 		xp_research_type = army
 		xp_boost_cost = 50
 		xp_research_bonus = 0.5
+
+		start_year = 1205
+		folder = {
+			name = fallout_infantry_folder
+			position = { x = @Row_heavyinf y = @Col_1 }
+		}
+
+		categories = {
+			infantry_tech
+			ballistic_weapon_tech
+		}
+
+		ai_will_do = {
+			factor = 10
+			modifier = {
+				factor = 0
+				is_researching_technology = melee_weaponry_tech_1
+			}
+			modifier = {
+				factor = 0
+				has_tech = melee_weaponry_tech_1
+			}
+		}
+	}
+
+	# Bolt-Action
+	ballistic_weaponry_tech_1 = {
+		enable_equipments = {
+			ballistic_equipment_1
+		}
+		path = {
+			leads_to_tech = warrior_equipment
+			research_cost_coeff = 1
+		}
+		path = {
+			leads_to_tech = enchanted_bullets
+			research_cost_coeff = 1
+		}
+
+		dependencies = {
+			infantry_tech_level_tribal = 1
+		}
+
+		research_cost = 2
+		xp_research_type = army
+		xp_boost_cost = 50
+		xp_research_bonus = 0.3
 
 		start_year = 1237
 		folder = {
 			name = fallout_infantry_folder
-			position = { x = @Row_train y = @Col_2 }
+			position = { x = @Row_heavyinf y = @Col_2 }
 		}
 
 		categories = {
 			infantry_tech
-			training_tech
+			ballistic_weapon_tech
 		}
 
 		ai_will_do = {
-			factor = 1
+			factor = 3
 			modifier = {
-				factor = 3
-				date > "1238.1.1"
+				factor = 10
+				date > "1237.1.1"
+			}
+			modifier = {
+				factor = 0
+				is_researching_technology = melee_weaponry_tech_2
+			}
+			modifier = {
+				factor = 0
+				has_country_flag = infantry_melee_ai
+			}
+			modifier = {
+				factor = 0
+				has_tech = melee_weaponry_tech_2
 			}
 		}
 	}
 
-	# Guerilla tactics
-	unit_training_tech_3 = {
+	warrior_equipment = {
 		category_all_infantry = {
-			breakthrough = 0.06
+			soft_attack = 0.05
 		}
-
 		path = {
-			leads_to_tech = unit_training_tech_4
+			leads_to_tech = ballistic_weaponry_tech_2
 			research_cost_coeff = 1
 		}
 
@@ -124,36 +184,48 @@ technologies = {
 		research_cost = 2
 		xp_research_type = army
 		xp_boost_cost = 50
-		xp_research_bonus = 0.5
+		xp_research_bonus = 0.3
 
 		start_year = 1239
 		folder = {
 			name = fallout_infantry_folder
-			position = { x = @Row_train y = @Col_3 }
+			position = { x = @Row_heavyinf y = @Col_3 }
 		}
 
 		categories = {
 			infantry_tech
-			training_tech
+			ballistic_weapon_tech
 		}
 
 		ai_will_do = {
-			factor = 1
+			factor = 3
 			modifier = {
-				factor = 3
-				date > "1240.1.1"
+				factor = 10
+				date > "1239.1.1"
+			}
+			modifier = {
+				factor = 0
+				is_researching_technology = energy_weaponry_tech_1
+			}
+			modifier = {
+				factor = 0
+				has_country_flag = infantry_energy_ai
+			}
+			modifier = {
+				factor = 0
+				has_tech = energy_weaponry_tech_1
 			}
 		}
 	}
 
-	# Platoon Training
-	unit_training_tech_4 = {
-		category_all_infantry = {
-			max_organisation = 3
+	# Magazine-Fed Weapons
+	ballistic_weaponry_tech_2 = {
+		enable_equipments = {
+			ballistic_equipment_2
 		}
 
 		path = {
-			leads_to_tech = unit_training_tech_5
+			leads_to_tech = ballistic_weaponry_tech_3
 			research_cost_coeff = 1
 		}
 
@@ -164,75 +236,86 @@ technologies = {
 		research_cost = 2
 		xp_research_type = army
 		xp_boost_cost = 50
-		xp_research_bonus = 0.5
+		xp_research_bonus = 0.3
 
-		start_year = 1240
+		start_year = 1241
 		folder = {
 			name = fallout_infantry_folder
-			position = { x = @Row_train y = @Col_4 }
+			position = { x = @Row_heavyinf y = @Col_4 }
 		}
 
 		categories = {
 			infantry_tech
-			training_tech
+			ballistic_weapon_tech
 		}
 
 		ai_will_do = {
-			factor = 1
+			factor = 3
 			modifier = {
-				factor = 3
+				factor = 10
 				date > "1241.1.1"
 			}
 		}
 	}
 
-	# Basic Drill
-	unit_training_tech_5 = {
-		category_all_infantry = {
-			default_morale = 0.03
+	#Assault-Weapons
+	ballistic_weaponry_tech_3 = {
+		enable_equipments = {
+			ballistic_equipment_3
 		}
 
 		path = {
-			leads_to_tech = unit_training_tech_6
+			leads_to_tech = basic_infantry_equipment
 			research_cost_coeff = 1
 		}
 
 		dependencies = {
-			infantry_tech_level_settler = 1
+			infantry_tech_level_scientific = 1
 		}
 
 		research_cost = 2
 		xp_research_type = army
 		xp_boost_cost = 50
-		xp_research_bonus = 0.5
+		xp_research_bonus = 0.3
 
-		start_year = 1241
+		start_year = 1243
 		folder = {
 			name = fallout_infantry_folder
-			position = { x = @Row_train y = @Col_5 }
+			position = { x = @Row_heavyinf y = @Col_5 }
 		}
 
 		categories = {
 			infantry_tech
-			training_tech
+			ballistic_weapon_tech
 		}
 
 		ai_will_do = {
-			factor = 1
+			factor = 0.8
+
 			modifier = {
-				factor = 3
-				date > "1242.1.1"
+				factor = 2
+				date > "1242.1.9"
+			}
+
+			modifier = {
+				factor = 2
+				date > "1243.1.1"
+			}
+
+			modifier = {
+				factor = 5
+				date > "1244.1.6"
 			}
 		}
 	}
 
-	# Life fire excersises
-	unit_training_tech_6 = {
-
-		land_reinforce_rate = 0.05
+	basic_infantry_equipment = {
+		category_all_infantry = {
+			soft_attack = 0.05
+		}
 
 		path = {
-			leads_to_tech = unit_training_tech_7
+			leads_to_tech = collapsible_weapons
 			research_cost_coeff = 1
 		}
 
@@ -243,35 +326,36 @@ technologies = {
 		research_cost = 2
 		xp_research_type = army
 		xp_boost_cost = 50
-		xp_research_bonus = 0.5
+		xp_research_bonus = 0.3
 
 		start_year = 1242
 		folder = {
 			name = fallout_infantry_folder
-			position = { x = @Row_train y = @Col_6 }
+			position = { x = @Row_heavyinf y = @Col_6 }
 		}
 
 		categories = {
 			infantry_tech
-			training_tech
+			ballistic_weapon_tech
 		}
 
 		ai_will_do = {
-			factor = 1
+			factor = 3
 			modifier = {
-				factor = 3
-				date > "1243.1.1"
+				factor = 10
+				date > "1240.1.1"
 			}
 		}
 	}
 
-	# Entrenchment technologies
-	unit_training_tech_7 = {
-
-		max_dig_in = 0.15
+	collapsible_weapons = {
+		category_all_infantry = {
+			defense = 0.05
+			breakthrough = 0.05
+		}
 
 		path = {
-			leads_to_tech = unit_training_tech_8
+			leads_to_tech = ballistic_weaponry_tech_4
 			research_cost_coeff = 1
 		}
 
@@ -282,32 +366,134 @@ technologies = {
 		research_cost = 2
 		xp_research_type = army
 		xp_boost_cost = 50
-		xp_research_bonus = 0.5
+		xp_research_bonus = 0.3
 
-		start_year = 1244
+		start_year = 1242
 		folder = {
 			name = fallout_infantry_folder
-			position = { x = @Row_train y = @Col_8 }
+			position = { x = @Row_heavyinf y = @Col_7 }
 		}
 
 		categories = {
 			infantry_tech
-			training_tech
+			ballistic_weapon_tech
 		}
 
 		ai_will_do = {
-			factor = 1
+			factor = 3
 			modifier = {
-				factor = 3
-				date > "1245.1.1"
+				factor = 10
+				date > "1240.1.1"
 			}
 		}
 	}
 
-	# VR-Pods
-	unit_training_tech_8 = {
+	#Modular Rifles
+	ballistic_weaponry_tech_4 = {
+		enable_equipments = {
+			ballistic_equipment_4
+		}
 
-		training_time_factor = -0.05
+		dependencies = {
+			infantry_tech_level_scientific = 1
+		}
+
+		path = {
+			leads_to_tech = ballistic_weaponry_tech_5
+			research_cost_coeff = 1
+		}
+
+		research_cost = 2
+		xp_research_type = army
+		xp_boost_cost = 50
+		xp_research_bonus = 0.3
+
+		start_year = 1246
+		folder = {
+			name = fallout_infantry_folder
+			position = { x = @Row_heavyinf y = @Col_8 }
+		}
+
+		categories = {
+			infantry_tech
+			ballistic_weapon_tech
+		}
+
+		ai_will_do = {
+			factor = 0.8
+
+			modifier = {
+				factor = 2
+				date > "1247.1.9"
+			}
+
+			modifier = {
+				factor = 2
+				date > "1248.1.1"
+			}
+
+			modifier = {
+				factor = 5
+				date > "1249.1.6"
+			}
+		}
+	}
+
+	#Late_war Rifles
+	ballistic_weaponry_tech_5 = {
+		enable_equipments = {
+			#ballistic_equipment_5
+		}
+
+		dependencies = {
+			infantry_tech_level_scientific = 1
+		}
+
+		path = {
+			leads_to_tech = prewar_infantry_kit
+			research_cost_coeff = 1
+		}
+
+		research_cost = 2
+		xp_research_type = army
+		xp_boost_cost = 50
+		xp_research_bonus = 0.3
+
+		start_year = 1246
+		folder = {
+			name = fallout_infantry_folder
+			position = { x = @Row_heavyinf y = @Col_9 }
+		}
+
+		categories = {
+			infantry_tech
+			ballistic_weapon_tech
+		}
+
+		ai_will_do = {
+			factor = 0.8
+
+			modifier = {
+				factor = 2
+				date > "1247.1.9"
+			}
+
+			modifier = {
+				factor = 2
+				date > "1248.1.1"
+			}
+
+			modifier = {
+				factor = 5
+				date > "1249.1.6"
+			}
+		}
+	}
+
+	prewar_infantry_kit = {
+		category_all_infantry = {
+			soft_attack = 0.05
+		}
 
 		dependencies = {
 			infantry_tech_level_scientific = 1
@@ -316,27 +502,444 @@ technologies = {
 		research_cost = 2
 		xp_research_type = army
 		xp_boost_cost = 50
-		xp_research_bonus = 0.5
+		xp_research_bonus = 0.3
 
-		start_year = 1246
+		start_year = 1244
 		folder = {
 			name = fallout_infantry_folder
-			position = { x = @Row_train y = @Col_10 }
+			position = { x = @Row_heavyinf y = @Col_10 }
 		}
 
 		categories = {
 			infantry_tech
-			training_tech
+			ballistic_weapon_tech
 		}
 
 		ai_will_do = {
-			factor = 1
+			factor = 0.8
+
 			modifier = {
-				factor = 3
-				date > "1247.1.1"
+				factor = 2
+				date > "1244.1.9"
+			}
+
+			modifier = {
+				factor = 2
+				date > "1245.1.1"
+			}
+
+			modifier = {
+				factor = 5
+				date > "1246.1.6"
 			}
 		}
 	}
+
+	enchanted_bullets = {
+		category_all_infantry = {
+			soft_attack = 0.03
+			hard_attack = 0.03
+		}
+		path = {
+			leads_to_tech = captured_spells
+			research_cost_coeff = 1
+		}
+
+		dependencies = {
+			infantry_tech_level_tribal = 1
+		}
+
+		research_cost = 2
+		xp_research_type = army
+		xp_boost_cost = 20
+		xp_research_bonus = 0.3
+
+		start_year = 1239
+		folder = {
+			name = fallout_infantry_folder
+			position = { x = @Row_energy y = @Col_2 }
+		}
+
+		categories = {
+			infantry_tech
+			energy_weapon_tech
+		}
+
+		ai_will_do = {
+			factor = 3
+			modifier = {
+				factor = 10
+				date > "1239.1.1"
+			}
+			modifier = {
+				factor = 0
+				has_country_flag = infantry_energy_ai
+			}
+		}
+	}
+
+	captured_spells = {
+		category_all_infantry = {
+			max_strength = 0.05
+			breakthrough = 0.025
+		}
+		path = {
+			leads_to_tech = energy_weaponry_tech_1
+			research_cost_coeff = 1
+		}
+
+		dependencies = {
+			infantry_tech_level_tribal = 1
+		}
+
+		research_cost = 2
+		xp_research_type = army
+		xp_boost_cost = 20
+		xp_research_bonus = 0.3
+
+		start_year = 1239
+		folder = {
+			name = fallout_infantry_folder
+			position = { x = @Row_energy y = @Col_3 }
+		}
+
+		categories = {
+			infantry_tech
+			energy_weapon_tech
+		}
+
+		ai_will_do = {
+			factor = 3
+			modifier = {
+				factor = 10
+				date > "1239.1.1"
+			}
+			modifier = {
+				factor = 0
+				has_country_flag = infantry_energy_ai
+			}
+		}
+	}
+
+	#Arcane Discharge Weapons
+	energy_weaponry_tech_1 = {
+		#enable_subunits = {
+			#heavy_infantry
+		#}
+
+		enable_equipments = {
+			energy_equipment_1
+		}
+		path = {
+			leads_to_tech = mew_capacitors
+			research_cost_coeff = 1
+		}
+
+		dependencies = {
+			infantry_tech_level_tribal = 1
+		}
+
+		research_cost = 2
+		xp_research_type = army
+		xp_boost_cost = 50
+		xp_research_bonus = 0.3
+
+		start_year = 1239
+		folder = {
+			name = fallout_infantry_folder
+			position = { x = @Row_energy y = @Col_4 }
+		}
+
+		categories = {
+			infantry_tech
+			energy_weapon_tech
+		}
+
+		ai_will_do = {
+			factor = 3
+			modifier = {
+				factor = 10
+				date > "1239.1.1"
+			}
+			modifier = {
+				factor = 0
+				has_country_flag = infantry_energy_ai
+			}
+		}
+	}
+
+	mew_capacitors = {
+		category_all_infantry = {
+			hard_attack = 0.02
+		}
+		category_magical = {
+			breakthrough = 0.05
+		}
+		path = {
+			leads_to_tech = energy_weaponry_tech_2
+			research_cost_coeff = 1
+		}
+
+		dependencies = {
+			infantry_tech_level_settler = 1
+		}
+
+		research_cost = 2
+		xp_research_type = army
+		xp_boost_cost = 50
+		xp_research_bonus = 0.3
+
+		start_year = 1239
+		folder = {
+			name = fallout_infantry_folder
+			position = { x = @Row_energy y = @Col_5 }
+		}
+
+		categories = {
+			infantry_tech
+			energy_weapon_tech
+		}
+
+		ai_will_do = {
+			factor = 3
+			modifier = {
+				factor = 10
+				date > "1239.1.1"
+			}
+			modifier = {
+				factor = 0
+				has_country_flag = infantry_energy_ai
+			}
+		}
+	}
+
+	#Early Laser Weapons
+	energy_weaponry_tech_2 = {
+
+		enable_equipments = {
+			energy_equipment_2
+		}
+		path = {
+			leads_to_tech = crystal_lenses
+			research_cost_coeff = 1
+		}
+
+		dependencies = {
+			infantry_tech_level_settler = 1
+		}
+
+		research_cost = 2
+		xp_research_type = army
+		xp_boost_cost = 50
+		xp_research_bonus = 0.3
+
+		start_year = 1239
+		folder = {
+			name = fallout_infantry_folder
+			position = { x = @Row_energy y = @Col_6 }
+		}
+
+		categories = {
+			infantry_tech
+			energy_weapon_tech
+		}
+
+		ai_will_do = {
+			factor = 3
+			modifier = {
+				factor = 10
+				date > "1239.1.1"
+			}
+			modifier = {
+				factor = 0
+				has_country_flag = infantry_energy_ai
+			}
+		}
+	}
+
+	crystal_lenses = {
+		category_all_infantry = {
+			hard_attack = 0.02
+		}
+		category_magical = {
+			breakthrough = 0.02
+			soft_attack = 0.04
+		}
+		path = {
+			leads_to_tech = energy_weaponry_tech_3
+			research_cost_coeff = 1
+		}
+
+		dependencies = {
+			infantry_tech_level_settler = 1
+		}
+
+		research_cost = 2
+		xp_research_type = army
+		xp_boost_cost = 50
+		xp_research_bonus = 0.3
+
+		start_year = 1239
+		folder = {
+			name = fallout_infantry_folder
+			position = { x = @Row_energy y = @Col_7 }
+		}
+
+		categories = {
+			infantry_tech
+			energy_weapon_tech
+		}
+
+		ai_will_do = {
+			factor = 3
+			modifier = {
+				factor = 10
+				date > "1239.1.1"
+			}
+			modifier = {
+				factor = 0
+				has_country_flag = infantry_energy_ai
+			}
+		}
+	}
+
+	#Improved Laser Weapons
+	energy_weaponry_tech_3 = {
+
+		enable_equipments = {
+			energy_equipment_3
+		}
+		path = {
+			leads_to_tech = improved_heat_cycling
+			research_cost_coeff = 1
+		}
+
+		dependencies = {
+			infantry_tech_level_scientific = 1
+		}
+
+		research_cost = 2
+		xp_research_type = army
+		xp_boost_cost = 50
+		xp_research_bonus = 0.3
+
+		start_year = 1239
+		folder = {
+			name = fallout_infantry_folder
+			position = { x = @Row_energy y = @Col_8 }
+		}
+
+		categories = {
+			infantry_tech
+			energy_weapon_tech
+		}
+
+		ai_will_do = {
+			factor = 3
+			modifier = {
+				factor = 10
+				date > "1239.1.1"
+			}
+			modifier = {
+				factor = 0
+				has_country_flag = infantry_energy_ai
+			}
+		}
+	}
+
+	improved_heat_cycling = {
+		category_all_infantry = {
+			hard_attack = 0.05
+		}
+		category_magical = {
+			breakthrough = 0.05
+			soft_attack = 0.05
+		}
+		path = {
+			leads_to_tech = energy_weaponry_tech_4
+			research_cost_coeff = 1
+		}
+
+		dependencies = {
+			infantry_tech_level_scientific = 1
+		}
+
+		research_cost = 2
+		xp_research_type = army
+		xp_boost_cost = 50
+		xp_research_bonus = 0.3
+
+		start_year = 1239
+		folder = {
+			name = fallout_infantry_folder
+			position = { x = @Row_energy y = @Col_9 }
+		}
+
+		categories = {
+			infantry_tech
+			energy_weapon_tech
+		}
+
+		ai_will_do = {
+			factor = 3
+			modifier = {
+				factor = 10
+				date > "1239.1.1"
+			}
+			modifier = {
+				factor = 0
+				has_country_flag = infantry_energy_ai
+			}
+		}
+	}
+
+	#Plasma Weapons
+	energy_weaponry_tech_4 = {
+		enable_equipments = {
+			energy_equipment_4
+		}
+
+		dependencies = {
+			infantry_tech_level_scientific = 1
+		}
+
+		research_cost = 2
+		xp_research_type = army
+		xp_boost_cost = 50
+		xp_research_bonus = 0.3
+
+		start_year = 1239
+		folder = {
+			name = fallout_infantry_folder
+			position = { x = @Row_energy y = @Col_10 }
+		}
+
+		categories = {
+			infantry_tech
+			energy_weapon_tech
+		}
+
+		ai_will_do = {
+			factor = 3
+			modifier = {
+				factor = 10
+				date > "1239.1.1"
+			}
+			modifier = {
+				factor = 0
+				has_country_flag = infantry_energy_ai
+			}
+		}
+	}
+
+
+
+
+
+
+
+
+
 
 	#-------------------------
 	# Heavy Infantry
@@ -369,6 +972,10 @@ technologies = {
 			leads_to_tech = heavy_infantry_tech_2
 			research_cost_coeff = 1
 		}
+		path = {
+			leads_to_tech = heavy_infantry_tech_1_1
+			research_cost_coeff = 1
+		}
 
 		dependencies = {
 			infantry_tech_level_tribal = 1
@@ -382,7 +989,46 @@ technologies = {
 		start_year = 1230
 		folder = {
 			name = fallout_infantry_folder
-			position = { x = @Row_heavyinf y = @Col_1 }
+			position = { x = @Row_ballistic y = @Col_1 }
+		}
+
+		categories = {
+			infantry_tech
+			riot_control_tech
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 15
+				num_occupied_states > 0
+			}
+			modifier = {
+				factor = 10
+				date > "2276.1.1"
+			}
+		}
+	}
+
+	heavy_infantry_tech_1_1 = {
+
+		heavy_infantry = {
+			suppression_factor = 0.10
+		}
+
+		dependencies = {
+			infantry_tech_level_tribal = 1
+		}
+
+		research_cost = 1
+		xp_research_type = army
+		xp_boost_cost = 15
+		xp_research_bonus = 0.3
+
+		start_year = 1230
+		folder = {
+			name = fallout_infantry_folder
+			position = { x = @Row_melee y = @Col_1 }
 		}
 
 		categories = {
@@ -406,8 +1052,8 @@ technologies = {
 	heavy_infantry_tech_2 = {
 
 		heavy_infantry = {
-			hardness = 0.25
-			maximum_speed = -0.25
+			hardness = 0.10
+			breakthrough = 0.05
 		}
 
 		path = {
@@ -427,7 +1073,7 @@ technologies = {
 		start_year = 1237
 		folder = {
 			name = fallout_infantry_folder
-			position = { x = @Row_heavyinf y = @Col_2 }
+			position = { x = @Row_ballistic y = @Col_2 }
 		}
 
 		categories = {
@@ -462,6 +1108,15 @@ technologies = {
 			}
 		}
 
+		path = {
+			leads_to_tech = heavy_infantry_tech_4
+			research_cost_coeff = 1
+		}
+		path = {
+			leads_to_tech = heavy_infantry_tech_3_1
+			research_cost_coeff = 1
+		}
+
 		dependencies = {
 			infantry_tech_level_tribal = 1
 		}
@@ -474,7 +1129,7 @@ technologies = {
 		start_year = 1239
 		folder = {
 			name = fallout_infantry_folder
-			position = { x = @Row_heavyinf y = @Col_3 }
+			position = { x = @Row_ballistic y = @Col_3 }
 		}
 
 		categories = {
@@ -495,137 +1150,14 @@ technologies = {
 		}
 	}
 
-	#-------------------------
-	# Ranged Weaponry
-	#-------------------------
-	# Pipe Guns
-	standard_weaponry_tech = {
-	
-		enable_subunits = {
-			militia
-			infantry
-		}
-		
+	heavy_infantry_tech_4 = {
+
 		enable_equipments = {
-			infantry_equipment_1
-		}
-		
-		path = {
-			leads_to_tech = ballistic_weaponry_tech_1
-			research_cost_coeff = 1
-		}
-
-		dependencies = {
-			infantry_tech_level_tribal = 1
-		}
-
-		research_cost = 2
-		xp_research_type = army
-		xp_boost_cost = 50
-		xp_research_bonus = 0.5
-
-		start_year = 1205
-		folder = {
-			name = fallout_infantry_folder
-			position = { x = @Row_ballistic y = @Col_1 }
-		}
-
-		categories = {
-			infantry_tech
-			ballistic_weapon_tech
-		}
-
-		ai_will_do = {
-			factor = 10
-			modifier = {
-				factor = 0
-				is_researching_technology = melee_weaponry_tech_1
-			}
-			modifier = {
-				factor = 0
-				has_tech = melee_weaponry_tech_1
-			}
-		}
-	}
-
-	# Energy Weaponry
-
-	# Laser Muskets
-	energy_weaponry_tech_1 = {
-		enable_equipments = {
-			energy_equipment_1
-		}
-
-		XOR = {
-			warrior_equipment
+			heavy_infantry_equipment_1
 		}
 
 		path = {
-			leads_to_tech = energy_weaponry_tech_2
-			research_cost_coeff = 1
-		}
-
-		dependencies = {
-			infantry_tech_level_tribal = 1
-		}
-
-		research_cost = 2
-		xp_research_type = army
-		xp_boost_cost = 50
-		xp_research_bonus = 0.3
-
-		start_year = 1239
-		folder = {
-			name = fallout_infantry_folder
-			position = { x = @Row_energy y = @Col_3 }
-		}
-
-		categories = {
-			infantry_tech
-			energy_weapon_tech
-		}
-
-		ai_will_do = {
-			factor = 3
-			modifier = {
-				factor = 10
-				date > "1239.1.1"
-			}
-			modifier = {
-				factor = 0
-				NOT = { energy > 8 }
-			}
-			modifier = {
-				factor = 0
-				has_country_flag = infantry_ballistic_ai
-			}
-			modifier = {
-				factor = 0
-				has_country_flag = infantry_melee_ai
-			}
-			modifier = {
-				factor = 0
-				has_tech = warrior_equipment
-			}
-			modifier = {
-				factor = 2
-				energy > 14
-			}
-			modifier = {
-				factor = 0
-				is_researching_technology = warrior_equipment
-			}
-		}
-	}
-
-	# Common Energy Weapons
-	energy_weaponry_tech_2 = {
-		enable_equipments = {
-			energy_equipment_2
-		}
-
-		path = {
-			leads_to_tech = overcharged_ammunition
+			leads_to_tech = heavy_infantry_tech_5
 			research_cost_coeff = 1
 		}
 
@@ -633,371 +1165,45 @@ technologies = {
 			infantry_tech_level_settler = 1
 		}
 
-		research_cost = 2
+		research_cost = 1
 		xp_research_type = army
-		xp_boost_cost = 50
-		xp_research_bonus = 0.3
-
-		start_year = 1241
-		folder = {
-			name = fallout_infantry_folder
-			position = { x = @Row_energy y = @Col_5 }
-		}
-
-		categories = {
-			infantry_tech
-			energy_weapon_tech
-		}
-
-		ai_will_do = {
-			factor = 3
-
-			modifier = {
-				factor = 10
-				date > "1241.1.1"
-			}
-		}
-	}
-
-	overcharged_ammunition = {
-		category_all_infantry = {
-			ap_attack = 0.1
-		}
-
-		path = {
-			leads_to_tech = energy_weaponry_tech_3
-			research_cost_coeff = 1
-		}
-
-		dependencies = {
-			infantry_tech_level_settler = 1
-		}
-
-		research_cost = 2
-		xp_research_type = army
-		xp_boost_cost = 50
-		xp_research_bonus = 0.3
-
-		start_year = 1242
-		folder = {
-			name = fallout_infantry_folder
-			position = { x = @Row_energy y = @Col_6 }
-		}
-
-		categories = {
-			infantry_tech
-			energy_weapon_tech
-		}
-
-		ai_will_do = {
-			factor = 3
-
-			modifier = {
-				factor = 10
-				date > "1242.1.1"
-			}
-		}
-	}
-
-	# Advanced Energy Weapons
-	energy_weaponry_tech_3 = {
-		enable_equipments = {
-			energy_equipment_3
-		}
-
-		path = {
-			leads_to_tech = custom_built_capacitors
-			research_cost_coeff = 1
-		}
-
-		dependencies = {
-			infantry_tech_level_scientific = 1
-		}
-
-		research_cost = 2
-		xp_research_type = army
-		xp_boost_cost = 50
-		xp_research_bonus = 0.3
-
-		start_year = 1243
-		folder = {
-			name = fallout_infantry_folder
-			position = { x = @Row_energy y = @Col_7  }
-		}
-
-		categories = {
-			infantry_tech
-			energy_weapon_tech
-		}
-
-		ai_will_do = {
-			factor = 0.8
-
-			modifier = {
-				factor = 2
-				date > "1242.1.9"
-			}
-
-			modifier = {
-				factor = 2
-				date > "1243.1.1"
-			}
-
-			modifier = {
-				factor = 5
-				date > "1244.1.6"
-			}
-		}
-	}
-
-	custom_built_capacitors = {
-		category_all_infantry = {
-			ap_attack = 0.1
-		}
-
-		dependencies = {
-			infantry_tech_level_scientific = 1
-		}
-
-		path = {
-			leads_to_tech = energy_weaponry_tech_4
-			research_cost_coeff = 1
-		}
-
-		research_cost = 2
-		xp_research_type = army
-		xp_boost_cost = 50
-		xp_research_bonus = 0.3
-
-		start_year = 1244
-		folder = {
-			name = fallout_infantry_folder
-			position = { x = @Row_energy y = @Col_8  }
-		}
-
-		categories = {
-			infantry_tech
-			energy_weapon_tech
-		}
-
-		ai_will_do = {
-			factor = 0.8
-
-			modifier = {
-				factor = 2
-				date > "1243.1.9"
-			}
-
-			modifier = {
-				factor = 2
-				date > "1244.1.1"
-			}
-
-			modifier = {
-				factor = 5
-				date > "1245.1.6"
-			}
-		}
-	}
-
-	energy_weaponry_tech_4 = {
-		enable_equipments = {
-			energy_equipment_4
-		}
-
-		dependencies = {
-			infantry_tech_level_scientific = 1
-		}
-		XOR = {
-			melee_weaponry_tech_1
-		}
-
-		research_cost = 2
-		xp_research_type = army
-		xp_boost_cost = 50
-		xp_research_bonus = 0.3
-
-		start_year = 1246
-		folder = {
-			name = fallout_infantry_folder
-			position = { x = @Row_energy y = @Col_10  }
-		}
-
-		categories = {
-			infantry_tech
-			energy_weapon_tech
-		}
-
-		ai_will_do = {
-			factor = 0.8
-
-			modifier = {
-				factor = 2
-				date > "1248.1.9"
-			}
-
-			modifier = {
-				factor = 2
-				date > "1249.1.1"
-			}
-
-			modifier = {
-				factor = 5
-				date > "1250.1.6"
-			}
-		}
-	}
-
-	#MAS MAG-X Rifle
-	MAS_driver_mag_rifle_tech = {
-
-        enable_equipments = {
-			magx_equipment_gun
-		}
-
-        research_cost = 2
-        xp_research_type = army
 		xp_boost_cost = 35
 		xp_research_bonus = 0.3
 
-		start_year = 1248
+		start_year = 1230
 		folder = {
 			name = fallout_infantry_folder
-			position = { x = @Row_energy y = @Col_11  }
-		}
-
-       	allow = {
-        	always = no
-        }
-
-		categories = {
-			infantry_tech
-			energy_weapon_tech
-		}
-
-		dependencies = {
-			magx_rifle_unlock_tech = 1
-		}
-
-    }
-
-	# Ballistic sub-route
-	# Basic Firearms
-	ballistic_weaponry_tech_1 = {
-		enable_equipments = {
-			ballistic_equipment_1
-		}
-		path = {
-			leads_to_tech = warrior_equipment
-			research_cost_coeff = 1
-		}
-		path = {
-			leads_to_tech = energy_weaponry_tech_1
-			research_cost_coeff = 1
-		}
-
-		dependencies = {
-			infantry_tech_level_tribal = 1
-		}
-
-		research_cost = 2
-		xp_research_type = army
-		xp_boost_cost = 50
-		xp_research_bonus = 0.3
-
-		start_year = 1237
-		folder = {
-			name = fallout_infantry_folder
-			position = { x = @Row_ballistic y = @Col_2 }
+			position = { x = @Row_ballistic y = @Col_4 }
 		}
 
 		categories = {
 			infantry_tech
-			ballistic_weapon_tech
+			riot_control_tech
 		}
 
 		ai_will_do = {
-			factor = 3
+			factor = 1
+			modifier = {
+				factor = 15
+				num_occupied_states > 0
+			}
 			modifier = {
 				factor = 10
-				date > "1237.1.1"
-			}
-			modifier = {
-				factor = 0
-				is_researching_technology = melee_weaponry_tech_2
-			}
-			modifier = {
-				factor = 0
-				has_country_flag = infantry_melee_ai
-			}
-			modifier = {
-				factor = 0
-				has_tech = melee_weaponry_tech_2
+				date > "2278.1.1"
 			}
 		}
 	}
 
-	warrior_equipment = {
-		category_all_infantry = {
-			soft_attack = 0.05
-		}
-		XOR = {
-			energy_weaponry_tech_1
-		}
-		path = {
-			leads_to_tech = ballistic_weaponry_tech_2
-			research_cost_coeff = 1
-		}
+	heavy_infantry_tech_5 = {
 
-		dependencies = {
-			infantry_tech_level_tribal = 1
-		}
-
-		research_cost = 2
-		xp_research_type = army
-		xp_boost_cost = 50
-		xp_research_bonus = 0.3
-
-		start_year = 1239
-		folder = {
-			name = fallout_infantry_folder
-			position = { x = @Row_ballistic y = @Col_3 }
-		}
-
-		categories = {
-			infantry_tech
-			ballistic_weapon_tech
-		}
-
-		ai_will_do = {
-			factor = 3
-			modifier = {
-				factor = 10
-				date > "1239.1.1"
-			}
-			modifier = {
-				factor = 0
-				is_researching_technology = energy_weaponry_tech_1
-			}
-			modifier = {
-				factor = 0
-				has_country_flag = infantry_energy_ai
-			}
-			modifier = {
-				factor = 0
-				has_tech = energy_weaponry_tech_1
-			}
-		}
-	}
-
-	# Common Infantry Weapons
-	ballistic_weaponry_tech_2 = {
-		enable_equipments = {
-			ballistic_equipment_2
+		heavy_infantry = {
+			armor_value = 0.2
+			defense = 0.05
+			breakthrough = 0.05
 		}
 
 		path = {
-			leads_to_tech = basic_infantry_equipment
+			leads_to_tech = heavy_infantry_tech_6
 			research_cost_coeff = 1
 		}
 
@@ -1005,12 +1211,12 @@ technologies = {
 			infantry_tech_level_settler = 1
 		}
 
-		research_cost = 2
+		research_cost = 1
 		xp_research_type = army
-		xp_boost_cost = 50
+		xp_boost_cost = 35
 		xp_research_bonus = 0.3
 
-		start_year = 1241
+		start_year = 1230
 		folder = {
 			name = fallout_infantry_folder
 			position = { x = @Row_ballistic y = @Col_5 }
@@ -1018,25 +1224,30 @@ technologies = {
 
 		categories = {
 			infantry_tech
-			ballistic_weapon_tech
+			riot_control_tech
 		}
 
 		ai_will_do = {
-			factor = 3
+			factor = 1
+			modifier = {
+				factor = 15
+				num_occupied_states > 0
+			}
 			modifier = {
 				factor = 10
-				date > "1241.1.1"
+				date > "2276.1.1"
 			}
 		}
 	}
 
-	basic_infantry_equipment = {
-		category_all_infantry = {
-			soft_attack = 0.05
+	heavy_infantry_tech_6 = {
+
+		enable_equipments = {
+			heavy_infantry_equipment_1
 		}
 
 		path = {
-			leads_to_tech = ballistic_weaponry_tech_3
+			leads_to_tech = heavy_infantry_tech_7
 			research_cost_coeff = 1
 		}
 
@@ -1044,12 +1255,12 @@ technologies = {
 			infantry_tech_level_settler = 1
 		}
 
-		research_cost = 2
+		research_cost = 1
 		xp_research_type = army
-		xp_boost_cost = 50
+		xp_boost_cost = 35
 		xp_research_bonus = 0.3
 
-		start_year = 1242
+		start_year = 1230
 		folder = {
 			name = fallout_infantry_folder
 			position = { x = @Row_ballistic y = @Col_6 }
@@ -1057,38 +1268,40 @@ technologies = {
 
 		categories = {
 			infantry_tech
-			ballistic_weapon_tech
+			riot_control_tech
 		}
 
 		ai_will_do = {
-			factor = 3
+			factor = 1
+			modifier = {
+				factor = 15
+				num_occupied_states > 0
+			}
 			modifier = {
 				factor = 10
-				date > "1240.1.1"
+				date > "2278.1.1"
 			}
 		}
 	}
 
-	ballistic_weaponry_tech_3 = {
-		enable_equipments = {
-			ballistic_equipment_3
-		}
+	heavy_infantry_tech_7 = {
 
-		path = {
-			leads_to_tech = prewar_infantry_kit
-			research_cost_coeff = 1
+		heavy_infantry = {
+			soft_attack = 0.05
+			max_organisation = 5
+			max_strength = 0.2
 		}
 
 		dependencies = {
 			infantry_tech_level_scientific = 1
 		}
 
-		research_cost = 2
+		research_cost = 1
 		xp_research_type = army
-		xp_boost_cost = 50
+		xp_boost_cost = 35
 		xp_research_bonus = 0.3
 
-		start_year = 1243
+		start_year = 1230
 		folder = {
 			name = fallout_infantry_folder
 			position = { x = @Row_ballistic y = @Col_7 }
@@ -1096,233 +1309,29 @@ technologies = {
 
 		categories = {
 			infantry_tech
-			ballistic_weapon_tech
+			riot_control_tech
 		}
 
 		ai_will_do = {
-			factor = 0.8
-
+			factor = 1
 			modifier = {
-				factor = 2
-				date > "1242.1.9"
-			}
-
-			modifier = {
-				factor = 2
-				date > "1243.1.1"
-			}
-
-			modifier = {
-				factor = 5
-				date > "1244.1.6"
-			}
-		}
-	}
-
-	prewar_infantry_kit = {
-		category_all_infantry = {
-			soft_attack = 0.05
-		}
-
-		dependencies = {
-			infantry_tech_level_scientific = 1
-		}
-
-		path = {
-			leads_to_tech = ballistic_weaponry_tech_4
-			research_cost_coeff = 1
-		}
-
-		research_cost = 2
-		xp_research_type = army
-		xp_boost_cost = 50
-		xp_research_bonus = 0.3
-
-		start_year = 1244
-		folder = {
-			name = fallout_infantry_folder
-			position = { x = @Row_ballistic y = @Col_8 }
-		}
-
-		categories = {
-			infantry_tech
-			ballistic_weapon_tech
-		}
-
-		ai_will_do = {
-			factor = 0.8
-
-			modifier = {
-				factor = 2
-				date > "1244.1.9"
-			}
-
-			modifier = {
-				factor = 2
-				date > "1245.1.1"
-			}
-
-			modifier = {
-				factor = 5
-				date > "1246.1.6"
-			}
-		}
-	}
-
-	ballistic_weaponry_tech_4 = {
-		enable_equipments = {
-			ballistic_equipment_4
-		}
-
-		dependencies = {
-			infantry_tech_level_scientific = 1
-		}
-
-		research_cost = 2
-		xp_research_type = army
-		xp_boost_cost = 50
-		xp_research_bonus = 0.3
-
-		start_year = 1246
-		folder = {
-			name = fallout_infantry_folder
-			position = { x = @Row_ballistic y = @Col_10 }
-		}
-
-		categories = {
-			infantry_tech
-			ballistic_weapon_tech
-		}
-
-		ai_will_do = {
-			factor = 0.8
-
-			modifier = {
-				factor = 2
-				date > "1247.1.9"
-			}
-
-			modifier = {
-				factor = 2
-				date > "1248.1.1"
-			}
-
-			modifier = {
-				factor = 5
-				date > "1249.1.6"
-			}
-		}
-	}
-
-	#-------------------------
-	# Melee Weaponry
-	#-------------------------
-	melee_weaponry_tech_1 = {
-		enable_subunits = {
-			militia
-			infantry
-		}
-		
-		enable_equipments = {
-			melee_equipment_1
-		}
-		XOR = {
-			ballistic_weaponry_tech_1
-		}
-
-		path = {
-			leads_to_tech = melee_weaponry_tech_2
-			research_cost_coeff = 1
-		}
-
-		dependencies = {
-			infantry_tech_level_tribal = 1
-		}
-
-		research_cost = 2
-		xp_research_type = army
-		xp_boost_cost = 50
-		xp_research_bonus = 0.5
-
-		start_year = 1235
-		folder = {
-			name = fallout_infantry_folder
-			position = { x = @Row_melee y = @Col_1 }
-		}
-
-		categories = {
-			infantry_tech
-			melee_weapon_tech
-		}
-
-		ai_will_do = {
-			factor = 10
-		}
-	}
-
-	melee_weaponry_tech_2 = {
-		enable_equipments = {
-			melee_equipment_2
-		}
-		
-		path = {
-			leads_to_tech = melee_weaponry_tech_3
-			research_cost_coeff = 1
-		}
-
-		dependencies = {
-			infantry_tech_level_tribal = 1
-		}
-
-		research_cost = 2
-		xp_research_type = army
-		xp_boost_cost = 50
-		xp_research_bonus = 0.3
-
-		start_year = 1237
-		folder = {
-			name = fallout_infantry_folder
-			position = { x = @Row_melee y = @Col_2 }
-		}
-
-		categories = {
-			infantry_tech
-			melee_weapon_tech
-		}
-
-		ai_will_do = {
-			factor = 3
-
-			modifier = {
-				factor = 0
-				is_researching_technology = ballistic_weaponry_tech_1
-			}
-			modifier = {
-				factor = 0
-				has_country_flag = infantry_ballistic_ai
-			}
-			modifier = {
-				factor = 0
-				has_tech = ballistic_weaponry_tech_1
+				factor = 15
+				num_occupied_states > 0
 			}
 			modifier = {
 				factor = 10
-				date > "1237.1.1"
+				date > "2278.1.1"
 			}
 		}
 	}
 
-	melee_weaponry_tech_3 = {
-		enable_equipments = {
-			melee_equipment_3
-		}
+	heavy_infantry_tech_3_1 = {
 
-		path = {
-			leads_to_tech = warrior_equipment
-			research_cost_coeff = 1
+		enable_equipments = {
+			heavy_infantry_equipment_1
 		}
 		path = {
-			leads_to_tech = melee_weaponry_tech_4
+			leads_to_tech = heavy_infantry_tech_5_1
 			research_cost_coeff = 1
 		}
 
@@ -1330,9 +1339,9 @@ technologies = {
 			infantry_tech_level_tribal = 1
 		}
 
-		research_cost = 2
+		research_cost = 1
 		xp_research_type = army
-		xp_boost_cost = 50
+		xp_boost_cost = 35
 		xp_research_bonus = 0.3
 
 		start_year = 1239
@@ -1343,38 +1352,42 @@ technologies = {
 
 		categories = {
 			infantry_tech
-			melee_weapon_tech
+			riot_control_tech
 		}
 
 		ai_will_do = {
-			factor = 3
-
+			factor = 1
 			modifier = {
-				factor = 10
-				tag = CES
+				factor = 15
+				num_occupied_states > 0
 			}
 			modifier = {
 				factor = 10
-				date > "2279.1.1"
+				date > "2280.1.1"
 			}
 		}
 	}
 
-	melee_weaponry_tech_4 = {
+	heavy_infantry_tech_5_1 = {
+
 		enable_equipments = {
-			melee_equipment_4
+			heavy_infantry_equipment_1
+		}
+		path = {
+			leads_to_tech = heavy_infantry_tech_7_1
+			research_cost_coeff = 1
 		}
 
 		dependencies = {
 			infantry_tech_level_settler = 1
 		}
 
-		research_cost = 2
+		research_cost = 1
 		xp_research_type = army
-		xp_boost_cost = 50
+		xp_boost_cost = 35
 		xp_research_bonus = 0.3
 
-		start_year = 1240
+		start_year = 1239
 		folder = {
 			name = fallout_infantry_folder
 			position = { x = @Row_melee y = @Col_5 }
@@ -1382,15 +1395,57 @@ technologies = {
 
 		categories = {
 			infantry_tech
-			melee_weapon_tech
+			riot_control_tech
 		}
 
 		ai_will_do = {
-			factor = 3
-
+			factor = 1
+			modifier = {
+				factor = 15
+				num_occupied_states > 0
+			}
 			modifier = {
 				factor = 10
-				date > "1239.1.1"
+				date > "2280.1.1"
+			}
+		}
+	}
+
+	heavy_infantry_tech_7_1 = {
+
+		enable_equipments = {
+			heavy_infantry_equipment_1
+		}
+
+		dependencies = {
+			infantry_tech_level_settler = 1
+		}
+
+		research_cost = 1
+		xp_research_type = army
+		xp_boost_cost = 35
+		xp_research_bonus = 0.3
+
+		start_year = 1239
+		folder = {
+			name = fallout_infantry_folder
+			position = { x = @Row_melee y = @Col_7 }
+		}
+
+		categories = {
+			infantry_tech
+			riot_control_tech
+		}
+
+		ai_will_do = {
+			factor = 1
+			modifier = {
+				factor = 15
+				num_occupied_states > 0
+			}
+			modifier = {
+				factor = 10
+				date > "2280.1.1"
 			}
 		}
 	}
@@ -1520,7 +1575,7 @@ technologies = {
 		start_year = 1237
 		folder = {
 			name = fallout_infantry_folder
-			position = { x = @Row_specopsmiddle y = @Col_2 }
+			position = { x = @Row_specops y = @Col_2 }
 		}
 
 		categories = {
@@ -2551,6 +2606,39 @@ technologies = {
 			}
 		}
 	}
+
+	#MAS MAG-X Rifle
+	MAS_driver_mag_rifle_tech = {
+
+        enable_equipments = {
+			magx_equipment_gun
+		}
+
+        research_cost = 2
+        xp_research_type = army
+		xp_boost_cost = 35
+		xp_research_bonus = 0.3
+
+		start_year = 1248
+		folder = {
+			name = fallout_infantry_folder
+			position = { x = @Row_energy y = @Col_11  }
+		}
+
+       	allow = {
+        	always = no
+        }
+
+		categories = {
+			infantry_tech
+			energy_weapon_tech
+		}
+
+		dependencies = {
+			magx_rifle_unlock_tech = 1
+		}
+
+    }
 }
 
 	
