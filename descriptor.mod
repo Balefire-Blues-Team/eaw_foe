@@ -180,10 +180,6 @@ tags={
 	"Map"
 }
 name="Balefire Blues"
-dependencies={
-	"Old World Blues"
-	"Equestria at War"
-}
 picture="thumbnail.png"
 supported_version="1.16.*"
 path="mod/eaw_foe"
