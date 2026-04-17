@@ -46,7 +46,7 @@ country_event = {
 		name = shatteredhoof.2.a
 		261 = { add_extra_state_shared_building_slots = 2 }
 		334 = { add_extra_state_shared_building_slots = 2 }
-		588 = { add_extra_state_shared_building_slots = 2 }
+		578 = { add_extra_state_shared_building_slots = 2 }
 	}
 	
 	option = {
@@ -54,13 +54,13 @@ country_event = {
 		name = shatteredhoof.2.b
 		261 = { add_building_construction = {type = infrastructure level = 1 instant_build = yes } }
 		334 = { add_building_construction = {type = infrastructure level = 1 instant_build = yes } }
-		588 = { add_building_construction = {type = infrastructure level = 1 instant_build = yes } }
+		578 = { add_building_construction = {type = infrastructure level = 1 instant_build = yes } }
 	}
 	
 	option = {
 	ai_chance = { factor = 10 }
 		name = shatteredhoof.2.c
-		588 = { remove_building = { type = dockyard level = 1 } add_resource = { type = metal amount = 12 }}
+		578 = { add_resource = { type = metal amount = 10 }}
 	}	
 }
 
@@ -76,27 +76,32 @@ country_event = {
 	option = {
 	ai_chance = { factor = 89 }
 		name = shatteredhoof.3.a
-		572 = { remove_building = { type = industrial_complex level = 1 } add_manpower = -1000 }
-		562 = { remove_building = { type = arms_factory level = 1 } remove_building = { type = industrial_complex level = 1 } add_manpower = -1000 }
-		578 = { remove_building = { type = arms_factory level = 1 } add_manpower = -1000 }
-		808 = { add_extra_state_shared_building_slots = 4 add_building_construction = {type = industrial_complex level = 2 instant_build = yes } add_manpower = 2000}
-		610 = { add_extra_state_shared_building_slots = 4 add_building_construction = {type = arms_factory level = 2 instant_build = yes } add_manpower = 2000}	
+		save_current_manpower = yes
+		808 = { add_manpower = -1500 
+		add_building_construction = {type = industrial_complex level = 1 instant_build = yes }}
+		610 = {
+			add_manpower = -1000
+			add_building_construction = {type = arms_factory level = 1 instant_build = yes }
+		}
+
 	}
 	
 	option = {
 	ai_chance = { factor = 10 }
 		name = shatteredhoof.3.b
-		610 = { add_extra_state_shared_building_slots = 1 add_manpower = 1000 }
-		334 = { add_extra_state_shared_building_slots = 1 add_manpower = 1000 }
-		588 = { add_extra_state_shared_building_slots = 1 add_manpower = 1000 }
-		808 = { add_manpower = -1000 }
-		610 = { add_manpower = -1000 }
+		254 = { add_building_construction = {type = arms_factory level = 1 instant_build = yes } }
+		add_equipment_to_stockpile = {
+			type = infantry_equipment_1
+			amount = 250
+			producer = SHC
+		}
 	}
 	
 	option = {
 	ai_chance = { factor = 1 }
 		name = shatteredhoof.3.c
-		562 = { add_extra_state_shared_building_slots = 1 add_manpower = 1000 add_building_construction = {type = arms_factory level = 1 instant_build = yes }}
+		610 = { add_extra_state_shared_building_slots = 1 add_building_construction = {type = industrial_complex level = 1 instant_build = yes }}
+		588 = { add_extra_state_shared_building_slots = 1 add_building_construction = {type = arms_factory level = 1 instant_build = yes }}
 	}	
 }
 
@@ -171,7 +176,7 @@ country_event = {
 			610 = {
 				damage_building = {
 					type = infrastructure
-					damage = 3
+					damage = 4
 				}
 				damage_building = {
 					type = industrial_complex
@@ -179,39 +184,7 @@ country_event = {
 				}
 				damage_building = {
 					type = arms_factory
-					damage = 1
-				}	
-			}
-			562 = {
-				set_demilitarized_zone = yes
-				damage_building = {
-					type = infrastructure
-					damage = 4
-				}
-			}
-			578 = {
-				set_demilitarized_zone = yes
-				damage_building = {
-					type = infrastructure
-					damage = 3
-				}
-			}
-			311 = {
-				set_demilitarized_zone = yes
-				damage_building = {
-					type = infrastructure
-					damage = 3
-				}
-			}
-			572 = {
-				set_demilitarized_zone = yes
-				damage_building = {
-					type = infrastructure
-					damage = 3
-				}
-				damage_building = {
-					type = industrial_complex
-					damage = 1
+					damage = 2
 				}	
 			}
 		}	
@@ -229,9 +202,16 @@ country_event = {
 		add_ideas = SHA_economic_ruin
 		add_ideas = SHA_slaver_remnants
 		custom_effect_tooltip = sha_lose_countryside_tt
+		hidden_effect = {
+			country_event = {
+				id = shatteredhoof.7003
+				days = 1
+			}
+		}
 	}
 }
 
+#The Corona Massacre
 country_event = {
  	id = shatteredhoof.7
  	title = shatteredhoof.7.t
@@ -252,6 +232,132 @@ country_event = {
 	option = {
 		name = shatteredhoof.7.a
 		LRA = {transfer_state = 810}
+		hidden_effect = {
+			country_event = {
+				id = shatteredhoof.7001
+				days = 5
+			}
+		}
+	}	
+}
+
+#Tributary no more
+country_event = {
+ 	id = shatteredhoof.7001
+ 	title = shatteredhoof.7001.t
+ 	desc = shatteredhoof.7001.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = shatteredhoof.7001.a
+		end_puppet = COT
+		COT = {
+			drop_cosmetic_tag = yes
+		}
+		hidden_effect = {
+			LRA = {
+			country_event = {
+				id = shatteredhoof.7002
+				days = 5
+			}
+			}
+		}
+	}	
+}
+
+#A new Opportunity
+country_event = {
+ 	id = shatteredhoof.7002
+ 	title = shatteredhoof.7002.t
+ 	desc = shatteredhoof.7002.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = shatteredhoof.7002.a
+		COT = { ROOT = { grant_wargoals_on_core_states_of_prev = yes } }
+		IF = {
+			limit = { is_ai = yes }
+			810 = { add_compliance = 80 }
+			add_collaboration = {
+				target = COT
+				value = 0.5
+			}
+			declare_war_on = {
+				target = COT
+				type = annex_everything
+			}
+		}
+	}	
+}
+
+#Sherhoof declares Independence
+country_event = {
+ 	id = shatteredhoof.7003
+ 	title = shatteredhoof.7003.t
+ 	desc = shatteredhoof.7003.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+		name = shatteredhoof.7003.a
+		end_puppet = SHC
+		SHC = { 
+			drop_cosmetic_tag = yes 
+			add_war_support = 0.05
+			add_stability = 0.05
+		}
+		hidden_effect = {
+			country_event = {
+				id = shatteredhoof.7004
+				days = 40
+			}
+		}
+	}	
+}
+
+#Formation of the Greenway Compact
+country_event = {
+ 	id = shatteredhoof.7004
+ 	title = shatteredhoof.7004.t
+ 	desc = shatteredhoof.7004.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	immediate = {
+		GTC = {
+		create_faction_from_template = {
+			template = faction_template_generic
+			name = GTC_TPU_faction_name
+		}
+		add_to_faction = TPU
+		add_relation_modifier = {
+			target = TPU
+			modifier = large_increase
+		}
+		reverse_add_relation_modifier = {
+			target = TPU
+			modifier = large_increase
+		}
+		swap_ideas = {
+			remove_idea = GTC_outcompeted_by_OAP_idea
+			add_idea = GTC_outcompeted_by_OAP_2_idea
+		}
+		}
+	}
+
+	option = {
+		name = shatteredhoof.7004.a
+		
 	}	
 }
 
