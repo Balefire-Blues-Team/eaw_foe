@@ -205,6 +205,17 @@ country_event = {
 			idea = SHA_capital_in_chaos_idea
 			days = 100
 		}
+		division_template = {
+			name = "Shatterguard"
+			regiments = {
+				infantry = { x = 0 y = 0 } infantry = { x = 1 y = 0 }
+				infantry = { x = 0 y = 1 } infantry = { x = 1 y = 1 }
+				infantry = { x = 0 y = 2 }
+			}
+			support = {
+				demolitions_support = { x = 0 y = 0 }
+			}
+		}
 		custom_effect_tooltip = sha_lose_countryside_tt
 		hidden_effect = {
 			country_event = {
@@ -402,13 +413,262 @@ country_event = {
 	picture = GFX_event_test
 
 	is_triggered_only = yes
- 	fire_only_once = no
+ 	fire_only_once = yes
 
 	option = {
 	ai_chance = { factor = 80 }
 		name = shatteredhoof.8001.a
 	}
 
+}
+
+#A letter from Gawd
+country_event = {
+ 	id = shatteredhoof.8002
+ 	title = shatteredhoof.8002.t
+ 	desc = shatteredhoof.8002.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 80 }
+		name = shatteredhoof.8002.a
+		SHA = {
+			country_event = {
+				id = shatteredhoof.8003
+				days = 2
+			}
+		}
+	}
+}
+
+#Steel Wall's Response
+country_event = {
+ 	id = shatteredhoof.8003
+ 	title = shatteredhoof.8003.t
+ 	desc = shatteredhoof.8003.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 80 }
+		name = shatteredhoof.8003.a
+		add_political_power = -15
+		SHC = {
+			country_event = {
+				id = shatteredhoof.8004
+				days = 1
+			}
+		}
+	}
+}
+
+#Another sign of Gawd
+country_event = {
+ 	id = shatteredhoof.8004
+ 	title = shatteredhoof.8004.t
+ 	desc = shatteredhoof.8004.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 80 }
+		name = shatteredhoof.8004.a
+		SHA = {
+			country_event = {
+				id = shatteredhoof.8005
+				days = 1
+			}
+		}
+	}
+}
+
+#Demands from Sherhoof
+country_event = {
+ 	id = shatteredhoof.8005
+ 	title = shatteredhoof.8005.t
+ 	desc = shatteredhoof.8005.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 80 }
+		name = shatteredhoof.8005.a
+		SHC = {
+			country_event = {
+				id = shatteredhoof.8006
+				days = 1
+			}
+		}
+		custom_effect_tooltip = SHA_purge_raiders_tt
+		delete_unit_template_and_units = {
+			division_template = "Raiders"
+			disband = yes
+		}
+		hidden_effect = {
+			add_manpower = -230
+		}
+	}
+	option = {
+	ai_chance = { factor = 0 }
+		name = shatteredhoof.8005.b
+		add_stability = -0.20
+		add_war_support = -0.10
+		SHC = { ROOT = { grant_wargoals_on_core_states_of_prev = yes } }
+		set_division_template_lock = {
+			division_template = "Raiders"
+			is_locked = no
+		}
+		create_faction_from_template = {
+			template = faction_template_generic
+			name = SHA_azurian_alliance_name
+		}
+	}
+}
+
+#Sincerity at Last
+country_event = {
+ 	id = shatteredhoof.8006
+ 	title = shatteredhoof.8006.t
+ 	desc = shatteredhoof.8006.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 80 }
+		name = shatteredhoof.8006.a
+		custom_effect_tooltip = SHC_locked_alliance_tt
+		SHA = {
+			country_event = {
+				id = shatteredhoof.8007
+				days = 1
+			}
+		}
+	}
+	option = {
+	ai_chance = { factor = 0 }
+		name = shatteredhoof.8006.b
+		SHA = {
+			SHC = { ROOT = { grant_wargoals_on_core_states_of_prev = yes } }
+		}
+	}
+}
+
+#Birth of the Azurian Alliance
+country_event = {
+ 	id = shatteredhoof.8007
+ 	title = shatteredhoof.8007.t
+ 	desc = shatteredhoof.8007.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 80 }
+		name = shatteredhoof.8007.a
+		create_faction_from_template = {
+			template = faction_template_generic
+			name = SHA_azurian_alliance_name
+		}
+		add_to_faction = SHC
+		hidden_effect = { SHA = { add_ai_strategy = { type = alliance id = "SHC" value = 200} add_opinion_modifier = { target = SHC modifier = huge_increase } } }
+		hidden_effect = { SHC = { add_ai_strategy = { type = alliance id = "SHA" value = 200} add_opinion_modifier = { target = SHA modifier = huge_increase } } }
+	}
+}
+
+#Azuria's New Order
+country_event = {
+ 	id = shatteredhoof.8008
+ 	title = shatteredhoof.8008.t
+ 	desc = shatteredhoof.8008.d
+	picture = GFX_event_test
+
+	trigger = {
+		tag = SHA
+		OR = {
+			SHA = { has_full_control_of_state = 588 }
+			SHC = { has_full_control_of_state = 588 }
+		}
+		OR = {
+			SHA = { has_full_control_of_state = 500 }
+			SHC = { has_full_control_of_state = 500 }
+		}
+		OR = {
+			SHA = { has_full_control_of_state = 572 }
+			SHC = { has_full_control_of_state = 572 }
+		}
+		OR = {
+			SHA = { has_full_control_of_state = 25 }
+			SHC = { has_full_control_of_state = 25 }
+		}
+		OR = {
+			SHA = { has_full_control_of_state = 288 }
+			SHC = { has_full_control_of_state = 288 }
+		}
+		OR = {
+			SHA = { has_full_control_of_state = 562 }
+			SHC = { has_full_control_of_state = 562 }
+		}
+	}
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 80 }
+		name = shatteredhoof.8008.a
+		transfer_state = 500
+		transfer_state = 25
+		GTC = {
+			transfer_state = 588
+			transfer_state = 572
+			swap_ideas = {
+				remove_idea = slaver_society
+				add_idea = wasteland_society
+			}
+			set_cosmetic_tag = GTC_SHC_puppet_cosm
+		}
+		SHC = { puppet = GTC }
+		TPU = {
+			transfer_state = 288
+			transfer_state = 562
+			swap_ideas = {
+				remove_idea = raider_society
+				add_idea = wasteland_society
+			}
+			set_cosmetic_tag = TPU_SHA_puppet_cosm
+			set_country_flag = change_to_settler_tree_flag
+			mark_focus_tree_layout_dirty = yes
+		}
+		puppet = TPU
+	}
+}
+
+#Griffon Dreams in Pony Lands
+country_event = {
+ 	id = shatteredhoof.8009
+ 	title = shatteredhoof.8009.t
+ 	desc = shatteredhoof.8009.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = yes
+
+	option = {
+	ai_chance = { factor = 80 }
+		name = shatteredhoof.8009.a
+		add_stability = 0.05
+		add_political_power = 50
+	}
 }
 
 #Make Leslie a Prisoner Colony
@@ -435,6 +695,7 @@ country_event = {
 				transfer_state = 575
 				transfer_state = 26
 				transfer_state = 794
+				transfer_state = 810
 			}
 			set_autonomy = {
 				target = LRA
@@ -472,7 +733,12 @@ country_event = {
 			SHA = {
 				LRA = { transfer_technology = yes }
 			}
-			transfer_state = 810
+			TPU = { transfer_state = 562 }
+			562 = { add_core_of = TPU }
+			SHC = { transfer_state = 311 }
+			311 = { add_core_of = SHC }
+			transfer_state = 260
+			260 = { add_core_of = SHA }
 		}
 	}
 	

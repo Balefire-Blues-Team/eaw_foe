@@ -712,11 +712,17 @@ shared_focus = {
 	ai_will_do = { factor = 50 }
 
 	completion_reward = {
-		
+		custom_effect_tooltip = SHA_SHC_alliance_offer_tt
+		SHC = {
+			country_event = {
+				id = shatteredhoof.8002
+				days = 1
+			}
+		}
 	}
 } 
 #Showdown in Azuria
-shared_focus = { 
+shared_focus = {
 	id = SHA_showdown_azuria
 	icon = GFX_goal_SHA_gawd
 	x = -4
@@ -732,10 +738,42 @@ shared_focus = {
 		focus = SHA_hoof_of_friendship 
 	}
 	
-	ai_will_do = { factor = 50 }
+	ai_will_do = { factor = 10 }
 
+	will_lead_to_war_with = TPU
+	will_lead_to_war_with = GTC
 	completion_reward = {
-		
+		every_state = {
+			limit = {
+				is_core_of = TPU
+			}
+			add_claim_by = SHA
+		}
+		add_state_claim = 500
+		SHC = {
+			add_state_claim = 588
+			add_state_claim = 572
+		}
+		declare_war_on = {
+			target = TPU
+			type = annex_everything
+		}
+		declare_war_on = {
+			target = GTC
+			type = annex_everything
+		}
+		hidden_effect = {
+			SHC = {
+				declare_war_on = {
+					target = TPU
+					type = annex_everything
+				}
+				declare_war_on = {
+					target = GTC
+					type = annex_everything
+				}
+			}
+		}
 	}
 } 
 #Unraiderlike Mercy
@@ -751,11 +789,34 @@ shared_focus = {
 	prerequisite = { 
 		focus = SHA_showdown_azuria 
 	}
+	available = {
+		TPU = { is_in_faction_with = SHA }
+		GTC = { is_in_faction_with = SHA }
+	}
 	
 	ai_will_do = { factor = 50 }
 
 	completion_reward = {
-		
+		TPU = {
+			add_tech_bonus = {
+			name = power_armor_tech
+			bonus = 0.8
+			uses = 1
+			category = industry
+			}
+			one_random_infrastructure = yes
+			add_stability = 0.15
+		}
+		GTC = {
+			add_tech_bonus = {
+			name = power_armor_tech
+			bonus = 0.8
+			uses = 1
+			category = industry
+			}
+			one_random_infrastructure = yes
+			add_stability = 0.15
+		}
 	}
 } 
 #The Will to be Free
@@ -765,6 +826,10 @@ shared_focus = {
 	x = -3
 	y = 4
 	relative_position_id = SHA_the_play_is_made
+	available = {
+		owns_state = 500
+		owns_state = 25
+	}
 	
 	cost = 4.38
 
@@ -775,7 +840,14 @@ shared_focus = {
 	ai_will_do = { factor = 500 }
 
 	completion_reward = {
-		
+		500 = {
+			add_core_of = SHA
+			add_manpower = 1500
+		}
+		25 = {
+			add_core_of = SHA
+			add_manpower = 500
+		}
 	}
 } 
 
@@ -798,8 +870,10 @@ shared_focus = {
 	
 	ai_will_do = { factor = 50 }
 
+	will_lead_to_war_with = LRA
 	completion_reward = {
-		
+		LRA = { ROOT = { grant_wargoals_on_core_states_of_prev = yes } }
+		add_war_support = 0.05
 	}
 } 
 
@@ -807,7 +881,7 @@ shared_focus = {
 
 
 
-#The Fate of Shattered Hoof
+#The Future of Shattered Hoof
 shared_focus = { 
 	id = SHA_fate_of_shattered_hoof
 	icon = GFX_goal_goal_the_fate_of_shattered_hoof
@@ -826,7 +900,7 @@ shared_focus = {
 	ai_will_do = { factor = 500 }
 
 	completion_reward = {
-		country_event = shatteredhoof.10
+		country_event = shatteredhoof.8009
 	}
 }
 
@@ -1587,6 +1661,7 @@ shared_focus = {
 				NOT = { original_tag = OAP }
 			}
 			country_event = shatteredhoof_ncr.1
+			#country_event = shatteredhoof.10#Important to look at
 		}
 		if = {
 			limit = { OAP = { is_in_faction_with = SHA } } 
