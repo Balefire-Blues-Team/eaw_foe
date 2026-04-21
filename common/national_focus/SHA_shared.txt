@@ -401,6 +401,7 @@ shared_focus = {
 	cost = 4.38
 	available = {
 		is_in_faction = yes
+		has_subject = TPU
 	}
 	
 	prerequisite = { focus = SHA_reclaim_corona }
@@ -873,13 +874,18 @@ shared_focus = {
 	will_lead_to_war_with = LRA
 	completion_reward = {
 		LRA = { ROOT = { grant_wargoals_on_core_states_of_prev = yes } }
+		IF = {
+			limit = {
+				is_ai = yes
+			}
+			declare_war_on = {
+				target = LRA
+				type = annex_everything
+			}
+		}
 		add_war_support = 0.05
 	}
 } 
-
-
-
-
 
 #The Future of Shattered Hoof
 shared_focus = { 
@@ -912,6 +918,12 @@ shared_focus = {
 	y = 1
 	
 	cost = 4.38
+	available = {
+		is_in_faction_with = SHC
+		is_in_faction_with = TPU
+		is_in_faction_with = GTC
+		is_in_faction_with = LRA
+	}
 	relative_position_id = SHA_fate_of_shattered_hoof
 	prerequisite = {
 		focus = SHA_fate_of_shattered_hoof
@@ -921,7 +933,10 @@ shared_focus = {
 
 	completion_reward = {
 		country_event = shatteredhoof.14
-		add_stability = 0.1
+		every_faction_member = {
+			add_stability = 0.05
+		}
+		add_stability = 0.05
 		add_popularity = {
 			ideology = visionary
 			popularity = 0.15
@@ -934,7 +949,6 @@ shared_focus = {
 						EYE = { is_ai = no }
 						FSR = { is_ai = no }
 						MSR = { is_ai = no }
-						MAS = { is_ai = no }
 						NEV = { is_ai = no }
 					}
 				}
@@ -1190,6 +1204,26 @@ shared_focus = {
 		}
 	}
 } 
+
+#Unified Extration Scheme
+shared_focus = { 
+	id = NCR_unified_extraction_scheme
+	icon = GFX_goal_SHA_gawd
+	x = -4
+	y = 5
+	relative_position_id = NCR_provisional_republic
+	
+	cost = 8.71
+
+	prerequisite = { focus = NCR_fortify_leslie }
+	prerequisite = { focus = NCR_lumber_from_radshore }
+
+	ai_will_do = { factor = 500 }
+
+	completion_reward = {
+		
+	}
+} 
 #Total War Preparations
 shared_focus = { 
 	id = NCR_total_war_preparation
@@ -1202,6 +1236,7 @@ shared_focus = {
 
 	prerequisite = { focus = NCR_integrated_economies }
 	prerequisite = { focus = NCR_integrated_war_industry }
+	prerequisite = { focus = NCR_unified_extraction_scheme }
 	bypass = {
 		OR = {
 			has_idea = war_economy
@@ -1238,7 +1273,7 @@ shared_focus = {
 shared_focus = { 
 	id = NCR_joint_exercises
 	icon = GFX_SHA_goal_joint_exercises
-	x = 2
+	x = 6
 	y = 3
 	relative_position_id = NCR_provisional_republic
 
@@ -1259,7 +1294,7 @@ shared_focus = {
 shared_focus = { 
 	id = NCR_leslie_work_release
 	icon = GFX_SHA_goal_fight_release_program
-	x = 1
+	x = 5
 	y = 4
 	relative_position_id = NCR_provisional_republic
 
@@ -1279,7 +1314,7 @@ shared_focus = {
 shared_focus = { 
 	id = NCR_sponsor_mango_brigades
 	icon = GFX_SHA_goal_sponsor_new_mango_jungle_brigades
-	x = 1
+	x = 5
 	y = 5
 	relative_position_id = NCR_provisional_republic
 
@@ -1306,7 +1341,7 @@ shared_focus = {
 shared_focus = { 
 	id = NCR_rockbreaker_divisions
 	icon = GFX_SHA_goal_form_rockbreaker_divisions
-	x = 3
+	x = 7
 	y = 4
 	relative_position_id = NCR_provisional_republic
 
@@ -1334,7 +1369,7 @@ shared_focus = {
 shared_focus = { 
 	id = NCR_arm_the_fishers
 	icon = GFX_SHA_goal_arm_the_fishers
-	x = 3
+	x = 7
 	y = 5
 	relative_position_id = NCR_provisional_republic
 
@@ -1362,7 +1397,7 @@ shared_focus = {
 shared_focus = { 
 	id = NCR_prov_army_of_the_republic
 	icon = GFX_SHA_goal_establish_a_provisional_army
-	x = 6
+	x = 2
 	y = 3
 	relative_position_id = NCR_provisional_republic
 	
@@ -1380,7 +1415,7 @@ shared_focus = {
 shared_focus = { 
 	id = NCR_seize_civillian_arms
 	icon = GFX_SHA_goal_seize_civillian_arms
-	x = 5
+	x = 1
 	y = 4
 	relative_position_id = NCR_provisional_republic
 	
@@ -1399,7 +1434,7 @@ shared_focus = {
 shared_focus = { 
 	id = NCR_fight_for_the_cause
 	icon = GFX_SHA_goal_fight_for_the_cause
-	x = 7
+	x = 3
 	y = 4
 	relative_position_id = NCR_provisional_republic
 	
@@ -1432,7 +1467,7 @@ shared_focus = {
 shared_focus = { 
 	id = NCR_everycreature_serves
 	icon = GFX_SHA_goal_everycreature_serves
-	x = 6
+	x = 2
 	y = 5
 	relative_position_id = NCR_provisional_republic
 	
@@ -1491,13 +1526,15 @@ shared_focus = {
 	id = NCR_the_war_to_free_the_sun
 	icon = GFX_SHA_goal_to_free_the_sun
 	x = 0
-	y = 7
+	y = 5
 	relative_position_id = NCR_provisional_republic
 	
 	cost = 8.71
+	available = {
+		has_war_with = NEV
+	}
 
-	prerequisite = { focus = NCR_everything_we_have }
-	prerequisite = { focus = NCR_total_war_preparation }
+	prerequisite = { focus = NCR_a_new_society }
 
 	ai_will_do = { factor = 500 }
 
@@ -1519,7 +1556,7 @@ shared_focus = {
 	id = NCR_raise_emergency_militias
 	icon = GFX_SHA_goal_raise_emergency_militias
 	x = -2
-	y = 8
+	y = 6
 	relative_position_id = NCR_provisional_republic
 	
 	cost = 4.38
@@ -1590,7 +1627,7 @@ shared_focus = {
 	id = NCR_backyard_gun_workshops
 	icon = GFX_SHA_goal_encourage_local_gun_workshops
 	x = 0
-	y = 8
+	y = 6
 	relative_position_id = NCR_provisional_republic
 	
 	cost = 4.38
@@ -1613,7 +1650,7 @@ shared_focus = {
 	id = NCR_pull_out_all_stops
 	icon = GFX_SHA_goal_pull_out_all_the_stops
 	x = 2
-	y = 8
+	y = 6
 	relative_position_id = NCR_provisional_republic
 	
 	cost = 4.38
@@ -1632,21 +1669,93 @@ shared_focus = {
 		add_timed_idea = { idea = NCR_last_resort_idea days = 100 }
 	}
 }
-#Make the Republic Official
+
+#Prepare for Unification
 shared_focus = { 
-	id = NCR_make_republic_official
-	icon = GFX_SHA_goal_make_the_republic_official
-	x = 0
-	y = 9
+	id = NCR_prepare_for_unification
+	icon = GFX_goal_SHA_gawd
+	x = -3
+	y = 7
 	relative_position_id = NCR_provisional_republic
 	
 	cost = 4.38
 
 	prerequisite = {
-		focus = NCR_raise_emergency_militias 
-		focus = NCR_backyard_gun_workshops 
-		focus = NCR_pull_out_all_stops
+		focus = NCR_everything_we_have 
 	}
+	prerequisite = {
+		focus = NCR_total_war_preparation
+	}
+
+	ai_will_do = { factor = 500 }
+
+	completion_reward = {
+		
+	}
+} 
+
+#Negotiate with New Mango
+shared_focus = { 
+	id = NCR_negotiate_new_mango
+	icon = GFX_goal_SHA_gawd
+	x = 0
+	y = 7
+	relative_position_id = NCR_provisional_republic
+	
+	cost = 4.38
+
+	prerequisite = {
+		focus = NCR_everything_we_have 
+	}
+	prerequisite = {
+		focus = NCR_total_war_preparation
+	}
+
+	ai_will_do = { factor = 500 }
+
+	completion_reward = {
+		
+	}
+} 
+
+#Negotiate with New Mango
+shared_focus = { 
+	id = NCR_unify_command_structure
+	icon = GFX_goal_SHA_gawd
+	x = 3
+	y = 7
+	relative_position_id = NCR_provisional_republic
+	
+	cost = 4.38
+
+	prerequisite = {
+		focus = NCR_everything_we_have 
+	}
+	prerequisite = {
+		focus = NCR_total_war_preparation
+	}
+
+	ai_will_do = { factor = 500 }
+
+	completion_reward = {
+		
+	}
+} 
+
+
+#Make the Republic Official
+shared_focus = { 
+	id = NCR_make_republic_official
+	icon = GFX_SHA_goal_make_the_republic_official
+	x = 0
+	y = 8
+	relative_position_id = NCR_provisional_republic
+	
+	cost = 4.38
+
+	prerequisite = { focus = NCR_unify_command_structure }
+	prerequisite = { focus = NCR_prepare_for_unification }
+	prerequisite = { focus = NCR_negotiate_new_mango }
 	available = { 
 		NOT = { has_war_with = NEV } 
 		is_puppet = no
@@ -1675,6 +1784,25 @@ shared_focus = {
 		}
 	}
 } 
+
+shared_focus = { 
+	id = NCR_the_first_election_opening
+	icon = GFX_SHA_goal_the_first_election
+	x = 0
+	y = 1
+	prerequisite = {
+		focus = NCR_make_republic_official
+	}
+	relative_position_id = NCR_make_republic_official
+	
+	cost = 4.38
+
+	ai_will_do = { factor = 500 }
+
+	completion_reward = {
+		country_event = shatteredhoof_ncr.6
+	}
+}
 
 ############################
 ###New Canterlot Republic###
