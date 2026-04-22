@@ -1732,13 +1732,10 @@ shared_focus = {
 	relative_position_id = EYE_everfree_road
 	x = 0
 	y = 2
-	cost = 7
+	cost = 1
 
 	available = {
-		OR = {
-			has_completed_focus = EYE_futureofamonster
-		}
-
+		has_completed_focus = EYE_crackdown
 	}
 	ai_will_do = { 
 		factor = 60
@@ -1746,7 +1743,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_wasteland_army"
-
+		country_event = { 
+			id = redeye_army.1
+		}
 	}
 
 }
@@ -1757,7 +1756,7 @@ shared_focus = {
 	relative_position_id = EYE_wasteland_army
 	x = -1
 	y = 1
-	cost = 7
+	cost = 1
 	
 	prerequisite = { focus = EYE_wasteland_army } 
 
@@ -1770,7 +1769,21 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_proven_slaves"
-
+		country_event = { 
+			id = redeye_army.2
+		}
+		add_corps_commander_role = {
+			traits = {
+				EYE_slave_visionary_trait intelligent_trait pony_race_trait
+			}
+			character = EYE_char_protege
+			skill = 4
+			attack_skill = 2
+			defense_skill = 4
+			planning_skill = 6
+			logistics_skill = 5
+		}
+		custom_effect_tooltip = EYE_protege_stats_tt
 	}
 
 }
@@ -1781,7 +1794,7 @@ shared_focus = {
 	relative_position_id = EYE_wasteland_army
 	x = 1
 	y = 1
-	cost = 7
+	cost = 1
 
 	prerequisite = { focus = EYE_wasteland_army } 
 	
@@ -1794,7 +1807,23 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_proven_masters"
-
+		country_event = { 
+			id = redeye_army.3
+		}
+		add_corps_commander_role = {
+			character = EYE_char_chainlink
+			traits = { strong_trait pony_race_trait }
+			skill = 4
+			attack_skill = 5
+			defense_skill = 4
+			planning_skill = 5
+			logistics_skill = 3
+			legacy_id = 59308
+		}
+		custom_effect_tooltip = EYE_chainlink_stats_tt
+		hidden_effect = {
+			set_country_flag = EYE_chainlink_commander_flag
+		}
 	}
 
 }
@@ -1805,7 +1834,7 @@ shared_focus = {
 	relative_position_id = EYE_wasteland_army
 	x = 0
 	y = 2
-	cost = 7
+	cost = 1
 
 	prerequisite = { focus = EYE_army_proven_slaves } 
 	prerequisite = { focus = EYE_army_proven_masters }
@@ -1819,7 +1848,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_fanatics"
-
+		country_event = { 
+			id = redeye_army.4
+		}
 	}
 
 }
@@ -1830,15 +1861,12 @@ shared_focus = {
 	relative_position_id = EYE_army_fanatics
 	x = 0
 	y = 1
-	cost = 7
+	cost = 1
 	
 	prerequisite = { focus = EYE_army_fanatics } 
 
 	available = {
-		OR = {
-			has_completed_focus = EYE_futureofamonster
-		}
-
+		has_completed_focus = EYE_redeye_political
 	}
 	ai_will_do = { 
 		factor = 60
@@ -1846,7 +1874,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_three_part_army"
-
+		country_event = { 
+			id = redeye_army.5
+		}
 	}
 
 }
@@ -1858,7 +1888,9 @@ shared_focus = {
 	x = 0
 	y = 1
 	cost = 7
-	
+	allow_branch = {
+			has_country_flag = EYE_raider_army_flag
+	}
 	prerequisite = { focus = EYE_army_three_part_army } 
 
 	available = {
@@ -2029,7 +2061,9 @@ shared_focus = {
 	x = 0
 	y = 1
 	cost = 7
-	
+	allow_branch = {
+			has_country_flag = EYE_slave_army_flag
+	}
 	prerequisite = { focus = EYE_army_three_part_army } 
 
 	available = {
@@ -2193,7 +2227,9 @@ shared_focus = {
 	x = 0
 	y = 1
 	cost = 7
-	
+	allow_branch = {
+			has_country_flag = EYE_talon_army_flag
+	}	
 	prerequisite = { focus = EYE_army_three_part_army } 
 
 	available = {
@@ -2390,7 +2426,6 @@ shared_focus = {
 
 	available = {
 		has_completed_focus = EYE_crackdown
-
 	}
 	ai_will_do = { 
 		factor = 70
@@ -5870,17 +5905,25 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_master_leaders"
+		if = {
+		limit = {
+			 NOT = {
+				has_country_flag = EYE_chainlink_commander_flag
+			 }
+		}
 		add_corps_commander_role = {
 			character = EYE_char_chainlink
 			traits = { strong_trait pony_race_trait }
-			skill = 2
-			attack_skill = 3
-			defense_skill = 1
-			planning_skill = 3
-			logistics_skill = 1
+			skill = 4
+			attack_skill = 5
+			defense_skill = 4
+			planning_skill = 5
+			logistics_skill = 3
 			legacy_id = 59308
 		}
-		custom_effect_tooltip = EYE_chainlink_stats_tt
+		custom_effect_tooltip = EYE_chainlink_stats_tt	
+		}
+
 		set_country_flag = EYE_add_char_Thorn_Bush
 		custom_effect_tooltip = EYE_thorn_stats_tt
 	}
