@@ -980,7 +980,7 @@ shared_focus = {
 	}
 }
 ##Early Industry##
-#Expand the Alliance
+#Solidify the Alliance
 shared_focus = { 
 	id = NCR_expand_the_alliance
 	icon = GFX_SHA_goal_expand_the_alliance
@@ -995,10 +995,14 @@ shared_focus = {
 	ai_will_do = { factor = 50 }
 
 	completion_reward = {
-		custom_effect_tooltip = NCR_invite_new_members_decisions_tt
+		every_faction_member = {
+			add_political_power = 25
+		}
+		set_faction_research_unlocked = yes
+		add_faction_initiative = 2
 	}
 } 
-#Invest in Western Industry
+#Industrial Cooperation
 shared_focus = { 
 	id = NCR_invest_western_industry
 	icon = GFX_SHA_goal_invest_in_western_industry
@@ -1014,21 +1018,21 @@ shared_focus = {
 
 	completion_reward = {
 		custom_effect_tooltip = NCR_unlock_western_investement_tt
-		if = {
-			limit = { ROK = { is_in_faction_with = SHA } }
-			ROK = { add_ideas = NCR_investement_from_sha }
+		add_political_power = -50
+		every_subject_country = {
+			add_ideas = NCR_investement_from_sha
 		}
-		if = {
-			limit = { RAF = { is_in_faction_with = SHA } }
-			RAF = { add_ideas = NCR_investement_from_sha }
-		}
-		if = {
-			limit = { NAP = { is_in_faction_with = SHA } }
-			NAP = { add_ideas = NCR_investement_from_sha }
+		one_random_industrial_complex = yes
+		SHC = {
+			add_political_power = -25
+			one_random_industrial_complex = yes
+			every_subject_country = {
+				add_ideas = NCR_investement_from_sha
+			}
 		}
 	}
 }
-#Expand Rockbreaking Compounds
+#Utilize GTC Trade Network
 shared_focus = { 
 	id = NCR_expand_rock_breaking
 	icon = GFX_SHA_goal_expand_rockbreaking_compounds
@@ -1043,14 +1047,14 @@ shared_focus = {
 	ai_will_do = { factor = 500 }
 
 	completion_reward = {
-		589 = { 
+		588 = { 
 			add_extra_state_shared_building_slots = 1 
 			add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
 		}
-		36 = { add_resource = { type = metal amount = 8 } }
+		588 = { add_resource = { type = water amount = 8 } }
 	}
 }
-#Lumber From the Radshore
+#Free  Movement of Ponies and goods
 shared_focus = { 
 	id = NCR_lumber_from_radshore
 	icon = GFX_SHA_goal_lumber_from_the_radshore
@@ -1065,16 +1069,15 @@ shared_focus = {
 	ai_will_do = { factor = 500 }
 
 	completion_reward = {
-		42 = { add_extra_state_shared_building_slots = 1 
-			add_building_construction = { type = industrial_complex level = 1 instant_build = yes } 
-		}
-		807 = { 
-			add_extra_state_shared_building_slots = 1 
-			add_building_construction = { type = dockyard level = 1 instant_build = yes } 
+		every_faction_member = {
+			add_ideas = open_borders
+			add_ideas = free_trade
+			one_random_infrastructure = yes
+			one_random_infrastructure = yes
 		}
 	}
 } 
-#Integrated Economies
+#Alliance-Wide Labour-market
 shared_focus = { 
 	id = NCR_integrated_economies
 	icon = GFX_SHA_goal_integrated_economies
@@ -1090,8 +1093,9 @@ shared_focus = {
 	ai_will_do = { factor = 500 }
 
 	completion_reward = {
-		every_country = {
-			limit = { is_in_faction_with = SHA }
+		every_faction_member = {
+			add_stability = -0.04
+			add_political_power = -15
 			one_random_industrial_complex = yes
 		}
 	}
@@ -1122,7 +1126,7 @@ shared_focus = {
 		}
 	}
 } 
-#Subsidize the Bat's Industry
+#Concessions to New Mango
 shared_focus = { 
 	id = NCR_subsidise_bat_farms
 	icon = GFX_SHA_goal_subsidize_the_bats_industry
@@ -1145,6 +1149,7 @@ shared_focus = {
 	ai_will_do = { factor = 500 }
 
 	completion_reward = {
+		add_political_power = -20
 		608 = { 
 			add_extra_state_shared_building_slots = 1 
 			add_building_construction = { type = industrial_complex level = 1 instant_build = yes } 
@@ -1155,7 +1160,7 @@ shared_focus = {
 		}
 	}
 } 
-#Fortify Leslie
+#Neocastle development Deal
 shared_focus = { 
 	id = NCR_fortify_leslie
 	icon = GFX_SHA_goal_fortify_leslie
@@ -1170,6 +1175,13 @@ shared_focus = {
 	ai_will_do = { factor = 500 }
 
 	completion_reward = {
+		LRA = {
+		add_equipment_to_stockpile = {
+			type = ballistic_equipment_1
+			amount = 250
+			producer = NCG
+		}
+		}
 		575 = {
 			add_extra_state_shared_building_slots = 1 
 			add_building_construction = { type = arms_factory level = 1 instant_build = yes }
@@ -1179,6 +1191,10 @@ shared_focus = {
 				level = 3
 				instant_build = yes
 			}
+		}
+		747 = {
+			add_extra_state_shared_building_slots = 1 
+			add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
 		}
 	}
 } 
@@ -1221,10 +1237,34 @@ shared_focus = {
 	ai_will_do = { factor = 500 }
 
 	completion_reward = {
-		
+		every_faction_member = {
+			add_tech_bonus = {
+			name = power_armor_tech
+			bonus = 0.3
+			uses = 1
+			category = extraction_tech
+		}
+		}
+		every_faction_member = {
+			limit = { is_subject = yes }
+			random_list = {
+				25 = {
+					capital_scope = { add_resource = {type = metal amount = 10}}
+				}
+				25 = {
+					capital_scope = { add_resource = {type = water amount = 10}}
+				}
+				25 = {
+					capital_scope = { add_resource = {type = energy amount = 10}}
+				}
+				25 = {
+					capital_scope = { add_resource = {type = composites amount = 6}}
+				}
+			}
+		}
 	}
 } 
-#Total War Preparations
+#Embers of Prosperity
 shared_focus = { 
 	id = NCR_total_war_preparation
 	icon = GFX_SHA_goal_total_war_preparations
@@ -1237,17 +1277,14 @@ shared_focus = {
 	prerequisite = { focus = NCR_integrated_economies }
 	prerequisite = { focus = NCR_integrated_war_industry }
 	prerequisite = { focus = NCR_unified_extraction_scheme }
-	bypass = {
-		OR = {
-			has_idea = war_economy
-			has_idea = tot_economic_mobilisation
-		}
-	}
 
 	ai_will_do = { factor = 500 }
 
 	completion_reward = {
-		add_ideas = war_economy
+		swap_ideas = {
+			remove_idea = SHA_economic_ruin3
+			add_idea = SHA_economic_ruin4
+		}
 	}
 }
 ##Early Military##
@@ -1284,16 +1321,18 @@ shared_focus = {
 	ai_will_do = { factor = 50 }
 
 	completion_reward = {
-		every_other_country = {
-			limit = { is_in_faction_with = SHA }
-			add_ideas = NCR_early_joint_exercise
+		every_faction_member = {
+			add_timed_idea = {
+				idea = NCR_early_joint_exercise
+				days = 200
+			}
 		}
 	}
 }
-#Fight-Release Program
+#The Cause of Liberation
 shared_focus = { 
 	id = NCR_leslie_work_release
-	icon = GFX_SHA_goal_fight_release_program
+	icon = GFX_goal_SHA_gawd
 	x = 5
 	y = 4
 	relative_position_id = NCR_provisional_republic
@@ -1310,10 +1349,10 @@ shared_focus = {
 		hidden_effect = { LRA = { load_oob = "LRA_penal_battalions" } }
 	}
 }
-#Sponsor New Mango Jungle-Brigades
+#Amnesty for Service
 shared_focus = { 
 	id = NCR_sponsor_mango_brigades
-	icon = GFX_SHA_goal_sponsor_new_mango_jungle_brigades
+	icon = GFX_SHA_goal_fight_release_program
 	x = 5
 	y = 5
 	relative_position_id = NCR_provisional_republic
@@ -1321,26 +1360,21 @@ shared_focus = {
 	cost = 4.38
 
 	prerequisite = { focus = NCR_leslie_work_release }
-	bypass = {
-		MAN = {
-			OR = {
-				NOT = { is_in_faction_with = SHA }
-				exists = no
-			}
-		}
-	}
 
 	ai_will_do = { factor = 500 }
 
 	completion_reward = {
-		custom_effect_tooltip = MAN_jungle_brigades_tt
-		hidden_effect = { MAN = { load_oob = "MAN_jungle_brigades" } }
+		custom_effect_tooltip = SHA_LRA_amnesty_tt
+		LRA = {
+			add_ideas = service_by_requirement
+			add_ideas = tot_economic_mobilisation
+		}
 	}
 }
-#Form Rockbreaker Divisions
+#Joint Coalition-Arms
 shared_focus = { 
 	id = NCR_rockbreaker_divisions
-	icon = GFX_SHA_goal_form_rockbreaker_divisions
+	icon = GFX_goal_SHA_gawd
 	x = 7
 	y = 4
 	relative_position_id = NCR_provisional_republic
@@ -1352,23 +1386,25 @@ shared_focus = {
 	ai_will_do = { factor = 500 }
 
 	completion_reward = {
-		custom_effect_tooltip = ROK_rockbreakers_tt
-		hidden_effect = {
-			ROK = {
-				load_oob = "ROK_rockbreakers"
-				add_equipment_to_stockpile = {
-					type = demolitions_equipment_1
-					amount = 250
-					producer = SHA
-				}
+		add_equipment_to_stockpile = {
+			type = ballistic_equipment_1
+			amount = 250
+			producer = SHC
+		}
+		SHC = {
+			add_equipment_to_stockpile = {
+				type = ballistic_equipment_1
+				amount = 250
+				producer = SHA
 			}
+			one_random_arms_factory = yes
 		}
 	}
 }
-#Arm the Fishers
+#Sponsor Jungle Brigades
 shared_focus = { 
 	id = NCR_arm_the_fishers
-	icon = GFX_SHA_goal_arm_the_fishers
+	icon = GFX_SHA_goal_sponsor_new_mango_jungle_brigades
 	x = 7
 	y = 5
 	relative_position_id = NCR_provisional_republic
@@ -1380,20 +1416,11 @@ shared_focus = {
 	ai_will_do = { factor = 500 }
 
 	completion_reward = {
-		custom_effect_tooltip = RAF_uber_fishers_tt
-		hidden_effect = {
-			RAF = {
-				load_oob = "RAF_uber_fishers"
-				add_equipment_to_stockpile = {
-					type = demolitions_equipment_1
-					amount = 250
-					producer = SHA
-				}
-			}
-		}
+		custom_effect_tooltip = MAN_jungle_brigades_tt
+		hidden_effect = { MAN = { load_oob = "MAN_jungle_brigades" } }
 	}
 }
-#Establish a Provisional Army
+#Proper Armed Forces
 shared_focus = { 
 	id = NCR_prov_army_of_the_republic
 	icon = GFX_SHA_goal_establish_a_provisional_army
@@ -1430,7 +1457,7 @@ shared_focus = {
 		add_equipment_to_stockpile = { type = infantry_equipment_1 amount = 500 producer = SHA }
 	}
 }
-#Fight for the Cause!
+#Invite foreign Volunteers
 shared_focus = { 
 	id = NCR_fight_for_the_cause
 	icon = GFX_SHA_goal_fight_for_the_cause
@@ -1446,24 +1473,9 @@ shared_focus = {
 
 	completion_reward = {
 		add_manpower = 600
-		ROK = { add_manpower = 190 }
-		LRA = { add_manpower = 150 }
-		RAF = { add_manpower = 100 }
-		if = {
-			limit = { MAN = { is_in_faction_with = SHA } }
-			MAN = { add_manpower = 200 }
-		}
-		if = {
-			limit = { NAP = { is_in_faction_with = SHA } }
-			NAP = { add_manpower = 150 }
-		}
-		if = {
-			limit = { NCG = { is_in_faction_with = SHA } }
-			NCG = { add_manpower = 110 }
-		}
 	}
 }
-#Everycreature Serves!
+#Hire Minor Talon Companies
 shared_focus = { 
 	id = NCR_everycreature_serves
 	icon = GFX_SHA_goal_everycreature_serves
@@ -1473,13 +1485,6 @@ shared_focus = {
 	
 	cost = 4.38
 
-	bypass = {
-		OR = {
-			has_idea = extensive_conscription
-			has_idea = service_by_requirement
-		}
-	}
-
 	prerequisite = { focus = NCR_seize_civillian_arms }
 	prerequisite = { focus = NCR_fight_for_the_cause }
 
@@ -1488,7 +1493,32 @@ shared_focus = {
 	}
 
 	completion_reward = {
-		add_ideas = extensive_conscription
+		add_political_power = -100
+		custom_effect_tooltip = SHA_elite_talons_tt
+		division_template = {
+			name = "Hired Talons"
+			regiments = {
+				talons = { x = 0 y = 0 } talons = { x = 1 y = 0 } talons = { x = 2 y = 0 }
+				talons = { x = 0 y = 1 } talons = { x = 1 y = 1 } talons = { x = 2 y = 1 }
+				talons = { x = 0 y = 2 } talons = { x = 1 y = 2 } talons = { x = 2 y = 2 }
+				talons = { x = 0 y = 3 }
+			}
+			support = {
+				demolitions_support = { x = 0 y = 0 }
+				fireteam_support = { x = 0 y = 1 }
+				medical_chem_company = { x = 0 y = 2 }
+			}
+		}
+		808 = {
+			create_unit = {
+				division = "name = \"Marcel's Talons\" division_template = \"Hired Talons\" start_experience_factor = 0.8" 
+				owner = SHA
+			}
+			create_unit = {
+				division = "name = \"Tinsel's Talons\" division_template = \"Hired Talons\" start_experience_factor = 0.8" 
+				owner = SHA
+			}
+		}
 	}
 } 
 #Everything We Have
@@ -1508,16 +1538,13 @@ shared_focus = {
 	ai_will_do = { factor = 500 }
 
 	completion_reward = {
-		add_stability = -0.1
-		#add_offsite_building = { type = arms_factory level = 1 }
-		#add_offsite_building = { type = industrial_complex level = 1 }
+		add_war_support = 0.05
 		random_core_state = {
 			limit = { is_fully_controlled_by = ROOT }
 			add_extra_state_shared_building_slots = 2
 			add_building_construction = { type = arms_factory level = 1 }
 			add_building_construction = { type = industrial_complex level = 1 }
 		}
-		add_equipment_to_stockpile = { type = infantry_equipment_1 amount = 173 producer = SHA }
 	}
 } 
 ##Early Enclave Matters##
@@ -1690,7 +1717,24 @@ shared_focus = {
 	ai_will_do = { factor = 500 }
 
 	completion_reward = {
-		
+		every_faction_member = {
+			add_popularity = {
+				ideology = visionary
+				popularity = 0.2
+			}
+		}
+		RAF = {
+			add_popularity = {
+				ideology = visionary
+				popularity = 0.1
+			}
+		}
+		ROK = {
+			add_popularity = {
+				ideology = visionary
+				popularity = 0.1
+			}
+		}
 	}
 } 
 
@@ -1714,11 +1758,11 @@ shared_focus = {
 	ai_will_do = { factor = 500 }
 
 	completion_reward = {
-		
+		country_event = shatteredhoof_ncr.1001
 	}
 } 
 
-#Negotiate with New Mango
+#Unify the Command Structure
 shared_focus = { 
 	id = NCR_unify_command_structure
 	icon = GFX_goal_SHA_gawd
@@ -1738,7 +1782,10 @@ shared_focus = {
 	ai_will_do = { factor = 500 }
 
 	completion_reward = {
-		
+		every_faction_member = {
+			add_ideas = officer_law_military_academy
+			add_ideas = training_law_military_academy
+		}
 	}
 } 
 
@@ -1768,6 +1815,7 @@ shared_focus = {
 			limit = { 
 				is_in_faction_with = SHA 
 				NOT = { original_tag = OAP }
+				NOT = { has_country_flag = NCR_opt_out_flag }
 			}
 			country_event = shatteredhoof_ncr.1
 			#country_event = shatteredhoof.10#Important to look at
@@ -1812,9 +1860,8 @@ shared_focus = {
 shared_focus = { 
 	id = NCR_the_first_election
 	icon = GFX_SHA_goal_the_first_election
-	x = 0
-	y = 1
-	relative_position_id = NCR_make_republic_official
+	x = 14
+	y = 2
 	
 	cost = 4.38
 
@@ -1830,8 +1877,8 @@ shared_focus = {
 	id = NCR_the_citizenship_act
 	icon = GFX_SHA_goal_the_citizenship_act
 	x = -4
-	y = 2
-	relative_position_id = NCR_make_republic_official
+	y = 1
+	relative_position_id = NCR_the_first_election
 	
 	cost = 4.38
 
@@ -1850,8 +1897,8 @@ shared_focus = {
 	id = NCR_curtail_the_generals
 	icon = GFX_SHA_goal_curtail_the_generals
 	x = -2
-	y = 2
-	relative_position_id = NCR_make_republic_official
+	y = 1
+	relative_position_id = NCR_the_first_election
 	
 	cost = 4.38
 
@@ -1874,8 +1921,8 @@ shared_focus = {
 	id = NCR_federalize_the_military
 	icon = GFX_SHA_goal_full_military_federalization
 	x = -3
-	y = 3
-	relative_position_id = NCR_make_republic_official
+	y = 2
+	relative_position_id = NCR_the_first_election
 	
 	cost = 4.38
 
@@ -1900,8 +1947,8 @@ shared_focus = {
 	id = NCR_restructuring_the_economy
 	icon = GFX_SHA_goal_restructuring_the_economy
 	x = 2
-	y = 2
-	relative_position_id = NCR_make_republic_official
+	y = 1
+	relative_position_id = NCR_the_first_election
 	
 	cost = 4.38
 
@@ -1923,8 +1970,8 @@ shared_focus = {
 	id = NCR_the_enclave_act
 	icon = GFX_SHA_goal_meet_with_enclave_leaders
 	x = 4
-	y = 2
-	relative_position_id = NCR_make_republic_official
+	y = 1
+	relative_position_id = NCR_the_first_election
 	
 	cost = 4.38
 
@@ -1946,8 +1993,8 @@ shared_focus = {
 	id = NCR_emergency_food_stamps
 	icon = GFX_SHA_goal_emergency_food_relief_program_idea
 	x = 3
-	y = 3
-	relative_position_id = NCR_make_republic_official
+	y = 2
+	relative_position_id = NCR_the_first_election
 
 	cost = 4.38
 
@@ -1961,17 +2008,87 @@ shared_focus = {
 		country_event = shatteredhoof_ncr.23
 	}
 } 
+#The Outer Members
+shared_focus = { 
+	id = NCR_outer_members
+	icon = GFX_goal_SHA_gawd
+	x = 0
+	y = 1
+	relative_position_id = NCR_the_first_election
+	
+	cost = 4.38
+
+	prerequisite = { focus = NCR_the_first_election }
+	bypass = {
+		ROK = {
+			exists = no
+		}
+		RAF = {
+			exists = no
+		}
+	}
+
+	ai_will_do = { factor = 50 }
+
+	will_lead_to_war_with = RAF
+	will_lead_to_war_with = ROK
+	completion_reward = {
+		custom_effect_tooltip = SHA_outer_members_explain_tt
+		IF = {
+			limit = {
+				RAF = {
+					visionary > 39
+					is_subject = no
+				}
+			}
+			annex_country = {
+				target = RAF
+				transfer_troops = no
+			}
+			every_state = {
+				limit = {
+					is_core_of = RAF
+				}
+				add_core_of = SHA
+			}
+		}
+		ELSE = {
+			RAF = { ROOT = { grant_wargoals_on_core_states_of_prev = yes } }
+		}
+		IF = {
+			limit = {
+				ROK = {
+					visionary > 39
+					is_subject = no
+				}
+			}
+			annex_country = {
+				target = ROK
+				transfer_troops = no
+			}
+			every_state = {
+				limit = {
+					is_core_of = ROK
+				}
+				add_core_of = SHA
+			}
+		}
+		ELSE = {
+			ROK = { ROOT = { grant_wargoals_on_core_states_of_prev = yes } }
+		}
+	}
+} 
 #Proposal 261
 shared_focus = { 
 	id = NCR_proposal_216
 	icon = GFX_SHA_goal_proposal_261
 	x = 0
-	y = 3
-	relative_position_id = NCR_make_republic_official
+	y = 2
+	relative_position_id = NCR_the_first_election
 	
 	cost = 4.38
 
-	prerequisite = { focus = NCR_the_first_election }
+	prerequisite = { focus = NCR_outer_members }
 
 	ai_will_do = { factor = 50 }
 
@@ -1985,8 +2102,8 @@ shared_focus = {
 	id = NCR_the_steel_rangers
 	icon = GFX_SHA_goal_our_stance_on_the_steel_rangers
 	x = -4
-	y = 4
-	relative_position_id = NCR_make_republic_official
+	y = 3
+	relative_position_id = NCR_the_first_election
 	
 	cost = 4.38
 	
@@ -2010,8 +2127,8 @@ shared_focus = {
 	id = NCR_fillydelphia_panis_proposal
 	icon = GFX_SHA_goal_the_fillydelphia_pains_proposal
 	x = -5
-	y = 5
-	relative_position_id = NCR_make_republic_official
+	y = 4
+	relative_position_id = NCR_the_first_election
 	
 	cost = 4.38
 
@@ -2035,8 +2152,8 @@ shared_focus = {
 	id = NCR_how_to_deal_with_the_followers
 	icon = GFX_SHA_goal_the_matter_of_the_followers_of_the_apocalypse
 	x = -3
-	y = 5
-	relative_position_id = NCR_make_republic_official
+	y = 4
+	relative_position_id = NCR_the_first_election
 	
 	cost = 4.38
 
@@ -2055,8 +2172,8 @@ shared_focus = {
 	id = NCR_operation_broken_heart
 	icon = GFX_SHA_goal_operation_broken_heart
 	x = -4
-	y = 6
-	relative_position_id = NCR_make_republic_official
+	y = 5
+	relative_position_id = NCR_the_first_election
 	
 	cost = 1.43
 
@@ -2074,8 +2191,8 @@ shared_focus = {
 	id = NCR_help_spread_the_followers
 	icon = GFX_SHA_goal_help_them_spread_their_message
 	x = -2
-	y = 6
-	relative_position_id = NCR_make_republic_official
+	y = 5
+	relative_position_id = NCR_the_first_election
 	
 	cost = 1.43
 
@@ -2098,7 +2215,7 @@ shared_focus = {
 	icon = GFX_SHA_goal_found_the_fmds
 	x = 0
 	y = 4
-	relative_position_id = NCR_make_republic_official
+	relative_position_id = NCR_the_first_election
 	
 	cost = 4.38
 
@@ -2115,8 +2232,8 @@ shared_focus = {
 	id = NCR_the_fight_to_spread_democracy
 	icon = GFX_SHA_goal_fight_to_spread_democracy
 	x = 2
-	y = 4
-	relative_position_id = NCR_make_republic_official
+	y = 3
+	relative_position_id = NCR_the_first_election
 	
 	cost = 4.38
 
@@ -2134,8 +2251,8 @@ shared_focus = {
 	id = NCR_the_wasteland_exploitation_treaty
 	icon = GFX_SHA_goal_the_wasteland_exploitation_treaty
 	x = 4
-	y = 4
-	relative_position_id = NCR_make_republic_official
+	y = 3
+	relative_position_id = NCR_the_first_election
 	
 	cost = 4.38
 
@@ -2172,8 +2289,8 @@ shared_focus = {
 	id = NCR_expand_academia
 	icon = GFX_SHA_goal_establish_public_education
 	x = 0
-	y = 6
-	relative_position_id = NCR_make_republic_official
+	y = 5
+	relative_position_id = NCR_the_first_election
 	
 	cost = 4.38
 
@@ -5761,7 +5878,7 @@ shared_focus = {
 
 		completion_reward = {
 			swap_ideas = {
-				remove_idea = SHA_economic_ruin3
+				remove_idea = SHA_economic_ruin4
 				add_idea = NCR_flwda_idea
 			}
 		}
