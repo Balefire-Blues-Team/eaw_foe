@@ -41,7 +41,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = EYE_futureofamonster
-	icon = GFX_goal_EYE_futureofamonster
+	icon = GFX_goal_EYE_land_for_the_loyal
 	relative_position_id = EYE_lifeofamonster
 	x = 0
 	y = 1
@@ -1725,8 +1725,944 @@ shared_focus = {
 } 
 
 ### Army Tree
+#armystart
 shared_focus = { 
 	id = EYE_wasteland_army
+	icon = GFX_goal_EYE_wasteland_army
+	relative_position_id = EYE_everfree_road
+	x = 0
+	y = 1
+	cost = 5
+
+	available = {
+		has_completed_focus = EYE_redeye_political
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_wasteland_army"
+		country_event = { 
+			id = redeye_army.1
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = EYE_army_proven_slaves
+	icon = GFX_goal_EYE_slave_loyalty
+	relative_position_id = EYE_wasteland_army
+	x = -1
+	y = 1
+	cost = 5
+	
+	prerequisite = { focus = EYE_wasteland_army } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_proven_slaves"
+		country_event = { 
+			id = redeye_army.2
+		}
+		hidden effect = {
+		add_corps_commander_role = {
+			traits = {
+				EYE_slave_visionary_trait intelligent_trait pony_race_trait
+			}
+			character = EYE_char_protege
+			skill = 4
+			attack_skill = 2
+			defense_skill = 4
+			planning_skill = 6
+			logistics_skill = 5
+		}
+		}
+		custom_effect_tooltip = EYE_protege_stats_tt
+	}
+
+}
+
+shared_focus = { 
+	id = EYE_army_proven_masters
+	icon = GFX_goal_EYE_the_masters
+	relative_position_id = EYE_wasteland_army
+	x = 1
+	y = 1
+	cost = 5
+
+	prerequisite = { focus = EYE_wasteland_army } 
+	
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_proven_masters"
+		country_event = { 
+			id = redeye_army.3
+		}
+		hidden_effect = {
+		add_corps_commander_role = {
+			character = EYE_char_chainlink
+			traits = { strong_trait pony_race_trait }
+			skill = 4
+			attack_skill = 5
+			defense_skill = 4
+			planning_skill = 5
+			logistics_skill = 3
+			legacy_id = 59308
+		}
+		set_country_flag = EYE_chainlink_commander_flag
+		}
+		custom_effect_tooltip = EYE_chainlink_stats_tt
+	}
+
+}
+
+shared_focus = { 
+	id = EYE_army_fanatics
+	icon = GFX_goal_ERA_EYE_loyalty
+	relative_position_id = EYE_wasteland_army
+	x = 0
+	y = 2
+	cost = 5
+
+	prerequisite = { focus = EYE_army_proven_slaves } 
+	prerequisite = { focus = EYE_army_proven_masters }
+	
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_fanatics"
+		country_event = { 
+			id = redeye_army.4
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = EYE_army_three_part_army
+	icon = GFX_goal_EYE_futureofamonster
+	relative_position_id = EYE_army_fanatics
+	x = 0
+	y = 1
+	cost = 5
+	
+	prerequisite = { focus = EYE_army_fanatics } 
+
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_three_part_army"
+		country_event = { 
+			id = redeye_army.5
+		}
+	}
+
+}
+#armyraider
+shared_focus = {
+	id = EYE_army_raider_start
+	icon = GFX_goal_EYE_raider_army
+	relative_position_id = EYE_army_three_part_army
+	x = -5
+	y = 1
+	cost = 6
+	prerequisite = { focus = EYE_army_three_part_army } 
+	mutually_exclusive = { focus = EYE_army_slave_start focus = EYE_army_talon_start }
+	
+
+	available = {
+			has_country_flag = EYE_raider_army_flag
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_raider_start"
+		if = {
+		limit = {
+			has_idea = EYE_redeyes_army5_idea
+		}
+		swap_ideas = {
+			remove_idea = EYE_redeyes_army5_idea
+			add_idea = EYE_redeyes_army_raider1_idea
+		}
+		}
+		else = {
+			custom_effect_tooltip = eye_army_new_unity_raider_tt
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = EYE_army_raider_heel
+	icon = GFX_goal_EYE_raiders_in_command
+	relative_position_id = EYE_army_raider_start
+	x = -1
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_raider_start } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_raider_heel"
+		EYE_better_raider_army = yes
+		add_manpower = 250
+		custom_effect_tooltip = EYE_scarlett_recruit_tt
+		custom_effect_tooltip = EYE_scarlett_stats_tt
+		hidden_effect = {
+		add_corps_commander_role = {
+			character = EYE_char_scarlett_flash
+			traits = { intelligent_trait charismatic_trait pony_race_trait }
+			skill = 4
+			attack_skill = 2
+			defense_skill = 2
+			planning_skill = 3
+			logistics_skill = 6
+		}
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = EYE_army_raider_lessons
+	icon = GFX_goal_generic_raider_army_xp
+	relative_position_id = EYE_army_raider_start
+	x = 1
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_raider_start } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_raider_lessons"
+		EYE_better_raider_army = yes
+		add_army_experience = 50
+		add_mastery = {
+			amount = 100
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = EYE_army_raider_big_four
+	icon = GFX_goal_EYE_raids_for_slaves
+	relative_position_id = EYE_army_raider_start
+	x = 0
+	y = 2
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_raider_heel } 
+	prerequisite = { focus = EYE_army_raider_lessons } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_raider_big_four"
+		EYE_better_raider_army = yes
+		country_event = {
+			id = redeye_army.6
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = EYE_army_raider_press_conscript
+	icon = GFX_goal_EYE_raids_for_glory
+	relative_position_id = EYE_army_raider_big_four
+	x = -1
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_raider_big_four } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_raider_press_conscript"
+		custom_effect_tooltip = eye_army_raider_recruitment_tt
+		hidden_effect = {
+			set_country_flag = eye_army_raider_recruit_flag
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = EYE_army_raider_chems
+	icon = GFX_goal_resisting_villages
+	relative_position_id = EYE_army_raider_big_four
+	x = 1
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_raider_big_four } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_chems"
+		add_timed_idea = {
+			idea = EYE_redeyes_army_raider_chems_idea
+			days = 180
+		}
+		custom_effect_tooltip = eye_army_raider_chem_tt
+		hidden_effect = {
+			set_country_flag = eye_army_raider_chem_flag
+			set_country_flag = eye_army_raider_chem_use_flag
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = EYE_army_raider_new_unity
+	icon = GFX_goal_village_raid
+	relative_position_id = EYE_army_slave_promises
+	x = 0
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_talon_the_best  focus = EYE_army_slave_promises focus = EYE_army_raider_press_conscript focus = EYE_army_raider_chems } 
+	
+	allow_branch = {
+		has_country_flag = EYE_raider_army_flag
+	}
+
+	available = {
+		custom_trigger_tooltip = {
+			tooltip = eye_new_unity_formed_tt
+			has_country_flag = EYE_new_unity_flag
+		}
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_raider_new_unity"
+		EYE_better_raider_army = yes
+
+	}
+
+}
+
+#armyslaves
+shared_focus = { 
+	id = EYE_army_slave_start
+	icon = GFX_goal_EYE_an_army_of_slaves
+	relative_position_id = EYE_army_three_part_army
+	x = 0
+	y = 1
+	cost = 6
+
+	mutually_exclusive = { focus = EYE_army_raider_start focus = EYE_army_talon_start }
+	prerequisite = { focus = EYE_army_three_part_army } 
+
+	available = {
+		has_country_flag = EYE_slave_army_flag
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_slave_start"
+		if = {
+		limit = {
+			has_idea = EYE_redeyes_army5_idea
+		}
+		swap_ideas = {
+			remove_idea = EYE_redeyes_army5_idea
+			add_idea = EYE_redeyes_army_slave1_idea
+		}
+		}
+		if = {
+			limit = { 
+				NOT = {
+					RSH = {
+						has_country_flag = RSH_has_lavender
+					}
+				}
+			}
+			set_country_flag = EYE_add_char_lavender_basket_flag
+			custom_effect_tooltip = EYE_lavender_stats_tt
+			custom_effect_tooltip = EYE_lavender_unlock_tt
+			add_corps_commander_role = {
+				character = EYE_char_bleeding_heart
+				traits = { pony_race_trait charismatic_trait }
+				skill = 1
+				attack_skill = 1
+				defense_skill = 1
+				planning_skill = 2
+				logistics_skill = 1
+				legacy_id = 59307
+			}
+			custom_effect_tooltip = EYE_bleeding_stats_tt
+			
+
+			hidden_effect = {
+				set_country_flag = EYE_has_lavender
+			}
+		}
+		else = {
+			add_corps_commander_role = {
+				character = EYE_char_bleeding_heart
+				traits = { pony_race_trait charismatic_trait }
+				skill = 1
+				attack_skill = 1
+				defense_skill = 1
+				planning_skill = 2
+				logistics_skill = 1
+				legacy_id = 59307
+			}
+			custom_effect_tooltip = EYE_bleeding_stats_tt
+		}
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_slave_pressed_service
+	icon = GFX_goal_EYE_fighters_workers
+	relative_position_id = EYE_army_slave_start
+	x = 0
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_slave_start } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_slave_pressed_service"
+		EYE_better_slave_army = yes
+		custom_effect_tooltip = eye_army_slave_conscription_tt
+		hidden_effect = {
+			set_country_flag = eye_army_slave_conscription_flag
+		}
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_slave_benefits
+	icon = GFX_goal_generic_foe_sparkle_cola
+	relative_position_id = EYE_army_slave_pressed_service
+	x = -2
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_slave_pressed_service } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_slave_benefits"
+		EYE_better_slave_army = yes
+		custom_effect_tooltip = eye_army_slave_conscription_improvement_tt
+		hidden_effect = {
+			set_country_flag = eye_army_slave_conscription_faster_flag
+		}
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_slave_commissars
+	icon = GFX_goal_EYE_officers
+	relative_position_id = EYE_army_slave_pressed_service
+	x = 0
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_slave_pressed_service } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_slave_commissars"
+		EYE_better_slave_army = yes
+		if = {
+			limit = {
+				has_idea = EYE_redeye_army_faithfulwarriors_idea
+			}
+			swap_ideas = {
+				add_idea = EYE_redeye_army_faithfulwarriors2_idea
+				remove_idea = EYE_redeye_army_faithfulwarriors_idea
+			}
+		}
+		else_if = {
+			limit = {
+				has_idea = EYE_redeye_army_faithfulpreachers_idea
+			}
+			swap_ideas = {
+				add_idea = EYE_redeye_army_faithfulpreachers2_idea
+				remove_idea = EYE_redeye_army_faithfulpreachers_idea
+			}
+		}
+		else = {
+				add_manpower = 300
+		}
+		hidden_effect = {
+			add_corps_commander_role = {
+				character = EYE_char_wicked_slit
+				traits = { pony_race_trait perceptive_trait }
+				skill = 4
+				attack_skill = 4
+				defense_skill = 2
+				planning_skill = 2
+				logistics_skill = 4
+			}	
+			add_corps_commander_role = {
+				character = EYE_char_whiplash
+				traits = { pony_race_trait strong_trait }
+				skill = 4
+				attack_skill = 2
+				defense_skill = 3
+				planning_skill = 3
+				logistics_skill = 3
+			}
+		}
+		custom_effect_tooltip = EYE_whiplash_stats_tt
+		custom_effect_tooltip = EYE_wicked_stats_tt
+		}
+	}
+shared_focus = { 
+	id = EYE_army_slave_ponywave
+	icon = GFX_generic_goal_militarize_our_society
+	relative_position_id = EYE_army_slave_pressed_service
+	x = 2
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_slave_pressed_service } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_slave_ponywave"
+		EYE_better_slave_army = yes
+		add_mastery = {
+			amount = 100
+		}
+		add_manpower = 300
+		custom_effect_tooltip = eye_army_slave_conscription_improvement2_tt
+		hidden_effect = {
+			set_country_flag = eye_army_slave_conscription_more_flag
+		}
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_slave_promises
+	icon = GFX_goal_AJR_summerfield_conference
+	relative_position_id = EYE_army_slave_pressed_service
+	x = 0
+	y = 2
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_slave_benefits } 
+	prerequisite = { focus = EYE_army_slave_commissars } 
+	prerequisite = { focus = EYE_army_slave_ponywave } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_slave_promises"
+		EYE_better_slave_army = yes
+		add_timed_idea = {
+			idea = EYE_redeye_army_waveofslaves_idea
+			years = 2
+		}
+		custom_effect_tooltip = eye_army_slave_wave_tt
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_slave_new_unity
+	icon = GFX_generic_goal_the_common_infantrypony
+	relative_position_id = EYE_army_slave_promises
+	x = 0
+	y = 1
+	cost = 6
+	allow_branch = {
+		has_country_flag = EYE_slave_army_flag
+	}
+	prerequisite = { focus = EYE_army_talon_the_best  focus = EYE_army_slave_promises focus = EYE_army_raider_press_conscript focus = EYE_army_raider_chems } 
+
+	available = {
+		custom_trigger_tooltip = {
+			tooltip = eye_new_unity_formed_tt
+			has_country_flag = EYE_new_unity_flag
+		}
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_slave_promises"
+		EYE_better_slave_army = yes
+	}
+
+}
+#armytalons
+shared_focus = { 
+	id = EYE_army_talon_start
+	icon = GFX_goal_EYE_the_talons
+	relative_position_id = EYE_army_three_part_army
+	x = 5
+	y = 1
+	cost = 6
+	mutually_exclusive = { focus = EYE_army_raider_start focus = EYE_army_slave_start }
+	prerequisite = { focus = EYE_army_three_part_army } 
+
+	available = {
+		has_country_flag = EYE_talon_army_flag
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_talon_start"
+		
+		if = {
+			limit = {
+				has_idea = EYE_redeyes_army5_idea
+			}
+		swap_ideas = {
+			add_idea = EYE_redeyes_army_talon1_idea
+			remove_idea = EYE_redeyes_army5_idea
+		}
+		else = {
+			custom_effect_tooltip = eye_army_new_unity_talon_tt
+		}
+		}
+		if = {
+			limit = {
+			NOT = {
+				has_idea = training_law_talon
+			}
+			}
+		}
+		add_ideas = training_law_talon
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_talon_ranger_tactics
+	icon = GFX_goal_EYE_anti_tank_focus
+	relative_position_id = EYE_army_talon_start
+	x = -2
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_talon_start } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_talon_ranger_tactics"
+		EYE_better_talon_army = yes
+		add_equipment_to_stockpile = {
+			type = anti_tank_equipment
+			amount = 300
+		}
+		add_ideas = EYE_redeye_army_talons_antiranger_idea
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_talon_logistics
+	icon = GFX_goal_EYE_the_talons_2
+	relative_position_id = EYE_army_talon_start
+	x = 0
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_talon_start } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_talon_logistics"
+		EYE_better_talon_army = yes
+		custom_effect_tooltip = eye_army_talon_hire_tt
+		hidden_effect = {
+			set_country_flag = eye_army_talon_recruit_flag
+		}
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_talon_rapid_force
+	icon = GFX_goal_EYE_combat_doctrine
+	relative_position_id = EYE_army_talon_start
+	x = 2
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_talon_start } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_talon_rapid_force"
+		EYE_better_talon_army = yes
+		add_ideas = EYE_redeye_army_talons_rapid_idea
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_talon_power_armor
+	icon = GFX_goal_EYE_pa_focus
+	relative_position_id = EYE_army_talon_logistics
+	x = -1
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_talon_ranger_tactics } 
+	prerequisite = { focus = EYE_army_talon_logistics } 
+	prerequisite = { focus = EYE_army_talon_rapid_force }
+	
+	mutually_exclusive = { focus = EYE_army_talon_spec_ops }
+
+	available = {
+		has_completed_focus = EYE_ranger_turncoats
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_talon_power_armor"
+		set_technology = {
+    		talon_pa_tech = 1
+		}
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_talon_spec_ops
+	icon = GFX_goal_EYE_elite_mercs
+	relative_position_id = EYE_army_talon_logistics
+	x = 1
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_talon_ranger_tactics } 
+	prerequisite = { focus = EYE_army_talon_logistics } 
+	prerequisite = { focus = EYE_army_talon_rapid_force }
+	
+	mutually_exclusive = { focus = EYE_army_talon_power_armor }
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_talon_spec_ops"
+		set_technology = {
+			stealth_boy_tech = 1
+			special_forces_tech_level_scientific = 1
+		}
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_talon_the_best
+	icon = GFX_goal_EYE_the_talons_of_fillydelphia
+	relative_position_id = EYE_army_talon_power_armor
+	x = 1
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_talon_power_armor
+					 focus = EYE_army_talon_spec_ops } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_talon_the_best"
+		EYE_better_talon_army = yes
+		custom_effect_tooltip = eye_army_talon_merge_tt
+		hidden_effect = {
+			remove_ideas = {
+				idea = EYE_redeye_army_talons_antiranger_idea
+				idea = EYE_redeye_army_talons_rapid_idea
+			}
+		}
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_talon_new_unity
+	icon = GFX_goal_EYE_the_victorious_talons
+	relative_position_id = EYE_army_slave_promises
+	x = 0
+	y = 1
+	cost = 6
+	allow_branch = {
+		has_country_flag = EYE_talon_army_flag
+	}
+	prerequisite = { focus = EYE_army_talon_the_best  focus = EYE_army_slave_promises focus = EYE_army_raider_press_conscript focus = EYE_army_raider_chems } 
+
+	available = {
+		custom_trigger_tooltip = {
+			tooltip = eye_new_unity_formed_tt
+			has_country_flag = EYE_new_unity_flag
+		}
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_talon_new_unity"
+		EYE_better_talon_army = yes
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_new_unity_neutral
+	icon = GFX_generic_goal_conventional_tactics
+	relative_position_id = EYE_army_slave_promises
+	x = 0
+	y = 1
+	cost = 6
+	
+	allow_branch = {
+		NOT = {
+			OR = {
+				has_country_flag = EYE_slave_army_flag
+				has_country_flag = EYE_talon_army_flag
+				has_country_flag = EYE_raider_army_flag
+			}
+		}
+	}
+	
+	prerequisite = { focus = EYE_army_talon_the_best  focus = EYE_army_slave_promises focus = EYE_army_raider_press_conscript focus = EYE_army_raider_chems } 
+
+	available = {
+		custom_trigger_tooltip = {
+			tooltip = eye_new_unity_formed_tt
+			has_country_flag = EYE_new_unity_flag
+		}
+	}
+	ai_will_do = { 
+		factor = 60
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_talon_new_unity"
+		custom_effect_tooltip = eye_army_new_unity_generic_tt
+	}
+
+}
+###Alt Army Tree
+shared_focus = { 
+	id = EYE_wasteland_army_legacy
 	icon = GFX_goal_EYE_wasteland_army
 	relative_position_id = EYE_everfree_road
 	x = 0
@@ -1745,12 +2681,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_wasteland_army"
-		add_doctrine_cost_reduction = {
-    		cost_reduction = 0.5
-    		uses = 2
-    		category = land_doctrine
-		}
-		army_experience = 10
+		EYE_better_army_remove
+		add_ideas = professional_army_idea
 	}
 
 }
@@ -1758,12 +2690,12 @@ shared_focus = {
 shared_focus = { 
 	id = EYE_merc_army
 	icon = GFX_goal_EYE_merc_army
-	relative_position_id = EYE_wasteland_army
+	relative_position_id = EYE_wasteland_army_legacy
 	x = 4
 	y = 1
 	cost = 6
 
-	prerequisite = { focus = EYE_wasteland_army} 
+	prerequisite = { focus = EYE_wasteland_army_legacy} 
 	available = {
 		has_country_flag = EYE_talon_army_flag
 	}
@@ -1781,11 +2713,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_merc_army"
-		add_tech_bonus = {
-    		bonus = 0.5
-    		uses = 2
-    		category = cat_elite_army
-		}
+		add_ideas = EYE_redeye_army_talons_rapid_idea
 	}
 
 } 
@@ -1793,12 +2721,12 @@ shared_focus = {
 shared_focus = { 
 	id = EYE_slave_army
 	icon = GFX_goal_EYE_slave_army
-	relative_position_id = EYE_wasteland_army
+	relative_position_id = EYE_wasteland_army_legacy
 	x = 0
 	y = 1
 	cost = 6
 
-	prerequisite = { focus = EYE_wasteland_army} 
+	prerequisite = { focus = EYE_wasteland_army_legacy} 
 	available = {
 		has_country_flag = EYE_slave_army_flag
 	}
@@ -1816,8 +2744,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_slave_army"
-		add_manpower = 1500
-		add_war_support = -0.10
+		custom_effect_tooltip = eye_army_slave_conscription_tt
+		hidden_effect = {
+			set_country_flag = eye_army_slave_conscription_flag
+		}
 	}
 
 } 
@@ -1825,12 +2755,12 @@ shared_focus = {
 shared_focus = { 
 	id = EYE_raider_army
 	icon = GFX_goal_EYE_raider_army
-	relative_position_id = EYE_wasteland_army
+	relative_position_id = EYE_wasteland_army_legacy
 	x = -4
 	y = 1
 	cost = 6
 
-	prerequisite = { focus = EYE_wasteland_army}
+	prerequisite = { focus = EYE_wasteland_army_legacy}
 	available = {
 		has_country_flag = EYE_raider_army_flag
 	}
@@ -1848,11 +2778,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_raider_army"
-		add_tech_bonus = {
-    		bonus = 0.5
-    		uses = 2
-    		category = cat_terror_tactics
-		}
+		set_country_flag = EYE_add_char_wildcard_flag
+		custom_effect_tooltip = EYE_wildcard_stats_tt
 	}
 
 } 
@@ -1860,7 +2787,7 @@ shared_focus = {
 shared_focus = { 
 	id = EYE_military_cache
 	icon = GFX_goal_EYE_military_cache
-	relative_position_id = EYE_raider_army
+	relative_position_id = EYE_raider_army_legacy
 	x = 0
 	y = 1
 	cost = 6
@@ -1911,8 +2838,28 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_strong_leadership"
-
-		EYE_better_army = yes
+		hidden_effect = {
+			add_corps_commander_role = {
+				character = EYE_char_wicked_slit
+				traits = { pony_race_trait perceptive_trait }
+				skill = 4
+				attack_skill = 4
+				defense_skill = 2
+				planning_skill = 2
+				logistics_skill = 4
+			}	
+			add_corps_commander_role = {
+				character = EYE_char_whiplash
+				traits = { pony_race_trait strong_trait }
+				skill = 4
+				attack_skill = 2
+				defense_skill = 3
+				planning_skill = 3
+				logistics_skill = 3
+			}
+		}
+		custom_effect_tooltip = EYE_whiplash_stats_tt
+		custom_effect_tooltip = EYE_wicked_stats_tt
 	}
 
 }
@@ -2270,7 +3217,6 @@ shared_focus = {
 
 	available = {
 		has_completed_focus = EYE_crackdown
-
 	}
 	ai_will_do = { 
 		factor = 70
@@ -5750,17 +6696,25 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_master_leaders"
+		if = {
+		limit = {
+			 NOT = {
+				has_country_flag = EYE_chainlink_commander_flag
+			 }
+		}
 		add_corps_commander_role = {
 			character = EYE_char_chainlink
 			traits = { strong_trait pony_race_trait }
-			skill = 2
-			attack_skill = 3
-			defense_skill = 1
-			planning_skill = 3
-			logistics_skill = 1
+			skill = 4
+			attack_skill = 5
+			defense_skill = 4
+			planning_skill = 5
+			logistics_skill = 3
 			legacy_id = 59308
 		}
-		custom_effect_tooltip = EYE_chainlink_stats_tt
+		custom_effect_tooltip = EYE_chainlink_stats_tt	
+		}
+
 		set_country_flag = EYE_add_char_Thorn_Bush
 		custom_effect_tooltip = EYE_thorn_stats_tt
 	}
