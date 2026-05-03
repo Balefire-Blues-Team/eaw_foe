@@ -10385,10 +10385,21 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 50
 	} 
+	bypass = {
+		NOV = { all_core_land_owned_by_prev_sphere = yes }
+		DSB = { all_core_land_owned_by_prev_sphere = yes }
+	}
 
+	will_lead_to_war_with = NOV
+	will_lead_to_war_with = DSB
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_settle_old_scores"
-		
+		NOV = {
+			grant_wargoals_on_core_states_of_prev = yes
+		}
+		DSB = {
+			grant_wargoals_on_core_states_of_prev = yes
+		}
 	}
 } 
 
@@ -10405,10 +10416,31 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 50
 	} 
+	available = {
+		OR = {
+			DSB = {
+				is_subject_of = COL
+			}
+			321 = {
+				is_owned_and_controlled_by = COL
+				compliance > 69
+			}
+		}
+	}
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_mend_burnt_bridges"
-		
+		#Flavour-event
+		IF = {
+			limit = {
+				DSB = { is_subject_of = COL }
+			}
+			annex_country = {
+				target = DSB
+				transfer_troops = yes
+			}
+		}
+		core_original_DSB = yes
 	}
 } 
 
@@ -10425,10 +10457,32 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 50
 	} 
+	available = {
+		OR = {
+			NOV = {
+				is_subject_of = COL
+			}
+			204 = {
+				is_owned_and_controlled_by = COL
+				compliance > 69
+			}
+		}
+	}
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_unite_with_novochernusk"
 		#They have a senate too, and in general did really well. We will core them, and allow Sudden Drop to return to the Fold!
+		#Flavour-event for the above
+		IF = {
+			limit = {
+				NOV = { is_subject_of = COL }
+			}
+			annex_country = {
+				target = NOV
+				transfer_troops = yes
+			}
+		}
+		core_original_NOV = yes
 	}
 } 
 
@@ -10447,9 +10501,21 @@ shared_focus = {
 		factor = 50
 	} 
 
+	will_lead_to_war_with = SKY
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_liberate_the_enclave"
-		
+		#flavour-event
+		add_war_support = 0.10
+		every_state = {
+			limit = {
+				is_owned_by = SKY
+			}
+			add_claim_by = COL
+		}
+		declare_war_on = {
+			target = SKY
+			type = annex_everything
+		}
 	}
 } 
 
