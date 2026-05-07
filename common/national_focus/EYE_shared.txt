@@ -493,8 +493,8 @@ shared_focus = {
 				value = 5
 				compare = greater_than_or_equals
 			}
-		}
 			is_ai = yes
+		}
 		}
 		}
 	}
@@ -1047,25 +1047,29 @@ shared_focus = {
 		48 = {
 			add_building_construction = {
 				type = bunker
-				level = 1
+				level = 2
 				instant_build = yes
 				province = 9090
 			}
 			add_building_construction = {
-				type = outpost
-				level = 2
+				type = bunker2
+				level = 1
+				instant_build = yes 
+				province = 9090
 			}
 		}
 		50 = {
 			add_building_construction = {
 				type = bunker
-				level = 1
+				level = 2
 				instant_build = yes
 				province = 9090
 			}
 			add_building_construction = {
-				type = outpost
-				level = 2
+				type = bunker2
+				level = 1
+				instant_build = yes 
+				province = 9090
 			}
 		}
 	}
@@ -1752,7 +1756,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = EYE_army_proven_slaves
-	icon = GFX_goal_EYE_slave_loyalty
+	icon = GFX_goal_EYE_those_who_prove_themselves
 	relative_position_id = EYE_wasteland_army
 	x = -1
 	y = 1
@@ -1832,7 +1836,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = EYE_army_fanatics
-	icon = GFX_goal_ERA_EYE_loyalty
+	icon = GFX_goal_EYE_believers_and_fanatics
 	relative_position_id = EYE_wasteland_army
 	x = 0
 	y = 2
@@ -1956,7 +1960,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = EYE_army_raider_lessons
-	icon = GFX_goal_generic_raider_army_xp
+	icon = GFX_goal_EYE_lessons_in_brutality
 	relative_position_id = EYE_army_raider_start
 	x = 1
 	y = 1
@@ -2039,7 +2043,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = EYE_army_raider_chems
-	icon = GFX_goal_resisting_villages
+	icon = GFX_goal_EYE_bountiful_chems_and_violence
 	relative_position_id = EYE_army_raider_big_four
 	x = 1
 	y = 1
@@ -2204,7 +2208,7 @@ shared_focus = {
 }
 shared_focus = { 
 	id = EYE_army_slave_benefits
-	icon = GFX_goal_generic_foe_sparkle_cola
+	icon = GFX_goal_EYE_special_privelges
 	relative_position_id = EYE_army_slave_pressed_service
 	x = -2
 	y = 1
@@ -2231,7 +2235,7 @@ shared_focus = {
 }
 shared_focus = { 
 	id = EYE_army_slave_commissars
-	icon = GFX_goal_EYE_officers
+	icon = GFX_goal_EYE_ideological_officers
 	relative_position_id = EYE_army_slave_pressed_service
 	x = 0
 	y = 1
@@ -2296,7 +2300,7 @@ shared_focus = {
 	}
 shared_focus = { 
 	id = EYE_army_slave_ponywave
-	icon = GFX_generic_goal_militarize_our_society
+	icon = GFX_goal_EYE_endless_waves
 	relative_position_id = EYE_army_slave_pressed_service
 	x = 2
 	y = 1
@@ -2327,7 +2331,7 @@ shared_focus = {
 }
 shared_focus = { 
 	id = EYE_army_slave_promises
-	icon = GFX_goal_AJR_summerfield_conference
+	icon = GFX_goal_EYE_promises_of_freedom
 	relative_position_id = EYE_army_slave_pressed_service
 	x = 0
 	y = 2
@@ -2429,7 +2433,7 @@ shared_focus = {
 }
 shared_focus = { 
 	id = EYE_army_talon_ranger_tactics
-	icon = GFX_goal_EYE_anti_tank_focus
+	icon = GFX_goal_EYE_anti_ranger_tactics
 	relative_position_id = EYE_army_talon_start
 	x = -2
 	y = 1
@@ -2457,7 +2461,7 @@ shared_focus = {
 }
 shared_focus = { 
 	id = EYE_army_talon_logistics
-	icon = GFX_goal_EYE_the_talons_2
+	icon = GFX_goal_EYE_recruitment_calls
 	relative_position_id = EYE_army_talon_start
 	x = 0
 	y = 1
@@ -2562,12 +2566,19 @@ shared_focus = {
 			stealth_boy_tech = 1
 			special_forces_tech_level_scientific = 1
 		}
+		custom_effect_tooltip = EYE_talon_specops_equip_tt
+		hidden_effect = {
+			set_technology = {
+				foe_talon_spec_ops_require_tech = 1
+				popup = no
+			}
+		}
 	}
 
 }
 shared_focus = { 
 	id = EYE_army_talon_the_best
-	icon = GFX_goal_EYE_the_talons_of_fillydelphia
+	icon = GFX_goal_EYE_the_best_of_the_best
 	relative_position_id = EYE_army_talon_power_armor
 	x = 1
 	y = 1
@@ -2626,7 +2637,7 @@ shared_focus = {
 }
 shared_focus = { 
 	id = EYE_army_new_unity_neutral
-	icon = GFX_generic_goal_conventional_tactics
+	icon = GFX_goal_EYE_army_of_unity
 	relative_position_id = EYE_army_slave_promises
 	x = 0
 	y = 1
@@ -3761,7 +3772,12 @@ shared_focus = {
 
 	prerequisite = { focus = EYE_cybernetic }
 	available = {
-		EYE_has_med_infl_UNI = yes
+		OR = {
+			NOT = {
+				country_exists = UNI
+			}
+			EYE_has_med_infl_UNI = yes
+		}
 	}
 	ai_will_do = { 
 		factor = 70
