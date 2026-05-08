@@ -7239,9 +7239,9 @@ shared_focus = {
 
 #starting militery tree draft
 shared_focus = {
-		id = NEV_Military_situation
+		id = NEV_Core_militery_doctorine
 		icon = NEV_academy
-		x = 42
+		x = 48
 		y = 2
 		cost = 2
 
@@ -7257,15 +7257,104 @@ shared_focus = {
 		army_experience = 20
 		}
 }
-
+## infrantry core
 shared_focus = {
-		id = NEV_repairing_old_factories
-		relative_position_id = NEV_Military_situation
-		prerequisite = { focus = NEV_Military_situation }
-		mutually_exclusive = { focus = NEV_switching_priorities }
+		id = NEV_infrantry_core
+		relative_position_id = NEV_Core_militery_doctorine
+		prerequisite = { focus = NEV_Core_militery_doctorine }
+		mutually_exclusive = { focus = NEV_pegasi_core }
+		mutually_exclusive = { focus = NEV_power_armour_core }
 		icon = NEV_academy
-		x = -3
+		x = -5
 		y = 1
+		cost = 6
+
+		available_if_capitulated = yes
+		ai_will_do = {
+		factor = 50
+		modifier = {
+				factor = 0.1
+
+			}
+		}
+
+		completion_reward = {
+           add_ideas = NEV_militery_doctorine_ideas_1
+	}
+}
+
+shared_focus = {
+		id = NEV_increased_research_funds
+		relative_position_id = NEV_Core_militery_doctorine
+		prerequisite = { focus = NEV_infrantry_core }
+		icon = NEV_academy
+		x = -6
+		y = 3
+		cost = 3
+
+		available_if_capitulated = yes
+		ai_will_do = {
+		factor = 50
+		modifier = {
+				factor = 0.1
+
+			}
+		}
+
+		completion_reward = {
+add_tech_bonus = {
+	name = infantry_bonus
+	bonus = 0.75
+	uses = 3
+	technology = unit_training_tech1
+	technology = unit_training_tech2
+	technology = unit_training_tech3
+	technology = unit_training_tech4
+	technology = unit_training_tech5
+	technology = unit_training_tech6
+	technology = unit_training_tech7
+	technology = unit_training_tech8
+	technology = overcharged_ammunition
+	technology = energy_weaponry_tech_3
+	technology = custom_built_capacitors
+	technology = energy_weaponry_tech_4
+}
+	}
+}
+
+shared_focus = {
+		id = NEV_increased_recruitment
+		relative_position_id = NEV_Core_militery_doctorine
+		prerequisite = { focus = NEV_infrantry_core }
+		icon = NEV_academy
+		x = -4
+		y = 3
+		cost = 3
+
+		available_if_capitulated = yes
+		ai_will_do = {
+		factor = 50
+		modifier = {
+				factor = 0.1
+
+			}
+		}
+
+		completion_reward = {
+		add_manpower = 400
+		add_war_support = 0.1
+          
+	}
+}
+
+shared_focus = {
+		id = NEV_research_wasteland_battles
+		relative_position_id = NEV_Core_militery_doctorine
+		prerequisite = { focus = NEV_increased_research_funds }
+		prerequisite = { focus = NEV_increased_recruitment }
+		icon = NEV_academy
+		x = -5
+		y = 4
 		cost = 4
 
 		available_if_capitulated = yes
@@ -7278,24 +7367,20 @@ shared_focus = {
 		}
 
 		completion_reward = {
-			696 = {
-			add_extra_state_shared_building_slots = 2
-			add_building_construction = {
-				type = arms_factory
-				level = 2
-				instant_build = yes
+			swap_ideas = { 
+                remove_idea = NEV_militery_doctorine_ideas_1
+                add_idea = NEV_militery_doctorine_ideas_2
 			}
-		}
 	}
 }
 
 shared_focus = {
-		id = NEV_clean_up_the_old_district
-		relative_position_id = NEV_Military_situation
-		prerequisite = { focus = NEV_repairing_old_factories }
+		id = NEV_decrease_reqirements
+		relative_position_id = NEV_Core_militery_doctorine
+		prerequisite = { focus = NEV_research_wasteland_battles }
 		icon = NEV_academy
-		x = -3
-		y = 2
+		x = -5
+		y = 5
 		cost = 4
 
 		available_if_capitulated = yes
@@ -7308,30 +7393,44 @@ shared_focus = {
 		}
 
 		completion_reward = {
-			696 = {
-			add_extra_state_shared_building_slots = 2
-			add_building_construction = {
-				type = arms_factory
-				level = 2
-				instant_build = yes
-			add_building_construction = {
-				type = industrial_complex
-				level = 1
-				instant_build = yes
+			swap_ideas = { 
+                remove_idea = NEV_militery_doctorine_ideas_2
+                add_idea = NEV_militery_doctorine_ideas_3
 			}
-		}
 	}
 }
 
+shared_focus = {
+		id = NEV_power_armour_core
+		relative_position_id = NEV_Core_militery_doctorine
+		prerequisite = { focus = NEV_Core_militery_doctorine }
+		mutually_exclusive = { focus = NEV_pegasi_core }
+		mutually_exclusive = { focus = NEV_infrantry_core }
+		icon = NEV_academy
+		x = 0
+		y = 1
+		cost = 6
+
+		available_if_capitulated = yes
+		ai_will_do = {
+		factor = 50
+		modifier = {
+				factor = 0.1
+	
+			}
+		}
+
+		completion_reward = {
+			add_ideas = NEV_militery_doctorine_ideas_11
+	}
 }
 
 shared_focus = {
-		id = NEV_Recyle_the_scrap
-		relative_position_id = NEV_Military_situation
-		prerequisite = { focus = NEV_clean_up_the_old_district }
-		prerequisite = { focus = NEV_Quality_first focus = NEV_Quentity_first }
+		id = NEV_examining_broken_frames
+		relative_position_id = NEV_Core_militery_doctorine
+		prerequisite = { focus = NEV_power_armour_core }
 		icon = NEV_academy
-		x = -2
+		x = 0
 		y = 3
 		cost = 4
 
@@ -7345,32 +7444,80 @@ shared_focus = {
 		}
 
 		completion_reward = {
-			add_resource = {
-				type = metal
-				amount = 4
-				state = 696
-			}
-			add_resource = {
-				type = circuitry
-				amount = 2
-				state = 696
-			}
-			add_resource = {
-				type = crystals
-				amount = 2
-				state = 696
-			}
-		}
+add_tech_bonus = {
+	name = infantry_bonus
+	bonus = 0.5
+	uses = 5
+	technology = tech_pegasus_power_armor
+	technology = tech_pegasus_power_armor2
+	technology = tech_pegasus_power_armor3
+	technology = tech_pegasus_power_armor4
+	technology = tech_pegasus_power_armor5
+}
 	}
+}
 
 shared_focus = {
-		id = NEV_Quality_first
-		relative_position_id = NEV_Military_situation
-		prerequisite = { focus = NEV_repairing_old_factories focus = NEV_switching_priorities }
-		mutually_exclusive = { focus = NEV_Quentity_first }
+		id = NEV_increase_testing
+		relative_position_id = NEV_Core_militery_doctorine
+		prerequisite = { focus = NEV_examining_broken_frames }
 		icon = NEV_academy
-		x = -1
-		y = 2
+		x = 0
+		y = 4
+		cost = 4
+
+		available_if_capitulated = yes
+		ai_will_do = {
+		factor = 50
+		modifier = {
+				factor = 0.1
+	
+			}
+		}
+
+		completion_reward = {
+			swap_ideas = { 
+                remove_idea = NEV_militery_doctorine_ideas_11
+                add_idea = NEV_militery_doctorine_ideas_12
+			}
+	}
+}
+
+shared_focus = {
+		id = NEV_implement_improvements
+		relative_position_id = NEV_Core_militery_doctorine
+		prerequisite = { focus = NEV_increase_testing }
+		icon = NEV_academy
+		x = 0
+		y = 5
+		cost = 4
+
+		available_if_capitulated = yes
+		ai_will_do = {
+		factor = 50
+		modifier = {
+				factor = 0.1
+	
+			}
+		}
+
+		completion_reward = {
+			swap_ideas = { 
+                remove_idea = NEV_militery_doctorine_ideas_12
+                add_idea = NEV_militery_doctorine_ideas_13
+			}
+	}
+}
+
+shared_focus = {
+		id = NEV_pegasi_core
+		relative_position_id = NEV_Core_militery_doctorine
+		prerequisite = { focus = NEV_Core_militery_doctorine }
+		mutually_exclusive = { focus = NEV_infrantry_core }
+		mutually_exclusive = { focus = NEV_power_armour_core }
+		icon = NEV_academy
+		x = 5
+		y = 1
 		cost = 6
 
 		available_if_capitulated = yes
@@ -7378,22 +7525,140 @@ shared_focus = {
 		factor = 50
 		modifier = {
 				factor = 0.1
-
+	
 			}
 		}
 
 		completion_reward = {
-          add_ideas = NEV_improved_training_1
+			add_ideas = NEV_militery_doctorine_ideas_6
+	}
+}
+
+shared_focus = {
+		id = increased_flying_lessons
+		relative_position_id = NEV_Core_militery_doctorine
+		prerequisite = { focus = NEV_pegasi_core }
+		icon = NEV_academy
+		x = 6
+		y = 3
+		cost = 3
+
+		available_if_capitulated = yes
+		ai_will_do = {
+		factor = 50
+		modifier = {
+				factor = 0.1
+	
+			}
+		}
+
+		completion_reward = {
+add_tech_bonus = {
+	name = infantry_bonus
+	bonus = 0.75
+	uses = 3
+	technology = tech_pegasus_misc
+	technology = tech_pegasus_misc2
+	technology = tech_pegasus_misc3
+	technology = tech_pegasus_misc4
+	technology = tech_pegasus_misc5
+	technology = tech_pegasus_misc6a
+	technology = tech_pegasus_misc6b
+	technology = tech_pegasus_pegasi
+	technology = tech_pegasus_pegasi2
+	technology = tech_pegasus_pegasi3
+	technology = tech_pegasus_pegasi4
+	technology = tech_pegasus_pegasi5
+}
+	}
+}
+
+shared_focus = {
+		id = NEV_militery_parades
+		relative_position_id = NEV_Core_militery_doctorine
+		prerequisite = { focus = NEV_pegasi_core }
+		icon = NEV_academy
+		x = 4
+		y = 3
+		cost = 3
+
+		available_if_capitulated = yes
+		ai_will_do = {
+		factor = 50
+		modifier = {
+				factor = 0.1
+	
+			}
+		}
+
+		completion_reward = {
+			add_political_power = 100
+			add_war_support = 0.1
+			add_command_power = 40
+			army_experience = 20
+	}
+}
+
+shared_focus = {
+		id = NEV_heavy_weight_training
+		relative_position_id = NEV_Core_militery_doctorine
+		prerequisite = { focus = increased_flying_lessons }
+		prerequisite = { focus = NEV_militery_parades }
+		icon = NEV_academy
+		x = 5
+		y = 4
+		cost = 4
+
+		available_if_capitulated = yes
+		ai_will_do = {
+		factor = 50
+		modifier = {
+				factor = 0.1
+	
+			}
+		}
+
+		completion_reward = {
+			swap_ideas = { 
+                remove_idea = NEV_militery_doctorine_ideas_6
+                add_idea = NEV_militery_doctorine_ideas_7
+	}
+	}
+}
+
+shared_focus = {
+		id = NEV_remove_unessery_weight
+		relative_position_id = NEV_Core_militery_doctorine
+		prerequisite = { focus = NEV_heavy_weight_training }
+		icon = NEV_academy
+		x = 5
+		y = 5
+		cost = 4
+
+		available_if_capitulated = yes
+		ai_will_do = {
+		factor = 50
+		modifier = {
+				factor = 0.1
+	
+			}
+		}
+
+		completion_reward = {
+			swap_ideas = { 
+                remove_idea = NEV_militery_doctorine_ideas_7
+                add_idea = NEV_militery_doctorine_ideas_8
+	}
 	}
 }
 
 shared_focus = {
 		id = NEV_Quentity_first
-		relative_position_id = NEV_Military_situation
-		prerequisite = { focus = NEV_repairing_old_factories focus = NEV_switching_priorities }
+		relative_position_id = NEV_Core_militery_doctorine
+		prerequisite = { focus = NEV_infrantry_core focus = NEV_power_armour_core focus = NEV_pegasi_core }
 		mutually_exclusive = { focus = NEV_Quality_first }
 		icon = NEV_academy
-		x = 1
+		x = -2
 		y = 2
 		cost = 6
 
@@ -7412,14 +7677,12 @@ shared_focus = {
 }
 
 shared_focus = {
-		id = NEV_switching_priorities
-		relative_position_id = NEV_Military_situation
-		prerequisite = { focus = NEV_Military_situation }
-		mutually_exclusive = { focus = NEV_repairing_old_factories }
-		
+		id = NEV_increased_production
+		relative_position_id = NEV_Core_militery_doctorine
+		prerequisite = { focus = NEV_Quentity_first }
 		icon = NEV_academy
-		x = 3
-		y = 1
+		x = -2
+		y = 3
 		cost = 4
 
 		available_if_capitulated = yes
@@ -7432,27 +7695,48 @@ shared_focus = {
 		}
 
 		completion_reward = {
-			696 = {
-	        remove_building = { 
-			type = industrial_complex  level = 3 } 
-			add_building_construction = {
-				type = arms_factory
-				level = 3
-				instant_build = yes
+			swap_ideas = { 
+                remove_idea = NEV_increased_numbers_1
+                add_idea = NEV_increased_numbers_2
 			}
-		}
 	}
 }
 
 shared_focus = {
-		id = NEV_build_more_factories
-		relative_position_id = NEV_Military_situation
-		prerequisite = { focus = NEV_switching_priorities}
-		
+		id = NEV_more_propoganda_posters
+		relative_position_id = NEV_Core_militery_doctorine
+		prerequisite = { focus = NEV_increased_production }
 		icon = NEV_academy
-		x = 3
-		y = 2
+		x = -2
+		y = 4
 		cost = 4
+
+		available_if_capitulated = yes
+		ai_will_do = {
+		factor = 50
+		modifier = {
+				factor = 0.1
+	
+			}
+		}
+
+		completion_reward = {
+			swap_ideas = { 
+                remove_idea = NEV_increased_numbers_2
+                add_idea = NEV_increased_numbers_3
+			}
+	}
+}
+
+shared_focus = {
+		id = NEV_Quality_first
+		relative_position_id = NEV_Core_militery_doctorine
+		prerequisite = { focus = NEV_infrantry_core focus = NEV_pegasi_core focus = NEV_power_armour_core }
+		mutually_exclusive = { focus = NEV_Quentity_first }
+		icon = NEV_academy
+		x = 2
+		y = 2
+		cost = 6
 
 		available_if_capitulated = yes
 		ai_will_do = {
@@ -7464,22 +7748,14 @@ shared_focus = {
 		}
 
 		completion_reward = {
-			696 = {
-			add_extra_state_shared_building_slots = 3
-			add_building_construction = {
-				type = arms_factory
-				level = 3
-				instant_build = yes
-			}
-		}
+          add_ideas = NEV_improved_training_1
 	}
 }
 
 shared_focus = {
-		id = focus_on_the_troops
-		relative_position_id = NEV_Military_situation
-		prerequisite = { focus = NEV_build_more_factories }
-		prerequisite = { focus = NEV_Quality_first focus = NEV_Quentity_first }
+		id = NEV_increased_quailty_checks
+		relative_position_id = NEV_Core_militery_doctorine
+		prerequisite = { focus = NEV_Quality_first }
 		icon = NEV_academy
 		x = 2
 		y = 3
@@ -7495,18 +7771,47 @@ shared_focus = {
 		}
 
 		completion_reward = {
-		add_ideas = NEV_The_troops_above_all
+			swap_ideas = { 
+                remove_idea = NEV_improved_training_1
+                add_idea = NEV_improved_training_2
+			}
+	}
+}
+
+shared_focus = {
+		id = NEV_more_funding_to_resource_gathering
+		relative_position_id = NEV_Core_militery_doctorine
+		prerequisite = { focus = NEV_Quality_first }
+		icon = NEV_academy
+		x = 2
+		y = 4
+		cost = 4
+
+		available_if_capitulated = yes
+		ai_will_do = {
+		factor = 50
+		modifier = {
+				factor = 0.1
+
+			}
+		}
+
+		completion_reward = {
+			swap_ideas = { 
+                remove_idea = NEV_improved_training_2
+                add_idea = NEV_improved_training_3
+			}
 	}
 }
 
 shared_focus = {
 		id = NEV_push_forward_the_militery_plans
-		relative_position_id = NEV_Military_situation
-		prerequisite = { focus = NEV_Recyle_the_scrap focus = focus_on_the_troops }
-		prerequisite = { focus = NEV_Quality_first focus = NEV_Quentity_first }
+		relative_position_id = NEV_Core_militery_doctorine
+		prerequisite = { focus = NEV_more_propoganda_posters focus = NEV_more_funding_to_resource_gathering }
+		prerequisite = { focus = NEV_decrease_reqirements focus = NEV_remove_unessery_weight focus = NEV_implement_improvements }
 		icon = NEV_academy
 		x = 0
-		y = 4
+		y = 6
 		cost = 6
 
 		available_if_capitulated = yes
@@ -7519,21 +7824,77 @@ shared_focus = {
 		}
 
 		completion_reward = {
+		## will merge the two chosen ideas into one to avoid idea bloat
 			add_political_power = 120
-			if = {
-			limit = { 
-			has_idea = NEV_improved_training_1 }
-			add_ideas = NEV_improved_training_2
+			If = {
+			limit = {			
+				has_idea = NEV_improved_training_3	
 			}
-            else = {
-			if = {
-			limit = { 
-			has_idea = NEV_increased_numbers_1 }
-			add_ideas = NEV_increased_numbers_2
+			If = {
+			limit = {
+				has_idea = NEV_militery_doctorine_ideas_3
+			}	
+			swap_ideas = { 
+                remove_idea = NEV_militery_doctorine_ideas_3
+                add_idea = NEV_militery_doctorine_ideas_4
 			}
+		}
+					If = {
+			limit = {
+				has_idea = NEV_militery_doctorine_ideas_8
+			}	
+			swap_ideas = { 
+                remove_idea = NEV_militery_doctorine_ideas_8
+                add_idea = NEV_militery_doctorine_ideas_9
+			}
+		}	
+					If = {
+			limit = {
+				has_idea = NEV_militery_doctorine_ideas_13
+			}	
+			swap_ideas = { 
+                remove_idea = NEV_militery_doctorine_ideas_13
+                add_idea = NEV_militery_doctorine_ideas_14
+			}
+		}	
+		remove_ideas = NEV_improved_training_3
 	}
-  }
-  
+
+        else_if = {
+			limit = {			
+				has_idea = NEV_increased_numbers_3
+			}
+			If = {
+			limit = {
+				has_idea = NEV_militery_doctorine_ideas_3
+			}	
+			swap_ideas = { 
+                remove_idea = NEV_militery_doctorine_ideas_3
+                add_idea = NEV_militery_doctorine_ideas_5
+			}
+		}
+					If = {
+			limit = {
+				has_idea = NEV_militery_doctorine_ideas_8
+			}	
+			swap_ideas = { 
+                remove_idea = NEV_militery_doctorine_ideas_8
+                add_idea = NEV_militery_doctorine_ideas_10
+			}
+		}	
+					If = {
+			limit = {
+				has_idea = NEV_militery_doctorine_ideas_13
+			}	
+			swap_ideas = { 
+                remove_idea = NEV_militery_doctorine_ideas_13
+                add_idea = NEV_militery_doctorine_ideas_15
+			}
+		}	
+		remove_ideas = NEV_increased_numbers_3
+	}
+}
+
 }
 
 
