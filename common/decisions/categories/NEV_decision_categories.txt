@@ -9,9 +9,11 @@ NEV_Rebuilding_the_swamp = {
 		days_remove = 21
 
 		ai_will_do = {
-			base = 100
+			base = 250
 		}
 
+		priority = 100
+		
 		fire_only_once = yes
 
 		visible = {
@@ -63,9 +65,11 @@ NEV_Rebuilding_the_swamp = {
 		days_remove = 21
 
 		ai_will_do = {
-			base = 100
+			base = 250
 		}
 
+		priority = 100
+		
 		fire_only_once = yes
 
 		visible = {
@@ -121,9 +125,11 @@ NEV_Rebuilding_the_swamp = {
 		days_remove = 21
 
 		ai_will_do = {
-			base = 100
+			base = 250
 		}
 
+		priority = 100
+		
 		fire_only_once = yes
 
 		visible = {
@@ -173,9 +179,11 @@ NEV_Rebuilding_the_swamp = {
 		days_remove = 21
 
 		ai_will_do = {
-			base = 100
+			base = 250
 		}
 
+		priority = 100
+		
 		fire_only_once = yes
 
 		visible = {
@@ -227,9 +235,11 @@ NEV_Rebuilding_the_swamp = {
 		days_remove = 21
 
 		ai_will_do = {
-			base = 100
+			base = 250
 		}
 
+		priority = 100
+		
 		fire_only_once = yes
 
 		visible = {
@@ -284,9 +294,11 @@ NEV_Rebuilding_the_swamp = {
 		days_remove = 21
 
 		ai_will_do = {
-			base = 100
+			base = 250
 		}
 
+		priority = 100
+		
 		fire_only_once = yes
 
 		visible = {
@@ -335,9 +347,11 @@ NEV_Rebuilding_the_swamp = {
 		days_remove = 21
 
 		ai_will_do = {
-			base = 100
+			base = 250
 		}
 
+		priority = 100
+		
 		fire_only_once = yes
 
 		visible = {
@@ -345,7 +359,7 @@ NEV_Rebuilding_the_swamp = {
 			owns_state = 295	
 			owns_state = 568
 			owns_state = 574
-			owns_state = 445
+			owns_state = 447
 			}
 			
 		}
@@ -398,9 +412,11 @@ NEV_Rebuilding_the_swamp = {
 		days_remove = 21
 
 		ai_will_do = {
-			base = 100
+			base = 250
 		}
 
+		priority = 100
+		
 		fire_only_once = yes
 
 		visible = {
@@ -408,7 +424,7 @@ NEV_Rebuilding_the_swamp = {
 			owns_state = 295	
 			owns_state = 568
 			owns_state = 574
-			owns_state = 445
+			owns_state = 447
 			}
 			
 		}
@@ -465,9 +481,11 @@ NEV_Rebuilding_the_swamp = {
 		days_remove = 21
 
 		ai_will_do = {
-			base = 100
+			base = 250
 		}
 
+		priority = 100
+		
 		fire_only_once = yes
 
 		visible = {
@@ -475,7 +493,7 @@ NEV_Rebuilding_the_swamp = {
 			owns_state = 295	
 			owns_state = 568
 			owns_state = 574
-			owns_state = 445
+			owns_state = 447
 			}
 			
 		}
@@ -514,6 +532,123 @@ NEV_Rebuilding_the_swamp = {
 		 }
 	}
 }
+
+
+}
+
+NEV_war_exhaustion_category = {
+	
+	NEV_exhaustion_points_monthly = {
+		icon = GFX_decision_unknown
+		### Never "complete" success
+		activation  = {
+			has_country_flag = NEV_deploy_points_unlock
+			has_completed_focus = NEV_des_launch_cauterize
+			has_global_flag = cauterize_in_progress_flag
+		}
+		available = {
+			NOT = {
+				has_global_flag = cauterize_in_progress_flag
+			}
+		}
+		allowed = {
+			tag = NEV
+		}
+		is_good = yes
+		days_mission_timeout = 30
+		fire_only_once = no
+		###Add points to actual number
+		timeout_effect = {
+			custom_effect_tooltip = NEV_exhaustion_gain_tt
+				
+				###Add points of monthly net
+				
+				add_to_variable = {
+					var = war_exhaustion
+					value = exhaustion_monthly
+				}
+		}
+		days_re_enable = 0
+		days_remove = 1
+	}
+	
+	NEV_domestic_propaganda_decision = {
+		icon = generic_construction
+		ai_will_do = {
+			factor = 20
+			
+		}
+		
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = NEV_has_5_exhaustion
+                    check_variable = {
+                        war_exhaustion > 4
+                    }
+            }
+			has_political_power > 49
+		}
+		days_re_enable = 50
+		cost = 50
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEV_domestic_Propaganda_decision"
+			custom_effect_tooltip = NEV_loose_5_exhaustion
+			custom_effect_tooltip = NEV_gain_1_mexhaustion
+			
+			subtract_from_variable = {
+				var = war_exhaustion
+				value = 5
+			}
+			add_to_variable = {
+				var = exhaustion_monthly
+				value = 1
+			}
+			
+		}
+	}
+	
+	NEV_military_crackdown_decision = {
+		icon = generic_construction
+		ai_will_do = {
+			factor = 20
+			
+		}
+		available = {
+			custom_trigger_tooltip = {
+                tooltip = NEV_has_10_exhaustion
+                    check_variable = {
+                        war_exhaustion > 9
+                    }
+            }
+			has_political_power > 9
+			has_manpower > 249
+			has_equipment = {
+				energy_equipment_2 > 249
+			}
+		}
+		days_re_enable = 150
+		cost = 10
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision NEV_domestic_Propaganda_decision"
+			custom_effect_tooltip = NEV_loose_10_exhaustion
+			custom_effect_tooltip = NEV_gain_2_mexhaustion
+			
+			subtract_from_variable = {
+				var = war_exhaustion
+				value = 10
+			}
+			add_to_variable = {
+				var = exhaustion_monthly
+				value = 2
+			}
+			add_manpower = -250
+			add_equipment_to_stockpile = {
+				type = energy_equipment_2 amount = -250 producer = NEV
+			}
+			
+		}
+	}
+
 
 
 }
