@@ -3362,7 +3362,7 @@ shared_focus = {
 			has_government = visionary
 		}
 		prerequisite = { focus = FSR_srarmy }
-		mutually_exclusive = { focus = FSR_priviarmy focus = FSR_raiderarmy }
+		mutually_exclusive = { focus = FSR_raiderarmy focus = FSR_priviarmy }
 		ai_will_do = { 
 		factor = 300
 		} 
@@ -3576,11 +3576,8 @@ shared_focus = {
 		cost = 8
 		
 		available_if_capitulated = yes 
-		available = {
-			has_government = continuation
-		}
 		prerequisite = { focus = FSR_srarmy }
-		mutually_exclusive = { focus = FSR_ajarmy focus = FSR_raiderarmy }		
+		mutually_exclusive = { focus = FSR_raiderarmy focus = FSR_ajarmy }				
 		ai_will_do = { 
 		factor = 30
 		} 
@@ -3748,7 +3745,7 @@ shared_focus = {
 			has_government = destruction
 		}
 		prerequisite = { focus = FSR_srarmy }
-		mutually_exclusive = { focus = FSR_priviarmy focus = FSR_ajarmy }		
+		mutually_exclusive = { focus = FSR_ajarmy focus = FSR_priviarmy }		
 		ai_will_do = { 
 		factor = 30
 		} 
@@ -3987,332 +3984,304 @@ shared_focus = {
 ##Airforce##
 ############
 
-#Steel-Ranger Airforce
-shared_focus = {
-		id = FSR_srairforce
-		icon = GFX_goal_the_steel_ranger_airforce
+### Aviation Tree ###
+
+shared_focus = { 
+		id = FSR_Taking_To_The_Skies
+		icon = GFX_MSR_goal_taking_to_the_skies
 		x = 13
 		y = 6
-		cost = 1
-		
+		cost = 8
+
 		available_if_capitulated = yes 
-		available = {
-			OR = {
-						has_completed_focus = FSR_blueberry
-						has_completed_focus = FSR_strawberry
-						has_completed_focus = FSR_badpony
-						has_completed_focus = FSR_sl_victory
-					}
-		}
-		
 		ai_will_do = { 
-		factor = 1000
-		} 
+			factor = 50
+		}
+		available = {
+			has_completed_focus = FSR_Finished
+		}
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus FSR_srairforce"
-			air_experience = 35
-			set_technology = {
-				air_tech_level_settler = 1
+			log = "[GetDateText]: [Root.GetName]:Focus FSR_Taking_To_The_Skies"
+			add_tech_bonus = {
+			name = light_air
+			bonus = 0.6
+			uses = 2
+			category = air_tech
 			}
+
 		}
 }
 
-#Build up Bases
-shared_focus = {
-		id = FSR_first_base
-		icon = GFX_goal_first_airbases
+shared_focus = { 
+		id = FSR_Repairing_Old_Airfields
+		icon = GFX_MSR_goal_repairing_old_airfields
+		relative_position_id = FSR_Taking_To_The_Skies
 		x = 0
 		y = 1
-		relative_position_id = FSR_srairforce
-		cost = 5
-		
+		cost = 8
+
 		available_if_capitulated = yes 
-		prerequisite = { focus = FSR_srairforce } 
 		ai_will_do = { 
-		factor = 1000
-		} 
+			factor = 15
+		}
+
+		prerequisite = { focus = FSR_Taking_To_The_Skies }
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus FSR_first_base"
+			log = "[GetDateText]: [Root.GetName]:Focus FSR_Repairing_Old_Airfields"
+			air_experience = 20
 			538 = { 
 				add_building_construction = {
 					type = air_base
 					level = 4
 					instant_build = yes
-				} 
+			}	 
+		}
+	}
+}
+
+### Left Tree ###
+
+shared_focus = { 
+		id = FSR_Secure_The_Skies
+		icon = GFX_MSR_goal_securing_the_skies
+		relative_position_id = FSR_Repairing_Old_Airfields
+		x = -1
+		y = 1
+		cost = 8
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 50
+		}
+
+		prerequisite = { focus = FSR_Repairing_Old_Airfields }
+		mutually_exclusive = { focus = FSR_Support_Our_Troops }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]:Focus FSR_Secure_The_Skies"
+			add_tech_bonus = {
+			name = fighter_tech
+			bonus = 0.6
+			uses = 2
+			category = fighter_tech
 			}
-		   
-		
-		
+
 		}
 }
 
-#Rival the Enclave
-shared_focus = {
-		id = FSR_airsuperiority
-		icon = GFX_goal_rival_the_enclave
-		x = -1
-		y = 2
-		relative_position_id = FSR_srairforce
-		cost = 8
-		
+shared_focus = { 
+		id = FSR_Focus_On_Fighters
+		icon = GFX_MSR_goal_focus_on_fighters
+		relative_position_id = FSR_Secure_The_Skies
+		x = 0
+		y = 1
+		cost = 7
+
 		available_if_capitulated = yes 
-		prerequisite = { focus = FSR_first_base } 
-		mutually_exclusive = { focus = FSR_groundsupport }
 		ai_will_do = { 
-		factor = 30
-		} 
+			factor = 15
+		}
+
+		prerequisite = { focus = FSR_Secure_The_Skies }
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus FSR_airsuperiority"
-			 add_tech_bonus = {
-				name = fighter_bonus
-				bonus = 1.0
-				uses = 1
+			log = "[GetDateText]: [Root.GetName]:Focus FSR_Focus_On_Fighters"
+			add_ideas = MSR_fighter_focus_idea
+
+		}
+}
+
+shared_focus = { 
+		id = FSR_Dominate_The_Skies
+		icon = GFX_MSR_goal_dominate_the_skies
+		relative_position_id = FSR_Focus_On_Fighters
+		x = 0
+		y = 1
+		cost = 7
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 15
+		}
+
+		prerequisite = { focus = FSR_Focus_On_Fighters }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]:Focus FSR_Dominate_The_Skies"
+			add_tech_bonus = {
+				bonus = 0.8
+				ahead_reduction = 2
+				uses = 2
 				category = fighter_tech
 			}
-			add_equipment_to_stockpile = {
-				type = fighter_equipment_1
-				amount = 50
-				producer = FSR
-			}
+
 		}
 }
 
-#Concentrated bases
-shared_focus = {
-		id = FSR_base_con
-		icon = GFX_goal_concentrated_strikes
-		x = -1
-		y = 3
-		relative_position_id = FSR_srairforce
-		cost = 8
-		
-		available_if_capitulated = yes 
-		prerequisite = { focus = FSR_airsuperiority } 
-		ai_will_do = { 
-		factor = 30
-		} 
+shared_focus = { 
+		id = FSR_Flying_Fortresses
+		icon = GFX_MSR_goal_flying_fortresses
+		relative_position_id = FSR_Dominate_The_Skies
+		x = 0
+		y = 1
+		cost = 7
 
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus FSR_base_con"
-			random_owned_controlled_state = {
-			limit = {
-				anti_air_building < 4
-			}
-				add_building_construction = {
-					type = air_base
-					level = 4
-					instant_build = yes
-				}
-			}
-			random_owned_controlled_state = {
-			limit = {
-				anti_air_building < 4
-			}
-				add_building_construction = {
-					type = air_base
-					level = 4
-					instant_build = yes
-				}
-			}
-			random_owned_controlled_state = {
-			limit = {
-				anti_air_building < 4
-			}
-				add_building_construction = {
-					type = air_base
-					level = 4
-					instant_build = yes
-				}
-			}
-			random_owned_controlled_state = {
-			limit = {
-				anti_air_building < 4
-			}
-				add_building_construction = {
-					type = air_base
-					level = 4
-					instant_build = yes
-				}
-			}
-		   
-		
-		
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 15
 		}
-}
 
-#Supremacy Doctrine
-shared_focus = {
-		id = FSR_dir_doctrine
-		icon = GFX_goal_aerial_supremacy_doctrine
-		x = -1
-		y = 4
-		relative_position_id = FSR_srairforce
-		cost = 8
-		
-		available_if_capitulated = yes 
-		prerequisite = { focus = FSR_base_con } 
-		ai_will_do = { 
-		factor = 30
-		} 
+		prerequisite = { focus = FSR_Dominate_The_Skies }
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus FSR_dir_doctrine"
-			add_doctrine_cost_reduction = {
-				cost_reduction = 0.8
-				name = recon_bonus
-				uses = 3
-				category = air_doctrine
-			}
-		
-		
-		}
-}
-
-#Anti-Cloudships
-shared_focus = {
-		id = FSR_anti_cloud
-		icon = GFX_goal_behemoths_in_the_sky
-		x = -1
-		y = 5
-		relative_position_id = FSR_srairforce
-		cost = 8
-		
-		available_if_capitulated = yes 
-		prerequisite = { focus = FSR_dir_doctrine } 
-		ai_will_do = { 
-		factor = 30
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus FSR_anti_cloud"
+			log = "[GetDateText]: [Root.GetName]:Focus FSR_Flying_Fortresses"
 			add_tech_bonus = {
-				name = fighter_bonus
-				bonus = 0.8
-				uses = 2
-				ahead_reduction = 2
-				category = airship_tech
+			name = fighter_tech
+			bonus = 0.8
+			uses = 2
+			category = airship_tech
 			}
-		   
+
 		}
 }
 
-#Support our Groundtroops
-shared_focus = {
-		id = FSR_groundsupport
-		icon = GFX_goal_support_our_groundtroops
+### Right Tree ###
+
+shared_focus = { 
+		id = FSR_Support_Our_Troops
+		icon = GFX_MSR_goal_support_our_troops
+		relative_position_id = FSR_Repairing_Old_Airfields
 		x = 1
-		y = 2
-		relative_position_id = FSR_srairforce
+		y = 1
 		cost = 8
-		
+
 		available_if_capitulated = yes 
-		prerequisite = { focus = FSR_first_base } 
-		mutually_exclusive = { focus = FSR_airsuperiority }
 		ai_will_do = { 
-		factor = 30
-		} 
+			factor = 50
+		}
+
+		prerequisite = { focus = FSR_Repairing_Old_Airfields }
+		mutually_exclusive = { focus = FSR_Secure_The_Skies }
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus FSR_groundsupport"
-			
-		    add_tech_bonus = {
-				name = cas_bonus
-				bonus = 1.0
-				uses = 1
-				category = bomber_tech
+			log = "[GetDateText]: [Root.GetName]:Focus FSR_Support_Our_Troops"
+			add_tech_bonus = {
+			name = fighter_tech
+			bonus = 0.6
+			uses = 2
+			category = air_support_tech
 			}
-			add_equipment_to_stockpile = {
-				type = cas_equipment_1
-				amount = 50
-				producer = FSR
-			}
-		
-		
+
 		}
 }
 
-#Defend our Assets
-shared_focus = {
-		id = FSR_asset_def
-		icon = GFX_goal_protect_ground_assets
-		x = 1
-		y = 3
-		relative_position_id = FSR_srairforce
-		cost = 8
-		
+shared_focus = { 
+		id = FSR_Focus_On_CAS
+		icon = GFX_MSR_goal_focus_on_cas
+		relative_position_id = FSR_Support_Our_Troops
+		x = 0
+		y = 1
+		cost = 7
+
 		available_if_capitulated = yes 
-		prerequisite = { focus = FSR_groundsupport } 
 		ai_will_do = { 
-		factor = 30
-		} 
+			factor = 15
+		}
+
+		prerequisite = { focus = FSR_Support_Our_Troops }
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus FSR_asset_def"
-			add_ideas = FSR_air_def
-		   
-		
-		
+			log = "[GetDateText]: [Root.GetName]:Focus FSR_Focus_On_CAS"
+			add_ideas = MSR_cas_focus_idea
+
 		}
 }
 
-#Wide Range bases
-shared_focus = {
-		id = FSR_range_bases
-		icon = GFX_goal_spread_out_bases
-		x = 1
-		y = 4
-		relative_position_id = FSR_srairforce
-		cost = 8
-		
+shared_focus = { 
+		id = FSR_Death_From_Above
+		icon = GFX_MSR_goal_death_from_above
+		relative_position_id = FSR_Focus_On_CAS
+		x = 0
+		y = 1
+		cost = 7
+
 		available_if_capitulated = yes 
-		prerequisite = { focus = FSR_asset_def } 
 		ai_will_do = { 
-		factor = 30
-		} 
+			factor = 15
+		}
+
+		prerequisite = { focus = FSR_Focus_On_CAS }
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus FSR_range_bases"
-			swap_ideas = { remove_idea = FSR_air_def  add_idea = FSR_air_def2 }
+			log = "[GetDateText]: [Root.GetName]:Focus FSR_Death_From_Above"
+			add_tech_bonus = {
+			name = fighter_tech
+			bonus = 0.8
+			ahead_reduction = 2
+			uses = 2
+			category = air_support_tech
+			}
+
 		}
 }
 
-#Support doctrine
-shared_focus = {
-		id = FSR_sup_doctrine
-		icon = GFX_goal_ground_support_doctrine
-		x = 1
-		y = 5
-		relative_position_id = FSR_srairforce
-		cost = 8
-		
+
+shared_focus = { 
+		id = FSR_Strategic_Bombing
+		icon = GFX_MSR_goal_strategic_bombing
+		relative_position_id = FSR_Death_From_Above
+		x = 0
+		y = 1
+		cost = 7
+
 		available_if_capitulated = yes 
-		prerequisite = { focus = FSR_range_bases } 
 		ai_will_do = { 
-		factor = 30
-		} 
+			factor = 15
+		}
+
+		prerequisite = { focus = FSR_Death_From_Above }
 
 		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus FSR_sup_doctrine"
-			 add_doctrine_cost_reduction = {
-				name = recon_bonus
-				cost_reduction = 0.5
-				uses = 1
-				category = air_doctrine
+			log = "[GetDateText]: [Root.GetName]:Focus FSR_Strategic_Bombing"
+				add_tech_bonus = {
+			name = fighter_tech
+			bonus = 0.8
+			uses = 2
+			category = bomber_tech
 			}
-			 add_doctrine_cost_reduction = {
-				name = recon_bonus
-				cost_reduction = 0.5
-				uses = 1
-				category = land_doctrine
-			}
-		   
-		
-		
+
 		}
 }
+
+### Aviation Tree Final ###
+
+shared_focus = { 
+		id = FSR_birds_of_steel
+		icon = GFX_MSR_goal_birds_of_steel
+		relative_position_id = FSR_Flying_Fortresses
+		x = 1
+		y = 1
+		cost = 5
+
+		available_if_capitulated = yes 
+		ai_will_do = { 
+			factor = 15
+		}
+
+		prerequisite = { focus = FSR_Flying_Fortresses focus = FSR_Strategic_Bombing }
+
+		completion_reward = {
+			log = "[GetDateText]: [Root.GetName]:Focus FSR_birds_of_steel"
+			add_ideas = MSR_birds_of_steel_idea
+
+		}
+}
+
+
+
+
 
 ####################
 ##Industrial Stuff##

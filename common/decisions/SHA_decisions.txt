@@ -1,38 +1,5 @@
  #The Leslie Penal Colony
  NCR_leslie_prison_decision_cat = {
-
-	SHA_LRA_war_countdown = {
-		available = {
-			always = no
-		}
-		activation = {
-			has_completed_focus = SHA_reclaim_corona
-			has_war_with = LRA
-			NOT = { has_country_flag = SHA_failed_conquest_LRA_flg }
-		}
-		selectable_mission = no
-		days_mission_timeout = 140
-		cancel_trigger = {
-			OR = {
-				owns_state = 575
-				has_subject = LRA
-			}
-		}
-		timeout_effect = {
-			white_peace = LRA
-			add_stability = -0.10
-			set_country_flag = SHA_failed_conquest_LRA_flg
-			
-        if = { 
-		limit = { is_in_faction_with = SHA }
-		MAN = { country_event = shatteredhoof_ncr_decisions.13 }
-		RAF = { country_event = shatteredhoof_ncr_decisions.13 }
-		ROK = { country_event = shatteredhoof_ncr_decisions.13 }
-	  }
-	
-  }
-	
-		}
 	
 	#Send Troublemakers to Leslie
 	SHA_LRA_prisoner_bye_decision = {
@@ -66,7 +33,7 @@
 }
 #Western Investements
 NCR_early_western_investement_decision_cat = {
-	#Dig for Valuable Ore in the Rock Breaker's Territory
+	#Dig for Valuable Ore in Purepoint
 	NCR_early_western_investement_expand_pinkie_farm_decision = {
 		icon = steel
 		available = {
@@ -116,13 +83,14 @@ NCR_early_western_investement_decision_cat = {
 	NCR_early_western_investement_connect_capitals_decision = {
 		icon = generic_construction
 		available = {
-			num_of_civilian_factories_available_for_projects > 3
+			num_of_civilian_factories_available_for_projects > 2
 		}
 		visible = {
-			ROK = { is_in_faction_with = SHA }
+			ROK = { exists = yes
+		is_subject = no }
 		}
 		modifier = {
-			civilian_factory_use = 4
+			civilian_factory_use = 3
 		}
 		fire_only_once = yes
 		days_remove = 100
@@ -137,7 +105,7 @@ NCR_early_western_investement_decision_cat = {
 			ROK = {
 				add_popularity = {
 					ideology = visionary
-					popularity = 0.1
+					popularity = 0.2
 				}
 			}
 			808 = { add_extra_state_shared_building_slots = 1 add_building_construction = { type = infrastructure level = 1 instant_build = yes } }
@@ -150,17 +118,20 @@ NCR_early_western_investement_decision_cat = {
 			factor = 100
 		}
 	}
-	#Promote New Settlements in Rad Fisher Territory
+	#Promote New Settlements in Pure Territory
 	NCR_early_western_investement_fisher_settlement_decision = {
 		icon = generic_economy
 		available = {
-			num_of_civilian_factories_available_for_projects > 3
+			num_of_civilian_factories_available_for_projects > 2
 		}
 		visible = {
-			RAF = { is_in_faction_with = SHA }
+			RAF = { 
+				exists = yes
+				is_subject = no
+			}
 		}
 		modifier = {
-			civilian_factory_use = 4
+			civilian_factory_use = 3
 		}
 		fire_only_once = yes
 		days_remove = 100
@@ -175,7 +146,7 @@ NCR_early_western_investement_decision_cat = {
 			RAF = {
 				add_popularity = {
 					ideology = visionary
-					popularity = 0.15
+					popularity = 0.20
 				}
 			}
 			807 = { add_extra_state_shared_building_slots = 1 add_manpower = 1000 }
@@ -195,13 +166,13 @@ NCR_early_eastern_defense_decision_cat = {
 	NCR_early_eastern_defense_connect_capitals_decision = {
 		icon = generic_construction
 		available = {
-			num_of_civilian_factories_available_for_projects > 3
+			num_of_civilian_factories_available_for_projects > 2
 		}
 		visible = {
 			MAN = { is_in_faction_with = SHA }
 		}
 		modifier = {
-			civilian_factory_use = 4
+			civilian_factory_use = 3
 		}
 		fire_only_once = yes
 		days_remove = 100
@@ -247,7 +218,27 @@ NCR_early_eastern_defense_decision_cat = {
 			log = "[GetDateText]: [Root.GetName]: Decision NCR_early_eastern_defense_outpost_line_decision"
 			594 = { add_building_construction = { type = bunker province = 2686 level = 1 instant_build = yes } add_building_construction = { type = bunker province = 6358 level = 1 instant_build = yes } add_building_construction = { type = bunker province = 4819 level = 1 instant_build = yes } }
 			575 = { add_building_construction = { type = bunker province = 6668 level = 1 instant_build = yes } add_building_construction = { type = bunker province = 9279 level = 1 instant_build = yes } add_building_construction = { type = bunker province = 3736 level = 1 instant_build = yes } }
-			794 = { add_building_construction = { type = bunker province = 2173 level = 1 instant_build = yes } add_building_construction = { type = bunker province = 2512 level = 1 instant_build = yes } }
+			794 = { 
+				add_building_construction = { type = bunker province = 2173 level = 1 instant_build = yes } 
+				add_building_construction = { type = bunker province = 2512 level = 1 instant_build = yes } 
+				add_building_construction = {
+					type = supply_node
+					province = 2512
+					level = 1
+				}
+			}
+			add_victory_points = {
+				province = 2512
+				value = 2
+			}
+			set_province_name = {
+				id = 2512
+				name = "Gawdington"
+			}
+			build_railway = {
+				level = 2
+				path = { 2511 12294 2173 15455 2512 12688 986 12132 3139 }
+			}
 		}
 		
 		ai_will_do = {
@@ -2742,34 +2733,6 @@ NCR_stable_excavation_decision_cat = {
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NCR_silverwing_excavation_decision "
 			country_event = shatteredhoof_ncr_decisions.8
-			clr_country_flag = NCR_excavation_flag
-		}
-
-		ai_will_do = {
-			factor = 100
-		}
-	}
-	#Into Stable 32
-	NCR_stable32_excavation_decision = {
-		icon = steel
-		available = {
-			num_of_civilian_factories_available_for_projects > 3
-			has_full_control_of_state = 790
-			NOT = { has_country_flag = NCR_excavation_flag }
-		}
-		cost = 50
-		days_remove = 60
-		fire_only_once = yes
-		modifier = {
-			civilian_factory_use = 4
-		}
-		complete_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision NCR_stable32_excavation_decision "
-			set_country_flag = NCR_excavation_flag
-		}
-		remove_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision NCR_stable32_excavation_decision "
-			country_event = shatteredhoof_ncr_decisions.9
 			clr_country_flag = NCR_excavation_flag
 		}
 
