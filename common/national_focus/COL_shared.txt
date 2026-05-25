@@ -10431,6 +10431,7 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_mend_burnt_bridges"
 		#Flavour-event
+		country_event = springcouncil_purple.16
 		IF = {
 			limit = {
 				DSB = { is_subject_of = COL }
@@ -10473,6 +10474,7 @@ shared_focus = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_unite_with_novochernusk"
 		#They have a senate too, and in general did really well. We will core them, and allow Sudden Drop to return to the Fold!
 		#Flavour-event for the above
+		country_event = springcouncil_purple.17
 		IF = {
 			limit = {
 				NOV = { is_subject_of = COL }
@@ -10500,11 +10502,21 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 50
 	} 
+	available = {
+		OR = {
+			has_deployed_air_force_size = {
+				type = fighter
+				size > 399
+			}
+			is_ai = yes
+		}
+	}
 
 	will_lead_to_war_with = SKY
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_liberate_the_enclave"
 		#flavour-event
+		country_event = springcouncil_purple.18
 		add_war_support = 0.10
 		every_state = {
 			limit = {
@@ -10532,10 +10544,20 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 50
 	} 
+	available = {
+		SKY = { exists = no }
+		owns_state = 28
+		owns_state = 353
+	}
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_extend_hoof_to_sosans"
-		
+		country_event = springcouncil_purple.19
+		add_state_core = 28
+		add_state_core = 353
+		set_technology = {
+			naval_tech_level_scientific = 1
+		}
 	}
 } 
 
@@ -10552,10 +10574,32 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 50
 	} 
+	available = {
+		SKY = { exists = no }
+		owns_state = 877
+		owns_state = 878
+	}
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_meet_with_skyfreeze_leaders"
-		
+		country_event = springcouncil_purple.21
+		every_state = {
+			limit = {
+				is_owned_by = COL
+				OR = { 
+					is_core_of = VOI
+					is_core_of = DEP
+					is_core_of = TMS
+					is_core_of = TFL
+					is_core_of = WTR
+					is_core_of = DFF
+					is_core_of = NGU
+					is_core_of = NOO
+				}
+			}
+			add_compliance = 50
+			add_resistance = -20
+		}
 	}
 } 
 
@@ -10572,10 +10616,29 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 50
 	} 
+	available = {
+		SKY = { exists = no }
+		owns_state = 299
+		owns_state = 310
+		owns_state = 272
+		owns_state = 294
+		owns_state = 875
+		owns_state = 887
+		owns_state = 876
+	}
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_freeing_the_earthbloods_kin"
-		#Attack the Toll, and gain event to core them.
+		country_event = springcouncil_purple.20
+		add_state_core = 299
+		add_state_core = 310
+		save_current_manpower = yes
+		272 = { add_manpower = -1551 }
+		294 = { add_manpower = -285 }
+		875 = { add_manpower = -199 }
+		887 = { add_manpower = -9 }
+		876 = { add_manpower = -310 }
+		restore_previous_manpower = yes
 	}
 } 
 
@@ -10597,7 +10660,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_exporting_republican_ideals"
-		
+		add_ideas = COL_mandate_of_democracy_idea
+			country_event = {
+				id = springcouncil_purple.22
+				days = 20
+			}
 	}
 } 
 
@@ -10608,7 +10675,11 @@ shared_focus = {
 	y = 8
 	cost = 0
 	relative_position_id = COL_sky_high_ambitions
-	prerequisite = { focus = COL_proclaim_grand_limuan_republic } 		
+	prerequisite = { focus = COL_proclaim_grand_limuan_republic } 	
+	available = {
+		has_tech = tech_pegasus_misc6b
+		has_tech = tech_pony_misc
+	}	
 
 	available_if_capitulated = yes 
 	ai_will_do = { 
@@ -10617,7 +10688,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_merge_soil_cloud_farming"
-		
+		every_owned_state = {
+			add_extra_state_shared_building_slots = 1
+			add_manpower = 250
+		}
 	}
 } 
 
@@ -10637,7 +10711,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_government_food_grants"
-		
+		add_stability = 0.08
 	}
 } 
 
@@ -10657,7 +10731,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_reviving_cloud_industry"
-		
+		add_offsite_building = {
+			type = arms_factory
+			level = 3
+		}
+		add_offsite_building = {
+			type = industrial_complex
+			level = 3
+		}
 	}
 } 
 
@@ -10674,10 +10755,23 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 50
 	} 
+	available = {
+		has_tech = electronic_engineering_4
+	}
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_new_electronics_industry"
-		
+		292  = {
+			add_resource = {
+				type = circuitry
+				amount = 22
+			}
+			add_extra_state_shared_building_slots = 3
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+			}
+		}
 	}
 } 
 
@@ -10697,7 +10791,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_deregulate_markets"
-		
+		add_war_support = -0.05
+		two_random_industrial_complex = yes
+		two_random_industrial_complex = yes
+		two_random_industrial_complex = yes
+		add_cic = 100000
 	}
 } 
 
@@ -10717,7 +10815,55 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_connect_major_cities"
-		
+		140 = { set_building_level = {
+			type = infrastructure
+			level = 10
+		} }
+		422 = { set_building_level = {
+			type = infrastructure
+			level = 10
+		} }
+		318 = { set_building_level = {
+			type = infrastructure
+			level = 10
+		} }
+		361 = { set_building_level = {
+			type = infrastructure
+			level = 10
+		} }
+		292 = { set_building_level = {
+			type = infrastructure
+			level = 10
+		} }
+		387 = { set_building_level = {
+			type = infrastructure
+			level = 10
+		} }
+		build_railway = {
+			start_province = 8163
+			target_province = 1085
+			level = 5
+		}
+		build_railway = {
+			start_province = 470
+			target_province = 1085
+			level = 5
+		}
+		build_railway = {
+			start_province = 10663
+			target_province = 1085
+			level = 5
+		}
+		build_railway = {
+			start_province = 1622
+			target_province = 1085
+			level = 5
+		}
+		build_railway = {
+			start_province = 5735
+			target_province = 1085
+			level = 5
+		}
 	}
 } 
 
@@ -10737,7 +10883,24 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_dedicated_economic_zones"
-		#with tax-breaks and everything!
+		140 = { add_dynamic_modifier = {
+			modifier = COC_city_of_progress_modifier
+		}}
+		422 = { add_dynamic_modifier = {
+			modifier = COC_city_of_progress_modifier
+		} }
+		318 = { add_dynamic_modifier = {
+			modifier = COC_city_of_progress_modifier
+		} }
+		361 = { add_dynamic_modifier = {
+			modifier = COC_city_of_progress_modifier
+		} }
+		292 = { add_dynamic_modifier = {
+			modifier = COC_city_of_progress_modifier
+		} }
+		387 = { add_dynamic_modifier = {
+			modifier = COC_city_of_progress_modifier
+		}}
 	}
 } 
 
@@ -10757,7 +10920,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_revive_the_higher_sciences"
-		#Gives a bunch of Advanced
+		add_research_slot = 1
 	}
 } 
 
@@ -10778,7 +10941,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_the_full_employment_program"
-		
+		swap_ideas = {
+			remove_idea = wasteland_society
+			add_idea = old_world_society
+		}
 	}
 } 
 
@@ -10798,7 +10964,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_syncretise_pegasus_warrior_culture"
-		
+		set_technology = {
+			tech_pegasus_power_armor = 1
+			tech_pegasus_power_armor2 = 1
+		}
 	}
 } 
 
@@ -10818,7 +10987,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_focus_on_specialists"
-		
+		add_tech_bonus = {
+			name = recon_tech
+			bonus = 0.8
+			ahead_reduction = 4
+			uses = 2
+			category = special_forces_tech
+		}
 	}
 } 
 
@@ -10838,7 +11013,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_research_superior_energy_weapons"
-		
+		add_tech_bonus = {
+			name = recon_tech
+			bonus = 0.8
+			ahead_reduction = 4
+			uses = 2
+			category = energy_weapon_tech
+		}
 	}
 } 
 
@@ -10858,7 +11039,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_advanced_battle_saddles"
-		
+		add_tech_bonus = {
+			name = recon_tech
+			bonus = 0.8
+			ahead_reduction = 4
+			uses = 2
+			category = support_tech
+		}
 	}
 } 
 
@@ -10878,7 +11065,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_retool_pa_factories"
-		
+		add_ideas = COL_standardized_pa_idea
 	}
 } 
 
@@ -10898,7 +11085,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_reverse_engineer_enclave_pa"
-		
+		set_technology = {
+			x02_pa_tech = 1
+		}
 	}
 } 
 
@@ -10918,7 +11107,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_new_republican_navy"
-		#a LOT of navy-research
+		add_tech_bonus = {
+			name = recon_tech
+			bonus = 0.99
+			uses = 6
+			category = naval_tech
+		}
 	}
 } 
 
@@ -10935,10 +11129,16 @@ shared_focus = {
 	ai_will_do = { 
 		factor = 50
 	} 
+	available = {
+		has_idea = COL_turncoat_idea
+	}
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_split_civilian_and_military_police"
-		
+		swap_ideas = {
+			remove_idea = COL_turncoat_idea
+			add_idea = COL_turncoat_purple_idea
+		}
 	}
 } 
 
@@ -10959,7 +11159,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COL_shock_awe_and_swift_death"
-		
+		swap_ideas = {
+			remove_idea = COL_contesting_cloudlayer_idea
+			add_idea = COL_contesting_cloudlayer_2_idea
+		}
 	}
 } 
 
