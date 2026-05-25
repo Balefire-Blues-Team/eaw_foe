@@ -142,6 +142,10 @@ shared_focus = {
 				factor = 0
 				has_country_flag = NEV_des_ai
 			}
+			modifier = {
+				factor = 0
+				has_country_flag = NEV_vis_ai
+			}
 		}
 
 		completion_reward = {
@@ -244,9 +248,17 @@ shared_focus = {
 		mutually_exclusive = { focus = NEV_tornado_deal }
 		ai_will_do = {
 		factor = 50
-		modifier = {
+			modifier = {
 				factor = 999
 				has_country_flag = NEV_vis_ai
+			}
+			modifier = {
+				factor = 0
+				has_country_flag = NEV_con_ai
+			}
+			modifier = {
+				factor = 999
+				has_country_flag = NEV_des_ai
 			}
 		}
 
@@ -318,6 +330,10 @@ shared_focus = {
 		prerequisite = { focus = NEV_investigate_commitee focus = NEV_calm_minds }
 		ai_will_do = {
 		factor = 30
+			modifier = {
+				factor = 999
+				has_country_flag = NEV_des_ai
+			}
 		}
 
 		completion_reward = {
@@ -345,8 +361,25 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus NEV_fate_general"
+			hidden_effect = {
+				if = {
+					limit = {
+						has_country_flag = NEV_des_ai
+					}
+					add_popularity = {
+						ideology = destruction
+						popularity = 0.30
+					}
+				}
+				else_if = {
+					limit = { OR = { has_country_flag = NEV_vis_ai has_country_flag = NEV_con_ai } }
+					add_popularity = {
+						ideology = destruction
+						popularity = -0.30
+					}
+				}
+			}
 			country_event = { id = cloudsdale.8 }
-
 		}
 }
 
