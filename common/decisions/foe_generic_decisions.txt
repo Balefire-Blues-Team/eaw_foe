@@ -360,5 +360,101 @@ foe_political_effort_cat = {
 			log = "[GetDateText]: [Root.GetName]: Decision foe_building_dec"
 		}
 	}
-	
+
+}
+
+foe_military_command_cat = {
+
+	# Peacetime: cycle experienced officers through training assignments to accelerate
+	# recruit development. Cancels automatically when war breaks out.
+	foe_field_officer_rotations = {
+		icon = GFX_decision_rifles
+		custom_cost_trigger = {
+			command_power > 49
+		}
+		custom_cost_text = foe_cp_cost_50
+		visible = {
+			always = yes
+		}
+		available = {
+			has_war = no
+		}
+		cancel_trigger = {
+			has_war = yes
+		}
+		days_remove = 90
+		days_re_enable = 180
+		modifier = {
+			training_time_army_factor = -0.15
+			experience_gain_army_factor = 0.05
+			experience_gain_army = 0.10
+		}
+		complete_effect = {
+			hidden_effect = {
+				add_command_power = -50
+			}
+			log = "[GetDateText]: [Root.GetName]: Decision foe_field_officer_rotations"
+		}
+		remove_effect = {
+			army_experience = 5
+		}
+		ai_will_do = {
+			base = 3
+			modifier = {
+				factor = 0
+				command_power < 70
+			}
+			modifier = {
+				factor = 0
+				has_war = yes
+			}
+		}
+	}
+
+	# Wartime: bypass seniority and promote officers on demonstrated battlefield
+	# performance. Units retain experience better and reinforce faster.
+	foe_authorize_field_promotions = {
+		icon = GFX_decision_statue
+		custom_cost_trigger = {
+			command_power > 29
+		}
+		custom_cost_text = foe_cp_cost_30
+		visible = {
+			always = yes
+		}
+		available = {
+			has_war = yes
+		}
+		cancel_trigger = {
+			has_war = no
+		}
+		days_remove = 60
+		days_re_enable = 90
+		modifier = {
+			experience_gain_army_unit_factor = 0.10
+			experience_loss_factor = -0.10
+			land_reinforce_rate = 0.04
+		}
+		complete_effect = {
+			hidden_effect = {
+				add_command_power = -30
+			}
+			log = "[GetDateText]: [Root.GetName]: Decision foe_authorize_field_promotions"
+		}
+		remove_effect = {
+			army_experience = 5
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 5
+				has_war = yes
+			}
+			modifier = {
+				factor = 0
+				command_power < 50
+			}
+		}
+	}
+
 }
