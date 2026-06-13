@@ -229,6 +229,8 @@ NDefines.NMilitary.UNIT_EXP_LEVELS = {0.02,	0.04,	0.06,	0.08,	0.1,	0.14,	0.18,	0
 NDefines.NMilitary.EXPERIENCE_COMBAT_FACTOR = 0.05
 NDefines.NMilitary.ARMY_EXP_BASE_LEVEL = 5
 
+NDefines.NMilitary.REGIMENTAL_SUPPORT_REQUIRED_BATTALIONS = { 2 }
+
 --NAir
 NDefines.NAir.FUEL_COST_MULT = 0 --fuel multiplier for all air missions
 NDefines.NAir.MIN_PLANE_COUNT_PARADROP = 10

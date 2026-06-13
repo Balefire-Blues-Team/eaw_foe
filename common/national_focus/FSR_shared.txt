@@ -3998,7 +3998,11 @@ shared_focus = {
 			factor = 50
 		}
 		available = {
-			has_completed_focus = FSR_Finished
+			OR = {
+				has_completed_focus = FSR_blueberry
+				has_completed_focus = FSR_strawberry
+				has_completed_focus = FSR_badpony
+			}
 		}
 
 		completion_reward = {
@@ -4067,7 +4071,9 @@ shared_focus = {
 			uses = 2
 			category = fighter_tech
 			}
-
+			set_technology = {
+				air_tech_level_settler = 1
+			}
 		}
 }
 
@@ -4173,7 +4179,9 @@ shared_focus = {
 			uses = 2
 			category = air_support_tech
 			}
-
+			set_technology = {
+				air_tech_level_settler = 1
+			}
 		}
 }
 
@@ -4274,8 +4282,21 @@ shared_focus = {
 
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]:Focus FSR_birds_of_steel"
-			add_ideas = MSR_birds_of_steel_idea
-
+			IF = {
+				limit = {
+					has_idea = MSR_cas_focus_idea
+				}
+				swap_ideas = {
+					remove_idea = MSR_cas_focus_idea
+					add_idea = FSR_birds_of_steel_cas_idea
+				}
+			}
+			ELSE = {
+				swap_ideas = {
+					remove_idea = MSR_fighter_focus_idea
+					add_idea = FSR_birds_of_steel_fighter_idea
+				}
+			}
 		}
 }
 
@@ -8695,7 +8716,7 @@ shared_focus = {
 		
 		available_if_capitulated = no 
 		available = {
-      
+			has_completed_focus = FSR_birds_of_steel
 		}
 		prerequisite = {
 			focus = FSR_sl_moa2
