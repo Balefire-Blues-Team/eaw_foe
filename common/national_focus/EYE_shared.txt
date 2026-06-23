@@ -14,6 +14,26 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_birthofamonster"
 		country_event = { id = redeye.1 }
+		hidden_effect = {
+			IF = {
+				limit = {
+					is_ai = yes
+				}
+				505 = {
+					add_building_construction = {
+						type = supply_node
+						level = 1
+						instant_build = yes
+						province = 13243
+					}	
+				}
+				build_railway = {
+					start_province = 13243
+					target_province = 15769
+					level = 1
+				}
+			}
+		}
 	}
 
 } 
@@ -41,7 +61,7 @@ shared_focus = {
 
 shared_focus = { 
 	id = EYE_futureofamonster
-	icon = GFX_goal_EYE_futureofamonster
+	icon = GFX_goal_EYE_land_for_the_loyal
 	relative_position_id = EYE_lifeofamonster
 	x = 0
 	y = 1
@@ -67,7 +87,7 @@ shared_focus = {
 	icon = GFX_goal_EYE_fire_industry
 	x = 32
 	y = 0
-	cost = 7
+	cost = 5.80
 
 	available = {
 		has_completed_focus = EYE_futureofamonster
@@ -81,16 +101,28 @@ shared_focus = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_fire_industry"
 		add_tech_bonus = {
 			name = industry_bonus
-			bonus = 0.5
+			bonus = 0.6
 			uses = 1
 			category = industry
 		}
 
 		add_tech_bonus = {
 			name = electronics_bonus
-			bonus = 0.5
+			bonus = 0.6
 			uses = 1
 			category = electronics
+		}
+		if = {
+			limit = {
+				NOT = {
+					has_country_flag = EYE_slavery_abolished
+				}
+			}
+			custom_effect_tooltip = EYE_3_gain_slave_tt
+			add_to_variable = {
+				var = foe_slaves_var
+				value = 3
+			}
 		}
 	}
 	search_filters = { FOCUS_FILTER_RESEARCH }
@@ -104,8 +136,29 @@ shared_focus = {
 	relative_position_id = EYE_fire_industry
 	x = -4
 	y = 1
-	cost = 7
+	cost = 5.80
 	prerequisite = { focus = EYE_fire_industry } 
+	available = {
+		custom_trigger_tooltip = {
+		tooltip = eye_the_hinterlands_slaves_tt
+		EYE = {
+			OR = {
+				check_variable = {
+				var = foe_slaves_var
+				value = 5
+				compare = greater_than_or_equals
+			}
+			is_ai = yes
+			}
+		}
+		}
+	
+	}
+
+	bypass = {
+		has_country_flag = EYE_slavery_abolished
+	}
+	
 	ai_will_do = { 
 		factor = 45
 	} 
@@ -118,6 +171,12 @@ shared_focus = {
 				level = 2
 				instant_build = yes
 			}
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+			add_extra_state_shared_building_slots = 2
 		}
 		504 = {	
 			add_building_construction = {
@@ -125,6 +184,7 @@ shared_focus = {
 				level = 2
 				instant_build = yes
 			}
+			add_extra_state_shared_building_slots = 2
 		}
 		529 = {	
 			add_building_construction = {
@@ -132,6 +192,12 @@ shared_focus = {
 				level = 2
 				instant_build = yes
 			}
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+			}
+			add_extra_state_shared_building_slots = 2
 		}
 		523 = {	
 			add_building_construction = {
@@ -139,7 +205,13 @@ shared_focus = {
 				level = 2
 				instant_build = yes
 			}
+			add_extra_state_shared_building_slots = 2
 		}
+		add_to_variable = {
+			var = foe_slaves_var
+			value = -5
+		}
+		custom_effect_tooltip = EYE_5_lose_slave_tt
 	}
 	search_filters = { FOCUS_FILTER_INDUSTRY }
 
@@ -151,20 +223,24 @@ shared_focus = {
 	relative_position_id = EYE_the_hinterlands
 	x = -1
 	y = 1
-	cost = 7
+	cost = 5.80
 	prerequisite = { focus = EYE_the_hinterlands } 
 	ai_will_do = { 
 		factor = 45
-	} 
+	}
+
+	bypass = {
+		has_country_flag = EYE_slavery_abolished
+	}
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_boomtown_pits"
 		529 = {	
-			add_extra_state_shared_building_slots = 2
+			add_extra_state_shared_building_slots = 3
 
 			add_building_construction = {
 				type = arms_factory
-				level = 1
+				level = 2
 				instant_build = yes
 			}
 
@@ -173,7 +249,13 @@ shared_focus = {
 				level = 1
 				instant_build = yes
 			}
+			add_manpower = -5034
 		}
+		add_to_variable = {
+			var = foe_slaves_var
+			value = 3
+		}
+		custom_effect_tooltip = EYE_3_gain_slave_tt
 	}
 	search_filters = { FOCUS_FILTER_INDUSTRY }
 
@@ -185,7 +267,7 @@ shared_focus = {
 	relative_position_id = EYE_boomtown_pits
 	x = 0
 	y = 2
-	cost = 7
+	cost = 5.80
 	prerequisite = { focus = EYE_boomtown_pits } 
 	ai_will_do = { 
 		factor = 45
@@ -195,13 +277,24 @@ shared_focus = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_settle_backcountry"
 		502 = {	
 			add_extra_state_shared_building_slots = 2
-
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
 			add_manpower = 1500
 		}
 		504 = {	
 			add_extra_state_shared_building_slots = 2
-
+			add_resource = {
+				type = water
+				amount = 6
+			}
 			add_manpower = 1500
+		}
+		add_timed_idea = {
+			idea = EYE_incentivized_settlement_idea
+			days = 160
 		}
 	}
 	search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -216,24 +309,49 @@ shared_focus = {
 	relative_position_id = EYE_the_hinterlands
 	x = 1
 	y = 1
-	cost = 7
+	cost = 5.80
 	prerequisite = { focus = EYE_the_hinterlands } 
 	ai_will_do = { 
 		factor = 45
 	} 
+	
+	available = {
+		custom_trigger_tooltip = {
+			tooltip = eye_iron_cliffs_slaves_tt
+			EYE = {
+			OR = {
+			check_variable = {
+				var = foe_slaves_var
+				value = 4
+				compare = greater_than_or_equals
+			}
+			is_ai = yes
+			}
+			}
+		}
+	}
+	
+	bypass = {
+		has_country_flag = EYE_slavery_abolished
+	}
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_iron_cliffs"
 		add_resource = {
 			type = metal
-			amount = 8
+			amount = 14
 			state = 523
 		}
 		add_resource = {
 			type = composites
-			amount = 3
+			amount = 9
 			state = 523
 		}
+		add_to_variable = {
+			var = foe_slaves_var
+			value = -4
+		}
+		custom_effect_tooltip = EYE_4_lose_slave_tt
 	}
 	search_filters = { FOCUS_FILTER_INDUSTRY }
 
@@ -245,7 +363,7 @@ shared_focus = {
 	relative_position_id = EYE_iron_cliffs
 	x = 0
 	y = 2
-	cost = 7
+	cost = 5.80
 	prerequisite = { focus = EYE_iron_cliffs } 
 	ai_will_do = { 
 		factor = 45
@@ -254,11 +372,11 @@ shared_focus = {
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_fort_carmine"
 		498 = {	
-			add_extra_state_shared_building_slots = 1
+			add_extra_state_shared_building_slots = 2
 
 			add_building_construction = {
 				type = arms_factory
-				level = 1
+				level = 2
 				instant_build = yes
 			}
 
@@ -285,12 +403,30 @@ shared_focus = {
 	relative_position_id = EYE_the_hinterlands
 	x = 0
 	y = 2
-	cost = 7
+	cost = 5.80
 	prerequisite = { focus = EYE_boomtown_pits }
 	prerequisite = { focus = EYE_iron_cliffs }
 	ai_will_do = { 
 		factor = 45
 	} 
+	bypass = {
+		has_country_flag = EYE_slavery_abolished
+	}
+	available = {
+		custom_trigger_tooltip = {
+		tooltip = eye_red_forest_slaves_tt
+		EYE = {
+		OR = {
+			check_variable = {
+				var = foe_slaves_var
+				value = 3
+				compare = greater_than_or_equals
+			}
+			is_ai = yes
+			}
+		}
+		}
+	}
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_red_forest"
@@ -305,9 +441,14 @@ shared_focus = {
 
 			add_building_construction = {
 				type = industrial_complex
-				level = 1
+				level = 2
 				instant_build = yes
 			}
+		}
+		custom_effect_tooltip = EYE_3_lose_slave_tt
+		add_to_variable = {
+			var = foe_slaves_var
+			value = -3
 		}
 	}
 	search_filters = { FOCUS_FILTER_INDUSTRY }
@@ -320,7 +461,7 @@ shared_focus = {
 	relative_position_id = EYE_red_forest
 	x = 0
 	y = 2
-	cost = 7
+	cost = 5.80
 	prerequisite = { focus = EYE_red_forest }
 	prerequisite = { focus = EYE_fort_carmine }
 	prerequisite = { focus = EYE_settle_backcountry }
@@ -330,14 +471,19 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_flatlander_knowledge"
+		set_technology = {
+			exploitation_tech_level_scientific = 1
+		}
 		add_tech_bonus = {
-			bonus = 0.25
-			uses = 1
+			bonus = 0.60
+			uses = 2
+			ahead_reduction = 2
 			category = extraction_tech
 		}
 		add_tech_bonus = {
-			bonus = 0.25
+			bonus = 0.60
 			uses = 2
+			ahead_reduction = 2
 			category = agriculture_tech
 		}
 	}
@@ -352,19 +498,72 @@ shared_focus = {
 	relative_position_id = EYE_fire_industry
 	x = 0
 	y = 1
-	cost = 7
+	cost = 5.80
 	prerequisite = { focus = EYE_fire_industry } 
 	ai_will_do = { 
 		factor = 45
 	} 
+	available = {
+		custom_trigger_tooltip = {
+		tooltip = eye_the_hinterlands_slaves_tt
+		EYE = {
+		OR = {
+			check_variable = {
+				var = foe_slaves_var
+				value = 5
+				compare = greater_than_or_equals
+			}
+			is_ai = yes
+		}
+		}
+		}
+	}
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_the_forest"
 		add_tech_bonus = {
 			name = industry_bonus
-			ahead_reduction = 0.5
-			uses = 1
+			bonus = 1.5
+			ahead_reduction = 1.5
+			uses = 2
 			category = electronics
+		}
+		505 = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+		533 = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+		}
+		492 = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+		513 = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+			}
+		}
+		custom_effect_tooltip = EYE_5_lose_slave_tt
+		add_to_variable = {
+			var = foe_slaves_var
+			value = -5
 		}
 	}
 	search_filters = { FOCUS_FILTER_RESEARCH }
@@ -378,16 +577,12 @@ shared_focus = {
 	relative_position_id = EYE_the_forest
 	x = 1
 	y = 1
-	cost = 7
+	cost = 5.80
 
 	prerequisite = { focus = EYE_the_forest} 
 	available = {
-		has_idea = one_o_one_alive
 		controls_state = 593
 	}
-	mutually_exclusive = {
-        focus = EYE_cathedral
-    }
 
 	ai_will_do = { 
 		factor = 45
@@ -395,10 +590,31 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_stable_oneoone"
-		swap_ideas = {
-    		remove_idea = one_o_one_alive
-    		add_idea = one_o_one_alive_2
-		}
+			IF = {
+			limit = {
+				has_idea = one_o_one_alive
+			}
+			swap_ideas = {
+				remove_idea = one_o_one_alive
+				add_idea = one_o_one_alive_2
+			}
+			add_offsite_building = {
+					type = industrial_complex
+					level = 2
+				}
+				add_offsite_building = {
+					type = arms_factory
+					level = 1
+				}
+			}
+			ELSE = {
+			add_ideas = one_o_one_alive
+				add_offsite_building = {
+					type = industrial_complex
+					level = 1
+					}
+			}
+			custom_effect_tooltip = eye_stableoneoone_tt
 	}
 
 } 
@@ -409,16 +625,12 @@ shared_focus = {
 	relative_position_id = EYE_the_forest
 	x = -1
 	y = 1
-	cost = 7
+	cost = 5.80
 
 	prerequisite = { focus = EYE_the_forest} 
 	available = {
-		has_idea = one_o_one_dead
 		controls_state = 593
 	}
-	mutually_exclusive = {
-        focus = EYE_stable_oneoone
-    }
 
 	ai_will_do = { 
 		factor = 0
@@ -426,10 +638,31 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_cathedral"
-		swap_ideas = {
+		IF = {
+			limit = {
+				has_idea = one_o_one_dead
+			}
+			swap_ideas = {
     		remove_idea = one_o_one_dead
     		add_idea = one_o_one_dead_2
+			}
+			add_offsite_building = {
+				type = arms_factory
+				level = 2
+			}
+			add_offsite_building = {
+				type = industrial_complex
+				level = 1
+			}
 		}
+		ELSE = {
+			add_ideas = one_o_one_dead
+			add_offsite_building = {
+				type = arms_factory
+				level = 1
+			}
+		}
+		custom_effect_tooltip = eye_cathedral_tt
 
 	}
 
@@ -441,7 +674,7 @@ shared_focus = {
 	relative_position_id = EYE_cathedral
 	x = 0
 	y = 1
-	cost = 7
+	cost = 5.80
 
 	prerequisite = { 
 		focus = EYE_cathedral
@@ -453,10 +686,27 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_disciples"
-		swap_ideas = {
-    		remove_idea = one_o_one_dead_2
-    		add_idea = cathedral_disciples_idea
+		IF = {
+			limit = {
+				has_idea = one_o_one_dead_2
+			}
+			swap_ideas = {
+    			remove_idea = one_o_one_dead_2
+    			add_idea = cathedral_disciples_idea
+			}
+			add_offsite_building = {
+				type = arms_factory
+				level = 2
+			}
 		}
+		else = {
+			add_manpower = 600
+			add_offsite_building = {
+				type = arms_factory
+				level = 1
+			}
+		}
+		custom_effect_tooltip = eye_cathedral_tt
 	}
 
 } 
@@ -467,7 +717,7 @@ shared_focus = {
 	relative_position_id = EYE_stable_oneoone
 	x = 0
 	y = 1
-	cost = 7
+	cost = 5.80
 
 	prerequisite = { 
 		focus = EYE_stable_oneoone
@@ -479,7 +729,27 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_full_labs"
+		if = {
+			limit = {
+				has_idea = one_o_one_alive_2
+			}
+			add_offsite_building = {
+				type = industrial_complex
+				level = 2
+			}
+			swap_ideas = {
+				remove_idea = one_o_one_alive_2
+				add_idea = one_o_one_alive_3
+			}
+		}
+		else = {
+			add_offsite_building = {
+				type = industrial_complex
+				level = 1
+			}
+		}
 		add_research_slot = 1
+		custom_effect_tooltip = eye_stableoneoone_tt
 	}
 	search_filters = { FOCUS_FILTER_RESEARCH }
 
@@ -491,7 +761,7 @@ shared_focus = {
 	relative_position_id = EYE_disciples
 	x = 0
 	y = 1
-	cost = 7
+	cost = 5.80
 
 	prerequisite = { 
 		focus = EYE_disciples
@@ -507,6 +777,22 @@ shared_focus = {
 		set_technology = {
     		dog_equipment_tech_3 = 1
 		}
+			if = {
+				limit = {
+					has_country_leader = {
+						character = EYE_char_red_eye
+						ruling_only = yes
+					}
+				}
+				hidden_effect = {
+					set_country_flag = eye_winter_allowed_flag
+				}
+			}
+			add_equipment_to_stockpile = {
+				type = dogs_equipment
+				amount = 150
+			}
+			custom_effect_tooltip = eye_winter_allowed_tt
 	}
 
 }
@@ -517,12 +803,13 @@ shared_focus = {
 	relative_position_id = EYE_full_labs
 	x = 0
 	y = 1
-	cost = 7
+	cost = 5.80
 
 	prerequisite = { 
 		focus = EYE_disciples
 		focus = EYE_full_labs
 	} 
+	
 
 	ai_will_do = { 
 		factor = 45
@@ -540,21 +827,22 @@ shared_focus = {
 			}
 			add_building_construction = {
 				type = anti_air_building
-				level = 1
+				level = 5
 				instant_build = yes
 			}
 		}
+
 	}
 
 } 
 
-shared_focus = { 
+shared_focus = {
 	id = EYE_everfree_road
 	icon = GFX_goal_EYE_everfree_road
 	relative_position_id = EYE_cyberdogs
 	x = 1
 	y = 1
-	cost = 7
+	cost = 5.80
 
 	prerequisite = { focus = EYE_cathedral_arms }  
 	prerequisite = { focus = EYE_cyberdogs } 
@@ -563,14 +851,37 @@ shared_focus = {
 		factor = 45
 	} 
 
+	available = {
+		custom_trigger_tooltip = {
+		tooltip = eye_everfree_road_slaves_tt
+		EYE = {
+			OR = {
+			check_variable = {
+				var = foe_slaves_var
+				value = 7
+				compare = greater_than_or_equals
+			}
+			is_ai = yes
+			}
+		}
+		}
+	}
+	
+	bypass = {
+		has_country_flag = EYE_slavery_abolished
+	}
+	
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_cathedral_arms"
+		set_technology = {
+			tools_tech_level_scientific = 1
+		}
 		505 = {	
 			add_extra_state_shared_building_slots = 2
 
 			add_building_construction = {
 				type = infrastructure
-				level = 2
+				level = 3
 				instant_build = yes
 			}
 		}
@@ -579,7 +890,7 @@ shared_focus = {
 
 			add_building_construction = {
 				type = infrastructure
-				level = 2
+				level = 3
 				instant_build = yes
 			}
 		}
@@ -588,10 +899,15 @@ shared_focus = {
 
 			add_building_construction = {
 				type = infrastructure
-				level = 2
+				level = 3
 				instant_build = yes
 			}
 		}
+		add_to_variable = {
+			var = foe_slaves_var
+			value = -7
+		}
+		custom_effect_tooltip = EYE_7_lose_slave_tt
 	}
 
 } 
@@ -602,19 +918,62 @@ shared_focus = {
 	relative_position_id = EYE_fire_industry
 	x = 4
 	y = 1
-	cost = 7
+	cost = 5.80
 	prerequisite = { focus = EYE_fire_industry } 
 	ai_will_do = { 
 		factor = 45
 	} 
+	
+	available = {
+		custom_trigger_tooltip = {
+		tooltip = eye_the_hinterlands_slaves_tt
+		EYE = {
+			OR = {
+			check_variable = {
+				var = foe_slaves_var
+				value = 5
+				compare = greater_than_or_equals
+			}
+			is_ai = yes
+			}
+		}
+		}
+	}
+	bypass = {
+		has_country_flag = EYE_slavery_abolished
+	}
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_the_city"
 		add_tech_bonus = {
 			name = industry_bonus
+			bonus = 1
 			ahead_reduction = 0.5
 			uses = 1
 			category = industry
+		}
+		48 = {
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+			}
+		}
+		45 = {
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+			}
+		}
+		532 = {
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+			}
+		}
+		custom_effect_tooltip = EYE_5_lose_slave_tt
+		add_to_variable = {
+			var = foe_slaves_var
+			value = -5
 		}
 	}
 	search_filters = { FOCUS_FILTER_RESEARCH }
@@ -628,29 +987,55 @@ shared_focus = {
 	relative_position_id = EYE_the_city
 	x = -1
 	y = 1
-	cost = 7
+	cost = 5.80
 	prerequisite = { focus = EYE_the_city } 
 	available = {
 		controls_state = 45
+		custom_trigger_tooltip = {
+		tooltip = eye_red_forest_slaves_tt
+		EYE = {
+			OR = {
+			check_variable = {
+				var = foe_slaves_var
+				value = 3
+				compare = greater_than_or_equals
+			}
+			is_ai = yes
+			}
+		}
+		}
+	}
+	bypass = {
+		has_country_flag = EYE_slavery_abolished
 	}
 	ai_will_do = { 
 		factor = 0
-	} 
+	}
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_remove_parasprites"
 		45 = {	
 			add_extra_state_shared_building_slots = 6
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
 		}
 		add_resource = {
 			type = energy
-			amount = 8
+			amount = 10
 			state = 45
 		}
 		add_resource = {
 			type = advanced
-			amount = 4
+			amount = 10
 			state = 45
+		}
+		custom_effect_tooltip = EYE_3_lose_slave_tt
+		add_to_variable = {
+			var = foe_slaves_var
+			value = -3
 		}
 	}
 
@@ -662,22 +1047,48 @@ shared_focus = {
 	relative_position_id = EYE_remove_parasprites
 	x = 0
 	y = 2
-	cost = 7
+	cost = 5.80
 	prerequisite = { focus = EYE_remove_parasprites }
 	available = {
 		controls_state = 48
 	}
 	ai_will_do = { 
 		factor = 45
-	} 
+	}
+	bypass = {
+		controls_state = 538
+		NOT = {
+			country_exists = FSR
+		}
+	}
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_fortify_bridge"
 		48 = {
 			add_building_construction = {
 				type = bunker
-				level = 3
+				level = 2
 				instant_build = yes
+				province = 9090
+			}
+			add_building_construction = {
+				type = bunker2
+				level = 1
+				instant_build = yes 
+				province = 9090
+			}
+		}
+		50 = {
+			add_building_construction = {
+				type = bunker
+				level = 2
+				instant_build = yes
+				province = 9090
+			}
+			add_building_construction = {
+				type = bunker2
+				level = 1
+				instant_build = yes 
 				province = 9090
 			}
 		}
@@ -691,15 +1102,30 @@ shared_focus = {
 	relative_position_id = EYE_the_city
 	x = 1
 	y = 1
-	cost = 7
+	cost = 5.80
 	prerequisite = { focus = EYE_the_city }
 	available = {
 		controls_state = 532
+		custom_trigger_tooltip = {
+		tooltip =  eye_red_forest_slaves_tt
+		EYE = {
+			OR = {
+			check_variable = {
+				var = foe_slaves_var
+				value = 3
+				compare = greater_than_or_equals
+			}
+			is_ai = yes
+			}
+		}
+		}
 	} 
 	ai_will_do = { 
 		factor = 45
 	} 
-
+	bypass = {
+		has_country_flag = EYE_slavery_abolished
+	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_filly_automotive"
 		532 = {	
@@ -710,8 +1136,24 @@ shared_focus = {
 				level = 2
 				instant_build = yes
 			}
+			
+			add_building_construction = {
+				type = arms_factory
+				level = 3
+				instant_build = yes
+			}
+			
 		}
-
+		add_equipment_to_stockpile = {
+				type = motorized_equipment
+				amount = 150
+				producer = OWE
+			}
+		custom_effect_tooltip = EYE_3_lose_slave_tt
+		add_to_variable = {
+			var = foe_slaves_var
+			value = -3
+		}
 	}
 
 }
@@ -726,6 +1168,19 @@ shared_focus = {
 	prerequisite = { focus = EYE_filly_automotive }
 	available = {
 		controls_state = 532
+		custom_trigger_tooltip = {
+		tooltip =  eye_iron_cliffs_slaves_tt
+		EYE = {
+			OR = {
+			check_variable = {
+				var = foe_slaves_var
+				value = 4
+				compare = greater_than_or_equals
+			}
+			is_ai = yes
+			}
+		}
+		}
 	} 
 	ai_will_do = { 
 		factor = 45
@@ -735,9 +1190,15 @@ shared_focus = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_radiation_engine"
 		add_resource = {
 			type = energy
-			amount = 25
+			amount = 40
 			state = 532
 		}
+		add_to_variable = {
+			var = foe_slaves_var
+			value = -4
+		}
+		add_ideas = EYE_the_radiation_engine_idea
+		custom_effect_tooltip = EYE_4_lose_slave_tt
 	}
 
 }
@@ -748,7 +1209,7 @@ shared_focus = {
 	relative_position_id = EYE_the_city
 	x = 0
 	y = 2
-	cost = 7
+	cost = 5.80
 	available = {
 		controls_state = 538
 	}
@@ -763,16 +1224,51 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_loot_stabletec"
-		add_resource = {
-			type = circuitry
-			amount = 6
-			state = 538
+		set_technology = {
+			electronics_tech_level_scientific = 1
 		}
-		add_tech_bonus = {
-			bonus = 0.75
-			uses = 1
-			category = electronics
+		if = {
+			limit = {
+				has_completed_focus = EYE_stable_oneoone
+			}
+			add_resource = {
+				type = circuitry
+				amount = 16
+				state = 538
+			}
+			add_resource = {
+				type = advanced
+				amount = 10
+				state = 538
+			}
+			add_tech_bonus = {
+				bonus = 0.75
+				uses = 1
+				category = electronics
+			}
+			add_timed_idea = {
+				idea = EYE_stable_tec_research
+				days = 80
+			}
 		}
+		else = {
+			add_resource = {
+				type = circuitry
+				amount = 7
+				state = 538
+			}
+			add_resource = {
+				type = advanced
+				amount = 4
+				state = 538
+			}
+			add_tech_bonus = {
+				bonus = 0.50
+				uses = 1
+				category = electronics
+			}
+		}
+		custom_effect_tooltip = eye_stableoneoonecompleted_tt
 
 	}
 
@@ -784,19 +1280,39 @@ shared_focus = {
 	relative_position_id = EYE_loot_stabletec
 	x = 0
 	y = 2
-	cost = 7
+	cost = 5.80
 	prerequisite = { focus = EYE_loot_stabletec } 
 	prerequisite = { focus = EYE_fortify_bridge } 
 	prerequisite = { focus = EYE_radiation_engine } 
 	ai_will_do = { 
 		factor = 45
-	} 
-
+	}
+	bypass = {
+		has_country_flag = EYE_slavery_abolished
+	}
+	available = {
+		custom_trigger_tooltip = {
+		tooltip =  eye_the_hinterlands_slaves_tt
+		EYE = {
+			OR = {
+			check_variable = {
+				var = foe_slaves_var
+				value = 5
+				compare = greater_than_or_equals
+			}
+			is_ai = yes
+			}
+		}
+		}
+	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_restore_power"
 		45 = {	
 			add_extra_state_shared_building_slots = 1
-
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+			}
 			add_building_construction = {
 				type = infrastructure
 				level = 2
@@ -805,7 +1321,10 @@ shared_focus = {
 		}
 		48 = {	
 			add_extra_state_shared_building_slots = 1
-
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+			}
 			add_building_construction = {
 				type = infrastructure
 				level = 2
@@ -814,7 +1333,10 @@ shared_focus = {
 		}
 		532 = {	
 			add_extra_state_shared_building_slots = 1
-
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+			}
 			add_building_construction = {
 				type = infrastructure
 				level = 2
@@ -823,7 +1345,10 @@ shared_focus = {
 		}
 		538 = {	
 			add_extra_state_shared_building_slots = 1
-
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+			}
 			add_building_construction = {
 				type = infrastructure
 				level = 2
@@ -832,12 +1357,20 @@ shared_focus = {
 		}
 		536 = {	
 			add_extra_state_shared_building_slots = 1
-
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+			}
 			add_building_construction = {
 				type = infrastructure
 				level = 2
 				instant_build = yes
 			}
+		}
+		custom_effect_tooltip = EYE_5_lose_slave_tt
+		add_to_variable = {
+			var = foe_slaves_var
+			value = -5
 		}
 	}
 
@@ -1217,8 +1750,973 @@ shared_focus = {
 } 
 
 ### Army Tree
+#armystart
 shared_focus = { 
 	id = EYE_wasteland_army
+	icon = GFX_goal_EYE_wasteland_army
+	relative_position_id = EYE_everfree_road
+	x = 0
+	y = 1
+	cost = 5
+
+	available = {
+		has_completed_focus = EYE_redeye_political
+	}
+	ai_will_do = { 
+		factor = 200
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_wasteland_army"
+		country_event = { 
+			id = redeye_army.1
+		}
+		hidden_effect = {
+			IF = {
+				limit = {
+					is_ai = yes
+				}
+				army_experience = 50
+			}
+			IF = {
+				limit = {
+					is_ai = yes
+					has_war = no
+				}
+				delete_units = {
+					division_template = "Slave Militia"
+					disband = yes
+				}
+				delete_units = {
+					division_template = "Raider Warband"
+					disband = yes
+				}
+				delete_units = {
+					division_template = "Talon Company"
+					disband = yes
+				}
+			}
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = EYE_army_proven_slaves
+	icon = GFX_goal_EYE_those_who_prove_themselves
+	relative_position_id = EYE_wasteland_army
+	x = -1
+	y = 1
+	cost = 5
+	
+	prerequisite = { focus = EYE_wasteland_army } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 100
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_proven_slaves"
+		country_event = { 
+			id = redeye_army.2
+		}
+		hidden_effect = {
+		add_corps_commander_role = {
+			traits = {
+				EYE_slave_visionary_trait intelligent_trait pony_race_trait
+			}
+			character = EYE_char_protege
+			skill = 4
+			attack_skill = 2
+			defense_skill = 4
+			planning_skill = 6
+			logistics_skill = 5
+		}
+		}
+		custom_effect_tooltip = EYE_protege_stats_tt
+	}
+
+}
+
+shared_focus = { 
+	id = EYE_army_proven_masters
+	icon = GFX_goal_EYE_the_masters
+	relative_position_id = EYE_wasteland_army
+	x = 1
+	y = 1
+	cost = 5
+
+	prerequisite = { focus = EYE_wasteland_army } 
+	
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 100
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_proven_masters"
+		country_event = { 
+			id = redeye_army.3
+		}
+		hidden_effect = {
+		add_corps_commander_role = {
+			character = EYE_char_chainlink
+			traits = { strong_trait pony_race_trait }
+			skill = 4
+			attack_skill = 5
+			defense_skill = 4
+			planning_skill = 5
+			logistics_skill = 3
+			legacy_id = 59308
+		}
+		set_country_flag = EYE_chainlink_commander_flag
+		}
+		custom_effect_tooltip = EYE_chainlink_stats_tt
+	}
+
+}
+
+shared_focus = { 
+	id = EYE_army_fanatics
+	icon = GFX_goal_EYE_believers_and_fanatics
+	relative_position_id = EYE_wasteland_army
+	x = 0
+	y = 2
+	cost = 5
+
+	prerequisite = { focus = EYE_army_proven_slaves } 
+	prerequisite = { focus = EYE_army_proven_masters }
+	
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 100
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_fanatics"
+		country_event = { 
+			id = redeye_army.4
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = EYE_army_three_part_army
+	icon = GFX_goal_EYE_futureofamonster
+	relative_position_id = EYE_army_fanatics
+	x = 0
+	y = 1
+	cost = 5
+	
+	prerequisite = { focus = EYE_army_fanatics } 
+
+	ai_will_do = { 
+		factor = 75
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_three_part_army"
+		country_event = { 
+			id = redeye_army.5
+		}
+	}
+
+}
+#armyraider
+shared_focus = {
+	id = EYE_army_raider_start
+	icon = GFX_goal_EYE_raider_army
+	relative_position_id = EYE_army_three_part_army
+	x = -5
+	y = 1
+	cost = 6
+	prerequisite = { focus = EYE_army_three_part_army } 
+	mutually_exclusive = { focus = EYE_army_slave_start focus = EYE_army_talon_start }
+	
+
+	available = {
+			has_country_flag = EYE_raider_army_flag
+	}
+	ai_will_do = { 
+		factor = 75
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_raider_start"
+		if = {
+		limit = {
+			has_idea = EYE_redeyes_army5_idea
+		}
+		swap_ideas = {
+			remove_idea = EYE_redeyes_army5_idea
+			add_idea = EYE_redeyes_army_raider1_idea
+		}
+		}
+		else = {
+			custom_effect_tooltip = eye_army_new_unity_raider_tt
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = EYE_army_raider_heel
+	icon = GFX_goal_EYE_raiders_in_command
+	relative_position_id = EYE_army_raider_start
+	x = -1
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_raider_start } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 75
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_raider_heel"
+		EYE_better_raider_army = yes
+		add_manpower = 250
+		custom_effect_tooltip = EYE_scarlett_recruit_tt
+		custom_effect_tooltip = EYE_scarlett_stats_tt
+		hidden_effect = {
+		add_corps_commander_role = {
+			character = EYE_char_scarlett_flash
+			traits = { intelligent_trait charismatic_trait pony_race_trait }
+			skill = 4
+			attack_skill = 2
+			defense_skill = 2
+			planning_skill = 3
+			logistics_skill = 6
+		}
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = EYE_army_raider_lessons
+	icon = GFX_goal_EYE_lessons_in_brutality
+	relative_position_id = EYE_army_raider_start
+	x = 1
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_raider_start } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 75
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_raider_lessons"
+		EYE_better_raider_army = yes
+		army_experience = 50
+		add_mastery = {
+			amount = 100
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = EYE_army_raider_big_four
+	icon = GFX_goal_EYE_raids_for_slaves
+	relative_position_id = EYE_army_raider_start
+	x = 0
+	y = 2
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_raider_heel } 
+	prerequisite = { focus = EYE_army_raider_lessons } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 75
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_raider_big_four"
+		EYE_better_raider_army = yes
+		country_event = {
+			id = redeye_army.6
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = EYE_army_raider_press_conscript
+	icon = GFX_goal_EYE_raids_for_glory
+	relative_position_id = EYE_army_raider_big_four
+	x = -1
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_raider_big_four } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 75
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_raider_press_conscript"
+		custom_effect_tooltip = eye_army_raider_recruitment_tt
+		hidden_effect = {
+			set_country_flag = eye_army_raider_recruit_flag
+		}
+	}
+
+}
+
+shared_focus = { 
+	id = EYE_army_raider_chems
+	icon = GFX_goal_EYE_bountiful_chems_and_violence
+	relative_position_id = EYE_army_raider_big_four
+	x = 1
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_raider_big_four } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 75
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_chems"
+		add_timed_idea = {
+			idea = EYE_redeyes_army_raider_chems_idea
+			days = 180
+		}
+		custom_effect_tooltip = eye_army_raider_chem_tt
+		hidden_effect = {
+			set_country_flag = eye_army_raider_chem_flag
+			set_country_flag = eye_army_raider_chem_use_flag
+		}
+	}
+
+}
+
+shared_focus = {
+	id = EYE_army_raider_new_unity
+	icon = GFX_goal_village_raid
+	relative_position_id = EYE_army_slave_promises
+	x = 0
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_talon_the_best  focus = EYE_army_slave_promises focus = EYE_army_raider_press_conscript focus = EYE_army_raider_chems } 
+	
+	allow_branch = {
+		has_country_flag = EYE_raider_army_flag
+	}
+
+	available = {
+		custom_trigger_tooltip = {
+			tooltip = eye_new_unity_formed_tt
+			has_country_flag = EYE_new_unity_flag
+		}
+	}
+	ai_will_do = { 
+		factor = 75
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_raider_new_unity"
+		EYE_better_raider_army = yes
+	}
+
+}
+
+#armyslaves
+shared_focus = { 
+	id = EYE_army_slave_start
+	icon = GFX_goal_EYE_an_army_of_slaves
+	relative_position_id = EYE_army_three_part_army
+	x = 0
+	y = 1
+	cost = 6
+
+	mutually_exclusive = { focus = EYE_army_raider_start focus = EYE_army_talon_start }
+	prerequisite = { focus = EYE_army_three_part_army } 
+
+	available = {
+		has_country_flag = EYE_slave_army_flag
+	}
+	ai_will_do = { 
+		factor = 75
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_slave_start"
+		if = {
+		limit = {
+			has_idea = EYE_redeyes_army5_idea
+		}
+		swap_ideas = {
+			remove_idea = EYE_redeyes_army5_idea
+			add_idea = EYE_redeyes_army_slave1_idea
+		}
+		}
+		if = {
+			limit = { 
+				NOT = {
+					RSH = {
+						has_country_flag = RSH_has_lavender
+					}
+				}
+			}
+			set_country_flag = EYE_add_char_lavender_basket_flag
+			custom_effect_tooltip = EYE_lavender_stats_tt
+			custom_effect_tooltip = EYE_lavender_unlock_tt
+			add_corps_commander_role = {
+				character = EYE_char_bleeding_heart
+				traits = { pony_race_trait charismatic_trait }
+				skill = 1
+				attack_skill = 1
+				defense_skill = 1
+				planning_skill = 2
+				logistics_skill = 1
+				legacy_id = 59307
+			}
+			custom_effect_tooltip = EYE_bleeding_stats_tt
+			
+
+			hidden_effect = {
+				set_country_flag = EYE_has_lavender
+			}
+		}
+		else = {
+			add_corps_commander_role = {
+				character = EYE_char_bleeding_heart
+				traits = { pony_race_trait charismatic_trait }
+				skill = 1
+				attack_skill = 1
+				defense_skill = 1
+				planning_skill = 2
+				logistics_skill = 1
+				legacy_id = 59307
+			}
+			custom_effect_tooltip = EYE_bleeding_stats_tt
+		}
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_slave_pressed_service
+	icon = GFX_goal_EYE_fighters_workers
+	relative_position_id = EYE_army_slave_start
+	x = 0
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_slave_start } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 75
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_slave_pressed_service"
+		EYE_better_slave_army = yes
+		custom_effect_tooltip = eye_army_slave_conscription_tt
+		hidden_effect = {
+			set_country_flag = eye_army_slave_conscription_flag
+		}
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_slave_benefits
+	icon = GFX_goal_EYE_special_privelges
+	relative_position_id = EYE_army_slave_pressed_service
+	x = -2
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_slave_pressed_service } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 75
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_slave_benefits"
+		EYE_better_slave_army = yes
+		custom_effect_tooltip = eye_army_slave_conscription_improvement_tt
+		hidden_effect = {
+			set_country_flag = eye_army_slave_conscription_faster_flag
+		}
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_slave_commissars
+	icon = GFX_goal_EYE_ideological_officers
+	relative_position_id = EYE_army_slave_pressed_service
+	x = 0
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_slave_pressed_service } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 75
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_slave_commissars"
+		EYE_better_slave_army = yes
+		if = {
+			limit = {
+				has_idea = EYE_redeye_army_faithfulwarriors_idea
+			}
+			swap_ideas = {
+				add_idea = EYE_redeye_army_faithfulwarriors2_idea
+				remove_idea = EYE_redeye_army_faithfulwarriors_idea
+			}
+		}
+		else_if = {
+			limit = {
+				has_idea = EYE_redeye_army_faithfulpreachers_idea
+			}
+			swap_ideas = {
+				add_idea = EYE_redeye_army_faithfulpreachers2_idea
+				remove_idea = EYE_redeye_army_faithfulpreachers_idea
+			}
+		}
+		else = {
+				add_manpower = 300
+		}
+		hidden_effect = {
+			add_corps_commander_role = {
+				character = EYE_char_wicked_slit
+				traits = { pony_race_trait perceptive_trait }
+				skill = 4
+				attack_skill = 4
+				defense_skill = 2
+				planning_skill = 2
+				logistics_skill = 4
+			}	
+			add_corps_commander_role = {
+				character = EYE_char_whiplash
+				traits = { pony_race_trait strong_trait }
+				skill = 4
+				attack_skill = 2
+				defense_skill = 3
+				planning_skill = 3
+				logistics_skill = 3
+			}
+		}
+		custom_effect_tooltip = EYE_whiplash_stats_tt
+		custom_effect_tooltip = EYE_wicked_stats_tt
+		}
+	}
+shared_focus = { 
+	id = EYE_army_slave_ponywave
+	icon = GFX_goal_EYE_endless_waves
+	relative_position_id = EYE_army_slave_pressed_service
+	x = 2
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_slave_pressed_service } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 75
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_slave_ponywave"
+		EYE_better_slave_army = yes
+		add_mastery = {
+			amount = 100
+		}
+		add_manpower = 300
+		custom_effect_tooltip = eye_army_slave_conscription_improvement2_tt
+		hidden_effect = {
+			set_country_flag = eye_army_slave_conscription_more_flag
+		}
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_slave_promises
+	icon = GFX_goal_EYE_promises_of_freedom
+	relative_position_id = EYE_army_slave_pressed_service
+	x = 0
+	y = 2
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_slave_benefits } 
+	prerequisite = { focus = EYE_army_slave_commissars } 
+	prerequisite = { focus = EYE_army_slave_ponywave } 
+
+	ai_will_do = { 
+		factor = 75
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_slave_promises"
+		EYE_better_slave_army = yes
+		add_timed_idea = {
+			idea = EYE_redeye_army_waveofslaves_idea
+			years = 2
+		}
+		custom_effect_tooltip = eye_army_slave_wave_tt
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_slave_new_unity
+	icon = GFX_generic_goal_the_common_infantrypony
+	relative_position_id = EYE_army_slave_promises
+	x = 0
+	y = 1
+	cost = 6
+	allow_branch = {
+		has_country_flag = EYE_slave_army_flag
+	}
+	prerequisite = { focus = EYE_army_talon_the_best  focus = EYE_army_slave_promises focus = EYE_army_raider_press_conscript focus = EYE_army_raider_chems } 
+
+	available = {
+		custom_trigger_tooltip = {
+			tooltip = eye_new_unity_formed_tt
+			has_country_flag = EYE_new_unity_flag
+		}
+	}
+	ai_will_do = { 
+		factor = 75
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_slave_promises"
+		EYE_better_slave_army = yes
+	}
+
+}
+#armytalons
+shared_focus = { 
+	id = EYE_army_talon_start
+	icon = GFX_goal_EYE_the_talons
+	relative_position_id = EYE_army_three_part_army
+	x = 5
+	y = 1
+	cost = 6
+	mutually_exclusive = { focus = EYE_army_raider_start focus = EYE_army_slave_start }
+	prerequisite = { focus = EYE_army_three_part_army } 
+
+	available = {
+		has_country_flag = EYE_talon_army_flag
+	}
+	ai_will_do = { 
+		factor = 75
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_talon_start"
+		
+		if = {
+			limit = {
+				has_idea = EYE_redeyes_army5_idea
+			}
+		swap_ideas = {
+			add_idea = EYE_redeyes_army_talon1_idea
+			remove_idea = EYE_redeyes_army5_idea
+		}
+		else = {
+			custom_effect_tooltip = eye_army_new_unity_talon_tt
+		}
+		}
+		if = {
+			limit = {
+			NOT = {
+				has_idea = training_law_talon
+			}
+			}
+		}
+		add_ideas = training_law_talon
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_talon_ranger_tactics
+	icon = GFX_goal_EYE_anti_ranger_tactics
+	relative_position_id = EYE_army_talon_start
+	x = -2
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_talon_start } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 75
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_talon_ranger_tactics"
+		EYE_better_talon_army = yes
+		add_equipment_to_stockpile = {
+			type = anti_tank_equipment
+			amount = 300
+		}
+		add_ideas = EYE_redeye_army_talons_antiranger_idea
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_talon_logistics
+	icon = GFX_goal_EYE_recruitment_calls
+	relative_position_id = EYE_army_talon_start
+	x = 0
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_talon_start } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 75
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_talon_logistics"
+		EYE_better_talon_army = yes
+		custom_effect_tooltip = eye_army_talon_hire_tt
+		hidden_effect = {
+			set_country_flag = eye_army_talon_recruit_flag
+		}
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_talon_rapid_force
+	icon = GFX_goal_EYE_combat_doctrine
+	relative_position_id = EYE_army_talon_start
+	x = 2
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_talon_start } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 75
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_talon_rapid_force"
+		EYE_better_talon_army = yes
+		add_ideas = EYE_redeye_army_talons_rapid_idea
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_talon_power_armor
+	icon = GFX_goal_EYE_pa_focus
+	relative_position_id = EYE_army_talon_logistics
+	x = -1
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_talon_ranger_tactics } 
+	prerequisite = { focus = EYE_army_talon_logistics } 
+	prerequisite = { focus = EYE_army_talon_rapid_force }
+	
+	mutually_exclusive = { focus = EYE_army_talon_spec_ops }
+
+	available = {
+		has_completed_focus = EYE_ranger_turncoats
+	}
+	ai_will_do = { 
+		factor = 75
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_talon_power_armor"
+		set_technology = {
+    		talon_pa_tech = 1
+		}
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_talon_spec_ops
+	icon = GFX_goal_EYE_elite_mercs
+	relative_position_id = EYE_army_talon_logistics
+	x = 1
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_talon_ranger_tactics } 
+	prerequisite = { focus = EYE_army_talon_logistics } 
+	prerequisite = { focus = EYE_army_talon_rapid_force }
+	
+	mutually_exclusive = { focus = EYE_army_talon_power_armor }
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 75
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_talon_spec_ops"
+		set_technology = {
+			stealth_boy_tech = 1
+			special_forces_tech_level_scientific = 1
+		}
+		custom_effect_tooltip = EYE_talon_specops_equip_tt
+		hidden_effect = {
+			set_technology = {
+				foe_talon_spec_ops_require_tech = 1
+				popup = no
+			}
+		}
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_talon_the_best
+	icon = GFX_goal_EYE_the_best_of_the_best
+	relative_position_id = EYE_army_talon_power_armor
+	x = 1
+	y = 1
+	cost = 6
+	
+	prerequisite = { focus = EYE_army_talon_power_armor
+					 focus = EYE_army_talon_spec_ops } 
+
+	available = {
+
+	}
+	ai_will_do = { 
+		factor = 75
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_talon_the_best"
+		EYE_better_talon_army = yes
+		custom_effect_tooltip = eye_army_talon_merge_tt
+		hidden_effect = {
+			remove_ideas = {
+				idea = EYE_redeye_army_talons_antiranger_idea
+				idea = EYE_redeye_army_talons_rapid_idea
+			}
+		}
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_talon_new_unity
+	icon = GFX_goal_EYE_the_victorious_talons
+	relative_position_id = EYE_army_slave_promises
+	x = 0
+	y = 1
+	cost = 6
+	allow_branch = {
+		has_country_flag = EYE_talon_army_flag
+	}
+	prerequisite = { focus = EYE_army_talon_the_best  focus = EYE_army_slave_promises focus = EYE_army_raider_press_conscript focus = EYE_army_raider_chems } 
+
+	available = {
+		custom_trigger_tooltip = {
+			tooltip = eye_new_unity_formed_tt
+			has_country_flag = EYE_new_unity_flag
+		}
+	}
+	ai_will_do = { 
+		factor = 75
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_talon_new_unity"
+		EYE_better_talon_army = yes
+	}
+
+}
+shared_focus = { 
+	id = EYE_army_new_unity_neutral
+	icon = GFX_goal_EYE_army_of_unity
+	relative_position_id = EYE_army_slave_promises
+	x = 0
+	y = 1
+	cost = 6
+	
+	allow_branch = {
+		NOT = {
+			OR = {
+				has_country_flag = EYE_slave_army_flag
+				has_country_flag = EYE_talon_army_flag
+				has_country_flag = EYE_raider_army_flag
+			}
+		}
+	}
+	
+	prerequisite = { focus = EYE_army_talon_the_best  focus = EYE_army_slave_promises focus = EYE_army_raider_press_conscript focus = EYE_army_raider_chems } 
+
+	available = {
+		custom_trigger_tooltip = {
+			tooltip = eye_new_unity_formed_tt
+			has_country_flag = EYE_new_unity_flag
+		}
+	}
+	ai_will_do = { 
+		factor = 75
+	} 
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus EYE_army_talon_new_unity"
+		custom_effect_tooltip = eye_army_new_unity_generic_tt
+	}
+
+}
+###Alt Army Tree
+shared_focus = { 
+	id = EYE_wasteland_army_legacy
 	icon = GFX_goal_EYE_wasteland_army
 	relative_position_id = EYE_everfree_road
 	x = 0
@@ -1232,17 +2730,12 @@ shared_focus = {
 
 	}
 	ai_will_do = { 
-		factor = 60
+		factor = 75
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_wasteland_army"
-		add_doctrine_cost_reduction = {
-    		cost_reduction = 0.5
-    		uses = 2
-    		category = land_doctrine
-		}
-		army_experience = 10
+		add_ideas = professional_army_idea
 	}
 
 }
@@ -1250,15 +2743,12 @@ shared_focus = {
 shared_focus = { 
 	id = EYE_merc_army
 	icon = GFX_goal_EYE_merc_army
-	relative_position_id = EYE_wasteland_army
+	relative_position_id = EYE_wasteland_army_legacy
 	x = 4
 	y = 1
 	cost = 6
 
-	prerequisite = { focus = EYE_wasteland_army} 
-	available = {
-		has_country_flag = EYE_talon_army_flag
-	}
+	prerequisite = { focus = EYE_wasteland_army_legacy} 
 	
 	mutually_exclusive = {
         focus = EYE_slave_army
@@ -1268,16 +2758,12 @@ shared_focus = {
     }
 
 	ai_will_do = { 
-		factor = 70
+		factor = 90
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_merc_army"
-		add_tech_bonus = {
-    		bonus = 0.5
-    		uses = 2
-    		category = cat_elite_army
-		}
+		add_ideas = EYE_redeye_army_talons_rapid_idea
 	}
 
 } 
@@ -1285,16 +2771,12 @@ shared_focus = {
 shared_focus = { 
 	id = EYE_slave_army
 	icon = GFX_goal_EYE_slave_army
-	relative_position_id = EYE_wasteland_army
+	relative_position_id = EYE_wasteland_army_legacy
 	x = 0
 	y = 1
 	cost = 6
 
-	prerequisite = { focus = EYE_wasteland_army} 
-	available = {
-		has_country_flag = EYE_slave_army_flag
-	}
-
+	prerequisite = { focus = EYE_wasteland_army_legacy} 
 	mutually_exclusive = {
         focus = EYE_merc_army
     }
@@ -1303,13 +2785,15 @@ shared_focus = {
     }
 
 	ai_will_do = { 
-		factor = 70
+		factor = 90
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_slave_army"
-		add_manpower = 1500
-		add_war_support = -0.10
+		custom_effect_tooltip = eye_army_slave_conscription_tt
+		hidden_effect = {
+			set_country_flag = eye_army_slave_conscription_flag
+		}
 	}
 
 } 
@@ -1317,16 +2801,12 @@ shared_focus = {
 shared_focus = { 
 	id = EYE_raider_army
 	icon = GFX_goal_EYE_raider_army
-	relative_position_id = EYE_wasteland_army
+	relative_position_id = EYE_wasteland_army_legacy
 	x = -4
 	y = 1
 	cost = 6
 
-	prerequisite = { focus = EYE_wasteland_army}
-	available = {
-		has_country_flag = EYE_raider_army_flag
-	}
-	
+	prerequisite = { focus = EYE_wasteland_army_legacy}
 	mutually_exclusive = {
         focus = EYE_merc_army
     }
@@ -1335,16 +2815,13 @@ shared_focus = {
     }
 
 	ai_will_do = { 
-		factor = 70
+		factor = 90
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_raider_army"
-		add_tech_bonus = {
-    		bonus = 0.5
-    		uses = 2
-    		category = cat_terror_tactics
-		}
+		set_country_flag = EYE_add_char_wildcard_flag
+		custom_effect_tooltip = EYE_wildcard_stats_tt
 	}
 
 } 
@@ -1403,8 +2880,28 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_strong_leadership"
-
-		EYE_better_army = yes
+		hidden_effect = {
+			add_corps_commander_role = {
+				character = EYE_char_wicked_slit
+				traits = { pony_race_trait perceptive_trait }
+				skill = 4
+				attack_skill = 4
+				defense_skill = 2
+				planning_skill = 2
+				logistics_skill = 4
+			}	
+			add_corps_commander_role = {
+				character = EYE_char_whiplash
+				traits = { pony_race_trait strong_trait }
+				skill = 4
+				attack_skill = 2
+				defense_skill = 3
+				planning_skill = 3
+				logistics_skill = 3
+			}
+		}
+		custom_effect_tooltip = EYE_whiplash_stats_tt
+		custom_effect_tooltip = EYE_wicked_stats_tt
 	}
 
 }
@@ -1762,7 +3259,6 @@ shared_focus = {
 
 	available = {
 		has_completed_focus = EYE_crackdown
-
 	}
 	ai_will_do = { 
 		factor = 70
@@ -2086,6 +3582,12 @@ shared_focus = {
 		NOT = { country_exists = FTP }
 		NOT = { country_exists = FTR }
 	}
+	available = {
+		OR = {
+			is_ai = no
+			has_war = no
+		}
+	}
 
 	prerequisite = { focus =EYE_old_appleloosa } 
 	ai_will_do = { 
@@ -2298,7 +3800,12 @@ shared_focus = {
 
 	prerequisite = { focus = EYE_cybernetic }
 	available = {
-		EYE_has_med_infl_UNI = yes
+		OR = {
+			NOT = {
+				country_exists = UNI
+			}
+			EYE_has_med_infl_UNI = yes
+		}
 	}
 	ai_will_do = { 
 		factor = 70
@@ -2428,6 +3935,15 @@ shared_focus = {
         NOT = { country_exists = GRV }
         NOT = { country_exists = HIT }
     }
+	available = {
+		OR = {
+			is_ai = no
+			AND = {
+				is_ai = yes
+				has_war = no
+			}
+		}
+	}
 
 	prerequisite = { focus = EYE_old_fashioned_way } 
 	ai_will_do = { 
@@ -2507,6 +4023,15 @@ shared_focus = {
         NOT = { country_exists = GUN }
         NOT = { country_exists = LGH }
     }
+	available = {
+		OR = {
+			is_ai = no
+			AND = {
+				is_ai = yes
+				has_war = no
+			}
+		}
+	}
 
 	prerequisite = { focus = EYE_drums_of_war }
 	ai_will_do = { 
@@ -5215,17 +6740,25 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus EYE_master_leaders"
+		if = {
+		limit = {
+			 NOT = {
+				has_country_flag = EYE_chainlink_commander_flag
+			 }
+		}
 		add_corps_commander_role = {
 			character = EYE_char_chainlink
 			traits = { strong_trait pony_race_trait }
-			skill = 2
-			attack_skill = 3
-			defense_skill = 1
-			planning_skill = 3
-			logistics_skill = 1
+			skill = 4
+			attack_skill = 5
+			defense_skill = 4
+			planning_skill = 5
+			logistics_skill = 3
 			legacy_id = 59308
 		}
-		custom_effect_tooltip = EYE_chainlink_stats_tt
+		custom_effect_tooltip = EYE_chainlink_stats_tt	
+		}
+
 		set_country_flag = EYE_add_char_Thorn_Bush
 		custom_effect_tooltip = EYE_thorn_stats_tt
 	}
@@ -5446,6 +6979,14 @@ shared_focus = {
 	cost = 7
 
  	prerequisite = { focus = EYE_wretched_hive }
+
+		available = {
+		OR = {
+			is_ai = no
+			has_war = no
+		}
+	}
+
 	ai_will_do = { 
 		factor = 120
 	}
@@ -5736,6 +7277,14 @@ shared_focus = {
 	cost = 7
 
  	prerequisite = { focus = EYE_fillydelphia_queen }
+
+		available = {
+		OR = {
+			is_ai = no
+			has_war = no
+		}
+	}
+
 	ai_will_do = { 
 		factor = 100
 	}
@@ -5850,6 +7399,13 @@ shared_focus = {
 
  	prerequisite = { focus = EYE_smash_holy_sites }
  	prerequisite = { focus = EYE_child_labour }
+
+		available = {
+		OR = {
+			is_ai = no
+			has_war = no
+		}
+	}
  	bypass = {
  		CCD = {
  			exists = no
@@ -6196,6 +7752,14 @@ shared_focus = {
 	cost = 7
 
  	prerequisite = { focus = EYE_fillydelphia_queen }
+
+		available = {
+		OR = {
+			is_ai = no
+			has_war = no
+		}
+	}
+
 	ai_will_do = { 
 		factor = 100
 	}
@@ -6222,6 +7786,14 @@ shared_focus = {
 	cost = 7
 
  	prerequisite = { focus = EYE_everfree_dogs }
+
+		available = {
+		OR = {
+			is_ai = no
+			has_war = no
+		}
+	}
+
  	available = {
  		EVR = {
  			exists = no
@@ -6272,6 +7844,14 @@ shared_focus = {
 	cost = 7
 
  	prerequisite = { focus = EYE_fillydelphia_queen }
+
+		available = {
+		OR = {
+			is_ai = no
+			has_war = no
+		}
+	}
+
 	ai_will_do = { 
 		factor = 100
 	}
@@ -6505,6 +8085,14 @@ shared_focus = {
  	prerequisite = { focus = EYE_land_for_loyal }
  	prerequisite = { focus = EYE_equestrian_slave_trade }
  	prerequisite = { focus = EYE_chainlink_dies }
+
+		available = {
+		OR = {
+			is_ai = no
+			has_war = no
+		}
+	}
+
 	ai_will_do = { 
 		factor = 100
 	}
@@ -6771,6 +8359,14 @@ shared_focus = {
 
 	prerequisite = { focus = EYE_new_griffon_home } 
 	mutually_exclusive = { focus = EYE_keep_rangers_alive }
+
+		available = {
+		OR = {
+			is_ai = no
+			has_war = no
+		}
+	}
+
 	ai_will_do = { 
 		factor = 120
 	} 
@@ -7018,6 +8614,14 @@ shared_focus = {
 	cost = 7
 
 	prerequisite = { focus = EYE_talon_queen }
+
+		available = {
+		OR = {
+			is_ai = no
+			has_war = no
+		}
+	}
+
 	ai_will_do = { 
 		factor = 100
 	}
@@ -7135,6 +8739,14 @@ shared_focus = {
 	cost = 7
 
 	prerequisite = { focus = EYE_road_to_manehattan }
+
+		available = {
+		OR = {
+			is_ai = no
+			has_war = no
+		}
+	}
+
 	ai_will_do = { 
 		factor = 100
 	} 
@@ -7166,6 +8778,14 @@ shared_focus = {
 	cost = 7
 
 	prerequisite = { focus = EYE_road_to_manehattan }
+
+		available = {
+		OR = {
+			is_ai = no
+			has_war = no
+		}
+	}
+
 	ai_will_do = { 
 		factor = 100
 	} 
@@ -7208,6 +8828,14 @@ shared_focus = {
 
 	prerequisite = { focus = EYE_blood_road }
 	prerequisite = { focus = EYE_poninsula_detour }
+
+		available = {
+		OR = {
+			is_ai = no
+			has_war = no
+		}
+	}
+
 	ai_will_do = { 
 		factor = 100
 	} 
@@ -7270,6 +8898,14 @@ shared_focus = {
 	cost = 7
 
 	prerequisite = { focus = EYE_stern_takes_manehattan }
+
+		available = {
+		OR = {
+			is_ai = no
+			has_war = no
+		}
+	}
+
 	ai_will_do = { 
 		factor = 100
 	}
@@ -7492,6 +9128,14 @@ shared_focus = {
 	cost = 7
 
 	prerequisite = { focus = EYE_talon_queen }
+
+		available = {
+		OR = {
+			is_ai = no
+			has_war = no
+		}
+	}
+
 	ai_will_do = { 
 		factor = 100
 	} 
@@ -7683,6 +9327,14 @@ shared_focus = {
 
 	prerequisite = { focus = EYE_legacy_of_griffonstone }
 	prerequisite = { focus = EYE_long_march }
+
+		available = {
+		OR = {
+			is_ai = no
+			has_war = no
+		}
+	}
+
 	ai_will_do = { 
 		factor = 100
 	} 
@@ -7726,6 +9378,8 @@ shared_focus = {
 	cost = 7
 
 	prerequisite = { focus = EYE_deal_with_bloody_army }
+
+	
 	ai_will_do = { 
 		factor = 100
 	}
@@ -7797,6 +9451,14 @@ shared_focus = {
 	cost = 7
 
 	prerequisite = { focus = EYE_masters_triumphant }
+
+		available = {
+		OR = {
+			is_ai = no
+			has_war = no
+		}
+	}
+
 	ai_will_do = { 
 		factor = 100
 	}
@@ -7870,6 +9532,14 @@ shared_focus = {
 	cost = 7
 
 	prerequisite = { focus = EYE_no_mercy_for_rangers }
+
+		available = {
+		OR = {
+			is_ai = no
+			has_war = no
+		}
+	}
+
 	ai_will_do = { 
 		factor = 100
 	}
@@ -8406,6 +10076,14 @@ shared_focus = {
 	cost = 7
 
 	prerequisite = { focus = EYE_army_of_slaves }
+
+		available = {
+		OR = {
+			is_ai = no
+			has_war = no
+		}
+	}
+
 	ai_will_do = { 
 		factor = 100
 	}
@@ -8458,6 +10136,14 @@ shared_focus = {
 	cost = 7
 
 	prerequisite = { focus = EYE_march_to_greenline }
+
+		available = {
+		OR = {
+			is_ai = no
+			has_war = no
+		}
+	}
+
 	ai_will_do = { 
 		factor = 100
 	}
@@ -8629,6 +10315,14 @@ shared_focus = {
 
 	prerequisite = { focus = EYE_rewriting_history }
 	prerequisite = { focus = EYE_more_pits }
+
+		available = {
+		OR = {
+			is_ai = no
+			has_war = no
+		}
+	}
+	
 	ai_will_do = { 
 		factor = 100
 	}
