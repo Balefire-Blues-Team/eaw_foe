@@ -181,5 +181,5 @@ tags={
 }
 name="Balefire Blues"
 picture="thumbnail.png"
-supported_version="1.16.*"
+supported_version="1.19.*"
 path="mod/eaw_foe"
