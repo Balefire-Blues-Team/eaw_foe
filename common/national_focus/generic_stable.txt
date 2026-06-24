@@ -68,7 +68,7 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_opening1"
-		
+		country_event = generic_stable.1
 	}
 }
 
@@ -88,7 +88,7 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_opening2"
-		
+		country_event = generic_stable.2
 	}
 }
 
@@ -108,7 +108,7 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_opening3"
-		
+		country_event = generic_stable.3
 	}
 }
 
@@ -130,7 +130,14 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_building_down"
-		
+		capital_scope = {
+			add_extra_state_shared_building_slots = 2
+		}
+		add_tech_bonus = {
+			bonus = 0.33
+			uses = 3
+			category = industry
+		}
 	}
 }
 
@@ -150,7 +157,12 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_activate_reactors"
-		
+		capital_scope = {
+			add_resource = {
+				type = energy
+				amount = 12
+			}
+		}
 	}
 }
 
@@ -170,7 +182,12 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_expand_purification"
-		
+		capital_scope = {
+			add_resource = {
+				type = water
+				amount = 12
+			}
+		}
 	}
 }
 
@@ -191,7 +208,13 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_craft_guns"
-		
+		capital_scope = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = arms_factory
+				level = 2
+			}
+		}
 	}
 }
 
@@ -212,7 +235,13 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_consumer_manufacturing"
-		
+		capital_scope = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = industrial_complex
+				level = 2
+			}
+		}
 	}
 }
 
@@ -233,7 +262,17 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_repurpose_maintenance"
-		
+		capital_scope = {
+			add_resource = {
+				type = circuitry
+				amount = 10
+			}
+		}
+		add_tech_bonus = {
+			bonus = 0.10
+			uses = 1
+			category = robotics_tech
+		}
 	}
 }
 
@@ -254,7 +293,17 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_recycle_technology"
-		
+		capital_scope = {
+			add_resource = {
+				type = advanced
+				amount = 10
+			}
+		}
+		add_tech_bonus = {
+			bonus = 0.25
+			uses = 1
+			category = electronics
+		}
 	}
 }
 
@@ -266,6 +315,16 @@ shared_focus = {
 	
 	cost = 8.58
 	relative_position_id = genstable_building_down
+	available = {
+		capital_scope = {
+			arms_factory > 4
+			industrial_complex > 4
+			free_building_slots = {
+				building = industrial_complex
+				size < 5
+			}
+		}
+	}
 	prerequisite = {
 		focus = genstable_repurpose_maintenance
 		focus = genstable_recycle_technology
@@ -275,7 +334,14 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_underground_chorapolis"
-		
+		add_offsite_building = {
+			type = industrial_complex
+			level = 3
+		}
+		add_offsite_building = {
+			type = arms_factory
+			level = 3
+		}
 	}
 }
 
@@ -287,6 +353,11 @@ shared_focus = {
 	
 	cost = 8.58
 	relative_position_id = genstable_opening1
+	available = {
+		any_owned_state = {
+			is_capital = no
+		}
+	}
 	prerequisite = {
 		focus = genstable_opening3
 	}
@@ -295,7 +366,23 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_building_out"
-		
+		random_owned_state = {
+			limit = {
+				is_capital = no
+			}
+			add_extra_state_shared_building_slots = 3
+		}
+		add_tech_bonus = {
+			bonus = 0.50
+			uses = 1
+			category = extraction_tech
+		}
+		add_tech_bonus = {
+			bonus = 0.10
+			ahead_reduction = 2
+			uses = 3
+			category = industry
+		}
 	}
 }
 
@@ -315,7 +402,13 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_settle_countryside"
-		
+		custom_effect_tooltip = GENSTABLE_settle_tt
+		every_owned_state = {
+			limit = {
+				is_capital = no
+			}
+			add_manpower = 500
+		}
 	}
 }
 
@@ -335,7 +428,38 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_seize_opportunities"
-		
+		random_list = {
+			10 = {
+				custom_effect_tooltip = GENSTABLE_major_armory_tt
+				add_equipment_to_stockpile = {
+					type = ballistic_equipment_3
+					amount = 300
+					producer = OWE
+				}
+				add_equipment_to_stockpile = {
+					type = ballistic_fireteam_equipment_3
+					amount = 100
+					producer = OWE
+				}
+				add_equipment_to_stockpile = {
+					type = spec_ops_equipment_4
+					amount = 100
+					producer = OWE
+				}
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 100
+					producer = OWE
+				}
+			}
+			10 = {
+				custom_effect_tooltip = GENSTABLE_supply_bunker_tt
+				add_timed_idea = {
+					idea = GenStable_supply_bunker
+					days = 300
+				}
+			}
+		}
 	}
 }
 
