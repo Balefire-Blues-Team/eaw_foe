@@ -402,6 +402,16 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_settle_countryside"
+		IF = {
+			limit = {
+				NOT = {
+					any_owned_state = {
+						is_capital = no
+					}
+				}
+			}
+			custom_effect_tooltip = GENSTABLE_gain_more_land_tt
+		}
 		custom_effect_tooltip = GENSTABLE_settle_tt
 		every_owned_state = {
 			limit = {
@@ -459,6 +469,56 @@ shared_focus = {
 					days = 300
 				}
 			}
+			10 = {
+				custom_effect_tooltip = GENSTABLE_mwt_databank_tt
+				add_tech_bonus = {
+					bonus = 0.20
+					uses = 1
+					ahead_reduction = 1
+					category = power_armor_tech
+				}
+				add_tech_bonus = {
+					bonus = 0.20
+					uses = 1
+					ahead_reduction = 1
+					category = infantry_tech
+				}
+				add_tech_bonus = {
+					bonus = 0.20
+					uses = 1
+					ahead_reduction = 1
+					category = support_tech
+				}
+			}
+			10 = {
+				custom_effect_tooltip = GENSTABLE_robot_outpost_tt
+				IF = {
+					limit = {
+						has_tech = robot_clockwork_automatons_tech
+					}
+					add_tech_bonus = {
+					bonus = 0.50
+					uses = 1
+					ahead_reduction = 2
+					category = robotics_tech
+					}
+				}
+				ELSE = {
+					set_technology = {
+						robot_clockwork_automatons_tech = 1
+					}
+				}
+				add_equipment_to_stockpile = {
+					type = light_robot_sprite_equipment
+					amount = 150
+					producer = OWE
+				}
+				add_equipment_to_stockpile = {
+					type = light_robot_handy_equipment
+					amount = 50
+					producer = OWE
+				}
+			}
 		}
 	}
 }
@@ -480,7 +540,12 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_room_to_grow"
-		
+		add_tech_bonus = {
+			bonus = 0.25
+			uses = 5
+			ahead_reduction = 1.5
+			category = industry
+		}
 	}
 }
 
@@ -501,7 +566,30 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_industrialize_surface"
-		
+		IF = {
+			limit = {
+				NOT = {
+					any_owned_state = {
+						is_capital = no
+					}
+				}
+			}
+			custom_effect_tooltip = GENSTABLE_gain_more_land_tt
+		}
+		random_owned_state = {
+			limit = {
+				is_capital = no
+			}
+			add_extra_state_shared_building_slots = 4
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+			}
+			add_building_construction = {
+				type = arms_factory
+				level = x
+			}
+		}
 	}
 }
 
@@ -522,7 +610,23 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_connect_realm"
-		
+		IF = {
+			limit = {
+				NOT = {
+					any_owned_state = {
+						is_capital = no
+					}
+				}
+			}
+			custom_effect_tooltip = GENSTABLE_gain_more_land_tt
+		}
+		every_owned_state = {
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+			}
+			add_extra_state_shared_building_slots = 1
+		}
 	}
 }
 
@@ -534,6 +638,11 @@ shared_focus = {
 	
 	cost = 8.58
 	relative_position_id = genstable_building_out
+	available = {
+		any_core_state = {
+			is_capital = no
+		}
+	}
 	prerequisite = {
 		focus = genstable_room_to_grow
 		focus = genstable_industrialize_surface
@@ -543,7 +652,29 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_foundries_dot_land"
-		
+		IF = {
+			limit = {
+				NOT = {
+					any_owned_state = {
+						is_capital = no
+					}
+				}
+			}
+			custom_effect_tooltip = GENSTABLE_gain_more_land_tt
+		}
+		random_core_state = {
+			limit = {
+				is_capital = no
+			}
+			add_resource = {
+				type = metal
+				amount = 12
+			}
+			add_resource = {
+				type = composites
+				amount = 8
+			}
+		}
 	}
 }
 
@@ -564,7 +695,8 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_smokestacks_and_cities"
-		
+		custom_effect_tooltip = GENSTABLE_smokestack_event_tt
+		country_event = generic_stable.4
 	}
 }
 
@@ -586,7 +718,8 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_our_governance"
-		
+		add_stability = 0.05
+		add_political_power = 150
 	}
 }
 
@@ -596,7 +729,7 @@ shared_focus = {
 	x = -2
 	y = 1
 	
-	cost = 8.58
+	cost = 2.9
 	relative_position_id = genstable_our_governance
 	prerequisite = {
 		focus = genstable_our_governance
@@ -610,7 +743,14 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_empower_security"
-		
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.20
+		}
+		set_politics = {
+			ruling_party = destruction
+			elections_allowed = no
+		}
 	}
 }
 
@@ -620,7 +760,7 @@ shared_focus = {
 	x = 0
 	y = 1
 	
-	cost = 8.58
+	cost = 2.9
 	relative_position_id = genstable_our_governance
 	prerequisite = {
 		focus = genstable_our_governance
@@ -634,7 +774,14 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_steady_as_she_goes"
-		
+		add_popularity = {
+			ideology = continuation
+			popularity = 0.20
+		}
+		set_politics = {
+			ruling_party = continuation
+			elections_allowed = no
+		}
 	}
 }
 
@@ -644,7 +791,7 @@ shared_focus = {
 	x = 2
 	y = 1
 	
-	cost = 8.58
+	cost = 2.9
 	relative_position_id = genstable_our_governance
 	prerequisite = {
 		focus = genstable_our_governance
@@ -658,7 +805,14 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_let_dwellers_choose"
-		
+		add_popularity = {
+			ideology = visionary
+			popularity = 0.20
+		}
+		set_politics = {
+			ruling_party = visionary
+			elections_allowed = no
+		}
 	}
 }
 
