@@ -832,7 +832,36 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_safeguard_way_of_life"
-		
+		custom_effect_tooltip = GENSTABLE_mob_security_tt
+		division_template = {
+			name = "Mobilized Security"
+			regiments = {
+				infantry = { x = 0 y = 0 }
+				infantry = { x = 0 y = 1 }
+				infantry = { x = 0 y = 2 }
+				infantry = { x = 1 y = 0 }
+				infantry = { x = 1 y = 1 }
+				infantry = { x = 1 y = 2 }
+			}
+		}
+		capital_scope = {
+			create_unit = {
+					division = "name = \"1st. Mobilized Security\" division_template = \"Mobilized Security\" start_experience_factor = 0.3"
+					owner = ROOT
+			}
+			create_unit = {
+					division = "name = \"2nd. Mobilized Security\" division_template = \"Mobilized Security\" start_experience_factor = 0.3"
+					owner = ROOT
+			}
+			create_unit = {
+					division = "name = \"3rd. Mobilized Security\" division_template = \"Mobilized Security\" start_experience_factor = 0.3"
+					owner = ROOT
+			}
+			create_unit = {
+					division = "name = \"4th. Mobilized Security\" division_template = \"Mobilized Security\" start_experience_factor = 0.3"
+					owner = ROOT
+			}
+		}
 	}
 }
 
@@ -852,7 +881,16 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_dont_rock_boat"
-		
+		IF = {
+			limit = {
+				has_stability < 0.90
+			}
+			add_stability = 0.15
+		}
+		ELSE = {
+			one_random_industrial_complex = yes
+			add_political_power = 100
+		}
 	}
 }
 
@@ -872,7 +910,31 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_into_wide_world"
-		
+		IF = {
+			limit = {
+				is_ai = yes
+			}
+			capital_scope = {
+				every_neighbor_state = {
+					limit = {
+						owner = {
+							OR = {
+								has_completed_focus = GR_basecamp
+								has_completed_focus = gs_opening1
+								has_completed_focus = tribal_past
+							}
+						}
+					}
+					add_claim_by = ROOT
+				}
+			}
+			add_offsite_building = {
+				type = arms_factory
+				level = 1
+			}
+		}
+		set_variable = { coring_cost_country_factor = -0.25 }
+		custom_effect_tooltip = FOE_25_percent_core_cost_reduction_tt
 	}
 }
 
@@ -892,7 +954,7 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_beacon_of_civilization"
-		
+		add_ideas = GENSTABLE_protectors_of_civilization_idea
 	}
 }
 
@@ -912,7 +974,7 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_undisputed_leadership"
-		
+		add_ideas = GENSTABLE_lockstep_society_idea
 	}
 }
 
@@ -932,7 +994,7 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_build_something_new"
-		
+		add_ideas = GENSTABLE_rebuilding_wastes_idea	
 	}
 }
 
@@ -954,7 +1016,7 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_now_know_wastes"
-		
+		add_research_slot = 1
 	}
 }
 
@@ -979,7 +1041,40 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_preserve_paradise"
-		
+		add_offsite_building = {
+			type = arms_factory
+			level = 2
+		}
+		add_offsite_building = {
+			type = industrial_complex
+			level = 2
+		}
+		capital = {
+			add_resource = {
+				type = metal
+				amount = 6
+			}
+			add_resource = {
+				type = water
+				amount = 6
+			}
+			add_resource = {
+				type = energy
+				amount = 6
+			}
+			add_resource = {
+				type = composites
+				amount = 6
+			}
+			add_resource = {
+				type = circuitry
+				amount = 6
+			}
+			add_resource = {
+				type = advanced
+				amount = 6
+			}
+		}
 	}
 }
 
@@ -1004,7 +1099,10 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_proclaim_new_nation"
-		
+		swap_ideas = {
+			remove_idea = open_stable_society
+			add_idea = wasteland_society2
+		}
 	}
 }
 
@@ -1029,7 +1127,16 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_enslave_wastelanders"
-		
+		swap_ideas = {
+			remove_idea = open_stable_society
+			add_idea = slaver_society
+		}
+		set_country_flag = slavery_allowed
+		custom_effect_tooltip = foe_10_gain_slave_tt
+			add_to_variable = {
+				var = foe_slaves_var
+				value = 10
+			}
 	}
 }
 
@@ -1054,7 +1161,10 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_cling_old_world"
-		
+		swap_ideas = {
+			remove_idea = open_stable_society
+			add_idea = old_world_society
+		}
 	}
 }
 
@@ -1074,7 +1184,7 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_let_none_interfere"
-		
+		add_ideas = GENSTABLE_isolationist_bastion_idea
 	}
 }
 
@@ -1094,7 +1204,7 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_expand_our_borders"
-		
+		add_ideas = GENSTABLE_expansionist_nation_idea
 	}
 }
 
@@ -1114,7 +1224,7 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_superior_in_every_way"
-		
+		add_ideas = GENSTABLE_superior_populous_idea
 	}
 }
 
@@ -1134,7 +1244,7 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_secure_our_domain"
-		
+		add_ideas = GENSTABLE_technological_domain_idea
 	}
 }
 
@@ -1157,7 +1267,12 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_concerns_of_security"
-		
+		army_experience = 25
+		add_doctrine_cost_reduction = {
+			cost_reduction = 0.60
+			uses = 2
+			category = land_doctrine
+		}
 	}
 }
 
@@ -1177,7 +1292,17 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_i_can_see_sky"
-		
+		air_experience = 25
+		capital_scope = {
+			add_building_construction = {
+				type = air_base
+				level = 4
+			}
+			add_building_construction = {
+				type = anti_air_building
+				level = 2
+			}
+		}
 	}
 }
 
@@ -1197,7 +1322,17 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_crack_open_armories"
-		
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.8
+			uses = 2
+			category = infantry_tech
+		}
+		add_equipment_to_stockpile = {
+			type = energy_equipment_4
+			amount = 50
+			producer = OWE
+		}
 	}
 }
 
@@ -1212,12 +1347,18 @@ shared_focus = {
 	prerequisite = {
 		focus = genstable_concerns_of_security
 	}
+	available = {
+		any_owned_state = {
+			is_coastal = yes
+		}
+	}
 	ai_will_do = {
 		factor = 100
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_thats_alotta_water"
-		
+		navy_experience = 25
+		two_random_dockyards = yes
 	}
 }
 
@@ -1237,7 +1378,12 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_fly_like_pegasus"
-		
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.4
+			uses = 5
+			category = air_tech
+		}
 	}
 }
 
@@ -1257,7 +1403,17 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_outfit_our_best"
-		
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.8
+			uses = 2
+			category = special_forces_tech
+		}
+		add_equipment_to_stockpile = {
+			type = spec_ops_equipment_5
+			amount = 50
+			producer = OWE
+		}
 	}
 }
 
@@ -1277,7 +1433,12 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_swim_like_fish"
-		
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.4
+			uses = 5
+			category = naval_tech
+		}
 	}
 }
 
@@ -1297,7 +1458,12 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_stable_built_vehicles"
-		
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.6
+			uses = 3
+			category = vehicle_tech
+		}
 	}
 }
 
@@ -1317,7 +1483,17 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_rapid_fire_guns"
-		
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.6
+			uses = 2
+			category = fireteam_tech
+		}
+		add_equipment_to_stockpile = {
+			type = energy_fireteam_equipment_4
+			amount = 50
+			producer = OWE
+		}
 	}
 }
 
@@ -1338,7 +1514,8 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_time_marches_on"
-		
+		custom_effect_tooltip = GENSTABLE_timemarch_event_tt
+		country_event = generic_stable.5
 	}
 }
 
@@ -1360,7 +1537,12 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_matters_of_science"
-		
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.6
+			uses = 3
+			category = electronics
+		}
 	}
 }
 
@@ -1380,7 +1562,17 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_refit_maintenance_robots"
-		
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.5
+			uses = 2
+			category = robotics_tech
+		}
+		add_equipment_to_stockpile = {
+			type = light_robot_gutsy_equipment
+			amount = 50
+			producer = OWE
+		}
 	}
 }
 
@@ -1400,7 +1592,17 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_keep_dwellers_healthy"
-		
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.5
+			uses = 2
+			category = medical_tech
+		}
+		add_equipment_to_stockpile = {
+			type = support_equipment
+			amount = 50
+			producer = OWE
+		}
 	}
 }
 
@@ -1420,7 +1622,10 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_equestrian_military_robotics"
-		
+		set_technology = {
+			robotics_tech_level_scientific = 1
+			electronics_tech_level_scientific = 1
+		}
 	}
 }
 
@@ -1441,7 +1646,7 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_access_databanks"
-		
+		add_research_slot = 1
 	}
 }
 
@@ -1461,7 +1666,13 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_improve_farming"
-		
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.5
+			uses = 2
+			category = agriculture_tech
+		}
+		add_manpower = 400
 	}
 }
 
@@ -1481,7 +1692,12 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_200_years_data"
-		
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.4
+			uses = 4
+			category = race_tech
+		}
 	}
 }
 
@@ -1501,7 +1717,18 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_support_security_effort"
-		
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.5
+			uses = 3
+			category = support_tech
+		}
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.5
+			uses = 2
+			category = training_tech
+		}
 	}
 }
 
@@ -1522,7 +1749,10 @@ shared_focus = {
 	}
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus genstable_smartest_people_wasteland"
-		
+		swap_ideas = {
+			remove_idea = wasteland_research_base
+			add_idea = advanced_research_base
+		}
 	}
 }
 
