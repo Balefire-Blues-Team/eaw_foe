@@ -1,0 +1,517 @@
+#category = short_term medium_term or long_term
+
+###########################################################
+
+ ##  ### #  # ### ###  ###  ##       ##   ##   ##  #    ##
+#    #   ## # #   #  #  #  #  #     #    #  # #  # #   #
+# ## ##  # ## ##  ###   #  #        # ## #  # #### #    #
+#  # #   #  # #   #  #  #  #  #     #  # #  # #  # #     #
+ ##  ### #  # ### #  # ###  ##       ##   ##  #  # ### ##
+
+###########################################################
+
+
+### Faction Growth
+
+### Faction Growth
+
+faction_goal_a_large_faction = {
+	name = a_large_faction_goal_name
+	description = a_large_faction_goal_desc
+	category = medium_term
+	group = FOCUS_FILTER_POLITICAL_CHARACTER
+	visible = {
+		num_faction_members > 4
+	}
+	completed = {
+		num_faction_members > 9
+	}
+	complete_effect = {
+		add_faction_power_projection = 200
+		custom_effect_tooltip = generic_skip_one_line_tt
+		custom_effect_tooltip = THE_FACTION_LEADER
+		add_faction_initiative = 1
+	}
+	ai_will_do = {
+		base = 1
+	}
+}
+
+### Units/Deployment
+faction_goal_air_superiority = {
+	name = air_superiority_goal_name
+	description = air_superiority_goal_desc
+	category = medium_term
+	group = FOCUS_FILTER_AIR_XP
+	available = {
+
+	}
+	completed = {
+		count_in_collection = {
+			collection = {
+				input = game:scope
+				operators = { faction_members }
+				name = FACTION
+			}
+			unit = fighter
+			size > 999
+		}
+	}
+	complete_effect = {
+		add_faction_power_projection = 100
+		custom_effect_tooltip = generic_skip_one_line_tt
+		every_collection_element = {
+			input = {
+				input = game:scope
+				operators = {
+					faction_members
+					limit = {
+						has_army_size = {
+							size > 249
+							type = fighter
+						}
+					}
+				}
+				name = ALL_FACTION_MEMBERS_WITH_250_FIGHTERS
+			}
+			air_experience = 50
+		}
+		custom_effect_tooltip = generic_skip_one_line_tt
+		custom_effect_tooltip = ALL_FACTION_MEMBERS
+		every_faction_member = {
+			add_tech_bonus = {
+				name = air_superiority_tech_bonus
+				bonus = 0.5
+				uses = 1
+				category = air_tech_category
+			}
+		}
+	}
+	ai_will_do = {
+		base = 0
+		modifier = {
+			add = 1 # Powers with few military factories should probably not care about expensive planes
+			num_of_military_factories > 39
+		}
+		modifier = {
+			add = 1 # Factions with decent number of military factories should probably start caring a lot about contesting air superiority - because they can
+			count_in_collection = {
+				collection = {
+					input = game:scope
+					operators = { faction_members }
+					name = FACTION_NAME
+				}
+				buildings = { arms_factory }
+				size > 149
+			}
+		}
+	}
+}
+
+### Industry
+
+faction_goal_industrial_expansion = {
+	name = industrial_expansion_goal_name
+	description = industrial_expansion_goal_desc
+	category = medium_term
+	group = FOCUS_FILTER_INDUSTRY
+	visible = {
+		count_in_collection = {
+			collection = {
+				input = game:scope
+				operators = { faction_members }
+				name = FACTION_NAME
+			}
+			buildings = { industrial_complex }
+			size > 49
+		}
+	}
+	completed = {
+		count_in_collection = {
+			collection = {
+				input = game:scope
+				operators = { faction_members }
+				name = FACTION_NAME
+			}
+			buildings = { industrial_complex }
+			size > 149
+		}
+	}
+	complete_effect = {
+		add_faction_power_projection = 200
+		custom_effect_tooltip = generic_skip_one_line_tt
+		every_faction_member = {
+			tooltip = AT_LEAST_50_CIVS
+			visible_when_empty = yes
+			limit = {
+				num_of_civilian_factories > 49
+			}
+			add_tech_bonus = {
+				name = industrial_expansion_tech_bonus
+				bonus = 0.5
+				uses = 2
+				category = industry
+			}
+		}
+	}
+	ai_will_do = {
+		base = 1
+		modifier = {
+			add = 1 # If already big it's easy to grow
+			is_major = yes
+		}
+		modifier = {
+			add = 1 # If already big it's easy to grow
+			is_major = yes
+		}
+		modifier = {
+			add = 1 # Prioritize more earlier on - more pay-off
+			date < 2277.1.1
+		}
+	}
+}
+
+faction_goal_a_military_base = {
+	name = a_military_base_goal_name
+	description = a_military_base_goal_desc
+	category = medium_term
+	group = FOCUS_FILTER_INDUSTRY
+	visible = {
+		count_in_collection = {
+			collection = {
+				input = game:scope
+				operators = { faction_members }
+				name = FACTION_NAME
+			}
+			buildings = { arms_factory }
+			size > 49
+		}
+	}
+	completed = {
+		count_in_collection = {
+			collection = {
+				input = game:scope
+				operators = { faction_members }
+				name = FACTION_NAME
+			}
+			buildings = { arms_factory }
+			size > 149
+		}
+	}
+	complete_effect = {
+		add_faction_power_projection = 200
+		custom_effect_tooltip = generic_skip_one_line_tt
+		every_faction_member = {
+			tooltip = AT_LEAST_50_MILS
+			visible_when_empty = yes
+			limit = {
+				num_of_military_factories > 49
+			}
+			add_tech_bonus = {
+				name = a_military_base_tech_bonus
+				bonus = 0.5
+				uses = 2
+				category = resource_and_agriculture_category
+			}
+		}
+	}
+	ai_will_do = {
+		base = 0
+	}
+}
+
+faction_goal_market_domination = {
+	name = market_domination_goal_name
+	description = market_domination_goal_desc
+	group = FOCUS_FILTER_INDUSTRY
+	category = medium_term
+	visible = {
+		always = yes
+	}
+	select_effect = {
+		set_temp_variable = { total_nodes = 0 }
+		every_collection_element = {
+			input = {
+				input = game:scope
+				operators =  {
+					faction_members
+				}
+			}
+			add_to_temp_variable = { total_nodes = state_controlled_nodes^num }
+		}
+
+		multiply_temp_variable = {
+			var = total_nodes
+			value = 1.50
+		}
+		clamp_temp_variable = {
+			var = total_nodes
+			min = 1
+		}
+		scope:faction = {
+			set_variable = { unlock_trade_nodes_target = total_nodes }
+		}
+	}
+	completed = {
+		scope:faction = {
+			hidden_trigger = {
+				tooltip_evaluation = eval
+				set_temp_variable = { unlock_trade_nodes_compare = 0 }
+				all_collection_elements = {
+					collection = {
+						input = game:scope
+						operators =  { faction_members }
+					}
+					add_to_temp_variable = { unlock_trade_nodes_compare = state_controlled_nodes^num }
+				}
+				set_temp_variable = { unlock_trade_nodes_compare_temp_target = unlock_trade_nodes_compare }
+				multiply_temp_variable = { unlock_trade_nodes_compare_temp_target = 1.50 }
+			}
+			if = {
+				limit = {
+					has_variable = unlock_trade_nodes_target
+				}
+				check_variable = {
+					var = unlock_trade_nodes_compare
+					value = unlock_trade_nodes_target
+					compare = greater_than
+					tooltip = "GOAL_NODES_TRIGGER_A"
+				}
+			}
+			else = {
+				check_variable = {
+					var = unlock_trade_nodes_compare
+					value = unlock_trade_nodes_compare_temp_target
+					compare = greater_than
+					tooltip = "GOAL_NODES_TRIGGER_A"
+				}
+			}
+		}
+	}
+	complete_effect = {
+		add_faction_power_projection = 100
+		custom_effect_tooltip = generic_skip_one_line_tt
+		custom_effect_tooltip = ALL_FACTION_MEMBERS_TRADE_NODES
+		every_faction_member = {
+			limit = {
+				check_variable = {
+					state_controlled_nodes^num > 0
+				}
+			}
+			add_faction_initiative = 1
+		}
+		custom_effect_tooltip = generic_skip_one_line_tt
+		custom_effect_tooltip = ALL_FACTION_MEMBERS
+		every_faction_member = {
+			set_temp_variable = { caps_to_add = 25 }
+			add_caps = yes
+			set_country_flag = faction_trade_completed
+		}
+	}
+	ai_will_do = {
+		base = 1
+	}
+}
+
+### War Waging
+
+faction_goal_guardians_of_peace = {
+	name = guardians_of_peace_goal_name
+	description = guardians_of_peace_goal_desc
+	category = short_term
+	group = FOCUS_FILTER_CONSOLIDATION
+	available = {
+		NOT = { has_country_flag = guardians_of_peace_been_at_war_flag }
+	}
+	cancel = {
+		has_country_flag = guardians_of_peace_been_at_war_flag
+	}
+	completed = {
+		date > 2277.12.31
+		NOT = { has_country_flag = guardians_of_peace_been_at_war_flag }
+	}
+	complete_effect = {
+		add_faction_power_projection = 100
+		custom_effect_tooltip = generic_skip_one_line_tt
+		custom_effect_tooltip = ALL_FACTION_MEMBERS
+		every_faction_member = {
+			add_stability = 0.025
+		}
+	}
+	ai_will_do = {
+		base = 0
+	}
+}
+
+faction_goal_aggressive_defense = {
+	name = aggressive_defense_goal_name
+	description = aggressive_defense_goal_desc
+	group = FOCUS_FILTER_WAR_SUPPORT
+	category = medium_term
+	visible = {
+		FROM = { has_defensive_war = yes }
+	}
+	completed = {
+		any_allied_country = {
+			has_defensive_war = yes
+		}
+		collection_size = {
+			input = {
+				input = game:scope
+				operators = {
+					faction_members
+					limit = {
+						any_enemy_country = {
+							has_offensive_war_with = ROOT
+							casualties_inflicted_by = {
+							    opponent = PREV
+							    thousands > 15
+							}
+						}
+					}
+				}
+				name = COLLECTION_CASUALTIES_INFLICTED_BY_FACTION_MEMBERS
+			}
+			value > 0
+		}
+	}
+	complete_effect = {
+		add_faction_power_projection = 100
+		custom_effect_tooltip = generic_skip_one_line_tt
+		custom_effect_tooltip = ALL_FACTION_MEMBERS_INFLICTED_15K_CASUALTIES
+		every_faction_member = {
+			limit = {
+				any_enemy_country = {
+					has_offensive_war_with = ROOT
+					casualties_inflicted_by = {
+					    opponent = PREV
+					    thousands > 15
+					}
+				}
+			}
+			add_faction_initiative = 1
+		}
+		custom_effect_tooltip = generic_skip_one_line_tt
+		custom_effect_tooltip = ALL_FACTION_MEMBERS
+		every_faction_member = {
+			army_experience = 50
+		}
+	}
+	ai_will_do = {
+		base = 1
+	}
+}
+
+# Resources
+
+faction_goal_electrify_the_wasteland = {
+	name = electrify_the_wasteland_goal_name
+	description = electrify_the_wasteland_goal_desc
+	category = medium_term
+	group = resources_to_market_icon
+	allowed = {
+		
+	}
+	visible = {
+		
+	}
+	completed = {
+		count_in_collection = {
+			collection = {
+				input = game:scope
+				operators = { faction_members }
+				name = FACTION_NAME
+			}
+			buildings = { electricity_generator }
+			size > 24
+		}
+	}
+	complete_effect = {
+
+		every_faction_member = { 
+			tooltip = AT_LEAST_5_GENERATORS
+			visible_when_empty = yes
+			limit = {
+				electricity_generator > 4
+			}
+			add_faction_initiative = 1
+			add_faction_influence_ratio = 0.05
+			add_tech_bonus = {
+				name = tech_bonus_decisions_tt
+				bonus = 1
+				uses = 1
+				category = power_station_tech_category
+			}
+		}
+		
+	}
+	ai_will_do = {
+		base = 1
+	}
+}
+
+# Hoover Dam
+faction_goal_control_hoover_dam = {
+	name = control_hoover_dam_goal_name
+	description = control_hoover_dam_goal_desc
+	category = medium_term
+	group = FOCUS_FILTER_ANNEXATION
+	allowed = {
+		
+	}
+	visible = {
+		FROM = {
+			NOT = {
+				original_tag = MOT
+				is_in_faction_with = MOT
+			}
+		}
+		any_collection_element = {
+			collection = {
+				 input = game:scope
+				 operators = { faction_members controlled_states }
+				 name = FACTION_CONTROLLED_STATES
+			}
+			distance_to = {
+				target = 252
+				value < 2000
+			}
+		}
+	}
+	available = {
+
+	}
+	completed = {
+		252 = { is_controlled_by = ROOT }
+	}
+	complete_effect = {
+		add_faction_power_projection = 100
+		custom_effect_tooltip = generic_skip_one_line_tt
+		custom_effect_tooltip = TARGET_STATE_CONTROLLERS
+		every_faction_member = { 
+			visible_when_empty = yes
+			limit = {
+				controls_state = 252
+			}
+			add_faction_initiative = 1
+		}
+	}
+	ai_will_do = {
+		base = 0
+		modifier = {
+			factor = 2 # Target of opportunity - already at war anyway
+			252 = {
+				owner = {
+					has_war_with = ROOT
+				}
+			}
+		}
+		modifier = {
+			add = 1 # If at war with NCR prioritize this
+			any_enemy_country = {
+				original_tag = NCR
+			}
+		}
+	}
+}
+
