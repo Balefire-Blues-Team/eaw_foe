@@ -1,0 +1,1818 @@
+focus_tree = {
+	id = genstable
+	country = {
+		factor = 1
+		modifier = {
+			OR = {
+				has_country_flag = is_stable_nation
+
+				original_tag = SCI
+				original_tag = STT
+				original_tag = STA
+			}
+			factor = 10
+		}
+		modifier = {
+			has_country_flag = change_to_stable_tree_flag
+			factor = 100
+		}
+	}
+	default = no
+	continuous_focus_position = { x = 420 y = 0 }
+
+	shared_focus = genstable_opening1
+}
+
+shared_focus = {
+	id = genstable_opening1
+	icon = GFX_stable_goal_the_stable
+	x = 13
+	y = 0
+	
+	cost = 1
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_opening1"
+		country_event = generic_stable.1
+	}
+}
+
+shared_focus = {
+	id = genstable_opening2
+	icon = GFX_stable_goal_the_dwellers
+	x = 0
+	y = 1
+	
+	cost = 1
+	relative_position_id = genstable_opening1
+	prerequisite = {
+		focus = genstable_opening1
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_opening2"
+		country_event = generic_stable.2
+	}
+}
+
+shared_focus = {
+	id = genstable_opening3
+	icon = GFX_stable_goal_the_purpose
+	x = 0
+	y = 2
+	
+	cost = 1
+	relative_position_id = genstable_opening1
+	prerequisite = {
+		focus = genstable_opening2
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_opening3"
+		country_event = generic_stable.3
+	}
+}
+
+### Industry ###
+
+shared_focus = {
+	id = genstable_building_down
+	icon = GFX_stable_goal_building_down
+	x = -10
+	y = 3
+	
+	cost = 8.58
+	relative_position_id = genstable_opening1
+	prerequisite = {
+		focus = genstable_opening3
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_building_down"
+		capital_scope = {
+			add_extra_state_shared_building_slots = 2
+		}
+		add_tech_bonus = {
+			bonus = 0.33
+			uses = 3
+			category = industry
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_activate_reactors
+	icon = GFX_stable_goal_activate_backup_reactors
+	x = -2
+	y = 1
+		
+	cost = 8.58
+	relative_position_id = genstable_building_down
+	prerequisite = {
+		focus = genstable_building_down
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_activate_reactors"
+		capital_scope = {
+			add_resource = {
+				type = energy
+				amount = 12
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_expand_purification
+	icon = GFX_stable_goal_expand_water_purification
+	x = 0
+	y = 1
+
+	cost = 8.58
+	relative_position_id = genstable_building_down
+	prerequisite = {
+		focus = genstable_building_down
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_expand_purification"
+		capital_scope = {
+			add_resource = {
+				type = water
+				amount = 12
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_craft_guns
+	icon = GFX_stable_goal_craft_new_guns
+	x = -2
+	y = 2
+	
+	cost = 8.58
+	relative_position_id = genstable_building_down
+	prerequisite = {
+		focus = genstable_activate_reactors
+		focus = genstable_expand_purification
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_craft_guns"
+		capital_scope = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = arms_factory
+				level = 2
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_consumer_manufacturing
+	icon = GFX_stable_goal_dweller_focused_manufacturing
+	x = 0
+	y = 2
+	
+	cost = 8.58
+	relative_position_id = genstable_building_down
+	prerequisite = {
+		focus = genstable_activate_reactors
+		focus = genstable_expand_purification
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_consumer_manufacturing"
+		capital_scope = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = industrial_complex
+				level = 2
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_repurpose_maintenance
+	icon = GFX_stable_goal_repurpose_maintenance_wing
+	x = -2
+	y = 3
+	
+	cost = 8.58
+	relative_position_id = genstable_building_down
+	prerequisite = {
+		focus = genstable_craft_guns
+		focus = genstable_consumer_manufacturing
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_repurpose_maintenance"
+		capital_scope = {
+			add_resource = {
+				type = circuitry
+				amount = 10
+			}
+		}
+		add_tech_bonus = {
+			bonus = 0.10
+			uses = 1
+			category = robotics_tech
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_recycle_technology
+	icon = GFX_stable_goal_recycle_wartime_technology
+	x = 0
+	y = 3
+	
+	cost = 8.58
+	relative_position_id = genstable_building_down
+	prerequisite = {
+		focus = genstable_craft_guns
+		focus = genstable_consumer_manufacturing
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_recycle_technology"
+		capital_scope = {
+			add_resource = {
+				type = advanced
+				amount = 10
+			}
+		}
+		add_tech_bonus = {
+			bonus = 0.25
+			uses = 1
+			category = electronics
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_underground_chorapolis
+	icon = GFX_stable_goal_underground_chorapolis
+	x = -1
+	y = 4
+	
+	cost = 8.58
+	relative_position_id = genstable_building_down
+	available = {
+		capital_scope = {
+			arms_factory > 4
+			industrial_complex > 4
+		}
+	}
+	prerequisite = {
+		focus = genstable_repurpose_maintenance
+		focus = genstable_recycle_technology
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_underground_chorapolis"
+		add_offsite_building = {
+			type = industrial_complex
+			level = 3
+		}
+		add_offsite_building = {
+			type = arms_factory
+			level = 3
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_building_out
+	icon = GFX_stable_goal_building_out
+	x = -8
+	y = 3
+	
+	cost = 8.58
+	relative_position_id = genstable_opening1
+	available = {
+		any_owned_state = {
+			is_capital = no
+		}
+	}
+	prerequisite = {
+		focus = genstable_opening3
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_building_out"
+		random_owned_state = {
+			limit = {
+				is_capital = no
+			}
+			add_extra_state_shared_building_slots = 3
+		}
+		add_tech_bonus = {
+			bonus = 0.50
+			uses = 1
+			category = extraction_tech
+		}
+		add_tech_bonus = {
+			bonus = 0.10
+			ahead_reduction = 2
+			uses = 3
+			category = industry
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_settle_countryside
+	icon = GFX_stable_goal_settle_the_countryside
+	x = 0
+	y = 1
+	
+	cost = 8.58
+	relative_position_id = genstable_building_out
+	prerequisite = {
+		focus = genstable_building_out
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_settle_countryside"
+		IF = {
+			limit = {
+				NOT = {
+					any_owned_state = {
+						is_capital = no
+					}
+				}
+			}
+			custom_effect_tooltip = GENSTABLE_gain_more_land_tt
+		}
+		custom_effect_tooltip = GENSTABLE_settle_tt
+		every_owned_state = {
+			limit = {
+				is_capital = no
+			}
+			add_manpower = 500
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_seize_opportunities
+	icon = GFX_stable_goal_seize_opportunities
+	x = 2
+	y = 1
+	
+	cost = 8.58
+	relative_position_id = genstable_building_out
+	prerequisite = {
+		focus = genstable_building_out
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_seize_opportunities"
+		random_list = {
+			10 = {
+				custom_effect_tooltip = GENSTABLE_major_armory_tt
+				add_equipment_to_stockpile = {
+					type = ballistic_equipment_3
+					amount = 300
+					producer = OWE
+				}
+				add_equipment_to_stockpile = {
+					type = ballistic_fireteam_equipment_3
+					amount = 100
+					producer = OWE
+				}
+				add_equipment_to_stockpile = {
+					type = spec_ops_equipment_4
+					amount = 100
+					producer = OWE
+				}
+				add_equipment_to_stockpile = {
+					type = support_equipment
+					amount = 100
+					producer = OWE
+				}
+			}
+			10 = {
+				custom_effect_tooltip = GENSTABLE_supply_bunker_tt
+				add_timed_idea = {
+					idea = GenStable_supply_bunker
+					days = 300
+				}
+			}
+			10 = {
+				custom_effect_tooltip = GENSTABLE_mwt_databank_tt
+				add_tech_bonus = {
+					bonus = 0.20
+					uses = 1
+					ahead_reduction = 1
+					category = power_armor_tech
+				}
+				add_tech_bonus = {
+					bonus = 0.20
+					uses = 1
+					ahead_reduction = 1
+					category = infantry_tech
+				}
+				add_tech_bonus = {
+					bonus = 0.20
+					uses = 1
+					ahead_reduction = 1
+					category = support_tech
+				}
+			}
+			10 = {
+				custom_effect_tooltip = GENSTABLE_robot_outpost_tt
+				IF = {
+					limit = {
+						has_tech = robot_clockwork_automatons_tech
+					}
+					add_tech_bonus = {
+					bonus = 0.50
+					uses = 1
+					ahead_reduction = 2
+					category = robotics_tech
+					}
+				}
+				ELSE = {
+					set_technology = {
+						robot_clockwork_automatons_tech = 1
+					}
+				}
+				add_equipment_to_stockpile = {
+					type = light_robot_sprite_equipment
+					amount = 150
+					producer = OWE
+				}
+				add_equipment_to_stockpile = {
+					type = light_robot_handy_equipment
+					amount = 50
+					producer = OWE
+				}
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_room_to_grow
+	icon = GFX_stable_goal_room_to_grow
+	x = 0
+	y = 2
+	
+	cost = 8.58
+	relative_position_id = genstable_building_out
+	prerequisite = {
+		focus = genstable_settle_countryside
+		focus = genstable_seize_opportunities
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_room_to_grow"
+		add_tech_bonus = {
+			bonus = 0.25
+			uses = 5
+			ahead_reduction = 1.5
+			category = industry
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_industrialize_surface
+	icon = GFX_stable_goal_industrialize_the_surface
+	x = 2
+	y = 2
+	
+	cost = 8.58
+	relative_position_id = genstable_building_out
+	prerequisite = {
+		focus = genstable_settle_countryside
+		focus = genstable_seize_opportunities
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_industrialize_surface"
+		IF = {
+			limit = {
+				NOT = {
+					any_owned_state = {
+						is_capital = no
+					}
+				}
+			}
+			custom_effect_tooltip = GENSTABLE_gain_more_land_tt
+		}
+		random_owned_state = {
+			limit = {
+				is_capital = no
+			}
+			add_extra_state_shared_building_slots = 4
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+			}
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_connect_realm
+	icon = GFX_stable_goal_connect_our_realm
+	x = 0
+	y = 3
+	
+	cost = 8.58
+	relative_position_id = genstable_building_out
+	prerequisite = {
+		focus = genstable_room_to_grow
+		focus = genstable_industrialize_surface
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_connect_realm"
+		IF = {
+			limit = {
+				NOT = {
+					any_owned_state = {
+						is_capital = no
+					}
+				}
+			}
+			custom_effect_tooltip = GENSTABLE_gain_more_land_tt
+		}
+		every_owned_state = {
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+			}
+			add_extra_state_shared_building_slots = 1
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_foundries_dot_land
+	icon = GFX_stable_goal_founding_foundries
+	x = 2
+	y = 3
+	
+	cost = 8.58
+	relative_position_id = genstable_building_out
+	available = {
+		any_core_state = {
+			is_capital = no
+		}
+	}
+	prerequisite = {
+		focus = genstable_room_to_grow
+		focus = genstable_industrialize_surface
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_foundries_dot_land"
+		IF = {
+			limit = {
+				NOT = {
+					any_owned_state = {
+						is_capital = no
+					}
+				}
+			}
+			custom_effect_tooltip = GENSTABLE_gain_more_land_tt
+		}
+		random_core_state = {
+			limit = {
+				is_capital = no
+			}
+			add_resource = {
+				type = metal
+				amount = 12
+			}
+			add_resource = {
+				type = composites
+				amount = 8
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_smokestacks_and_cities
+	icon = GFX_stable_goal_smokestacks_and_cities
+	x = 1
+	y = 4
+	
+	cost = 8.58
+	relative_position_id = genstable_building_out
+	prerequisite = {
+		focus = genstable_connect_realm
+		focus = genstable_foundries_dot_land
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_smokestacks_and_cities"
+		custom_effect_tooltip = GENSTABLE_smokestack_event_tt
+		country_event = generic_stable.4
+	}
+}
+
+### Political ###
+
+shared_focus = {
+	id = genstable_our_governance
+	icon = GFX_stable_goal_our_governannce
+	x = 0
+	y = 3
+	
+	cost = 8.58
+	relative_position_id = genstable_opening1
+	prerequisite = {
+		focus = genstable_opening3
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_our_governance"
+		add_stability = 0.05
+		add_political_power = 150
+	}
+}
+
+shared_focus = {
+	id = genstable_empower_security
+	icon = GFX_stable_goal_empower_security
+	x = -3
+	y = 1
+	
+	cost = 2.9
+	relative_position_id = genstable_our_governance
+	prerequisite = {
+		focus = genstable_our_governance
+	}
+	mutually_exclusive = {
+		focus = genstable_steady_as_she_goes
+		focus = genstable_let_dwellers_choose
+		focus = genstable_boring_survivalism
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_empower_security"
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.20
+		}
+		set_politics = {
+			ruling_party = destruction
+			elections_allowed = no
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_steady_as_she_goes
+	icon = GFX_stable_goal_steady_as_she_goes
+	x = -1
+	y = 1
+	
+	cost = 2.9
+	relative_position_id = genstable_our_governance
+	prerequisite = {
+		focus = genstable_our_governance
+	}
+	mutually_exclusive = {
+		focus = genstable_empower_security
+		focus = genstable_let_dwellers_choose
+		focus = genstable_boring_survivalism
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_steady_as_she_goes"
+		add_popularity = {
+			ideology = continuation
+			popularity = 0.20
+		}
+		set_politics = {
+			ruling_party = continuation
+			elections_allowed = no
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_let_dwellers_choose
+	icon = GFX_stable_goal_let_dwellers_choose
+	x = 1
+	y = 1
+	
+	cost = 2.9
+	relative_position_id = genstable_our_governance
+	prerequisite = {
+		focus = genstable_our_governance
+	}
+	mutually_exclusive = {
+		focus = genstable_empower_security
+		focus = genstable_steady_as_she_goes
+		focus = genstable_boring_survivalism
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_let_dwellers_choose"
+		add_popularity = {
+			ideology = visionary
+			popularity = 0.20
+		}
+		set_politics = {
+			ruling_party = visionary
+			elections_allowed = no
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_boring_survivalism
+	icon = GFX_stable_goal_survival_in_a_new_world
+	x = 3
+	y = 1
+	
+	cost = 2.9
+	relative_position_id = genstable_our_governance
+	prerequisite = {
+		focus = genstable_our_governance
+	}
+	mutually_exclusive = {
+		focus = genstable_empower_security
+		focus = genstable_steady_as_she_goes
+		focus = genstable_let_dwellers_choose
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_boring_survivalism"
+		add_popularity = {
+			ideology = survivalism
+			popularity = 0.20
+		}
+		set_politics = {
+			ruling_party = survivalism
+			elections_allowed = no
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_maximum_recycling
+	icon = GFX_stable_goal_unlimited_recycling
+	x = 3
+	y = 2
+	
+	cost = 2.9
+	relative_position_id = genstable_our_governance
+	prerequisite = {
+		focus = genstable_boring_survivalism
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_maximum_recycling"
+		capital_scope = {
+			add_resource = {
+				type = metal
+				amount = 6
+			}
+			add_resource = {
+				type = water
+				amount = 6
+			}
+			add_resource = {
+				type = energy
+				amount = 6
+			}
+			add_resource = {
+				type = composites
+				amount = 6
+			}
+			add_resource = {
+				type = circuitry
+				amount = 6
+			}
+			add_resource = {
+				type = advanced
+				amount = 6
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_reach_out_trade
+	icon = GFX_stable_goal_stable_trade
+	x = 3
+	y = 3
+	
+	cost = 2.9
+	relative_position_id = genstable_our_governance
+	prerequisite = {
+		focus = genstable_maximum_recycling
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_reach_out_trade"
+		add_ideas = GENSTABLE_trade_caravans_idea
+	}
+}
+
+
+
+shared_focus = {
+	id = genstable_safeguard_way_of_life
+	icon = GFX_stable_goal_safeguard_our_way_of_life
+	x = -3
+	y = 2
+	
+	cost = 8.58
+	relative_position_id = genstable_our_governance
+	prerequisite = {
+		focus = genstable_empower_security
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_safeguard_way_of_life"
+		custom_effect_tooltip = GENSTABLE_mob_security_tt
+		division_template = {
+			name = "Mobilized Security"
+			regiments = {
+				infantry = { x = 0 y = 0 }
+				infantry = { x = 0 y = 1 }
+				infantry = { x = 0 y = 2 }
+				infantry = { x = 1 y = 0 }
+				infantry = { x = 1 y = 1 }
+				infantry = { x = 1 y = 2 }
+			}
+		}
+		capital_scope = {
+			create_unit = {
+					division = "name = \"1st. Mobilized Security\" division_template = \"Mobilized Security\" start_experience_factor = 0.3"
+					owner = ROOT
+			}
+			create_unit = {
+					division = "name = \"2nd. Mobilized Security\" division_template = \"Mobilized Security\" start_experience_factor = 0.3"
+					owner = ROOT
+			}
+			create_unit = {
+					division = "name = \"3rd. Mobilized Security\" division_template = \"Mobilized Security\" start_experience_factor = 0.3"
+					owner = ROOT
+			}
+			create_unit = {
+					division = "name = \"4th. Mobilized Security\" division_template = \"Mobilized Security\" start_experience_factor = 0.3"
+					owner = ROOT
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_dont_rock_boat
+	icon = GFX_stable_goal_dont_rock_the_boat
+	x = -1
+	y = 2
+	
+	cost = 8.58
+	relative_position_id = genstable_our_governance
+	prerequisite = {
+		focus = genstable_steady_as_she_goes
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_dont_rock_boat"
+		IF = {
+			limit = {
+				has_stability < 0.90
+			}
+			add_stability = 0.15
+		}
+		ELSE = {
+			one_random_industrial_complex = yes
+			add_political_power = 100
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_into_wide_world
+	icon = GFX_stable_goal_into_the_wide_wasteland
+	x = 1
+	y = 2
+	
+	cost = 8.58
+	relative_position_id = genstable_our_governance
+	prerequisite = {
+		focus = genstable_let_dwellers_choose
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_into_wide_world"
+		IF = {
+			limit = {
+				is_ai = yes
+			}
+			capital_scope = {
+				every_neighbor_state = {
+					limit = {
+						owner = {
+							OR = {
+								has_completed_focus = GR_basecamp
+								has_completed_focus = gs_opening1
+								has_completed_focus = tribal_past
+							}
+						}
+					}
+					add_claim_by = ROOT
+				}
+			}
+			add_offsite_building = {
+				type = arms_factory
+				level = 1
+			}
+		}
+		set_variable = { coring_cost_country_factor = -0.25 }
+		custom_effect_tooltip = FOE_25_percent_core_cost_reduction_tt
+	}
+}
+
+shared_focus = {
+	id = genstable_beacon_of_civilization
+	icon = GFX_stable_goal_beacon_of_civilization
+	x = -3
+	y = 3
+	
+	cost = 8.58
+	relative_position_id = genstable_our_governance
+	prerequisite = {
+		focus = genstable_safeguard_way_of_life
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_beacon_of_civilization"
+		add_ideas = GENSTABLE_protectors_of_civilization_idea
+	}
+}
+
+shared_focus = {
+	id = genstable_undisputed_leadership
+	icon = GFX_stable_goal_undisputed_leadership
+	x = -1
+	y = 3
+	
+	cost = 8.58
+	relative_position_id = genstable_our_governance
+	prerequisite = {
+		focus = genstable_dont_rock_boat
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_undisputed_leadership"
+		add_ideas = GENSTABLE_lockstep_society_idea
+	}
+}
+
+shared_focus = {
+	id = genstable_build_something_new
+	icon = GFX_stable_goal_build_something_new
+	x = 1
+	y = 3
+	
+	cost = 8.58
+	relative_position_id = genstable_our_governance
+	prerequisite = {
+		focus = genstable_into_wide_world
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_build_something_new"
+		add_ideas = GENSTABLE_rebuilding_wastes_idea	
+	}
+}
+
+shared_focus = {
+	id = genstable_now_know_wastes
+	icon = GFX_stable_goal_wasteland_knowledge
+	x = 0
+	y = 4
+	
+	cost = 8.58
+	relative_position_id = genstable_our_governance
+	prerequisite = {
+		focus = genstable_beacon_of_civilization
+		focus = genstable_undisputed_leadership
+		focus = genstable_build_something_new
+		focus = genstable_reach_out_trade
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_now_know_wastes"
+		add_research_slot = 1
+		IF = {
+			limit = {
+				has_idea = isolation
+			}
+			swap_ideas = {
+				remove_idea = isolation
+				add_idea = civilian_economy
+			}
+		}
+		IF = {
+			limit = {
+				has_idea = undisturbed_isolation
+			}
+			swap_ideas = {
+				remove_idea = undisturbed_isolation
+				add_idea = civilian_economy
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_preserve_paradise
+	icon = GFX_stable_goal_preserve_paradise
+	x = -3
+	y = 5
+	
+	cost = 8.58
+	relative_position_id = genstable_our_governance
+	prerequisite = {
+		focus = genstable_now_know_wastes
+	}
+	mutually_exclusive = {
+		focus = genstable_proclaim_new_nation
+		focus = genstable_enslave_wastelanders
+		focus = genstable_cling_old_world
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_preserve_paradise"
+		add_offsite_building = {
+			type = arms_factory
+			level = 3
+		}
+		add_offsite_building = {
+			type = industrial_complex
+			level = 3
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_proclaim_new_nation
+	icon = GFX_stable_goal_proclaim_new_nation
+	x = -1
+	y = 5
+	
+	cost = 8.58
+	relative_position_id = genstable_our_governance
+	prerequisite = {
+		focus = genstable_now_know_wastes
+	}
+	mutually_exclusive = {
+		focus = genstable_preserve_paradise
+		focus = genstable_enslave_wastelanders
+		focus = genstable_cling_old_world
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_proclaim_new_nation"
+		swap_ideas = {
+			remove_idea = open_stable_society
+			add_idea = wasteland_society2
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_enslave_wastelanders
+	icon = GFX_stable_goal_enslave_wastelanders
+	x = 1
+	y = 5
+	
+	cost = 8.58
+	relative_position_id = genstable_our_governance
+	prerequisite = {
+		focus = genstable_now_know_wastes
+	}
+	mutually_exclusive = {
+		focus = genstable_preserve_paradise
+		focus = genstable_proclaim_new_nation
+		focus = genstable_cling_old_world
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_enslave_wastelanders"
+		swap_ideas = {
+			remove_idea = open_stable_society
+			add_idea = slaver_society
+		}
+		set_country_flag = slavery_allowed
+		custom_effect_tooltip = foe_10_gain_slave_tt
+			add_to_variable = {
+				var = foe_slaves_var
+				value = 10
+			}
+	}
+}
+
+shared_focus = {
+	id = genstable_cling_old_world
+	icon = GFX_stable_goal_old_world_blues
+	x = 3
+	y = 5
+	
+	cost = 8.58
+	relative_position_id = genstable_our_governance
+	prerequisite = {
+		focus = genstable_now_know_wastes
+	}
+	mutually_exclusive = {
+		focus = genstable_preserve_paradise
+		focus = genstable_proclaim_new_nation
+		focus = genstable_enslave_wastelanders
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_cling_old_world"
+		swap_ideas = {
+			remove_idea = open_stable_society
+			add_idea = old_world_society
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_let_none_interfere
+	icon = GFX_stable_goal_let_none_interfere
+	x = -3
+	y = 6
+	
+	cost = 8.58
+	relative_position_id = genstable_our_governance
+	prerequisite = {
+		focus = genstable_preserve_paradise
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_let_none_interfere"
+		add_ideas = GENSTABLE_isolationist_bastion_idea
+	}
+}
+
+shared_focus = {
+	id = genstable_expand_our_borders
+	icon = GFX_stable_goal_expand_our_borders
+	x = -1
+	y = 6
+	
+	cost = 8.58
+	relative_position_id = genstable_our_governance
+	prerequisite = {
+		focus = genstable_proclaim_new_nation
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_expand_our_borders"
+		add_ideas = GENSTABLE_expansionist_nation_idea
+	}
+}
+
+shared_focus = {
+	id = genstable_superior_in_every_way
+	icon = GFX_stable_goal_superior_in_every_way
+	x = 1
+	y = 6
+	
+	cost = 8.58
+	relative_position_id = genstable_our_governance
+	prerequisite = {
+		focus = genstable_enslave_wastelanders
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_superior_in_every_way"
+		add_ideas = GENSTABLE_superior_populous_idea
+	}
+}
+
+shared_focus = {
+	id = genstable_secure_our_domain
+	icon = GFX_stable_goal_secure_our_domain
+	x = 3
+	y = 6
+	
+	cost = 8.58
+	relative_position_id = genstable_our_governance
+	prerequisite = {
+		focus = genstable_cling_old_world
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_secure_our_domain"
+		add_ideas = GENSTABLE_technological_domain_idea
+	}
+}
+
+
+### Military ###
+
+shared_focus = {
+	id = genstable_concerns_of_security
+	icon = GFX_stable_goal_concerns_of_security
+	x = 8
+	y = 3
+	
+	cost = 8.58
+	relative_position_id = genstable_opening1
+	prerequisite = {
+		focus = genstable_opening3
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_concerns_of_security"
+		army_experience = 25
+		add_doctrine_cost_reduction = {
+			cost_reduction = 0.60
+			uses = 2
+			category = land_doctrine
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_i_can_see_sky
+	icon = GFX_stable_goal_hello_sky
+	x = -2
+	y = 1
+	
+	cost = 8.58
+	relative_position_id = genstable_concerns_of_security
+	prerequisite = {
+		focus = genstable_concerns_of_security
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_i_can_see_sky"
+		air_experience = 25
+		capital_scope = {
+			add_building_construction = {
+				type = air_base
+				level = 4
+			}
+			add_building_construction = {
+				type = anti_air_building
+				level = 2
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_crack_open_armories
+	icon = GFX_stable_goal_crack_open_armories
+	x = 0
+	y = 1
+	
+	cost = 8.58
+	relative_position_id = genstable_concerns_of_security
+	prerequisite = {
+		focus = genstable_concerns_of_security
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_crack_open_armories"
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.8
+			uses = 2
+			category = infantry_tech
+		}
+		add_equipment_to_stockpile = {
+			type = energy_equipment_4
+			amount = 50
+			producer = OWE
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_thats_alotta_water
+	icon = GFX_stable_goal_thats_a_lot_of_water
+	x = 2
+	y = 1
+	
+	cost = 8.58
+	relative_position_id = genstable_concerns_of_security
+	prerequisite = {
+		focus = genstable_concerns_of_security
+	}
+	available = {
+		any_owned_state = {
+			is_coastal = yes
+		}
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_thats_alotta_water"
+		navy_experience = 25
+		two_random_dockyards = yes
+	}
+}
+
+shared_focus = {
+	id = genstable_fly_like_pegasus
+	icon = GFX_stable_goal_fly_like_a_pegasus
+	x = -2
+	y = 2
+	
+	cost = 8.58
+	relative_position_id = genstable_concerns_of_security
+	prerequisite = {
+		focus = genstable_i_can_see_sky
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_fly_like_pegasus"
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.4
+			uses = 5
+			category = air_tech
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_outfit_our_best
+	icon = GFX_stable_goal_outfit_our_best
+	x = 0
+	y = 2
+	
+	cost = 8.58
+	relative_position_id = genstable_concerns_of_security
+	prerequisite = {
+		focus = genstable_crack_open_armories
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_outfit_our_best"
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.8
+			uses = 2
+			category = special_forces_tech
+		}
+		add_equipment_to_stockpile = {
+			type = spec_ops_equipment_5
+			amount = 50
+			producer = OWE
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_swim_like_fish
+	icon = GFX_stable_goal_swim_like_fish
+	x = 2
+	y = 2
+	
+	cost = 8.58
+	relative_position_id = genstable_concerns_of_security
+	prerequisite = {
+		focus = genstable_thats_alotta_water
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_swim_like_fish"
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.4
+			uses = 5
+			category = naval_tech
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_stable_built_vehicles
+	icon = GFX_stable_goal_stable_built_vehicles
+	x = -1
+	y = 3
+	
+	cost = 8.58
+	relative_position_id = genstable_concerns_of_security
+	prerequisite = {
+		focus = genstable_outfit_our_best
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_stable_built_vehicles"
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.6
+			uses = 3
+			category = vehicle_tech
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_rapid_fire_guns
+	icon = GFX_stable_goal_rabid_fire_guns
+	x = 1
+	y = 3
+	
+	cost = 8.58
+	relative_position_id = genstable_concerns_of_security
+	prerequisite = {
+		focus = genstable_outfit_our_best
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_rapid_fire_guns"
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.6
+			uses = 2
+			category = fireteam_tech
+		}
+		add_equipment_to_stockpile = {
+			type = energy_fireteam_equipment_4
+			amount = 50
+			producer = OWE
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_time_marches_on
+	icon = GFX_stable_goal_time_marches_on
+	x = 0
+	y = 4
+	
+	cost = 8.58
+	relative_position_id = genstable_concerns_of_security
+	prerequisite = {
+		focus = genstable_stable_built_vehicles
+		focus = genstable_rapid_fire_guns
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_time_marches_on"
+		custom_effect_tooltip = GENSTABLE_timemarch_event_tt
+		country_event = generic_stable.5
+	}
+}
+
+### Science ###
+
+shared_focus = {
+	id = genstable_matters_of_science
+	icon = GFX_stable_goal_matters_of_science
+	x = 16
+	y = 3
+	
+	cost = 8.58
+	relative_position_id = genstable_opening1
+	prerequisite = {
+		focus = genstable_opening3
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_matters_of_science"
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.6
+			uses = 3
+			category = electronics
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_refit_maintenance_robots
+	icon = GFX_stable_goal_refit_maintenance_robots
+	x = -1
+	y = 1
+	
+	cost = 8.58
+	relative_position_id = genstable_matters_of_science
+	prerequisite = {
+		focus = genstable_matters_of_science
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_refit_maintenance_robots"
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.5
+			uses = 2
+			category = robotics_tech
+		}
+		add_equipment_to_stockpile = {
+			type = light_robot_gutsy_equipment
+			amount = 50
+			producer = OWE
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_keep_dwellers_healthy
+	icon = GFX_stable_goal_keep_dwellers_healthy
+	x = 1
+	y = 1
+	
+	cost = 8.58
+	relative_position_id = genstable_matters_of_science
+	prerequisite = {
+		focus = genstable_matters_of_science
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_keep_dwellers_healthy"
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.5
+			uses = 2
+			category = medical_tech
+		}
+		add_equipment_to_stockpile = {
+			type = support_equipment
+			amount = 50
+			producer = OWE
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_equestrian_military_robotics
+	icon = GFX_stable_goal_equestrian_military_robotics
+	x = -2
+	y = 2
+	
+	cost = 8.58
+	relative_position_id = genstable_matters_of_science
+	prerequisite = {
+		focus = genstable_refit_maintenance_robots
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_equestrian_military_robotics"
+		set_technology = {
+			robotics_tech_level_scientific = 1
+			electronics_tech_level_scientific = 1
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_access_databanks
+	icon = GFX_stable_goal_access_databanks
+	x = 0
+	y = 2
+	
+	cost = 8.58
+	relative_position_id = genstable_matters_of_science
+	prerequisite = {
+		focus = genstable_refit_maintenance_robots
+		focus = genstable_keep_dwellers_healthy
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_access_databanks"
+		add_research_slot = 1
+	}
+}
+
+shared_focus = {
+	id = genstable_improve_farming
+	icon = GFX_stable_goal_improve_farming
+	x = 2
+	y = 2
+	
+	cost = 8.58
+	relative_position_id = genstable_matters_of_science
+	prerequisite = {
+		focus = genstable_keep_dwellers_healthy
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_improve_farming"
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.5
+			uses = 2
+			category = agriculture_tech
+		}
+		add_manpower = 400
+	}
+}
+
+shared_focus = {
+	id = genstable_200_years_data
+	icon = GFX_stable_goal_200_years_of_data
+	x = -1
+	y = 3
+	
+	cost = 8.58
+	relative_position_id = genstable_matters_of_science
+	prerequisite = {
+		focus = genstable_access_databanks
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_200_years_data"
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.4
+			uses = 4
+			category = race_tech
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_support_security_effort
+	icon = GFX_stable_goal_support_security_effort
+	x = 1
+	y = 3
+	
+	cost = 8.58
+	relative_position_id = genstable_matters_of_science
+	prerequisite = {
+		focus = genstable_access_databanks
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_support_security_effort"
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.5
+			uses = 3
+			category = support_tech
+		}
+		add_tech_bonus = {
+			name = anti_tank_bonus
+			bonus = 0.5
+			uses = 2
+			category = training_tech
+		}
+	}
+}
+
+shared_focus = {
+	id = genstable_smartest_people_wasteland
+	icon = GFX_stable_goal_brilliance_unleashed
+	x = 0
+	y = 4
+	
+	cost = 8.58
+	relative_position_id = genstable_matters_of_science
+	prerequisite = {
+		focus = genstable_200_years_data
+		focus = genstable_support_security_effort
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus genstable_smartest_people_wasteland"
+		swap_ideas = {
+			remove_idea = wasteland_research_base
+			add_idea = advanced_research_base
+		}
+	}
+}
+
+
+
