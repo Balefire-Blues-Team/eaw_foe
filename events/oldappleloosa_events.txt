@@ -1,4 +1,4 @@
-﻿add_namespace = oldappleloosa
+add_namespace = oldappleloosa
 add_namespace = oldapplestart
 add_namespace = oldappleranger
 add_namespace = oldapplered
@@ -342,44 +342,34 @@ country_event = {
 	option = {
 		name = oldapplestart.8.a
 		ai_chance = { 
-			factor = 50	
+			factor = 0
 		}
-		
-		start_civil_war = {
-				ruling_party = destruction
-				ideology = visionary
-				size = 0.5
-				capital = 599
-				states = { 111 599 }
-				keep_political_leader = yes
-			}
 		hidden_effect = {
-			random_other_country = {
-			limit = { 
-			    original_tag = OAP
-				has_government = visionary
-			}
-				retire_country_leader = yes
-				add_country_leader_role = {
-					character = OAP_char_Farsight
-					promote_leader = yes
-
-					country_leader={
-						expire = "1965.1.1"
-						ideology = justice
-						desc = "POLITICS_FARSIGHT_DESC"
-						traits = {
-				
-						}
-						id=-1
-					}
-				}
+			OAX = {
+				transfer_state = 599
+				transfer_state = 111
+				inherit_technology = OAP
 				load_focus_tree = OAP_ranger_tree
+				declare_war_on = {
+					target = OAP
+					type = annex_everything
+				}
+			}
+			OAP = {
+				transfer_units_fraction = {
+					target = OAX
+					size = 0.5
+				}
+			}
+			every_state = {
+				limit = {
+					is_core_of = OAP
+				}
+				add_claim_by = OAX
+				add_core_of = OAX
 			}
 			set_global_flag = OAP_civil_war_flag
 		}
-		
-		
 	}
 	option = {
 		name = oldapplestart.8.b
@@ -387,43 +377,38 @@ country_event = {
 			factor = 50	
 		}
 		hidden_effect = {
-			set_capital = { state = 599 }
-		}
-		start_civil_war = {
-				ruling_party = visionary
-				ideology = destruction
-				size = 0.5
-				capital = 596
-				states = { 67 596 213 205 587 }
-				keep_political_leader = yes
-			}
-		hidden_effect = {
-			random_other_country = {
-			limit = { 
-			    original_tag = OAP
-				has_government = destruction
-			}
-				retire_country_leader = yes
-				add_country_leader_role = {
-					character = OAP_char_SteelShackles
-					promote_leader = yes
-
-					country_leader={
-						expire = "1965.1.1"
-						ideology = slaver
-						desc = "POLITICS_STEELSHACKLES_DESC"
-						traits = {
-							oap_steel_shackles_trait
-						}
-						id=-1
-					}
+			OAX = {
+				transfer_state = 599
+				transfer_state = 111
+				inherit_technology = OAP
+				OAX_transfer_ranger_characters = yes
+				load_focus_tree = OAP_ranger_tree
+				declare_war_on = {
+					target = OAP
+					type = annex_everything
 				}
-				set_country_flag = OAP_add_char_SteelShackles_flag
-				custom_effect_tooltip = OAP_SteelShackles_stats_tt
 			}
-			load_focus_tree = OAP_ranger_tree
+			OAP = {
+				transfer_units_fraction = {
+					target = OAX
+					size = 0.5
+				}
+			}
+			every_state = {
+				limit = {
+					is_core_of = OAP
+				}
+				add_claim_by = OAX
+				add_core_of = OAX
+			}
+			set_global_flag = OAP_civil_war_flag
 		}
-		
+		IF = {
+			limit = {
+				OAP = { is_ai = no }
+			}
+			OAX = { change_tag_from = OAP }
+		}
 	}
 }
 
@@ -521,7 +506,7 @@ country_event = {
 	picture = GFX_event_test
 
 	trigger = {
-		has_civil_war = yes
+		has_war_with = OAX
 		original_tag = OAP
 		has_government = destruction
 		is_ai = yes
@@ -579,7 +564,7 @@ country_event = {
 	picture = GFX_event_equestria_fail
 
 	trigger = {
-		has_civil_war = no
+		NOT = { has_war_with = OAX }
 		original_tag = OAP
 		OR = {
 			has_government = destruction
@@ -906,8 +891,8 @@ country_event = {
 	picture = GFX_event_ponies_in_battle
 
 	trigger = {
-		has_civil_war = yes
-		original_tag = OAP
+		has_war_with = OAP
+		original_tag = OAX
 		has_government  = visionary
 	}
 	fire_only_once = yes
@@ -966,9 +951,9 @@ country_event = {
             }
 			IF = {
 				limit = {
-					check_variable = {
+					OAP = {check_variable = {
 						ranger_military = 1
-					}
+					}}
 				}
 				599 = {
 					create_unit = {
@@ -979,9 +964,9 @@ country_event = {
 			}
 			If = {
 				limit = {
-					check_variable = {
+					OAP = {check_variable = {
 						ranger_military = 2
-					}
+					}}
 				}
 				599 = {
 					create_unit = {
@@ -996,9 +981,9 @@ country_event = {
 			}
 			IF = {
 				limit = {
-					check_variable = {
+					OAP = {check_variable = {
 						ranger_military = 3
-					}
+					}}
 				}
 				599 = {
 					create_unit = {
@@ -1017,9 +1002,9 @@ country_event = {
 			}
 			IF = {
 				limit = {
-					check_variable = {
+					OAP = {check_variable = {
 						ranger_military = 4
-					}
+					}}
 				}
 				599 = {
 					create_unit = {
@@ -1042,9 +1027,9 @@ country_event = {
 			}
 			IF = {
 				limit = {
-					check_variable = {
+					OAP = {check_variable = {
 						ranger_military > 4
-					}
+					}}
 				}
 				599 = {
 					create_unit = {
@@ -1211,7 +1196,7 @@ country_event = {
 		ai_chance = { 
 			factor = 50	
 		}
-		OAP = { country_event = { id = oldappleranger.6 }}
+		OAX = { country_event = { id = oldappleranger.6 }}
 	}
 }
 

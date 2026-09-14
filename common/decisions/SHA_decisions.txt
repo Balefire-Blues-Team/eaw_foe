@@ -378,48 +378,43 @@ NCR_incite_ranger_uprising_decision_cat = {
 		}
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision NCR_launch_ranger_coup_decision"
-			OAP = {
-				if = {
-					limit = {
-						has_government = destruction
-					}
-					start_civil_war = {
-						ruling_party = destruction
-						ideology = visionary
-						size = 0.3
-						capital = 599
-					}
+			OAX = {
+				transfer_state = 599
+				transfer_state = 111
+				inherit_technology = OAP
+				OAX_transfer_ranger_characters = yes
+				load_focus_tree = OAP_ranger_tree
+				set_cosmetic_tag = OAP_NCR_rangers
+				declare_war_on = {
+					target = OAP
+					type = annex_everything
 				}
-				random_other_country = {
-					limit = { 
-						original_tag = OAP
-					}
-					set_cosmetic_tag = OAP_NCR_rangers
-					retire_country_leader = yes
-					add_popularity = {
-						ideology = visionary
-						popularity = 0.50
-					}
-					recruit_character = OAP_char_Farsight
-					promote_character = OAP_char_Farsight
-					declare_war_on = {
-						target = OAP
-						type = annex_everything
-					}
-					add_opinion_modifier = {
-						target = SHA
-						modifier = huge_increase
-					}
-					reverse_add_opinion_modifier = {
-						target = SHA
-						modifier = huge_increase
-					}
-					add_ai_strategy = { type = alliance id = SHA value = 200 }
-					SHA = { add_ai_strategy = { type = alliance id = ROOT value = 200 } }
-					load_focus_tree = OAP_ranger_tree
-					SHA = { add_to_faction = ROOT }
+				add_opinion_modifier = {
+					target = SHA
+					modifier = huge_increase
+				}
+				reverse_add_opinion_modifier = {
+					target = SHA
+					modifier = huge_increase
+				}
+				add_ai_strategy = { type = alliance id = SHA value = 200 }
+				SHA = { add_ai_strategy = { type = alliance id = OAX value = 200 } }
+				SHA = { add_to_faction = OAX }
+			}
+			OAP = {
+				transfer_units_fraction = {
+					target = OAX
+					size = 0.15
 				}
 			}
+			every_state = {
+				limit = {
+					is_core_of = OAP
+				}
+				add_claim_by = OAX
+				add_core_of = OAX
+			}
+			set_global_flag = OAP_civil_war_flag
 			hidden_effect = {
 				clr_country_flag = NCR_agree_to_rangers_flag
 				clr_country_flag = NCR_agree_to_rangers_flag2

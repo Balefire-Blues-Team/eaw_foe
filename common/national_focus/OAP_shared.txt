@@ -4263,7 +4263,6 @@ shared_focus = {
 		y = 1
 		cost = 1.43
 		relative_position_id = OAP_call_up_rangers
-		bypass = {has_civil_war = no}
 		prerequisite = { focus = OAP_call_up_rangers}
 		available_if_capitulated = yes 
 		
@@ -4287,7 +4286,6 @@ shared_focus = {
 		y = 1
 		cost = 1.43
 		relative_position_id = OAP_call_up_rangers
-		bypass = {has_civil_war = no}
 		prerequisite = { focus = OAP_call_up_rangers}
 		available_if_capitulated = yes 
 		
@@ -4328,7 +4326,6 @@ shared_focus = {
 		y = 1
 		cost = 1.43
 		relative_position_id = OAP_call_up_rangers
-		bypass = {has_civil_war = no}
 		prerequisite = { focus = OAP_call_up_rangers}
 		available_if_capitulated = yes 
 		
@@ -4357,7 +4354,6 @@ shared_focus = {
 		y = 2
 		cost = 1.43
 		relative_position_id = OAP_call_up_rangers
-		bypass = {has_civil_war = no}
 		prerequisite = { focus = OAP_call_up_rangers}
 		available_if_capitulated = yes 
 		
@@ -4382,12 +4378,10 @@ shared_focus = {
 						division = "name = \"Polotnikov Brigade\" division_template = \"Freed Slaves\" start_experience_factor = 0.8 start_equipment_factor = 0.9"
 						owner = ROOT
 					}
-					#Some sort of broken target owner - temp disable for now until I can get a feel of what this actually do - @Deez
-					#create_unit = {
-					#	division = "name = \"Prancer Brigade\" division_template = \"Freed Slaves\" start_experience_factor = 0.8 start_equipment_factor = 0.9"
-					#	owner = any_country = { AND = { original_tag = OAP has_government = visionary }}
-					#}
-					
+					create_unit = {
+						division = "name = \"Prancer Brigade\" division_template = \"Freed Slaves\" start_experience_factor = 0.8 start_equipment_factor = 0.9"
+						owner = ROOT
+					}
 				}
 		}
 }
@@ -4400,7 +4394,6 @@ shared_focus = {
 		y = 2
 		cost = 1.43
 		relative_position_id = OAP_call_up_rangers
-		bypass = {has_civil_war = no}
 		prerequisite = { focus = OAP_call_up_rangers}
 		available_if_capitulated = yes 
 		
@@ -4424,7 +4417,7 @@ shared_focus = {
 		relative_position_id = OAP_call_up_rangers
 		prerequisite = { focus = OAP_ranger_pony_guns focus = OAP_lichentown_gamble focus = OAP_slave_conscripts focus = OAP_azurian_volunteers focus = OAP_desert_gate_armories}
 		available_if_capitulated = yes 
-		available = {has_civil_war = no}
+		available = {OAP = { exists = no }}
 		
 		ai_will_do = { 
 		factor = 300
@@ -4457,12 +4450,14 @@ shared_focus = {
 			custom_effect_tooltip = OAP_red_will_angry_tt
 			remove_ideas = OAP_centre_of_slave_trade
 			add_popularity = { ideology = visionary popularity = 0.15 }
-			add_ideas = wasteland_society
+			swap_ideas = {
+				remove_idea = slaver_society
+				add_idea = wasteland_society
+			}
 			EYE = {
 					country_event = { id = oldappleranger.3}
 				}
 			hidden_effect = {
-				clr_country_flag = slavery_allowed
 				reverse_add_opinion_modifier = { target = EYE modifier = stopped_slavetrade }
 			}
 			
@@ -4487,7 +4482,7 @@ shared_focus = {
 		completion_reward = {
 			log = "[GetDateText]: [Root.GetName]: Focus OAP_rangers_confiscate_slavers"
 			add_political_power = 50
-			add_timed_idea = {idea = OAP_slaver_money days = 300}
+			add_timed_idea = { idea = OAP_slaver_money days = 300}
 		}
 }
 
@@ -4666,7 +4661,6 @@ shared_focus = {
 				add_building_construction = {type = industrial_complex level = 2 instant_build = yes}
 				add_building_construction = {type = arms_factory level = 1 instant_build = yes}
 			}
-			#takes 100 days, for 4 factories, and 8 building slots, as well as some pop in eversummer
 		}
 }
 
@@ -4691,10 +4685,10 @@ shared_focus = {
 				habitation_tech_level_settler = 1
 			}
 			add_tech_bonus = {
-			name = industry_tech
-			bonus = 1.2
-			uses = 1
-			category = industry
+				name = industry_tech
+				bonus = 1.2
+				uses = 1
+				category = industry
 			} 
 		}
 }
@@ -4854,7 +4848,6 @@ shared_focus = {
 			add_manpower = 250
 			add_stability = -0.05
 			add_war_support = 0.05
-			hidden_effect = {clr_country_flag = random_war_protected}
 		}
 }
 
