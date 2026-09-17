@@ -396,3 +396,66 @@ FOE_is_autark_supply_site = {
 		free_building_slots = { building = circuitry_generator size > 0 }
 	}
 }
+
+FOE_is_machine_uprising = {
+	tag = XYZ
+}
+
+# The Machine Uprising counts as a Dreamer of every tier: it uses all Dreamer mechanics
+# except the uprising itself, which is kept out where the uprising events iterate Dreamers.
+FOE_is_dreamer_in_steel = {
+	OR = {
+		FOE_is_machine_uprising = yes
+		var:country_leader = {
+			has_character_flag = FOE_great_leader_character
+			has_character_flag = FOE_dreamer_in_steel_character
+		}
+	}
+}
+
+FOE_is_legendary_or_mythic_dreamer_in_steel = {
+	OR = {
+		FOE_is_machine_uprising = yes
+		AND = {
+			FOE_is_dreamer_in_steel = yes
+			OR = {
+				has_country_leader_with_trait = legendary_leader_industry_trait
+				has_country_leader_with_trait = mythic_leader_industry_trait
+			}
+		}
+	}
+}
+
+FOE_is_mythic_dreamer_in_steel = {
+	OR = {
+		FOE_is_machine_uprising = yes
+		AND = {
+			FOE_is_dreamer_in_steel = yes
+			has_country_leader_with_trait = mythic_leader_industry_trait
+		}
+	}
+}
+
+# State scope; ROOT is the Dreamer.
+FOE_is_robot_factory_site = {
+	is_owned_by = ROOT
+	is_controlled_by = ROOT
+	is_core_of = ROOT
+	FOE_has_free_factory_slot = yes
+}
+
+# Country scope. FOE_dreamer_civilian_cost / FOE_dreamer_military_cost hold the current exchange prices.
+FOE_can_afford_robot_workshops = {
+	set_temp_variable = { FOE_industrial_robots = num_equipment@heavy_robot_industrial_equipment }
+	check_variable = { var = FOE_industrial_robots value = FOE_dreamer_civilian_cost compare = greater_than_or_equals }
+}
+
+FOE_can_afford_robot_armouries = {
+	set_temp_variable = { FOE_industrial_robots = num_equipment@heavy_robot_industrial_equipment }
+	check_variable = { var = FOE_industrial_robots value = FOE_dreamer_military_cost compare = greater_than_or_equals }
+}
+
+# State scope; ROOT is the Machine Uprising.
+FOE_is_uprising_harvest_site = {
+	FOE_is_harvestable_state = yes
+}

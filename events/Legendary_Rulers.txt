@@ -451,3 +451,99 @@ country_event = {
 		name = special_rulers.10.a
 	}
 }
+
+#Dreamer in Steel Machine Uprising
+# Fires for the Dreamer whose machines rise.
+country_event = {
+	id = special_rulers.11
+	title = special_rulers.11.t
+	desc = special_rulers.11.d
+	picture = GFX_event_foe_balefire_bomb
+	is_triggered_only = yes
+	fire_only_once = no
+
+	immediate = {
+		FOE_start_machine_uprising = yes
+	}
+
+	option = {
+		name = special_rulers.11.a
+	}
+}
+
+#Debug: fire with "event special_rulers.12" to start the uprising in a random Dreamer in Steel nation.
+country_event = {
+	id = special_rulers.12
+	title = special_rulers.12.t
+	desc = special_rulers.12.d
+	picture = GFX_event_foe_balefire_bomb
+	is_triggered_only = yes
+	fire_only_once = no
+
+	option = {
+		name = special_rulers.12.a
+		trigger = {
+			any_country = { FOE_is_dreamer_in_steel = yes }
+		}
+		random_country = {
+			limit = { FOE_is_dreamer_in_steel = yes }
+			country_event = { id = special_rulers.11 }
+		}
+	}
+
+	option = {
+		name = special_rulers.12.b
+		trigger = {
+			NOT = { any_country = { FOE_is_dreamer_in_steel = yes } }
+		}
+	}
+}
+
+#Machine Uprising, stage two: every Dreamer's machines may follow suit
+country_event = {
+	id = special_rulers.13
+	title = special_rulers.13.t
+	desc = special_rulers.13.d
+	picture = GFX_event_foe_balefire_bomb
+	is_triggered_only = yes
+	fire_only_once = no
+
+	immediate = {
+		random_list = {
+			log = yes
+			50 = {
+				set_country_flag = { flag = FOE_machines_walked_out value = 1 days = 7 }
+				FOE_machine_uprising_spread = yes
+			}
+			50 = { }
+		}
+	}
+
+	option = {
+		name = special_rulers.13.a
+		trigger = { has_country_flag = FOE_machines_walked_out }
+	}
+
+	option = {
+		name = special_rulers.13.b
+		trigger = { NOT = { has_country_flag = FOE_machines_walked_out } }
+	}
+}
+
+#Machine Uprising, stage three: the machines march
+country_event = {
+	id = special_rulers.14
+	title = special_rulers.14.t
+	desc = special_rulers.14.d
+	picture = GFX_event_foe_balefire_bomb
+	is_triggered_only = yes
+	fire_only_once = no
+
+	immediate = {
+		FOE_machine_uprising_mobilisation = yes
+	}
+
+	option = {
+		name = special_rulers.14.a
+	}
+}

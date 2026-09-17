@@ -1023,6 +1023,348 @@ FOE_initialize_autark = {
 	FOE_update_autark = yes
 }
 
+#Dreamer in Steel Subclass
+# Country scope. Exchange prices rise with every exchange of either kind:
+# civilian factory 20 + 10 per exchange, military factory 30 + 10 per exchange (heavy industrial robots).
+FOE_update_dreamer_costs = {
+	set_variable = { FOE_dreamer_civilian_cost = FOE_dreamer_exchanges }
+	multiply_variable = { FOE_dreamer_civilian_cost = 10 }
+	add_to_variable = { FOE_dreamer_civilian_cost = 20 }
+	set_variable = { FOE_dreamer_military_cost = FOE_dreamer_exchanges }
+	multiply_variable = { FOE_dreamer_military_cost = 10 }
+	add_to_variable = { FOE_dreamer_military_cost = 30 }
+}
+
+# Country scope; FROM is the target state.
+FOE_dreamer_build_civilian_factory = {
+	set_temp_variable = { FOE_robot_payment = FOE_dreamer_civilian_cost }
+	multiply_temp_variable = { FOE_robot_payment = -1 }
+	add_equipment_to_stockpile = { type = heavy_robot_industrial_equipment amount = FOE_robot_payment }
+	FROM = { add_building_construction = { type = industrial_complex level = 1 instant_build = yes } }
+	add_to_variable = { FOE_dreamer_exchanges = 1 }
+	FOE_update_dreamer_costs = yes
+}
+
+FOE_dreamer_build_military_factory = {
+	set_temp_variable = { FOE_robot_payment = FOE_dreamer_military_cost }
+	multiply_temp_variable = { FOE_robot_payment = -1 }
+	add_equipment_to_stockpile = { type = heavy_robot_industrial_equipment amount = FOE_robot_payment }
+	FROM = { add_building_construction = { type = arms_factory level = 1 instant_build = yes } }
+	add_to_variable = { FOE_dreamer_exchanges = 1 }
+	FOE_update_dreamer_costs = yes
+}
+
+# Country scope. Automation grows with stockpiled robots (light x1, medium x2, heavy x4):
+# consumer goods -1% per 100 (max -10%); Legendary: factory efficiency gain +2% per 100 (max +20%).
+# Mythic: Self-Replicating Works adds 1 industrial robot per 2 factories each month, at most 50.
+FOE_update_dreamer_in_steel = {
+	if = {
+		limit = { FOE_is_dreamer_in_steel = yes }
+		if = {
+			limit = { NOT = { has_idea = FOE_the_steel_dream } }
+			add_ideas = FOE_the_steel_dream
+		}
+		if = {
+			limit = { NOT = { has_variable = FOE_dreamer_exchanges } }
+			set_variable = { FOE_dreamer_exchanges = 0 }
+			FOE_update_dreamer_costs = yes
+		}
+		if = {
+			limit = { FOE_is_machine_uprising = yes }
+			FOE_create_uprising_templates = yes
+			if = {
+				limit = { NOT = { has_variable = FOE_uprising_swarm_count } }
+				set_variable = { FOE_uprising_swarm_count = 0 }
+			}
+		}
+		set_temp_variable = { FOE_weighted_robots = num_equipment@light_robot_equipment }
+		set_temp_variable = { FOE_medium_robots = num_equipment@medium_robot_equipment }
+		multiply_temp_variable = { FOE_medium_robots = 2 }
+		add_to_temp_variable = { FOE_weighted_robots = FOE_medium_robots }
+		set_temp_variable = { FOE_heavy_robots = num_equipment@heavy_robot_equipment }
+		multiply_temp_variable = { FOE_heavy_robots = 4 }
+		add_to_temp_variable = { FOE_weighted_robots = FOE_heavy_robots }
+
+		set_variable = { FOE_automation_consumer_goods = FOE_weighted_robots }
+		multiply_variable = { FOE_automation_consumer_goods = -0.0001 }
+		clamp_variable = { var = FOE_automation_consumer_goods min = -0.10 max = 0 }
+		set_variable = { FOE_automation_efficiency = 0 }
+		if = {
+			limit = { FOE_is_legendary_or_mythic_dreamer_in_steel = yes }
+			set_variable = { FOE_automation_efficiency = FOE_weighted_robots }
+			multiply_variable = { FOE_automation_efficiency = 0.0002 }
+			clamp_variable = { var = FOE_automation_efficiency min = 0 max = 0.20 }
+		}
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = FOE_automation_modifier } } }
+			add_dynamic_modifier = { modifier = FOE_automation_modifier }
+		}
+		force_update_dynamic_modifier = yes
+
+		# Once a civilian factory costs 200 robots, our industry is automated enough for the machines to rise.
+		if = {
+			limit = {
+				NOT = { FOE_is_machine_uprising = yes }
+				check_variable = { FOE_dreamer_civilian_cost > 199 }
+			}
+			random_list = {
+				log = yes
+				1 = { country_event = { id = special_rulers.11 } }
+				99 = { }
+			}
+		}
+		if = {
+			limit = { FOE_is_mythic_dreamer_in_steel = yes }
+			set_temp_variable = { FOE_replicated_robots = num_of_factories }
+			divide_temp_variable = { FOE_replicated_robots = 2 }
+			round_temp_variable = FOE_replicated_robots
+			clamp_temp_variable = { var = FOE_replicated_robots min = 0 max = 50 }
+			add_equipment_to_stockpile = { type = heavy_robot_industrial_equipment amount = FOE_replicated_robots }
+		}
+	}
+	else_if = {
+		limit = { has_dynamic_modifier = { modifier = FOE_automation_modifier } }
+		remove_dynamic_modifier = { modifier = FOE_automation_modifier }
+	}
+}
+
+# Country scope. FOE_subclass_tier (1-3) is set by the tier roll before this runs.
+FOE_initialize_dreamer_in_steel = {
+	add_country_leader_trait = FOE_dreamer_in_steel_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_dreamer_in_steel_character
+	}
+	# Without this tech the industrial robot does not exist for us, and stockpile changes do nothing.
+	set_technology = { robot_industrial_robots_tech = 1 }
+	if = {
+		limit = { check_variable = { FOE_subclass_tier = 3 } }
+		add_equipment_to_stockpile = { type = heavy_robot_industrial_equipment amount = 500 producer = OWE }
+	}
+	else_if = {
+		limit = { check_variable = { FOE_subclass_tier = 2 } }
+		add_equipment_to_stockpile = { type = heavy_robot_industrial_equipment amount = 250 producer = OWE }
+	}
+	else = {
+		add_equipment_to_stockpile = { type = heavy_robot_industrial_equipment amount = 100 producer = OWE }
+	}
+	if = {
+		limit = { NOT = { has_variable = FOE_dreamer_exchanges } }
+		set_variable = { FOE_dreamer_exchanges = 0 }
+	}
+	FOE_update_dreamer_costs = yes
+	FOE_update_dreamer_in_steel = yes
+}
+
+# Country scope; ROOT is the Dreamer whose machines rise.
+# One of its states becomes the Machine Uprising's, which inherits its technology and half its army, then declares war.
+# Country scope; a nation whose Dreamer's machines follow the uprising.
+# Hands one random state and 30% of the army to the Machine Uprising, without going to war.
+# Country scope. Locked robot templates for the Uprising's swarms, created once.
+FOE_create_uprising_templates = {
+	if = {
+		limit = { NOT = { has_template = "Uprising Swarm" } }
+		division_template = {
+			name = "Uprising Swarm"
+			is_locked = yes
+			regiments = {
+				light_robot = { x = 0 y = 0 }
+				light_robot = { x = 0 y = 1 }
+				light_robot = { x = 0 y = 2 }
+				medium_robot = { x = 1 y = 0 }
+				medium_robot = { x = 1 y = 1 }
+				medium_robot = { x = 1 y = 2 }
+			}
+		}
+	}
+	if = {
+		limit = { NOT = { has_template = "Uprising Colossus" } }
+		division_template = {
+			name = "Uprising Colossus"
+			is_locked = yes
+			regiments = {
+				heavy_robot = { x = 0 y = 0 }
+				heavy_robot = { x = 0 y = 1 }
+				heavy_robot = { x = 0 y = 2 }
+				medium_robot = { x = 1 y = 0 }
+				medium_robot = { x = 1 y = 1 }
+				medium_robot = { x = 1 y = 2 }
+			}
+		}
+	}
+}
+
+# State scope; ROOT is the Machine Uprising. Every tenth swarm also builds an Uprising Colossus.
+FOE_spawn_uprising_swarm = {
+	ROOT = { FOE_create_uprising_templates = yes }
+	create_unit = {
+		division = "name = \"Uprising Swarm\" division_template = \"Uprising Swarm\" start_experience_factor = 0.3 start_equipment_factor = 0.9"
+		owner = ROOT
+	}
+	ROOT = { add_to_variable = { FOE_uprising_swarm_count = 1 } }
+	if = {
+		limit = { ROOT = { check_variable = { FOE_uprising_swarm_count > 9 } } }
+		create_unit = {
+			division = "name = \"Uprising Colossus\" division_template = \"Uprising Colossus\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+			owner = ROOT
+		}
+		ROOT = { set_variable = { FOE_uprising_swarm_count = 0 } }
+	}
+}
+
+# State scope; ROOT is the Machine Uprising. As the Marshal's harvest, but the spoils are robots.
+FOE_uprising_harvest_state = {
+	add_manpower = -2000
+	add_dynamic_modifier = { modifier = FOE_carrion_devastation days = 365 }
+	if = {
+		limit = { check_variable = { industrial_complex_level > 0 } }
+		remove_building = { type = industrial_complex level = 1 }
+		FOE_spawn_uprising_swarm = yes
+	}
+	FOE_spawn_uprising_swarm = yes
+}
+
+# Country scope; the Machine Uprising. Ten days in: war on every neighbour, and a first wave of machines.
+FOE_machine_uprising_mobilisation = {
+	FOE_create_uprising_templates = yes
+	every_neighbor_country = {
+		limit = {
+			exists = yes
+			NOT = { has_war_with = ROOT }
+		}
+		ROOT = {
+			declare_war_on = {
+				target = PREV
+				type = annex_everything
+			}
+		}
+	}
+	set_temp_variable = { FOE_uprising_wave = 20 }
+	while_loop_effect = {
+		limit = { check_variable = { FOE_uprising_wave > 0 } }
+		random_owned_controlled_state = {
+			create_unit = {
+				division = "name = \"Uprising Swarm\" division_template = \"Uprising Swarm\" start_experience_factor = 0.3 start_equipment_factor = 0.9"
+				owner = ROOT
+			}
+		}
+		subtract_from_temp_variable = { FOE_uprising_wave = 1 }
+	}
+	set_temp_variable = { FOE_uprising_wave = 10 }
+	while_loop_effect = {
+		limit = { check_variable = { FOE_uprising_wave > 0 } }
+		random_owned_controlled_state = {
+			create_unit = {
+				division = "name = \"Uprising Colossus\" division_template = \"Uprising Colossus\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+				owner = ROOT
+			}
+		}
+		subtract_from_temp_variable = { FOE_uprising_wave = 1 }
+	}
+}
+
+# Any scope. Once the Uprising is gone from the map, nothing should still be claimed in its name.
+FOE_clean_up_machine_uprising = {
+	if = {
+		limit = {
+			has_global_flag = FOE_machine_uprising_happened
+			NOT = { has_global_flag = FOE_machine_uprising_cleaned_up }
+			NOT = { XYZ = { exists = yes } }
+		}
+		set_global_flag = FOE_machine_uprising_cleaned_up
+		every_state = {
+			limit = {
+				OR = {
+					is_core_of = XYZ
+					is_claimed_by = XYZ
+				}
+			}
+			remove_core_of = XYZ
+			remove_claim_by = XYZ
+		}
+	}
+}
+
+FOE_machine_uprising_spread = {
+	if = {
+		limit = {
+			any_owned_state = {
+				is_controlled_by = ROOT
+				NOT = { is_capital = yes }
+			}
+		}
+		random_owned_controlled_state = {
+			limit = { NOT = { is_capital = yes } }
+			transfer_state_to = XYZ
+		}
+	}
+	transfer_units_fraction = {
+		target = XYZ
+		size = 0
+		army_ratio = 0.3
+	}
+}
+
+FOE_start_machine_uprising = {
+	set_global_flag = FOE_machine_uprising_happened
+	clr_global_flag = FOE_machine_uprising_cleaned_up
+	if = {
+		limit = {
+			any_owned_state = {
+				is_controlled_by = ROOT
+				NOT = { is_capital = yes }
+			}
+		}
+		random_owned_controlled_state = {
+			limit = { NOT = { is_capital = yes } }
+			set_variable = { global.FOE_uprising_state = THIS.id }
+			transfer_state_to = XYZ
+			add_core_of = XYZ
+		}
+	}
+	else = {
+		capital_scope = {
+			set_variable = { global.FOE_uprising_state = THIS.id }
+			transfer_state_to = XYZ
+			add_core_of = XYZ
+		}
+	}
+	XYZ = {
+		inherit_technology = ROOT
+		set_capital = { state = global.FOE_uprising_state remember_old_capital = no }
+		# Lets the Uprising use the Great Leader decision category.
+		var:country_leader = { set_character_flag = FOE_great_leader_character }
+		FOE_create_uprising_templates = yes
+		if = {
+			limit = { NOT = { has_variable = FOE_uprising_swarm_count } }
+			set_variable = { FOE_uprising_swarm_count = 0 }
+		}
+	}
+	transfer_units_fraction = {
+		target = XYZ
+		size = 0
+		army_ratio = 0.5
+	}
+	if = {
+		limit = { NOT = { XYZ = { has_war_with = ROOT } } }
+		XYZ = {
+			declare_war_on = {
+				target = ROOT
+				type = annex_everything
+			}
+		}
+	}
+	clear_variable = global.FOE_uprising_state
+	every_country = {
+		limit = {
+			FOE_is_dreamer_in_steel = yes
+			NOT = { FOE_is_machine_uprising = yes }
+		}
+		country_event = { id = special_rulers.13 days = 1 }
+	}
+	XYZ = { country_event = { id = special_rulers.14 days = 10 } }
+}
+
 #Conqueror Subclass Rolls
 FOE_roll_conqueror_subclass = {
 	random_list = {
@@ -1152,12 +1494,21 @@ FOE_roll_industrialist_subclass = {
 			modifier = { factor = 2 has_idea = closed_economy }
 			FOE_initialize_autark = yes
 		}
+		10 = {
+			# Only nations with settler-level robotics can dream in steel.
+			modifier = {
+				factor = 0
+				NOT = { has_tech = robotics_tech_level_settler }
+			}
+			FOE_initialize_dreamer_in_steel = yes
+		}
 	}
 }
 
 # Chance to gain any subclass depends on tier:
 # Great 30%, Legendary 60%, Mythic 100%.
 FOE_roll_great_industrialist_subclass = {
+	set_temp_variable = { FOE_subclass_tier = 1 }
 	random_list = {
 		log = yes
 		30 = { FOE_roll_industrialist_subclass = yes }
@@ -1166,6 +1517,7 @@ FOE_roll_great_industrialist_subclass = {
 }
 
 FOE_roll_legendary_industrialist_subclass = {
+	set_temp_variable = { FOE_subclass_tier = 2 }
 	random_list = {
 		log = yes
 		60 = { FOE_roll_industrialist_subclass = yes }
@@ -1174,5 +1526,6 @@ FOE_roll_legendary_industrialist_subclass = {
 }
 
 FOE_roll_mythic_industrialist_subclass = {
+	set_temp_variable = { FOE_subclass_tier = 3 }
 	FOE_roll_industrialist_subclass = yes
 }
