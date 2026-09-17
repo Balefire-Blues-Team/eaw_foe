@@ -1,0 +1,49 @@
+# Country scope. No scripted-effect parameters are used.
+# During subclass testing every newly generated Conqueror receives this class.
+
+#Nomadic Khan Subclass
+FOE_initialize_nomadic_khan = {
+	add_country_leader_trait = FOE_nomadic_khan_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_nomadic_khan_character
+	}
+	if = {
+		limit = { NOT = { has_variable = FOE_nomadic_court_state } }
+		capital_scope = {
+			ROOT = { set_variable = { FOE_nomadic_court_state = PREV.id } }
+			add_dynamic_modifier = { modifier = FOE_nomadic_court_modifier scope = ROOT }
+		}
+	}
+}
+
+# Country scope; FROM is the destination state.
+FOE_relocate_nomadic_court = {
+	if = {
+		limit = { has_variable = FOE_nomadic_court_state }
+		var:FOE_nomadic_court_state = {
+			remove_dynamic_modifier = { modifier = FOE_nomadic_court_modifier scope = ROOT }
+		}
+	}
+	set_capital = { state = FROM remember_old_capital = no }
+	set_variable = { FOE_nomadic_court_state = FROM.id }
+	FROM = {
+		add_dynamic_modifier = { modifier = FOE_nomadic_court_modifier scope = ROOT }
+	}
+	set_country_flag = { flag = FOE_nomadic_court_cooldown days = 100  value = 1}
+}
+
+# Country scope; FROM remains the new court state after relocation.
+FOE_integrate_nomadic_frontier = {
+	FROM = {
+		add_core_of = ROOT
+		every_neighbor_state = {
+			limit = {
+				is_owned_by = ROOT
+				NOT = { is_core_of = ROOT }
+			}
+			add_compliance = 10
+			add_resistance = -20
+		}
+	}
+}
