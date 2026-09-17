@@ -279,6 +279,89 @@ FOE_initialize_unifier = {
 	FOE_update_one_nation = yes
 }
 
+#Puppetmaster Subclass
+# State scope; ROOT is the Puppetmaster.
+# States that are also our cores stay with us
+FOE_release_puppet_from_state = {
+	random_scope_in_array = {
+		array = core_countries
+		limit = { exists = no }
+		every_state = {
+			limit = {
+				is_owned_by = ROOT
+				is_core_of = ROOT
+				is_core_of = PREV
+			}
+			remove_core_of = PREV
+			set_state_flag = FOE_puppet_release_shared_core
+		}
+		ROOT = { release_puppet = PREV }
+		every_state = {
+			limit = { has_state_flag = FOE_puppet_release_shared_core }
+			add_core_of = PREV
+			clr_state_flag = FOE_puppet_release_shared_core
+		}
+	}
+}
+
+# Country scope; the subject. Locked template for proxy divisions, created once.
+FOE_create_proxy_template = {
+	if = {
+		limit = { NOT = { has_country_flag = FOE_proxy_template_created } }
+		set_country_flag = FOE_proxy_template_created
+		division_template = {
+			name = "Proxy Infantry"
+			is_locked = no
+			regiments = {
+				infantry = { x = 0 y = 0 }
+				infantry = { x = 0 y = 1 }
+				infantry = { x = 0 y = 2 }
+				infantry = { x = 1 y = 0 }
+				infantry = { x = 1 y = 1 }
+				infantry = { x = 1 y = 2 }
+			}
+		}
+	}
+}
+
+# Country scope. Legendary: subjects gain Patronage, refreshed monthly so it lapses on its own.
+# Mythic: Web of Strings grows with our subject count.
+FOE_update_puppet_web = {
+	if = {
+		limit = { FOE_is_legendary_or_mythic_puppetmaster = yes }
+		every_subject_country = {
+			add_dynamic_modifier = { modifier = FOE_patronage_modifier days = 35 }
+		}
+	}
+	if = {
+		limit = { FOE_is_mythic_puppetmaster = yes }
+		set_variable = { FOE_web_manpower = num_subjects }
+		set_variable = { FOE_web_stability = num_subjects }
+		multiply_variable = { FOE_web_stability = 0.02 }
+		clamp_variable = { var = FOE_web_stability min = 0 max = 0.10 }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = FOE_web_of_strings_modifier } } }
+			add_dynamic_modifier = { modifier = FOE_web_of_strings_modifier }
+		}
+		force_update_dynamic_modifier = yes
+	}
+	else_if = {
+		limit = { has_dynamic_modifier = { modifier = FOE_web_of_strings_modifier } }
+		remove_dynamic_modifier = { modifier = FOE_web_of_strings_modifier }
+		clear_variable = FOE_web_manpower
+		clear_variable = FOE_web_stability
+	}
+}
+
+FOE_initialize_puppetmaster = {
+	add_country_leader_trait = FOE_puppetmaster_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_puppetmaster_character
+	}
+	FOE_update_puppet_web = yes
+}
+
 #Conqueror Subclass Rolls
 FOE_roll_conqueror_subclass = {
 	random_list = {
@@ -341,6 +424,16 @@ FOE_roll_administrator_subclass = {
 			modifier = { factor = 0.1 has_idea = steel_ranger_society }
 			modifier = { factor = 0.1 has_idea = raider_society }
 			FOE_initialize_unifier = yes
+		}
+		10 = {
+			modifier = { factor = 2 has_government = survivalism }
+			modifier = { factor = 2 has_idea = wasteland_research_base }
+			modifier = { factor = 2 has_idea = wasteland_society }
+			modifier = { factor = 2 num_subjects > 0 }
+			modifier = { factor = 0.1 has_idea = raider_society }
+			modifier = { factor = 0.1 has_idea = closed_economy }
+			modifier = { factor = 0.1 has_idea = political_effort_press }
+			FOE_initialize_puppetmaster = yes
 		}
 	}
 }

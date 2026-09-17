@@ -405,6 +405,186 @@ GEN_great_leader_decisions = {
 		}
 	}
 
+	#Puppetmaster: Strings Attached
+	FOE_puppet_release_state = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		state_target = yes
+		target_array = owned_states
+		on_map_mode = map_and_decisions_view
+		cost = 50
+		fire_only_once = no
+		visible = { FOE_is_puppetmaster = yes }
+		target_root_trigger = { FOE_is_puppetmaster = yes }
+		target_trigger = {
+			FROM = { FOE_is_puppet_release_target = yes }
+		}
+		available = {
+			FROM = { FOE_is_puppet_release_target = yes }
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_puppet_release_state_tt
+			hidden_effect = {
+				FROM = { FOE_release_puppet_from_state = yes }
+				FOE_update_puppet_web = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	FOE_puppet_tighten_strings = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		target_array = subjects
+		cost = 25
+		fire_only_once = no
+		days_re_enable = 90
+		visible = { FOE_is_puppetmaster = yes }
+		target_root_trigger = { FOE_is_puppetmaster = yes }
+		target_trigger = {
+			FROM = { is_subject_of = ROOT }
+		}
+		available = {
+			FROM = { is_subject_of = ROOT }
+		}
+		complete_effect = {
+			FROM = { add_autonomy_ratio = { value = -0.1 } }
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	FOE_puppet_build_workshops = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		target_array = subjects
+		cost = 25
+		fire_only_once = no
+		days_remove = 120
+		days_re_enable = 60
+		visible = { FOE_is_puppetmaster = yes }
+		target_root_trigger = { FOE_is_puppetmaster = yes }
+		target_trigger = {
+			FROM = { is_subject_of = ROOT }
+		}
+		available = {
+			num_of_available_civilian_factories > 4
+			FROM = {
+				is_subject_of = ROOT
+				any_owned_state = {
+					is_controlled_by = PREV
+					FOE_has_free_factory_slot = yes
+				}
+			}
+		}
+		modifier = {
+			civilian_factory_use = 5
+		}
+		remove_effect = {
+			custom_effect_tooltip = FOE_puppet_build_workshops_tt
+			hidden_effect = {
+				FROM = {
+					random_owned_controlled_state = {
+						limit = { FOE_has_free_factory_slot = yes }
+						add_building_construction = {
+							type = industrial_complex
+							level = 1
+							instant_build = yes
+						}
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 20
+			modifier = {
+				factor = 0
+				num_of_civilian_factories < 11
+			}
+		}
+	}
+
+	#Puppetmaster: Proxy Armies
+	FOE_puppet_arm_proxy = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		target_array = subjects
+		cost = 75
+		fire_only_once = no
+		visible = { FOE_is_legendary_or_mythic_puppetmaster = yes }
+		target_root_trigger = { FOE_is_legendary_or_mythic_puppetmaster = yes }
+		target_trigger = {
+			FROM = { is_subject_of = ROOT }
+		}
+		available = {
+			has_equipment = { infantry_equipment > 149 }
+			FROM = {
+				is_subject_of = ROOT
+				custom_trigger_tooltip = {
+					tooltip = FOE_puppet_arm_proxy_cooldown_tt
+					NOT = { has_country_flag = FOE_proxy_armed_cooldown }
+				}
+			}
+		}
+		complete_effect = {
+			add_equipment_to_stockpile = { type = infantry_equipment amount = -150 }
+			custom_effect_tooltip = FOE_puppet_arm_proxy_tt
+			hidden_effect = {
+				FROM = {
+					set_country_flag = { flag = FOE_proxy_armed_cooldown value = 1 days = 180 }
+					FOE_create_proxy_template = yes
+					capital_scope = {
+						create_unit = {
+							division = "name = \"Proxy Infantry\" division_template = \"Proxy Infantry\" start_experience_factor = 0.3 start_equipment_factor = 1.0"
+							owner = FROM
+						}
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 30
+			modifier = {
+				factor = 0
+				has_equipment = { infantry_equipment < 300 }
+			}
+		}
+	}
+
+	#Puppetmaster: The Hidden Hand
+	FOE_puppet_install_regime = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		target_array = global.countries
+		cost = 100
+		fire_only_once = no
+		visible = { FOE_is_mythic_puppetmaster = yes }
+		target_root_trigger = { FOE_is_mythic_puppetmaster = yes }
+		target_trigger = {
+			FROM = { FOE_is_puppet_install_target = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_puppet_install_cooldown_tt
+				NOT = { has_country_flag = FOE_puppet_install_cooldown }
+			}
+			FROM = { FOE_is_puppet_install_target = yes }
+		}
+		complete_effect = {
+			puppet = FROM
+			hidden_effect = {
+				set_country_flag = { flag = FOE_puppet_install_cooldown value = 1 days = 730 }
+				FOE_update_puppet_web = yes
+			}
+		}
+		ai_will_do = {
+			base = 100
+		}
+	}
+
 }
 
 foe_slaving_cat = {

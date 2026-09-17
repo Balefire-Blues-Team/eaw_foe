@@ -149,3 +149,74 @@ FOE_is_unifier_absorption_target = {
 		check_variable = { var = num_owned_states value = FOE_absorb_state_limit compare = less_than_or_equals }
 	}
 }
+
+FOE_is_puppetmaster = {
+	var:country_leader = {
+		has_character_flag = FOE_great_leader_character
+		has_character_flag = FOE_puppetmaster_character
+	}
+}
+
+FOE_is_legendary_or_mythic_puppetmaster = {
+	FOE_is_puppetmaster = yes
+	OR = {
+		has_country_leader_with_trait = legendary_leader_admin_trait
+		has_country_leader_with_trait = mythic_leader_admin_trait
+	}
+}
+
+FOE_is_mythic_puppetmaster = {
+	FOE_is_puppetmaster = yes
+	has_country_leader_with_trait = mythic_leader_admin_trait
+}
+
+# State scope; ROOT is the Puppetmaster. The state must be a core of a country that no longer exists.
+FOE_is_puppet_release_target = {
+	is_owned_by = ROOT
+	is_controlled_by = ROOT
+	NOT = { is_core_of = ROOT }
+	any_of_scopes = {
+		array = core_countries
+		exists = no
+	}
+}
+
+# State scope.
+FOE_has_free_factory_slot = {
+	free_building_slots = {
+		building = industrial_complex
+		size > 0
+	}
+}
+
+# Country scope; ROOT is the Puppetmaster.
+FOE_is_puppet_install_target = {
+	exists = yes
+	is_ai = yes
+	# Only generic nations; countries with unique content are never installed.
+	OR = {
+		has_completed_focus = GR_basecamp
+		has_completed_focus = gs_opening1
+		has_completed_focus = tribal_past
+		has_completed_focus = genstable_opening1
+	}
+	has_war = no
+	is_in_faction = no
+	is_subject = no
+	# Borders us or one of our subjects.
+	any_owned_state = {
+		any_neighbor_state = {
+			OR = {
+				is_owned_by = ROOT
+				owner = { is_subject_of = ROOT }
+			}
+		}
+	}
+	custom_trigger_tooltip = {
+		tooltip = FOE_puppet_install_size_tt
+		set_temp_variable = { FOE_install_state_limit = ROOT.num_owned_states }
+		add_to_temp_variable = { FOE_install_state_limit = ROOT.num_subjects }
+		divide_temp_variable = { FOE_install_state_limit = 2 }
+		check_variable = { var = num_owned_states value = FOE_install_state_limit compare = less_than_or_equals }
+	}
+}
