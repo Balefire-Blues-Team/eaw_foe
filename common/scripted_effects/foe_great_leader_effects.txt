@@ -730,6 +730,299 @@ FOE_initialize_reactor_prophet = {
 	FOE_update_reactor_prophet = yes
 }
 
+#Autark Subclass
+# Country scope. Counts resources we fully cover ourselves (water, energy, metal, composites, circuitry).
+FOE_count_self_sufficient_resources = {
+	set_variable = { FOE_autark_self_sufficient = 0 }
+	if = {
+		limit = { FOE_is_self_sufficient_in_water = yes }
+		add_to_variable = { FOE_autark_self_sufficient = 1 }
+	}
+	if = {
+		limit = { FOE_is_self_sufficient_in_energy = yes }
+		add_to_variable = { FOE_autark_self_sufficient = 1 }
+	}
+	if = {
+		limit = { FOE_is_self_sufficient_in_metal = yes }
+		add_to_variable = { FOE_autark_self_sufficient = 1 }
+	}
+	if = {
+		limit = { FOE_is_self_sufficient_in_composites = yes }
+		add_to_variable = { FOE_autark_self_sufficient = 1 }
+	}
+	if = {
+		limit = { FOE_is_self_sufficient_in_circuitry = yes }
+		add_to_variable = { FOE_autark_self_sufficient = 1 }
+	}
+}
+
+# Country scope; FROM is the target state. Builds one level of a random generator that still fits.
+FOE_autark_build_random_generator = {
+	random_list = {
+		log = yes
+		20 = {
+			modifier = {
+				factor = 0
+				FROM = { NOT = { free_building_slots = { building = water_generator size > 0 } } }
+			}
+			FROM = { add_building_construction = { type = water_generator level = 1 instant_build = yes } }
+		}
+		20 = {
+			modifier = {
+				factor = 0
+				FROM = { NOT = { free_building_slots = { building = electricity_generator size > 0 } } }
+			}
+			FROM = { add_building_construction = { type = electricity_generator level = 1 instant_build = yes } }
+		}
+		20 = {
+			modifier = {
+				factor = 0
+				FROM = { NOT = { free_building_slots = { building = metal_generator size > 0 } } }
+			}
+			FROM = { add_building_construction = { type = metal_generator level = 1 instant_build = yes } }
+		}
+		20 = {
+			modifier = {
+				factor = 0
+				FROM = { NOT = { free_building_slots = { building = composites_generator size > 0 } } }
+			}
+			FROM = { add_building_construction = { type = composites_generator level = 1 instant_build = yes } }
+		}
+		20 = {
+			modifier = {
+				factor = 0
+				FROM = { NOT = { free_building_slots = { building = circuitry_generator size > 0 } } }
+			}
+			FROM = { add_building_construction = { type = circuitry_generator level = 1 instant_build = yes } }
+		}
+	}
+}
+
+# Country scope. Mythic: a random core state permanently gains 1 of a resource we lack.
+FOE_autark_scavenge = {
+	random_list = {
+		log = yes
+		20 = {
+			modifier = {
+				factor = 0
+				FOE_is_self_sufficient_in_water = yes
+			}
+			random_owned_controlled_state = {
+				limit = { is_core_of = ROOT }
+				add_resource = { type = water amount = 1 }
+			}
+		}
+		20 = {
+			modifier = {
+				factor = 0
+				FOE_is_self_sufficient_in_energy = yes
+			}
+			random_owned_controlled_state = {
+				limit = { is_core_of = ROOT }
+				add_resource = { type = energy amount = 1 }
+			}
+		}
+		20 = {
+			modifier = {
+				factor = 0
+				FOE_is_self_sufficient_in_metal = yes
+			}
+			random_owned_controlled_state = {
+				limit = { is_core_of = ROOT }
+				add_resource = { type = metal amount = 1 }
+			}
+		}
+		20 = {
+			modifier = {
+				factor = 0
+				FOE_is_self_sufficient_in_composites = yes
+			}
+			random_owned_controlled_state = {
+				limit = { is_core_of = ROOT }
+				add_resource = { type = composites amount = 1 }
+			}
+		}
+		20 = {
+			modifier = {
+				factor = 0
+				FOE_is_self_sufficient_in_circuitry = yes
+			}
+			random_owned_controlled_state = {
+				limit = { is_core_of = ROOT }
+				add_resource = { type = circuitry amount = 1 }
+			}
+		}
+	}
+	add_to_variable = { FOE_autark_scavenged = 1 }
+}
+
+# Country scope. Legendary: the resource with the largest shortfall (imports minus balance) gets a flat bonus of that size
+# (at least 3, at most 12) for 180 days.
+FOE_apply_import_substitution = {
+	set_temp_variable = { FOE_largest_deficit = -1000 }
+	set_temp_variable = { FOE_largest_deficit_resource = 0 }
+	set_temp_variable = { FOE_resource_deficit = resource_imported@water }
+	subtract_from_temp_variable = { FOE_resource_deficit = resource@water }
+	if = {
+		limit = {
+			NOT = { FOE_is_self_sufficient_in_water = yes }
+			check_variable = { FOE_resource_deficit > FOE_largest_deficit }
+		}
+		set_temp_variable = { FOE_largest_deficit = FOE_resource_deficit }
+		set_temp_variable = { FOE_largest_deficit_resource = 1 }
+	}
+	set_temp_variable = { FOE_resource_deficit = resource_imported@energy }
+	subtract_from_temp_variable = { FOE_resource_deficit = resource@energy }
+	if = {
+		limit = {
+			NOT = { FOE_is_self_sufficient_in_energy = yes }
+			check_variable = { FOE_resource_deficit > FOE_largest_deficit }
+		}
+		set_temp_variable = { FOE_largest_deficit = FOE_resource_deficit }
+		set_temp_variable = { FOE_largest_deficit_resource = 2 }
+	}
+	set_temp_variable = { FOE_resource_deficit = resource_imported@metal }
+	subtract_from_temp_variable = { FOE_resource_deficit = resource@metal }
+	if = {
+		limit = {
+			NOT = { FOE_is_self_sufficient_in_metal = yes }
+			check_variable = { FOE_resource_deficit > FOE_largest_deficit }
+		}
+		set_temp_variable = { FOE_largest_deficit = FOE_resource_deficit }
+		set_temp_variable = { FOE_largest_deficit_resource = 3 }
+	}
+	set_temp_variable = { FOE_resource_deficit = resource_imported@composites }
+	subtract_from_temp_variable = { FOE_resource_deficit = resource@composites }
+	if = {
+		limit = {
+			NOT = { FOE_is_self_sufficient_in_composites = yes }
+			check_variable = { FOE_resource_deficit > FOE_largest_deficit }
+		}
+		set_temp_variable = { FOE_largest_deficit = FOE_resource_deficit }
+		set_temp_variable = { FOE_largest_deficit_resource = 4 }
+	}
+	set_temp_variable = { FOE_resource_deficit = resource_imported@circuitry }
+	subtract_from_temp_variable = { FOE_resource_deficit = resource@circuitry }
+	if = {
+		limit = {
+			NOT = { FOE_is_self_sufficient_in_circuitry = yes }
+			check_variable = { FOE_resource_deficit > FOE_largest_deficit }
+		}
+		set_temp_variable = { FOE_largest_deficit = FOE_resource_deficit }
+		set_temp_variable = { FOE_largest_deficit_resource = 5 }
+	}
+	clamp_temp_variable = { var = FOE_largest_deficit min = 3 max = 12 }
+	if = {
+		limit = { check_variable = { FOE_largest_deficit_resource = 1 } }
+		set_variable = { FOE_import_substitution_water = FOE_largest_deficit }
+		add_dynamic_modifier = { modifier = FOE_import_substitution_water_modifier days = 180 }
+	}
+	else_if = {
+		limit = { check_variable = { FOE_largest_deficit_resource = 2 } }
+		set_variable = { FOE_import_substitution_energy = FOE_largest_deficit }
+		add_dynamic_modifier = { modifier = FOE_import_substitution_energy_modifier days = 180 }
+	}
+	else_if = {
+		limit = { check_variable = { FOE_largest_deficit_resource = 3 } }
+		set_variable = { FOE_import_substitution_metal = FOE_largest_deficit }
+		add_dynamic_modifier = { modifier = FOE_import_substitution_metal_modifier days = 180 }
+	}
+	else_if = {
+		limit = { check_variable = { FOE_largest_deficit_resource = 4 } }
+		set_variable = { FOE_import_substitution_composites = FOE_largest_deficit }
+		add_dynamic_modifier = { modifier = FOE_import_substitution_composites_modifier days = 180 }
+	}
+	else_if = {
+		limit = { check_variable = { FOE_largest_deficit_resource = 5 } }
+		set_variable = { FOE_import_substitution_circuitry = FOE_largest_deficit }
+		add_dynamic_modifier = { modifier = FOE_import_substitution_circuitry_modifier days = 180 }
+	}
+	force_update_dynamic_modifier = yes
+}
+
+# Country scope. Keeps the Autark in a closed economy (enclave laws may stay), and updates
+# Autarky (Great) and Fortress Economy and Scavenger Networks (Mythic).
+FOE_update_autark = {
+	if = {
+		limit = { FOE_is_autark = yes }
+		if = {
+			limit = {
+				NOT = {
+					has_idea = closed_economy
+					has_idea = enclave_economy
+					has_idea = lit_enclave_economy
+				}
+			}
+			add_ideas = closed_economy
+		}
+		FOE_count_self_sufficient_resources = yes
+		# Per self-sufficient resource: factory output +2%, stability +1%.
+		set_variable = { FOE_autarky_output = FOE_autark_self_sufficient }
+		multiply_variable = { FOE_autarky_output = 0.02 }
+		set_variable = { FOE_autarky_stability = FOE_autark_self_sufficient }
+		multiply_variable = { FOE_autarky_stability = 0.01 }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = FOE_autarky_modifier } } }
+			add_dynamic_modifier = { modifier = FOE_autarky_modifier }
+		}
+		if = {
+			limit = {
+				FOE_is_mythic_autark = yes
+				check_variable = { FOE_autark_self_sufficient > 4 }
+			}
+			if = {
+				limit = { NOT = { has_dynamic_modifier = { modifier = FOE_fortress_economy_modifier } } }
+				add_dynamic_modifier = { modifier = FOE_fortress_economy_modifier }
+			}
+		}
+		else_if = {
+			limit = { has_dynamic_modifier = { modifier = FOE_fortress_economy_modifier } }
+			remove_dynamic_modifier = { modifier = FOE_fortress_economy_modifier }
+		}
+		if = {
+			limit = {
+				FOE_is_mythic_autark = yes
+				check_variable = { FOE_autark_self_sufficient < 5 }
+				check_variable = { FOE_autark_scavenged < 20 }
+			}
+			random_list = {
+				log = yes
+				10 = { FOE_autark_scavenge = yes }
+				90 = { }
+			}
+		}
+		force_update_dynamic_modifier = yes
+	}
+	else_if = {
+		limit = { has_dynamic_modifier = { modifier = FOE_autarky_modifier } }
+		remove_dynamic_modifier = { modifier = FOE_autarky_modifier }
+		if = {
+			limit = { has_dynamic_modifier = { modifier = FOE_fortress_economy_modifier } }
+			remove_dynamic_modifier = { modifier = FOE_fortress_economy_modifier }
+		}
+	}
+}
+
+FOE_initialize_autark = {
+	add_country_leader_trait = FOE_autark_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_autark_character
+	}
+	set_technology = {
+		resource_generator_water_tech_1 = 1
+		resource_generator_power_tech_1 = 1
+		resource_generator_metal_tech_1 = 1
+		resource_generator_composites_tech_1 = 1
+		resource_generator_circuitry_tech_1 = 1
+	}
+	if = {
+		limit = { NOT = { has_variable = FOE_autark_scavenged } }
+		set_variable = { FOE_autark_scavenged = 0 }
+	}
+	FOE_update_autark = yes
+}
+
 #Conqueror Subclass Rolls
 FOE_roll_conqueror_subclass = {
 	random_list = {
@@ -852,6 +1145,12 @@ FOE_roll_industrialist_subclass = {
 			modifier = { factor = 0.1 has_idea = tribal_society }
 			modifier = { factor = 0.1 has_idea = tribal_research_base }
 			FOE_initialize_reactor_prophet = yes
+		}
+		# Generic fallback: nothing lowers the Autark.
+		10 = {
+			modifier = { factor = 2 has_idea = enclave_economy }
+			modifier = { factor = 2 has_idea = closed_economy }
+			FOE_initialize_autark = yes
 		}
 	}
 }

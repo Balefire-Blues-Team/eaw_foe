@@ -806,6 +806,76 @@ GEN_great_leader_decisions = {
 		}
 	}
 
+	#Autark: Self-Reliance
+	FOE_autark_secure_supply = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		state_target = yes
+		target_array = owned_states
+		on_map_mode = map_and_decisions_view
+		cost = 25
+		fire_only_once = no
+		days_remove = 90
+		visible = { FOE_is_autark = yes }
+		target_root_trigger = { FOE_is_autark = yes }
+		target_trigger = {
+			FROM = { FOE_is_autark_supply_site = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_autark_supply_cooldown_tt
+				NOT = { has_country_flag = FOE_autark_supply_cooldown }
+			}
+			FROM = { FOE_is_autark_supply_site = yes }
+		}
+		modifier = {
+			civilian_factory_use = 5
+		}
+		complete_effect = {
+			hidden_effect = {
+				set_country_flag = { flag = FOE_autark_supply_cooldown value = 1 days = 180 }
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = FOE_autark_secure_supply_tt
+			hidden_effect = {
+				FOE_autark_build_random_generator = yes
+				FOE_update_autark = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	#Autark: The Closed Economy
+	FOE_autark_import_substitution = {
+		icon = GFX_decision_unknown
+		cost = 50
+		fire_only_once = no
+		days_re_enable = 360
+		visible = { FOE_is_legendary_or_mythic_autark = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_autark_not_self_sufficient_tt
+				OR = {
+					NOT = { FOE_is_self_sufficient_in_water = yes }
+					NOT = { FOE_is_self_sufficient_in_energy = yes }
+					NOT = { FOE_is_self_sufficient_in_metal = yes }
+					NOT = { FOE_is_self_sufficient_in_composites = yes }
+					NOT = { FOE_is_self_sufficient_in_circuitry = yes }
+				}
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_autark_import_substitution_tt
+			hidden_effect = { FOE_apply_import_substitution = yes }
+		}
+		ai_will_do = {
+			base = 50
+		}
+	}
+
 }
 
 foe_slaving_cat = {

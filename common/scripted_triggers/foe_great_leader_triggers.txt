@@ -336,3 +336,63 @@ FOE_is_reactor_site = {
 		size > 0
 	}
 }
+
+FOE_is_autark = {
+	var:country_leader = {
+		has_character_flag = FOE_great_leader_character
+		has_character_flag = FOE_autark_character
+	}
+}
+
+FOE_is_legendary_or_mythic_autark = {
+	FOE_is_autark = yes
+	OR = {
+		has_country_leader_with_trait = legendary_leader_industry_trait
+		has_country_leader_with_trait = mythic_leader_industry_trait
+	}
+}
+
+FOE_is_mythic_autark = {
+	FOE_is_autark = yes
+	has_country_leader_with_trait = mythic_leader_industry_trait
+}
+
+# Country scope. Self-sufficient: our resource balance is not negative and we import none of it.
+FOE_is_self_sufficient_in_water = {
+	check_variable = { resource@water > -0.01 }
+	check_variable = { resource_imported@water < 0.1 }
+}
+
+FOE_is_self_sufficient_in_energy = {
+	check_variable = { resource@energy > -0.01 }
+	check_variable = { resource_imported@energy < 0.1 }
+}
+
+FOE_is_self_sufficient_in_metal = {
+	check_variable = { resource@metal > -0.01 }
+	check_variable = { resource_imported@metal < 0.1 }
+}
+
+FOE_is_self_sufficient_in_composites = {
+	check_variable = { resource@composites > -0.01 }
+	check_variable = { resource_imported@composites < 0.1 }
+}
+
+FOE_is_self_sufficient_in_circuitry = {
+	check_variable = { resource@circuitry > -0.01 }
+	check_variable = { resource_imported@circuitry < 0.1 }
+}
+
+# State scope; ROOT is the Autark.
+FOE_is_autark_supply_site = {
+	is_owned_by = ROOT
+	is_controlled_by = ROOT
+	is_core_of = ROOT
+	OR = {
+		free_building_slots = { building = water_generator size > 0 }
+		free_building_slots = { building = electricity_generator size > 0 }
+		free_building_slots = { building = metal_generator size > 0 }
+		free_building_slots = { building = composites_generator size > 0 }
+		free_building_slots = { building = circuitry_generator size > 0 }
+	}
+}
