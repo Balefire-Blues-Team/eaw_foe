@@ -672,6 +672,140 @@ GEN_great_leader_decisions = {
 		}
 	}
 
+	#Reactor Prophet: Kindle the Reactors
+	FOE_reactor_overcharge_grid = {
+		icon = GFX_decision_unknown
+		fire_only_once = no
+		days_re_enable = 120
+		visible = { FOE_is_reactor_prophet = yes }
+		available = {
+			has_fuel > 999
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_reactor_fuel_cost_tt
+			custom_effect_tooltip = FOE_reactor_overcharge_grid_tt
+			hidden_effect = {
+				FOE_spend_reactor_fuel = yes
+				FOE_roll_reactor_economy_surge = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+			modifier = {
+				factor = 0
+				fuel_ratio < 0.5
+			}
+		}
+	}
+
+	#Reactor Prophet: The Grid Expands
+	FOE_reactor_energised_offensive = {
+		icon = GFX_decision_unknown
+		fire_only_once = no
+		days_re_enable = 120
+		visible = { FOE_is_legendary_or_mythic_reactor_prophet = yes }
+		available = {
+			has_fuel > 999
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_reactor_fuel_cost_tt
+			custom_effect_tooltip = FOE_reactor_energised_offensive_tt
+			hidden_effect = {
+				FOE_spend_reactor_fuel = yes
+				FOE_roll_reactor_military_surge = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+			modifier = {
+				factor = 0
+				has_war = no
+			}
+		}
+	}
+
+	FOE_reactor_raise_reactor = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		state_target = yes
+		target_array = owned_states
+		on_map_mode = map_and_decisions_view
+		fire_only_once = no
+		days_remove = 90
+		visible = { FOE_is_legendary_or_mythic_reactor_prophet = yes }
+		target_root_trigger = { FOE_is_legendary_or_mythic_reactor_prophet = yes }
+		target_trigger = {
+			FROM = { FOE_is_reactor_site = yes }
+		}
+		available = {
+			has_fuel > 999
+			custom_trigger_tooltip = {
+				tooltip = FOE_reactor_raise_cooldown_tt
+				NOT = { has_country_flag = FOE_reactor_raise_cooldown }
+			}
+			FROM = { FOE_is_reactor_site = yes }
+		}
+		modifier = {
+			civilian_factory_use = 5
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_reactor_fuel_cost_tt
+			hidden_effect = {
+				FOE_spend_reactor_fuel = yes
+				set_country_flag = { flag = FOE_reactor_raise_cooldown value = 1 days = 180 }
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = FOE_reactor_raise_reactor_tt
+			hidden_effect = {
+				FROM = {
+					if = {
+						limit = { FOE_is_reactor_site = yes }
+						add_building_construction = {
+							type = electricity_generator
+							level = 1
+							instant_build = yes
+						}
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	#Reactor Prophet: The Reactor Sings
+	FOE_reactor_unleash_the_sun = {
+		icon = GFX_decision_unknown
+		fire_only_once = no
+		visible = { FOE_is_mythic_reactor_prophet = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_reactor_charge_ready_tt
+				check_variable = { FOE_reactor_charge > 19 }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_reactor_unleash_the_sun_tt
+			hidden_effect = {
+				set_temp_variable = { FOE_reactor_power = FOE_reactor_charge }
+				set_temp_variable = { FOE_reactor_cap_mult = 2 }
+				set_temp_variable = { FOE_reactor_days = 90 }
+				FOE_roll_reactor_economy_surge = yes
+				FOE_roll_reactor_military_surge = yes
+				set_variable = { FOE_reactor_charge = 0 }
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 10
+				check_variable = { FOE_reactor_charge > 39 }
+			}
+		}
+	}
+
 }
 
 foe_slaving_cat = {
