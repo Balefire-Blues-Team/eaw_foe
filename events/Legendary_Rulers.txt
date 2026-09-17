@@ -547,3 +547,41 @@ country_event = {
 		name = special_rulers.14.a
 	}
 }
+
+
+#Debug: fire with "event special_rulers.16" to make our own leader a Mythic Iron Warden.
+country_event = {
+	id = special_rulers.16
+	title = special_rulers.16.t
+	desc = special_rulers.16.d
+	picture = GFX_event_NCR_startup
+	is_triggered_only = yes
+	fire_only_once = no
+
+	option = {
+		name = special_rulers.16.a
+		trigger = {
+			NOT = { has_country_leader_with_trait = mythic_leader_military_trait }
+		}
+		add_country_leader_trait = mythic_leader_military_trait
+		FOE_initialize_iron_warden = yes
+	}
+
+	option = {
+		name = special_rulers.16.b
+		trigger = {
+			has_country_leader_with_trait = mythic_leader_military_trait
+			NOT = { FOE_is_iron_warden = yes }
+		}
+		FOE_initialize_iron_warden = yes
+	}
+
+	# Saves waiting for the weekly tick when testing the works. Seven of these finish a site.
+	option = {
+		name = special_rulers.16.c
+		trigger = {
+			FOE_is_iron_warden = yes
+		}
+		FOE_tick_warden_works = yes
+	}
+}

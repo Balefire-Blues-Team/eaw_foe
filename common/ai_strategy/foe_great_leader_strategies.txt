@@ -274,3 +274,875 @@ FOE_dreamer_in_steel_strategy = {
 		value = 50
 	}
 }
+
+# Shared profiles: additive preferences, not fixed army or economy templates.
+# No hard minimum factory allocations; no forced wars or changes to decision AI.
+
+# Despots, Marshals and Puppetmaster subjects: reinforce infantry without demanding more divisions.
+FOE_shared_infantry_sustainment = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_ai_infantry_sustainment = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = equipment_production_factor
+		id = infantry
+		value = 25
+	}
+}
+
+# Support construction research without overriding access restrictions or country research priorities.
+FOE_shared_civilian_research = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_ai_civilian_development = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = research_weight_factor
+		id = pre_construction_industry_tech
+		value = 25
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = construction_industry_tech_1
+		value = 25
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = construction_industry_tech_2
+		value = 25
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = construction_industry_tech_3
+		value = 25
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = construction_industry_tech_4
+		value = 25
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = construction_industry_tech_4_2
+		value = 25
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = construction_industry_tech_5
+		value = 25
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = construction_industry_tech_6
+		value = 25
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = construction_industry_tech_7
+		value = 25
+	}
+}
+
+# Small peacetime foundation only: at least two military factories and six divisions first.
+FOE_shared_civilian_foundation = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_ai_civilian_development = yes
+		has_war = no
+		num_of_military_factories > 1
+		has_army_size = { size > 5 }
+		num_of_civilian_factories < 8
+		any_owned_state = {
+			is_controlled_by = ROOT
+			free_building_slots = { building = industrial_complex size > 0 }
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = building_target
+		id = industrial_complex
+		value = 8
+	}
+}
+
+# Khans and Prophets improve fuel gain. Reserve recovery below adds generator priority only while low.
+FOE_shared_fuel_efficiency = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_ai_fuel_economy = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = research_weight_factor
+		id = pre_recycling_industry_tech
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = recycling_industry_tech_1
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = recycling_industry_tech_2
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = recycling_industry_tech_3
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = recycling_industry_tech_4
+		value = 35
+	}
+}
+
+# Autarks and Prophets improve domestic extraction.
+FOE_shared_resource_efficiency = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_ai_resource_development = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = research_weight_factor
+		id = extraction_industry_tech_1
+		value = 25
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = extraction_industry_tech_2
+		value = 25
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = extraction_industry_tech_3
+		value = 25
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = extraction_industry_tech_4
+		value = 25
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = extraction_industry_tech_4_2
+		value = 25
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = extraction_industry_tech_5
+		value = 25
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = extraction_industry_tech_6
+		value = 25
+	}
+}
+
+# Water: research bias ends when shortages/import dependence (or low fuel) end.
+FOE_shared_water_research = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_is_autark = yes
+		OR = {
+			check_variable = { resource@water < 0 }
+			check_variable = { resource_imported@water > 0.1 }
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_water_tech_1
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_water_tech_2
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_water_tech_3
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_water_tech_4
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_water_tech_5
+		value = 35
+	}
+}
+
+# Water: modest construction weight, five civilian factories and a valid core site required.
+FOE_shared_water_construction = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_is_autark = yes
+		OR = {
+			check_variable = { resource@water < 0 }
+			check_variable = { resource_imported@water > 0.1 }
+		}
+		num_of_civilian_factories > 4
+		has_tech = resource_generator_water_tech_1
+		any_owned_state = {
+			is_controlled_by = ROOT
+			is_core_of = ROOT
+			free_building_slots = { building = water_generator size > 0 }
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = build_building
+		id = water_generator
+		value = 2
+	}
+}
+
+# Energy: research bias ends when shortages/import dependence (or low fuel) end.
+FOE_shared_energy_research = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		OR = {
+			AND = {
+				FOE_ai_resource_development = yes
+				OR = {
+			check_variable = { resource@energy < 0 }
+			check_variable = { resource_imported@energy > 0.1 }
+		}
+			}
+			FOE_ai_low_fuel_reserves = yes
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_power_tech_1
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_power_tech_2
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_power_tech_3
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_power_tech_4
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_power_tech_5
+		value = 35
+	}
+}
+
+# Energy: modest construction weight, five civilian factories and a valid core site required.
+FOE_shared_energy_construction = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		OR = {
+			AND = {
+				FOE_ai_resource_development = yes
+				OR = {
+			check_variable = { resource@energy < 0 }
+			check_variable = { resource_imported@energy > 0.1 }
+		}
+			}
+			FOE_ai_low_fuel_reserves = yes
+		}
+		num_of_civilian_factories > 4
+		has_tech = resource_generator_power_tech_1
+		any_owned_state = {
+			is_controlled_by = ROOT
+			is_core_of = ROOT
+			free_building_slots = { building = electricity_generator size > 0 }
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = build_building
+		id = electricity_generator
+		value = 2
+	}
+}
+
+# Metal: research bias ends when shortages/import dependence (or low fuel) end.
+FOE_shared_metal_research = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_is_autark = yes
+		OR = {
+			check_variable = { resource@metal < 0 }
+			check_variable = { resource_imported@metal > 0.1 }
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_metal_tech_1
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_metal_tech_2
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_metal_tech_3
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_metal_tech_4
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_metal_tech_5
+		value = 35
+	}
+}
+
+# Metal: modest construction weight, five civilian factories and a valid core site required.
+FOE_shared_metal_construction = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_is_autark = yes
+		OR = {
+			check_variable = { resource@metal < 0 }
+			check_variable = { resource_imported@metal > 0.1 }
+		}
+		num_of_civilian_factories > 4
+		has_tech = resource_generator_metal_tech_1
+		any_owned_state = {
+			is_controlled_by = ROOT
+			is_core_of = ROOT
+			free_building_slots = { building = metal_generator size > 0 }
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = build_building
+		id = metal_generator
+		value = 2
+	}
+}
+
+# Composites: research bias ends when shortages/import dependence (or low fuel) end.
+FOE_shared_composites_research = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_is_autark = yes
+		OR = {
+			check_variable = { resource@composites < 0 }
+			check_variable = { resource_imported@composites > 0.1 }
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_composites_tech_1
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_composites_tech_2
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_composites_tech_3
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_composites_tech_4
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_composites_tech_5
+		value = 35
+	}
+}
+
+# Composites: modest construction weight, five civilian factories and a valid core site required.
+FOE_shared_composites_construction = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_is_autark = yes
+		OR = {
+			check_variable = { resource@composites < 0 }
+			check_variable = { resource_imported@composites > 0.1 }
+		}
+		num_of_civilian_factories > 4
+		has_tech = resource_generator_composites_tech_1
+		any_owned_state = {
+			is_controlled_by = ROOT
+			is_core_of = ROOT
+			free_building_slots = { building = composites_generator size > 0 }
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = build_building
+		id = composites_generator
+		value = 2
+	}
+}
+
+# Circuitry: research bias ends when shortages/import dependence (or low fuel) end.
+FOE_shared_circuitry_research = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_is_autark = yes
+		OR = {
+			check_variable = { resource@circuitry < 0 }
+			check_variable = { resource_imported@circuitry > 0.1 }
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_circuitry_tech_1
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_circuitry_tech_2
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_circuitry_tech_3
+		value = 35
+	}
+}
+
+# Circuitry: modest construction weight, five civilian factories and a valid core site required.
+FOE_shared_circuitry_construction = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_is_autark = yes
+		OR = {
+			check_variable = { resource@circuitry < 0 }
+			check_variable = { resource_imported@circuitry > 0.1 }
+		}
+		num_of_civilian_factories > 4
+		has_tech = resource_generator_circuitry_tech_1
+		any_owned_state = {
+			is_controlled_by = ROOT
+			is_core_of = ROOT
+			free_building_slots = { building = circuitry_generator size > 0 }
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = build_building
+		id = circuitry_generator
+		value = 2
+	}
+}
+
+# Shared generator prerequisite appears once even when several resources are scarce.
+FOE_shared_generator_foundation = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		OR = {
+			FOE_ai_resource_development = yes
+			FOE_ai_low_fuel_reserves = yes
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_tech
+		value = 35
+	}
+}
+
+# Extra troops for fronts at/adjacent to the capital or court, including a lost court. Not a fixed rear garrison.
+FOE_shared_critical_seat_defense = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		has_war = yes
+		OR = {
+			FOE_is_architect_of_order = yes
+			AND = {
+				FOE_is_mythic_nomadic_khan = yes
+				has_variable = FOE_nomadic_court_state
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_unit_request
+		state_trigger = {
+			OR = {
+				FOE_ai_is_critical_seat = yes
+				any_neighbor_state = { FOE_ai_is_critical_seat = yes }
+			}
+		}
+		value = 50
+	}
+}
+
+# Subclass-specific priorities. Existing national plans and shared profiles still apply.
+
+# Mobile court: improve motorized equipment and its maintenance, respecting normal tech access.
+FOE_unique_khan_mobile_research = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_is_nomadic_khan = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = research_weight_factor
+		id = bike_tech_1
+		value = 40
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = bike_tech_2
+		value = 40
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = truck_tech_1
+		value = 40
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = truck_tech_2
+		value = 40
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = tires_vehicle_tech
+		value = 40
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = tires_vehicle_tech_1
+		value = 40
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = storage_vehicle_tech
+		value = 40
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = maintenance_company_tech_1
+		value = 40
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = maintenance_company_tech_2
+		value = 40
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = maintenance_company_tech_3
+		value = 40
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = maintenance_company_tech_4
+		value = 40
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = maintenance_company_tech_5
+		value = 40
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = maintenance_company_tech_6
+		value = 40
+	}
+}
+
+# Grow the mobile arm only with an industrial base and fuel; no fixed factory minimum.
+FOE_unique_khan_mobile_army = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_is_nomadic_khan = yes
+		num_of_military_factories > 3
+		fuel_ratio > 0.3
+		has_tech = bike_tech_1
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = equipment_production_factor
+		id = motorized
+		value = 35
+	}
+	ai_strategy = {
+		type = role_ratio
+		id = motorized
+		value = 15
+	}
+}
+
+# During existing wars, favour populated states that can still yield conquest slaves.
+FOE_unique_despot_slave_raids = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_is_slaving_despot = yes
+		has_war = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = force_concentration_target_weight
+		state_trigger = {
+			state_population > 5000
+			NOT = { is_core_of = FROM.FROM }
+			NOT = { has_state_flag = FOE_despot_conquest_slaves_taken }
+			controller = { has_war_with = FROM.FROM }
+		}
+		value = 35
+	}
+}
+
+# Seek fresh feeding grounds without forcing reckless attack execution or extra recruitment.
+FOE_unique_marshal_feeding_grounds = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_is_carrion_marshal = yes
+		has_war = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = force_concentration_target_weight
+		state_trigger = {
+			state_population > 3000
+			NOT = { is_core_of = FROM.FROM }
+			NOT = { has_dynamic_modifier = { modifier = FOE_carrion_devastation } }
+			controller = { has_war_with = FROM.FROM }
+		}
+		value = 40
+	}
+}
+
+# Prefer conquests bordering the core homeland, ready for subsequent integration.
+FOE_unique_unifier_contiguous_expansion = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_is_unifier = yes
+		has_war = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = force_concentration_target_weight
+		state_trigger = {
+			NOT = { is_core_of = FROM.FROM }
+			controller = { has_war_with = FROM.FROM }
+			any_neighbor_state = {
+				is_owned_by = FROM.FROM
+				is_core_of = FROM.FROM
+			}
+		}
+		value = 35
+	}
+}
+
+# Build a bounded rifle reserve for proxy decisions; stop the extra bias at 600 rifles.
+FOE_unique_puppetmaster_proxy_stockpile = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_is_legendary_or_mythic_puppetmaster = yes
+		any_subject_country = { is_ai = yes }
+		num_of_military_factories > 1
+		has_equipment = { infantry_equipment < 600 }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = equipment_production_factor
+		id = infantry
+		value = 25
+	}
+	ai_strategy = {
+		type = equipment_production_surplus_management
+		id = infantry_equipment
+		value = 10
+	}
+}
+
+# Request more troops on fronts in subject territory, including occupied subject land.
+FOE_unique_puppetmaster_protect_subjects = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_is_puppetmaster = yes
+		has_war = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_unit_request
+		state_trigger = {
+			owner = { is_subject_of = FROM.FROM }
+		}
+		value = 25
+	}
+}
+
+# Recover the tracked heart of the state even after automatic capital relocation; shared profiles handle defense.
+FOE_unique_architect_recover_capital = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_is_architect_of_order = yes
+		has_war = yes
+		has_variable = FOE_architect_heart_state
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = force_concentration_target_weight
+		state_trigger = {
+			is_owned_by = FROM.FROM
+			state = var:FROM.FROM.FOE_architect_heart_state
+			controller = { has_war_with = FROM.FROM }
+		}
+		value = 75
+	}
+}
+
+# Continue energy research even when imports and immediate fuel needs are satisfied.
+FOE_unique_prophet_energy_ambition = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_is_reactor_prophet = yes
+		# Complement the shared energy profile without stacking its research bonus.
+		FOE_is_self_sufficient_in_energy = yes
+		NOT = { FOE_ai_low_fuel_reserves = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_power_tech_1
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_power_tech_2
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_power_tech_3
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_power_tech_4
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = resource_generator_power_tech_5
+		value = 35
+	}
+}
+
+# Build toward a modest energy surplus for stronger reactor mechanics, even with full fuel.
+FOE_unique_prophet_energy_surplus = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_is_reactor_prophet = yes
+		FOE_is_self_sufficient_in_energy = yes
+		NOT = { FOE_ai_low_fuel_reserves = yes }
+		check_variable = { resource@energy < 20 }
+		num_of_civilian_factories > 4
+		has_tech = resource_generator_power_tech_1
+		any_owned_state = { FOE_is_reactor_site = yes }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = build_building
+		id = electricity_generator
+		value = 2
+	}
+}
+
+# Domestic self-reliance also means conserving equipment and recovering enemy materiel.
+FOE_unique_autark_equipment_conservation = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_is_autark = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = research_weight_factor
+		id = maintenance_company_tech_1
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = maintenance_company_tech_2
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = maintenance_company_tech_3
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = maintenance_company_tech_4
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = maintenance_company_tech_5
+		value = 35
+	}
+	ai_strategy = {
+		type = research_weight_factor
+		id = maintenance_company_tech_6
+		value = 35
+	}
+}

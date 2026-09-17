@@ -219,6 +219,171 @@ FOE_initialize_carrion_marshal = {
 	FOE_update_living_off_the_land = yes
 }
 
+#Iron Warden Subclass
+# State scope; ROOT is the Iron Warden. The work is done: the walls go up and the state is ours for good.
+FOE_secure_state = {
+	add_building_construction = {
+		type = bunker
+		level = 2
+		instant_build = yes
+		province = {
+			all_provinces = yes
+			limit_to_border = yes
+		}
+	}
+	add_dynamic_modifier = { modifier = FOE_warden_bastion_modifier }
+	clr_state_flag = FOE_warden_securing
+	clr_state_flag = FOE_warden_auto_securing
+	clear_variable = FOE_warden_work_progress
+	# A Legendary Warden pacifies the population along with the ground.
+	if = {
+		limit = { owner = { FOE_is_legendary_or_mythic_iron_warden = yes } }
+		add_compliance = 25
+		cancel_resistance = yes
+	}
+}
+
+# Country scope. The Iron Line counts secured states against everything we hold but have not locked down,
+# so conquering faster than we consolidate is worth nothing.
+FOE_update_iron_warden = {
+	if = {
+		limit = { FOE_is_iron_warden = yes }
+		set_variable = { FOE_warden_secured_states = 0 }
+		every_owned_state = {
+			limit = { has_dynamic_modifier = { modifier = FOE_warden_bastion_modifier } }
+			ROOT = { add_to_variable = { FOE_warden_secured_states = 1 } }
+		}
+		# Secured minus unsecured, which is twice the secured states less everything we own.
+		set_temp_variable = { FOE_warden_line = FOE_warden_secured_states }
+		multiply_temp_variable = { FOE_warden_line = 2 }
+		subtract_from_temp_variable = { FOE_warden_line = num_owned_states }
+		clamp_temp_variable = { var = FOE_warden_line min = 0 }
+		if = {
+			limit = { FOE_is_mythic_iron_warden = yes }
+			multiply_temp_variable = { FOE_warden_line = 2 }
+		}
+		set_variable = { FOE_iron_line_defence = FOE_warden_line }
+		multiply_variable = { FOE_iron_line_defence = 0.01 }
+		clamp_variable = { var = FOE_iron_line_defence min = 0 max = 0.20 }
+		set_variable = { FOE_iron_line_dig_in = FOE_warden_line }
+		multiply_variable = { FOE_iron_line_dig_in = 0.25 }
+		clamp_variable = { var = FOE_iron_line_dig_in min = 0 max = 5 }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = FOE_the_iron_line_modifier } } }
+			add_dynamic_modifier = { modifier = FOE_the_iron_line_modifier }
+		}
+		if = {
+			limit = {
+				FOE_is_legendary_or_mythic_iron_warden = yes
+				NOT = { has_idea = FOE_the_wardens_peace }
+			}
+			add_ideas = FOE_the_wardens_peace
+		}
+		if = {
+			limit = {
+				FOE_is_mythic_iron_warden = yes
+				NOT = { has_idea = FOE_the_line_holds }
+			}
+			add_ideas = FOE_the_line_holds
+		}
+		# Unordered work still ties up builders, three factories per site, as the decision does.
+		set_variable = { FOE_warden_works = 0 }
+		every_owned_state = {
+			limit = { has_state_flag = FOE_warden_auto_securing }
+			ROOT = { add_to_variable = { FOE_warden_works = 1 } }
+		}
+		multiply_variable = { FOE_warden_works = 3 }
+		if = {
+			limit = {
+				check_variable = { FOE_warden_works > 0 }
+				NOT = { has_dynamic_modifier = { modifier = FOE_warden_works_modifier } }
+			}
+			add_dynamic_modifier = { modifier = FOE_warden_works_modifier }
+		}
+		else_if = {
+			limit = {
+				check_variable = { FOE_warden_works < 1 }
+				has_dynamic_modifier = { modifier = FOE_warden_works_modifier }
+			}
+			remove_dynamic_modifier = { modifier = FOE_warden_works_modifier }
+		}
+	}
+	else_if = {
+		limit = { has_dynamic_modifier = { modifier = FOE_the_iron_line_modifier } }
+		remove_dynamic_modifier = { modifier = FOE_the_iron_line_modifier }
+		if = {
+			limit = { has_dynamic_modifier = { modifier = FOE_warden_works_modifier } }
+			remove_dynamic_modifier = { modifier = FOE_warden_works_modifier }
+		}
+		clear_variable = FOE_warden_secured_states
+		clear_variable = FOE_warden_works
+		clear_variable = FOE_warden_slots
+		clear_variable = FOE_warden_sites
+		clear_variable = FOE_iron_line_defence
+		clear_variable = FOE_iron_line_dig_in
+	}
+}
+
+# Country scope; a Mythic Iron Warden. Runs weekly. The engineers pick up every unsecured state by
+# themselves and work it for seven weeks. The countdown lives on the state, because a state event is
+# fired FOR a country and so arrives in country scope, carrying nothing about the state it is named for.
+FOE_tick_warden_works = {
+	if = {
+		limit = { FOE_is_mythic_iron_warden = yes }
+		# One building crew per 30 factories we own, never more than five sites at once.
+		set_variable = { FOE_warden_slots = num_of_factories }
+		set_variable = { FOE_warden_slot_remainder = FOE_warden_slots }
+		modulo_variable = { var = FOE_warden_slot_remainder value = 30 }
+		subtract_from_variable = { FOE_warden_slots = FOE_warden_slot_remainder }
+		divide_variable = { FOE_warden_slots = 30 }
+		clamp_variable = { var = FOE_warden_slots min = 0 max = 5 }
+		clear_variable = FOE_warden_slot_remainder
+		set_variable = { FOE_warden_sites = 0 }
+		every_owned_state = {
+			limit = { has_state_flag = FOE_warden_auto_securing }
+			ROOT = { add_to_variable = { FOE_warden_sites = 1 } }
+		}
+		every_owned_state = {
+			limit = {
+				FOE_is_securable_state = yes
+				ROOT = { check_variable = { FOE_warden_sites < FOE_warden_slots } }
+			}
+			set_state_flag = { flag = FOE_warden_auto_securing value = 1 days = 90 }
+			set_variable = { FOE_warden_work_progress = 0 }
+			ROOT = { add_to_variable = { FOE_warden_sites = 1 } }
+		}
+	}
+	every_owned_state = {
+		limit = { has_state_flag = FOE_warden_auto_securing }
+		if = {
+			limit = {
+				owner = { FOE_is_mythic_iron_warden = yes }
+				is_fully_controlled_by = OWNER
+			}
+			add_to_variable = { FOE_warden_work_progress = 1 }
+			if = {
+				limit = { check_variable = { FOE_warden_work_progress > 6 } }
+				FOE_secure_state = yes
+			}
+		}
+		else = {
+			# The site is abandoned if we lose the ground, or the Warden who ordered the work.
+			clr_state_flag = FOE_warden_auto_securing
+			clear_variable = FOE_warden_work_progress
+		}
+	}
+	FOE_update_iron_warden = yes
+}
+
+FOE_initialize_iron_warden = {
+	add_country_leader_trait = FOE_iron_warden_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_iron_warden_character
+	}
+	FOE_update_iron_warden = yes
+}
+
 #Unifier Subclass
 # State scope; ROOT is the Unifier. Compliance is 5 plus 1 per core state, up to 30.
 FOE_unifier_integrate_state = {
@@ -1390,6 +1555,16 @@ FOE_roll_conqueror_subclass = {
 			modifier = { factor = 0.1 has_idea = old_world_society }
 			modifier = { factor = 0.1 has_idea = steel_ranger_society }
 			FOE_initialize_carrion_marshal = yes
+		}
+		10 = {
+			modifier = { factor = 2 has_idea = old_world_society }
+			modifier = { factor = 2 has_idea = steel_ranger_society }
+			modifier = { factor = 2 has_idea = wasteland_society2 }
+			modifier = { factor = 2 has_idea = closed_borders }
+			modifier = { factor = 0.1 has_idea = raider_society }
+			modifier = { factor = 0.1 has_idea = tribal_society }
+			modifier = { factor = 0.1 has_idea = open_borders }
+			FOE_initialize_iron_warden = yes
 		}
 	}
 }

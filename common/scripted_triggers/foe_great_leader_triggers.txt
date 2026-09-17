@@ -92,6 +92,35 @@ FOE_is_harvestable_state = {
 	NOT = { has_dynamic_modifier = { modifier = FOE_carrion_devastation } }
 }
 
+FOE_is_iron_warden = {
+	var:country_leader = {
+		has_character_flag = FOE_great_leader_character
+		has_character_flag = FOE_iron_warden_character
+	}
+}
+
+FOE_is_legendary_or_mythic_iron_warden = {
+	FOE_is_iron_warden = yes
+	OR = {
+		has_country_leader_with_trait = legendary_leader_military_trait
+		has_country_leader_with_trait = mythic_leader_military_trait
+	}
+}
+
+FOE_is_mythic_iron_warden = {
+	FOE_is_iron_warden = yes
+	has_country_leader_with_trait = mythic_leader_military_trait
+}
+
+# State scope; ROOT is the Iron Warden. Only a finished conquest can be walled in.
+FOE_is_securable_state = {
+	is_owned_by = ROOT
+	is_fully_controlled_by = ROOT
+	NOT = { has_dynamic_modifier = { modifier = FOE_warden_bastion_modifier } }
+	NOT = { has_state_flag = FOE_warden_securing }
+	NOT = { has_state_flag = FOE_warden_auto_securing }
+}
+
 FOE_is_unifier = {
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
@@ -458,4 +487,65 @@ FOE_can_afford_robot_armouries = {
 # State scope; ROOT is the Machine Uprising.
 FOE_is_uprising_harvest_site = {
 	FOE_is_harvestable_state = yes
+}
+
+# Shared Great Leader AI profile membership. All country scope unless noted.
+FOE_ai_infantry_sustainment = {
+	OR = {
+		FOE_is_slaving_despot = yes
+		FOE_is_carrion_marshal = yes
+		AND = {
+			is_subject = yes
+			overlord = { FOE_is_puppetmaster = yes }
+		}
+	}
+}
+
+FOE_ai_civilian_development = {
+	OR = {
+		FOE_is_unifier = yes
+		FOE_is_puppetmaster = yes
+		FOE_is_architect_of_order = yes
+		FOE_is_autark = yes
+	}
+}
+
+FOE_ai_fuel_economy = {
+	OR = {
+		FOE_is_nomadic_khan = yes
+		FOE_is_reactor_prophet = yes
+	}
+}
+
+# Recovery thresholds, not hard fuel-spending restrictions.
+FOE_ai_low_fuel_reserves = {
+	OR = {
+		AND = { FOE_is_nomadic_khan = yes fuel_ratio < 0.5 }
+		AND = { FOE_is_reactor_prophet = yes fuel_ratio < 0.9 }
+	}
+}
+
+FOE_ai_resource_development = {
+	OR = {
+		FOE_is_autark = yes
+		FOE_is_reactor_prophet = yes
+	}
+}
+
+# State scope inside front_unit_request: FROM.FROM is our country.
+# Evaluate live, so moving the capital/court never leaves a stale state ID.
+FOE_ai_is_critical_seat = {
+	OR = {
+		AND = {
+			FROM.FROM = { FOE_is_architect_of_order = yes }
+			state = var:FROM.FROM.capital
+		}
+		AND = {
+			FROM.FROM = {
+				FOE_is_mythic_nomadic_khan = yes
+				has_variable = FOE_nomadic_court_state
+			}
+			state = var:FROM.FROM.FOE_nomadic_court_state
+		}
+	}
 }
