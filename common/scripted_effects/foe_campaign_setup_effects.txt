@@ -1,0 +1,24 @@
+FOE_confirm_campaign_setup = {
+	if = {
+		limit = { FOE_campaign_setup_editable = yes }
+		# Lock before dispatching events: repeated clicks/reopening cannot reroll.
+		set_global_flag = FOE_campaign_setup_confirmed
+		if = {
+			limit = { has_country_flag = FOE_campaign_setup_great_leaders_selected }
+			set_global_flag = FOE_campaign_great_leaders_enabled
+			every_country = {
+				limit = {
+					is_ai = yes
+					exists = yes
+					NOT = { tag = EYE }
+					NOT = { tag = SHA }
+					NOT = { tag = COM }
+					NOT = { has_country_flag = FOE_great_leader_roll_completed }
+					NOT = { has_country_flag = great_leader_flag }
+				}
+				country_event = { id = special_rulers.1 }
+			}
+		}
+		clr_country_flag = FOE_campaign_setup_great_leaders_selected
+	}
+}

@@ -120,6 +120,19 @@ scripted_gui = {
 				check_variable = { eaw_welcome_screen = 4 }
 			}
 
+			tab_5_on_visible = {
+				FOE_campaign_setup_single_player = yes
+				check_variable = { eaw_welcome_screen = 5 }
+			}
+			tab_5_off_visible = {
+				FOE_campaign_setup_single_player = yes
+				NOT = { check_variable = { eaw_welcome_screen = 5 } }
+			}
+			tab_5_header_visible = {
+				FOE_campaign_setup_single_player = yes
+				check_variable = { eaw_welcome_screen = 5 }
+			}
+
 			#tab_4_off_click_enabled = {
 			#	always = no
 			#}
@@ -127,7 +140,11 @@ scripted_gui = {
 
 		effects = {
 			close_button_click = {
-				clear_variable = eaw_welcome_screen
+				if = {
+					limit = { FOE_campaign_setup_editable = yes }
+					set_variable = { eaw_welcome_screen = 5 }
+				}
+				else = { clear_variable = eaw_welcome_screen }
 			}
 
 			tab_1_off_click = {
@@ -140,6 +157,13 @@ scripted_gui = {
 
 			tab_3_off_click = {
 				set_variable = { eaw_welcome_screen = 3 }
+			}
+
+			tab_5_off_click = {
+				if = {
+					limit = { FOE_campaign_setup_single_player = yes }
+					set_variable = { eaw_welcome_screen = 5 }
+				}
 			}
 
 			tab_4_off_click = {
@@ -193,6 +217,62 @@ scripted_gui = {
 		visible = {
 			is_ai = no
 			check_variable = { eaw_welcome_screen = 4 }
+		}
+	}
+
+
+	eaw_welcome_screen_tab_5_content = {
+		context_type = player_context
+		window_name = "eaw_ws_tab_5_content"
+		parent_window_name = "eaw_welcome_screen_container"
+		visible = {
+			FOE_campaign_setup_single_player = yes
+			check_variable = { eaw_welcome_screen = 5 }
+		}
+		triggers = {
+			leaders_on_visible = {
+				OR = {
+					AND = {
+						FOE_campaign_setup_editable = yes
+						has_country_flag = FOE_campaign_setup_great_leaders_selected
+					}
+					has_global_flag = FOE_campaign_great_leaders_enabled
+				}
+			}
+			leaders_off_visible = {
+				NOT = {
+					AND = {
+						FOE_campaign_setup_editable = yes
+						has_country_flag = FOE_campaign_setup_great_leaders_selected
+					}
+				}
+				NOT = { has_global_flag = FOE_campaign_great_leaders_enabled }
+			}
+			leaders_on_click_enabled = { FOE_campaign_setup_editable = yes }
+			leaders_off_click_enabled = { FOE_campaign_setup_editable = yes }
+			confirm_setup_visible = { FOE_campaign_setup_editable = yes }
+			confirm_setup_click_enabled = { FOE_campaign_setup_editable = yes }
+			setup_pending_visible = { FOE_campaign_setup_editable = yes }
+			setup_locked_visible = { has_global_flag = FOE_campaign_setup_confirmed }
+			setup_expired_visible = {
+				NOT = { has_global_flag = FOE_campaign_setup_confirmed }
+				NOT = { FOE_campaign_setup_editable = yes }
+			}
+		}
+		effects = {
+			leaders_off_click = {
+				if = {
+					limit = { FOE_campaign_setup_editable = yes }
+					set_country_flag = FOE_campaign_setup_great_leaders_selected
+				}
+			}
+			leaders_on_click = {
+				if = {
+					limit = { FOE_campaign_setup_editable = yes }
+					clr_country_flag = FOE_campaign_setup_great_leaders_selected
+				}
+			}
+			confirm_setup_click = { FOE_confirm_campaign_setup = yes }
 		}
 	}
 
