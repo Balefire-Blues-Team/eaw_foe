@@ -585,6 +585,93 @@ GEN_great_leader_decisions = {
 		}
 	}
 
+	#Architect of Order: Resettlement Order
+	FOE_architect_resettle = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		state_target = yes
+		target_array = owned_states
+		on_map_mode = map_and_decisions_view
+		cost = 10
+		fire_only_once = no
+		visible = { FOE_is_architect_of_order = yes }
+		target_root_trigger = { FOE_is_architect_of_order = yes }
+		target_trigger = {
+			FROM = { FOE_is_resettlement_source = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_resettlement_cooldown_tt
+				NOT = { has_country_flag = FOE_resettlement_cooldown }
+			}
+			FROM = { FOE_is_resettlement_source = yes }
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_architect_resettle_tt
+			hidden_effect = { FOE_resettle_to_capital = yes }
+		}
+		ai_will_do = {
+			base = 20
+			modifier = {
+				factor = 3
+				FROM = { state_population > 5000 }
+			}
+		}
+	}
+
+	#Architect of Order: The Grand Plan
+	FOE_architect_relocate_industry = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		state_target = yes
+		target_array = owned_states
+		on_map_mode = map_and_decisions_view
+		cost = 25
+		fire_only_once = no
+		visible = { FOE_is_legendary_or_mythic_architect_of_order = yes }
+		target_root_trigger = { FOE_is_legendary_or_mythic_architect_of_order = yes }
+		target_trigger = {
+			FROM = { FOE_is_industry_relocation_source = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_industry_relocation_cooldown_tt
+				NOT = { has_country_flag = FOE_industry_relocation_cooldown }
+			}
+			FROM = { FOE_is_industry_relocation_source = yes }
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_architect_relocate_industry_tt
+			hidden_effect = { FOE_relocate_industry_to_capital = yes }
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	FOE_architect_raise_capital = {
+		icon = GFX_decision_unknown
+		cost = 50
+		fire_only_once = no
+		visible = { FOE_is_legendary_or_mythic_architect_of_order = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_capital_can_rise_tt
+				capital_scope = { FOE_capital_can_rise = yes }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_architect_raise_capital_tt
+			hidden_effect = {
+				capital_scope = { FOE_raise_capital_status = yes }
+				FOE_update_planned_capital = yes
+			}
+		}
+		ai_will_do = {
+			base = 100
+		}
+	}
+
 }
 
 foe_slaving_cat = {

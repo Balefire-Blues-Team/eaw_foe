@@ -92,4 +92,47 @@ on_actions = {
 			}
 		}
 	}
+
+	#Architect of Order actions
+	on_state_control_changed = {
+		effect = {
+			FROM = {
+				if = {
+					limit = {
+						FOE_is_mythic_architect_of_order = yes
+						NOT = { has_country_flag = FOE_centre_fallen }
+						has_variable = FOE_architect_heart_state
+						var:FOE_architect_heart_state = { NOT = { is_controlled_by = PREV } }
+					}
+					set_country_flag = FOE_centre_fallen
+					add_ideas = FOE_the_centre_has_fallen
+					FOE_update_planned_capital = yes
+				}
+			}
+			if = {
+				limit = {
+					has_country_flag = FOE_centre_fallen
+					has_variable = FOE_architect_heart_state
+					var:FOE_architect_heart_state = { is_controlled_by = PREV }
+				}
+				clr_country_flag = FOE_centre_fallen
+				remove_ideas = FOE_the_centre_has_fallen
+				FOE_update_planned_capital = yes
+			}
+		}
+	}
+
+	on_monthly = {
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						FOE_is_architect_of_order = yes
+						has_variable = FOE_planned_capital_state
+					}
+				}
+				FOE_update_planned_capital = yes
+			}
+		}
+	}
 }

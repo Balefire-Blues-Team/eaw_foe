@@ -220,3 +220,88 @@ FOE_is_puppet_install_target = {
 		check_variable = { var = num_owned_states value = FOE_install_state_limit compare = less_than_or_equals }
 	}
 }
+
+FOE_is_architect_of_order = {
+	var:country_leader = {
+		has_character_flag = FOE_great_leader_character
+		has_character_flag = FOE_architect_of_order_character
+	}
+}
+
+FOE_is_legendary_or_mythic_architect_of_order = {
+	FOE_is_architect_of_order = yes
+	OR = {
+		has_country_leader_with_trait = legendary_leader_admin_trait
+		has_country_leader_with_trait = mythic_leader_admin_trait
+	}
+}
+
+FOE_is_mythic_architect_of_order = {
+	FOE_is_architect_of_order = yes
+	has_country_leader_with_trait = mythic_leader_admin_trait
+}
+
+# State scope; ROOT is the Architect.
+FOE_is_resettlement_source = {
+	is_owned_by = ROOT
+	is_controlled_by = ROOT
+	is_capital = no
+	state_population > 2000
+}
+
+# State scope; ROOT is the Architect. The capital needs a free factory slot.
+FOE_is_industry_relocation_source = {
+	is_owned_by = ROOT
+	is_controlled_by = ROOT
+	is_capital = no
+	OR = {
+		check_variable = { industrial_complex_level > 0 }
+		check_variable = { arms_factory_level > 0 }
+	}
+	ROOT = {
+		capital_scope = { FOE_has_free_factory_slot = yes }
+	}
+}
+
+# State scope; the capital. Each category step needs more residents.
+FOE_capital_can_rise = {
+	OR = {
+		AND = {
+			NOT = {
+				has_state_category = shanty
+				has_state_category = town
+				has_state_category = large_town
+				has_state_category = city
+				has_state_category = large_city
+				has_state_category = metropolis
+				has_state_category = megalopolis
+				has_state_category = prewar_megacity
+			}
+			state_population > 1999
+		}
+		AND = {
+			has_state_category = shanty
+			state_population > 3999
+		}
+		AND = {
+			has_state_category = town
+			state_population > 5999
+		}
+		AND = {
+			has_state_category = large_town
+			state_population > 7999
+		}
+		AND = {
+			has_state_category = city
+			state_population > 10999
+		}
+		AND = {
+			has_state_category = large_city
+			state_population > 13999
+		}
+		AND = {
+			has_state_category = metropolis
+			state_population > 17999
+		}
+	}
+}

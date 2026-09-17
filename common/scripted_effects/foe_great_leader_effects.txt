@@ -362,6 +362,178 @@ FOE_initialize_puppetmaster = {
 	FOE_update_puppet_web = yes
 }
 
+#Architect of Order Subclass
+# Country scope. Planned Capital follows the current capital and grows with its population.
+# Mythic: The Ordered State grows with it too, and turns negative while the heart has fallen.
+FOE_update_planned_capital = {
+	if = {
+		limit = { FOE_is_architect_of_order = yes }
+		capital_scope = {
+			ROOT = { set_temp_variable = { FOE_current_capital = PREV.id } }
+		}
+		if = {
+			limit = {
+				has_variable = FOE_planned_capital_state
+				NOT = { check_variable = { FOE_planned_capital_state = FOE_current_capital } }
+			}
+			var:FOE_planned_capital_state = {
+				remove_dynamic_modifier = { modifier = FOE_planned_capital_modifier }
+			}
+		}
+		set_variable = { FOE_planned_capital_state = FOE_current_capital }
+		if = {
+			limit = { NOT = { has_country_flag = FOE_centre_fallen } }
+			set_variable = { FOE_architect_heart_state = FOE_current_capital }
+		}
+		capital_scope = {
+			# Per thousand residents: population growth +1%, resources +1%,
+			# recruitable population +0.5% (max 10%), construction speed +1% (max 25%).
+			set_variable = { FOE_planned_population = state_population_k }
+			multiply_variable = { FOE_planned_population = 0.01 }
+			set_variable = { FOE_planned_resources = state_population_k }
+			multiply_variable = { FOE_planned_resources = 0.01 }
+			set_variable = { FOE_planned_recruitable = state_population_k }
+			multiply_variable = { FOE_planned_recruitable = 0.005 }
+			clamp_variable = { var = FOE_planned_recruitable min = 0 max = 0.10 }
+			set_variable = { FOE_planned_construction = state_population_k }
+			multiply_variable = { FOE_planned_construction = 0.01 }
+			clamp_variable = { var = FOE_planned_construction min = 0 max = 0.25 }
+			if = {
+				limit = { NOT = { has_dynamic_modifier = { modifier = FOE_planned_capital_modifier } } }
+				add_dynamic_modifier = { modifier = FOE_planned_capital_modifier }
+			}
+			force_update_dynamic_modifier = yes
+		}
+	}
+	else_if = {
+		limit = { has_variable = FOE_planned_capital_state }
+		var:FOE_planned_capital_state = {
+			remove_dynamic_modifier = { modifier = FOE_planned_capital_modifier }
+		}
+		clear_variable = FOE_planned_capital_state
+		clear_variable = FOE_architect_heart_state
+	}
+
+	if = {
+		limit = { FOE_is_mythic_architect_of_order = yes }
+		capital_scope = {
+			ROOT = { set_temp_variable = { FOE_capital_population_k = PREV.state_population_k } }
+		}
+		# Per thousand residents: stability +0.5% (max 15%), research speed +0.5% (max 10%).
+		set_variable = { FOE_ordered_stability = FOE_capital_population_k }
+		multiply_variable = { FOE_ordered_stability = 0.005 }
+		clamp_variable = { var = FOE_ordered_stability min = 0 max = 0.15 }
+		set_variable = { FOE_ordered_research = FOE_capital_population_k }
+		multiply_variable = { FOE_ordered_research = 0.005 }
+		clamp_variable = { var = FOE_ordered_research min = 0 max = 0.10 }
+		if = {
+			limit = { has_country_flag = FOE_centre_fallen }
+			multiply_variable = { FOE_ordered_stability = -1 }
+			multiply_variable = { FOE_ordered_research = -1 }
+		}
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = FOE_ordered_state_modifier } } }
+			add_dynamic_modifier = { modifier = FOE_ordered_state_modifier }
+		}
+		force_update_dynamic_modifier = yes
+	}
+	else_if = {
+		limit = { has_dynamic_modifier = { modifier = FOE_ordered_state_modifier } }
+		remove_dynamic_modifier = { modifier = FOE_ordered_state_modifier }
+		clear_variable = FOE_ordered_stability
+		clear_variable = FOE_ordered_research
+	}
+	if = {
+		limit = {
+			has_country_flag = FOE_centre_fallen
+			NOT = { FOE_is_mythic_architect_of_order = yes }
+		}
+		clr_country_flag = FOE_centre_fallen
+	}
+}
+
+# Country scope; FROM is the source state.
+FOE_resettle_to_capital = {
+	FROM = { add_manpower = -1000 }
+	capital_scope = { add_manpower = 1000 }
+	set_country_flag = { flag = FOE_resettlement_cooldown value = 1 days = 30 }
+	FOE_update_planned_capital = yes
+}
+
+# Country scope; FROM is the source state. Civilian factories move first.
+FOE_relocate_industry_to_capital = {
+	if = {
+		limit = { FROM = { check_variable = { industrial_complex_level > 0 } } }
+		FROM = { remove_building = { type = industrial_complex level = 1 } }
+		capital_scope = {
+			add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+		}
+	}
+	else = {
+		FROM = { remove_building = { type = arms_factory level = 1 } }
+		capital_scope = {
+			add_building_construction = { type = arms_factory level = 1 instant_build = yes }
+		}
+	}
+	set_country_flag = { flag = FOE_industry_relocation_cooldown value = 1 days = 60 }
+}
+
+# State scope; the capital, ROOT is the Architect.
+# All factories and dockyards go offsite so the new slots can be built on, then the category rises one step.
+FOE_raise_capital_status = {
+	while_loop_effect = {
+		limit = { check_variable = { industrial_complex_level > 0 } }
+		remove_building = { type = industrial_complex level = 1 }
+		ROOT = { add_offsite_building = { type = industrial_complex level = 1 } }
+	}
+	while_loop_effect = {
+		limit = { check_variable = { arms_factory_level > 0 } }
+		remove_building = { type = arms_factory level = 1 }
+		ROOT = { add_offsite_building = { type = arms_factory level = 1 } }
+	}
+	while_loop_effect = {
+		limit = { check_variable = { building_level@dockyard > 0 } }
+		remove_building = { type = dockyard level = 1 }
+		ROOT = { add_offsite_building = { type = dockyard level = 1 } }
+	}
+	if = {
+		limit = { has_state_category = metropolis }
+		set_state_category = megalopolis
+	}
+	else_if = {
+		limit = { has_state_category = large_city }
+		set_state_category = metropolis
+	}
+	else_if = {
+		limit = { has_state_category = city }
+		set_state_category = large_city
+	}
+	else_if = {
+		limit = { has_state_category = large_town }
+		set_state_category = city
+	}
+	else_if = {
+		limit = { has_state_category = town }
+		set_state_category = large_town
+	}
+	else_if = {
+		limit = { has_state_category = shanty }
+		set_state_category = town
+	}
+	else = {
+		set_state_category = shanty
+	}
+}
+
+FOE_initialize_architect_of_order = {
+	add_country_leader_trait = FOE_architect_of_order_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_architect_of_order_character
+	}
+	FOE_update_planned_capital = yes
+}
+
 #Conqueror Subclass Rolls
 FOE_roll_conqueror_subclass = {
 	random_list = {
@@ -434,6 +606,16 @@ FOE_roll_administrator_subclass = {
 			modifier = { factor = 0.1 has_idea = closed_economy }
 			modifier = { factor = 0.1 has_idea = political_effort_press }
 			FOE_initialize_puppetmaster = yes
+		}
+		10 = {
+			modifier = { factor = 2 has_idea = old_world_society }
+			modifier = { factor = 2 has_idea = slaver_society }
+			modifier = { factor = 2 has_government = survivalism }
+			modifier = { factor = 2 has_idea = wasteland_society2 }
+			modifier = { factor = 0.1 has_idea = tribal_research_base }
+			modifier = { factor = 0.1 has_idea = raider_society }
+			modifier = { factor = 0.1 has_idea = tribal_society }
+			FOE_initialize_architect_of_order = yes
 		}
 	}
 }
