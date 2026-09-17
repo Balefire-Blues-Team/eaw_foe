@@ -117,7 +117,6 @@ FOE_initialize_slaving_despot = {
 }
 
 #Carrion Marshal Subclass
-# Country scope. Locked templates for the hordes, created once.
 FOE_create_carrion_templates = {
 	if = {
 		limit = { NOT = { has_country_flag = FOE_carrion_templates_created } }
@@ -220,8 +219,67 @@ FOE_initialize_carrion_marshal = {
 	FOE_update_living_off_the_land = yes
 }
 
+#Unifier Subclass
+# State scope; ROOT is the Unifier. Compliance is 5 plus 1 per core state, up to 30.
+FOE_unifier_integrate_state = {
+	set_temp_variable = { FOE_unifier_compliance = ROOT.num_core_states }
+	add_to_temp_variable = { FOE_unifier_compliance = 5 }
+	clamp_temp_variable = { var = FOE_unifier_compliance min = 5 max = 30 }
+	add_compliance = FOE_unifier_compliance
+	if = {
+		limit = { compliance > 49 }
+		add_core_of = ROOT
+	}
+}
+
+# Legendary: stability and construction +1%, recruitable population +0.5% per core state.
+FOE_update_one_nation = {
+	if = {
+		limit = { FOE_is_legendary_or_mythic_unifier = yes }
+		set_variable = { FOE_unity_stability = num_core_states }
+		multiply_variable = { FOE_unity_stability = 0.01 }
+		clamp_variable = { var = FOE_unity_stability min = 0 max = 0.15 }
+		set_variable = { FOE_unity_construction = num_core_states }
+		multiply_variable = { FOE_unity_construction = 0.01 }
+		clamp_variable = { var = FOE_unity_construction min = 0 max = 0.15 }
+		set_variable = { FOE_unity_recruitable = num_core_states }
+		multiply_variable = { FOE_unity_recruitable = 0.005 }
+		clamp_variable = { var = FOE_unity_recruitable min = 0 max = 0.05 }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = FOE_one_nation_modifier } } }
+			add_dynamic_modifier = { modifier = FOE_one_nation_modifier }
+		}
+		force_update_dynamic_modifier = yes
+	}
+	else_if = {
+		limit = { has_dynamic_modifier = { modifier = FOE_one_nation_modifier } }
+		remove_dynamic_modifier = { modifier = FOE_one_nation_modifier }
+		clear_variable = FOE_unity_stability
+		clear_variable = FOE_unity_construction
+		clear_variable = FOE_unity_recruitable
+	}
+}
+
+# Country scope; FROM is the absorbed country. Its states arrive as cores.
+FOE_unifier_absorb_country = {
+	FROM = {
+		every_owned_state = { add_core_of = ROOT }
+	}
+	annex_country = { target = FROM transfer_troops = yes }
+	set_country_flag = { flag = FOE_unifier_absorb_cooldown value = 1 days = 1095 }
+	FOE_update_one_nation = yes
+}
+
+FOE_initialize_unifier = {
+	add_country_leader_trait = FOE_unifier_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_unifier_character
+	}
+	FOE_update_one_nation = yes
+}
+
 #Conqueror Subclass Rolls
-# Picks which subclass. Old World and Steel Ranger societies discourage every subclass.
 FOE_roll_conqueror_subclass = {
 	random_list = {
 		log = yes
@@ -250,7 +308,8 @@ FOE_roll_conqueror_subclass = {
 	}
 }
 
-# Chance to gain any subclass depends on tier: Great 30%, Legendary 60%, Mythic 100%.
+# Chance to gain any subclass depends on tier:
+# Great 30%, Legendary 60%, Mythic 100%.
 FOE_roll_great_conqueror_subclass = {
 	random_list = {
 		log = yes
@@ -269,4 +328,41 @@ FOE_roll_legendary_conqueror_subclass = {
 
 FOE_roll_mythic_conqueror_subclass = {
 	FOE_roll_conqueror_subclass = yes
+}
+
+#Administrator Subclass Rolls
+FOE_roll_administrator_subclass = {
+	random_list = {
+		log = yes
+		10 = {
+			modifier = { factor = 2 has_government = visionary }
+			modifier = { factor = 2 has_idea = wasteland_society2 }
+			modifier = { factor = 2 has_idea = postwar_collectivist_society }
+			modifier = { factor = 0.1 has_idea = steel_ranger_society }
+			modifier = { factor = 0.1 has_idea = raider_society }
+			FOE_initialize_unifier = yes
+		}
+	}
+}
+
+# Chance to gain any subclass depends on tier:
+# Great 30%, Legendary 60%, Mythic 100%.
+FOE_roll_great_administrator_subclass = {
+	random_list = {
+		log = yes
+		30 = { FOE_roll_administrator_subclass = yes }
+		70 = { }
+	}
+}
+
+FOE_roll_legendary_administrator_subclass = {
+	random_list = {
+		log = yes
+		60 = { FOE_roll_administrator_subclass = yes }
+		40 = { }
+	}
+}
+
+FOE_roll_mythic_administrator_subclass = {
+	FOE_roll_administrator_subclass = yes
 }

@@ -75,6 +75,9 @@ GEN_great_leader_decisions = {
 		}
 		fire_only_once = no
 		is_good = yes
+		visible = {
+			NOT = { FOE_is_unifier = yes }
+		}
 		available = {
 			has_political_power > 24
 			any_owned_state = {
@@ -311,6 +314,94 @@ GEN_great_leader_decisions = {
 				factor = 3
 				FROM = { NOT = { is_owned_by = ROOT } }
 			}
+		}
+	}
+
+	FOE_unifier_integrate_state = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		state_target = yes
+		target_array = owned_states
+		on_map_mode = map_and_decisions_view
+		cost = 25
+		fire_only_once = no
+		visible = { FOE_is_unifier = yes }
+		target_root_trigger = { FOE_is_unifier = yes }
+		target_trigger = {
+			FROM = { FOE_is_unifier_integration_target = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_unifier_integration_cooldown_tt
+				NOT = { has_country_flag = FOE_unifier_integration_cooldown }
+			}
+			FROM = { FOE_is_unifier_integration_target = yes }
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_unifier_integrate_tt
+			hidden_effect = {
+				FROM = { FOE_unifier_integrate_state = yes }
+				if = {
+					limit = { FOE_is_legendary_or_mythic_unifier = yes }
+					set_country_flag = { flag = FOE_unifier_integration_cooldown value = 1 days = 30 }
+				}
+				else = {
+					set_country_flag = { flag = FOE_unifier_integration_cooldown value = 1 days = 60 }
+				}
+				FOE_update_one_nation = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	FOE_unifier_call_the_provinces = {
+		icon = GFX_decision_unknown
+		cost = 25
+		fire_only_once = no
+		visible = { FOE_is_unifier = yes }
+		days_remove = 70
+		days_re_enable = 295
+		complete_effect = {
+			custom_effect_tooltip = FOE_unifier_levy_tt
+			hidden_effect = {
+				set_variable = { FOE_unifier_levy_manpower = num_core_states }
+				add_dynamic_modifier = { modifier = FOE_unifier_levy_modifier days = 70 }
+			}
+		}
+		ai_will_do = {
+			base = 20
+			modifier = {
+				factor = 5
+				has_war = yes
+			}
+		}
+	}
+
+	FOE_unifier_absorb = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		target_array = neighbors
+		cost = 150
+		fire_only_once = no
+		visible = { FOE_is_mythic_unifier = yes }
+		target_root_trigger = { FOE_is_mythic_unifier = yes }
+		target_trigger = {
+			FROM = { FOE_is_unifier_absorption_target = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_unifier_absorb_cooldown_tt
+				NOT = { has_country_flag = FOE_unifier_absorb_cooldown }
+			}
+			FROM = { FOE_is_unifier_absorption_target = yes }
+		}
+		complete_effect = {
+			FOE_unifier_absorb_country = yes
+		}
+		ai_will_do = {
+			base = 100
 		}
 	}
 

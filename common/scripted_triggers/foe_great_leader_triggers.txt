@@ -91,3 +91,61 @@ FOE_is_harvestable_state = {
 	state_population > 3000
 	NOT = { has_dynamic_modifier = { modifier = FOE_carrion_devastation } }
 }
+
+FOE_is_unifier = {
+	var:country_leader = {
+		has_character_flag = FOE_great_leader_character
+		has_character_flag = FOE_unifier_character
+	}
+}
+
+FOE_is_legendary_or_mythic_unifier = {
+	FOE_is_unifier = yes
+	OR = {
+		has_country_leader_with_trait = legendary_leader_admin_trait
+		has_country_leader_with_trait = mythic_leader_admin_trait
+	}
+}
+
+FOE_is_mythic_unifier = {
+	FOE_is_unifier = yes
+	has_country_leader_with_trait = mythic_leader_admin_trait
+}
+
+# State scope; ROOT is the Unifier.
+FOE_is_unifier_integration_target = {
+	is_owned_by = ROOT
+	is_controlled_by = ROOT
+	NOT = { is_core_of = ROOT }
+	any_neighbor_state = {
+		is_owned_by = ROOT
+		is_core_of = ROOT
+	}
+}
+
+# Country scope; ROOT is the Unifier.
+FOE_is_unifier_absorption_target = {
+	is_ai = yes
+	# Only generic nations; countries with unique content are never absorbed.
+	OR = {
+		has_completed_focus = GR_basecamp
+		has_completed_focus = gs_opening1
+		has_completed_focus = tribal_past
+		has_completed_focus = genstable_opening1
+	}
+	has_war = no
+	is_in_faction = no
+	is_subject = no
+	any_owned_state = {
+		any_neighbor_state = {
+			is_owned_by = ROOT
+			is_core_of = ROOT
+		}
+	}
+	custom_trigger_tooltip = {
+		tooltip = FOE_unifier_absorb_size_tt
+		set_temp_variable = { FOE_absorb_state_limit = ROOT.num_core_states }
+		divide_temp_variable = { FOE_absorb_state_limit = 2 }
+		check_variable = { var = num_owned_states value = FOE_absorb_state_limit compare = less_than_or_equals }
+	}
+}
