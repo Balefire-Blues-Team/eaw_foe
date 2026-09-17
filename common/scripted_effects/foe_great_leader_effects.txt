@@ -116,6 +116,110 @@ FOE_initialize_slaving_despot = {
 	FOE_update_empire_of_chains = yes
 }
 
+#Carrion Marshal Subclass
+# Country scope. Locked templates for the hordes, created once.
+FOE_create_carrion_templates = {
+	if = {
+		limit = { NOT = { has_country_flag = FOE_carrion_templates_created } }
+		set_country_flag = FOE_carrion_templates_created
+		division_template = {
+			name = "Carrion Horde"
+			is_locked = yes
+			regiments = {
+				militia = { x = 0 y = 0 }
+				militia = { x = 0 y = 1 }
+				militia = { x = 0 y = 2 }
+				militia = { x = 0 y = 3 }
+				militia = { x = 1 y = 0 }
+				militia = { x = 1 y = 1 }
+				militia = { x = 1 y = 2 }
+				militia = { x = 1 y = 3 }
+			}
+		}
+		division_template = {
+			name = "Carrion Vanguard"
+			is_locked = yes
+			regiments = {
+				spec_ops = { x = 0 y = 0 }
+				spec_ops = { x = 0 y = 1 }
+				spec_ops = { x = 0 y = 2 }
+				spec_ops = { x = 0 y = 3 }
+				spec_ops = { x = 0 y = 4 }
+				infantry = { x = 1 y = 0 }
+				infantry = { x = 1 y = 1 }
+				infantry = { x = 1 y = 2 }
+				infantry = { x = 1 y = 3 }
+				infantry = { x = 1 y = 4 }
+			}
+			support = {
+				fireteam_support = {
+					x = 0
+					y = 0
+				}
+				demolitions_support = {
+					x = 0
+					y = 1
+				}
+			}
+		}
+	}
+}
+
+# State scope; ROOT is the Marshal's country. Every tenth horde also raises a Carrion Vanguard.
+FOE_spawn_carrion_horde = {
+	create_unit = {
+		division = "name = \"Carrion Horde\" division_template = \"Carrion Horde\" start_experience_factor = 0.3 start_equipment_factor = 0.9"
+		owner = ROOT
+	}
+	ROOT = { add_to_variable = { FOE_carrion_horde_count = 1 } }
+	if = {
+		limit = { ROOT = { check_variable = { FOE_carrion_horde_count > 9 } } }
+		create_unit = {
+			division = "name = \"Carrion Vanguard\" division_template = \"Carrion Vanguard\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+			owner = ROOT
+		}
+		ROOT = { set_variable = { FOE_carrion_horde_count = 0 } }
+	}
+}
+
+# State scope; ROOT is the harvesting country.
+# Consumes 2,000 population and one civilian factory if present; military industry is left intact.
+FOE_carrion_harvest_state = {
+	add_manpower = -2000
+	add_dynamic_modifier = { modifier = FOE_carrion_devastation days = 365 }
+	if = {
+		limit = { check_variable = { industrial_complex_level > 0 } }
+		remove_building = { type = industrial_complex level = 1 }
+		FOE_spawn_carrion_horde = yes
+	}
+	FOE_spawn_carrion_horde = yes
+}
+
+# Country scope.
+FOE_update_living_off_the_land = {
+	if = {
+		limit = {
+			FOE_is_legendary_or_mythic_carrion_marshal = yes
+			NOT = { has_idea = FOE_living_off_the_land }
+		}
+		add_ideas = FOE_living_off_the_land
+	}
+}
+
+FOE_initialize_carrion_marshal = {
+	add_country_leader_trait = FOE_carrion_marshal_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_carrion_marshal_character
+	}
+	FOE_create_carrion_templates = yes
+	if = {
+		limit = { NOT = { has_variable = FOE_carrion_horde_count } }
+		set_variable = { FOE_carrion_horde_count = 0 }
+	}
+	FOE_update_living_off_the_land = yes
+}
+
 #Conqueror Subclass Rolls
 # Picks which subclass. Old World and Steel Ranger societies discourage every subclass.
 FOE_roll_conqueror_subclass = {
@@ -135,6 +239,13 @@ FOE_roll_conqueror_subclass = {
 			modifier = { factor = 0.1 has_idea = old_world_society }
 			modifier = { factor = 0.1 has_idea = steel_ranger_society }
 			FOE_initialize_slaving_despot = yes
+		}
+		10 = {
+			modifier = { factor = 2 has_idea = raider_society }
+			modifier = { factor = 2 has_government = destruction }
+			modifier = { factor = 0.1 has_idea = old_world_society }
+			modifier = { factor = 0.1 has_idea = steel_ranger_society }
+			FOE_initialize_carrion_marshal = yes
 		}
 	}
 }

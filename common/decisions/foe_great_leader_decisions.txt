@@ -229,6 +229,91 @@ GEN_great_leader_decisions = {
 		}
 	}
 
+	FOE_carrion_harvest_great = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		state_target = yes
+		target_array = owned_states
+		on_map_mode = map_and_decisions_view
+		cost = 25
+		fire_only_once = no
+		visible = { FOE_is_great_carrion_marshal = yes }
+		target_root_trigger = { FOE_is_great_carrion_marshal = yes }
+		target_trigger = {
+			FROM = {
+				is_owned_by = ROOT
+				FOE_is_harvestable_state = yes
+			}
+		}
+		available = {
+			FROM = {
+				is_owned_by = ROOT
+				FOE_is_harvestable_state = yes
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_carrion_harvest_tt
+			hidden_effect = {
+				FROM = { FOE_carrion_harvest_state = yes }
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 0
+				has_war = no
+			}
+			modifier = {
+				factor = 0
+				num_of_civilian_factories < 6
+				FROM = { check_variable = { industrial_complex_level > 0 } }
+			}
+		}
+	}
+
+	FOE_carrion_harvest_legendary = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		state_target = yes
+		target_array = controlled_states
+		on_map_mode = map_and_decisions_view
+		cost = 25
+		fire_only_once = no
+		visible = { FOE_is_legendary_or_mythic_carrion_marshal = yes }
+		target_root_trigger = { FOE_is_legendary_or_mythic_carrion_marshal = yes }
+		target_trigger = {
+			FROM = { FOE_is_harvestable_state = yes }
+		}
+		available = {
+			FROM = { FOE_is_harvestable_state = yes }
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_carrion_harvest_tt
+			hidden_effect = {
+				FROM = { FOE_carrion_harvest_state = yes }
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 0
+				has_war = no
+			}
+			modifier = {
+				factor = 0
+				num_of_civilian_factories < 6
+				FROM = {
+					is_owned_by = ROOT
+					check_variable = { industrial_complex_level > 0 }
+				}
+			}
+			modifier = {
+				factor = 3
+				FROM = { NOT = { is_owned_by = ROOT } }
+			}
+		}
+	}
+
 }
 
 foe_slaving_cat = {
