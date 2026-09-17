@@ -16,4 +16,35 @@ on_actions = {
 			}
 		}
 	}
+
+	#Slaving Despot actions
+	on_state_control_changed = {
+		effect = {
+			if = {
+				limit = {
+					FOE_is_slaving_despot = yes
+					has_war_with = FROM
+					FROM.FROM = {
+						NOT = { is_core_of = ROOT }
+						NOT = { has_state_flag = FOE_despot_conquest_slaves_taken }
+					}
+				}
+				FOE_take_conquest_slaves = yes
+			}
+		}
+	}
+
+	on_monthly = {
+		effect = {
+			if = {
+				limit = {
+					OR = {
+						FOE_is_mythic_slaving_despot = yes
+						has_dynamic_modifier = { modifier = FOE_empire_of_chains_modifier }
+					}
+				}
+				FOE_update_empire_of_chains = yes
+			}
+		}
+	}
 }

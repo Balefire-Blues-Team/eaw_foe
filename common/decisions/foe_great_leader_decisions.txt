@@ -230,3 +230,97 @@ GEN_great_leader_decisions = {
 	}
 
 }
+
+foe_slaving_cat = {
+
+	#Slaving Despot: Chain Gangs
+	FOE_despot_enslave_non_core = {
+		icon = GFX_dec_enslave_counquered_population
+		cost = 5
+		fire_only_once = no
+		visible = { FOE_is_slaving_despot = yes }
+		available = {
+			any_owned_state = { FOE_is_enslaveable_state = yes }
+		}
+		days_remove = 30
+		days_re_enable = 30
+		remove_effect = {
+			if = {
+				limit = { any_owned_state = { FOE_is_enslaveable_state = yes } }
+				save_current_manpower = yes
+				random_owned_controlled_state = {
+					limit = { FOE_is_enslaveable_state = yes }
+					add_manpower = -2000
+				}
+				restore_previous_manpower = yes
+				custom_effect_tooltip = foe_2_gain_slave_tt
+				add_to_variable = { var = foe_slaves_var value = 2 }
+				hidden_effect = { FOE_update_empire_of_chains = yes }
+			}
+		}
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	#Slaving Despot: Slave Levies
+	FOE_despot_slave_levy = {
+		icon = GFX_decision_slavery
+		cost = 25
+		fire_only_once = no
+		visible = { FOE_is_legendary_or_mythic_slaving_despot = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = foe_3_cost_slave_tt
+				check_variable = { foe_slaves_var > 2 }
+			}
+		}
+		days_re_enable = 60
+		complete_effect = {
+			custom_effect_tooltip = foe_3_lose_slave_tt
+			subtract_from_variable = { var = foe_slaves_var value = 3 }
+			add_manpower = 3000
+			add_equipment_to_stockpile = { type = infantry_equipment_1 amount = 300 producer = OWE }
+			hidden_effect = { FOE_update_empire_of_chains = yes }
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 5
+				has_war = yes
+			}
+		}
+	}
+
+	FOE_despot_enslave_refugees = {
+		icon = GFX_decision_slavery
+		cost = 10
+		fire_only_once = no
+		visible = { FOE_is_legendary_or_mythic_slaving_despot = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_despot_refugees_present_tt
+				check_variable = { unassimilated_refugees > 1000 }
+			}
+		}
+		days_re_enable = 30
+		complete_effect = {
+			custom_effect_tooltip = FOE_despot_enslave_refugees_tt
+			hidden_effect = {
+				# Only complete thousands are enslaved; the remainder stays as refugees.
+				set_temp_variable = { FOE_refugee_remainder = unassimilated_refugees }
+				modulo_temp_variable = { var = FOE_refugee_remainder value = 1000 }
+				set_temp_variable = { FOE_enslaved_refugees = unassimilated_refugees }
+				subtract_from_temp_variable = { FOE_enslaved_refugees = FOE_refugee_remainder }
+				subtract_from_variable = { unassimilated_refugees = FOE_enslaved_refugees }
+				divide_temp_variable = { FOE_enslaved_refugees = 1000 }
+				add_to_variable = { foe_slaves_var = FOE_enslaved_refugees }
+				on_refugee_change = yes
+				FOE_update_empire_of_chains = yes
+			}
+		}
+		ai_will_do = {
+			base = 50
+		}
+	}
+}

@@ -1,5 +1,4 @@
 # Country scope. No scripted-effect parameters are used.
-# During subclass testing every newly generated Conqueror receives this class.
 
 #Nomadic Khan Subclass
 FOE_initialize_nomadic_khan = {
@@ -46,4 +45,117 @@ FOE_integrate_nomadic_frontier = {
 			add_resistance = -20
 		}
 	}
+}
+
+#Slaving Despot Subclass
+# Mythic: industry and occupied-state resistance both grow by 1% per thousand slaves.
+FOE_update_empire_of_chains = {
+	if = {
+		limit = { FOE_is_mythic_slaving_despot = yes }
+		set_variable = { FOE_chains_industry = foe_slaves_var }
+		multiply_variable = { FOE_chains_industry = 0.01 }
+		clamp_variable = { var = FOE_chains_industry min = 0 max = 0.25 }
+		set_variable = { FOE_chains_resistance = foe_slaves_var }
+		multiply_variable = { FOE_chains_resistance = 0.01 }
+		clamp_variable = { var = FOE_chains_resistance min = 0 max = 0.50 }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = FOE_empire_of_chains_modifier } } }
+			add_dynamic_modifier = { modifier = FOE_empire_of_chains_modifier }
+		}
+		force_update_dynamic_modifier = yes
+	}
+	else_if = {
+		limit = { has_dynamic_modifier = { modifier = FOE_empire_of_chains_modifier } }
+		remove_dynamic_modifier = { modifier = FOE_empire_of_chains_modifier }
+		clear_variable = FOE_chains_industry
+		clear_variable = FOE_chains_resistance
+	}
+}
+
+# Country scope (new controller); FROM.FROM is the conquered state.
+# One thousand slaves per 3,000 population, up to 5.
+FOE_take_conquest_slaves = {
+	FROM.FROM = {
+		set_state_flag = { flag = FOE_despot_conquest_slaves_taken value = 1 days = 180 }
+	}
+	if = {
+		limit = { FROM.FROM = { state_population > 14999 } }
+		add_to_variable = { var = foe_slaves_var value = 5 }
+	}
+	else_if = {
+		limit = { FROM.FROM = { state_population > 11999 } }
+		add_to_variable = { var = foe_slaves_var value = 4 }
+	}
+	else_if = {
+		limit = { FROM.FROM = { state_population > 8999 } }
+		add_to_variable = { var = foe_slaves_var value = 3 }
+	}
+	else_if = {
+		limit = { FROM.FROM = { state_population > 5999 } }
+		add_to_variable = { var = foe_slaves_var value = 2 }
+	}
+	else_if = {
+		limit = { FROM.FROM = { state_population > 2999 } }
+		add_to_variable = { var = foe_slaves_var value = 1 }
+	}
+	FOE_update_empire_of_chains = yes
+}
+
+# Nations without slavery gain access to it through their Despot.
+FOE_initialize_slaving_despot = {
+	add_country_leader_trait = FOE_slaving_despot_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_slaving_despot_character
+	}
+	set_country_flag = slavery_allowed
+	if = {
+		limit = { NOT = { has_variable = foe_slaves_var } }
+		set_variable = { foe_slaves_var = 0 }
+	}
+	FOE_update_empire_of_chains = yes
+}
+
+#Conqueror Subclass Rolls
+# Picks which subclass. Old World and Steel Ranger societies discourage every subclass.
+FOE_roll_conqueror_subclass = {
+	random_list = {
+		log = yes
+		10 = {
+			modifier = { factor = 2 has_idea = raider_society }
+			modifier = { factor = 2 has_idea = tribal_society }
+			modifier = { factor = 2 has_idea = open_borders }
+			modifier = { factor = 0.1 has_idea = old_world_society }
+			modifier = { factor = 0.1 has_idea = steel_ranger_society }
+			FOE_initialize_nomadic_khan = yes
+		}
+		10 = {
+			modifier = { factor = 2 has_country_flag = slavery_allowed }
+			modifier = { factor = 2 has_idea = slaver_society }
+			modifier = { factor = 0.1 has_idea = old_world_society }
+			modifier = { factor = 0.1 has_idea = steel_ranger_society }
+			FOE_initialize_slaving_despot = yes
+		}
+	}
+}
+
+# Chance to gain any subclass depends on tier: Great 30%, Legendary 60%, Mythic 100%.
+FOE_roll_great_conqueror_subclass = {
+	random_list = {
+		log = yes
+		30 = { FOE_roll_conqueror_subclass = yes }
+		70 = { }
+	}
+}
+
+FOE_roll_legendary_conqueror_subclass = {
+	random_list = {
+		log = yes
+		60 = { FOE_roll_conqueror_subclass = yes }
+		40 = { }
+	}
+}
+
+FOE_roll_mythic_conqueror_subclass = {
+	FOE_roll_conqueror_subclass = yes
 }
