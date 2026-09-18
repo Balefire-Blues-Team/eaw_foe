@@ -7,10 +7,7 @@ country_event = {
 	desc = special_rulers.1.d
 	picture = GFX_event_NCR_startup
 	is_triggered_only = yes
-	trigger = {
-		is_ai = yes
-		NOT = { has_country_flag = FOE_great_leader_roll_completed }
-	}
+	trigger = { FOE_great_leader_roll_eligible = yes }
 	immediate = { set_country_flag = FOE_great_leader_roll_completed }
 	fire_only_once = no
 
@@ -583,5 +580,33 @@ country_event = {
 			FOE_is_iron_warden = yes
 		}
 		FOE_tick_warden_works = yes
+	}
+
+	option = {
+		name = special_rulers.16.e
+		trigger = {
+			NOT = { has_country_leader_with_trait = mythic_leader_military_trait }
+		}
+		add_country_leader_trait = mythic_leader_military_trait
+		FOE_initialize_saint_of_war = yes
+	}
+
+	option = {
+		name = special_rulers.16.f
+		trigger = {
+			has_country_leader_with_trait = mythic_leader_military_trait
+			NOT = { FOE_is_saint_of_war = yes }
+		}
+		FOE_initialize_saint_of_war = yes
+	}
+
+	# Puts the counter one short and counts one victory, so the payout fires through the real path.
+	option = {
+		name = special_rulers.16.g
+		trigger = {
+			FOE_is_saint_of_war = yes
+		}
+		set_variable = { FOE_saint_victories = 24 }
+		FOE_count_saint_victory = yes
 	}
 }

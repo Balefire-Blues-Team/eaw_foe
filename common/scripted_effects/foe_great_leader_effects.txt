@@ -384,6 +384,124 @@ FOE_initialize_iron_warden = {
 	FOE_update_iron_warden = yes
 }
 
+#Saint of War Subclass
+# Country scope. The Saint's elite template, created once.
+FOE_create_saint_templates = {
+	if = {
+		limit = { NOT = { has_template = "Sainted Host" } }
+		division_template = {
+			name = "Sainted Host"
+			is_locked = yes
+			regiments = {
+				heavy_infantry = { x = 0 y = 0 }
+				heavy_infantry = { x = 0 y = 1 }
+				heavy_infantry = { x = 0 y = 2 }
+				heavy_infantry = { x = 0 y = 3 }
+				heavy_infantry = { x = 0 y = 4 }
+				spec_ops = { x = 1 y = 0 }
+				spec_ops = { x = 1 y = 1 }
+				spec_ops = { x = 1 y = 2 }
+				spec_ops = { x = 1 y = 3 }
+				spec_ops = { x = 1 y = 4 }
+			}
+			support = {
+				medical_chem_company = { x = 0 y = 0 }
+			}
+		}
+	}
+}
+
+# Country scope. Raises a Sainted Host in our capital. PREV is used for the owner rather than ROOT,
+# because on_army_leader_won_combat reaches this with the army leader as ROOT.
+FOE_spawn_sainted_host = {
+	FOE_create_saint_templates = yes
+	capital_scope = {
+		create_unit = {
+			division = "name = \"Sainted Host\" division_template = \"Sainted Host\" start_experience_factor = 0.75 start_equipment_factor = 1.0"
+			owner = PREV
+		}
+	}
+}
+
+# Country scope. Every 25 victories the Saint's army is rewarded, and a Mythic Saint's is canonised.
+FOE_count_saint_victory = {
+	add_to_variable = { FOE_saint_victories = 1 }
+	if = {
+		limit = { check_variable = { FOE_saint_victories > 24 } }
+		set_variable = { FOE_saint_victories = 0 }
+		army_experience = 10
+		if = {
+			limit = { FOE_is_mythic_saint_of_war = yes }
+			FOE_spawn_sainted_host = yes
+		}
+	}
+}
+
+# Country scope.
+FOE_update_saint_of_war = {
+	if = {
+		limit = {
+			FOE_is_legendary_or_mythic_saint_of_war = yes
+			NOT = { has_idea = FOE_the_veterans_rite }
+		}
+		add_ideas = FOE_the_veterans_rite
+	}
+	if = {
+		limit = {
+			FOE_is_mythic_saint_of_war = yes
+			NOT = { has_idea = FOE_the_saint_walks_among_them }
+		}
+		add_ideas = FOE_the_saint_walks_among_them
+	}
+}
+
+FOE_initialize_saint_of_war = {
+	add_country_leader_trait = FOE_saint_of_war_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_saint_of_war_character
+	}
+	# Provide generals for the victory on-action; names/portraits use country defaults.
+	# Grant once on assignment, never from monthly updates or repeated initialization.
+	if = {
+		limit = { NOT = { has_country_flag = FOE_saint_commanders_granted } }
+		set_country_flag = FOE_saint_commanders_granted
+		create_corps_commander = {
+			skill = 1
+			attack_skill = 1
+			defense_skill = 1
+			planning_skill = 1
+			logistics_skill = 1
+		}
+		if = {
+			limit = { FOE_is_legendary_or_mythic_saint_of_war = yes }
+			create_corps_commander = {
+				skill = 1
+				attack_skill = 1
+				defense_skill = 1
+				planning_skill = 1
+				logistics_skill = 1
+			}
+		}
+		if = {
+			limit = { FOE_is_mythic_saint_of_war = yes }
+			create_corps_commander = {
+				skill = 1
+				attack_skill = 1
+				defense_skill = 1
+				planning_skill = 1
+				logistics_skill = 1
+			}
+		}
+	}
+	FOE_create_saint_templates = yes
+	if = {
+		limit = { NOT = { has_variable = FOE_saint_victories } }
+		set_variable = { FOE_saint_victories = 0 }
+	}
+	FOE_update_saint_of_war = yes
+}
+
 #Unifier Subclass
 # State scope; ROOT is the Unifier. Compliance is 5 plus 1 per core state, up to 30.
 FOE_unifier_integrate_state = {
@@ -1532,31 +1650,90 @@ FOE_start_machine_uprising = {
 
 #Conqueror Subclass Rolls
 FOE_roll_conqueror_subclass = {
+	# QA: enable global flag FOE_great_leader_assignment_audit before confirming setup.
+	if = {
+		limit = { has_global_flag = { flag = FOE_great_leader_assignment_audit value = 1}}
+		set_temp_variable = { FOE_audit_nomadic_khan = 10 }
+		if = { limit = { NOT = { FOE_can_assign_nomadic_khan = yes } } multiply_temp_variable = { FOE_audit_nomadic_khan = 0 } }
+		if = { limit = { has_idea = raider_society } multiply_temp_variable = { FOE_audit_nomadic_khan = 2 } }
+		if = { limit = { has_idea = tribal_society } multiply_temp_variable = { FOE_audit_nomadic_khan = 2 } }
+		if = { limit = { has_idea = open_borders } multiply_temp_variable = { FOE_audit_nomadic_khan = 2 } }
+		if = { limit = { has_idea = old_world_society } multiply_temp_variable = { FOE_audit_nomadic_khan = 0.1 } }
+		if = { limit = { has_idea = steel_ranger_society } multiply_temp_variable = { FOE_audit_nomadic_khan = 0.1 } }
+		if = { limit = { FOE_assignment_suits_nomadic_khan = yes } multiply_temp_variable = { FOE_audit_nomadic_khan = 1.5 } }
+		if = { limit = { NOT = { FOE_has_nomadic_destination = yes } } multiply_temp_variable = { FOE_audit_nomadic_khan = 0.5 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=conqueror candidate=nomadic_khan weight=[?FOE_audit_nomadic_khan] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_slaving_despot = 10 }
+		if = { limit = { NOT = { FOE_can_assign_slaving_despot = yes } } multiply_temp_variable = { FOE_audit_slaving_despot = 0 } }
+		if = { limit = { has_country_flag = slavery_allowed } multiply_temp_variable = { FOE_audit_slaving_despot = 2 } }
+		if = { limit = { has_idea = slaver_society } multiply_temp_variable = { FOE_audit_slaving_despot = 2 } }
+		if = { limit = { has_idea = old_world_society } multiply_temp_variable = { FOE_audit_slaving_despot = 0.1 } }
+		if = { limit = { has_idea = steel_ranger_society } multiply_temp_variable = { FOE_audit_slaving_despot = 0.1 } }
+		if = { limit = { FOE_assignment_suits_slaving_despot = yes } multiply_temp_variable = { FOE_audit_slaving_despot = 1.5 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=conqueror candidate=slaving_despot weight=[?FOE_audit_slaving_despot] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_carrion_marshal = 10 }
+		if = { limit = { NOT = { FOE_can_assign_carrion_marshal = yes } } multiply_temp_variable = { FOE_audit_carrion_marshal = 0 } }
+		if = { limit = { has_idea = raider_society } multiply_temp_variable = { FOE_audit_carrion_marshal = 2 } }
+		if = { limit = { has_government = destruction } multiply_temp_variable = { FOE_audit_carrion_marshal = 2 } }
+		if = { limit = { has_idea = old_world_society } multiply_temp_variable = { FOE_audit_carrion_marshal = 0.1 } }
+		if = { limit = { has_idea = steel_ranger_society } multiply_temp_variable = { FOE_audit_carrion_marshal = 0.1 } }
+		if = { limit = { FOE_assignment_suits_carrion_marshal = yes } multiply_temp_variable = { FOE_audit_carrion_marshal = 1.5 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=conqueror candidate=carrion_marshal weight=[?FOE_audit_carrion_marshal] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_iron_warden = 10 }
+		if = { limit = { NOT = { FOE_can_assign_iron_warden = yes } } multiply_temp_variable = { FOE_audit_iron_warden = 0 } }
+		if = { limit = { has_idea = old_world_society } multiply_temp_variable = { FOE_audit_iron_warden = 2 } }
+		if = { limit = { has_idea = steel_ranger_society } multiply_temp_variable = { FOE_audit_iron_warden = 2 } }
+		if = { limit = { has_idea = wasteland_society2 } multiply_temp_variable = { FOE_audit_iron_warden = 2 } }
+		if = { limit = { has_idea = closed_borders } multiply_temp_variable = { FOE_audit_iron_warden = 2 } }
+		if = { limit = { has_idea = raider_society } multiply_temp_variable = { FOE_audit_iron_warden = 0.1 } }
+		if = { limit = { has_idea = tribal_society } multiply_temp_variable = { FOE_audit_iron_warden = 0.1 } }
+		if = { limit = { has_idea = open_borders } multiply_temp_variable = { FOE_audit_iron_warden = 0.1 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=conqueror candidate=iron_warden weight=[?FOE_audit_iron_warden] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_saint_of_war = 10 }
+		if = { limit = { NOT = { FOE_can_assign_saint_of_war = yes } } multiply_temp_variable = { FOE_audit_saint_of_war = 0 } }
+		if = { limit = { has_idea = old_world_society } multiply_temp_variable = { FOE_audit_saint_of_war = 2 } }
+		if = { limit = { has_idea = steel_ranger_society } multiply_temp_variable = { FOE_audit_saint_of_war = 2 } }
+		if = { limit = { has_government = visionary } multiply_temp_variable = { FOE_audit_saint_of_war = 2 } }
+		if = { limit = { has_idea = raider_society } multiply_temp_variable = { FOE_audit_saint_of_war = 0.1 } }
+		if = { limit = { has_government = destruction } multiply_temp_variable = { FOE_audit_saint_of_war = 0.1 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=conqueror candidate=saint_of_war weight=[?FOE_audit_saint_of_war] (zero=ineligible)"
+	}
 	random_list = {
 		log = yes
 		10 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_nomadic_khan = yes } }
 			modifier = { factor = 2 has_idea = raider_society }
 			modifier = { factor = 2 has_idea = tribal_society }
 			modifier = { factor = 2 has_idea = open_borders }
 			modifier = { factor = 0.1 has_idea = old_world_society }
 			modifier = { factor = 0.1 has_idea = steel_ranger_society }
+			modifier = { factor = 1.5 FOE_assignment_suits_nomadic_khan = yes }
+			modifier = { factor = 0.5 NOT = { FOE_has_nomadic_destination = yes } }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=conqueror selected=nomadic_khan" }
 			FOE_initialize_nomadic_khan = yes
 		}
 		10 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_slaving_despot = yes } }
 			modifier = { factor = 2 has_country_flag = slavery_allowed }
 			modifier = { factor = 2 has_idea = slaver_society }
 			modifier = { factor = 0.1 has_idea = old_world_society }
 			modifier = { factor = 0.1 has_idea = steel_ranger_society }
+			modifier = { factor = 1.5 FOE_assignment_suits_slaving_despot = yes }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=conqueror selected=slaving_despot" }
 			FOE_initialize_slaving_despot = yes
 		}
 		10 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_carrion_marshal = yes } }
 			modifier = { factor = 2 has_idea = raider_society }
 			modifier = { factor = 2 has_government = destruction }
 			modifier = { factor = 0.1 has_idea = old_world_society }
 			modifier = { factor = 0.1 has_idea = steel_ranger_society }
+			modifier = { factor = 1.5 FOE_assignment_suits_carrion_marshal = yes }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=conqueror selected=carrion_marshal" }
 			FOE_initialize_carrion_marshal = yes
 		}
 		10 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_iron_warden = yes } }
 			modifier = { factor = 2 has_idea = old_world_society }
 			modifier = { factor = 2 has_idea = steel_ranger_society }
 			modifier = { factor = 2 has_idea = wasteland_society2 }
@@ -1564,7 +1741,18 @@ FOE_roll_conqueror_subclass = {
 			modifier = { factor = 0.1 has_idea = raider_society }
 			modifier = { factor = 0.1 has_idea = tribal_society }
 			modifier = { factor = 0.1 has_idea = open_borders }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=conqueror selected=iron_warden" }
 			FOE_initialize_iron_warden = yes
+		}
+		10 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_saint_of_war = yes } }
+			modifier = { factor = 2 has_idea = old_world_society }
+			modifier = { factor = 2 has_idea = steel_ranger_society }
+			modifier = { factor = 2 has_government = visionary }
+			modifier = { factor = 0.1 has_idea = raider_society }
+			modifier = { factor = 0.1 has_government = destruction }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=conqueror selected=saint_of_war" }
+			FOE_initialize_saint_of_war = yes
 		}
 	}
 }
@@ -1593,17 +1781,57 @@ FOE_roll_mythic_conqueror_subclass = {
 
 #Administrator Subclass Rolls
 FOE_roll_administrator_subclass = {
+	# QA: enable global flag FOE_great_leader_assignment_audit before confirming setup.
+	if = {
+		limit = { has_global_flag = FOE_great_leader_assignment_audit }
+		set_temp_variable = { FOE_audit_unifier = 10 }
+		if = { limit = { NOT = { FOE_can_assign_unifier = yes } } multiply_temp_variable = { FOE_audit_unifier = 0 } }
+		if = { limit = { has_government = visionary } multiply_temp_variable = { FOE_audit_unifier = 2 } }
+		if = { limit = { has_idea = wasteland_society2 } multiply_temp_variable = { FOE_audit_unifier = 2 } }
+		if = { limit = { has_idea = postwar_collectivist_society } multiply_temp_variable = { FOE_audit_unifier = 2 } }
+		if = { limit = { has_idea = steel_ranger_society } multiply_temp_variable = { FOE_audit_unifier = 0.1 } }
+		if = { limit = { has_idea = raider_society } multiply_temp_variable = { FOE_audit_unifier = 0.1 } }
+		if = { limit = { FOE_assignment_suits_unifier = yes } multiply_temp_variable = { FOE_audit_unifier = 1.5 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=administrator candidate=unifier weight=[?FOE_audit_unifier] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_puppetmaster = 10 }
+		if = { limit = { NOT = { FOE_can_assign_puppetmaster = yes } } multiply_temp_variable = { FOE_audit_puppetmaster = 0 } }
+		if = { limit = { has_government = survivalism } multiply_temp_variable = { FOE_audit_puppetmaster = 2 } }
+		if = { limit = { has_idea = wasteland_research_base } multiply_temp_variable = { FOE_audit_puppetmaster = 2 } }
+		if = { limit = { has_idea = wasteland_society } multiply_temp_variable = { FOE_audit_puppetmaster = 2 } }
+		if = { limit = { num_subjects > 0 } multiply_temp_variable = { FOE_audit_puppetmaster = 2 } }
+		if = { limit = { has_idea = raider_society } multiply_temp_variable = { FOE_audit_puppetmaster = 0.1 } }
+		if = { limit = { has_idea = closed_economy } multiply_temp_variable = { FOE_audit_puppetmaster = 0.1 } }
+		if = { limit = { has_idea = political_effort_press } multiply_temp_variable = { FOE_audit_puppetmaster = 0.1 } }
+		if = { limit = { FOE_assignment_suits_puppetmaster = yes } multiply_temp_variable = { FOE_audit_puppetmaster = 1.5 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=administrator candidate=puppetmaster weight=[?FOE_audit_puppetmaster] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_architect_of_order = 10 }
+		if = { limit = { NOT = { FOE_can_assign_architect_of_order = yes } } multiply_temp_variable = { FOE_audit_architect_of_order = 0 } }
+		if = { limit = { has_idea = old_world_society } multiply_temp_variable = { FOE_audit_architect_of_order = 2 } }
+		if = { limit = { has_idea = slaver_society } multiply_temp_variable = { FOE_audit_architect_of_order = 2 } }
+		if = { limit = { has_government = survivalism } multiply_temp_variable = { FOE_audit_architect_of_order = 2 } }
+		if = { limit = { has_idea = wasteland_society2 } multiply_temp_variable = { FOE_audit_architect_of_order = 2 } }
+		if = { limit = { has_idea = tribal_research_base } multiply_temp_variable = { FOE_audit_architect_of_order = 0.1 } }
+		if = { limit = { has_idea = raider_society } multiply_temp_variable = { FOE_audit_architect_of_order = 0.1 } }
+		if = { limit = { has_idea = tribal_society } multiply_temp_variable = { FOE_audit_architect_of_order = 0.1 } }
+		if = { limit = { FOE_assignment_suits_architect_of_order = yes } multiply_temp_variable = { FOE_audit_architect_of_order = 1.5 } }
+		if = { limit = { NOT = { FOE_assignment_suits_architect_of_order = yes } } multiply_temp_variable = { FOE_audit_architect_of_order = 0.5 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=administrator candidate=architect_of_order weight=[?FOE_audit_architect_of_order] (zero=ineligible)"
+	}
 	random_list = {
 		log = yes
 		10 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_unifier = yes } }
 			modifier = { factor = 2 has_government = visionary }
 			modifier = { factor = 2 has_idea = wasteland_society2 }
 			modifier = { factor = 2 has_idea = postwar_collectivist_society }
 			modifier = { factor = 0.1 has_idea = steel_ranger_society }
 			modifier = { factor = 0.1 has_idea = raider_society }
+			modifier = { factor = 1.5 FOE_assignment_suits_unifier = yes }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=administrator selected=unifier" }
 			FOE_initialize_unifier = yes
 		}
 		10 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_puppetmaster = yes } }
 			modifier = { factor = 2 has_government = survivalism }
 			modifier = { factor = 2 has_idea = wasteland_research_base }
 			modifier = { factor = 2 has_idea = wasteland_society }
@@ -1611,9 +1839,12 @@ FOE_roll_administrator_subclass = {
 			modifier = { factor = 0.1 has_idea = raider_society }
 			modifier = { factor = 0.1 has_idea = closed_economy }
 			modifier = { factor = 0.1 has_idea = political_effort_press }
+			modifier = { factor = 1.5 FOE_assignment_suits_puppetmaster = yes }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=administrator selected=puppetmaster" }
 			FOE_initialize_puppetmaster = yes
 		}
 		10 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_architect_of_order = yes } }
 			modifier = { factor = 2 has_idea = old_world_society }
 			modifier = { factor = 2 has_idea = slaver_society }
 			modifier = { factor = 2 has_government = survivalism }
@@ -1621,6 +1852,9 @@ FOE_roll_administrator_subclass = {
 			modifier = { factor = 0.1 has_idea = tribal_research_base }
 			modifier = { factor = 0.1 has_idea = raider_society }
 			modifier = { factor = 0.1 has_idea = tribal_society }
+			modifier = { factor = 1.5 FOE_assignment_suits_architect_of_order = yes }
+			modifier = { factor = 0.5 NOT = { FOE_assignment_suits_architect_of_order = yes } }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=administrator selected=architect_of_order" }
 			FOE_initialize_architect_of_order = yes
 		}
 	}
@@ -1651,9 +1885,32 @@ FOE_roll_mythic_administrator_subclass = {
 #Industrialist Subclass Rolls
 # Picks which subclass.
 FOE_roll_industrialist_subclass = {
+	# QA: enable global flag FOE_great_leader_assignment_audit before confirming setup.
+	if = {
+		limit = { has_global_flag = FOE_great_leader_assignment_audit }
+		set_temp_variable = { FOE_audit_reactor_prophet = 10 }
+		if = { limit = { NOT = { FOE_can_assign_reactor_prophet = yes } } multiply_temp_variable = { FOE_audit_reactor_prophet = 0 } }
+		if = { limit = { has_idea = advanced_research_base } multiply_temp_variable = { FOE_audit_reactor_prophet = 2 } }
+		if = { limit = { check_variable = { var = resource_produced@energy value = 15 compare = greater_than_or_equals } } multiply_temp_variable = { FOE_audit_reactor_prophet = 2 } }
+		if = { limit = { has_idea = tribal_society } multiply_temp_variable = { FOE_audit_reactor_prophet = 0.1 } }
+		if = { limit = { has_idea = tribal_research_base } multiply_temp_variable = { FOE_audit_reactor_prophet = 0.1 } }
+		if = { limit = { FOE_assignment_suits_reactor_prophet = yes } multiply_temp_variable = { FOE_audit_reactor_prophet = 1.5 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=industrialist candidate=reactor_prophet weight=[?FOE_audit_reactor_prophet] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_autark = 10 }
+		if = { limit = { NOT = { FOE_can_assign_autark = yes } } multiply_temp_variable = { FOE_audit_autark = 0 } }
+		if = { limit = { has_idea = enclave_economy } multiply_temp_variable = { FOE_audit_autark = 2 } }
+		if = { limit = { has_idea = closed_economy } multiply_temp_variable = { FOE_audit_autark = 2 } }
+		if = { limit = { FOE_assignment_suits_autark = yes } multiply_temp_variable = { FOE_audit_autark = 1.5 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=industrialist candidate=autark weight=[?FOE_audit_autark] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_dreamer_in_steel = 10 }
+		if = { limit = { NOT = { FOE_can_assign_dreamer_in_steel = yes } } multiply_temp_variable = { FOE_audit_dreamer_in_steel = 0 } }
+		if = { limit = { FOE_assignment_suits_dreamer_in_steel = yes } multiply_temp_variable = { FOE_audit_dreamer_in_steel = 1.5 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=industrialist candidate=dreamer_in_steel weight=[?FOE_audit_dreamer_in_steel] (zero=ineligible)"
+	}
 	random_list = {
 		log = yes
 		10 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_reactor_prophet = yes } }
 			modifier = { factor = 2 has_idea = advanced_research_base }
 			modifier = {
 				factor = 2
@@ -1661,20 +1918,23 @@ FOE_roll_industrialist_subclass = {
 			}
 			modifier = { factor = 0.1 has_idea = tribal_society }
 			modifier = { factor = 0.1 has_idea = tribal_research_base }
+			modifier = { factor = 1.5 FOE_assignment_suits_reactor_prophet = yes }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=industrialist selected=reactor_prophet" }
 			FOE_initialize_reactor_prophet = yes
 		}
 		# Generic fallback: nothing lowers the Autark.
 		10 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_autark = yes } }
 			modifier = { factor = 2 has_idea = enclave_economy }
 			modifier = { factor = 2 has_idea = closed_economy }
+			modifier = { factor = 1.5 FOE_assignment_suits_autark = yes }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=industrialist selected=autark" }
 			FOE_initialize_autark = yes
 		}
 		10 = {
-			# Only nations with settler-level robotics can dream in steel.
-			modifier = {
-				factor = 0
-				NOT = { has_tech = robotics_tech_level_settler }
-			}
+			modifier = { factor = 0 NOT = { FOE_can_assign_dreamer_in_steel = yes } }
+			modifier = { factor = 1.5 FOE_assignment_suits_dreamer_in_steel = yes }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=industrialist selected=dreamer_in_steel" }
 			FOE_initialize_dreamer_in_steel = yes
 		}
 	}

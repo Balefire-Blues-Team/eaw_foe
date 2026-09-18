@@ -121,6 +121,26 @@ FOE_is_securable_state = {
 	NOT = { has_state_flag = FOE_warden_auto_securing }
 }
 
+FOE_is_saint_of_war = {
+	var:country_leader = {
+		has_character_flag = FOE_great_leader_character
+		has_character_flag = FOE_saint_of_war_character
+	}
+}
+
+FOE_is_legendary_or_mythic_saint_of_war = {
+	FOE_is_saint_of_war = yes
+	OR = {
+		has_country_leader_with_trait = legendary_leader_military_trait
+		has_country_leader_with_trait = mythic_leader_military_trait
+	}
+}
+
+FOE_is_mythic_saint_of_war = {
+	FOE_is_saint_of_war = yes
+	has_country_leader_with_trait = mythic_leader_military_trait
+}
+
 FOE_is_unifier = {
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
@@ -546,6 +566,157 @@ FOE_ai_is_critical_seat = {
 				has_variable = FOE_nomadic_court_state
 			}
 			state = var:FROM.FROM.FOE_nomadic_court_state
+		}
+	}
+}
+
+
+# Assignment checks: country scope. Separate reusable suitability from the one-time roll gate.
+FOE_great_leader_country_valid = {
+	is_ai = yes
+	exists = yes
+	var:country_leader = { is_country_leader = yes }
+	capital_scope = { is_owned_by = PREV is_controlled_by = PREV }
+}
+
+FOE_great_leader_roll_eligible = {
+	FOE_great_leader_country_valid = yes
+	has_global_flag = FOE_campaign_setup_confirmed
+	has_global_flag = FOE_campaign_great_leaders_enabled
+	NOT = { has_global_flag = FOE_campaign_setup_multiplayer }
+	NOT = { has_country_flag = FOE_great_leader_roll_completed }
+	NOT = { has_country_flag = great_leader_flag }
+	NOT = { tag = EYE }
+	NOT = { tag = SHA }
+	NOT = { tag = COM }
+	NOT = { tag = OWE }
+}
+
+FOE_can_assign_nomadic_khan = {
+	FOE_great_leader_country_valid = yes
+}
+
+FOE_can_assign_slaving_despot = {
+	FOE_great_leader_country_valid = yes
+}
+
+FOE_can_assign_carrion_marshal = {
+	FOE_great_leader_country_valid = yes
+}
+
+FOE_can_assign_iron_warden = {
+	FOE_great_leader_country_valid = yes
+}
+
+FOE_can_assign_saint_of_war = {
+	FOE_great_leader_country_valid = yes
+}
+
+FOE_can_assign_unifier = {
+	FOE_great_leader_country_valid = yes
+}
+
+FOE_can_assign_puppetmaster = {
+	FOE_great_leader_country_valid = yes
+	is_subject = no
+}
+
+FOE_can_assign_architect_of_order = {
+	FOE_great_leader_country_valid = yes
+}
+
+FOE_can_assign_reactor_prophet = {
+	FOE_great_leader_country_valid = yes
+}
+
+FOE_can_assign_autark = {
+	FOE_great_leader_country_valid = yes
+}
+
+FOE_can_assign_dreamer_in_steel = {
+	FOE_great_leader_country_valid = yes
+	has_tech = robotics_tech_level_settler
+}
+
+# One operational suitability bonus per subclass: correlated signals do not multiply.
+FOE_has_nomadic_destination = {
+	any_owned_state = {
+		is_controlled_by = ROOT
+		is_capital = no
+		OR = {
+			is_core_of = ROOT
+			ROOT = {
+				OR = {
+					has_country_leader_with_trait = legendary_leader_military_trait
+					has_country_leader_with_trait = mythic_leader_military_trait
+				}
+			}
+		}
+	}
+}
+FOE_assignment_suits_nomadic_khan = {
+	OR = { has_tech = bike_tech_1 FOE_has_nomadic_destination = yes }
+}
+FOE_assignment_suits_slaving_despot = {
+	any_owned_state = { FOE_is_enslaveable_state = yes }
+}
+FOE_assignment_suits_carrion_marshal = {
+	any_controlled_state = {
+		FOE_is_harvestable_state = yes
+		NOT = { is_core_of = ROOT }
+		OR = {
+			is_owned_by = ROOT
+			ROOT = {
+				OR = {
+					has_country_leader_with_trait = legendary_leader_military_trait
+					has_country_leader_with_trait = mythic_leader_military_trait
+				}
+			}
+		}
+	}
+}
+FOE_assignment_suits_unifier = {
+	any_owned_state = { FOE_is_unifier_integration_target = yes }
+}
+FOE_assignment_suits_puppetmaster = {
+	OR = {
+		any_owned_state = { FOE_is_puppet_release_target = yes }
+		AND = {
+			has_country_leader_with_trait = mythic_leader_admin_trait
+			any_neighbor_country = { FOE_is_puppet_install_target = yes }
+		}
+	}
+}
+FOE_assignment_suits_architect_of_order = {
+	OR = {
+		any_owned_state = { FOE_is_resettlement_source = yes }
+		AND = {
+			OR = {
+				has_country_leader_with_trait = legendary_leader_admin_trait
+				has_country_leader_with_trait = mythic_leader_admin_trait
+			}
+			any_owned_state = { FOE_is_industry_relocation_source = yes }
+		}
+	}
+}
+FOE_assignment_suits_autark = {
+	OR = {
+		NOT = { FOE_is_self_sufficient_in_water = yes }
+		NOT = { FOE_is_self_sufficient_in_energy = yes }
+		NOT = { FOE_is_self_sufficient_in_metal = yes }
+		NOT = { FOE_is_self_sufficient_in_composites = yes }
+		NOT = { FOE_is_self_sufficient_in_circuitry = yes }
+	}
+}
+FOE_assignment_suits_reactor_prophet = {
+	any_owned_state = { FOE_is_reactor_site = yes }
+}
+FOE_assignment_suits_dreamer_in_steel = {
+	OR = {
+		has_tech = robot_industrial_robots_tech
+		AND = {
+			num_of_military_factories > 1
+			any_owned_state = { FOE_is_robot_factory_site = yes }
 		}
 	}
 }
