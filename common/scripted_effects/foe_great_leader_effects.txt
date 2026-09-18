@@ -2739,6 +2739,11 @@ FOE_roll_administrator_subclass = {
 		if = { limit = { tag = ACV } multiply_temp_variable = { FOE_audit_steadfast_librarian = 5 } }
 		if = { limit = { FOE_assignment_suits_steadfast_librarian = yes } multiply_temp_variable = { FOE_audit_steadfast_librarian = 1.5 } }
 		log = "FOE_ASSIGN [THIS.GetTag] class=administrator candidate=steadfast_librarian weight=[?FOE_audit_steadfast_librarian] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_voice_of_the_machine = 10 }
+		if = { limit = { NOT = { FOE_can_assign_voice_of_the_machine = yes } } multiply_temp_variable = { FOE_audit_voice_of_the_machine = 0 } }
+		if = { limit = { has_idea = old_world_society } multiply_temp_variable = { FOE_audit_voice_of_the_machine = 2 } }
+		if = { limit = { has_idea = advanced_research_base } multiply_temp_variable = { FOE_audit_voice_of_the_machine = 1.5 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=administrator candidate=voice_of_the_machine weight=[?FOE_audit_voice_of_the_machine] (zero=ineligible)"
 	}
 	random_list = {
 		log = yes
@@ -2824,6 +2829,13 @@ FOE_roll_administrator_subclass = {
 			modifier = { factor = 1.5 FOE_assignment_suits_steadfast_librarian = yes }
 			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=administrator selected=steadfast_librarian" }
 			FOE_initialize_steadfast_librarian = yes
+		}
+		10 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_voice_of_the_machine = yes } }
+			modifier = { factor = 2 has_idea = old_world_society }
+			modifier = { factor = 1.5 has_idea = advanced_research_base }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=administrator selected=voice_of_the_machine" }
+			FOE_initialize_voice_of_the_machine = yes
 		}
 	}
 }
@@ -3756,4 +3768,167 @@ FOE_initialize_steadfast_librarian = {
 		set_character_flag = FOE_steadfast_librarian_character
 	}
 	FOE_update_steadfast_librarian = yes
+}
+
+#Voice of the Machine Subclass
+# FOE_voice_priority: 1 Technology, 2 Production, 3 Mobilisation, 4 Administration.
+# Country scope. Sets the tier's buff and debuffs, and keeps only the active Priority's modifier.
+FOE_apply_voice_priority = {
+	set_variable = { FOE_voice_buff = 0.15 }
+	set_variable = { FOE_voice_debuff = -0.10 }
+	if = {
+		limit = { FOE_is_mythic_voice_of_the_machine = yes }
+		set_variable = { FOE_voice_buff = 0.25 }
+		set_variable = { FOE_voice_debuff = -0.05 }
+	}
+	else_if = {
+		limit = { FOE_is_legendary_or_mythic_voice_of_the_machine = yes }
+		set_variable = { FOE_voice_buff = 0.20 }
+		set_variable = { FOE_voice_debuff = -0.075 }
+	}
+	# Training time and resistance are better when lower.
+	set_variable = { FOE_voice_buff_inverse = FOE_voice_buff }
+	multiply_variable = { FOE_voice_buff_inverse = -1 }
+	if = {
+		limit = { check_variable = { FOE_voice_priority = 1 } NOT = { has_dynamic_modifier = { modifier = FOE_priority_technology_modifier } } }
+		add_dynamic_modifier = { modifier = FOE_priority_technology_modifier }
+	}
+	else_if = {
+		limit = { NOT = { check_variable = { FOE_voice_priority = 1 } } has_dynamic_modifier = { modifier = FOE_priority_technology_modifier } }
+		remove_dynamic_modifier = { modifier = FOE_priority_technology_modifier }
+	}
+	if = {
+		limit = { check_variable = { FOE_voice_priority = 2 } NOT = { has_dynamic_modifier = { modifier = FOE_priority_production_modifier } } }
+		add_dynamic_modifier = { modifier = FOE_priority_production_modifier }
+	}
+	else_if = {
+		limit = { NOT = { check_variable = { FOE_voice_priority = 2 } } has_dynamic_modifier = { modifier = FOE_priority_production_modifier } }
+		remove_dynamic_modifier = { modifier = FOE_priority_production_modifier }
+	}
+	if = {
+		limit = { check_variable = { FOE_voice_priority = 3 } NOT = { has_dynamic_modifier = { modifier = FOE_priority_mobilisation_modifier } } }
+		add_dynamic_modifier = { modifier = FOE_priority_mobilisation_modifier }
+	}
+	else_if = {
+		limit = { NOT = { check_variable = { FOE_voice_priority = 3 } } has_dynamic_modifier = { modifier = FOE_priority_mobilisation_modifier } }
+		remove_dynamic_modifier = { modifier = FOE_priority_mobilisation_modifier }
+	}
+	if = {
+		limit = { check_variable = { FOE_voice_priority = 4 } NOT = { has_dynamic_modifier = { modifier = FOE_priority_administration_modifier } } }
+		add_dynamic_modifier = { modifier = FOE_priority_administration_modifier }
+	}
+	else_if = {
+		limit = { NOT = { check_variable = { FOE_voice_priority = 4 } } has_dynamic_modifier = { modifier = FOE_priority_administration_modifier } }
+		remove_dynamic_modifier = { modifier = FOE_priority_administration_modifier }
+	}
+	force_update_dynamic_modifier = yes
+}
+
+# Country scope. The Mainframe assigns a new Priority at random, never the current one, for 180 days.
+# The timer flag runs out a day before special_rulers.22 fires, so an older, superseded event finds it still set and does nothing.
+FOE_assign_voice_priority = {
+	set_temp_variable = { FOE_voice_old_priority = 0 }
+	if = {
+		limit = { has_variable = FOE_voice_priority }
+		set_temp_variable = { FOE_voice_old_priority = FOE_voice_priority }
+	}
+	random_list = {
+		log = yes
+		1 = {
+			modifier = { factor = 0 check_variable = { FOE_voice_old_priority = 1 } }
+			set_variable = { FOE_voice_priority = 1 }
+		}
+		1 = {
+			modifier = { factor = 0 check_variable = { FOE_voice_old_priority = 2 } }
+			set_variable = { FOE_voice_priority = 2 }
+		}
+		1 = {
+			modifier = { factor = 0 check_variable = { FOE_voice_old_priority = 3 } }
+			set_variable = { FOE_voice_priority = 3 }
+		}
+		1 = {
+			modifier = { factor = 0 check_variable = { FOE_voice_old_priority = 4 } }
+			set_variable = { FOE_voice_priority = 4 }
+		}
+	}
+	clr_country_flag = FOE_voice_directive_used
+	set_country_flag = { flag = FOE_voice_priority_timer value = 1 days = 179 }
+	country_event = { id = special_rulers.22 days = 180 }
+	FOE_apply_voice_priority = yes
+}
+
+# Country scope. Monthly. Also catches a Voice with no Priority running, such as a former Voice returning to office.
+FOE_update_voice_of_the_machine = {
+	if = {
+		limit = { FOE_is_voice_of_the_machine = yes }
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_variable = FOE_voice_priority }
+					NOT = { has_country_flag = FOE_voice_priority_timer }
+				}
+			}
+			clr_country_flag = FOE_voice_petitioned
+			FOE_assign_voice_priority = yes
+		}
+		else = {
+			FOE_apply_voice_priority = yes
+		}
+	}
+	else_if = {
+		limit = { has_variable = FOE_voice_priority }
+		if = {
+			limit = { has_dynamic_modifier = { modifier = FOE_priority_technology_modifier } }
+			remove_dynamic_modifier = { modifier = FOE_priority_technology_modifier }
+		}
+		if = {
+			limit = { has_dynamic_modifier = { modifier = FOE_priority_production_modifier } }
+			remove_dynamic_modifier = { modifier = FOE_priority_production_modifier }
+		}
+		if = {
+			limit = { has_dynamic_modifier = { modifier = FOE_priority_mobilisation_modifier } }
+			remove_dynamic_modifier = { modifier = FOE_priority_mobilisation_modifier }
+		}
+		if = {
+			limit = { has_dynamic_modifier = { modifier = FOE_priority_administration_modifier } }
+			remove_dynamic_modifier = { modifier = FOE_priority_administration_modifier }
+		}
+		clear_variable = FOE_voice_priority
+		clear_variable = FOE_voice_buff
+		clear_variable = FOE_voice_debuff
+		clear_variable = FOE_voice_buff_inverse
+		clr_country_flag = FOE_voice_priority_timer
+		clr_country_flag = FOE_voice_directive_used
+		clr_country_flag = FOE_voice_petitioned
+	}
+}
+
+# Country scope. Mythic: 50% the Mainframe reassigns at once, 50% it refuses. The robotics study comes either way.
+FOE_petition_the_mainframe = {
+	set_country_flag = FOE_voice_petitioned
+	add_tech_bonus = {
+		name = FOE_voice_petition_mainframe
+		bonus = 1.0
+		uses = 1
+		category = robotics_tech
+	}
+	random_list = {
+		log = yes
+		50 = {
+			custom_effect_tooltip = FOE_voice_petition_accepted_tt
+			FOE_assign_voice_priority = yes
+		}
+		50 = {
+			custom_effect_tooltip = FOE_voice_petition_refused_tt
+		}
+	}
+}
+
+FOE_initialize_voice_of_the_machine = {
+	add_country_leader_trait = FOE_voice_of_the_machine_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_voice_of_the_machine_character
+	}
+	FOE_update_voice_of_the_machine = yes
 }

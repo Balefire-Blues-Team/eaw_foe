@@ -2228,6 +2228,162 @@ GEN_great_leader_decisions = {
 		}
 	}
 
+	#Voice of the Machine: Technology Priority directive
+	FOE_voice_compute_solution = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		cost = 50
+		fire_only_once = no
+		visible = {
+			FOE_is_voice_of_the_machine = yes
+			check_variable = { FOE_voice_priority = 1 }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_voice_directive_unused_tt
+				NOT = { has_country_flag = FOE_voice_directive_used }
+			}
+		}
+		complete_effect = {
+			add_tech_bonus = {
+				name = FOE_voice_compute_solution
+				bonus = 0.5
+				uses = 1
+				category = industry
+			}
+			add_tech_bonus = {
+				name = FOE_voice_compute_solution
+				bonus = 0.5
+				uses = 1
+				category = electronics
+			}
+			hidden_effect = { set_country_flag = FOE_voice_directive_used }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	#Voice of the Machine: Production Priority directive
+	FOE_voice_overclock_lines = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		cost = 50
+		fire_only_once = no
+		visible = {
+			FOE_is_voice_of_the_machine = yes
+			check_variable = { FOE_voice_priority = 2 }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_voice_directive_unused_tt
+				NOT = { has_country_flag = FOE_voice_directive_used }
+			}
+		}
+		complete_effect = {
+			add_dynamic_modifier = { modifier = FOE_overclocked_lines_modifier days = 90 }
+			hidden_effect = { set_country_flag = FOE_voice_directive_used }
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	#Voice of the Machine: Mobilisation Priority directive
+	FOE_voice_issue_draft = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		cost = 50
+		fire_only_once = no
+		visible = {
+			FOE_is_voice_of_the_machine = yes
+			check_variable = { FOE_voice_priority = 3 }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_voice_directive_unused_tt
+				NOT = { has_country_flag = FOE_voice_directive_used }
+			}
+		}
+		complete_effect = {
+			add_manpower = 500
+			hidden_effect = { set_country_flag = FOE_voice_directive_used }
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 2
+				has_war = yes
+			}
+		}
+	}
+
+	#Voice of the Machine: Administration Priority directive
+	FOE_voice_enforce_compliance = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		cost = 50
+		fire_only_once = no
+		visible = {
+			FOE_is_voice_of_the_machine = yes
+			check_variable = { FOE_voice_priority = 4 }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_voice_directive_unused_tt
+				NOT = { has_country_flag = FOE_voice_directive_used }
+			}
+		}
+		complete_effect = {
+			add_stability = 0.05
+			custom_effect_tooltip = FOE_voice_enforce_compliance_tt
+			hidden_effect = {
+				every_owned_state = {
+					limit = { NOT = { is_core_of = ROOT } }
+					add_compliance = 10
+				}
+			}
+			hidden_effect = { set_country_flag = FOE_voice_directive_used }
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 0.5
+				NOT = { any_owned_state = { NOT = { is_core_of = ROOT } } }
+			}
+		}
+	}
+
+	#Voice of the Machine: Mythic petition
+	FOE_voice_petition_mainframe = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		cost = 100
+		fire_only_once = no
+		visible = { FOE_is_mythic_voice_of_the_machine = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_voice_not_petitioned_tt
+				NOT = { has_country_flag = FOE_voice_petitioned }
+			}
+		}
+		complete_effect = {
+			FOE_petition_the_mainframe = yes
+		}
+		ai_will_do = {
+			base = 5
+			# At war, the AI asks to be released from peacetime Priorities.
+			modifier = {
+				factor = 3
+				has_war = yes
+				OR = {
+					check_variable = { FOE_voice_priority = 1 }
+					check_variable = { FOE_voice_priority = 4 }
+				}
+			}
+		}
+	}
+
 	#Dreamer in Steel: Automated Workshops
 	FOE_dreamer_robot_workshops = {
 		icon = GFX_decision_unknown

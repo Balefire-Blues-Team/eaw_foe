@@ -66,7 +66,7 @@ FOE_one_nation_modifier = {
 	enable = { always = yes }
 	stability_factor = FOE_unity_stability
 	production_speed_buildings_factor = FOE_unity_construction
-	recruitable_population_factor = FOE_unity_recruitable
+	conscription_factor = FOE_unity_recruitable
 }
 
 FOE_unifier_levy_modifier = {
@@ -145,7 +145,7 @@ FOE_leeched_industry_modifier = {
 FOE_leeched_levies_modifier = {
 	icon = GFX_idea_SPR_subvert_soviet_control
 	enable = { always = yes }
-	recruitable_population_factor = -0.10
+	conscription_factor = -0.10
 }
 
 # On the Parasite: 3% per current host, uncapped.
@@ -158,7 +158,7 @@ FOE_parasite_industry_modifier = {
 FOE_parasite_levies_modifier = {
 	icon = GFX_idea_Merchant_Tribute
 	enable = { always = yes }
-	recruitable_population_factor = FOE_parasite_levies
+	conscription_factor = FOE_parasite_levies
 }
 
 # On a goaded country that backed down. Lasts until it goes to war with the Parasite,
@@ -180,7 +180,7 @@ FOE_goaded_modifier = {
 	}
 	stability_factor = -0.20
 	war_support_factor = -0.20
-	recruitable_population_factor = -0.20
+	conscription_factor = -0.20
 }
 
 # On the Parasite for 100 days after a goaded neighbour declares war.
@@ -539,7 +539,7 @@ FOE_law_of_levy_modifier = {
 	remove_trigger = {
 		NOT = { FOE_is_lawgiver = yes }
 	}
-	recruitable_population_factor = FOE_law_levy_strength
+	conscription_factor = FOE_law_levy_strength
 	monthly_population = FOE_law_levy_strength
 }
 
@@ -564,7 +564,7 @@ FOE_eternal_code_modifier = {
 	army_attack_factor = FOE_code_arms
 	army_defence_factor = FOE_code_arms
 	research_speed_factor = FOE_code_learning
-	recruitable_population_factor = FOE_code_levy
+	conscription_factor = FOE_code_levy
 	monthly_population = FOE_code_levy
 	consumer_goods_factor = FOE_code_tithes
 }
@@ -581,4 +581,64 @@ FOE_catalogue_modifier = {
 	experience_gain_army_factor = FOE_catalogue_experience
 	experience_gain_air_factor = FOE_catalogue_experience
 	experience_gain_navy_factor = FOE_catalogue_experience
+}
+
+#Voice of the Machine
+# One Priority at a time. FOE_voice_buff / FOE_voice_debuff are set by tier: +15/-10%, +20/-7.5%, +25/-5%.
+FOE_priority_technology_modifier = {
+	icon = GFX_idea_fillydelphia_research_sharing
+	enable = { always = yes }
+	remove_trigger = {
+		NOT = { FOE_is_voice_of_the_machine = yes }
+	}
+	research_speed_factor = FOE_voice_buff
+	industrial_capacity_factory = FOE_voice_debuff
+	conscription_factor = FOE_voice_debuff
+	political_power_factor = FOE_voice_debuff
+}
+
+FOE_priority_production_modifier = {
+	icon = GFX_idea_MSR_automated_efficiency_idea
+	enable = { always = yes }
+	remove_trigger = {
+		NOT = { FOE_is_voice_of_the_machine = yes }
+	}
+	industrial_capacity_factory = FOE_voice_buff
+	production_speed_buildings_factor = FOE_voice_buff
+	research_speed_factor = FOE_voice_debuff
+	conscription_factor = FOE_voice_debuff
+	political_power_factor = FOE_voice_debuff
+}
+
+FOE_priority_mobilisation_modifier = {
+	icon = GFX_idea_MSR_better_training_program_idea
+	enable = { always = yes }
+	remove_trigger = {
+		NOT = { FOE_is_voice_of_the_machine = yes }
+	}
+	conscription_factor = FOE_voice_buff
+	training_time_factor = FOE_voice_buff_inverse
+	research_speed_factor = FOE_voice_debuff
+	industrial_capacity_factory = FOE_voice_debuff
+	political_power_factor = FOE_voice_debuff
+}
+
+FOE_priority_administration_modifier = {
+	icon = GFX_idea_unity_protocols_spirit
+	enable = { always = yes }
+	remove_trigger = {
+		NOT = { FOE_is_voice_of_the_machine = yes }
+	}
+	political_power_factor = FOE_voice_buff
+	resistance_target = FOE_voice_buff_inverse
+	research_speed_factor = FOE_voice_debuff
+	industrial_capacity_factory = FOE_voice_debuff
+	conscription_factor = FOE_voice_debuff
+}
+
+# Overclock the Lines: 90 days, set by the decision.
+FOE_overclocked_lines_modifier = {
+	icon = GFX_idea_Integrated_war_industries_idea
+	enable = { always = yes }
+	production_factory_efficiency_gain_factor = 0.15
 }

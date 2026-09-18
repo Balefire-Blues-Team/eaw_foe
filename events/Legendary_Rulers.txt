@@ -561,26 +561,26 @@ country_event = {
 			NOT = { has_country_leader_with_trait = mythic_leader_admin_trait }
 		}
 		add_country_leader_trait = mythic_leader_admin_trait
-		FOE_initialize_steadfast_librarian = yes
+		FOE_initialize_voice_of_the_machine = yes
 	}
 
 	option = {
 		name = special_rulers.16.b
 		trigger = {
 			has_country_leader_with_trait = mythic_leader_admin_trait
-			NOT = { FOE_is_steadfast_librarian = yes }
+			NOT = { FOE_is_voice_of_the_machine = yes }
 		}
-		FOE_initialize_steadfast_librarian = yes
+		FOE_initialize_voice_of_the_machine = yes
 	}
 
-	# Lowers the baseline, so the Catalogue counts 25 more techs, then runs the monthly update (slots at 20 and 50).
+	# Ends the current Priority now, as if its 180 days had run out; the Petition is unlocked again.
 	option = {
 		name = special_rulers.16.c
 		trigger = {
-			FOE_is_steadfast_librarian = yes
+			FOE_is_voice_of_the_machine = yes
 		}
-		subtract_from_variable = { FOE_catalogue_baseline = 25 }
-		FOE_update_steadfast_librarian = yes
+		clr_country_flag = FOE_voice_priority_timer
+		FOE_update_voice_of_the_machine = yes
 	}
 
 	option = {
@@ -749,5 +749,21 @@ country_event = {
 			subtract_from_variable = { FOE_black_market_factories = 1 }
 		}
 		clear_variable = FOE_black_market_factories
+	}
+}
+
+#Voice of the Machine: the Priority runs out and the Mainframe assigns the next.
+country_event = {
+	id = special_rulers.22
+	hidden = yes
+	is_triggered_only = yes
+	trigger = {
+		FOE_is_voice_of_the_machine = yes
+		NOT = { has_country_flag = FOE_voice_priority_timer }
+	}
+
+	immediate = {
+		clr_country_flag = FOE_voice_petitioned
+		FOE_assign_voice_priority = yes
 	}
 }
