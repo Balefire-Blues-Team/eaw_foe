@@ -1,5 +1,39 @@
 # Country scope. No scripted-effect parameters are used.
 
+# Record every outcome, including the ordinary-leader result, before the event options run.
+# Character flags survive leaving office, returning to office and save/reload.
+FOE_mark_great_leader_roll_completed = {
+	var:country_leader = { set_character_flag = FOE_great_leader_roll_completed }
+	set_country_flag = FOE_great_leader_roll_completed
+	set_country_flag = FOE_great_leader_character_roll_tracking
+}
+
+# Poll the incumbent: same-party scripted successions need not change the government.
+# Run in country scope from on_weekly so the event chain receives the successor's country as ROOT.
+FOE_check_great_leader_succession = {
+	if = {
+		limit = {
+			has_global_flag = FOE_campaign_setup_confirmed
+			has_global_flag = FOE_campaign_great_leaders_enabled
+			NOT = { has_global_flag = FOE_campaign_setup_multiplayer }
+			FOE_great_leader_country_valid = yes
+		}
+		# Old saves only recorded a country-wide result. Preserve the current incumbent's
+		# outcome once; the old data cannot identify a former ordinary leader.
+		if = {
+			limit = {
+				has_country_flag = FOE_great_leader_roll_completed
+				NOT = { has_country_flag = FOE_great_leader_character_roll_tracking }
+			}
+			FOE_mark_great_leader_roll_completed = yes
+		}
+		if = {
+			limit = { FOE_great_leader_roll_eligible = yes }
+			country_event = { id = special_rulers.1 }
+		}
+	}
+}
+
 #Nomadic Khan Subclass
 FOE_initialize_nomadic_khan = {
 	add_country_leader_trait = FOE_nomadic_khan_trait

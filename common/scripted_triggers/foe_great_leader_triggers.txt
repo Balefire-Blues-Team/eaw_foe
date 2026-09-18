@@ -1035,7 +1035,7 @@ FOE_ai_is_critical_seat = {
 }
 
 
-# Assignment checks: country scope. Separate reusable suitability from the one-time roll gate.
+# Assignment checks: country scope. Separate reusable suitability from the once-per-character roll gate.
 FOE_great_leader_country_valid = {
 	is_ai = yes
 	exists = yes
@@ -1048,8 +1048,15 @@ FOE_great_leader_roll_eligible = {
 	has_global_flag = FOE_campaign_setup_confirmed
 	has_global_flag = FOE_campaign_great_leaders_enabled
 	NOT = { has_global_flag = FOE_campaign_setup_multiplayer }
-	NOT = { has_country_flag = FOE_great_leader_roll_completed }
-	NOT = { has_country_flag = great_leader_flag }
+	# Country flags record past rolls; only the active character can block a successor.
+	var:country_leader = {
+		NOT = { has_character_flag = FOE_great_leader_roll_completed }
+		NOT = { has_character_flag = FOE_great_leader_character }
+	}
+	# Also protect leaders assigned directly, including Mythic combo classes.
+	NOT = { FOE_has_any_conqueror_tier = yes }
+	NOT = { FOE_has_any_administrator_tier = yes }
+	NOT = { FOE_has_any_industrialist_tier = yes }
 	NOT = { tag = EYE }
 	NOT = { tag = SHA }
 	NOT = { tag = COM }

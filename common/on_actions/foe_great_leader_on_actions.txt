@@ -1,17 +1,38 @@
 on_actions = {
+	# Skip subclass work when Great Leaders were disabled in campaign setup.
+	# Keep the gates outside scope changes and preserve cleanup checks within enabled campaigns.
+	# Each new incumbent gets one chance, even after a same-party scripted succession.
+	# The character marker also remembers failed rolls and returning former leaders.
+	on_weekly = {
+		effect = {
+			# Do not attempt succession checks unless the campaign enabled Great Leaders.
+			if = {
+				limit = {
+					has_global_flag = FOE_campaign_great_leaders_enabled
+					has_global_flag = FOE_campaign_setup_confirmed
+					NOT = { has_global_flag = FOE_campaign_setup_multiplayer }
+				}
+				FOE_check_great_leader_succession = yes
+			}
+		}
+	}
+
 	# ROOT = new controller, FROM = previous controller, FROM.FROM = state.
 	# Remove immediately on court loss rather than waiting for idea cancellation.
 	
 	#Nomadic Khan actions
 	on_state_control_changed = {
 		effect = {
-			FROM = {
-				if = {
-					limit = {
-						has_idea = FOE_the_court_is_the_state
-						NOT = { FOE_nomadic_court_controlled = yes }
+			if = {
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				FROM = {
+					if = {
+						limit = {
+							has_idea = FOE_the_court_is_the_state
+							NOT = { FOE_nomadic_court_controlled = yes }
+						}
+						remove_ideas = FOE_the_court_is_the_state
 					}
-					remove_ideas = FOE_the_court_is_the_state
 				}
 			}
 		}
@@ -21,15 +42,18 @@ on_actions = {
 	on_state_control_changed = {
 		effect = {
 			if = {
-				limit = {
-					FOE_is_slaving_despot = yes
-					has_war_with = FROM
-					FROM.FROM = {
-						NOT = { is_core_of = ROOT }
-						NOT = { has_state_flag = FOE_despot_conquest_slaves_taken }
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				if = {
+					limit = {
+						FOE_is_slaving_despot = yes
+						has_war_with = FROM
+						FROM.FROM = {
+							NOT = { is_core_of = ROOT }
+							NOT = { has_state_flag = FOE_despot_conquest_slaves_taken }
+						}
 					}
+					FOE_take_conquest_slaves = yes
 				}
-				FOE_take_conquest_slaves = yes
 			}
 		}
 	}
@@ -37,13 +61,16 @@ on_actions = {
 	on_monthly = {
 		effect = {
 			if = {
-				limit = {
-					OR = {
-						FOE_is_mythic_slaving_despot = yes
-						has_dynamic_modifier = { modifier = FOE_empire_of_chains_modifier }
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				if = {
+					limit = {
+						OR = {
+							FOE_is_mythic_slaving_despot = yes
+							has_dynamic_modifier = { modifier = FOE_empire_of_chains_modifier }
+						}
 					}
+					FOE_update_empire_of_chains = yes
 				}
-				FOE_update_empire_of_chains = yes
 			}
 		}
 	}
@@ -52,22 +79,28 @@ on_actions = {
 	on_state_control_changed = {
 		effect = {
 			if = {
-				limit = {
-					FOE_is_mythic_carrion_marshal = yes
-					has_war_with = FROM
-					FROM.FROM = {
-						NOT = { is_owned_by = ROOT }
-						FOE_is_harvestable_state = yes
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				if = {
+					limit = {
+						FOE_is_mythic_carrion_marshal = yes
+						has_war_with = FROM
+						FROM.FROM = {
+							NOT = { is_owned_by = ROOT }
+							FOE_is_harvestable_state = yes
+						}
 					}
+					FROM.FROM = { FOE_carrion_harvest_state = yes }
 				}
-				FROM.FROM = { FOE_carrion_harvest_state = yes }
 			}
 		}
 	}
 
 	on_monthly = {
 		effect = {
-			FOE_update_living_off_the_land = yes
+			if = {
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				FOE_update_living_off_the_land = yes
+			}
 		}
 	}
 
@@ -75,13 +108,16 @@ on_actions = {
 	on_weekly = {
 		effect = {
 			if = {
-				limit = {
-					OR = {
-						FOE_is_mythic_iron_warden = yes
-						has_dynamic_modifier = { modifier = FOE_warden_works_modifier }
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				if = {
+					limit = {
+						OR = {
+							FOE_is_mythic_iron_warden = yes
+							has_dynamic_modifier = { modifier = FOE_warden_works_modifier }
+						}
 					}
+					FOE_tick_warden_works = yes
 				}
-				FOE_tick_warden_works = yes
 			}
 		}
 	}
@@ -89,13 +125,16 @@ on_actions = {
 	on_monthly = {
 		effect = {
 			if = {
-				limit = {
-					OR = {
-						FOE_is_iron_warden = yes
-						has_dynamic_modifier = { modifier = FOE_the_iron_line_modifier }
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				if = {
+					limit = {
+						OR = {
+							FOE_is_iron_warden = yes
+							has_dynamic_modifier = { modifier = FOE_the_iron_line_modifier }
+						}
 					}
+					FOE_update_iron_warden = yes
 				}
-				FOE_update_iron_warden = yes
 			}
 		}
 	}
@@ -104,10 +143,13 @@ on_actions = {
 	# ROOT is the army leader who won; FROM is the country they fight for.
 	on_army_leader_won_combat = {
 		effect = {
-			FROM = {
-				if = {
-					limit = { FOE_is_legendary_or_mythic_saint_of_war = yes }
-					FOE_count_saint_victory = yes
+			if = {
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				FROM = {
+					if = {
+						limit = { FOE_is_legendary_or_mythic_saint_of_war = yes }
+						FOE_count_saint_victory = yes
+					}
 				}
 			}
 		}
@@ -115,7 +157,10 @@ on_actions = {
 
 	on_monthly = {
 		effect = {
-			FOE_update_saint_of_war = yes
+			if = {
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				FOE_update_saint_of_war = yes
+			}
 		}
 	}
 
@@ -123,32 +168,41 @@ on_actions = {
 	on_state_control_changed = {
 		effect = {
 			if = {
-				limit = {
-					FOE_is_chainbreaker = yes
-					has_war_with = FROM
-					FROM.FROM = { NOT = { has_state_flag = FOE_chainbreaker_liberated } }
-					FROM = {
-						OR = {
-							check_variable = { foe_slaves_var > 0 }
-							check_variable = { loot > 0 }
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				if = {
+					limit = {
+						FOE_is_chainbreaker = yes
+						has_war_with = FROM
+						FROM.FROM = { NOT = { has_state_flag = FOE_chainbreaker_liberated } }
+						FROM = {
+							OR = {
+								check_variable = { foe_slaves_var > 0 }
+								check_variable = { loot > 0 }
+							}
 						}
 					}
+					FOE_chainbreaker_liberate_state = yes
 				}
-				FOE_chainbreaker_liberate_state = yes
 			}
 		}
 	}
 
 	on_monthly = {
 		effect = {
-			FOE_update_chainbreaker = yes
+			if = {
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				FOE_update_chainbreaker = yes
+			}
 		}
 	}
 
 	#Unifier actions
 	on_monthly = {
 		effect = {
-			FOE_update_one_nation = yes
+			if = {
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				FOE_update_one_nation = yes
+			}
 		}
 	}
 
@@ -156,13 +210,16 @@ on_actions = {
 	on_monthly = {
 		effect = {
 			if = {
-				limit = {
-					OR = {
-						FOE_is_legendary_or_mythic_puppetmaster = yes
-						has_dynamic_modifier = { modifier = FOE_web_of_strings_modifier }
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				if = {
+					limit = {
+						OR = {
+							FOE_is_legendary_or_mythic_puppetmaster = yes
+							has_dynamic_modifier = { modifier = FOE_web_of_strings_modifier }
+						}
 					}
+					FOE_update_puppet_web = yes
 				}
-				FOE_update_puppet_web = yes
 			}
 		}
 	}
@@ -170,28 +227,31 @@ on_actions = {
 	#Architect of Order actions
 	on_state_control_changed = {
 		effect = {
-			FROM = {
+			if = {
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				FROM = {
+					if = {
+						limit = {
+							FOE_is_mythic_architect_of_order = yes
+							NOT = { has_country_flag = FOE_centre_fallen }
+							has_variable = FOE_architect_heart_state
+							var:FOE_architect_heart_state = { NOT = { is_controlled_by = PREV } }
+						}
+						set_country_flag = FOE_centre_fallen
+						add_ideas = FOE_the_centre_has_fallen
+						FOE_update_planned_capital = yes
+					}
+				}
 				if = {
 					limit = {
-						FOE_is_mythic_architect_of_order = yes
-						NOT = { has_country_flag = FOE_centre_fallen }
+						has_country_flag = FOE_centre_fallen
 						has_variable = FOE_architect_heart_state
-						var:FOE_architect_heart_state = { NOT = { is_controlled_by = PREV } }
+						var:FOE_architect_heart_state = { is_controlled_by = PREV }
 					}
-					set_country_flag = FOE_centre_fallen
-					add_ideas = FOE_the_centre_has_fallen
+					clr_country_flag = FOE_centre_fallen
+					remove_ideas = FOE_the_centre_has_fallen
 					FOE_update_planned_capital = yes
 				}
-			}
-			if = {
-				limit = {
-					has_country_flag = FOE_centre_fallen
-					has_variable = FOE_architect_heart_state
-					var:FOE_architect_heart_state = { is_controlled_by = PREV }
-				}
-				clr_country_flag = FOE_centre_fallen
-				remove_ideas = FOE_the_centre_has_fallen
-				FOE_update_planned_capital = yes
 			}
 		}
 	}
@@ -199,13 +259,16 @@ on_actions = {
 	on_monthly = {
 		effect = {
 			if = {
-				limit = {
-					OR = {
-						FOE_is_architect_of_order = yes
-						has_variable = FOE_planned_capital_state
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				if = {
+					limit = {
+						OR = {
+							FOE_is_architect_of_order = yes
+							has_variable = FOE_planned_capital_state
+						}
 					}
+					FOE_update_planned_capital = yes
 				}
-				FOE_update_planned_capital = yes
 			}
 		}
 	}
@@ -214,13 +277,16 @@ on_actions = {
 	on_monthly = {
 		effect = {
 			if = {
-				limit = {
-					OR = {
-						FOE_is_inward_perfectionist = yes
-						has_dynamic_modifier = { modifier = FOE_perfection_modifier }
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				if = {
+					limit = {
+						OR = {
+							FOE_is_inward_perfectionist = yes
+							has_dynamic_modifier = { modifier = FOE_perfection_modifier }
+						}
 					}
+					FOE_update_inward_perfectionist = yes
 				}
-				FOE_update_inward_perfectionist = yes
 			}
 		}
 	}
@@ -229,13 +295,16 @@ on_actions = {
 	on_monthly = {
 		effect = {
 			if = {
-				limit = {
-					OR = {
-						FOE_is_diplomatic_parasite = yes
-						has_dynamic_modifier = { modifier = FOE_parasite_industry_modifier }
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				if = {
+					limit = {
+						OR = {
+							FOE_is_diplomatic_parasite = yes
+							has_dynamic_modifier = { modifier = FOE_parasite_industry_modifier }
+						}
 					}
+					FOE_update_diplomatic_parasite = yes
 				}
-				FOE_update_diplomatic_parasite = yes
 			}
 		}
 	}
@@ -244,8 +313,11 @@ on_actions = {
 	on_monthly = {
 		effect = {
 			if = {
-				limit = { FOE_is_wild_heart = yes }
-				FOE_wild_heart_migration = yes
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				if = {
+					limit = { FOE_is_wild_heart = yes }
+					FOE_wild_heart_migration = yes
+				}
 			}
 		}
 	}
@@ -254,13 +326,16 @@ on_actions = {
 	on_monthly = {
 		effect = {
 			if = {
-				limit = {
-					OR = {
-						FOE_is_reactor_prophet = yes
-						has_dynamic_modifier = { modifier = FOE_reactor_cult_modifier }
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				if = {
+					limit = {
+						OR = {
+							FOE_is_reactor_prophet = yes
+							has_dynamic_modifier = { modifier = FOE_reactor_cult_modifier }
+						}
 					}
+					FOE_update_reactor_prophet = yes
 				}
-				FOE_update_reactor_prophet = yes
 			}
 		}
 	}
@@ -269,13 +344,16 @@ on_actions = {
 	on_monthly = {
 		effect = {
 			if = {
-				limit = {
-					OR = {
-						FOE_is_autark = yes
-						has_dynamic_modifier = { modifier = FOE_autarky_modifier }
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				if = {
+					limit = {
+						OR = {
+							FOE_is_autark = yes
+							has_dynamic_modifier = { modifier = FOE_autarky_modifier }
+						}
 					}
+					FOE_update_autark = yes
 				}
-				FOE_update_autark = yes
 			}
 		}
 	}
@@ -284,13 +362,16 @@ on_actions = {
 	on_monthly = {
 		effect = {
 			if = {
-				limit = {
-					OR = {
-						FOE_is_merchant_prince = yes
-						has_dynamic_modifier = { modifier = FOE_market_modifier }
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				if = {
+					limit = {
+						OR = {
+							FOE_is_merchant_prince = yes
+							has_dynamic_modifier = { modifier = FOE_market_modifier }
+						}
 					}
+					FOE_update_merchant_prince = yes
 				}
-				FOE_update_merchant_prince = yes
 			}
 		}
 	}
@@ -299,13 +380,16 @@ on_actions = {
 	on_monthly = {
 		effect = {
 			if = {
-				limit = {
-					OR = {
-						FOE_is_biological_engineer = yes
-						has_variable = FOE_biomass
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				if = {
+					limit = {
+						OR = {
+							FOE_is_biological_engineer = yes
+							has_variable = FOE_biomass
+						}
 					}
+					FOE_update_biological_engineer = yes
 				}
-				FOE_update_biological_engineer = yes
 			}
 		}
 	}
@@ -314,13 +398,16 @@ on_actions = {
 	on_monthly = {
 		effect = {
 			if = {
-				limit = {
-					OR = {
-						FOE_is_blackout_opportunist = yes
-						has_dynamic_modifier = { modifier = FOE_running_dark_modifier }
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				if = {
+					limit = {
+						OR = {
+							FOE_is_blackout_opportunist = yes
+							has_dynamic_modifier = { modifier = FOE_running_dark_modifier }
+						}
 					}
+					FOE_update_blackout_opportunist = yes
 				}
-				FOE_update_blackout_opportunist = yes
 			}
 		}
 	}
@@ -329,17 +416,20 @@ on_actions = {
 	on_monthly = {
 		effect = {
 			if = {
-				limit = { FOE_is_oathkeeper = yes }
-				FOE_collect_oath_tribute = yes
-			}
-			if = {
-				limit = {
-					OR = {
-						FOE_is_oathkeeper = yes
-						has_variable = FOE_oaths_sworn
-					}
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				if = {
+					limit = { FOE_is_oathkeeper = yes }
+					FOE_collect_oath_tribute = yes
 				}
-				FOE_update_oathkeeper = yes
+				if = {
+					limit = {
+						OR = {
+							FOE_is_oathkeeper = yes
+							has_variable = FOE_oaths_sworn
+						}
+					}
+					FOE_update_oathkeeper = yes
+				}
 			}
 		}
 	}
@@ -348,13 +438,16 @@ on_actions = {
 	on_monthly = {
 		effect = {
 			if = {
-				limit = {
-					OR = {
-						FOE_is_robber_baron = yes
-						has_variable = FOE_hoard_bonus
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				if = {
+					limit = {
+						OR = {
+							FOE_is_robber_baron = yes
+							has_variable = FOE_hoard_bonus
+						}
 					}
+					FOE_update_robber_baron = yes
 				}
-				FOE_update_robber_baron = yes
 			}
 		}
 	}
@@ -363,13 +456,16 @@ on_actions = {
 	on_monthly = {
 		effect = {
 			if = {
-				limit = {
-					OR = {
-						FOE_is_railroad_tycoon = yes
-						has_variable = FOE_arteries_bonus
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				if = {
+					limit = {
+						OR = {
+							FOE_is_railroad_tycoon = yes
+							has_variable = FOE_arteries_bonus
+						}
 					}
+					FOE_update_railroad_tycoon = yes
 				}
-				FOE_update_railroad_tycoon = yes
 			}
 		}
 	}
@@ -378,13 +474,16 @@ on_actions = {
 	on_monthly = {
 		effect = {
 			if = {
-				limit = {
-					OR = {
-						FOE_is_lawgiver = yes
-						has_variable = FOE_laws_in_force
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				if = {
+					limit = {
+						OR = {
+							FOE_is_lawgiver = yes
+							has_variable = FOE_laws_in_force
+						}
 					}
+					FOE_tick_lawgiver = yes
 				}
-				FOE_tick_lawgiver = yes
 			}
 		}
 	}
@@ -393,13 +492,16 @@ on_actions = {
 	on_monthly = {
 		effect = {
 			if = {
-				limit = {
-					OR = {
-						FOE_is_steadfast_librarian = yes
-						has_variable = FOE_catalogue_baseline
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				if = {
+					limit = {
+						OR = {
+							FOE_is_steadfast_librarian = yes
+							has_variable = FOE_catalogue_baseline
+						}
 					}
+					FOE_update_steadfast_librarian = yes
 				}
-				FOE_update_steadfast_librarian = yes
 			}
 		}
 	}
@@ -407,7 +509,10 @@ on_actions = {
 	#Machine Uprising cleanup
 	on_monthly = {
 		effect = {
-			FOE_clean_up_machine_uprising = yes
+			if = {
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				FOE_clean_up_machine_uprising = yes
+			}
 		}
 	}
 
@@ -415,13 +520,16 @@ on_actions = {
 	on_monthly = {
 		effect = {
 			if = {
-				limit = {
-					OR = {
-						FOE_is_dreamer_in_steel = yes
-						has_dynamic_modifier = { modifier = FOE_automation_modifier }
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				if = {
+					limit = {
+						OR = {
+							FOE_is_dreamer_in_steel = yes
+							has_dynamic_modifier = { modifier = FOE_automation_modifier }
+						}
 					}
+					FOE_update_dreamer_in_steel = yes
 				}
-				FOE_update_dreamer_in_steel = yes
 			}
 		}
 	}
