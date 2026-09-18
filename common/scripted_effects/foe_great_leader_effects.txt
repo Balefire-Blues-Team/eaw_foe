@@ -2697,6 +2697,14 @@ FOE_roll_administrator_subclass = {
 		if = { limit = { NOT = { FOE_can_assign_lawgiver = yes } } multiply_temp_variable = { FOE_audit_lawgiver = 0 } }
 		if = { limit = { FOE_assignment_suits_lawgiver = yes } multiply_temp_variable = { FOE_audit_lawgiver = 1.5 } }
 		log = "FOE_ASSIGN [THIS.GetTag] class=administrator candidate=lawgiver weight=[?FOE_audit_lawgiver] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_steadfast_librarian = 10 }
+		if = { limit = { NOT = { FOE_can_assign_steadfast_librarian = yes } } multiply_temp_variable = { FOE_audit_steadfast_librarian = 0 } }
+		if = { limit = { has_idea = old_world_society } multiply_temp_variable = { FOE_audit_steadfast_librarian = 2 } }
+		if = { limit = { has_idea = advanced_research_base } multiply_temp_variable = { FOE_audit_steadfast_librarian = 2 } }
+		if = { limit = { has_idea = tribal_research_base } multiply_temp_variable = { FOE_audit_steadfast_librarian = 0.1 } }
+		if = { limit = { tag = ACV } multiply_temp_variable = { FOE_audit_steadfast_librarian = 5 } }
+		if = { limit = { FOE_assignment_suits_steadfast_librarian = yes } multiply_temp_variable = { FOE_audit_steadfast_librarian = 1.5 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=administrator candidate=steadfast_librarian weight=[?FOE_audit_steadfast_librarian] (zero=ineligible)"
 	}
 	random_list = {
 		log = yes
@@ -2771,6 +2779,17 @@ FOE_roll_administrator_subclass = {
 			modifier = { factor = 1.5 FOE_assignment_suits_lawgiver = yes }
 			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=administrator selected=lawgiver" }
 			FOE_initialize_lawgiver = yes
+		}
+		# The Archivists were made for this.
+		10 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_steadfast_librarian = yes } }
+			modifier = { factor = 2 has_idea = old_world_society }
+			modifier = { factor = 2 has_idea = advanced_research_base }
+			modifier = { factor = 0.1 has_idea = tribal_research_base }
+			modifier = { factor = 5 tag = ACV }
+			modifier = { factor = 1.5 FOE_assignment_suits_steadfast_librarian = yes }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=administrator selected=steadfast_librarian" }
+			FOE_initialize_steadfast_librarian = yes
 		}
 	}
 }
@@ -3631,4 +3650,76 @@ FOE_initialize_lawgiver = {
 		set_character_flag = FOE_lawgiver_character
 	}
 	FOE_update_lawgiver = yes
+}
+
+#Steadfast Librarian Subclass
+# Country scope. Monthly. The Catalogue counts techs researched since the Librarian took office, so techs granted at
+# game start (tech levels, access techs) never count. Legendary: +1 research slot at 20 techs. Mythic: +1 more at 50.
+FOE_update_steadfast_librarian = {
+	if = {
+		limit = { FOE_is_steadfast_librarian = yes }
+		if = {
+			limit = { NOT = { has_variable = FOE_catalogue_baseline } }
+			set_variable = { FOE_catalogue_baseline = num_researched_technologies }
+			set_variable = { FOE_librarian_slots = 0 }
+		}
+		set_variable = { FOE_catalogue = num_researched_technologies }
+		subtract_from_variable = { FOE_catalogue = FOE_catalogue_baseline }
+		clamp_variable = { var = FOE_catalogue min = 0 }
+		set_variable = { FOE_catalogue_research = FOE_catalogue }
+		multiply_variable = { FOE_catalogue_research = 0.0025 }
+		clamp_variable = { var = FOE_catalogue_research min = 0 max = 0.15 }
+		set_variable = { FOE_catalogue_experience = 0 }
+		set_temp_variable = { FOE_librarian_slot_target = 0 }
+		if = {
+			limit = {
+				FOE_is_legendary_or_mythic_steadfast_librarian = yes
+				check_variable = { FOE_catalogue > 19 }
+			}
+			set_temp_variable = { FOE_librarian_slot_target = 1 }
+		}
+		if = {
+			limit = { FOE_is_mythic_steadfast_librarian = yes }
+			set_variable = { FOE_catalogue_experience = FOE_catalogue }
+			multiply_variable = { FOE_catalogue_experience = 0.005 }
+			clamp_variable = { var = FOE_catalogue_experience min = 0 max = 0.20 }
+			if = {
+				limit = { check_variable = { FOE_catalogue > 49 } }
+				set_temp_variable = { FOE_librarian_slot_target = 2 }
+			}
+		}
+		while_loop_effect = {
+			limit = { check_variable = { FOE_librarian_slots < FOE_librarian_slot_target } }
+			add_research_slot = 1
+			add_to_variable = { FOE_librarian_slots = 1 }
+		}
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = FOE_catalogue_modifier } } }
+			add_dynamic_modifier = { modifier = FOE_catalogue_modifier }
+		}
+		force_update_dynamic_modifier = yes
+	}
+	else_if = {
+		limit = { has_variable = FOE_catalogue_baseline }
+		# The Librarian is gone: the slots they added go with them.
+		while_loop_effect = {
+			limit = { check_variable = { FOE_librarian_slots > 0 } }
+			add_research_slot = -1
+			subtract_from_variable = { FOE_librarian_slots = 1 }
+		}
+		clear_variable = FOE_catalogue_baseline
+		clear_variable = FOE_librarian_slots
+		clear_variable = FOE_catalogue
+		clear_variable = FOE_catalogue_research
+		clear_variable = FOE_catalogue_experience
+	}
+}
+
+FOE_initialize_steadfast_librarian = {
+	add_country_leader_trait = FOE_steadfast_librarian_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_steadfast_librarian_character
+	}
+	FOE_update_steadfast_librarian = yes
 }
