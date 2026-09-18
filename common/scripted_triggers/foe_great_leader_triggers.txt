@@ -850,6 +850,28 @@ FOE_is_screwable_state = {
 	}
 }
 
+#Railroad Tycoon (Magnate). Combo subclasses are always Mythic, so there are no tier triggers.
+FOE_is_railroad_tycoon = {
+	var:country_leader = {
+		has_character_flag = FOE_great_leader_character
+		has_character_flag = FOE_railroad_tycoon_character
+	}
+}
+
+# State scope; ROOT is the Railroad Tycoon. One of our states at maximum infrastructure.
+FOE_is_rail_state = {
+	is_owned_by = ROOT
+	is_controlled_by = ROOT
+	infrastructure > 9
+}
+
+# State scope; ROOT is the Railroad Tycoon. One of our states the line can still reach further into.
+FOE_is_line_target = {
+	is_owned_by = ROOT
+	is_controlled_by = ROOT
+	infrastructure < 10
+}
+
 FOE_is_machine_uprising = {
 	tag = XYZ
 }
@@ -1080,6 +1102,10 @@ FOE_can_assign_robber_baron = {
 	NOT = { has_country_flag = cant_normal_raid }
 }
 
+FOE_can_assign_railroad_tycoon = {
+	FOE_great_leader_country_valid = yes
+}
+
 FOE_can_assign_dreamer_in_steel = {
 	FOE_great_leader_country_valid = yes
 	has_tech = robotics_tech_level_settler
@@ -1172,4 +1198,7 @@ FOE_assignment_suits_oathkeeper = {
 }
 FOE_assignment_suits_robber_baron = {
 	is_raider_nation = yes
+}
+FOE_assignment_suits_railroad_tycoon = {
+	any_owned_state = { infrastructure > 5 }
 }

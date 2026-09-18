@@ -3038,6 +3038,12 @@ FOE_roll_magnate_subclass = {
 		log = yes
 		60 = { FOE_roll_administrator_subclass = yes }
 		60 = { FOE_roll_industrialist_subclass = yes }
+		30 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_railroad_tycoon = yes } }
+			modifier = { factor = 1.5 FOE_assignment_suits_railroad_tycoon = yes }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=magnate selected=railroad_tycoon" }
+			FOE_initialize_railroad_tycoon = yes
+		}
 	}
 }
 
@@ -3201,4 +3207,139 @@ FOE_initialize_robber_baron = {
 		set_character_flag = FOE_robber_baron_character
 	}
 	FOE_update_robber_baron = yes
+}
+
+#Railroad Tycoon Subclass (Magnate)
+# Country scope. Locked template for the Railway Corps, created once: 4 + 4 infantry, 2 heavy infantry.
+FOE_create_railway_corps_template = {
+	if = {
+		limit = { NOT = { has_template = "Railway Corps" } }
+		division_template = {
+			name = "Railway Corps"
+			is_locked = yes
+			regiments = {
+				infantry = { x = 0 y = 0 }
+				infantry = { x = 0 y = 1 }
+				infantry = { x = 0 y = 2 }
+				infantry = { x = 0 y = 3 }
+				infantry = { x = 1 y = 0 }
+				infantry = { x = 1 y = 1 }
+				infantry = { x = 1 y = 2 }
+				infantry = { x = 1 y = 3 }
+				heavy_infantry = { x = 2 y = 0 }
+				heavy_infantry = { x = 2 y = 1 }
+			}
+		}
+	}
+}
+
+# Country scope; FROM is our state. +2 infrastructure (up to 10) and a railway from the capital.
+FOE_lay_the_line = {
+	add_equipment_to_stockpile = { type = caravan_equipment amount = -5 }
+	FROM = {
+		if = {
+			limit = { infrastructure > 8 }
+			add_building_construction = { type = infrastructure level = 1 instant_build = yes }
+		}
+		else = {
+			add_building_construction = { type = infrastructure level = 2 instant_build = yes }
+		}
+	}
+	capital_scope = {
+		FROM = {
+			build_railway = {
+				level = 1
+				start_state = PREV
+				target_state = THIS
+			}
+		}
+	}
+	FOE_update_railroad_tycoon = yes
+}
+
+# Country scope. One Railway Corps into storage.
+FOE_draft_the_timetable = {
+	add_manpower = -250
+	add_equipment_to_stockpile = { type = infantry_equipment amount = -100 }
+	add_equipment_to_stockpile = { type = caravan_equipment amount = -5 }
+	add_to_variable = { FOE_corps_stored = 1 }
+}
+
+# Country scope; FROM is a state of ours at maximum infrastructure. One stored Railway Corps arrives there.
+FOE_run_the_timetable = {
+	FOE_create_railway_corps_template = yes
+	FROM = {
+		create_unit = {
+			division = "name = \"Railway Corps\" division_template = \"Railway Corps\" start_experience_factor = 0.3 start_equipment_factor = 1.0"
+			owner = ROOT
+		}
+	}
+	subtract_from_variable = { FOE_corps_stored = 1 }
+	add_to_variable = { FOE_corps_deployed = 1 }
+}
+
+# Country scope. At peace the Railway Corps go back to the depot, without refunds.
+# A tenth of them, rounded up, never come back.
+FOE_return_railway_corps = {
+	delete_unit = { division_template = "Railway Corps" }
+	set_temp_variable = { FOE_corps_lost = FOE_corps_deployed }
+	add_to_temp_variable = { FOE_corps_lost = 9 }
+	set_temp_variable = { FOE_corps_remainder = FOE_corps_lost }
+	modulo_temp_variable = { var = FOE_corps_remainder value = 10 }
+	subtract_from_temp_variable = { FOE_corps_lost = FOE_corps_remainder }
+	divide_temp_variable = { FOE_corps_lost = 10 }
+	set_variable = { FOE_corps_last_lost = FOE_corps_lost }
+	add_to_variable = { FOE_corps_stored = FOE_corps_deployed }
+	subtract_from_variable = { FOE_corps_stored = FOE_corps_lost }
+	set_variable = { FOE_corps_deployed = 0 }
+}
+
+# Country scope. Monthly. Iron Arteries: +1% output and construction per state at maximum infrastructure, at most 15%.
+# Storage for the Railway Corps: 5 plus one per such state, at most 25.
+FOE_update_railroad_tycoon = {
+	if = {
+		limit = { FOE_is_railroad_tycoon = yes }
+		FOE_create_railway_corps_template = yes
+		if = {
+			limit = { NOT = { has_variable = FOE_corps_stored } }
+			set_variable = { FOE_corps_stored = 0 }
+			set_variable = { FOE_corps_deployed = 0 }
+		}
+		set_variable = { FOE_rail_states = 0 }
+		every_owned_state = {
+			limit = { FOE_is_rail_state = yes }
+			ROOT = { add_to_variable = { FOE_rail_states = 1 } }
+		}
+		set_variable = { FOE_arteries_bonus = FOE_rail_states }
+		multiply_variable = { FOE_arteries_bonus = 0.01 }
+		clamp_variable = { var = FOE_arteries_bonus min = 0 max = 0.15 }
+		set_variable = { FOE_corps_max = FOE_rail_states }
+		add_to_variable = { FOE_corps_max = 5 }
+		clamp_variable = { var = FOE_corps_max min = 5 max = 25 }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = FOE_iron_arteries_modifier } } }
+			add_dynamic_modifier = { modifier = FOE_iron_arteries_modifier }
+		}
+		force_update_dynamic_modifier = yes
+		if = {
+			limit = {
+				has_war = no
+				check_variable = { FOE_corps_deployed > 0 }
+			}
+			FOE_return_railway_corps = yes
+		}
+	}
+	else_if = {
+		limit = { has_variable = FOE_arteries_bonus }
+		clear_variable = FOE_arteries_bonus
+	}
+}
+
+FOE_initialize_railroad_tycoon = {
+	add_country_leader_trait = FOE_railroad_tycoon_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_railroad_tycoon_character
+	}
+	FOE_update_railroad_tycoon = yes
 }

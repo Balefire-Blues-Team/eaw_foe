@@ -591,28 +591,35 @@ country_event = {
 	option = {
 		name = special_rulers.16.e
 		trigger = {
-			NOT = { has_country_leader_with_trait = mythic_leader_industry_trait }
+			NOT = { has_country_leader_with_trait = mythic_leader_magnate_trait }
 		}
-		add_country_leader_trait = mythic_leader_industry_trait
-		FOE_initialize_blackout_opportunist = yes
+		# Swaps any class trait, Mythic included, for the Magnate's.
+		FOE_remove_class_traits = yes
+		if = { limit = { has_country_leader_with_trait = mythic_leader_military_trait } remove_country_leader_trait = mythic_leader_military_trait }
+		if = { limit = { has_country_leader_with_trait = mythic_leader_admin_trait } remove_country_leader_trait = mythic_leader_admin_trait }
+		if = { limit = { has_country_leader_with_trait = mythic_leader_industry_trait } remove_country_leader_trait = mythic_leader_industry_trait }
+		add_country_leader_trait = mythic_leader_magnate_trait
+		FOE_initialize_railroad_tycoon = yes
 	}
 
 	option = {
 		name = special_rulers.16.f
 		trigger = {
-			has_country_leader_with_trait = mythic_leader_industry_trait
-			NOT = { FOE_is_blackout_opportunist = yes }
+			has_country_leader_with_trait = mythic_leader_magnate_trait
+			NOT = { FOE_is_railroad_tycoon = yes }
 		}
-		FOE_initialize_blackout_opportunist = yes
+		FOE_initialize_railroad_tycoon = yes
 	}
 
-	# Re-runs the monthly update now, so Running Dark can be checked right after changing fuel in the console.
+	# Caravans for the decisions, and two Railway Corps in storage without paying for them.
 	option = {
 		name = special_rulers.16.g
 		trigger = {
-			FOE_is_blackout_opportunist = yes
+			FOE_is_railroad_tycoon = yes
 		}
-		FOE_update_blackout_opportunist = yes
+		add_equipment_to_stockpile = { type = caravan_equipment amount = 25 }
+		add_to_variable = { FOE_corps_stored = 2 }
+		FOE_update_railroad_tycoon = yes
 	}
 
 	option = {
