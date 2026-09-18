@@ -778,6 +778,58 @@ FOE_is_siphon_target = {
 	}
 }
 
+#Oathkeeper (Ruler). Combo subclasses are always Mythic, so there are no tier triggers.
+FOE_is_oathkeeper = {
+	var:country_leader = {
+		has_character_flag = FOE_great_leader_character
+		has_character_flag = FOE_oathkeeper_character
+	}
+}
+
+# Country scope; ROOT is the Oathkeeper.
+FOE_is_oathsworn = {
+	is_subject_of = ROOT
+	has_autonomy_state = autonomy_oathsworn
+}
+
+# Country scope; ROOT is the Oathkeeper. An Oathsworn that owns more cored than uncored states.
+FOE_is_loyal_oathsworn = {
+	FOE_is_oathsworn = yes
+	check_variable = { FOE_sworn_core_margin > 0 }
+}
+
+# State scope; ROOT is the Oathkeeper. Conquered land we can hand to a neighbouring Oathsworn.
+FOE_is_loyalty_reward_state = {
+	is_owned_by = ROOT
+	is_controlled_by = ROOT
+	NOT = { is_core_of = ROOT }
+	is_capital = no
+	any_neighbor_state = {
+		owner = { FOE_is_oathsworn = yes }
+	}
+}
+
+# State scope; ROOT is the Oathkeeper. An Oathsworn state on the border with anyone outside our sphere.
+FOE_is_oath_wall_state = {
+	owner = { FOE_is_oathsworn = yes }
+	is_fully_controlled_by = OWNER
+	any_neighbor_state = {
+		owner = {
+			NOT = { tag = ROOT }
+			NOT = { is_subject_of = ROOT }
+		}
+	}
+	NOT = { has_state_flag = FOE_oath_wall_raising }
+	NOT = { has_state_flag = FOE_oath_wall_raised }
+}
+
+# State scope; ROOT is the integrating country. GEN_integrate_state: passable non-core land next to one of our cores.
+FOE_is_integrable_state = {
+	NOT = { is_core_of = ROOT }
+	impassable = no
+	any_neighbor_state = { is_core_of = ROOT }
+}
+
 FOE_is_machine_uprising = {
 	tag = XYZ
 }
@@ -996,6 +1048,12 @@ FOE_can_assign_blackout_opportunist = {
 	FOE_great_leader_country_valid = yes
 }
 
+# The Khaganate has its own puppet system.
+FOE_can_assign_oathkeeper = {
+	FOE_great_leader_country_valid = yes
+	NOT = { tag = KHA }
+}
+
 FOE_can_assign_dreamer_in_steel = {
 	FOE_great_leader_country_valid = yes
 	has_tech = robotics_tech_level_settler
@@ -1082,4 +1140,7 @@ FOE_assignment_suits_biological_engineer = {
 }
 FOE_assignment_suits_blackout_opportunist = {
 	check_variable = { resource@energy < 0 }
+}
+FOE_assignment_suits_oathkeeper = {
+	any_owned_state = { FOE_is_puppet_release_target = yes }
 }

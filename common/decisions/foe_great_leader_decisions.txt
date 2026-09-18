@@ -73,7 +73,7 @@ GEN_great_leader_decisions = {
 		available = {
 			has_political_power > 24
 			any_owned_state = {
-				NOT = { is_core_of = ROOT }
+				FOE_is_integrable_state = yes
 			}
 			FOE_has_any_administrator_tier = yes
 		}
@@ -82,7 +82,7 @@ GEN_great_leader_decisions = {
 		remove_effect = {
 			random_owned_state = {
 				limit = {
-					NOT = { is_core_of = ROOT }
+					FOE_is_integrable_state = yes
 				}
 				add_core_of = ROOT
 			}
@@ -1564,6 +1564,259 @@ GEN_great_leader_decisions = {
 				factor = 2
 				FROM = { has_war_with = ROOT }
 			}
+		}
+	}
+
+	#Oathkeeper: Swear the Oath
+	FOE_oathkeeper_swear_oath = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		state_target = yes
+		target_array = owned_states
+		on_map_mode = map_and_decisions_view
+		cost = 50
+		fire_only_once = no
+		visible = { FOE_is_oathkeeper = yes }
+		target_root_trigger = { FOE_is_oathkeeper = yes }
+		target_trigger = {
+			FROM = { FOE_is_puppet_release_target = yes }
+		}
+		available = {
+			FROM = { FOE_is_puppet_release_target = yes }
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_oathkeeper_swear_oath_tt
+			hidden_effect = {
+				FROM = { FOE_swear_oath_from_state = yes }
+				FOE_update_oathkeeper = yes
+			}
+		}
+		ai_will_do = {
+			base = 10
+		}
+	}
+
+	#Oathkeeper: Reward Loyalty. Preferred by the AI, so Oathsworn grow before new ones are founded.
+	FOE_oathkeeper_reward_loyalty = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		state_target = yes
+		target_array = owned_states
+		on_map_mode = map_and_decisions_view
+		fire_only_once = no
+		visible = { FOE_is_oathkeeper = yes }
+		target_root_trigger = { FOE_is_oathkeeper = yes }
+		target_trigger = {
+			FROM = { FOE_is_loyalty_reward_state = yes }
+		}
+		available = {
+			FROM = { FOE_is_loyalty_reward_state = yes }
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_oathkeeper_reward_loyalty_tt
+			hidden_effect = { FOE_reward_loyalty = yes }
+		}
+		ai_will_do = {
+			base = 100
+			modifier = {
+				factor = 0
+				NOT = {
+					FROM = { any_neighbor_state = { owner = { FOE_is_loyal_oathsworn = yes } } }
+				}
+			}
+		}
+	}
+
+	#Oathkeeper: Bind by Oath
+	FOE_oathkeeper_bind_by_oath = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		target_array = subjects
+		cost = 25
+		fire_only_once = no
+		visible = { FOE_is_oathkeeper = yes }
+		target_root_trigger = { FOE_is_oathkeeper = yes }
+		target_trigger = {
+			FROM = {
+				is_subject_of = ROOT
+				NOT = { has_autonomy_state = autonomy_oathsworn }
+			}
+		}
+		available = {
+			FROM = {
+				is_subject_of = ROOT
+				NOT = { has_autonomy_state = autonomy_oathsworn }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_oathkeeper_bind_by_oath_tt
+			hidden_effect = {
+				set_autonomy = { target = FROM autonomy_state = autonomy_oathsworn }
+				FOE_update_oathkeeper = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	#Oathkeeper: the Oaths
+	FOE_oathkeeper_oath_of_prosperity = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		target_array = subjects
+		cost = 25
+		fire_only_once = no
+		visible = { FOE_is_oathkeeper = yes }
+		target_root_trigger = { FOE_is_oathkeeper = yes }
+		target_trigger = {
+			FROM = {
+				FOE_is_oathsworn = yes
+				NOT = { has_dynamic_modifier = { modifier = FOE_oath_of_prosperity_modifier } }
+			}
+		}
+		available = {
+			FROM = {
+				FOE_is_oathsworn = yes
+				NOT = { has_dynamic_modifier = { modifier = FOE_oath_of_prosperity_modifier } }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_oathkeeper_oath_of_prosperity_tt
+			hidden_effect = {
+				FROM = { add_dynamic_modifier = { modifier = FOE_oath_of_prosperity_modifier } }
+				FOE_update_oathkeeper = yes
+			}
+		}
+		ai_will_do = {
+			base = 15
+			modifier = {
+				factor = 0
+				num_of_available_civilian_factories < 3
+			}
+		}
+	}
+
+	FOE_oathkeeper_oath_of_plenty = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		target_array = subjects
+		cost = 25
+		fire_only_once = no
+		visible = { FOE_is_oathkeeper = yes }
+		target_root_trigger = { FOE_is_oathkeeper = yes }
+		target_trigger = {
+			FROM = {
+				FOE_is_oathsworn = yes
+				NOT = { has_dynamic_modifier = { modifier = FOE_oath_of_plenty_modifier } }
+			}
+		}
+		available = {
+			FROM = {
+				FOE_is_oathsworn = yes
+				NOT = { has_dynamic_modifier = { modifier = FOE_oath_of_plenty_modifier } }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_oathkeeper_oath_of_plenty_tt
+			hidden_effect = {
+				FROM = { add_dynamic_modifier = { modifier = FOE_oath_of_plenty_modifier } }
+				FOE_update_oathkeeper = yes
+			}
+		}
+		ai_will_do = {
+			base = 15
+			modifier = {
+				factor = 0
+				num_of_available_civilian_factories < 3
+			}
+		}
+	}
+
+	FOE_oathkeeper_oath_of_order = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		target_array = subjects
+		cost = 25
+		fire_only_once = no
+		visible = { FOE_is_oathkeeper = yes }
+		target_root_trigger = { FOE_is_oathkeeper = yes }
+		target_trigger = {
+			FROM = {
+				FOE_is_oathsworn = yes
+				NOT = { has_dynamic_modifier = { modifier = FOE_oath_of_order_modifier } }
+			}
+		}
+		available = {
+			FROM = {
+				FOE_is_oathsworn = yes
+				NOT = { has_dynamic_modifier = { modifier = FOE_oath_of_order_modifier } }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_oathkeeper_oath_of_order_tt
+			hidden_effect = {
+				FROM = { add_dynamic_modifier = { modifier = FOE_oath_of_order_modifier } }
+				FOE_update_oathkeeper = yes
+			}
+		}
+		ai_will_do = {
+			base = 15
+			modifier = {
+				factor = 0
+				num_of_available_civilian_factories < 3
+			}
+		}
+	}
+
+	#Oathkeeper: Raise the Wall
+	FOE_oathkeeper_raise_the_wall = {
+		icon = GFX_decision_generic_fortification
+		allowed = { always = yes }
+		state_target = yes
+		target_array = global.states
+		on_map_mode = map_and_decisions_view
+		cost = 25
+		fire_only_once = no
+		visible = { FOE_is_oathkeeper = yes }
+		target_root_trigger = { FOE_is_oathkeeper = yes }
+		target_trigger = {
+			FROM = { FOE_is_oath_wall_state = yes }
+		}
+		available = {
+			FROM = { FOE_is_oath_wall_state = yes }
+		}
+		days_remove = 50
+		days_re_enable = 30
+		modifier = {
+			civilian_factory_use = 3
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_oathkeeper_raise_the_wall_tt
+			hidden_effect = {
+				FROM = { set_state_flag = { flag = FOE_oath_wall_raising value = 1 days = 60 } }
+			}
+		}
+		remove_effect = {
+			FROM = {
+				if = {
+					limit = { owner = { FOE_is_oathsworn = yes } }
+					add_building_construction = {
+						type = bunker
+						level = 2
+						instant_build = yes
+						province = {
+							all_provinces = yes
+							limit_to_border = yes
+						}
+					}
+					set_state_flag = FOE_oath_wall_raised
+				}
+				clr_state_flag = FOE_oath_wall_raising
+			}
+		}
+		ai_will_do = {
+			base = 10
 		}
 	}
 

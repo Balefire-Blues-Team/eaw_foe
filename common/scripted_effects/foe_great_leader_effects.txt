@@ -3008,6 +3008,12 @@ FOE_roll_ruler_subclass = {
 		log = yes
 		60 = { FOE_roll_conqueror_subclass = yes }
 		60 = { FOE_roll_administrator_subclass = yes }
+		30 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_oathkeeper = yes } }
+			modifier = { factor = 1.5 FOE_assignment_suits_oathkeeper = yes }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=ruler selected=oathkeeper" }
+			FOE_initialize_oathkeeper = yes
+		}
 	}
 }
 
@@ -3029,3 +3035,122 @@ FOE_roll_magnate_subclass = {
 	}
 }
 
+#Oathkeeper Subclass (Ruler)
+# State scope; ROOT is the Oathkeeper. Releases the state's vanished core nation, then binds it by oath.
+# Same release as the Puppetmaster's: states that are also our cores stay with us.
+FOE_swear_oath_from_state = {
+	random_scope_in_array = {
+		array = core_countries
+		limit = { exists = no }
+		every_state = {
+			limit = {
+				is_owned_by = ROOT
+				is_core_of = ROOT
+				is_core_of = PREV
+			}
+			remove_core_of = PREV
+			set_state_flag = FOE_oath_release_shared_core
+		}
+		ROOT = { release_puppet = PREV }
+		ROOT = { set_autonomy = { target = PREV autonomy_state = autonomy_oathsworn } }
+		every_state = {
+			limit = { has_state_flag = FOE_oath_release_shared_core }
+			add_core_of = PREV
+			clr_state_flag = FOE_oath_release_shared_core
+		}
+	}
+}
+
+# Country scope; an Oathsworn. Cored minus uncored owned states: Reward Loyalty's AI only gives land while it is positive.
+FOE_update_sworn_core_margin = {
+	set_variable = { FOE_sworn_core_margin = 0 }
+	every_owned_state = {
+		if = {
+			limit = { is_core_of = PREV }
+			PREV = { add_to_variable = { FOE_sworn_core_margin = 1 } }
+		}
+		else = {
+			PREV = { add_to_variable = { FOE_sworn_core_margin = -1 } }
+		}
+	}
+}
+
+# Country scope; FROM is our state. It goes to a neighbouring Oathsworn, preferring one with more cored than uncored states.
+FOE_reward_loyalty = {
+	FROM = {
+		if = {
+			limit = { any_neighbor_state = { owner = { FOE_is_loyal_oathsworn = yes } } }
+			random_neighbor_state = {
+				limit = { owner = { FOE_is_loyal_oathsworn = yes } }
+				owner = { save_event_target_as = FOE_loyalty_recipient }
+			}
+		}
+		else = {
+			random_neighbor_state = {
+				limit = { owner = { FOE_is_oathsworn = yes } }
+				owner = { save_event_target_as = FOE_loyalty_recipient }
+			}
+		}
+		transfer_state_to = event_target:FOE_loyalty_recipient
+	}
+	event_target:FOE_loyalty_recipient = { FOE_update_sworn_core_margin = yes }
+}
+
+# Country scope. Monthly: every Oathsworn pays 75% of its manpower pool as tribute.
+FOE_collect_oath_tribute = {
+	every_subject_country = {
+		limit = { has_autonomy_state = autonomy_oathsworn }
+		set_variable = { FOE_oath_tribute = manpower_k }
+		multiply_variable = { FOE_oath_tribute = 750 }
+		round_variable = FOE_oath_tribute
+		ROOT = {
+			set_temp_variable = { FOE_tribute_received = PREV.FOE_oath_tribute }
+			add_manpower = FOE_tribute_received
+		}
+		set_temp_variable = { FOE_tribute_paid = FOE_oath_tribute }
+		multiply_temp_variable = { FOE_tribute_paid = -1 }
+		add_manpower = FOE_tribute_paid
+	}
+}
+
+# Country scope. Counts the Oaths sworn for the upkeep, and refreshes every Oathsworn's core margin.
+FOE_update_oathkeeper = {
+	if = {
+		limit = { FOE_is_oathkeeper = yes }
+		set_variable = { FOE_oaths_sworn = 0 }
+		every_subject_country = {
+			limit = { has_autonomy_state = autonomy_oathsworn }
+			FOE_update_sworn_core_margin = yes
+			if = {
+				limit = { has_dynamic_modifier = { modifier = FOE_oath_of_prosperity_modifier } }
+				ROOT = { add_to_variable = { FOE_oaths_sworn = 1 } }
+			}
+			if = {
+				limit = { has_dynamic_modifier = { modifier = FOE_oath_of_plenty_modifier } }
+				ROOT = { add_to_variable = { FOE_oaths_sworn = 1 } }
+			}
+			if = {
+				limit = { has_dynamic_modifier = { modifier = FOE_oath_of_order_modifier } }
+				ROOT = { add_to_variable = { FOE_oaths_sworn = 1 } }
+			}
+		}
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = FOE_burden_of_oaths_modifier } } }
+			add_dynamic_modifier = { modifier = FOE_burden_of_oaths_modifier }
+		}
+		force_update_dynamic_modifier = yes
+	}
+	else_if = {
+		limit = { has_variable = FOE_oaths_sworn }
+		clear_variable = FOE_oaths_sworn
+	}
+}
+
+FOE_initialize_oathkeeper = {
+	add_country_leader_trait = FOE_oathkeeper_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_oathkeeper_character
+	}
+	FOE_update_oathkeeper = yes
+}
