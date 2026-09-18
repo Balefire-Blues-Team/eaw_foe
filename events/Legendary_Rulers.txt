@@ -585,28 +585,28 @@ country_event = {
 	option = {
 		name = special_rulers.16.e
 		trigger = {
-			NOT = { has_country_leader_with_trait = mythic_leader_admin_trait }
+			NOT = { has_country_leader_with_trait = mythic_leader_industry_trait }
 		}
-		add_country_leader_trait = mythic_leader_admin_trait
-		FOE_initialize_wild_heart = yes
+		add_country_leader_trait = mythic_leader_industry_trait
+		FOE_initialize_merchant_prince = yes
 	}
 
 	option = {
 		name = special_rulers.16.f
 		trigger = {
-			has_country_leader_with_trait = mythic_leader_admin_trait
-			NOT = { FOE_is_wild_heart = yes }
+			has_country_leader_with_trait = mythic_leader_industry_trait
+			NOT = { FOE_is_merchant_prince = yes }
 		}
-		FOE_initialize_wild_heart = yes
+		FOE_initialize_merchant_prince = yes
 	}
 
-	# Runs one migration now, exactly as the monthly tick does. Six of these reach a Legendary factory.
+	# Re-runs the monthly Market update now, so the modifier can be checked as trades open and close.
 	option = {
 		name = special_rulers.16.g
 		trigger = {
-			FOE_is_wild_heart = yes
+			FOE_is_merchant_prince = yes
 		}
-		FOE_wild_heart_migration = yes
+		FOE_update_merchant_prince = yes
 	}
 
 	option = {
@@ -714,5 +714,21 @@ country_event = {
 
 	option = {
 		name = special_rulers.19.a
+	}
+}
+
+#Merchant Prince: the payments for a purchased state end, and the seller's offsite factories go with them.
+country_event = {
+	id = special_rulers.20
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		while_loop_effect = {
+			limit = { check_variable = { FOE_purchase_receipts > 0 } }
+			add_offsite_building = { type = industrial_complex level = -1 }
+			subtract_from_variable = { FOE_purchase_receipts = 1 }
+		}
+		clear_variable = FOE_purchase_receipts
 	}
 }

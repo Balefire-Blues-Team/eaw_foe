@@ -1867,6 +1867,102 @@ FOE_initialize_autark = {
 	FOE_update_autark = yes
 }
 
+#Merchant Prince Subclass
+# Country scope. Monthly. Keeps us on at least export focus, and turns trade volume into efficiency.
+# Per unit imported or exported: max factory efficiency +0.5% (cap 25%), line change efficiency +1% (cap 50%),
+# and the resource shortage penalty +1% (cap 50%).
+FOE_update_merchant_prince = {
+	if = {
+		limit = { FOE_is_merchant_prince = yes }
+		if = {
+			limit = {
+				NOT = { has_idea = free_trade }
+				NOT = { has_idea = export_focus }
+				NOT = { has_idea = trade_hub_law }
+			}
+			add_ideas = export_focus
+		}
+		set_variable = { FOE_trade_volume = 0 }
+		add_to_variable = { FOE_trade_volume = resource_imported@water }
+		add_to_variable = { FOE_trade_volume = resource_exported@water }
+		add_to_variable = { FOE_trade_volume = resource_imported@energy }
+		add_to_variable = { FOE_trade_volume = resource_exported@energy }
+		add_to_variable = { FOE_trade_volume = resource_imported@metal }
+		add_to_variable = { FOE_trade_volume = resource_exported@metal }
+		add_to_variable = { FOE_trade_volume = resource_imported@composites }
+		add_to_variable = { FOE_trade_volume = resource_exported@composites }
+		add_to_variable = { FOE_trade_volume = resource_imported@circuitry }
+		add_to_variable = { FOE_trade_volume = resource_exported@circuitry }
+		set_variable = { FOE_market_efficiency = FOE_trade_volume }
+		multiply_variable = { FOE_market_efficiency = 0.005 }
+		clamp_variable = { var = FOE_market_efficiency min = 0 max = 0.25 }
+		set_variable = { FOE_market_line_change = FOE_trade_volume }
+		multiply_variable = { FOE_market_line_change = 0.01 }
+		clamp_variable = { var = FOE_market_line_change min = 0 max = 0.50 }
+		set_variable = { FOE_market_shortage = FOE_trade_volume }
+		multiply_variable = { FOE_market_shortage = 0.01 }
+		clamp_variable = { var = FOE_market_shortage min = 0 max = 0.50 }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = FOE_market_modifier } } }
+			add_dynamic_modifier = { modifier = FOE_market_modifier }
+		}
+		if = {
+			limit = {
+				FOE_is_legendary_or_mythic_merchant_prince = yes
+				NOT = { has_idea = FOE_chartered_companies }
+			}
+			add_ideas = FOE_chartered_companies
+		}
+		force_update_dynamic_modifier = yes
+	}
+	else_if = {
+		limit = { has_dynamic_modifier = { modifier = FOE_market_modifier } }
+		remove_dynamic_modifier = { modifier = FOE_market_modifier }
+		clear_variable = FOE_trade_volume
+		clear_variable = FOE_market_efficiency
+		clear_variable = FOE_market_line_change
+		clear_variable = FOE_market_shortage
+	}
+}
+
+# Country scope; FROM is the state being bought. The price is paid in civilian factories for 180 days:
+# one per thousand residents and one per factory or dockyard in the state, at least one.
+FOE_purchase_state = {
+	set_variable = { FOE_purchase_payments = FROM.state_population_k }
+	add_to_variable = { FOE_purchase_payments = FROM.industrial_complex_level }
+	add_to_variable = { FOE_purchase_payments = FROM.arms_factory_level }
+	add_to_variable = { FOE_purchase_payments = FROM.building_level@dockyard }
+	round_variable = FOE_purchase_payments
+	clamp_variable = { var = FOE_purchase_payments min = 1 }
+	add_dynamic_modifier = { modifier = FOE_purchase_payments_modifier days = 180 }
+	# The seller is paid the same factories, as offsite civilian factories, before the state changes hands.
+	# special_rulers.20 takes them back after 180 days. One sale per seller at a time, so the count can't collide.
+	FROM = {
+		owner = {
+			set_variable = { FOE_purchase_receipts = ROOT.FOE_purchase_payments }
+			set_temp_variable = { FOE_receipts_left = FOE_purchase_receipts }
+			while_loop_effect = {
+				limit = { check_variable = { FOE_receipts_left > 0 } }
+				add_offsite_building = { type = industrial_complex level = 1 }
+				subtract_from_temp_variable = { FOE_receipts_left = 1 }
+			}
+			set_country_flag = { flag = FOE_recently_sold_state value = 1 days = 180 }
+			add_dynamic_modifier = { modifier = FOE_purchase_receipts_modifier days = 180 }
+			country_event = { id = special_rulers.20 days = 180 }
+		}
+		transfer_state_to = ROOT
+	}
+}
+
+FOE_initialize_merchant_prince = {
+	add_country_leader_trait = FOE_merchant_prince_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_merchant_prince_character
+	}
+	FOE_update_merchant_prince = yes
+}
+
 #Dreamer in Steel Subclass
 # Country scope. Exchange prices rise with every exchange of either kind:
 # civilian factory 20 + 10 per exchange, military factory 30 + 10 per exchange (heavy industrial robots).
@@ -2533,6 +2629,13 @@ FOE_roll_industrialist_subclass = {
 		if = { limit = { NOT = { FOE_can_assign_dreamer_in_steel = yes } } multiply_temp_variable = { FOE_audit_dreamer_in_steel = 0 } }
 		if = { limit = { FOE_assignment_suits_dreamer_in_steel = yes } multiply_temp_variable = { FOE_audit_dreamer_in_steel = 1.5 } }
 		log = "FOE_ASSIGN [THIS.GetTag] class=industrialist candidate=dreamer_in_steel weight=[?FOE_audit_dreamer_in_steel] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_merchant_prince = 10 }
+		if = { limit = { NOT = { FOE_can_assign_merchant_prince = yes } } multiply_temp_variable = { FOE_audit_merchant_prince = 0 } }
+		if = { limit = { has_idea = free_trade } multiply_temp_variable = { FOE_audit_merchant_prince = 2 } }
+		if = { limit = { has_idea = export_focus } multiply_temp_variable = { FOE_audit_merchant_prince = 2 } }
+		if = { limit = { has_idea = closed_economy } multiply_temp_variable = { FOE_audit_merchant_prince = 0.1 } }
+		if = { limit = { has_idea = steel_ranger_society } multiply_temp_variable = { FOE_audit_merchant_prince = 0.1 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=industrialist candidate=merchant_prince weight=[?FOE_audit_merchant_prince] (zero=ineligible)"
 	}
 	random_list = {
 		log = yes
@@ -2563,6 +2666,15 @@ FOE_roll_industrialist_subclass = {
 			modifier = { factor = 1.5 FOE_assignment_suits_dreamer_in_steel = yes }
 			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=industrialist selected=dreamer_in_steel" }
 			FOE_initialize_dreamer_in_steel = yes
+		}
+		10 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_merchant_prince = yes } }
+			modifier = { factor = 2 has_idea = free_trade }
+			modifier = { factor = 2 has_idea = export_focus }
+			modifier = { factor = 0.1 has_idea = closed_economy }
+			modifier = { factor = 0.1 has_idea = steel_ranger_society }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=industrialist selected=merchant_prince" }
+			FOE_initialize_merchant_prince = yes
 		}
 	}
 }
