@@ -2693,6 +2693,10 @@ FOE_roll_administrator_subclass = {
 		if = { limit = { has_idea = old_world_society } multiply_temp_variable = { FOE_audit_wild_heart = 0.1 } }
 		if = { limit = { has_idea = slaver_society } multiply_temp_variable = { FOE_audit_wild_heart = 0.1 } }
 		log = "FOE_ASSIGN [THIS.GetTag] class=administrator candidate=wild_heart weight=[?FOE_audit_wild_heart] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_lawgiver = 10 }
+		if = { limit = { NOT = { FOE_can_assign_lawgiver = yes } } multiply_temp_variable = { FOE_audit_lawgiver = 0 } }
+		if = { limit = { FOE_assignment_suits_lawgiver = yes } multiply_temp_variable = { FOE_audit_lawgiver = 1.5 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=administrator candidate=lawgiver weight=[?FOE_audit_lawgiver] (zero=ineligible)"
 	}
 	random_list = {
 		log = yes
@@ -2761,6 +2765,12 @@ FOE_roll_administrator_subclass = {
 			modifier = { factor = 0.1 has_idea = slaver_society }
 			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=administrator selected=wild_heart" }
 			FOE_initialize_wild_heart = yes
+		}
+		10 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_lawgiver = yes } }
+			modifier = { factor = 1.5 FOE_assignment_suits_lawgiver = yes }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=administrator selected=lawgiver" }
+			FOE_initialize_lawgiver = yes
 		}
 	}
 }
@@ -3342,4 +3352,283 @@ FOE_initialize_railroad_tycoon = {
 		set_character_flag = FOE_railroad_tycoon_character
 	}
 	FOE_update_railroad_tycoon = yes
+}
+
+#Lawgiver Subclass
+# A law lasts twelve monthly steps. Step 0 (enacted) to 9: base x (step - 4), so it starts as a penalty and turns
+# positive after step 4. Steps 10 and 11 are the Culmination: base x 12. At step 12 the law expires.
+# Base is 2.5% for every law, except the Law of Tithes: -1% (consumer goods).
+
+# Country scope.
+FOE_set_law_labour_strength = {
+	if = {
+		limit = { check_variable = { FOE_law_labour_step > 9 } }
+		set_variable = { FOE_law_labour_strength = 12 }
+	}
+	else = {
+		set_variable = { FOE_law_labour_strength = FOE_law_labour_step }
+		subtract_from_variable = { FOE_law_labour_strength = 4 }
+	}
+	multiply_variable = { FOE_law_labour_strength = 0.025 }
+}
+
+FOE_enact_law_labour = {
+	set_variable = { FOE_law_labour_step = 0 }
+	FOE_set_law_labour_strength = yes
+	add_dynamic_modifier = { modifier = FOE_law_of_labour_modifier }
+	FOE_update_lawgiver = yes
+}
+
+# Monthly. Mythic: a law that runs its full year adds to the Eternal Code.
+FOE_tick_law_labour = {
+	if = {
+		limit = { has_variable = FOE_law_labour_step }
+		add_to_variable = { FOE_law_labour_step = 1 }
+		if = {
+			limit = { check_variable = { FOE_law_labour_step > 11 } }
+			remove_dynamic_modifier = { modifier = FOE_law_of_labour_modifier }
+			clear_variable = FOE_law_labour_step
+			clear_variable = FOE_law_labour_strength
+			if = {
+				limit = { FOE_is_mythic_lawgiver = yes }
+				add_to_variable = { FOE_code_labour = 0.02 }
+				clamp_variable = { var = FOE_code_labour min = 0 max = 0.10 }
+			}
+		}
+		else = {
+			FOE_set_law_labour_strength = yes
+		}
+	}
+}
+
+# Country scope.
+FOE_set_law_arms_strength = {
+	if = {
+		limit = { check_variable = { FOE_law_arms_step > 9 } }
+		set_variable = { FOE_law_arms_strength = 12 }
+	}
+	else = {
+		set_variable = { FOE_law_arms_strength = FOE_law_arms_step }
+		subtract_from_variable = { FOE_law_arms_strength = 4 }
+	}
+	multiply_variable = { FOE_law_arms_strength = 0.025 }
+}
+
+FOE_enact_law_arms = {
+	set_variable = { FOE_law_arms_step = 0 }
+	FOE_set_law_arms_strength = yes
+	add_dynamic_modifier = { modifier = FOE_law_of_arms_modifier }
+	FOE_update_lawgiver = yes
+}
+
+# Monthly. Mythic: a law that runs its full year adds to the Eternal Code.
+FOE_tick_law_arms = {
+	if = {
+		limit = { has_variable = FOE_law_arms_step }
+		add_to_variable = { FOE_law_arms_step = 1 }
+		if = {
+			limit = { check_variable = { FOE_law_arms_step > 11 } }
+			remove_dynamic_modifier = { modifier = FOE_law_of_arms_modifier }
+			clear_variable = FOE_law_arms_step
+			clear_variable = FOE_law_arms_strength
+			if = {
+				limit = { FOE_is_mythic_lawgiver = yes }
+				add_to_variable = { FOE_code_arms = 0.02 }
+				clamp_variable = { var = FOE_code_arms min = 0 max = 0.10 }
+			}
+		}
+		else = {
+			FOE_set_law_arms_strength = yes
+		}
+	}
+}
+
+# Country scope.
+FOE_set_law_learning_strength = {
+	if = {
+		limit = { check_variable = { FOE_law_learning_step > 9 } }
+		set_variable = { FOE_law_learning_strength = 12 }
+	}
+	else = {
+		set_variable = { FOE_law_learning_strength = FOE_law_learning_step }
+		subtract_from_variable = { FOE_law_learning_strength = 4 }
+	}
+	multiply_variable = { FOE_law_learning_strength = 0.025 }
+}
+
+FOE_enact_law_learning = {
+	set_variable = { FOE_law_learning_step = 0 }
+	FOE_set_law_learning_strength = yes
+	add_dynamic_modifier = { modifier = FOE_law_of_learning_modifier }
+	FOE_update_lawgiver = yes
+}
+
+# Monthly. Mythic: a law that runs its full year adds to the Eternal Code.
+FOE_tick_law_learning = {
+	if = {
+		limit = { has_variable = FOE_law_learning_step }
+		add_to_variable = { FOE_law_learning_step = 1 }
+		if = {
+			limit = { check_variable = { FOE_law_learning_step > 11 } }
+			remove_dynamic_modifier = { modifier = FOE_law_of_learning_modifier }
+			clear_variable = FOE_law_learning_step
+			clear_variable = FOE_law_learning_strength
+			if = {
+				limit = { FOE_is_mythic_lawgiver = yes }
+				add_to_variable = { FOE_code_learning = 0.02 }
+				clamp_variable = { var = FOE_code_learning min = 0 max = 0.10 }
+			}
+		}
+		else = {
+			FOE_set_law_learning_strength = yes
+		}
+	}
+}
+
+# Country scope.
+FOE_set_law_levy_strength = {
+	if = {
+		limit = { check_variable = { FOE_law_levy_step > 9 } }
+		set_variable = { FOE_law_levy_strength = 12 }
+	}
+	else = {
+		set_variable = { FOE_law_levy_strength = FOE_law_levy_step }
+		subtract_from_variable = { FOE_law_levy_strength = 4 }
+	}
+	multiply_variable = { FOE_law_levy_strength = 0.025 }
+}
+
+FOE_enact_law_levy = {
+	set_variable = { FOE_law_levy_step = 0 }
+	FOE_set_law_levy_strength = yes
+	add_dynamic_modifier = { modifier = FOE_law_of_levy_modifier }
+	FOE_update_lawgiver = yes
+}
+
+# Monthly. Mythic: a law that runs its full year adds to the Eternal Code.
+FOE_tick_law_levy = {
+	if = {
+		limit = { has_variable = FOE_law_levy_step }
+		add_to_variable = { FOE_law_levy_step = 1 }
+		if = {
+			limit = { check_variable = { FOE_law_levy_step > 11 } }
+			remove_dynamic_modifier = { modifier = FOE_law_of_levy_modifier }
+			clear_variable = FOE_law_levy_step
+			clear_variable = FOE_law_levy_strength
+			if = {
+				limit = { FOE_is_mythic_lawgiver = yes }
+				add_to_variable = { FOE_code_levy = 0.02 }
+				clamp_variable = { var = FOE_code_levy min = 0 max = 0.10 }
+			}
+		}
+		else = {
+			FOE_set_law_levy_strength = yes
+		}
+	}
+}
+
+# Country scope.
+FOE_set_law_tithes_strength = {
+	if = {
+		limit = { check_variable = { FOE_law_tithes_step > 9 } }
+		set_variable = { FOE_law_tithes_strength = 12 }
+	}
+	else = {
+		set_variable = { FOE_law_tithes_strength = FOE_law_tithes_step }
+		subtract_from_variable = { FOE_law_tithes_strength = 4 }
+	}
+	multiply_variable = { FOE_law_tithes_strength = -0.01 }
+}
+
+FOE_enact_law_tithes = {
+	set_variable = { FOE_law_tithes_step = 0 }
+	FOE_set_law_tithes_strength = yes
+	add_dynamic_modifier = { modifier = FOE_law_of_tithes_modifier }
+	FOE_update_lawgiver = yes
+}
+
+# Monthly. Mythic: a law that runs its full year adds to the Eternal Code.
+FOE_tick_law_tithes = {
+	if = {
+		limit = { has_variable = FOE_law_tithes_step }
+		add_to_variable = { FOE_law_tithes_step = 1 }
+		if = {
+			limit = { check_variable = { FOE_law_tithes_step > 11 } }
+			remove_dynamic_modifier = { modifier = FOE_law_of_tithes_modifier }
+			clear_variable = FOE_law_tithes_step
+			clear_variable = FOE_law_tithes_strength
+			if = {
+				limit = { FOE_is_mythic_lawgiver = yes }
+				add_to_variable = { FOE_code_tithes = -0.01 }
+				clamp_variable = { var = FOE_code_tithes min = -0.05 max = 0 }
+			}
+		}
+		else = {
+			FOE_set_law_tithes_strength = yes
+		}
+	}
+}
+
+# Country scope. Counts the laws in force and sets the limit by tier.
+FOE_update_lawgiver = {
+	if = {
+		limit = { FOE_is_lawgiver = yes }
+		set_variable = { FOE_law_limit = 1 }
+		if = {
+			limit = { FOE_is_mythic_lawgiver = yes }
+			set_variable = { FOE_law_limit = 3 }
+		}
+		else_if = {
+			limit = { FOE_is_legendary_or_mythic_lawgiver = yes }
+			set_variable = { FOE_law_limit = 2 }
+		}
+		set_variable = { FOE_laws_in_force = 0 }
+		if = { limit = { has_variable = FOE_law_labour_step } add_to_variable = { FOE_laws_in_force = 1 } }
+		if = { limit = { has_variable = FOE_law_arms_step } add_to_variable = { FOE_laws_in_force = 1 } }
+		if = { limit = { has_variable = FOE_law_learning_step } add_to_variable = { FOE_laws_in_force = 1 } }
+		if = { limit = { has_variable = FOE_law_levy_step } add_to_variable = { FOE_laws_in_force = 1 } }
+		if = { limit = { has_variable = FOE_law_tithes_step } add_to_variable = { FOE_laws_in_force = 1 } }
+		if = {
+			limit = {
+				FOE_is_mythic_lawgiver = yes
+				NOT = { has_dynamic_modifier = { modifier = FOE_eternal_code_modifier } }
+			}
+			add_dynamic_modifier = { modifier = FOE_eternal_code_modifier }
+		}
+		force_update_dynamic_modifier = yes
+	}
+	else_if = {
+		limit = { has_variable = FOE_laws_in_force }
+		clear_variable = FOE_laws_in_force
+		clear_variable = FOE_law_limit
+		clear_variable = FOE_law_labour_step
+		clear_variable = FOE_law_labour_strength
+		clear_variable = FOE_law_arms_step
+		clear_variable = FOE_law_arms_strength
+		clear_variable = FOE_law_learning_step
+		clear_variable = FOE_law_learning_strength
+		clear_variable = FOE_law_levy_step
+		clear_variable = FOE_law_levy_strength
+		clear_variable = FOE_law_tithes_step
+		clear_variable = FOE_law_tithes_strength
+	}
+}
+
+# Country scope. Monthly.
+FOE_tick_lawgiver = {
+	FOE_tick_law_labour = yes
+	FOE_tick_law_arms = yes
+	FOE_tick_law_learning = yes
+	FOE_tick_law_levy = yes
+	FOE_tick_law_tithes = yes
+	FOE_update_lawgiver = yes
+}
+
+FOE_initialize_lawgiver = {
+	add_country_leader_trait = FOE_lawgiver_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_lawgiver_character
+	}
+	FOE_update_lawgiver = yes
 }

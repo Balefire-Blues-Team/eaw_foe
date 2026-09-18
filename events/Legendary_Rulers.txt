@@ -625,34 +625,28 @@ country_event = {
 	option = {
 		name = special_rulers.16.h
 		trigger = {
-			NOT = { has_country_leader_with_trait = mythic_leader_ruler_trait }
+			NOT = { has_country_leader_with_trait = mythic_leader_admin_trait }
 		}
-		# Swaps any class trait, Mythic included, for the Ruler's.
-		FOE_remove_class_traits = yes
-		if = { limit = { has_country_leader_with_trait = mythic_leader_military_trait } remove_country_leader_trait = mythic_leader_military_trait }
-		if = { limit = { has_country_leader_with_trait = mythic_leader_admin_trait } remove_country_leader_trait = mythic_leader_admin_trait }
-		if = { limit = { has_country_leader_with_trait = mythic_leader_industry_trait } remove_country_leader_trait = mythic_leader_industry_trait }
-		add_country_leader_trait = mythic_leader_ruler_trait
-		FOE_initialize_oathkeeper = yes
+		add_country_leader_trait = mythic_leader_admin_trait
+		FOE_initialize_lawgiver = yes
 	}
 
 	option = {
 		name = special_rulers.16.i
 		trigger = {
-			has_country_leader_with_trait = mythic_leader_ruler_trait
-			NOT = { FOE_is_oathkeeper = yes }
+			has_country_leader_with_trait = mythic_leader_admin_trait
+			NOT = { FOE_is_lawgiver = yes }
 		}
-		FOE_initialize_oathkeeper = yes
+		FOE_initialize_lawgiver = yes
 	}
 
-	# Runs the monthly tick now: tribute from every Oathsworn, then the Oath count and core margins.
+	# Runs the monthly law tick now: every law in force moves one step, and expired laws feed the Eternal Code.
 	option = {
 		name = special_rulers.16.j
 		trigger = {
-			FOE_is_oathkeeper = yes
+			FOE_is_lawgiver = yes
 		}
-		FOE_collect_oath_tribute = yes
-		FOE_update_oathkeeper = yes
+		FOE_tick_lawgiver = yes
 	}
 }
 
