@@ -3023,6 +3023,12 @@ FOE_roll_exploiter_subclass = {
 		log = yes
 		60 = { FOE_roll_conqueror_subclass = yes }
 		60 = { FOE_roll_industrialist_subclass = yes }
+		30 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_robber_baron = yes } }
+			modifier = { factor = 1.5 FOE_assignment_suits_robber_baron = yes }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=exploiter selected=robber_baron" }
+			FOE_initialize_robber_baron = yes
+		}
 	}
 }
 
@@ -3153,4 +3159,46 @@ FOE_initialize_oathkeeper = {
 		set_character_flag = FOE_oathkeeper_character
 	}
 	FOE_update_oathkeeper = yes
+}
+
+#Robber Baron Subclass (Exploiter)
+# Country scope; FROM is the state. Loot is half its factories and dockyards, rounded, from 1 to 6.
+FOE_tighten_the_screws = {
+	set_temp_variable = { FOE_screw_loot = FROM.industrial_complex_level }
+	add_to_temp_variable = { FOE_screw_loot = FROM.arms_factory_level }
+	add_to_temp_variable = { FOE_screw_loot = FROM.building_level@dockyard }
+	divide_temp_variable = { FOE_screw_loot = 2 }
+	round_temp_variable = FOE_screw_loot
+	clamp_temp_variable = { var = FOE_screw_loot min = 1 max = 6 }
+	add_to_variable = { loot = FOE_screw_loot }
+	FROM = { add_dynamic_modifier = { modifier = FOE_screws_tightened_modifier days = 180 } }
+	FOE_update_robber_baron = yes
+}
+
+# Country scope. Monthly. The Robber's Hoard: factory output and construction +1% per loot held, at most 20%.
+FOE_update_robber_baron = {
+	if = {
+		limit = { FOE_is_robber_baron = yes }
+		set_variable = { FOE_hoard_bonus = loot }
+		multiply_variable = { FOE_hoard_bonus = 0.01 }
+		clamp_variable = { var = FOE_hoard_bonus min = 0 max = 0.20 }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = FOE_robbers_hoard_modifier } } }
+			add_dynamic_modifier = { modifier = FOE_robbers_hoard_modifier }
+		}
+		force_update_dynamic_modifier = yes
+	}
+	else_if = {
+		limit = { has_variable = FOE_hoard_bonus }
+		clear_variable = FOE_hoard_bonus
+	}
+}
+
+FOE_initialize_robber_baron = {
+	add_country_leader_trait = FOE_robber_baron_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_robber_baron_character
+	}
+	FOE_update_robber_baron = yes
 }

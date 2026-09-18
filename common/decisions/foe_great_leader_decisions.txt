@@ -1820,6 +1820,48 @@ GEN_great_leader_decisions = {
 		}
 	}
 
+	#Robber Baron: Tighten the Screws
+	FOE_robber_tighten_the_screws = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		state_target = yes
+		target_array = controlled_states
+		on_map_mode = map_and_decisions_view
+		cost = 10
+		fire_only_once = no
+		visible = { FOE_is_robber_baron = yes }
+		target_root_trigger = { FOE_is_robber_baron = yes }
+		target_trigger = {
+			FROM = { FOE_is_screwable_state = yes }
+		}
+		available = {
+			FROM = { FOE_is_screwable_state = yes }
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_robber_tighten_the_screws_tt
+			hidden_effect = { FOE_tighten_the_screws = yes }
+		}
+		# Occupied land first, then our own conquests; the heartland last.
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 3
+				FROM = { NOT = { is_owned_by = ROOT } }
+			}
+			modifier = {
+				factor = 2
+				FROM = {
+					is_owned_by = ROOT
+					NOT = { is_core_of = ROOT }
+				}
+			}
+			modifier = {
+				factor = 0.2
+				FROM = { is_core_of = ROOT }
+			}
+		}
+	}
+
 	#Dreamer in Steel: Automated Workshops
 	FOE_dreamer_robot_workshops = {
 		icon = GFX_decision_unknown

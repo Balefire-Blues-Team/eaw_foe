@@ -225,6 +225,7 @@ FOE_is_oppressor = {
 		has_idea = raider_society
 		has_government = destruction
 		has_country_flag = slavery_allowed
+		FOE_is_robber_baron = yes
 	}
 }
 
@@ -830,6 +831,25 @@ FOE_is_integrable_state = {
 	any_neighbor_state = { is_core_of = ROOT }
 }
 
+#Robber Baron (Exploiter). Combo subclasses are always Mythic, so there are no tier triggers.
+FOE_is_robber_baron = {
+	var:country_leader = {
+		has_character_flag = FOE_great_leader_character
+		has_character_flag = FOE_robber_baron_character
+	}
+}
+
+# State scope; ROOT is the Robber Baron. Any state we control, ours or occupied, with industry to squeeze.
+FOE_is_screwable_state = {
+	is_controlled_by = ROOT
+	NOT = { has_dynamic_modifier = { modifier = FOE_screws_tightened_modifier } }
+	OR = {
+		check_variable = { industrial_complex_level > 0 }
+		check_variable = { arms_factory_level > 0 }
+		check_variable = { building_level@dockyard > 0 }
+	}
+}
+
 FOE_is_machine_uprising = {
 	tag = XYZ
 }
@@ -1054,6 +1074,12 @@ FOE_can_assign_oathkeeper = {
 	NOT = { tag = KHA }
 }
 
+# Nations barred from normal raids can't be Robber Barons.
+FOE_can_assign_robber_baron = {
+	FOE_great_leader_country_valid = yes
+	NOT = { has_country_flag = cant_normal_raid }
+}
+
 FOE_can_assign_dreamer_in_steel = {
 	FOE_great_leader_country_valid = yes
 	has_tech = robotics_tech_level_settler
@@ -1143,4 +1169,7 @@ FOE_assignment_suits_blackout_opportunist = {
 }
 FOE_assignment_suits_oathkeeper = {
 	any_owned_state = { FOE_is_puppet_release_target = yes }
+}
+FOE_assignment_suits_robber_baron = {
+	is_raider_nation = yes
 }

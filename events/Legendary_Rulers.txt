@@ -558,28 +558,34 @@ country_event = {
 	option = {
 		name = special_rulers.16.a
 		trigger = {
-			NOT = { has_country_leader_with_trait = mythic_leader_industry_trait }
+			NOT = { has_country_leader_with_trait = mythic_leader_exploiter_trait }
 		}
-		add_country_leader_trait = mythic_leader_industry_trait
-		FOE_initialize_biological_engineer = yes
+		# Swaps any class trait, Mythic included, for the Exploiter's.
+		FOE_remove_class_traits = yes
+		if = { limit = { has_country_leader_with_trait = mythic_leader_military_trait } remove_country_leader_trait = mythic_leader_military_trait }
+		if = { limit = { has_country_leader_with_trait = mythic_leader_admin_trait } remove_country_leader_trait = mythic_leader_admin_trait }
+		if = { limit = { has_country_leader_with_trait = mythic_leader_industry_trait } remove_country_leader_trait = mythic_leader_industry_trait }
+		add_country_leader_trait = mythic_leader_exploiter_trait
+		FOE_initialize_robber_baron = yes
 	}
 
 	option = {
 		name = special_rulers.16.b
 		trigger = {
-			has_country_leader_with_trait = mythic_leader_industry_trait
-			NOT = { FOE_is_biological_engineer = yes }
+			has_country_leader_with_trait = mythic_leader_exploiter_trait
+			NOT = { FOE_is_robber_baron = yes }
 		}
-		FOE_initialize_biological_engineer = yes
+		FOE_initialize_robber_baron = yes
 	}
 
-	# Runs the monthly update now: one Biomass decays (+4% stability) and every Breeding Pen regrows once.
+	# Ten loot for testing the loot decisions, and the Hoard updated straight away.
 	option = {
 		name = special_rulers.16.c
 		trigger = {
-			FOE_is_biological_engineer = yes
+			FOE_is_robber_baron = yes
 		}
-		FOE_update_biological_engineer = yes
+		add_to_variable = { loot = 10 }
+		FOE_update_robber_baron = yes
 	}
 
 	option = {
