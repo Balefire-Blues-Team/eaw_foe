@@ -1321,3 +1321,180 @@ FOE_assignment_suits_lawgiver = {
 FOE_assignment_suits_steadfast_librarian = {
 	amount_research_slots > 2
 }
+
+# Lord of the Long March
+# Country scope unless explicitly noted. ROOT must remain the marching country.
+FOE_is_lord_of_the_long_march = {
+	var:country_leader = {
+		has_character_flag = FOE_great_leader_character
+		has_character_flag = FOE_lord_of_the_long_march_character
+	}
+}
+# Probe uses a temporary variable only, as in live coring scripted triggers. Mirrors FOE_plan_long_march: a
+# three-state route may start next to any state we own, and a different peaceful neighbour must exist as custodian.
+FOE_march_probe_route_state = {
+	impassable = no
+	NOT = { is_owned_by = ROOT }
+	owner = {
+		FOE_march_hostile_candidate = yes
+		has_capitulated = no
+	}
+}
+FOE_can_assign_long_march = {
+	FOE_great_leader_country_valid = yes
+	is_subject = no
+	is_in_faction = no
+	has_capitulated = no
+	has_war = no
+	num_divisions > 0
+	NOT = { has_country_flag = FOE_march_committed }
+	any_owned_state = {
+		any_neighbor_state = {
+			FOE_march_probe_route_state = yes
+			ROOT = { set_temp_variable = { FOE_march_probe_first = PREV.id } }
+			any_neighbor_state = {
+				FOE_march_probe_route_state = yes
+				any_neighbor_state = {
+					FOE_march_probe_route_state = yes
+					NOT = { state = var:ROOT.FOE_march_probe_first }
+				}
+			}
+		}
+	}
+	any_neighbor_country = { FOE_march_custodian_basic = yes }
+}
+FOE_assignment_suits_long_march = {
+	OR = { has_idea = raider_society has_idea = tribal_society check_variable = { num_owned_states < 6 } }
+}
+FOE_march_can_administer = {
+	FOE_is_lord_of_the_long_march = yes
+	is_subject = no
+	has_capitulated = no
+	has_war = no
+}
+# Foreign COUNTRY scope. The route may cross several states of the same country.
+FOE_march_hostile_candidate = {
+	exists = yes
+	NOT = { tag = ROOT }
+	is_subject = no
+	is_major = no
+	is_in_faction = no
+	NOT = { is_in_faction_with = ROOT }
+	NOT = { is_subject_of = ROOT }
+	NOT = { has_truce_with = ROOT }
+	NOT = { has_non_aggression_pact_with = ROOT }
+	NOT = { has_guaranteed = ROOT }
+	NOT = { is_guaranteed_by = ROOT }
+	NOT = { has_war_with = ROOT }
+}
+# STATE scope, called while selecting the route.
+FOE_march_route_candidate = {
+	impassable = no
+	NOT = { is_owned_by = ROOT }
+	NOT = { is_in_array = { array = ROOT.FOE_march_route_states value = THIS.id } }
+	owner = {
+		FOE_march_hostile_candidate = yes
+		has_capitulated = no
+	}
+}
+# Foreign COUNTRY scope. A peaceful independent minor; usable before a route exists (assignment probe).
+FOE_march_custodian_basic = {
+	exists = yes
+	NOT = { tag = ROOT }
+	is_subject = no
+	is_major = no
+	is_in_faction = no
+	has_capitulated = no
+	NOT = { has_war_with = ROOT }
+}
+# Foreign COUNTRY scope. Owns no part of the route; also used to replace a lost custodian.
+FOE_march_custodian_candidate = {
+	FOE_march_custodian_basic = yes
+	NOT = { is_in_array = { array = ROOT.FOE_march_route_owners value = THIS.id } }
+	NOT = { var:ROOT.FOE_march_route_1 = { is_owned_by = PREV } }
+	NOT = { var:ROOT.FOE_march_route_2 = { is_owned_by = PREV } }
+	NOT = { var:ROOT.FOE_march_route_3 = { is_owned_by = PREV } }
+}
+# The custodian must still border our realm. It need not border the current camp: a small capital may have
+# only one foreign neighbour, and that one is often the first waypoint.
+FOE_march_custodian_valid = {
+	has_variable = FOE_march_custodian
+	var:FOE_march_custodian = {
+		FOE_march_custodian_candidate = yes
+		is_neighbor_of = ROOT
+	}
+}
+FOE_march_can_advance = {
+	FOE_march_can_administer = yes
+	check_variable = { FOE_march_phase = 1 }
+	check_variable = { FOE_march_steps < 3 }
+	NOT = { has_country_flag = FOE_march_advance_cooldown }
+	FOE_march_custodian_valid = yes
+	var:FOE_march_camp = { is_owned_by = ROOT is_fully_controlled_by = ROOT }
+	var:FOE_march_next = {
+		is_owned_by = ROOT
+		is_fully_controlled_by = ROOT
+		NOT = { is_in_array = { array = ROOT.FOE_march_packed_states value = THIS.id } }
+	}
+}
+# STATE scope. Optional original-home evacuation; route camps use their own progression.
+FOE_march_packable_rear = {
+	is_owned_by = ROOT
+	is_fully_controlled_by = ROOT
+	is_capital = no
+	NOT = { state = var:ROOT.FOE_march_camp }
+	is_in_array = { array = ROOT.FOE_march_home_states value = THIS.id }
+	NOT = { is_in_array = { array = ROOT.FOE_march_route_states value = THIS.id } }
+	NOT = { is_in_array = { array = ROOT.FOE_march_packed_states value = THIS.id } }
+}
+FOE_march_can_unfurl = {
+	FOE_is_lord_of_the_long_march = yes
+	is_subject = no
+	has_capitulated = no
+	check_variable = { FOE_march_phase = 2 }
+	check_variable = { FOE_march_reserves > 0 }
+	var:FOE_march_goal = { is_owned_by = ROOT is_fully_controlled_by = ROOT }
+}
+# Country scope. The tracked next-waypoint owner is still a live, unclaimed war target.
+# Deliberately independent of FOE_march_can_administer: the player must be able to open
+# this front even while fighting an unrelated war elsewhere.
+FOE_march_target_owner_valid = {
+	has_variable = FOE_march_target_owner
+	var:FOE_march_target_owner = {
+		exists = yes
+		NOT = { tag = ROOT }
+		NOT = { has_war_with = ROOT }
+		NOT = { ROOT = { has_wargoal_against = PREV } }
+	}
+}
+FOE_march_can_open_the_road = {
+	FOE_is_lord_of_the_long_march = yes
+	is_subject = no
+	has_capitulated = no
+	check_variable = { FOE_march_phase = 1 }
+	FOE_march_target_owner_valid = yes
+}
+# Foreign COUNTRY scope; ROOT is the marching country. A neighbor of the settled kingdom
+# worth claiming during the breakout window.
+FOE_march_horizon_target = {
+	FOE_march_hostile_candidate = yes
+	is_neighbor_of = ROOT
+	# The rear custodian is a valid target too: it may hold the states that reconnect the new homeland.
+}
+# Arrived (phase 2): one claim before the banners are unfurled, so a war can be under way first.
+# Breakout (phase 3): any number while the burst lasts.
+FOE_march_can_claim_horizons = {
+	FOE_is_lord_of_the_long_march = yes
+	is_subject = no
+	has_capitulated = no
+	OR = {
+		AND = {
+			check_variable = { FOE_march_phase = 2 }
+			NOT = { has_country_flag = FOE_march_first_horizon }
+		}
+		AND = {
+			check_variable = { FOE_march_phase = 3 }
+			has_country_flag = FOE_march_breakout_active
+		}
+	}
+}

@@ -2614,6 +2614,154 @@ GEN_great_leader_decisions = {
 		}
 	}
 
+
+	#Lord of the Long March: pick the fixed three-waypoint route and rear custodian. Zero PP; bounded random search.
+	FOE_march_plan_route = {
+		icon = GFX_decision_unknown
+		cost = 0
+		fire_only_once = no
+		visible = { FOE_is_lord_of_the_long_march = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_march_plan_cooldown_tt
+				NOT = { has_country_flag = FOE_march_plan_cooldown }
+			}
+			FOE_march_can_administer = yes
+			is_in_faction = no
+			num_divisions > 0
+			NOT = { has_country_flag = FOE_march_committed }
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_march_plan_route_tt
+			FOE_plan_long_march = yes
+		}
+		ai_will_do = {
+			base = 1000
+		}
+	}
+
+	#Lord of the Long March: cede an original home state to the rear custodian for a smaller reward.
+	FOE_march_pack_rear_state = {
+		icon = GFX_decision_generic_break_treaty
+		allowed = { always = yes }
+		state_target = yes
+		target_array = owned_states
+		on_map_mode = map_and_decisions_view
+		cost = 10
+		fire_only_once = no
+		visible = { FOE_is_lord_of_the_long_march = yes }
+		target_root_trigger = {
+			FOE_march_can_administer = yes
+			check_variable = { FOE_march_phase = 1 }
+		}
+		target_trigger = {
+			FROM = { FOE_march_packable_rear = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_march_advance_cooldown_tt
+				NOT = { has_country_flag = FOE_march_advance_cooldown }
+			}
+			FOE_march_custodian_valid = yes
+			capital_scope = { is_owned_by = ROOT is_fully_controlled_by = ROOT }
+			FROM = { FOE_march_packable_rear = yes }
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_march_pack_rear_state_tt
+			hidden_effect = {
+				FOE_pack_long_march_rear = yes
+			}
+		}
+		ai_will_do = {
+			base = 20
+			modifier = {
+				factor = 0
+				check_variable = { FOE_march_reserves > 11 }
+			}
+		}
+	}
+
+	#Lord of the Long March: a normal war goal against the next waypoint's owner. The war and any peace are unscripted.
+	FOE_march_open_the_road = {
+		icon = GFX_decision_border_war
+		cost = 25
+		fire_only_once = no
+		days_re_enable = 30
+		visible = { FOE_is_lord_of_the_long_march = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_march_next_foreign_tt
+				has_variable = FOE_march_target_owner
+			}
+			custom_trigger_tooltip = {
+				tooltip = FOE_march_road_closed_tt
+				FOE_march_can_open_the_road = yes
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_march_open_the_road_tt
+			hidden_effect = {
+				FOE_open_the_road = yes
+			}
+		}
+		ai_will_do = {
+			base = 500
+		}
+	}
+
+	#Lord of the Long March: during the breakout, claim a neighbor of the settled kingdom for a normal war.
+	FOE_march_claim_the_horizons = {
+		icon = GFX_decision_border_war
+		allowed = { always = yes }
+		target_array = neighbors
+		cost = 25
+		fire_only_once = no
+		days_re_enable = 30
+		visible = { FOE_is_lord_of_the_long_march = yes }
+		target_root_trigger = {
+			FOE_march_can_claim_horizons = yes
+		}
+		target_trigger = {
+			FROM = { FOE_march_horizon_target = yes }
+		}
+		available = {
+			FROM = { FOE_march_horizon_target = yes }
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_march_claim_the_horizons_tt
+			hidden_effect = {
+				FOE_claim_march_horizon = yes
+			}
+		}
+		ai_will_do = {
+			base = 80
+			# On arrival, claim straight away so the burst has a war to spend itself on.
+			modifier = {
+				factor = 5
+				check_variable = { FOE_march_phase = 2 }
+			}
+		}
+	}
+
+	#Lord of the Long March: spend every reserve on the arrival burst. The player (or AI) chooses the moment.
+	FOE_march_unfurl_banners = {
+		icon = GFX_decision_generic_military
+		cost = 0
+		fire_only_once = no
+		visible = { FOE_is_lord_of_the_long_march = yes }
+		available = {
+			FOE_march_can_unfurl = yes
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_march_unfurl_banners_tt
+			hidden_effect = {
+				FOE_unfurl_long_march_banners = yes
+			}
+		}
+		ai_will_do = {
+			base = 40
+		}
+	}
 }
 
 foe_slaving_cat = {

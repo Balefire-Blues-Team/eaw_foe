@@ -1643,3 +1643,72 @@ FOE_unique_broker_war_on_file = {
 		value = 200
 	}
 }
+
+#Lord of the Long March
+# The normal military AI fights every war; these only bias its existing target selection
+# and front requests. No forced declarations and no changes to decision AI live here.
+
+# While a waypoint war is on, prioritise the specific state the march is waiting on.
+FOE_long_march_open_road_target = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_is_lord_of_the_long_march = yes
+		has_war = yes
+		check_variable = { FOE_march_phase = 1 }
+		has_variable = FOE_march_target_owner
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = force_concentration_target_weight
+		state_trigger = {
+			NOT = { is_owned_by = FROM.FROM }
+			state = var:FROM.FROM.FOE_march_next
+			controller = { has_war_with = FROM.FROM }
+		}
+		value = 100
+	}
+}
+
+# During the breakout window, prioritise the border states the burst just opened.
+FOE_long_march_horizon_targets = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_is_lord_of_the_long_march = yes
+		has_war = yes
+		check_variable = { FOE_march_phase = 3 }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = force_concentration_target_weight
+		state_trigger = {
+			NOT = { is_owned_by = FROM.FROM }
+			controller = { has_war_with = FROM.FROM }
+			any_neighbor_state = { is_owned_by = FROM.FROM }
+		}
+		value = 60
+	}
+}
+
+# Ask for a few more troops around the moving column while a waypoint war is still open.
+FOE_long_march_defend_column = {
+	allowed = { always = yes }
+	enable = {
+		is_ai = yes
+		FOE_is_lord_of_the_long_march = yes
+		has_war = yes
+		check_variable = { FOE_march_phase = 1 }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_unit_request
+		state_trigger = {
+			OR = {
+				state = var:FROM.FROM.FOE_march_camp
+				any_neighbor_state = { state = var:FROM.FROM.FOE_march_camp }
+			}
+		}
+		value = 40
+	}
+}

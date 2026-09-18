@@ -793,3 +793,70 @@ country_event = {
 		FOE_assign_voice_priority = yes
 	}
 }
+
+# Dedicated non-destructive debug menu: use a leader without an existing subclass.
+# event special_rulers.23
+country_event = {
+    id = special_rulers.23
+    title = special_rulers.23.t
+    desc = special_rulers.23.d
+    picture = GFX_event_NCR_startup
+    is_triggered_only = yes
+    fire_only_once = no
+
+    option = {
+        name = special_rulers.23.a
+        trigger = {
+            has_global_flag = FOE_campaign_great_leaders_enabled
+            NOT = { has_country_flag = FOE_march_committed }
+            var:country_leader = { NOT = { has_character_flag = FOE_great_leader_character } }
+        }
+        FOE_remove_class_traits = yes
+        add_country_leader_trait = great_leader_military_trait
+        FOE_initialize_long_march = yes
+    }
+    option = {
+        name = special_rulers.23.b
+        trigger = {
+            has_global_flag = FOE_campaign_great_leaders_enabled
+            NOT = { has_country_flag = FOE_march_committed }
+            var:country_leader = { NOT = { has_character_flag = FOE_great_leader_character } }
+        }
+        FOE_remove_class_traits = yes
+        add_country_leader_trait = legendary_leader_military_trait
+        FOE_initialize_long_march = yes
+    }
+    option = {
+        name = special_rulers.23.c
+        trigger = {
+            has_global_flag = FOE_campaign_great_leaders_enabled
+            NOT = { has_country_flag = FOE_march_committed }
+            var:country_leader = { NOT = { has_character_flag = FOE_great_leader_character } }
+        }
+        FOE_remove_class_traits = yes
+        add_country_leader_trait = mythic_leader_military_trait
+        FOE_initialize_long_march = yes
+    }
+    option = {
+        name = special_rulers.23.e
+        trigger = { FOE_is_lord_of_the_long_march = yes }
+        FOE_update_long_march = yes
+    }
+    option = {
+        name = special_rulers.23.f
+        trigger = { FOE_is_lord_of_the_long_march = yes }
+        add_political_power = 100
+    }
+    # Hands over the next waypoint at peace, as a peace deal would. The weekly update then moves the camp.
+    option = {
+        name = special_rulers.23.g
+        trigger = {
+            FOE_is_lord_of_the_long_march = yes
+            check_variable = { FOE_march_phase = 1 }
+            has_war = no
+            var:FOE_march_next = { NOT = { is_owned_by = ROOT } }
+        }
+        var:FOE_march_next = { transfer_state_to = ROOT }
+    }
+    option = { name = special_rulers.23.close }
+}

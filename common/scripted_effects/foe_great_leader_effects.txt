@@ -2526,6 +2526,11 @@ FOE_roll_conqueror_subclass = {
 	# QA: enable global flag FOE_great_leader_assignment_audit before confirming setup.
 	if = {
 		limit = { has_global_flag = { flag = FOE_great_leader_assignment_audit value = 1}}
+
+		set_temp_variable = { FOE_audit_long_march = 10 }
+		if = { limit = { NOT = { FOE_can_assign_long_march = yes } } multiply_temp_variable = { FOE_audit_long_march = 0 } }
+		if = { limit = { FOE_assignment_suits_long_march = yes } multiply_temp_variable = { FOE_audit_long_march = 1.5 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=conqueror candidate=long_march weight=[?FOE_audit_long_march] (zero=ineligible)"
 		set_temp_variable = { FOE_audit_nomadic_khan = 10 }
 		if = { limit = { NOT = { FOE_can_assign_nomadic_khan = yes } } multiply_temp_variable = { FOE_audit_nomadic_khan = 0 } }
 		if = { limit = { has_idea = raider_society } multiply_temp_variable = { FOE_audit_nomadic_khan = 2 } }
@@ -2580,6 +2585,14 @@ FOE_roll_conqueror_subclass = {
 	}
 	random_list = {
 		log = yes
+
+		10 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_long_march = yes } }
+			modifier = { factor = 1.5 FOE_assignment_suits_long_march = yes }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=conqueror selected=long_march" }
+			FOE_initialize_long_march = yes
+		}
+
 		10 = {
 			modifier = { factor = 0 NOT = { FOE_can_assign_nomadic_khan = yes } }
 			modifier = { factor = 2 has_idea = raider_society }
@@ -4204,4 +4217,353 @@ FOE_initialize_whisper_broker = {
 	}
 	set_variable = { FOE_dossier = 0 }
 	FOE_update_whisper_broker = yes
+}
+
+# Lord of the Long March
+# All entry points run in country scope with ROOT the marching country.
+FOE_initialize_long_march = {
+	add_country_leader_trait = FOE_lord_of_the_long_march_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_lord_of_the_long_march_character
+	}
+	if = {
+		limit = { NOT = { has_country_flag = FOE_march_committed } }
+		set_variable = { FOE_march_phase = 0 }
+		set_variable = { FOE_march_reserves = 0 }
+	}
+	set_country_flag = FOE_march_active
+}
+FOE_march_remove_mobile_train = {
+	if = {
+		limit = { has_country_flag = FOE_march_mobile_train }
+		add_offsite_building = { type = industrial_complex level = -1 }
+		add_offsite_building = { type = arms_factory level = -2 }
+		clr_country_flag = FOE_march_mobile_train
+	}
+}
+FOE_cancel_long_march = {
+	FOE_march_remove_mobile_train = yes
+	remove_dynamic_modifier = { modifier = FOE_long_march_column }
+	remove_dynamic_modifier = { modifier = FOE_long_march_breakout }
+	clr_country_flag = FOE_march_active
+	clr_country_flag = FOE_march_breakout_active
+	clr_country_flag = FOE_march_blocked
+	clear_variable = FOE_march_target_owner
+	if = {
+		limit = { has_country_flag = FOE_march_committed }
+		set_variable = { FOE_march_phase = 4 }
+		set_variable = { FOE_march_reserves = 0 }
+	}
+}
+# Bounded attempts, zero PP cost. The destination is locked only after all three waypoints and a custodian exist.
+# The route comes first: 15 attempts from the capital, then 15 from any state on our border. The rear custodian
+# is chosen afterwards, a peaceful neighbouring country that owns none of the route.
+FOE_plan_long_march = {
+	if = {
+		limit = {
+			FOE_march_can_administer = yes
+			is_in_faction = no
+			num_divisions > 0
+			NOT = { has_country_flag = FOE_march_committed }
+			NOT = { has_country_flag = FOE_march_plan_cooldown }
+		}
+		set_country_flag = { flag = FOE_march_plan_cooldown days = 7 value = 1 }
+		clr_country_flag = FOE_march_plan_failed
+		capital_scope = { ROOT = { set_variable = { FOE_march_home = PREV.id } } }
+		clear_variable = FOE_march_custodian
+		clear_variable = FOE_march_route_3
+		set_variable = { FOE_march_attempts = 0 }
+		while_loop_effect = {
+			limit = {
+				check_variable = { FOE_march_attempts < 30 }
+				NOT = { has_variable = FOE_march_route_3 }
+			}
+			add_to_variable = { FOE_march_attempts = 1 }
+			clear_variable = FOE_march_route_1
+			clear_variable = FOE_march_route_2
+			clear_array = FOE_march_route_states
+			clear_array = FOE_march_route_owners
+			add_to_array = { FOE_march_route_states = FOE_march_home }
+			if = {
+				limit = { check_variable = { FOE_march_attempts < 16 } }
+				capital_scope = { save_event_target_as = FOE_march_start }
+			}
+			else = {
+				random_owned_state = {
+					limit = { any_neighbor_state = { FOE_march_route_candidate = yes } }
+					save_event_target_as = FOE_march_start
+				}
+			}
+			event_target:FOE_march_start = {
+				random_neighbor_state = {
+					limit = { FOE_march_route_candidate = yes }
+					ROOT = {
+						set_variable = { FOE_march_route_1 = PREV.id }
+						add_to_array = { FOE_march_route_states = PREV.id }
+					}
+					owner = { ROOT = { add_to_array = { FOE_march_route_owners = PREV.id } } }
+					random_neighbor_state = {
+						limit = { FOE_march_route_candidate = yes }
+						ROOT = {
+							set_variable = { FOE_march_route_2 = PREV.id }
+							add_to_array = { FOE_march_route_states = PREV.id }
+						}
+						owner = { ROOT = { add_to_array = { FOE_march_route_owners = PREV.id } } }
+						random_neighbor_state = {
+							limit = { FOE_march_route_candidate = yes }
+							ROOT = {
+								set_variable = { FOE_march_route_3 = PREV.id }
+								add_to_array = { FOE_march_route_states = PREV.id }
+							}
+							owner = { ROOT = { add_to_array = { FOE_march_route_owners = PREV.id } } }
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = { has_variable = FOE_march_route_3 }
+			random_neighbor_country = {
+				limit = { FOE_march_custodian_candidate = yes }
+				ROOT = { set_variable = { FOE_march_custodian = PREV } }
+			}
+		}
+		if = {
+			limit = {
+				has_variable = FOE_march_route_3
+				has_variable = FOE_march_custodian
+			}
+			set_country_flag = FOE_march_committed
+			set_country_flag = FOE_march_active
+			set_variable = { FOE_march_phase = 1 }
+			set_variable = { FOE_march_steps = 0 }
+			set_variable = { FOE_march_reserves = 0 }
+			set_variable = { FOE_march_camp = FOE_march_home }
+			set_variable = { FOE_march_goal = FOE_march_route_3 }
+			set_variable = { FOE_march_next = FOE_march_route_1 }
+			clear_array = FOE_march_home_states
+			every_owned_state = { ROOT = { add_to_array = { FOE_march_home_states = PREV.id } } }
+			add_offsite_building = { type = industrial_complex level = 1 }
+			add_offsite_building = { type = arms_factory level = 2 }
+			set_country_flag = FOE_march_mobile_train
+			add_dynamic_modifier = { modifier = FOE_long_march_column }
+			log = "FOE_MARCH [THIS.GetTag] committed route=[?FOE_march_route_1]/[?FOE_march_route_2]/[?FOE_march_route_3] rear=[?FOE_march_custodian] attempts=[?FOE_march_attempts]"
+			FOE_update_long_march = yes
+		}
+		else = {
+			set_country_flag = FOE_march_plan_failed
+			if = {
+				limit = { has_variable = FOE_march_route_3 }
+				log = "FOE_MARCH [THIS.GetTag] route found but no peaceful neighbour can be the rear custodian"
+			}
+			else = {
+				log = "FOE_MARCH [THIS.GetTag] no three-state route found in [?FOE_march_attempts] attempts"
+			}
+			clear_variable = FOE_march_route_1
+			clear_variable = FOE_march_route_2
+			clear_variable = FOE_march_route_3
+			clear_variable = FOE_march_custodian
+			clear_array = FOE_march_route_states
+			clear_array = FOE_march_route_owners
+		}
+		clear_variable = FOE_march_attempts
+	}
+}
+# State scope. Caller has validated the transfer and has already moved the capital.
+# Omitting destination sends each selected owner's armies to its own capital.
+FOE_march_cede_validated_state = {
+	teleport_armies = { limit = { tag = ROOT } }
+	ROOT = { add_to_array = { FOE_march_packed_states = PREV.id } }
+	remove_core_of = ROOT
+	remove_claim_by = ROOT
+	transfer_state_to = var:ROOT.FOE_march_custodian
+}
+FOE_march_refresh_custodian = {
+	if = {
+		limit = { NOT = { FOE_march_custodian_valid = yes } }
+		clear_variable = FOE_march_custodian
+		random_neighbor_country = {
+			limit = { FOE_march_custodian_candidate = yes }
+			ROOT = { set_variable = { FOE_march_custodian = PREV } }
+		}
+	}
+}
+FOE_march_arrive = {
+	if = {
+		limit = {
+			FOE_is_lord_of_the_long_march = yes
+			check_variable = { FOE_march_phase = 1 }
+			check_variable = { FOE_march_steps > 2 }
+			var:FOE_march_goal = { is_owned_by = ROOT is_controlled_by = ROOT }
+		}
+		set_variable = { FOE_march_phase = 2 }
+		clear_variable = FOE_march_target_owner
+		clr_country_flag = FOE_march_blocked
+		FOE_march_remove_mobile_train = yes
+		remove_dynamic_modifier = { modifier = FOE_long_march_column }
+		# Replace the temporary train once with permanent settlement industry.
+		var:FOE_march_goal = {
+			add_extra_state_shared_building_slots = 3
+			add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+			add_building_construction = { type = arms_factory level = 2 instant_build = yes }
+		}
+		log = "FOE_MARCH [THIS.GetTag] arrived goal=[?FOE_march_goal] reserves=[?FOE_march_reserves]"
+	}
+	else = {
+		log = "FOE_MARCH [THIS.GetTag] arrival waiting: phase=[?FOE_march_phase] steps=[?FOE_march_steps] reserves=[?FOE_march_reserves] goal=[?FOE_march_goal]"
+		if = { limit = { NOT = { FOE_is_lord_of_the_long_march = yes } } log = "FOE_MARCH [THIS.GetTag] arrival blocked: the leader is not the Lord of the Long March" }
+		if = { limit = { var:FOE_march_goal = { NOT = { is_owned_by = ROOT } } } log = "FOE_MARCH [THIS.GetTag] arrival blocked: goal not owned" }
+		if = { limit = { var:FOE_march_goal = { NOT = { is_controlled_by = ROOT } } } log = "FOE_MARCH [THIS.GetTag] arrival blocked: goal not controlled" }
+	}
+}
+FOE_advance_long_march = {
+	if = {
+		limit = { FOE_march_can_advance = yes }
+		set_variable = { FOE_march_old_camp = FOE_march_camp }
+		var:FOE_march_next = { add_core_of = ROOT }
+		set_capital = { state = var:FOE_march_next remember_old_capital = no }
+		set_variable = { FOE_march_camp = FOE_march_next }
+		var:FOE_march_old_camp = { FOE_march_cede_validated_state = yes }
+		add_to_variable = { FOE_march_reserves = 3 }
+		clamp_variable = { var = FOE_march_reserves min = 0 max = 12 }
+		add_to_variable = { FOE_march_steps = 1 }
+		set_country_flag = { flag = FOE_march_advance_cooldown days = 30 value = 1 }
+		log = "FOE_MARCH [THIS.GetTag] camp moved: step=[?FOE_march_steps] camp=[?FOE_march_camp] reserves=[?FOE_march_reserves]"
+		if = {
+			limit = { check_variable = { FOE_march_steps = 1 } }
+			set_variable = { FOE_march_next = FOE_march_route_2 }
+		}
+		else_if = {
+			limit = { check_variable = { FOE_march_steps = 2 } }
+			set_variable = { FOE_march_next = FOE_march_route_3 }
+		}
+		else = { FOE_march_arrive = yes }
+		clear_variable = FOE_march_old_camp
+	}
+}
+# Country scope, FROM is a state-target decision's rear state.
+FOE_pack_long_march_rear = {
+	if = {
+		limit = {
+			FOE_march_can_administer = yes
+			check_variable = { FOE_march_phase = 1 }
+			NOT = { has_country_flag = FOE_march_advance_cooldown }
+			FOE_march_custodian_valid = yes
+			FROM = { FOE_march_packable_rear = yes }
+			capital_scope = { is_owned_by = ROOT is_fully_controlled_by = ROOT }
+		}
+		FROM = { FOE_march_cede_validated_state = yes }
+		add_to_variable = { FOE_march_reserves = 1 }
+		clamp_variable = { var = FOE_march_reserves min = 0 max = 12 }
+		set_country_flag = { flag = FOE_march_advance_cooldown days = 30 value = 1 }
+	}
+}
+FOE_unfurl_long_march_banners = {
+	if = {
+		limit = { FOE_march_can_unfurl = yes }
+		set_variable = { FOE_march_attack = FOE_march_reserves }
+		multiply_variable = { FOE_march_attack = 0.01 }
+		set_variable = { FOE_march_breakthrough = FOE_march_reserves }
+		multiply_variable = { FOE_march_breakthrough = 0.015 }
+		set_temp_variable = { FOE_march_manpower = FOE_march_reserves }
+		multiply_temp_variable = { FOE_march_manpower = 500 }
+		add_manpower = var:FOE_march_manpower
+		set_temp_variable = { FOE_march_equipment = FOE_march_reserves }
+		multiply_temp_variable = { FOE_march_equipment = 100 }
+		add_equipment_to_stockpile = { type = infantry_equipment_1 amount = var:FOE_march_equipment producer = ROOT }
+		# The new homeland: every state we hold now becomes a core.
+		every_owned_state = {
+			limit = { NOT = { is_core_of = ROOT } }
+			add_core_of = ROOT
+		}
+		# The breakout lasts as long as the Lord rules; the tier only sets how long Claim the Horizons stays open.
+		add_dynamic_modifier = { modifier = FOE_long_march_breakout }
+		if = {
+			limit = { FOE_has_mythic_conqueror_tier = yes }
+			set_country_flag = { flag = FOE_march_breakout_active days = 120 value = 1 }
+		}
+		else_if = {
+			limit = { FOE_has_legendary_or_mythic_conqueror_tier = yes }
+			set_country_flag = { flag = FOE_march_breakout_active days = 90 value = 1 }
+		}
+		else = {
+			set_country_flag = { flag = FOE_march_breakout_active days = 60 value = 1 }
+		}
+		set_variable = { FOE_march_reserves = 0 }
+		set_variable = { FOE_march_phase = 3 }
+		force_update_dynamic_modifier = yes
+	}
+}
+# Country scope. Grants a claim and a normal war goal against the tracked waypoint owner;
+# the war itself, and any peace deal, are left to the normal game. Never annexes by script.
+FOE_open_the_road = {
+	if = {
+		limit = { FOE_march_can_open_the_road = yes }
+		var:FOE_march_next = {
+			if = {
+				limit = { NOT = { is_claimed_by = ROOT } }
+				add_claim_by = ROOT
+			}
+		}
+		var:FOE_march_target_owner = {
+			ROOT = { create_wargoal = { type = take_claimed_state target = PREV } }
+		}
+	}
+}
+# Country scope; FROM is the claimed neighbor. Only the states bordering our own land are
+# claimed, not the whole country: the burst opens local horizons, not a full annexation.
+FOE_claim_march_horizon = {
+	if = {
+		limit = {
+			FOE_march_can_claim_horizons = yes
+			FROM = { FOE_march_horizon_target = yes }
+		}
+		FROM = {
+			every_owned_state = {
+				limit = {
+					NOT = { is_claimed_by = ROOT }
+					any_neighbor_state = { is_owned_by = ROOT }
+				}
+				add_claim_by = ROOT
+			}
+		}
+		create_wargoal = { type = take_claimed_state target = FROM }
+		if = {
+			limit = { check_variable = { FOE_march_phase = 2 } }
+			set_country_flag = FOE_march_first_horizon
+		}
+	}
+}
+FOE_update_long_march = {
+	if = {
+		limit = { NOT = { FOE_is_lord_of_the_long_march = yes } }
+		FOE_cancel_long_march = yes
+	}
+	else_if = {
+		limit = { check_variable = { FOE_march_phase = 1 } }
+		clear_variable = FOE_march_target_owner
+		var:FOE_march_next = {
+			owner = {
+				if = {
+					limit = { NOT = { tag = ROOT } exists = yes }
+					ROOT = { set_variable = { FOE_march_target_owner = PREV } }
+				}
+			}
+		}
+		if = {
+			limit = { FOE_march_can_administer = yes }
+			FOE_march_refresh_custodian = yes
+			if = {
+				limit = { check_variable = { FOE_march_steps > 2 } }
+				FOE_march_arrive = yes
+			}
+			else_if = {
+				limit = { FOE_march_custodian_valid = yes }
+				clr_country_flag = FOE_march_blocked
+				FOE_advance_long_march = yes
+			}
+			else = { set_country_flag = FOE_march_blocked }
+		}
+	}
 }
