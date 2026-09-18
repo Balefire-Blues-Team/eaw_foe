@@ -502,6 +502,208 @@ FOE_initialize_saint_of_war = {
 	FOE_update_saint_of_war = yes
 }
 
+#Chainbreaker Subclass
+# Country scope. The Chainbreaker's volunteer templates, created once.
+FOE_create_chainbreaker_templates = {
+	if = {
+		limit = { NOT = { has_template = "Freedom Brigade" } }
+		division_template = {
+			name = "Freedom Brigade"
+			is_locked = yes
+			regiments = {
+				militia = { x = 0 y = 0 }
+				militia = { x = 0 y = 1 }
+				militia = { x = 0 y = 2 }
+				militia = { x = 0 y = 3 }
+				militia = { x = 0 y = 4 }
+				militia = { x = 1 y = 0 }
+				militia = { x = 1 y = 1 }
+				militia = { x = 1 y = 2 }
+				militia = { x = 1 y = 3 }
+				militia = { x = 1 y = 4 }
+			}
+		}
+	}
+	if = {
+		limit = { NOT = { has_template = "Crusaders of Liberty" } }
+		division_template = {
+			name = "Crusaders of Liberty"
+			is_locked = yes
+			regiments = {
+				infantry = { x = 0 y = 0 }
+				infantry = { x = 0 y = 1 }
+				infantry = { x = 0 y = 2 }
+				infantry = { x = 0 y = 3 }
+				infantry = { x = 0 y = 4 }
+				heavy_infantry = { x = 1 y = 0 }
+				heavy_infantry = { x = 1 y = 1 }
+				heavy_infantry = { x = 1 y = 2 }
+				heavy_infantry = { x = 1 y = 3 }
+				heavy_infantry = { x = 1 y = 4 }
+			}
+		}
+	}
+}
+
+# Country scope. One group of freed ponies chooses: settle down, take up arms, or join the veterans.
+FOE_chainbreaker_freed_choice = {
+	random_list = {
+		60 = {
+			if = {
+				limit = { any_owned_state = { is_core_of = ROOT is_controlled_by = ROOT } }
+				random_owned_controlled_state = {
+					limit = { is_core_of = ROOT }
+					add_manpower = 250
+				}
+			}
+			else = {
+				capital_scope = { add_manpower = 250 }
+			}
+		}
+		30 = {
+			capital_scope = {
+				create_unit = {
+					division = "name = \"Freedom Brigade\" division_template = \"Freedom Brigade\" start_experience_factor = 0 start_equipment_factor = 1.0"
+					owner = PREV
+				}
+			}
+		}
+		10 = {
+			capital_scope = {
+				create_unit = {
+					division = "name = \"Crusaders of Liberty\" division_template = \"Crusaders of Liberty\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+					owner = PREV
+				}
+			}
+		}
+	}
+}
+
+# Country scope. The stolen goods go back to work: a civilian factory where there is room for one.
+FOE_chainbreaker_build_liberated_factory = {
+	random_owned_controlled_state = {
+		limit = {
+			free_building_slots = {
+				building = industrial_complex
+				size > 0
+				include_locked = yes
+			}
+			OR = {
+				is_in_home_area = yes
+				NOT = {
+					owner = {
+						any_owned_state = {
+							free_building_slots = {
+								building = industrial_complex
+								size > 0
+								include_locked = yes
+							}
+							is_in_home_area = yes
+						}
+					}
+				}
+			}
+		}
+		add_extra_state_shared_building_slots = 1
+		add_building_construction = {
+			type = industrial_complex
+			level = 1
+			instant_build = yes
+		}
+	}
+}
+
+# Country scope; ROOT is the Chainbreaker, FROM the previous controller, FROM.FROM the state.
+# Frees as many thousands of slaves as the Despot would take from a state this size, but no more than FROM holds.
+# Each thousand gives 200 manpower and 800 refugees. Also recovers up to 5 of a raider's loot; every 5 builds a factory.
+FOE_chainbreaker_liberate_state = {
+	FROM.FROM = { set_state_flag = { flag = FOE_chainbreaker_liberated value = 1 days = 180 } }
+	if = {
+		limit = { FROM = { check_variable = { foe_slaves_var > 0 } } }
+		set_variable = { FOE_chainbreaker_freed = 0 }
+		if = {
+			limit = { FROM.FROM = { state_population > 14999 } }
+			set_variable = { FOE_chainbreaker_freed = 5 }
+		}
+		else_if = {
+			limit = { FROM.FROM = { state_population > 11999 } }
+			set_variable = { FOE_chainbreaker_freed = 4 }
+		}
+		else_if = {
+			limit = { FROM.FROM = { state_population > 8999 } }
+			set_variable = { FOE_chainbreaker_freed = 3 }
+		}
+		else_if = {
+			limit = { FROM.FROM = { state_population > 5999 } }
+			set_variable = { FOE_chainbreaker_freed = 2 }
+		}
+		else_if = {
+			limit = { FROM.FROM = { state_population > 2999 } }
+			set_variable = { FOE_chainbreaker_freed = 1 }
+		}
+		set_variable = { FOE_chainbreaker_freed_cap = FROM.foe_slaves_var }
+		if = {
+			limit = { check_variable = { FOE_chainbreaker_freed > FOE_chainbreaker_freed_cap } }
+			set_variable = { FOE_chainbreaker_freed = FOE_chainbreaker_freed_cap }
+		}
+		if = {
+			limit = { check_variable = { FOE_chainbreaker_freed > 0 } }
+			FROM = { subtract_from_variable = { foe_slaves_var = ROOT.FOE_chainbreaker_freed } }
+			set_variable = { FOE_chainbreaker_payout = FOE_chainbreaker_freed }
+			multiply_variable = { FOE_chainbreaker_payout = 200 }
+			add_manpower = FOE_chainbreaker_payout
+			multiply_variable = { FOE_chainbreaker_payout = 4 }
+			if = {
+				limit = { NOT = { has_variable = unassimilated_refugees } }
+				set_variable = { unassimilated_refugees = 0 }
+			}
+			add_to_variable = { unassimilated_refugees = FOE_chainbreaker_payout }
+			on_refugee_change = yes
+		}
+		clear_variable = FOE_chainbreaker_freed
+		clear_variable = FOE_chainbreaker_freed_cap
+		clear_variable = FOE_chainbreaker_payout
+	}
+	if = {
+		limit = { FROM = { check_variable = { loot > 0 } } }
+		set_variable = { FOE_chainbreaker_loot_taken = FROM.loot }
+		clamp_variable = { var = FOE_chainbreaker_loot_taken min = 0 max = 5 }
+		FROM = { subtract_from_variable = { loot = ROOT.FOE_chainbreaker_loot_taken } }
+		if = {
+			limit = { NOT = { has_variable = FOE_liberated_loot } }
+			set_variable = { FOE_liberated_loot = 0 }
+		}
+		add_to_variable = { FOE_liberated_loot = FOE_chainbreaker_loot_taken }
+		clear_variable = FOE_chainbreaker_loot_taken
+		if = {
+			limit = { check_variable = { FOE_liberated_loot > 4 } }
+			subtract_from_variable = { FOE_liberated_loot = 5 }
+			FOE_chainbreaker_build_liberated_factory = yes
+		}
+	}
+}
+
+# Country scope.
+FOE_update_chainbreaker = {
+	if = {
+		limit = {
+			FOE_is_chainbreaker = yes
+			NOT = { has_dynamic_modifier = { modifier = FOE_crusade_modifier } }
+		}
+		add_dynamic_modifier = { modifier = FOE_crusade_modifier }
+	}
+}
+
+FOE_initialize_chainbreaker = {
+	add_country_leader_trait = FOE_chainbreaker_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_chainbreaker_character
+	}
+	FOE_create_chainbreaker_templates = yes
+	FOE_update_chainbreaker = yes
+}
+
 #Unifier Subclass
 # State scope; ROOT is the Unifier. Compliance is 5 plus 1 per core state, up to 30.
 FOE_unifier_integrate_state = {
@@ -1697,6 +1899,13 @@ FOE_roll_conqueror_subclass = {
 		if = { limit = { has_idea = raider_society } multiply_temp_variable = { FOE_audit_saint_of_war = 0.1 } }
 		if = { limit = { has_government = destruction } multiply_temp_variable = { FOE_audit_saint_of_war = 0.1 } }
 		log = "FOE_ASSIGN [THIS.GetTag] class=conqueror candidate=saint_of_war weight=[?FOE_audit_saint_of_war] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_chainbreaker = 10 }
+		if = { limit = { NOT = { FOE_can_assign_chainbreaker = yes } } multiply_temp_variable = { FOE_audit_chainbreaker = 0 } }
+		if = { limit = { has_idea = wasteland_society } multiply_temp_variable = { FOE_audit_chainbreaker = 2 } }
+		if = { limit = { has_idea = postwar_collectivist_society } multiply_temp_variable = { FOE_audit_chainbreaker = 2 } }
+		if = { limit = { has_government = visionary } multiply_temp_variable = { FOE_audit_chainbreaker = 2 } }
+		if = { limit = { FOE_assignment_suits_chainbreaker = yes } multiply_temp_variable = { FOE_audit_chainbreaker = 1.5 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=conqueror candidate=chainbreaker weight=[?FOE_audit_chainbreaker] (zero=ineligible)"
 	}
 	random_list = {
 		log = yes
@@ -1753,6 +1962,15 @@ FOE_roll_conqueror_subclass = {
 			modifier = { factor = 0.1 has_government = destruction }
 			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=conqueror selected=saint_of_war" }
 			FOE_initialize_saint_of_war = yes
+		}
+		10 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_chainbreaker = yes } }
+			modifier = { factor = 2 has_idea = wasteland_society }
+			modifier = { factor = 2 has_idea = postwar_collectivist_society }
+			modifier = { factor = 2 has_government = visionary }
+			modifier = { factor = 1.5 FOE_assignment_suits_chainbreaker = yes }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=conqueror selected=chainbreaker" }
+			FOE_initialize_chainbreaker = yes
 		}
 	}
 }

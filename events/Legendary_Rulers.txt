@@ -609,4 +609,36 @@ country_event = {
 		set_variable = { FOE_saint_victories = 24 }
 		FOE_count_saint_victory = yes
 	}
+
+	option = {
+		name = special_rulers.16.h
+		trigger = {
+			NOT = { has_country_leader_with_trait = mythic_leader_military_trait }
+		}
+		add_country_leader_trait = mythic_leader_military_trait
+		FOE_initialize_chainbreaker = yes
+	}
+
+	option = {
+		name = special_rulers.16.i
+		trigger = {
+			has_country_leader_with_trait = mythic_leader_military_trait
+			NOT = { FOE_is_chainbreaker = yes }
+		}
+		FOE_initialize_chainbreaker = yes
+	}
+
+	# Enough refugees for one Freed March, through the exodus system's own refresh.
+	option = {
+		name = special_rulers.16.j
+		trigger = {
+			FOE_is_chainbreaker = yes
+		}
+		if = {
+			limit = { NOT = { has_variable = unassimilated_refugees } }
+			set_variable = { unassimilated_refugees = 0 }
+		}
+		add_to_variable = { unassimilated_refugees = 1000 }
+		on_refugee_change = yes
+	}
 }

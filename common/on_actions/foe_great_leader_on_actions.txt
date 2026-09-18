@@ -101,7 +101,7 @@ on_actions = {
 	}
 
 	#Saint of War actions
-	# ROOT is the army leader who won; FROM is the country he fights for.
+	# ROOT is the army leader who won; FROM is the country they fight for.
 	on_army_leader_won_combat = {
 		effect = {
 			FROM = {
@@ -116,6 +116,32 @@ on_actions = {
 	on_monthly = {
 		effect = {
 			FOE_update_saint_of_war = yes
+		}
+	}
+
+	#Chainbreaker actions
+	on_state_control_changed = {
+		effect = {
+			if = {
+				limit = {
+					FOE_is_chainbreaker = yes
+					has_war_with = FROM
+					FROM.FROM = { NOT = { has_state_flag = FOE_chainbreaker_liberated } }
+					FROM = {
+						OR = {
+							check_variable = { foe_slaves_var > 0 }
+							check_variable = { loot > 0 }
+						}
+					}
+				}
+				FOE_chainbreaker_liberate_state = yes
+			}
+		}
+	}
+
+	on_monthly = {
+		effect = {
+			FOE_update_chainbreaker = yes
 		}
 	}
 

@@ -417,6 +417,68 @@ GEN_great_leader_decisions = {
 		}
 	}
 
+	#Chainbreaker: The Freed March With Us
+	FOE_chainbreaker_freed_march = {
+		icon = GFX_decision_SWI_support_humanitarian_efforts
+		cost = 10
+		fire_only_once = no
+		visible = { FOE_is_legendary_or_mythic_chainbreaker = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_chainbreaker_refugees_present_tt
+				check_variable = { unassimilated_refugees > 999 }
+			}
+		}
+		days_re_enable = 30
+		complete_effect = {
+			custom_effect_tooltip = FOE_chainbreaker_freed_march_tt
+			hidden_effect = {
+				subtract_from_variable = { unassimilated_refugees = 1000 }
+				on_refugee_change = yes
+				FOE_create_chainbreaker_templates = yes
+				# Four groups, each choosing for themselves.
+				FOE_chainbreaker_freed_choice = yes
+				FOE_chainbreaker_freed_choice = yes
+				FOE_chainbreaker_freed_choice = yes
+				FOE_chainbreaker_freed_choice = yes
+			}
+		}
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	#Chainbreaker: Crusade
+	FOE_chainbreaker_crusade = {
+		icon = GFX_decision_border_war
+		allowed = { always = yes }
+		target_array = global.countries
+		cost = 50
+		fire_only_once = no
+		visible = { FOE_is_mythic_chainbreaker = yes }
+		target_root_trigger = { FOE_is_mythic_chainbreaker = yes }
+		target_trigger = {
+			FROM = { FOE_is_crusade_target = yes }
+		}
+		available = {
+			FROM = { FOE_is_crusade_target = yes }
+		}
+		days_re_enable = 180
+		complete_effect = {
+			create_wargoal = {
+				type = annex_everything
+				target = FROM
+			}
+		}
+		ai_will_do = {
+			base = 50
+			modifier = {
+				factor = 0.25
+				has_war = yes
+			}
+		}
+	}
+
 	FOE_unifier_integrate_state = {
 		icon = GFX_decision_unknown
 		allowed = { always = yes }

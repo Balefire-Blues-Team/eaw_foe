@@ -141,6 +141,47 @@ FOE_is_mythic_saint_of_war = {
 	has_country_leader_with_trait = mythic_leader_military_trait
 }
 
+FOE_is_chainbreaker = {
+	var:country_leader = {
+		has_character_flag = FOE_great_leader_character
+		has_character_flag = FOE_chainbreaker_character
+	}
+}
+
+FOE_is_legendary_or_mythic_chainbreaker = {
+	FOE_is_chainbreaker = yes
+	OR = {
+		has_country_leader_with_trait = legendary_leader_military_trait
+		has_country_leader_with_trait = mythic_leader_military_trait
+	}
+}
+
+FOE_is_mythic_chainbreaker = {
+	FOE_is_chainbreaker = yes
+	has_country_leader_with_trait = mythic_leader_military_trait
+}
+
+# Country scope. Slavers, raiders and destroyers: everyone the Chainbreaker exists to fight.
+FOE_is_oppressor = {
+	OR = {
+		has_idea = slaver_society
+		has_idea = raider_society
+		has_government = destruction
+		has_country_flag = slavery_allowed
+	}
+}
+
+# Country scope; ROOT is the Chainbreaker.
+FOE_is_crusade_target = {
+	exists = yes
+	FOE_is_oppressor = yes
+	is_neighbor_of = ROOT
+	NOT = { has_war_with = ROOT }
+	NOT = { is_in_faction_with = ROOT }
+	NOT = { is_subject_of = ROOT }
+	NOT = { ROOT = { has_wargoal_against = PREV } }
+}
+
 FOE_is_unifier = {
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
@@ -612,6 +653,11 @@ FOE_can_assign_saint_of_war = {
 	FOE_great_leader_country_valid = yes
 }
 
+FOE_can_assign_chainbreaker = {
+	FOE_great_leader_country_valid = yes
+	NOT = { FOE_is_oppressor = yes }
+}
+
 FOE_can_assign_unifier = {
 	FOE_great_leader_country_valid = yes
 }
@@ -719,4 +765,7 @@ FOE_assignment_suits_dreamer_in_steel = {
 			any_owned_state = { FOE_is_robot_factory_site = yes }
 		}
 	}
+}
+FOE_assignment_suits_chainbreaker = {
+	any_neighbor_country = { FOE_is_oppressor = yes }
 }
