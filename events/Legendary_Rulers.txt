@@ -588,25 +588,25 @@ country_event = {
 			NOT = { has_country_leader_with_trait = mythic_leader_industry_trait }
 		}
 		add_country_leader_trait = mythic_leader_industry_trait
-		FOE_initialize_merchant_prince = yes
+		FOE_initialize_blackout_opportunist = yes
 	}
 
 	option = {
 		name = special_rulers.16.f
 		trigger = {
 			has_country_leader_with_trait = mythic_leader_industry_trait
-			NOT = { FOE_is_merchant_prince = yes }
+			NOT = { FOE_is_blackout_opportunist = yes }
 		}
-		FOE_initialize_merchant_prince = yes
+		FOE_initialize_blackout_opportunist = yes
 	}
 
-	# Re-runs the monthly Market update now, so the modifier can be checked as trades open and close.
+	# Re-runs the monthly update now, so Running Dark can be checked right after changing fuel in the console.
 	option = {
 		name = special_rulers.16.g
 		trigger = {
-			FOE_is_merchant_prince = yes
+			FOE_is_blackout_opportunist = yes
 		}
-		FOE_update_merchant_prince = yes
+		FOE_update_blackout_opportunist = yes
 	}
 
 	option = {
@@ -730,5 +730,21 @@ country_event = {
 			subtract_from_variable = { FOE_purchase_receipts = 1 }
 		}
 		clear_variable = FOE_purchase_receipts
+	}
+}
+
+#Blackout Opportunist: the black-market payments end, and the offsite factories go with them.
+country_event = {
+	id = special_rulers.21
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		while_loop_effect = {
+			limit = { check_variable = { FOE_black_market_factories > 0 } }
+			add_offsite_building = { type = industrial_complex level = -1 }
+			subtract_from_variable = { FOE_black_market_factories = 1 }
+		}
+		clear_variable = FOE_black_market_factories
 	}
 }

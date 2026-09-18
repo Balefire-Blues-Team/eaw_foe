@@ -719,6 +719,41 @@ FOE_is_enemy_renderable_state = {
 	owner = { has_war_with = ROOT }
 }
 
+FOE_is_blackout_opportunist = {
+	var:country_leader = {
+		has_character_flag = FOE_great_leader_character
+		has_character_flag = FOE_blackout_opportunist_character
+	}
+}
+
+FOE_is_legendary_or_mythic_blackout_opportunist = {
+	FOE_is_blackout_opportunist = yes
+	OR = {
+		has_country_leader_with_trait = legendary_leader_industry_trait
+		has_country_leader_with_trait = mythic_leader_industry_trait
+	}
+}
+
+FOE_is_mythic_blackout_opportunist = {
+	FOE_is_blackout_opportunist = yes
+	has_country_leader_with_trait = mythic_leader_industry_trait
+}
+
+# Country scope; ROOT is the Blackout Opportunist. A neighbour with fuel to take; at Mythic, also any enemy at war with us.
+FOE_is_siphon_target = {
+	exists = yes
+	NOT = { tag = ROOT }
+	NOT = { is_subject_of = ROOT }
+	has_fuel > 999
+	OR = {
+		is_neighbor_of = ROOT
+		AND = {
+			has_war_with = ROOT
+			ROOT = { FOE_is_mythic_blackout_opportunist = yes }
+		}
+	}
+}
+
 FOE_is_machine_uprising = {
 	tag = XYZ
 }
@@ -936,6 +971,10 @@ FOE_can_assign_biological_engineer = {
 	NOT = { FOE_has_robotics_programme = yes }
 }
 
+FOE_can_assign_blackout_opportunist = {
+	FOE_great_leader_country_valid = yes
+}
+
 FOE_can_assign_dreamer_in_steel = {
 	FOE_great_leader_country_valid = yes
 	has_tech = robotics_tech_level_settler
@@ -1028,4 +1067,7 @@ FOE_assignment_suits_chainbreaker = {
 }
 FOE_assignment_suits_biological_engineer = {
 	any_owned_state = { state_population > 9999 }
+}
+FOE_assignment_suits_blackout_opportunist = {
+	check_variable = { resource@energy < 0 }
 }

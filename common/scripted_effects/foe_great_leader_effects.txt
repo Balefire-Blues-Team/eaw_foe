@@ -2071,6 +2071,80 @@ FOE_initialize_biological_engineer = {
 	FOE_update_biological_engineer = yes
 }
 
+#Blackout Opportunist Subclass
+# Country scope. Monthly. Running Dark: factory output and construction speed +15% x (1 - fuel ratio).
+FOE_update_blackout_opportunist = {
+	if = {
+		limit = { FOE_is_blackout_opportunist = yes }
+		set_variable = { FOE_running_dark = fuel_ratio }
+		multiply_variable = { FOE_running_dark = -1 }
+		add_to_variable = { FOE_running_dark = 1 }
+		multiply_variable = { FOE_running_dark = 0.15 }
+		clamp_variable = { var = FOE_running_dark min = 0 max = 0.15 }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = FOE_running_dark_modifier } } }
+			add_dynamic_modifier = { modifier = FOE_running_dark_modifier }
+		}
+		if = {
+			limit = {
+				FOE_is_mythic_blackout_opportunist = yes
+				NOT = { has_dynamic_modifier = { modifier = FOE_lights_out_modifier } }
+			}
+			add_dynamic_modifier = { modifier = FOE_lights_out_modifier }
+		}
+		force_update_dynamic_modifier = yes
+	}
+	else_if = {
+		limit = { has_dynamic_modifier = { modifier = FOE_running_dark_modifier } }
+		remove_dynamic_modifier = { modifier = FOE_running_dark_modifier }
+		clear_variable = FOE_running_dark
+	}
+}
+
+# Country scope. Every 1,000 fuel burned is +2% research speed for 60 days, at most 15%.
+FOE_burn_the_reserves = {
+	set_variable = { FOE_bonfire_research = fuel_k }
+	multiply_variable = { FOE_bonfire_research = 0.02 }
+	clamp_variable = { var = FOE_bonfire_research min = 0 max = 0.15 }
+	set_fuel = 0
+	add_dynamic_modifier = { modifier = FOE_bonfire_modifier days = 60 }
+	FOE_update_blackout_opportunist = yes
+}
+
+# Country scope; FROM is the target. Half their fuel is taken and sold on the black market:
+# one offsite civilian factory per 1,000 fuel (rounded, at least 1, at most 10) for 90 days.
+# special_rulers.21 takes the factories back; the cooldown means only one sale runs at a time.
+FOE_siphon_fuel = {
+	set_variable = { FOE_black_market_factories = FROM.fuel_k }
+	multiply_variable = { FOE_black_market_factories = 0.5 }
+	round_variable = FOE_black_market_factories
+	clamp_variable = { var = FOE_black_market_factories min = 1 max = 10 }
+	FROM = {
+		set_temp_variable = { FOE_fuel_taken = fuel_k }
+		multiply_temp_variable = { FOE_fuel_taken = -500 }
+		add_fuel = FOE_fuel_taken
+		add_opinion_modifier = { target = ROOT modifier = FOE_siphoned_our_fuel }
+	}
+	set_temp_variable = { FOE_market_left = FOE_black_market_factories }
+	while_loop_effect = {
+		limit = { check_variable = { FOE_market_left > 0 } }
+		add_offsite_building = { type = industrial_complex level = 1 }
+		subtract_from_temp_variable = { FOE_market_left = 1 }
+	}
+	set_country_flag = { flag = FOE_siphon_cooldown value = 1 days = 90 }
+	add_dynamic_modifier = { modifier = FOE_black_market_modifier days = 90 }
+	country_event = { id = special_rulers.21 days = 90 }
+}
+
+FOE_initialize_blackout_opportunist = {
+	add_country_leader_trait = FOE_blackout_opportunist_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_blackout_opportunist_character
+	}
+	FOE_update_blackout_opportunist = yes
+}
+
 #Dreamer in Steel Subclass
 # Country scope. Exchange prices rise with every exchange of either kind:
 # civilian factory 20 + 10 per exchange, military factory 30 + 10 per exchange (heavy industrial robots).
@@ -2748,6 +2822,13 @@ FOE_roll_industrialist_subclass = {
 		if = { limit = { NOT = { FOE_can_assign_biological_engineer = yes } } multiply_temp_variable = { FOE_audit_biological_engineer = 0 } }
 		if = { limit = { FOE_assignment_suits_biological_engineer = yes } multiply_temp_variable = { FOE_audit_biological_engineer = 1.5 } }
 		log = "FOE_ASSIGN [THIS.GetTag] class=industrialist candidate=biological_engineer weight=[?FOE_audit_biological_engineer] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_blackout_opportunist = 10 }
+		if = { limit = { NOT = { FOE_can_assign_blackout_opportunist = yes } } multiply_temp_variable = { FOE_audit_blackout_opportunist = 0 } }
+		if = { limit = { has_idea = tribal_society } multiply_temp_variable = { FOE_audit_blackout_opportunist = 2 } }
+		if = { limit = { has_idea = tribal_research_base } multiply_temp_variable = { FOE_audit_blackout_opportunist = 2 } }
+		if = { limit = { has_idea = advanced_research_base } multiply_temp_variable = { FOE_audit_blackout_opportunist = 0.1 } }
+		if = { limit = { FOE_assignment_suits_blackout_opportunist = yes } multiply_temp_variable = { FOE_audit_blackout_opportunist = 1.5 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=industrialist candidate=blackout_opportunist weight=[?FOE_audit_blackout_opportunist] (zero=ineligible)"
 	}
 	random_list = {
 		log = yes
@@ -2793,6 +2874,15 @@ FOE_roll_industrialist_subclass = {
 			modifier = { factor = 1.5 FOE_assignment_suits_biological_engineer = yes }
 			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=industrialist selected=biological_engineer" }
 			FOE_initialize_biological_engineer = yes
+		}
+		10 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_blackout_opportunist = yes } }
+			modifier = { factor = 2 has_idea = tribal_society }
+			modifier = { factor = 2 has_idea = tribal_research_base }
+			modifier = { factor = 0.1 has_idea = advanced_research_base }
+			modifier = { factor = 1.5 FOE_assignment_suits_blackout_opportunist = yes }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=industrialist selected=blackout_opportunist" }
+			FOE_initialize_blackout_opportunist = yes
 		}
 	}
 }

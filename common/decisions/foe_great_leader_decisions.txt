@@ -1528,6 +1528,57 @@ GEN_great_leader_decisions = {
 		}
 	}
 
+	#Blackout Opportunist: Burn the Reserves
+	FOE_blackout_burn_reserves = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		fire_only_once = no
+		days_re_enable = 120
+		visible = { FOE_is_blackout_opportunist = yes }
+		available = {
+			has_fuel > 499
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_blackout_burn_reserves_tt
+			hidden_effect = { FOE_burn_the_reserves = yes }
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	#Blackout Opportunist: Siphon
+	FOE_blackout_siphon_fuel = {
+		icon = GFX_decision_hol_drain_water_lines
+		allowed = { always = yes }
+		target_array = global.countries
+		cost = 50
+		fire_only_once = no
+		visible = { FOE_is_legendary_or_mythic_blackout_opportunist = yes }
+		target_root_trigger = { FOE_is_legendary_or_mythic_blackout_opportunist = yes }
+		target_trigger = {
+			FROM = { FOE_is_siphon_target = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_siphon_cooldown_tt
+				NOT = { has_country_flag = FOE_siphon_cooldown }
+			}
+			FROM = { FOE_is_siphon_target = yes }
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_blackout_siphon_fuel_tt
+			hidden_effect = { FOE_siphon_fuel = yes }
+		}
+		ai_will_do = {
+			base = 30
+			modifier = {
+				factor = 2
+				FROM = { has_war_with = ROOT }
+			}
+		}
+	}
+
 	#Dreamer in Steel: Automated Workshops
 	FOE_dreamer_robot_workshops = {
 		icon = GFX_decision_unknown
