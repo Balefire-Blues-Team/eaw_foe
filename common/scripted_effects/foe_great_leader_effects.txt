@@ -2618,7 +2618,7 @@ FOE_roll_great_conqueror_subclass = {
 	random_list = {
 		log = yes
 		30 = { FOE_roll_conqueror_subclass = yes }
-		70 = { }
+		70 = { FOE_try_conqueror_combo_promotion = yes }
 	}
 }
 
@@ -2626,7 +2626,7 @@ FOE_roll_legendary_conqueror_subclass = {
 	random_list = {
 		log = yes
 		60 = { FOE_roll_conqueror_subclass = yes }
-		40 = { }
+		40 = { FOE_try_conqueror_combo_promotion = yes }
 	}
 }
 
@@ -2771,7 +2771,7 @@ FOE_roll_great_administrator_subclass = {
 	random_list = {
 		log = yes
 		30 = { FOE_roll_administrator_subclass = yes }
-		70 = { }
+		70 = { FOE_try_administrator_combo_promotion = yes }
 	}
 }
 
@@ -2779,7 +2779,7 @@ FOE_roll_legendary_administrator_subclass = {
 	random_list = {
 		log = yes
 		60 = { FOE_roll_administrator_subclass = yes }
-		40 = { }
+		40 = { FOE_try_administrator_combo_promotion = yes }
 	}
 }
 
@@ -2894,7 +2894,7 @@ FOE_roll_great_industrialist_subclass = {
 	random_list = {
 		log = yes
 		30 = { FOE_roll_industrialist_subclass = yes }
-		70 = { }
+		70 = { FOE_try_industrialist_combo_promotion = yes }
 	}
 }
 
@@ -2903,7 +2903,7 @@ FOE_roll_legendary_industrialist_subclass = {
 	random_list = {
 		log = yes
 		60 = { FOE_roll_industrialist_subclass = yes }
-		40 = { }
+		40 = { FOE_try_industrialist_combo_promotion = yes }
 	}
 }
 
@@ -2911,3 +2911,121 @@ FOE_roll_mythic_industrialist_subclass = {
 	set_temp_variable = { FOE_subclass_tier = 3 }
 	FOE_roll_industrialist_subclass = yes
 }
+
+#Combo Classes
+# Country scope. A Great or Legendary leader who rolled no subclass has a 15% chance (AI only) to become one of the
+# two Mythic combo classes that contain their class. A combo leader always rolls a subclass.
+FOE_try_conqueror_combo_promotion = {
+	if = {
+		limit = { is_ai = yes }
+		random_list = {
+			log = yes
+			15 = {
+				random_list = {
+					log = yes
+					50 = { FOE_become_ruler = yes }
+					50 = { FOE_become_exploiter = yes }
+				}
+			}
+			85 = { }
+		}
+	}
+}
+
+FOE_try_administrator_combo_promotion = {
+	if = {
+		limit = { is_ai = yes }
+		random_list = {
+			log = yes
+			15 = {
+				random_list = {
+					log = yes
+					50 = { FOE_become_ruler = yes }
+					50 = { FOE_become_magnate = yes }
+				}
+			}
+			85 = { }
+		}
+	}
+}
+
+FOE_try_industrialist_combo_promotion = {
+	if = {
+		limit = { is_ai = yes }
+		random_list = {
+			log = yes
+			15 = {
+				random_list = {
+					log = yes
+					50 = { FOE_become_exploiter = yes }
+					50 = { FOE_become_magnate = yes }
+				}
+			}
+			85 = { }
+		}
+	}
+}
+
+# Country scope. Takes away the leader's Great or Legendary class trait before a combo trait replaces it.
+FOE_remove_class_traits = {
+	if = { limit = { has_country_leader_with_trait = great_leader_military_trait } remove_country_leader_trait = great_leader_military_trait }
+	if = { limit = { has_country_leader_with_trait = legendary_leader_military_trait } remove_country_leader_trait = legendary_leader_military_trait }
+	if = { limit = { has_country_leader_with_trait = great_leader_admin_trait } remove_country_leader_trait = great_leader_admin_trait }
+	if = { limit = { has_country_leader_with_trait = legendary_leader_admin_trait } remove_country_leader_trait = legendary_leader_admin_trait }
+	if = { limit = { has_country_leader_with_trait = great_leader_industry_trait } remove_country_leader_trait = great_leader_industry_trait }
+	if = { limit = { has_country_leader_with_trait = legendary_leader_industry_trait } remove_country_leader_trait = legendary_leader_industry_trait }
+}
+
+FOE_become_ruler = {
+	FOE_remove_class_traits = yes
+	add_country_leader_trait = mythic_leader_ruler_trait
+	var:country_leader = { set_character_flag = FOE_great_leader_character }
+	if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] promoted=ruler" }
+	FOE_roll_ruler_subclass = yes
+}
+
+FOE_become_exploiter = {
+	FOE_remove_class_traits = yes
+	add_country_leader_trait = mythic_leader_exploiter_trait
+	var:country_leader = { set_character_flag = FOE_great_leader_character }
+	if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] promoted=exploiter" }
+	FOE_roll_exploiter_subclass = yes
+}
+
+FOE_become_magnate = {
+	FOE_remove_class_traits = yes
+	add_country_leader_trait = mythic_leader_magnate_trait
+	var:country_leader = { set_character_flag = FOE_great_leader_character }
+	if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] promoted=magnate" }
+	FOE_roll_magnate_subclass = yes
+}
+
+# Combo subclass rolls. Each parent pool weighs 60 (six subclasses at 10) and rolls with its own weights and gates.
+# Combo subclasses go straight into these lists at 30 each, three times a single parent subclass.
+FOE_roll_ruler_subclass = {
+	set_temp_variable = { FOE_subclass_tier = 3 }
+	random_list = {
+		log = yes
+		60 = { FOE_roll_conqueror_subclass = yes }
+		60 = { FOE_roll_administrator_subclass = yes }
+	}
+}
+
+FOE_roll_exploiter_subclass = {
+	set_temp_variable = { FOE_subclass_tier = 3 }
+	random_list = {
+		log = yes
+		60 = { FOE_roll_conqueror_subclass = yes }
+		60 = { FOE_roll_industrialist_subclass = yes }
+	}
+}
+
+FOE_roll_magnate_subclass = {
+	set_temp_variable = { FOE_subclass_tier = 3 }
+	random_list = {
+		log = yes
+		60 = { FOE_roll_administrator_subclass = yes }
+		60 = { FOE_roll_industrialist_subclass = yes }
+	}
+}
+

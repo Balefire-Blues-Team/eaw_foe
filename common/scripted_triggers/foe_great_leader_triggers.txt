@@ -1,4 +1,76 @@
 # All these triggers run in country scope.
+
+# Class tiers. A combo class is always Mythic, and counts as Mythic in both of its parent classes:
+# Ruler = Conqueror + Administrator, Exploiter = Conqueror + Industrialist, Magnate = Administrator + Industrialist.
+FOE_has_any_conqueror_tier = {
+	OR = {
+		has_country_leader_with_trait = great_leader_military_trait
+		has_country_leader_with_trait = legendary_leader_military_trait
+		FOE_has_mythic_conqueror_tier = yes
+	}
+}
+
+FOE_has_legendary_or_mythic_conqueror_tier = {
+	OR = {
+		has_country_leader_with_trait = legendary_leader_military_trait
+		FOE_has_mythic_conqueror_tier = yes
+	}
+}
+
+FOE_has_mythic_conqueror_tier = {
+	OR = {
+		has_country_leader_with_trait = mythic_leader_military_trait
+		has_country_leader_with_trait = mythic_leader_ruler_trait
+		has_country_leader_with_trait = mythic_leader_exploiter_trait
+	}
+}
+
+FOE_has_any_administrator_tier = {
+	OR = {
+		has_country_leader_with_trait = great_leader_admin_trait
+		has_country_leader_with_trait = legendary_leader_admin_trait
+		FOE_has_mythic_administrator_tier = yes
+	}
+}
+
+FOE_has_legendary_or_mythic_administrator_tier = {
+	OR = {
+		has_country_leader_with_trait = legendary_leader_admin_trait
+		FOE_has_mythic_administrator_tier = yes
+	}
+}
+
+FOE_has_mythic_administrator_tier = {
+	OR = {
+		has_country_leader_with_trait = mythic_leader_admin_trait
+		has_country_leader_with_trait = mythic_leader_ruler_trait
+		has_country_leader_with_trait = mythic_leader_magnate_trait
+	}
+}
+
+FOE_has_any_industrialist_tier = {
+	OR = {
+		has_country_leader_with_trait = great_leader_industry_trait
+		has_country_leader_with_trait = legendary_leader_industry_trait
+		FOE_has_mythic_industrialist_tier = yes
+	}
+}
+
+FOE_has_legendary_or_mythic_industrialist_tier = {
+	OR = {
+		has_country_leader_with_trait = legendary_leader_industry_trait
+		FOE_has_mythic_industrialist_tier = yes
+	}
+}
+
+FOE_has_mythic_industrialist_tier = {
+	OR = {
+		has_country_leader_with_trait = mythic_leader_industry_trait
+		has_country_leader_with_trait = mythic_leader_exploiter_trait
+		has_country_leader_with_trait = mythic_leader_magnate_trait
+	}
+}
+
 FOE_is_nomadic_khan = {
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
@@ -21,7 +93,7 @@ FOE_is_legendary_nomadic_khan = {
 
 FOE_is_mythic_nomadic_khan = {
 	FOE_is_nomadic_khan = yes
-	has_country_leader_with_trait = mythic_leader_military_trait
+	FOE_has_mythic_conqueror_tier = yes
 }
 
 # PREV is the country invoking this trigger, even inside an on-action.
@@ -39,15 +111,12 @@ FOE_is_slaving_despot = {
 
 FOE_is_legendary_or_mythic_slaving_despot = {
 	FOE_is_slaving_despot = yes
-	OR = {
-		has_country_leader_with_trait = legendary_leader_military_trait
-		has_country_leader_with_trait = mythic_leader_military_trait
-	}
+	FOE_has_legendary_or_mythic_conqueror_tier = yes
 }
 
 FOE_is_mythic_slaving_despot = {
 	FOE_is_slaving_despot = yes
-	has_country_leader_with_trait = mythic_leader_military_trait
+	FOE_has_mythic_conqueror_tier = yes
 }
 
 # State scope; ROOT is the enslaving country.
@@ -74,15 +143,12 @@ FOE_is_great_carrion_marshal = {
 
 FOE_is_legendary_or_mythic_carrion_marshal = {
 	FOE_is_carrion_marshal = yes
-	OR = {
-		has_country_leader_with_trait = legendary_leader_military_trait
-		has_country_leader_with_trait = mythic_leader_military_trait
-	}
+	FOE_has_legendary_or_mythic_conqueror_tier = yes
 }
 
 FOE_is_mythic_carrion_marshal = {
 	FOE_is_carrion_marshal = yes
-	has_country_leader_with_trait = mythic_leader_military_trait
+	FOE_has_mythic_conqueror_tier = yes
 }
 
 # State scope; ROOT is the harvesting country.
@@ -101,15 +167,12 @@ FOE_is_iron_warden = {
 
 FOE_is_legendary_or_mythic_iron_warden = {
 	FOE_is_iron_warden = yes
-	OR = {
-		has_country_leader_with_trait = legendary_leader_military_trait
-		has_country_leader_with_trait = mythic_leader_military_trait
-	}
+	FOE_has_legendary_or_mythic_conqueror_tier = yes
 }
 
 FOE_is_mythic_iron_warden = {
 	FOE_is_iron_warden = yes
-	has_country_leader_with_trait = mythic_leader_military_trait
+	FOE_has_mythic_conqueror_tier = yes
 }
 
 # State scope; ROOT is the Iron Warden. Only a finished conquest can be walled in.
@@ -130,15 +193,12 @@ FOE_is_saint_of_war = {
 
 FOE_is_legendary_or_mythic_saint_of_war = {
 	FOE_is_saint_of_war = yes
-	OR = {
-		has_country_leader_with_trait = legendary_leader_military_trait
-		has_country_leader_with_trait = mythic_leader_military_trait
-	}
+	FOE_has_legendary_or_mythic_conqueror_tier = yes
 }
 
 FOE_is_mythic_saint_of_war = {
 	FOE_is_saint_of_war = yes
-	has_country_leader_with_trait = mythic_leader_military_trait
+	FOE_has_mythic_conqueror_tier = yes
 }
 
 FOE_is_chainbreaker = {
@@ -150,15 +210,12 @@ FOE_is_chainbreaker = {
 
 FOE_is_legendary_or_mythic_chainbreaker = {
 	FOE_is_chainbreaker = yes
-	OR = {
-		has_country_leader_with_trait = legendary_leader_military_trait
-		has_country_leader_with_trait = mythic_leader_military_trait
-	}
+	FOE_has_legendary_or_mythic_conqueror_tier = yes
 }
 
 FOE_is_mythic_chainbreaker = {
 	FOE_is_chainbreaker = yes
-	has_country_leader_with_trait = mythic_leader_military_trait
+	FOE_has_mythic_conqueror_tier = yes
 }
 
 # Country scope. Slavers, raiders and destroyers: everyone the Chainbreaker exists to fight.
@@ -191,15 +248,12 @@ FOE_is_unifier = {
 
 FOE_is_legendary_or_mythic_unifier = {
 	FOE_is_unifier = yes
-	OR = {
-		has_country_leader_with_trait = legendary_leader_admin_trait
-		has_country_leader_with_trait = mythic_leader_admin_trait
-	}
+	FOE_has_legendary_or_mythic_administrator_tier = yes
 }
 
 FOE_is_mythic_unifier = {
 	FOE_is_unifier = yes
-	has_country_leader_with_trait = mythic_leader_admin_trait
+	FOE_has_mythic_administrator_tier = yes
 }
 
 # State scope; ROOT is the Unifier.
@@ -249,15 +303,12 @@ FOE_is_puppetmaster = {
 
 FOE_is_legendary_or_mythic_puppetmaster = {
 	FOE_is_puppetmaster = yes
-	OR = {
-		has_country_leader_with_trait = legendary_leader_admin_trait
-		has_country_leader_with_trait = mythic_leader_admin_trait
-	}
+	FOE_has_legendary_or_mythic_administrator_tier = yes
 }
 
 FOE_is_mythic_puppetmaster = {
 	FOE_is_puppetmaster = yes
-	has_country_leader_with_trait = mythic_leader_admin_trait
+	FOE_has_mythic_administrator_tier = yes
 }
 
 # State scope; ROOT is the Puppetmaster. The state must be a core of a country that no longer exists.
@@ -320,15 +371,12 @@ FOE_is_architect_of_order = {
 
 FOE_is_legendary_or_mythic_architect_of_order = {
 	FOE_is_architect_of_order = yes
-	OR = {
-		has_country_leader_with_trait = legendary_leader_admin_trait
-		has_country_leader_with_trait = mythic_leader_admin_trait
-	}
+	FOE_has_legendary_or_mythic_administrator_tier = yes
 }
 
 FOE_is_mythic_architect_of_order = {
 	FOE_is_architect_of_order = yes
-	has_country_leader_with_trait = mythic_leader_admin_trait
+	FOE_has_mythic_administrator_tier = yes
 }
 
 # State scope; ROOT is the Architect.
@@ -405,15 +453,12 @@ FOE_is_inward_perfectionist = {
 
 FOE_is_legendary_or_mythic_inward_perfectionist = {
 	FOE_is_inward_perfectionist = yes
-	OR = {
-		has_country_leader_with_trait = legendary_leader_admin_trait
-		has_country_leader_with_trait = mythic_leader_admin_trait
-	}
+	FOE_has_legendary_or_mythic_administrator_tier = yes
 }
 
 FOE_is_mythic_inward_perfectionist = {
 	FOE_is_inward_perfectionist = yes
-	has_country_leader_with_trait = mythic_leader_admin_trait
+	FOE_has_mythic_administrator_tier = yes
 }
 
 # State scope; ROOT is the Perfectionist. The decision only goes up to level 4; level 5 comes from ceding.
@@ -450,15 +495,12 @@ FOE_is_diplomatic_parasite = {
 
 FOE_is_legendary_or_mythic_diplomatic_parasite = {
 	FOE_is_diplomatic_parasite = yes
-	OR = {
-		has_country_leader_with_trait = legendary_leader_admin_trait
-		has_country_leader_with_trait = mythic_leader_admin_trait
-	}
+	FOE_has_legendary_or_mythic_administrator_tier = yes
 }
 
 FOE_is_mythic_diplomatic_parasite = {
 	FOE_is_diplomatic_parasite = yes
-	has_country_leader_with_trait = mythic_leader_admin_trait
+	FOE_has_mythic_administrator_tier = yes
 }
 
 # Country scope; ROOT is the Parasite. A neighbour it may feed on or goad.
@@ -504,15 +546,12 @@ FOE_is_wild_heart = {
 
 FOE_is_legendary_or_mythic_wild_heart = {
 	FOE_is_wild_heart = yes
-	OR = {
-		has_country_leader_with_trait = legendary_leader_admin_trait
-		has_country_leader_with_trait = mythic_leader_admin_trait
-	}
+	FOE_has_legendary_or_mythic_administrator_tier = yes
 }
 
 FOE_is_mythic_wild_heart = {
 	FOE_is_wild_heart = yes
-	has_country_leader_with_trait = mythic_leader_admin_trait
+	FOE_has_mythic_administrator_tier = yes
 }
 
 # State scope; ROOT is the Wild Heart. A crowded state ponies leave: above our average, and at least 4,000.
@@ -548,15 +587,12 @@ FOE_is_reactor_prophet = {
 
 FOE_is_legendary_or_mythic_reactor_prophet = {
 	FOE_is_reactor_prophet = yes
-	OR = {
-		has_country_leader_with_trait = legendary_leader_industry_trait
-		has_country_leader_with_trait = mythic_leader_industry_trait
-	}
+	FOE_has_legendary_or_mythic_industrialist_tier = yes
 }
 
 FOE_is_mythic_reactor_prophet = {
 	FOE_is_reactor_prophet = yes
-	has_country_leader_with_trait = mythic_leader_industry_trait
+	FOE_has_mythic_industrialist_tier = yes
 }
 
 # State scope; ROOT is the Prophet.
@@ -579,15 +615,12 @@ FOE_is_autark = {
 
 FOE_is_legendary_or_mythic_autark = {
 	FOE_is_autark = yes
-	OR = {
-		has_country_leader_with_trait = legendary_leader_industry_trait
-		has_country_leader_with_trait = mythic_leader_industry_trait
-	}
+	FOE_has_legendary_or_mythic_industrialist_tier = yes
 }
 
 FOE_is_mythic_autark = {
 	FOE_is_autark = yes
-	has_country_leader_with_trait = mythic_leader_industry_trait
+	FOE_has_mythic_industrialist_tier = yes
 }
 
 # Country scope. Self-sufficient: our resource balance is not negative and we import none of it.
@@ -639,15 +672,12 @@ FOE_is_merchant_prince = {
 
 FOE_is_legendary_or_mythic_merchant_prince = {
 	FOE_is_merchant_prince = yes
-	OR = {
-		has_country_leader_with_trait = legendary_leader_industry_trait
-		has_country_leader_with_trait = mythic_leader_industry_trait
-	}
+	FOE_has_legendary_or_mythic_industrialist_tier = yes
 }
 
 FOE_is_mythic_merchant_prince = {
 	FOE_is_merchant_prince = yes
-	has_country_leader_with_trait = mythic_leader_industry_trait
+	FOE_has_mythic_industrialist_tier = yes
 }
 
 # State scope; ROOT is the Merchant Prince. A border state a small, peaceful AI neighbour will sell.
@@ -677,15 +707,12 @@ FOE_is_biological_engineer = {
 
 FOE_is_legendary_or_mythic_biological_engineer = {
 	FOE_is_biological_engineer = yes
-	OR = {
-		has_country_leader_with_trait = legendary_leader_industry_trait
-		has_country_leader_with_trait = mythic_leader_industry_trait
-	}
+	FOE_has_legendary_or_mythic_industrialist_tier = yes
 }
 
 FOE_is_mythic_biological_engineer = {
 	FOE_is_biological_engineer = yes
-	has_country_leader_with_trait = mythic_leader_industry_trait
+	FOE_has_mythic_industrialist_tier = yes
 }
 
 # Country scope. The robot techs nations start the game with; every later robot tech builds on one of them.
@@ -728,15 +755,12 @@ FOE_is_blackout_opportunist = {
 
 FOE_is_legendary_or_mythic_blackout_opportunist = {
 	FOE_is_blackout_opportunist = yes
-	OR = {
-		has_country_leader_with_trait = legendary_leader_industry_trait
-		has_country_leader_with_trait = mythic_leader_industry_trait
-	}
+	FOE_has_legendary_or_mythic_industrialist_tier = yes
 }
 
 FOE_is_mythic_blackout_opportunist = {
 	FOE_is_blackout_opportunist = yes
-	has_country_leader_with_trait = mythic_leader_industry_trait
+	FOE_has_mythic_industrialist_tier = yes
 }
 
 # Country scope; ROOT is the Blackout Opportunist. A neighbour with fuel to take; at Mythic, also any enemy at war with us.
@@ -775,10 +799,7 @@ FOE_is_legendary_or_mythic_dreamer_in_steel = {
 		FOE_is_machine_uprising = yes
 		AND = {
 			FOE_is_dreamer_in_steel = yes
-			OR = {
-				has_country_leader_with_trait = legendary_leader_industry_trait
-				has_country_leader_with_trait = mythic_leader_industry_trait
-			}
+			FOE_has_legendary_or_mythic_industrialist_tier = yes
 		}
 	}
 }
@@ -788,7 +809,7 @@ FOE_is_mythic_dreamer_in_steel = {
 		FOE_is_machine_uprising = yes
 		AND = {
 			FOE_is_dreamer_in_steel = yes
-			has_country_leader_with_trait = mythic_leader_industry_trait
+			FOE_has_mythic_industrialist_tier = yes
 		}
 	}
 }
@@ -988,10 +1009,7 @@ FOE_has_nomadic_destination = {
 		OR = {
 			is_core_of = ROOT
 			ROOT = {
-				OR = {
-					has_country_leader_with_trait = legendary_leader_military_trait
-					has_country_leader_with_trait = mythic_leader_military_trait
-				}
+				FOE_has_legendary_or_mythic_conqueror_tier = yes
 			}
 		}
 	}
@@ -1009,10 +1027,7 @@ FOE_assignment_suits_carrion_marshal = {
 		OR = {
 			is_owned_by = ROOT
 			ROOT = {
-				OR = {
-					has_country_leader_with_trait = legendary_leader_military_trait
-					has_country_leader_with_trait = mythic_leader_military_trait
-				}
+				FOE_has_legendary_or_mythic_conqueror_tier = yes
 			}
 		}
 	}
@@ -1024,7 +1039,7 @@ FOE_assignment_suits_puppetmaster = {
 	OR = {
 		any_owned_state = { FOE_is_puppet_release_target = yes }
 		AND = {
-			has_country_leader_with_trait = mythic_leader_admin_trait
+			FOE_has_mythic_administrator_tier = yes
 			any_neighbor_country = { FOE_is_puppet_install_target = yes }
 		}
 	}
@@ -1033,10 +1048,7 @@ FOE_assignment_suits_architect_of_order = {
 	OR = {
 		any_owned_state = { FOE_is_resettlement_source = yes }
 		AND = {
-			OR = {
-				has_country_leader_with_trait = legendary_leader_admin_trait
-				has_country_leader_with_trait = mythic_leader_admin_trait
-			}
+			FOE_has_legendary_or_mythic_administrator_tier = yes
 			any_owned_state = { FOE_is_industry_relocation_source = yes }
 		}
 	}
