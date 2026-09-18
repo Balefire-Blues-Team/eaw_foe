@@ -1459,6 +1459,75 @@ GEN_great_leader_decisions = {
 		}
 	}
 
+	#Biological Engineer: Render the Stock
+	FOE_engineer_render_stock = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		state_target = yes
+		target_array = owned_states
+		on_map_mode = map_and_decisions_view
+		cost = 25
+		fire_only_once = no
+		visible = { FOE_is_biological_engineer = yes }
+		target_root_trigger = { FOE_is_biological_engineer = yes }
+		target_trigger = {
+			FROM = { FOE_is_renderable_state = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_biomass_full_tt
+				check_variable = { FOE_biomass < 5 }
+			}
+			FROM = { FOE_is_renderable_state = yes }
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_engineer_render_stock_tt
+			add_stability = -0.05
+			hidden_effect = { FOE_render_stock = yes }
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 0
+				has_stability < 0.40
+			}
+			modifier = {
+				factor = 2
+				has_war = yes
+			}
+		}
+	}
+
+	#Biological Engineer: Render the Enemy
+	FOE_engineer_render_enemy = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		state_target = yes
+		target_array = controlled_states
+		on_map_mode = map_and_decisions_view
+		cost = 25
+		fire_only_once = no
+		visible = { FOE_is_mythic_biological_engineer = yes }
+		target_root_trigger = { FOE_is_mythic_biological_engineer = yes }
+		target_trigger = {
+			FROM = { FOE_is_enemy_renderable_state = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_biomass_full_tt
+				check_variable = { FOE_biomass < 5 }
+			}
+			FROM = { FOE_is_enemy_renderable_state = yes }
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_engineer_render_enemy_tt
+			hidden_effect = { FOE_render_enemy = yes }
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
 	#Dreamer in Steel: Automated Workshops
 	FOE_dreamer_robot_workshops = {
 		icon = GFX_decision_unknown

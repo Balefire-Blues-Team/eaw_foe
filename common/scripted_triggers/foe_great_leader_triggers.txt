@@ -668,6 +668,57 @@ FOE_is_purchasable_state = {
 	}
 }
 
+FOE_is_biological_engineer = {
+	var:country_leader = {
+		has_character_flag = FOE_great_leader_character
+		has_character_flag = FOE_biological_engineer_character
+	}
+}
+
+FOE_is_legendary_or_mythic_biological_engineer = {
+	FOE_is_biological_engineer = yes
+	OR = {
+		has_country_leader_with_trait = legendary_leader_industry_trait
+		has_country_leader_with_trait = mythic_leader_industry_trait
+	}
+}
+
+FOE_is_mythic_biological_engineer = {
+	FOE_is_biological_engineer = yes
+	has_country_leader_with_trait = mythic_leader_industry_trait
+}
+
+# Country scope. The robot techs nations start the game with; every later robot tech builds on one of them.
+FOE_has_robotics_programme = {
+	OR = {
+		has_tech = robot_automation_tech
+		has_tech = robot_makeshift_automatons_tech
+		has_tech = robot_clockwork_automatons_tech
+		has_tech = robot_simple_ai_tech
+		has_tech = robot_combat_ai_tech
+		has_tech = robot_protectapony_tech
+		has_tech = robot_spritebot_tech
+		has_tech = robot_assaultron_tech
+		has_tech = robot_robobrain_tech
+		has_tech = robot_industrial_robots_tech
+	}
+}
+
+# State scope; ROOT is the Biological Engineer. One of our own states, with ponies to spare.
+FOE_is_renderable_state = {
+	is_owned_by = ROOT
+	is_controlled_by = ROOT
+	state_population > 2999
+}
+
+# State scope; ROOT is the Biological Engineer. An enemy's state under our control, with ponies to spare.
+FOE_is_enemy_renderable_state = {
+	NOT = { is_owned_by = ROOT }
+	is_controlled_by = ROOT
+	state_population > 2999
+	owner = { has_war_with = ROOT }
+}
+
 FOE_is_machine_uprising = {
 	tag = XYZ
 }
@@ -880,6 +931,11 @@ FOE_can_assign_merchant_prince = {
 	NOT = { has_idea = lit_enclave_economy }
 }
 
+FOE_can_assign_biological_engineer = {
+	FOE_great_leader_country_valid = yes
+	NOT = { FOE_has_robotics_programme = yes }
+}
+
 FOE_can_assign_dreamer_in_steel = {
 	FOE_great_leader_country_valid = yes
 	has_tech = robotics_tech_level_settler
@@ -969,4 +1025,7 @@ FOE_assignment_suits_dreamer_in_steel = {
 }
 FOE_assignment_suits_chainbreaker = {
 	any_neighbor_country = { FOE_is_oppressor = yes }
+}
+FOE_assignment_suits_biological_engineer = {
+	any_owned_state = { state_population > 9999 }
 }

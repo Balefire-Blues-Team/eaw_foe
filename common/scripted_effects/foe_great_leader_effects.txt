@@ -1963,6 +1963,114 @@ FOE_initialize_merchant_prince = {
 	FOE_update_merchant_prince = yes
 }
 
+#Biological Engineer Subclass
+# Country scope. Biomass is 0-5; each point is +4% on whichever rendered spirit is active.
+FOE_update_biomass_modifiers = {
+	clamp_variable = { var = FOE_biomass min = 0 max = 5 }
+	set_variable = { FOE_biomass_bonus = FOE_biomass }
+	multiply_variable = { FOE_biomass_bonus = 0.04 }
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = FOE_rendered_industry_modifier } } }
+		add_dynamic_modifier = { modifier = FOE_rendered_industry_modifier }
+	}
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = FOE_rendered_soldiery_modifier } } }
+		add_dynamic_modifier = { modifier = FOE_rendered_soldiery_modifier }
+	}
+	force_update_dynamic_modifier = yes
+}
+
+# Country scope; FROM is one of our states. 400 ponies become 1 Biomass.
+# Legendary: the state becomes a Breeding Pen and regrows 360 of them.
+FOE_render_stock = {
+	FROM = {
+		add_manpower = -400
+		if = {
+			limit = { ROOT = { FOE_is_legendary_or_mythic_biological_engineer = yes } }
+			add_to_variable = { FOE_pen_ponies = 360 }
+			if = {
+				limit = { NOT = { has_dynamic_modifier = { modifier = FOE_breeding_pen_modifier } } }
+				add_dynamic_modifier = { modifier = FOE_breeding_pen_modifier }
+			}
+		}
+	}
+	add_to_variable = { FOE_biomass = 1 }
+	FOE_update_biomass_modifiers = yes
+}
+
+# Country scope; FROM is an enemy state we control. 800 of their ponies become 2 Biomass.
+FOE_render_enemy = {
+	FROM = { add_manpower = -800 }
+	add_to_variable = { FOE_biomass = 2 }
+	FOE_update_biomass_modifiers = yes
+}
+
+# State scope. Monthly. A sixth of what the pen still owes, at least 60, never more than it owes:
+# a single render regrows 60 a month for six months.
+FOE_regrow_breeding_pen = {
+	set_temp_variable = { FOE_pen_regrowth = FOE_pen_ponies }
+	divide_temp_variable = { FOE_pen_regrowth = 6 }
+	round_temp_variable = FOE_pen_regrowth
+	clamp_temp_variable = { var = FOE_pen_regrowth min = 60 }
+	if = {
+		limit = { check_variable = { FOE_pen_regrowth > FOE_pen_ponies } }
+		set_temp_variable = { FOE_pen_regrowth = FOE_pen_ponies }
+	}
+	add_manpower = FOE_pen_regrowth
+	subtract_from_variable = { FOE_pen_ponies = FOE_pen_regrowth }
+	if = {
+		limit = { check_variable = { FOE_pen_ponies < 1 } }
+		clear_variable = FOE_pen_ponies
+		remove_dynamic_modifier = { modifier = FOE_breeding_pen_modifier }
+	}
+	else_if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = FOE_breeding_pen_modifier } } }
+		add_dynamic_modifier = { modifier = FOE_breeding_pen_modifier }
+	}
+}
+
+# Country scope. Monthly. One Biomass decays, and the nation recovers 4% stability for it.
+FOE_update_biological_engineer = {
+	if = {
+		limit = { FOE_is_biological_engineer = yes }
+		if = {
+			limit = { NOT = { has_idea = FOE_the_flesh_is_the_machine } }
+			add_ideas = FOE_the_flesh_is_the_machine
+		}
+		if = {
+			limit = { NOT = { has_variable = FOE_biomass } }
+			set_variable = { FOE_biomass = 0 }
+		}
+		if = {
+			limit = { check_variable = { FOE_biomass > 0 } }
+			subtract_from_variable = { FOE_biomass = 1 }
+			add_stability = 0.04
+		}
+		FOE_update_biomass_modifiers = yes
+		if = {
+			limit = { FOE_is_legendary_or_mythic_biological_engineer = yes }
+			every_owned_state = {
+				limit = { check_variable = { FOE_pen_ponies > 0 } }
+				FOE_regrow_breeding_pen = yes
+			}
+		}
+	}
+	else_if = {
+		limit = { has_variable = FOE_biomass }
+		clear_variable = FOE_biomass
+		clear_variable = FOE_biomass_bonus
+	}
+}
+
+FOE_initialize_biological_engineer = {
+	add_country_leader_trait = FOE_biological_engineer_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_biological_engineer_character
+	}
+	FOE_update_biological_engineer = yes
+}
+
 #Dreamer in Steel Subclass
 # Country scope. Exchange prices rise with every exchange of either kind:
 # civilian factory 20 + 10 per exchange, military factory 30 + 10 per exchange (heavy industrial robots).
@@ -2636,6 +2744,10 @@ FOE_roll_industrialist_subclass = {
 		if = { limit = { has_idea = closed_economy } multiply_temp_variable = { FOE_audit_merchant_prince = 0.1 } }
 		if = { limit = { has_idea = steel_ranger_society } multiply_temp_variable = { FOE_audit_merchant_prince = 0.1 } }
 		log = "FOE_ASSIGN [THIS.GetTag] class=industrialist candidate=merchant_prince weight=[?FOE_audit_merchant_prince] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_biological_engineer = 10 }
+		if = { limit = { NOT = { FOE_can_assign_biological_engineer = yes } } multiply_temp_variable = { FOE_audit_biological_engineer = 0 } }
+		if = { limit = { FOE_assignment_suits_biological_engineer = yes } multiply_temp_variable = { FOE_audit_biological_engineer = 1.5 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=industrialist candidate=biological_engineer weight=[?FOE_audit_biological_engineer] (zero=ineligible)"
 	}
 	random_list = {
 		log = yes
@@ -2675,6 +2787,12 @@ FOE_roll_industrialist_subclass = {
 			modifier = { factor = 0.1 has_idea = steel_ranger_society }
 			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=industrialist selected=merchant_prince" }
 			FOE_initialize_merchant_prince = yes
+		}
+		10 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_biological_engineer = yes } }
+			modifier = { factor = 1.5 FOE_assignment_suits_biological_engineer = yes }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=industrialist selected=biological_engineer" }
+			FOE_initialize_biological_engineer = yes
 		}
 	}
 }
