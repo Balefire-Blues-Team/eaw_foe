@@ -1295,6 +1295,89 @@ FOE_initialize_diplomatic_parasite = {
 	FOE_update_diplomatic_parasite = yes
 }
 
+#Wild Heart Subclass
+# Country scope. Runs monthly. 2,000 ponies leave a crowded state for an emptier one, which gains a building
+# slot and 100 days of growth. Legendary: every 6th migration also builds a civilian factory there.
+# Mythic: the crowded state may belong to a neighbour.
+FOE_wild_heart_migration = {
+	# This month's average population across the states we own and control.
+	set_variable = { FOE_wild_total = 0 }
+	set_variable = { FOE_wild_states = 0 }
+	every_owned_state = {
+		limit = { is_controlled_by = ROOT }
+		ROOT = {
+			add_to_variable = { FOE_wild_total = PREV.state_population }
+			add_to_variable = { FOE_wild_states = 1 }
+		}
+	}
+	if = {
+		limit = { check_variable = { FOE_wild_states > 1 } }
+		set_variable = { FOE_wild_average = FOE_wild_total }
+		divide_variable = { FOE_wild_average = FOE_wild_states }
+		if = {
+			limit = {
+				any_owned_state = { FOE_is_migration_target = yes }
+				OR = {
+					any_owned_state = { FOE_is_domestic_migration_origin = yes }
+					AND = {
+						FOE_is_mythic_wild_heart = yes
+						any_state = { FOE_is_foreign_migration_origin = yes }
+					}
+				}
+			}
+			if = {
+				limit = { FOE_is_mythic_wild_heart = yes }
+				random_state = {
+					limit = {
+						OR = {
+							FOE_is_domestic_migration_origin = yes
+							FOE_is_foreign_migration_origin = yes
+						}
+					}
+					add_manpower = -2000
+				}
+			}
+			else = {
+				random_owned_controlled_state = {
+					limit = { FOE_is_domestic_migration_origin = yes }
+					add_manpower = -2000
+				}
+			}
+			add_to_variable = { FOE_wild_migrations = 1 }
+			set_temp_variable = { FOE_wild_cycle = FOE_wild_migrations }
+			modulo_temp_variable = { var = FOE_wild_cycle value = 6 }
+			random_owned_controlled_state = {
+				limit = { FOE_is_migration_target = yes }
+				add_manpower = 2000
+				add_extra_state_shared_building_slots = 1
+				add_dynamic_modifier = { modifier = FOE_migration_modifier days = 100 }
+				if = {
+					limit = {
+						ROOT = { FOE_is_legendary_or_mythic_wild_heart = yes }
+						check_variable = { FOE_wild_cycle = 0 }
+					}
+					add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+				}
+			}
+		}
+	}
+	clear_variable = FOE_wild_total
+	clear_variable = FOE_wild_states
+	clear_variable = FOE_wild_average
+}
+
+FOE_initialize_wild_heart = {
+	add_country_leader_trait = FOE_wild_heart_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_wild_heart_character
+	}
+	if = {
+		limit = { NOT = { has_variable = FOE_wild_migrations } }
+		set_variable = { FOE_wild_migrations = 0 }
+	}
+}
+
 #Reactor Prophet Subclass
 # Country scope. Surges read FOE_reactor_power (fuel in thousands), FOE_reactor_cap_mult and FOE_reactor_days,
 # which the calling decision sets as temp variables. Each surge has its own rate per thousand fuel and cap.
@@ -2324,6 +2407,14 @@ FOE_roll_administrator_subclass = {
 		if = { limit = { has_idea = political_effort_press } multiply_temp_variable = { FOE_audit_diplomatic_parasite = 2 } }
 		if = { limit = { num_subjects > 0 } multiply_temp_variable = { FOE_audit_diplomatic_parasite = 0.1 } }
 		log = "FOE_ASSIGN [THIS.GetTag] class=administrator candidate=diplomatic_parasite weight=[?FOE_audit_diplomatic_parasite] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_wild_heart = 10 }
+		if = { limit = { NOT = { FOE_can_assign_wild_heart = yes } } multiply_temp_variable = { FOE_audit_wild_heart = 0 } }
+		if = { limit = { has_idea = tribal_society } multiply_temp_variable = { FOE_audit_wild_heart = 2 } }
+		if = { limit = { has_idea = tribal_research_base } multiply_temp_variable = { FOE_audit_wild_heart = 2 } }
+		if = { limit = { has_idea = open_borders } multiply_temp_variable = { FOE_audit_wild_heart = 2 } }
+		if = { limit = { has_idea = old_world_society } multiply_temp_variable = { FOE_audit_wild_heart = 0.1 } }
+		if = { limit = { has_idea = slaver_society } multiply_temp_variable = { FOE_audit_wild_heart = 0.1 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=administrator candidate=wild_heart weight=[?FOE_audit_wild_heart] (zero=ineligible)"
 	}
 	random_list = {
 		log = yes
@@ -2382,6 +2473,16 @@ FOE_roll_administrator_subclass = {
 			modifier = { factor = 0.1 num_subjects > 0 }
 			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=administrator selected=diplomatic_parasite" }
 			FOE_initialize_diplomatic_parasite = yes
+		}
+		10 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_wild_heart = yes } }
+			modifier = { factor = 2 has_idea = tribal_society }
+			modifier = { factor = 2 has_idea = tribal_research_base }
+			modifier = { factor = 2 has_idea = open_borders }
+			modifier = { factor = 0.1 has_idea = old_world_society }
+			modifier = { factor = 0.1 has_idea = slaver_society }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=administrator selected=wild_heart" }
+			FOE_initialize_wild_heart = yes
 		}
 	}
 }
