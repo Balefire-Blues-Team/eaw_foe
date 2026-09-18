@@ -601,6 +601,48 @@ addintelligence_agency_normal_upgrade_prio = {
 	}
 }
 
+# Network building and counter-intelligence, re-enabled after La Resistance was switched off in the submod days. The mission scorer
+# (common/scorers/country/operative_mission_scorer.txt) only runs for missions a strategy enables; it then picks
+# targets among enemies, enemies of allies, neighbours and majors. Copied from vanilla's enable_operative_missions.
+enable_operative_network_building = {
+	allowed = { always = yes }
+	# enabled once the first operative has been recruited
+	enable = {
+		any_operative_leader = { always = yes }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = operative_mission
+		mission = build_intel_network
+		value = 100
+	}
+
+	# Targets our own country, our subjects, overlord and faction members; stronger armies score higher.
+	ai_strategy = {
+		type = operative_mission
+		mission = counter_intelligence
+		value = 100
+	}
+}
+
+# Root out resistance. Its scorer has no weight of its own (base 0, and resistance isn't scored yet), so the mission
+# only switches on while a state we control actually has resistance above 10%. Otherwise operatives would idle on it.
+enable_operative_root_out_resistance = {
+	allowed = { always = yes }
+	enable = {
+		any_operative_leader = { always = yes }
+		any_controlled_state = { resistance > 10 }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = operative_mission
+		mission = root_out_resistance
+		value = 100
+	}
+}
+
 ask_foreign_manpower_as_major = {
 	enable = {
 		is_major = yes

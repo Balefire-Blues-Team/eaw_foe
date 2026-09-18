@@ -2384,6 +2384,142 @@ GEN_great_leader_decisions = {
 		}
 	}
 
+	#Whisper Broker: choose the priority target
+	FOE_broker_open_black_file = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		target_array = global.countries
+		cost = 25
+		fire_only_once = no
+		visible = { FOE_is_whisper_broker = yes }
+		target_root_trigger = { FOE_is_whisper_broker = yes }
+		target_trigger = {
+			FROM = { FOE_is_black_file_candidate = yes }
+			NOT = {
+				has_variable = FOE_black_file
+				var:FOE_black_file = { tag = FROM }
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_black_file_cooldown_tt
+				NOT = { has_country_flag = FOE_black_file_cooldown }
+			}
+			# A file can't be closed while one of its operations is being prepared or run.
+			custom_trigger_tooltip = {
+				tooltip = FOE_broker_no_mission_tt
+				OR = {
+					NOT = { has_variable = FOE_black_file }
+					var:FOE_black_file = {
+						ROOT = {
+							NOT = { is_preparing_operation = { target = PREV operation = FOE_operation_open_ledger } }
+							NOT = { is_running_operation = { target = PREV operation = FOE_operation_open_ledger } }
+							NOT = { is_preparing_operation = { target = PREV operation = FOE_operation_crossed_wires } }
+							NOT = { is_running_operation = { target = PREV operation = FOE_operation_crossed_wires } }
+						}
+					}
+				}
+			}
+			FROM = { FOE_is_black_file_candidate = yes }
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_broker_open_black_file_tt
+			hidden_effect = {
+				set_variable = { FOE_black_file = FROM }
+				set_variable = { FOE_dossier = 2 }
+				FOE_refresh_insider_knowledge = yes
+				set_country_flag = { flag = FOE_black_file_cooldown value = 1 days = 90 }
+			}
+		}
+		ai_will_do = {
+			base = 10
+			# Keep a working file; only switch to a new war enemy while the current target is at peace with us.
+			modifier = {
+				factor = 0
+				has_variable = FOE_black_file
+				OR = {
+					NOT = { has_war_with = FROM }
+					var:FOE_black_file = { has_war_with = ROOT }
+				}
+			}
+			modifier = {
+				factor = 10
+				has_war_with = FROM
+			}
+			modifier = {
+				factor = 3
+				network_strength = { target = FROM value > 19 }
+			}
+			modifier = {
+				factor = 2
+				FROM = { is_neighbor_of = ROOT }
+			}
+			modifier = {
+				factor = 2
+				FROM = { num_of_civilian_factories > 9 }
+			}
+			modifier = {
+				factor = 0
+				NOT = { has_war_with = FROM }
+				FROM = { num_of_civilian_factories < 5 }
+			}
+		}
+	}
+
+	#Whisper Broker: Break Their Cipher
+	FOE_broker_break_cipher = {
+		icon = GFX_decision_unknown
+		allowed = { always = yes }
+		target_array = global.countries
+		cost = 25
+		fire_only_once = no
+		visible = { FOE_is_whisper_broker = yes }
+		target_root_trigger = {
+			FOE_is_whisper_broker = yes
+			has_variable = FOE_black_file
+		}
+		target_trigger = {
+			var:FOE_black_file = { tag = FROM }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_broker_cipher_cooldown_tt
+				NOT = { has_country_flag = FOE_broker_cipher_cooldown }
+			}
+			custom_trigger_tooltip = {
+				tooltip = FOE_broker_dossier_2_tt
+				check_variable = { FOE_dossier > 1 }
+			}
+			var:FOE_black_file = { tag = FROM }
+			custom_trigger_tooltip = {
+				tooltip = FOE_broker_valid_file_tt
+				FOE_has_valid_black_file = yes
+			}
+		}
+		complete_effect = {
+			add_decryption = { target = FROM ratio = 0.2 }
+			custom_effect_tooltip = FOE_broker_spend_2_dossier_tt
+			hidden_effect = {
+				subtract_from_variable = { FOE_dossier = 2 }
+				clamp_variable = { var = FOE_dossier min = 0 max = 6 }
+				FOE_refresh_insider_knowledge = yes
+				set_country_flag = { flag = FOE_broker_cipher_cooldown value = 1 days = 90 }
+			}
+		}
+		ai_will_do = {
+			base = 10
+			# At war the cipher is the road to Crossed Wires; in peace the Dossier is saved for Open Ledger.
+			modifier = {
+				factor = 0
+				NOT = { has_war_with = FROM }
+			}
+			modifier = {
+				factor = 0
+				decryption_progress = { target = FROM value > 0.5 }
+			}
+		}
+	}
+
 	#Dreamer in Steel: Automated Workshops
 	FOE_dreamer_robot_workshops = {
 		icon = GFX_decision_unknown

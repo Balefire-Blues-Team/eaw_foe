@@ -850,6 +850,29 @@ FOE_is_screwable_state = {
 	}
 }
 
+#Whisper Broker (Exploiter). Combo subclasses are always Mythic, so there are no tier triggers.
+FOE_is_whisper_broker = {
+	var:country_leader = {
+		has_character_flag = FOE_great_leader_character
+		has_character_flag = FOE_whisper_broker_character
+	}
+}
+
+# Country scope (the candidate); ROOT is the Broker. An independent foreign country outside our faction.
+FOE_is_black_file_candidate = {
+	exists = yes
+	NOT = { tag = ROOT }
+	is_subject = no
+	NOT = { is_in_faction_with = ROOT }
+	NOT = { ROOT = { is_subject_of = PREV } }
+}
+
+# Country scope (the Broker). The stored priority target still exists and is still a valid file.
+FOE_has_valid_black_file = {
+	has_variable = FOE_black_file
+	var:FOE_black_file = { FOE_is_black_file_candidate = yes }
+}
+
 #Railroad Tycoon (Magnate). Combo subclasses are always Mythic, so there are no tier triggers.
 FOE_is_railroad_tycoon = {
 	var:country_leader = {
@@ -1172,6 +1195,13 @@ FOE_can_assign_railroad_tycoon = {
 	FOE_great_leader_country_valid = yes
 }
 
+# The Whisper Broker lives on the intelligence agency, which needs La Resistance.
+FOE_can_assign_whisper_broker = {
+	FOE_great_leader_country_valid = yes
+	has_dlc = "La Resistance"
+	any_other_country = { FOE_is_black_file_candidate = yes }
+}
+
 FOE_can_assign_lawgiver = {
 	FOE_great_leader_country_valid = yes
 }
@@ -1281,6 +1311,9 @@ FOE_assignment_suits_robber_baron = {
 }
 FOE_assignment_suits_railroad_tycoon = {
 	any_owned_state = { infrastructure > 5 }
+}
+FOE_assignment_suits_whisper_broker = {
+	has_intelligence_agency = yes
 }
 FOE_assignment_suits_lawgiver = {
 	has_stability > 0.5

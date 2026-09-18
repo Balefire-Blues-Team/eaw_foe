@@ -1531,3 +1531,115 @@ FOE_unique_engineer_no_robotics = {
 		value = -90
 	}
 }
+
+#Whisper Broker
+# The mod's ai_strategy folder replaces vanilla's, so no country has build_intel_network enabled: the mission scorer only
+# runs for countries whose strategies enable a mission. These strategies enable it for the Broker, aimed at the Black File,
+# using the same var: targets as vanilla's generic_operation_strats.
+
+# The agency itself: more factories for upgrades, weighted to cryptology and operatives.
+FOE_unique_broker_agency = {
+	allowed = { always = yes }
+	enable = { FOE_is_whisper_broker = yes }
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = intelligence_agency_usable_factories
+		value = 5
+	}
+	ai_strategy = {
+		type = intelligence_agency_branch_desire_factor
+		id = branch_crypto
+		value = 50
+	}
+	ai_strategy = {
+		type = intelligence_agency_branch_desire_factor
+		id = branch_operative
+		value = 50
+	}
+}
+
+# Work the Black File: build the network there and aim decryption at it.
+FOE_unique_broker_black_file = {
+	allowed = { always = yes }
+	enable = {
+		FOE_is_whisper_broker = yes
+		FOE_has_valid_black_file = yes
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = operative_mission
+		mission = build_intel_network
+		value = 800
+		mission_target = var:FOE_black_file
+	}
+	ai_strategy = {
+		type = decrypt_target
+		id = var:FOE_black_file
+		value = 100
+	}
+}
+
+# With 5 or more operatives, put a second one on the file's network.
+FOE_unique_broker_black_file_more_operatives = {
+	allowed = { always = yes }
+	enable = {
+		FOE_is_whisper_broker = yes
+		FOE_has_valid_black_file = yes
+		num_of_operatives > 4
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = operative_mission
+		mission = build_intel_network
+		value = 800
+		mission_target = var:FOE_black_file
+		num_operatives = 2
+	}
+}
+
+# Open Ledger whenever it can be paid for and no blackmail is running. Its own ai_will_do still saves for Crossed Wires.
+FOE_unique_broker_open_ledger = {
+	allowed = { always = yes }
+	enable = {
+		FOE_is_whisper_broker = yes
+		FOE_has_valid_black_file = yes
+		check_variable = { FOE_dossier > 2 }
+		NOT = { has_country_flag = FOE_ledger_payout_active }
+		NOT = { has_country_flag = FOE_broker_alerted }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = operative_operation
+		operation = FOE_operation_open_ledger
+		value = 900
+		operation_target = var:FOE_black_file
+	}
+}
+
+# At war with the Black File: infiltrate its army for the token, then run Crossed Wires. Decryption gets a larger push.
+FOE_unique_broker_war_on_file = {
+	allowed = { always = yes }
+	enable = {
+		FOE_is_whisper_broker = yes
+		FOE_has_valid_black_file = yes
+		var:FOE_black_file = { has_war_with = ROOT }
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = operative_operation
+		operation = operation_infiltrate_armed_forces_army
+		value = 850
+		operation_target = var:FOE_black_file
+	}
+	ai_strategy = {
+		type = operative_operation
+		operation = FOE_operation_crossed_wires
+		value = 950
+		operation_target = var:FOE_black_file
+	}
+	ai_strategy = {
+		type = decrypt_target
+		id = var:FOE_black_file
+		value = 200
+	}
+}

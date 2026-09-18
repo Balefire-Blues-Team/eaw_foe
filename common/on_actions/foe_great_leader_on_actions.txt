@@ -524,6 +524,56 @@ on_actions = {
 		}
 	}
 
+	#Whisper Broker actions
+	on_monthly = {
+		effect = {
+			if = {
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				if = {
+					limit = {
+						OR = {
+							FOE_is_whisper_broker = yes
+							has_variable = FOE_dossier
+							has_variable = FOE_black_file
+							has_variable = FOE_insider_bonus
+							has_country_flag = FOE_ledger_payout_active
+							has_variable = FOE_ledger_payout
+							has_variable = FOE_ledger_victim
+						}
+					}
+					FOE_update_whisper_broker = yes
+				}
+			}
+		}
+	}
+
+	# THIS is the operation, ROOT the initiating country, FROM the target.
+	# An ordinary operation against the Black File adds field experience; the Broker's own two do not refund themselves.
+	on_operation_completed = {
+		effect = {
+			if = {
+				limit = {
+					has_global_flag = FOE_campaign_great_leaders_enabled
+					NOT = { is_operation_type = FOE_operation_open_ledger }
+					NOT = { is_operation_type = FOE_operation_crossed_wires }
+				}
+				ROOT = {
+					if = {
+						limit = {
+							FOE_is_whisper_broker = yes
+							has_variable = FOE_black_file
+							var:FOE_black_file = { tag = FROM }
+							NOT = { has_country_flag = FOE_broker_alerted }
+						}
+						add_to_variable = { FOE_dossier = 1 }
+						clamp_variable = { var = FOE_dossier min = 0 max = 6 }
+						FOE_refresh_insider_knowledge = yes
+					}
+				}
+			}
+		}
+	}
+
 	#Machine Uprising cleanup
 	on_monthly = {
 		effect = {

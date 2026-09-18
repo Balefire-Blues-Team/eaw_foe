@@ -2910,3 +2910,323 @@ operation_steal_tech_airforce = { ### 18 3/55
 		exfiltration_submarine_pickup = { base = 25 }
 	}
 }
+
+#Whisper Broker (Great Leader subclass): both operations run only against the Broker's Black File.
+# The Dossier is paid at launch (on_start). `available` is only checked at launch, so the payment can't cancel the operation.
+FOE_operation_open_ledger = {
+	icon = GFX_operations_steal_blueprints
+	map_icon = GFX_operations_steal_blueprints_map
+	name = FOE_operation_open_ledger
+	desc = FOE_operation_open_ledger_desc
+	priority = 19
+
+	days = 90
+	network_strength = 40
+	operatives = 2
+	cost_multiplier = 0.05
+
+	visible = {
+		FOE_is_whisper_broker = yes
+		has_variable = FOE_black_file
+		var:FOE_black_file = { tag = FROM }
+	}
+
+	available = {
+		FOE_is_whisper_broker = yes
+		has_variable = FOE_black_file
+		var:FOE_black_file = { tag = FROM }
+		FOE_has_valid_black_file = yes
+		custom_trigger_tooltip = {
+			tooltip = FOE_broker_dossier_3_tt
+			check_variable = { FOE_dossier > 2 }
+		}
+		custom_trigger_tooltip = {
+			tooltip = FOE_broker_not_alerted_tt
+			NOT = { has_country_flag = FOE_broker_alerted }
+		}
+		custom_trigger_tooltip = {
+			tooltip = FOE_ledger_no_payment_tt
+			NOT = { has_country_flag = FOE_ledger_payout_active }
+		}
+		FROM = {
+			num_of_civilian_factories > 4
+			NOT = { has_dynamic_modifier = { modifier = FOE_ledger_opened_modifier } }
+		}
+		NOT = { is_preparing_operation = { target = FROM operation = FOE_operation_crossed_wires } }
+		NOT = { is_running_operation = { target = FROM operation = FOE_operation_crossed_wires } }
+	}
+
+	equipment = {}
+
+	required_tokens = {}
+	awarded_tokens = {}
+	risk_chance = 0.2
+	experience = 2
+	outcome_extra_chance = 0
+	risk_modifiers = { operation_risk }
+	outcome_modifiers = { operation_outcome }
+	cost_modifiers = { operation_cost }
+
+	on_start = {
+		ROOT = {
+			subtract_from_variable = { FOE_dossier = 3 }
+			clamp_variable = { var = FOE_dossier min = 0 max = 6 }
+			FOE_refresh_insider_knowledge = yes
+		}
+	}
+
+	outcome_execute = {
+		ROOT = {
+			set_country_flag = { flag = FOE_broker_alerted value = 1 days = 30 }
+		}
+		# Re-check at outcome: nothing is paid if the target is gone, friendly, or already squeezed.
+		if = {
+			limit = {
+				FROM = {
+					exists = yes
+					NOT = { has_dynamic_modifier = { modifier = FOE_ledger_opened_modifier } }
+				}
+				ROOT = {
+					# A late completion cannot start sustained blackmail after the service lost its leverage.
+					FOE_is_whisper_broker = yes
+					FOE_has_valid_black_file = yes
+					var:FOE_black_file = { tag = FROM }
+					network_strength = { target = FROM value > 39 }
+					NOT = { has_country_flag = FOE_ledger_payout_active }
+					FROM = { FOE_is_black_file_candidate = yes }
+				}
+			}
+			FOE_open_ledger_payout = yes
+		}
+	}
+
+	outcome_potential = {
+		custom_effect_tooltip = FOE_operation_open_ledger_outcome_tt
+	}
+
+	ai_will_do = {
+		factor = 10
+		# At war, with the cipher past half, an army token in hand and a network strong enough for it, the Dossier is
+		# saved for Crossed Wires. Otherwise, or once Crossed Wires has run, Open Ledger is the fallback.
+		modifier = {
+			factor = 0
+			has_war_with = FROM
+			decryption_progress = { target = FROM value > 0.5 }
+			has_operation_token = { tag = FROM token = token_army }
+			network_strength = { target = FROM value > 49 }
+			FROM = { NOT = { has_dynamic_modifier = { modifier = FOE_crossed_wires_modifier } } }
+			NOT = { is_preparing_operation = { target = FROM operation = FOE_operation_open_ledger } }
+		}
+	}
+
+	phases = { #infiltration
+		infiltration_border = { base = 25 }
+		infiltration_submarine = { base = 25 }
+		infiltration_paradrop = {
+			base = 25
+			modifier = {
+				ROOT = {
+					has_equipment = {
+						cargo_plane_equipment < 1
+					}
+				}
+				factor = 0.1 #less likely if we have no transports
+			}
+		}
+		infiltration_diplomatic = {
+			base = 25
+			modifier = {
+				factor = 20
+				ROOT = { has_war = no }
+				FROM = {
+					has_war = no
+				}
+			}
+			modifier = {
+				FROM = {
+					has_war_with = ROOT
+				}
+				factor = 0
+			}
+		}
+	}
+	phases = { #blackmail
+		steal_blueprints_bribe = { base = 50 }
+		steal_blueprints_seduction = { base = 50 }
+	}
+	phases = { #exfiltration
+		exfiltration_air_pickup = {
+			base = 15
+			modifier = {
+				ROOT = {
+					has_equipment = {
+						cargo_plane_equipment < 1
+					}
+				}
+				factor = 0.1 #less likely if we have no transports
+			}
+		}
+		exfiltration_border = { base = 30 }
+		exfiltration_go_to_ground = { base = 30 }
+		exfiltration_submarine_pickup = { base = 25 }
+	}
+}
+
+FOE_operation_crossed_wires = {
+	icon = GFX_operations_fake_intel
+	map_icon = GFX_operations_fake_intel_map
+	name = FOE_operation_crossed_wires
+	desc = FOE_operation_crossed_wires_desc
+	priority = 20
+
+	days = 60
+	network_strength = 50
+	operatives = 2
+	cost_multiplier = 0.05
+
+	visible = {
+		FOE_is_whisper_broker = yes
+		has_variable = FOE_black_file
+		var:FOE_black_file = { tag = FROM }
+		has_war_with = FROM
+	}
+
+	available = {
+		FOE_is_whisper_broker = yes
+		has_variable = FOE_black_file
+		var:FOE_black_file = { tag = FROM }
+		has_war_with = FROM
+		FOE_has_valid_black_file = yes
+		decryption_progress = { target = FROM value > 0.5 }
+		custom_trigger_tooltip = {
+			tooltip = FOE_broker_dossier_4_tt
+			check_variable = { FOE_dossier > 3 }
+		}
+		custom_trigger_tooltip = {
+			tooltip = FOE_broker_not_alerted_tt
+			NOT = { has_country_flag = FOE_broker_alerted }
+		}
+		FROM = {
+			NOT = { has_dynamic_modifier = { modifier = FOE_crossed_wires_modifier } }
+		}
+		NOT = { is_preparing_operation = { target = FROM operation = FOE_operation_open_ledger } }
+		NOT = { is_running_operation = { target = FROM operation = FOE_operation_open_ledger } }
+	}
+
+	equipment = {}
+
+	required_tokens = {
+		token_army
+	}
+	awarded_tokens = {}
+	risk_chance = 0.25
+	experience = 2
+	outcome_extra_chance = 0
+	risk_modifiers = { operation_risk }
+	outcome_modifiers = { operation_outcome }
+	cost_modifiers = { operation_cost }
+
+	on_start = {
+		ROOT = {
+			subtract_from_variable = { FOE_dossier = 4 }
+			clamp_variable = { var = FOE_dossier min = 0 max = 6 }
+			FOE_refresh_insider_knowledge = yes
+		}
+	}
+
+	outcome_execute = {
+		ROOT = {
+			remove_operation_token = {
+				tag = FROM
+				token = token_army
+			}
+			set_country_flag = { flag = FOE_broker_alerted value = 1 days = 30 }
+		}
+		# Re-check at outcome: still at war, and no Crossed Wires already running from any Broker.
+		if = {
+			limit = {
+				FROM = {
+					exists = yes
+					NOT = { has_dynamic_modifier = { modifier = FOE_crossed_wires_modifier } }
+				}
+				ROOT = { has_war_with = FROM }
+			}
+			# A broken cipher, or our active decryption bonuses, keep the forged orders going for 90 days.
+			if = {
+				limit = {
+					ROOT = {
+						OR = {
+							is_fully_decrypted = FROM
+							is_active_decryption_bonuses_enabled = FROM
+						}
+					}
+				}
+				FROM = { add_dynamic_modifier = { modifier = FOE_crossed_wires_modifier days = 90 } }
+			}
+			else = {
+				FROM = { add_dynamic_modifier = { modifier = FOE_crossed_wires_modifier days = 60 } }
+			}
+		}
+	}
+
+	outcome_potential = {
+		custom_effect_tooltip = FOE_operation_crossed_wires_outcome_tt
+		custom_effect_tooltip = operation_outcome_consumes_token_tt
+	}
+
+	ai_will_do = {
+		factor = 15
+	}
+
+	phases = { #infiltration
+		infiltration_border = { base = 25 }
+		infiltration_submarine = { base = 25 }
+		infiltration_paradrop = {
+			base = 25
+			modifier = {
+				ROOT = {
+					has_equipment = {
+						cargo_plane_equipment < 1
+					}
+				}
+				factor = 0.1 #less likely if we have no transports
+			}
+		}
+		infiltration_diplomatic = {
+			base = 25
+			modifier = {
+				factor = 20
+				ROOT = { has_war = no }
+				FROM = {
+					has_war = no
+				}
+			}
+			modifier = {
+				FROM = {
+					has_war_with = ROOT
+				}
+				factor = 0
+			}
+		}
+	}
+	phases = { #forged orders
+		fake_intel_deliberate_leaks = { base = 60 }
+		fake_intel_utilize_double_agents = { base = 40 }
+	}
+	phases = { #exfiltration
+		exfiltration_air_pickup = {
+			base = 15
+			modifier = {
+				ROOT = {
+					has_equipment = {
+						cargo_plane_equipment < 1
+					}
+				}
+				factor = 0.1 #less likely if we have no transports
+			}
+		}
+		exfiltration_border = { base = 30 }
+		exfiltration_go_to_ground = { base = 30 }
+		exfiltration_submarine_pickup = { base = 25 }
+	}
+}
