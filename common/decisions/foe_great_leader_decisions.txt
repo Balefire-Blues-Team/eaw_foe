@@ -946,6 +946,142 @@ GEN_great_leader_decisions = {
 		}
 	}
 
+	#Diplomatic Parasite: Leech Their Industry
+	FOE_parasite_leech_industry = {
+		icon = GFX_decision_hol_drain_water_lines
+		allowed = { always = yes }
+		target_array = global.countries
+		cost = 50
+		fire_only_once = no
+		visible = { FOE_is_diplomatic_parasite = yes }
+		target_root_trigger = { FOE_is_diplomatic_parasite = yes }
+		target_trigger = {
+			FROM = {
+				FOE_is_leech_target = yes
+				NOT = { has_dynamic_modifier = { modifier = FOE_leeched_industry_modifier } }
+			}
+		}
+		available = {
+			FROM = {
+				FOE_is_leech_target = yes
+				NOT = { has_dynamic_modifier = { modifier = FOE_leeched_industry_modifier } }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_parasite_leech_industry_tt
+			hidden_effect = {
+				FROM = {
+					add_dynamic_modifier = { modifier = FOE_leeched_industry_modifier days = 200 }
+					set_variable = { FOE_industry_leeched_by = ROOT }
+				}
+				FOE_update_diplomatic_parasite = yes
+			}
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	#Diplomatic Parasite: Siphon Their Levies
+	FOE_parasite_siphon_levies = {
+		icon = GFX_decision_generic_army_support
+		allowed = { always = yes }
+		target_array = global.countries
+		cost = 50
+		fire_only_once = no
+		visible = { FOE_is_legendary_or_mythic_diplomatic_parasite = yes }
+		target_root_trigger = { FOE_is_legendary_or_mythic_diplomatic_parasite = yes }
+		target_trigger = {
+			FROM = {
+				FOE_is_leech_target = yes
+				NOT = { has_dynamic_modifier = { modifier = FOE_leeched_levies_modifier } }
+			}
+		}
+		available = {
+			FROM = {
+				FOE_is_leech_target = yes
+				NOT = { has_dynamic_modifier = { modifier = FOE_leeched_levies_modifier } }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_parasite_siphon_levies_tt
+			hidden_effect = {
+				FROM = {
+					add_dynamic_modifier = { modifier = FOE_leeched_levies_modifier days = 200 }
+					set_variable = { FOE_levies_leeched_by = ROOT }
+				}
+				FOE_update_diplomatic_parasite = yes
+			}
+		}
+		ai_will_do = {
+			base = 30
+		}
+	}
+
+	#Diplomatic Parasite: Goad
+	FOE_parasite_goad = {
+		icon = GFX_decision_border_war
+		allowed = { always = yes }
+		target_array = global.countries
+		cost = 50
+		fire_only_once = no
+		visible = { FOE_is_mythic_diplomatic_parasite = yes }
+		target_root_trigger = { FOE_is_mythic_diplomatic_parasite = yes }
+		target_trigger = {
+			FROM = { FOE_is_goad_target = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_parasite_goad_cooldown_tt
+				NOT = { has_country_flag = FOE_parasite_goad_cooldown }
+			}
+			FROM = { FOE_is_goad_target = yes }
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_parasite_goad_tt
+			hidden_effect = {
+				set_country_flag = { flag = FOE_parasite_goad_cooldown value = 1 days = 300 }
+				FROM = { country_event = { id = special_rulers.17 } }
+			}
+		}
+		ai_will_do = {
+			base = 20
+		}
+	}
+
+	#Leeched countries with a Great Leader, or a player, can throw the Parasites off
+	FOE_purge_the_parasites = {
+		icon = GFX_decision_generic_break_treaty
+		cost = 50
+		fire_only_once = no
+		visible = {
+			FOE_is_leeched = yes
+			OR = {
+				is_ai = no
+				var:country_leader = { has_character_flag = FOE_great_leader_character }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_purge_the_parasites_tt
+			hidden_effect = {
+				if = {
+					limit = { has_dynamic_modifier = { modifier = FOE_leeched_industry_modifier } }
+					remove_dynamic_modifier = { modifier = FOE_leeched_industry_modifier }
+				}
+				if = {
+					limit = { has_dynamic_modifier = { modifier = FOE_leeched_levies_modifier } }
+					remove_dynamic_modifier = { modifier = FOE_leeched_levies_modifier }
+				}
+				clear_variable = FOE_industry_leeched_by
+				clear_variable = FOE_levies_leeched_by
+				set_country_flag = { flag = FOE_leech_immunity value = 1 days = 365 }
+			}
+		}
+		ai_will_do = {
+			base = 50
+		}
+	}
+
 	#Reactor Prophet: Kindle the Reactors
 	FOE_reactor_overcharge_grid = {
 		icon = GFX_decision_unknown

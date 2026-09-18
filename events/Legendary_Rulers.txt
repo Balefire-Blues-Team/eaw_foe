@@ -588,28 +588,26 @@ country_event = {
 			NOT = { has_country_leader_with_trait = mythic_leader_admin_trait }
 		}
 		add_country_leader_trait = mythic_leader_admin_trait
-		FOE_initialize_inward_perfectionist = yes
+		FOE_initialize_diplomatic_parasite = yes
 	}
 
 	option = {
 		name = special_rulers.16.f
 		trigger = {
 			has_country_leader_with_trait = mythic_leader_admin_trait
-			NOT = { FOE_is_inward_perfectionist = yes }
+			NOT = { FOE_is_diplomatic_parasite = yes }
 		}
-		FOE_initialize_inward_perfectionist = yes
+		FOE_initialize_diplomatic_parasite = yes
 	}
 
-	# Brings the capital to level 4, so the next Cede the Periphery should raise it to level 5.
+	# Lets Goad be used again straight away, and recounts hosts without waiting for the month to turn.
 	option = {
 		name = special_rulers.16.g
 		trigger = {
-			FOE_is_inward_perfectionist = yes
+			FOE_is_diplomatic_parasite = yes
 		}
-		capital_scope = {
-			set_variable = { FOE_heartland_level = 4 }
-			FOE_update_heartland_state = yes
-		}
+		clr_country_flag = FOE_parasite_goad_cooldown
+		FOE_update_diplomatic_parasite = yes
 	}
 
 	option = {
@@ -642,5 +640,80 @@ country_event = {
 		}
 		add_to_variable = { unassimilated_refugees = 1000 }
 		on_refugee_change = yes
+	}
+}
+
+#Diplomatic Parasite, Mythic: a neighbour is goaded. ROOT is the neighbour, FROM the Parasite.
+country_event = {
+	id = special_rulers.17
+	title = special_rulers.17.t
+	desc = special_rulers.17.d
+	picture = GFX_event_NCR_startup
+	is_triggered_only = yes
+	fire_only_once = no
+
+	option = {
+		name = special_rulers.17.a
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 0.25
+				check_variable = { num_of_factories > FROM.num_of_factories }
+			}
+		}
+		add_dynamic_modifier = { modifier = FOE_goaded_modifier }
+		set_variable = { FOE_goaded_by = FROM }
+		FROM = { country_event = { id = special_rulers.19 } }
+	}
+
+	option = {
+		name = special_rulers.17.b
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 3
+				check_variable = { num_of_factories > FROM.num_of_factories }
+			}
+			modifier = {
+				factor = 0.25
+				check_variable = { num_of_factories < FROM.num_of_factories }
+			}
+		}
+		declare_war_on = {
+			target = FROM
+			type = annex_everything
+		}
+		FROM = {
+			add_dynamic_modifier = { modifier = FOE_provoked_modifier days = 100 }
+			country_event = { id = special_rulers.18 }
+		}
+	}
+}
+
+#Diplomatic Parasite: the goaded neighbour took the bait
+country_event = {
+	id = special_rulers.18
+	title = special_rulers.18.t
+	desc = special_rulers.18.d
+	picture = GFX_event_NCR_startup
+	is_triggered_only = yes
+	fire_only_once = no
+
+	option = {
+		name = special_rulers.18.a
+	}
+}
+
+#Diplomatic Parasite: the goaded neighbour backed down
+country_event = {
+	id = special_rulers.19
+	title = special_rulers.19.t
+	desc = special_rulers.19.d
+	picture = GFX_event_NCR_startup
+	is_triggered_only = yes
+	fire_only_once = no
+
+	option = {
+		name = special_rulers.19.a
 	}
 }

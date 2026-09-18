@@ -1237,6 +1237,64 @@ FOE_initialize_inward_perfectionist = {
 	FOE_update_inward_perfectionist = yes
 }
 
+#Diplomatic Parasite Subclass
+# Country scope. The Parasite grows 3% for every current host of each kind, with no cap.
+# Hosts are counted by who leeched them, so two Parasites sharing a victim don't count each other's.
+FOE_update_diplomatic_parasite = {
+	if = {
+		limit = { FOE_is_diplomatic_parasite = yes }
+		set_variable = { FOE_parasite_industry = 0 }
+		every_country = {
+			limit = {
+				has_dynamic_modifier = { modifier = FOE_leeched_industry_modifier }
+				has_variable = FOE_industry_leeched_by
+				var:FOE_industry_leeched_by = { tag = ROOT }
+			}
+			ROOT = { add_to_variable = { FOE_parasite_industry = 0.03 } }
+		}
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = FOE_parasite_industry_modifier } } }
+			add_dynamic_modifier = { modifier = FOE_parasite_industry_modifier }
+		}
+		if = {
+			limit = { FOE_is_legendary_or_mythic_diplomatic_parasite = yes }
+			set_variable = { FOE_parasite_levies = 0 }
+			every_country = {
+				limit = {
+					has_dynamic_modifier = { modifier = FOE_leeched_levies_modifier }
+					has_variable = FOE_levies_leeched_by
+					var:FOE_levies_leeched_by = { tag = ROOT }
+				}
+				ROOT = { add_to_variable = { FOE_parasite_levies = 0.03 } }
+			}
+			if = {
+				limit = { NOT = { has_dynamic_modifier = { modifier = FOE_parasite_levies_modifier } } }
+				add_dynamic_modifier = { modifier = FOE_parasite_levies_modifier }
+			}
+		}
+		force_update_dynamic_modifier = yes
+	}
+	else_if = {
+		limit = { has_dynamic_modifier = { modifier = FOE_parasite_industry_modifier } }
+		remove_dynamic_modifier = { modifier = FOE_parasite_industry_modifier }
+		if = {
+			limit = { has_dynamic_modifier = { modifier = FOE_parasite_levies_modifier } }
+			remove_dynamic_modifier = { modifier = FOE_parasite_levies_modifier }
+		}
+		clear_variable = FOE_parasite_industry
+		clear_variable = FOE_parasite_levies
+	}
+}
+
+FOE_initialize_diplomatic_parasite = {
+	add_country_leader_trait = FOE_diplomatic_parasite_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_diplomatic_parasite_character
+	}
+	FOE_update_diplomatic_parasite = yes
+}
+
 #Reactor Prophet Subclass
 # Country scope. Surges read FOE_reactor_power (fuel in thousands), FOE_reactor_cap_mult and FOE_reactor_days,
 # which the calling decision sets as temp variables. Each surge has its own rate per thousand fuel and cap.
@@ -2259,6 +2317,13 @@ FOE_roll_administrator_subclass = {
 		if = { limit = { has_idea = raider_society } multiply_temp_variable = { FOE_audit_inward_perfectionist = 0.1 } }
 		if = { limit = { has_government = visionary } multiply_temp_variable = { FOE_audit_inward_perfectionist = 0.1 } }
 		log = "FOE_ASSIGN [THIS.GetTag] class=administrator candidate=inward_perfectionist weight=[?FOE_audit_inward_perfectionist] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_diplomatic_parasite = 10 }
+		if = { limit = { NOT = { FOE_can_assign_diplomatic_parasite = yes } } multiply_temp_variable = { FOE_audit_diplomatic_parasite = 0 } }
+		if = { limit = { has_idea = raider_society } multiply_temp_variable = { FOE_audit_diplomatic_parasite = 2 } }
+		if = { limit = { has_idea = closed_economy } multiply_temp_variable = { FOE_audit_diplomatic_parasite = 2 } }
+		if = { limit = { has_idea = political_effort_press } multiply_temp_variable = { FOE_audit_diplomatic_parasite = 2 } }
+		if = { limit = { num_subjects > 0 } multiply_temp_variable = { FOE_audit_diplomatic_parasite = 0.1 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=administrator candidate=diplomatic_parasite weight=[?FOE_audit_diplomatic_parasite] (zero=ineligible)"
 	}
 	random_list = {
 		log = yes
@@ -2308,6 +2373,15 @@ FOE_roll_administrator_subclass = {
 			modifier = { factor = 0.1 has_government = visionary }
 			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=administrator selected=inward_perfectionist" }
 			FOE_initialize_inward_perfectionist = yes
+		}
+		10 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_diplomatic_parasite = yes } }
+			modifier = { factor = 2 has_idea = raider_society }
+			modifier = { factor = 2 has_idea = closed_economy }
+			modifier = { factor = 2 has_idea = political_effort_press }
+			modifier = { factor = 0.1 num_subjects > 0 }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=administrator selected=diplomatic_parasite" }
+			FOE_initialize_diplomatic_parasite = yes
 		}
 	}
 }
