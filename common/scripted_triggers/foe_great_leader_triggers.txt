@@ -396,6 +396,51 @@ FOE_capital_can_rise = {
 	}
 }
 
+FOE_is_inward_perfectionist = {
+	var:country_leader = {
+		has_character_flag = FOE_great_leader_character
+		has_character_flag = FOE_inward_perfectionist_character
+	}
+}
+
+FOE_is_legendary_or_mythic_inward_perfectionist = {
+	FOE_is_inward_perfectionist = yes
+	OR = {
+		has_country_leader_with_trait = legendary_leader_admin_trait
+		has_country_leader_with_trait = mythic_leader_admin_trait
+	}
+}
+
+FOE_is_mythic_inward_perfectionist = {
+	FOE_is_inward_perfectionist = yes
+	has_country_leader_with_trait = mythic_leader_admin_trait
+}
+
+# State scope; ROOT is the Perfectionist. The decision only goes up to level 4; level 5 comes from ceding.
+FOE_is_heartland_candidate = {
+	is_owned_by = ROOT
+	is_controlled_by = ROOT
+	is_core_of = ROOT
+	NOT = { check_variable = { FOE_heartland_level > 3 } }
+}
+
+# State scope; ROOT is the Perfectionist. A neighbouring state whose owner could take a ceded state.
+FOE_is_cede_recipient_state = {
+	NOT = { is_owned_by = ROOT }
+	owner = {
+		exists = yes
+		NOT = { has_war_with = ROOT }
+	}
+}
+
+# State scope; ROOT is the Perfectionist.
+FOE_is_cedable_state = {
+	is_owned_by = ROOT
+	is_controlled_by = ROOT
+	is_capital = no
+	any_neighbor_state = { FOE_is_cede_recipient_state = yes }
+}
+
 FOE_is_reactor_prophet = {
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
@@ -669,6 +714,11 @@ FOE_can_assign_puppetmaster = {
 
 FOE_can_assign_architect_of_order = {
 	FOE_great_leader_country_valid = yes
+}
+
+FOE_can_assign_inward_perfectionist = {
+	FOE_great_leader_country_valid = yes
+	check_variable = { num_owned_states < 9 }
 }
 
 FOE_can_assign_reactor_prophet = {

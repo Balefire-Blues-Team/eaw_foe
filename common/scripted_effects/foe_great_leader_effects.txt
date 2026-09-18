@@ -1019,6 +1019,224 @@ FOE_initialize_architect_of_order = {
 	FOE_update_planned_capital = yes
 }
 
+#Inward Perfectionist Subclass
+# State scope. Each level adds 5% population growth, construction speed and recruitable population;
+# level 5 also adds 20% core attack and defence.
+FOE_update_heartland_state = {
+	set_variable = { FOE_heartland_bonus = FOE_heartland_level }
+	multiply_variable = { FOE_heartland_bonus = 0.05 }
+	if = {
+		limit = { check_variable = { FOE_heartland_level > 4 } }
+		set_variable = { FOE_heartland_core = 0.20 }
+	}
+	else = {
+		set_variable = { FOE_heartland_core = 0 }
+	}
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = FOE_perfected_heartland_modifier } } }
+		add_dynamic_modifier = { modifier = FOE_perfected_heartland_modifier }
+	}
+	force_update_dynamic_modifier = yes
+}
+
+# State scope.
+FOE_raise_heartland = {
+	if = {
+		limit = { NOT = { has_variable = FOE_heartland_level } }
+		set_variable = { FOE_heartland_level = 0 }
+	}
+	add_to_variable = { FOE_heartland_level = 1 }
+	clamp_variable = { var = FOE_heartland_level min = 0 max = 5 }
+	FOE_update_heartland_state = yes
+}
+
+# Country scope; ROOT is the Perfectionist. A civilian factory from a ceded state finds a core state with room, or goes offsite.
+FOE_rehouse_ceded_civilian_factory = {
+	if = {
+		limit = {
+			any_owned_state = {
+				is_core_of = ROOT
+				is_controlled_by = ROOT
+				NOT = { has_state_flag = FOE_being_ceded }
+				free_building_slots = { building = industrial_complex size > 0 include_locked = no }
+			}
+		}
+		random_owned_controlled_state = {
+			limit = {
+				is_core_of = ROOT
+				NOT = { has_state_flag = FOE_being_ceded }
+				free_building_slots = { building = industrial_complex size > 0 include_locked = no }
+			}
+			add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+		}
+	}
+	else = {
+		add_offsite_building = { type = industrial_complex level = 1 }
+	}
+}
+
+# Country scope; ROOT is the Perfectionist.
+FOE_rehouse_ceded_military_factory = {
+	if = {
+		limit = {
+			any_owned_state = {
+				is_core_of = ROOT
+				is_controlled_by = ROOT
+				NOT = { has_state_flag = FOE_being_ceded }
+				free_building_slots = { building = arms_factory size > 0 include_locked = no }
+			}
+		}
+		random_owned_controlled_state = {
+			limit = {
+				is_core_of = ROOT
+				NOT = { has_state_flag = FOE_being_ceded }
+				free_building_slots = { building = arms_factory size > 0 include_locked = no }
+			}
+			add_building_construction = { type = arms_factory level = 1 instant_build = yes }
+		}
+	}
+	else = {
+		add_offsite_building = { type = arms_factory level = 1 }
+	}
+}
+
+# Country scope; ROOT is the Perfectionist, FROM the state being ceded.
+FOE_cede_periphery = {
+	# First, the state's industry comes home. Dockyards need a coast, so they go offsite.
+	FROM = {
+		set_state_flag = FOE_being_ceded
+		while_loop_effect = {
+			limit = { check_variable = { industrial_complex_level > 0 } }
+			remove_building = { type = industrial_complex level = 1 }
+			ROOT = { FOE_rehouse_ceded_civilian_factory = yes }
+		}
+		while_loop_effect = {
+			limit = { check_variable = { arms_factory_level > 0 } }
+			remove_building = { type = arms_factory level = 1 }
+			ROOT = { FOE_rehouse_ceded_military_factory = yes }
+		}
+		while_loop_effect = {
+			limit = { check_variable = { building_level@dockyard > 0 } }
+			remove_building = { type = dockyard level = 1 }
+			ROOT = { add_offsite_building = { type = dockyard level = 1 } }
+		}
+	}
+	# Second, the state goes to a neighbour we are at peace with, and we give up any claim to it.
+	FROM = {
+		if = {
+			limit = { has_dynamic_modifier = { modifier = FOE_perfected_heartland_modifier } }
+			remove_dynamic_modifier = { modifier = FOE_perfected_heartland_modifier }
+		}
+		clear_variable = FOE_heartland_level
+		clear_variable = FOE_heartland_bonus
+		clear_variable = FOE_heartland_core
+		remove_claim_by = ROOT
+		random_neighbor_state = {
+			limit = { FOE_is_cede_recipient_state = yes }
+			owner = { save_event_target_as = FOE_cede_recipient }
+		}
+		clr_state_flag = FOE_being_ceded
+		transfer_state_to = event_target:FOE_cede_recipient
+	}
+	# Third, what we keep grows more perfect: a level 4 capital first, then any level 4 state,
+	# then the capital, then any core state not yet at level 5.
+	if = {
+		limit = { capital_scope = { check_variable = { FOE_heartland_level = 4 } } }
+		capital_scope = { FOE_raise_heartland = yes }
+	}
+	else_if = {
+		limit = {
+			any_owned_state = {
+				is_core_of = ROOT
+				check_variable = { FOE_heartland_level = 4 }
+			}
+		}
+		random_owned_state = {
+			limit = {
+				is_core_of = ROOT
+				check_variable = { FOE_heartland_level = 4 }
+			}
+			FOE_raise_heartland = yes
+		}
+	}
+	else_if = {
+		limit = { capital_scope = { NOT = { check_variable = { FOE_heartland_level > 4 } } } }
+		capital_scope = { FOE_raise_heartland = yes }
+	}
+	else_if = {
+		limit = {
+			any_owned_state = {
+				is_core_of = ROOT
+				NOT = { check_variable = { FOE_heartland_level > 4 } }
+			}
+		}
+		random_owned_state = {
+			limit = {
+				is_core_of = ROOT
+				NOT = { check_variable = { FOE_heartland_level > 4 } }
+			}
+			FOE_raise_heartland = yes
+		}
+	}
+}
+
+# Country scope. Perfection: +3% per owned state below ten, -3% per state above.
+# Legendary: against the giant, +1% attack and defence per state the largest enemy has over us, up to 20%.
+FOE_update_inward_perfectionist = {
+	if = {
+		limit = { FOE_is_inward_perfectionist = yes }
+		set_variable = { FOE_perfection = 10 }
+		subtract_from_variable = { FOE_perfection = num_owned_states }
+		multiply_variable = { FOE_perfection = 0.03 }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = FOE_perfection_modifier } } }
+			add_dynamic_modifier = { modifier = FOE_perfection_modifier }
+		}
+		if = {
+			limit = { FOE_is_legendary_or_mythic_inward_perfectionist = yes }
+			set_variable = { FOE_giant_bonus = 0 }
+			every_enemy_country = {
+				if = {
+					limit = { check_variable = { num_owned_states > ROOT.FOE_giant_bonus } }
+					ROOT = { set_variable = { FOE_giant_bonus = PREV.num_owned_states } }
+				}
+			}
+			subtract_from_variable = { FOE_giant_bonus = num_owned_states }
+			multiply_variable = { FOE_giant_bonus = 0.01 }
+			clamp_variable = { var = FOE_giant_bonus min = 0 max = 0.20 }
+			if = {
+				limit = { NOT = { has_dynamic_modifier = { modifier = FOE_against_the_giant_modifier } } }
+				add_dynamic_modifier = { modifier = FOE_against_the_giant_modifier }
+			}
+		}
+		else_if = {
+			limit = { has_dynamic_modifier = { modifier = FOE_against_the_giant_modifier } }
+			remove_dynamic_modifier = { modifier = FOE_against_the_giant_modifier }
+			clear_variable = FOE_giant_bonus
+		}
+		force_update_dynamic_modifier = yes
+	}
+	else_if = {
+		limit = { has_dynamic_modifier = { modifier = FOE_perfection_modifier } }
+		remove_dynamic_modifier = { modifier = FOE_perfection_modifier }
+		if = {
+			limit = { has_dynamic_modifier = { modifier = FOE_against_the_giant_modifier } }
+			remove_dynamic_modifier = { modifier = FOE_against_the_giant_modifier }
+		}
+		clear_variable = FOE_perfection
+		clear_variable = FOE_giant_bonus
+	}
+}
+
+FOE_initialize_inward_perfectionist = {
+	add_country_leader_trait = FOE_inward_perfectionist_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_inward_perfectionist_character
+	}
+	FOE_update_inward_perfectionist = yes
+}
+
 #Reactor Prophet Subclass
 # Country scope. Surges read FOE_reactor_power (fuel in thousands), FOE_reactor_cap_mult and FOE_reactor_days,
 # which the calling decision sets as temp variables. Each surge has its own rate per thousand fuel and cap.
@@ -2034,6 +2252,13 @@ FOE_roll_administrator_subclass = {
 		if = { limit = { FOE_assignment_suits_architect_of_order = yes } multiply_temp_variable = { FOE_audit_architect_of_order = 1.5 } }
 		if = { limit = { NOT = { FOE_assignment_suits_architect_of_order = yes } } multiply_temp_variable = { FOE_audit_architect_of_order = 0.5 } }
 		log = "FOE_ASSIGN [THIS.GetTag] class=administrator candidate=architect_of_order weight=[?FOE_audit_architect_of_order] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_inward_perfectionist = 10 }
+		if = { limit = { NOT = { FOE_can_assign_inward_perfectionist = yes } } multiply_temp_variable = { FOE_audit_inward_perfectionist = 0 } }
+		if = { limit = { has_idea = steel_ranger_society } multiply_temp_variable = { FOE_audit_inward_perfectionist = 2 } }
+		if = { limit = { has_idea = old_world_society } multiply_temp_variable = { FOE_audit_inward_perfectionist = 2 } }
+		if = { limit = { has_idea = raider_society } multiply_temp_variable = { FOE_audit_inward_perfectionist = 0.1 } }
+		if = { limit = { has_government = visionary } multiply_temp_variable = { FOE_audit_inward_perfectionist = 0.1 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=administrator candidate=inward_perfectionist weight=[?FOE_audit_inward_perfectionist] (zero=ineligible)"
 	}
 	random_list = {
 		log = yes
@@ -2074,6 +2299,15 @@ FOE_roll_administrator_subclass = {
 			modifier = { factor = 0.5 NOT = { FOE_assignment_suits_architect_of_order = yes } }
 			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=administrator selected=architect_of_order" }
 			FOE_initialize_architect_of_order = yes
+		}
+		10 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_inward_perfectionist = yes } }
+			modifier = { factor = 2 has_idea = steel_ranger_society }
+			modifier = { factor = 2 has_idea = old_world_society }
+			modifier = { factor = 0.1 has_idea = raider_society }
+			modifier = { factor = 0.1 has_government = visionary }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=administrator selected=inward_perfectionist" }
+			FOE_initialize_inward_perfectionist = yes
 		}
 	}
 }

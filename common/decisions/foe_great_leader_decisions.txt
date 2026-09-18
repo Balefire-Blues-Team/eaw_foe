@@ -872,6 +872,80 @@ GEN_great_leader_decisions = {
 		}
 	}
 
+	#Inward Perfectionist: Perfect the Heartland
+	FOE_perfectionist_perfect_heartland = {
+		icon = GFX_dec_construct_fortified_housing_complexes
+		allowed = { always = yes }
+		state_target = yes
+		target_array = owned_states
+		on_map_mode = map_and_decisions_view
+		cost = 50
+		fire_only_once = no
+		visible = { FOE_is_inward_perfectionist = yes }
+		target_root_trigger = { FOE_is_inward_perfectionist = yes }
+		target_trigger = {
+			FROM = { FOE_is_heartland_candidate = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_heartland_cooldown_tt
+				NOT = { has_country_flag = FOE_heartland_cooldown }
+			}
+			FROM = { FOE_is_heartland_candidate = yes }
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_perfect_heartland_tt
+			hidden_effect = {
+				FROM = { FOE_raise_heartland = yes }
+				set_country_flag = { flag = FOE_heartland_cooldown value = 1 days = 60 }
+			}
+		}
+		ai_will_do = {
+			base = 30
+			modifier = {
+				factor = 2
+				FROM = { is_capital = yes }
+			}
+		}
+	}
+
+	#Inward Perfectionist: Cede the Periphery
+	FOE_perfectionist_cede_periphery = {
+		icon = GFX_decision_generic_break_treaty
+		allowed = { always = yes }
+		state_target = yes
+		target_array = owned_states
+		on_map_mode = map_and_decisions_view
+		cost = 25
+		fire_only_once = no
+		visible = { FOE_is_mythic_inward_perfectionist = yes }
+		target_root_trigger = { FOE_is_mythic_inward_perfectionist = yes }
+		target_trigger = {
+			FROM = { FOE_is_cedable_state = yes }
+		}
+		available = {
+			FROM = { FOE_is_cedable_state = yes }
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_cede_periphery_tt
+			hidden_effect = {
+				FOE_cede_periphery = yes
+				FOE_update_inward_perfectionist = yes
+			}
+		}
+		ai_will_do = {
+			base = 5
+			modifier = {
+				factor = 10
+				check_variable = { num_owned_states > 10 }
+			}
+			modifier = {
+				factor = 0.1
+				FROM = { is_core_of = ROOT }
+			}
+		}
+	}
+
 	#Reactor Prophet: Kindle the Reactors
 	FOE_reactor_overcharge_grid = {
 		icon = GFX_decision_unknown
