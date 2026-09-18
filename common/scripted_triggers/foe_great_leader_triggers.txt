@@ -1,5 +1,17 @@
 # All these triggers run in country scope.
 
+# STATE scope. True if the state has an owner. Many wasteland states have none, and an owner or controller
+# scope on them logs "invalid event target"; check this first.
+FOE_state_has_owner = {
+	NOT = { check_variable = { owner = 0 } }
+}
+
+# COUNTRY scope. True if the country has a leader character. Some countries have none, and a
+# var:country_leader scope on them logs "Invalid Scope, supported: Character, provided: Country"; check this first.
+FOE_has_leader_character = {
+	NOT = { check_variable = { country_leader = 0 } }
+}
+
 # Class tiers. A combo class is always Mythic, and counts as Mythic in both of its parent classes:
 # Ruler = Conqueror + Administrator, Exploiter = Conqueror + Industrialist, Magnate = Administrator + Industrialist.
 FOE_has_any_conqueror_tier = {
@@ -72,6 +84,7 @@ FOE_has_mythic_industrialist_tier = {
 }
 
 FOE_is_nomadic_khan = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_nomadic_khan_character
@@ -103,6 +116,7 @@ FOE_nomadic_court_controlled = {
 }
 
 FOE_is_slaving_despot = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_slaving_despot_character
@@ -128,6 +142,7 @@ FOE_is_enslaveable_state = {
 }
 
 FOE_is_carrion_marshal = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_carrion_marshal_character
@@ -159,6 +174,7 @@ FOE_is_harvestable_state = {
 }
 
 FOE_is_iron_warden = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_iron_warden_character
@@ -185,6 +201,7 @@ FOE_is_securable_state = {
 }
 
 FOE_is_saint_of_war = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_saint_of_war_character
@@ -202,6 +219,7 @@ FOE_is_mythic_saint_of_war = {
 }
 
 FOE_is_chainbreaker = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_chainbreaker_character
@@ -241,6 +259,7 @@ FOE_is_crusade_target = {
 }
 
 FOE_is_unifier = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_unifier_character
@@ -296,6 +315,7 @@ FOE_is_unifier_absorption_target = {
 }
 
 FOE_is_puppetmaster = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_puppetmaster_character
@@ -350,7 +370,10 @@ FOE_is_puppet_install_target = {
 		any_neighbor_state = {
 			OR = {
 				is_owned_by = ROOT
-				owner = { is_subject_of = ROOT }
+				AND = {
+					FOE_state_has_owner = yes
+					owner = { is_subject_of = ROOT }
+				}
 			}
 		}
 	}
@@ -364,6 +387,7 @@ FOE_is_puppet_install_target = {
 }
 
 FOE_is_architect_of_order = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_architect_of_order_character
@@ -446,6 +470,7 @@ FOE_capital_can_rise = {
 }
 
 FOE_is_inward_perfectionist = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_inward_perfectionist_character
@@ -473,6 +498,7 @@ FOE_is_heartland_candidate = {
 # State scope; ROOT is the Perfectionist. A neighbouring state whose owner could take a ceded state.
 FOE_is_cede_recipient_state = {
 	NOT = { is_owned_by = ROOT }
+	FOE_state_has_owner = yes
 	owner = {
 		exists = yes
 		NOT = { has_war_with = ROOT }
@@ -488,6 +514,7 @@ FOE_is_cedable_state = {
 }
 
 FOE_is_diplomatic_parasite = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_diplomatic_parasite_character
@@ -539,6 +566,7 @@ FOE_is_leeched = {
 }
 
 FOE_is_wild_heart = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_wild_heart_character
@@ -566,6 +594,7 @@ FOE_is_domestic_migration_origin = {
 # State scope; ROOT is the Wild Heart. Mythic: a crowded state of a neighbouring country, held by its owner.
 FOE_is_foreign_migration_origin = {
 	NOT = { is_owned_by = ROOT }
+	FOE_state_has_owner = yes
 	owner = { is_neighbor_of = ROOT }
 	is_fully_controlled_by = OWNER
 	state_population > 3999
@@ -580,6 +609,7 @@ FOE_is_migration_target = {
 }
 
 FOE_is_reactor_prophet = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_reactor_prophet_character
@@ -608,6 +638,7 @@ FOE_is_reactor_site = {
 }
 
 FOE_is_autark = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_autark_character
@@ -665,6 +696,7 @@ FOE_is_autark_supply_site = {
 }
 
 FOE_is_merchant_prince = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_merchant_prince_character
@@ -684,6 +716,7 @@ FOE_is_mythic_merchant_prince = {
 # State scope; ROOT is the Merchant Prince. A border state a small, peaceful AI neighbour will sell.
 FOE_is_purchasable_state = {
 	NOT = { is_owned_by = ROOT }
+	FOE_state_has_owner = yes
 	is_capital = no
 	impassable = no
 	is_fully_controlled_by = OWNER
@@ -700,6 +733,7 @@ FOE_is_purchasable_state = {
 }
 
 FOE_is_biological_engineer = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_biological_engineer_character
@@ -748,6 +782,7 @@ FOE_is_enemy_renderable_state = {
 }
 
 FOE_is_blackout_opportunist = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_blackout_opportunist_character
@@ -781,6 +816,7 @@ FOE_is_siphon_target = {
 
 #Oathkeeper (Ruler). Combo subclasses are always Mythic, so there are no tier triggers.
 FOE_is_oathkeeper = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_oathkeeper_character
@@ -806,21 +842,30 @@ FOE_is_loyalty_reward_state = {
 	NOT = { is_core_of = ROOT }
 	is_capital = no
 	any_neighbor_state = {
+		FOE_state_has_owner = yes
 		owner = { FOE_is_oathsworn = yes }
 	}
 }
 
 # State scope; ROOT is the Oathkeeper. An Oathsworn state on the border with anyone outside our sphere.
+# A decision's target check evaluates every line, so the owner checks sit inside an if.
 FOE_is_oath_wall_state = {
-	owner = { FOE_is_oathsworn = yes }
-	is_fully_controlled_by = OWNER
-	any_neighbor_state = {
-		owner = {
-			NOT = { tag = ROOT }
-			NOT = { is_subject_of = ROOT }
+	FOE_state_has_owner = yes
+	if = {
+		limit = { FOE_state_has_owner = yes }
+		AND = {
+			owner = { FOE_is_oathsworn = yes }
+			is_fully_controlled_by = OWNER
+			any_neighbor_state = {
+				FOE_state_has_owner = yes
+				owner = {
+					NOT = { tag = ROOT }
+					NOT = { is_subject_of = ROOT }
+				}
+			}
 		}
 	}
-	NOT = { has_state_flag = FOE_oath_wall_raising }
+	# Not FOE_oath_wall_raising: the running decision sets it, and excluding it cancelled the decision at once.
 	NOT = { has_state_flag = FOE_oath_wall_raised }
 }
 
@@ -833,6 +878,7 @@ FOE_is_integrable_state = {
 
 #Robber Baron (Exploiter). Combo subclasses are always Mythic, so there are no tier triggers.
 FOE_is_robber_baron = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_robber_baron_character
@@ -852,6 +898,7 @@ FOE_is_screwable_state = {
 
 #Whisper Broker (Exploiter). Combo subclasses are always Mythic, so there are no tier triggers.
 FOE_is_whisper_broker = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_whisper_broker_character
@@ -875,6 +922,7 @@ FOE_has_valid_black_file = {
 
 #Railroad Tycoon (Magnate). Combo subclasses are always Mythic, so there are no tier triggers.
 FOE_is_railroad_tycoon = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_railroad_tycoon_character
@@ -897,6 +945,7 @@ FOE_is_line_target = {
 
 #Lawgiver
 FOE_is_lawgiver = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_lawgiver_character
@@ -920,6 +969,7 @@ FOE_has_room_for_law = {
 
 #Steadfast Librarian
 FOE_is_steadfast_librarian = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_steadfast_librarian_character
@@ -938,6 +988,7 @@ FOE_is_mythic_steadfast_librarian = {
 
 #Voice of the Machine
 FOE_is_voice_of_the_machine = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_voice_of_the_machine_character
@@ -963,9 +1014,12 @@ FOE_is_machine_uprising = {
 FOE_is_dreamer_in_steel = {
 	OR = {
 		FOE_is_machine_uprising = yes
-		var:country_leader = {
-			has_character_flag = FOE_great_leader_character
-			has_character_flag = FOE_dreamer_in_steel_character
+		AND = {
+			FOE_has_leader_character = yes
+			var:country_leader = {
+				has_character_flag = FOE_great_leader_character
+				has_character_flag = FOE_dreamer_in_steel_character
+			}
 		}
 	}
 }
@@ -1080,6 +1134,7 @@ FOE_ai_is_critical_seat = {
 FOE_great_leader_country_valid = {
 	is_ai = yes
 	exists = yes
+	FOE_has_leader_character = yes
 	var:country_leader = { is_country_leader = yes }
 	capital_scope = { is_owned_by = PREV is_controlled_by = PREV }
 }
@@ -1090,6 +1145,7 @@ FOE_great_leader_roll_eligible = {
 	has_global_flag = FOE_campaign_great_leaders_enabled
 	NOT = { has_global_flag = FOE_campaign_setup_multiplayer }
 	# Country flags record past rolls; only the active character can block a successor.
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		NOT = { has_character_flag = FOE_great_leader_roll_completed }
 		NOT = { has_character_flag = FOE_great_leader_character }
@@ -1325,6 +1381,7 @@ FOE_assignment_suits_steadfast_librarian = {
 # Lord of the Long March
 # Country scope unless explicitly noted. ROOT must remain the marching country.
 FOE_is_lord_of_the_long_march = {
+	FOE_has_leader_character = yes
 	var:country_leader = {
 		has_character_flag = FOE_great_leader_character
 		has_character_flag = FOE_lord_of_the_long_march_character
@@ -1335,6 +1392,7 @@ FOE_is_lord_of_the_long_march = {
 FOE_march_probe_route_state = {
 	impassable = no
 	NOT = { is_owned_by = ROOT }
+	FOE_state_has_owner = yes
 	owner = {
 		FOE_march_hostile_candidate = yes
 		has_capitulated = no
@@ -1392,6 +1450,7 @@ FOE_march_route_candidate = {
 	impassable = no
 	NOT = { is_owned_by = ROOT }
 	NOT = { is_in_array = { array = ROOT.FOE_march_route_states value = THIS.id } }
+	FOE_state_has_owner = yes
 	owner = {
 		FOE_march_hostile_candidate = yes
 		has_capitulated = no

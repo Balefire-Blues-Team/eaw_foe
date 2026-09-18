@@ -3237,15 +3237,15 @@ FOE_update_sworn_core_margin = {
 FOE_reward_loyalty = {
 	FROM = {
 		if = {
-			limit = { any_neighbor_state = { owner = { FOE_is_loyal_oathsworn = yes } } }
+			limit = { any_neighbor_state = { FOE_state_has_owner = yes owner = { FOE_is_loyal_oathsworn = yes } } }
 			random_neighbor_state = {
-				limit = { owner = { FOE_is_loyal_oathsworn = yes } }
+				limit = { FOE_state_has_owner = yes owner = { FOE_is_loyal_oathsworn = yes } }
 				owner = { save_event_target_as = FOE_loyalty_recipient }
 			}
 		}
 		else = {
 			random_neighbor_state = {
-				limit = { owner = { FOE_is_oathsworn = yes } }
+				limit = { FOE_state_has_owner = yes owner = { FOE_is_oathsworn = yes } }
 				owner = { save_event_target_as = FOE_loyalty_recipient }
 			}
 		}
@@ -3297,10 +3297,17 @@ FOE_update_oathkeeper = {
 			add_dynamic_modifier = { modifier = FOE_burden_of_oaths_modifier }
 		}
 		force_update_dynamic_modifier = yes
+		# Raise the Wall targets: every state our Oathsworn own. The decision's own checks pick the border ones.
+		clear_array = FOE_oath_wall_targets
+		every_subject_country = {
+			limit = { has_autonomy_state = autonomy_oathsworn }
+			every_owned_state = { ROOT = { add_to_array = { FOE_oath_wall_targets = PREV.id } } }
+		}
 	}
 	else_if = {
 		limit = { has_variable = FOE_oaths_sworn }
 		clear_variable = FOE_oaths_sworn
+		clear_array = FOE_oath_wall_targets
 	}
 }
 
