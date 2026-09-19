@@ -596,45 +596,48 @@ country_event = {
 	option = {
 		name = special_rulers.16.e
 		trigger = {
-			NOT = { has_country_leader_with_trait = mythic_leader_magnate_trait }
+			NOT = { has_country_leader_with_trait = mythic_leader_exploiter_trait }
 		}
-		# Swaps any class trait, Mythic included, for the Magnate's.
+		# Swaps any class trait, Mythic and Multiclass included, for the Exploiter's.
 		FOE_remove_class_traits = yes
 		if = { limit = { has_country_leader_with_trait = mythic_leader_military_trait } remove_country_leader_trait = mythic_leader_military_trait }
 		if = { limit = { has_country_leader_with_trait = mythic_leader_admin_trait } remove_country_leader_trait = mythic_leader_admin_trait }
 		if = { limit = { has_country_leader_with_trait = mythic_leader_industry_trait } remove_country_leader_trait = mythic_leader_industry_trait }
-		add_country_leader_trait = mythic_leader_magnate_trait
-		FOE_initialize_deep_mine_sovereign = yes
+		if = { limit = { has_country_leader_with_trait = mythic_leader_ruler_trait } remove_country_leader_trait = mythic_leader_ruler_trait }
+		if = { limit = { has_country_leader_with_trait = mythic_leader_magnate_trait } remove_country_leader_trait = mythic_leader_magnate_trait }
+		add_country_leader_trait = mythic_leader_exploiter_trait
+		FOE_initialize_decadent_hedonist = yes
 	}
 
 	option = {
 		name = special_rulers.16.f
 		trigger = {
-			has_country_leader_with_trait = mythic_leader_magnate_trait
-			NOT = { FOE_is_deep_mine_sovereign = yes }
+			has_country_leader_with_trait = mythic_leader_exploiter_trait
+			NOT = { FOE_is_decadent_hedonist = yes }
 		}
-		FOE_initialize_deep_mine_sovereign = yes
+		FOE_initialize_decadent_hedonist = yes
 	}
 
-	# Finishes one dig now, free: depth +1, a slot, and the strike roll, with the report event.
+	# Decadence +25 at once: squanders the factories it passes and updates the Gilded Age.
 	option = {
 		name = special_rulers.16.g
 		trigger = {
-			FOE_is_deep_mine_sovereign = yes
-			check_variable = { FOE_mine_depth_shown < 10 }
+			FOE_is_decadent_hedonist = yes
+			check_variable = { FOE_decadence < 100 }
 		}
-		FOE_sink_the_shaft = yes
+		add_to_variable = { FOE_decadence = 25 }
+		FOE_after_decadence_change = yes
 	}
 
-	# Jumps the mine to Depth 10 so the Bottomless Mine starts rolling. Skipped digs grant no slots or finds.
+	# As if our leader had left: the gifted factories go, and above 50 Decadence The Hangover begins.
 	option = {
 		name = special_rulers.16.k
 		trigger = {
-			FOE_is_deep_mine_sovereign = yes
-			check_variable = { FOE_mine_depth_shown < 10 }
+			FOE_is_decadent_hedonist = yes
 		}
-		var:FOE_mine_state = { set_variable = { FOE_mine_depth = 10 } }
-		FOE_update_deep_mine_sovereign = yes
+		remove_country_leader_trait = FOE_decadent_hedonist_trait
+		var:country_leader = { clr_character_flag = FOE_decadent_hedonist_character }
+		FOE_update_decadent_hedonist = yes
 	}
 
 	option = {

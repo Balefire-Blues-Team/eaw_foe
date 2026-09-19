@@ -3316,6 +3316,206 @@ FOE_initialize_mentor = {
 	FOE_choose_heir = yes
 }
 
+#Decadent Hedonist Subclass (Exploiter)
+# Decadence (0-100): +3 a month at peace, +1 at war. The Gilded Age is worth full strength x (1 - Decadence / 50):
+# +15% factory output and attack, +10% organisation, construction and political power at 0, nothing at 50, and the
+# same as penalties at 100. Every 12.5 Decadence one of the eight gifted factories is squandered.
+
+# Country scope. The Gilded Age from the current Decadence.
+FOE_update_gilded_age = {
+	set_variable = { FOE_gilded_factor = FOE_decadence }
+	multiply_variable = { FOE_gilded_factor = -0.02 }
+	add_to_variable = { FOE_gilded_factor = 1 }
+	set_variable = { FOE_gilded_output = FOE_gilded_factor }
+	multiply_variable = { FOE_gilded_output = 0.15 }
+	set_variable = { FOE_gilded_attack = FOE_gilded_factor }
+	multiply_variable = { FOE_gilded_attack = 0.15 }
+	set_variable = { FOE_gilded_org = FOE_gilded_factor }
+	multiply_variable = { FOE_gilded_org = 0.10 }
+	set_variable = { FOE_gilded_construction = FOE_gilded_factor }
+	multiply_variable = { FOE_gilded_construction = 0.10 }
+	set_variable = { FOE_gilded_political = FOE_gilded_factor }
+	multiply_variable = { FOE_gilded_political = 0.10 }
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = FOE_gilded_age_modifier } } }
+		add_dynamic_modifier = { modifier = FOE_gilded_age_modifier }
+	}
+	force_update_dynamic_modifier = yes
+}
+
+# Country scope. Loses one gifted factory: military and civilian in turn, whichever kind is left.
+FOE_squander_one_factory = {
+	set_temp_variable = { FOE_squander_parity = FOE_squandered }
+	modulo_temp_variable = { var = FOE_squander_parity value = 2 }
+	if = {
+		limit = {
+			check_variable = { FOE_gift_mil_left > 0 }
+			OR = {
+				check_variable = { FOE_squander_parity = 0 }
+				check_variable = { FOE_gift_civ_left < 1 }
+			}
+		}
+		add_offsite_building = { type = arms_factory level = -1 }
+		subtract_from_variable = { FOE_gift_mil_left = 1 }
+	}
+	else_if = {
+		limit = { check_variable = { FOE_gift_civ_left > 0 } }
+		add_offsite_building = { type = industrial_complex level = -1 }
+		subtract_from_variable = { FOE_gift_civ_left = 1 }
+	}
+	add_to_variable = { FOE_squandered = 1 }
+}
+
+# Country scope. Squanders a factory for every 12.5 Decadence not yet paid for. Dry Out lowers Decadence but never
+# brings a factory back, so the count only catches up once Decadence climbs past the next step again.
+FOE_hedonist_squander = {
+	set_temp_variable = { FOE_squander_step = FOE_squandered }
+	add_to_temp_variable = { FOE_squander_step = 1 }
+	multiply_temp_variable = { FOE_squander_step = 12.5 }
+	while_loop_effect = {
+		limit = {
+			check_variable = { FOE_squandered < 8 }
+			# Inclusive: the eighth step is exactly 100, the cap.
+			NOT = { check_variable = { FOE_decadence < FOE_squander_step } }
+		}
+		FOE_squander_one_factory = yes
+		log = "FOE_HEDONIST [THIS.GetTag] squandered a factory, decadence=[?FOE_decadence]"
+		set_temp_variable = { FOE_squander_step = FOE_squandered }
+		add_to_temp_variable = { FOE_squander_step = 1 }
+		multiply_temp_variable = { FOE_squander_step = 12.5 }
+	}
+}
+
+# Country scope. Decadence changed (monthly tick or a decision).
+FOE_after_decadence_change = {
+	clamp_variable = { var = FOE_decadence min = 0 max = 100 }
+	FOE_hedonist_squander = yes
+	FOE_update_gilded_age = yes
+}
+
+# Country scope. The Hedonist's leader is gone. The remaining gifted factories go with it. Above 50 Decadence the
+# nation keeps the remaining penalties as The Hangover, fading to nothing over 12 months.
+FOE_hedonist_hangover = {
+	while_loop_effect = {
+		limit = { check_variable = { FOE_gift_mil_left > 0 } }
+		add_offsite_building = { type = arms_factory level = -1 }
+		subtract_from_variable = { FOE_gift_mil_left = 1 }
+	}
+	while_loop_effect = {
+		limit = { check_variable = { FOE_gift_civ_left > 0 } }
+		add_offsite_building = { type = industrial_complex level = -1 }
+		subtract_from_variable = { FOE_gift_civ_left = 1 }
+	}
+	if = {
+		limit = { check_variable = { FOE_decadence > 50 } }
+		set_variable = { FOE_hangover_base = FOE_gilded_factor }
+		set_variable = { FOE_hangover_months = 12 }
+		FOE_update_hangover = yes
+		log = "FOE_HEDONIST [THIS.GetTag] the Hedonist is gone, The Hangover begins (decadence=[?FOE_decadence])"
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = FOE_gilded_age_modifier } }
+		remove_dynamic_modifier = { modifier = FOE_gilded_age_modifier }
+	}
+	clear_variable = FOE_decadence
+	clear_variable = FOE_squandered
+	clear_variable = FOE_gift_mil_left
+	clear_variable = FOE_gift_civ_left
+	clear_variable = FOE_gilded_factor
+	clear_variable = FOE_gilded_output
+	clear_variable = FOE_gilded_attack
+	clear_variable = FOE_gilded_org
+	clear_variable = FOE_gilded_construction
+	clear_variable = FOE_gilded_political
+}
+
+# Country scope. The Hangover: the penalties the Hedonist left, scaled down by the months remaining.
+FOE_update_hangover = {
+	if = {
+		limit = { check_variable = { FOE_hangover_months > 0 } }
+		set_variable = { FOE_hangover_factor = FOE_hangover_months }
+		divide_variable = { FOE_hangover_factor = 12 }
+		multiply_variable = { FOE_hangover_factor = FOE_hangover_base }
+		set_variable = { FOE_hangover_output = FOE_hangover_factor }
+		multiply_variable = { FOE_hangover_output = 0.15 }
+		set_variable = { FOE_hangover_attack = FOE_hangover_factor }
+		multiply_variable = { FOE_hangover_attack = 0.15 }
+		set_variable = { FOE_hangover_org = FOE_hangover_factor }
+		multiply_variable = { FOE_hangover_org = 0.10 }
+		set_variable = { FOE_hangover_construction = FOE_hangover_factor }
+		multiply_variable = { FOE_hangover_construction = 0.10 }
+		set_variable = { FOE_hangover_political = FOE_hangover_factor }
+		multiply_variable = { FOE_hangover_political = 0.10 }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = FOE_hangover_modifier } } }
+			add_dynamic_modifier = { modifier = FOE_hangover_modifier }
+		}
+		force_update_dynamic_modifier = yes
+	}
+	else = {
+		if = {
+			limit = { has_dynamic_modifier = { modifier = FOE_hangover_modifier } }
+			remove_dynamic_modifier = { modifier = FOE_hangover_modifier }
+		}
+		clear_variable = FOE_hangover_months
+		clear_variable = FOE_hangover_base
+		clear_variable = FOE_hangover_factor
+		clear_variable = FOE_hangover_output
+		clear_variable = FOE_hangover_attack
+		clear_variable = FOE_hangover_org
+		clear_variable = FOE_hangover_construction
+		clear_variable = FOE_hangover_political
+	}
+}
+
+# Country scope. Monthly. A Hangover fades on its own schedule first, even while a new Hedonist rules, so it never
+# outlasts its year; a Hangover that starts this month is not shortened.
+FOE_update_decadent_hedonist = {
+	if = {
+		limit = { has_variable = FOE_hangover_months }
+		subtract_from_variable = { FOE_hangover_months = 1 }
+		FOE_update_hangover = yes
+	}
+	if = {
+		limit = { FOE_is_decadent_hedonist = yes }
+		if = {
+			limit = { has_war = yes }
+			add_to_variable = { FOE_decadence = 1 }
+		}
+		else = {
+			add_to_variable = { FOE_decadence = 3 }
+		}
+		FOE_after_decadence_change = yes
+		log = "FOE_HEDONIST [THIS.GetTag] decadence=[?FOE_decadence] factor=[?FOE_gilded_factor] squandered=[?FOE_squandered]"
+	}
+	else_if = {
+		limit = { has_variable = FOE_decadence }
+		FOE_hedonist_hangover = yes
+	}
+}
+
+# The Gilded Court: manpower, eight offsite factories and a technological inheritance to waste.
+FOE_initialize_decadent_hedonist = {
+	add_country_leader_trait = FOE_decadent_hedonist_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_decadent_hedonist_character
+	}
+	set_variable = { FOE_decadence = 0 }
+	set_variable = { FOE_squandered = 0 }
+	set_variable = { FOE_gift_mil_left = 4 }
+	set_variable = { FOE_gift_civ_left = 4 }
+	add_manpower = 1500
+	add_offsite_building = { type = industrial_complex level = 4 }
+	add_offsite_building = { type = arms_factory level = 4 }
+	add_equipment_to_stockpile = { type = energy_equipment_2 amount = 500 producer = OWE }
+	add_equipment_to_stockpile = { type = support_equipment amount = 200 producer = OWE }
+	add_equipment_to_stockpile = { type = spec_ops_equipment_2 amount = 100 producer = OWE }
+	add_equipment_to_stockpile = { type = energy_fireteam_equipment_2 amount = 100 producer = OWE }
+	add_equipment_to_stockpile = { type = flamer_demolitions_equipment_3 amount = 100 producer = OWE }
+	FOE_update_gilded_age = yes
+}
+
 # Country scope (ROOT), the Mentor's nation. Monthly.
 FOE_update_mentor = {
 	if = {
@@ -4543,6 +4743,10 @@ FOE_roll_exploiter_subclass = {
 		if = { limit = { NOT = { FOE_can_assign_whisper_broker = yes } } multiply_temp_variable = { FOE_audit_whisper_broker = 0 } }
 		if = { limit = { FOE_assignment_suits_whisper_broker = yes } multiply_temp_variable = { FOE_audit_whisper_broker = 1.5 } }
 		log = "FOE_ASSIGN [THIS.GetTag] class=exploiter candidate=whisper_broker weight=[?FOE_audit_whisper_broker] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_decadent_hedonist = 30 }
+		if = { limit = { NOT = { FOE_can_assign_decadent_hedonist = yes } } multiply_temp_variable = { FOE_audit_decadent_hedonist = 0 } }
+		if = { limit = { FOE_assignment_suits_decadent_hedonist = yes } multiply_temp_variable = { FOE_audit_decadent_hedonist = 1.5 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=exploiter candidate=decadent_hedonist weight=[?FOE_audit_decadent_hedonist] (zero=ineligible)"
 	}
 	random_list = {
 		log = yes
@@ -4565,6 +4769,12 @@ FOE_roll_exploiter_subclass = {
 			modifier = { factor = 1.5 FOE_assignment_suits_whisper_broker = yes }
 			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=exploiter selected=whisper_broker" }
 			FOE_initialize_whisper_broker = yes
+		}
+		30 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_decadent_hedonist = yes } }
+			modifier = { factor = 1.5 FOE_assignment_suits_decadent_hedonist = yes }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=exploiter selected=decadent_hedonist" }
+			FOE_initialize_decadent_hedonist = yes
 		}
 	}
 }

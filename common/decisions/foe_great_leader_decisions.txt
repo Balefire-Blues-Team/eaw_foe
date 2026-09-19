@@ -2567,6 +2567,68 @@ GEN_great_leader_decisions = {
 		}
 	}
 
+	#Decadent Hedonist: Lavish Triumph. A war bonus now, more Decadence later.
+	FOE_hedonist_lavish_triumph = {
+		icon = GFX_decision_generic_military
+		allowed = { always = yes }
+		cost = 50
+		fire_only_once = no
+		visible = { FOE_is_decadent_hedonist = yes }
+		available = {
+			has_war = yes
+			custom_trigger_tooltip = {
+				tooltip = FOE_triumph_ready_tt
+				NOT = { has_country_flag = FOE_triumph_cooldown }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_hedonist_lavish_triumph_tt
+			hidden_effect = {
+				set_country_flag = { flag = FOE_triumph_cooldown value = 1 days = 120 }
+				add_dynamic_modifier = { modifier = FOE_lavish_triumph_modifier days = 90 }
+				add_to_variable = { FOE_decadence = 5 }
+				FOE_after_decadence_change = yes
+			}
+		}
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	#Decadent Hedonist: Dry Out. Stability for Decadence; the squandered factories stay gone.
+	FOE_hedonist_dry_out = {
+		icon = GFX_decision_generic_industry
+		allowed = { always = yes }
+		fire_only_once = no
+		visible = { FOE_is_decadent_hedonist = yes }
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_dry_out_ready_tt
+				NOT = { has_country_flag = FOE_dry_out_cooldown }
+			}
+			check_variable = { FOE_decadence > 0 }
+			# The price has to be payable.
+			has_stability > 0.149
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_hedonist_dry_out_tt
+			add_stability = -0.15
+			hidden_effect = {
+				set_country_flag = { flag = FOE_dry_out_cooldown value = 1 days = 365 }
+				subtract_from_variable = { FOE_decadence = 15 }
+				FOE_after_decadence_change = yes
+			}
+		}
+		# Only once the bonuses have turned into penalties.
+		ai_will_do = {
+			base = 50
+			modifier = {
+				factor = 0
+				check_variable = { FOE_decadence < 50 }
+			}
+		}
+	}
+
 	#Lawgiver: the laws
 	FOE_lawgiver_enact_labour = {
 		icon = GFX_decision_unknown
