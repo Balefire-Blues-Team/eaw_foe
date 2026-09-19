@@ -969,6 +969,34 @@ FOE_holds_deep_mine = {
 	}
 }
 
+#Co-op subclasses: shared safeguards. Every co-op subclass (a Great Leader that elevates or binds another nation)
+# must use both of these, and must add its own bond variables to FOE_is_bonded. FOE_is_bonded applies to BOTH sides:
+# the candidate, and the founder in its FOE_can_assign_ trigger (a bonded nation's new leader must not start a
+# second bond).
+
+# COUNTRY scope. This nation is already part of a co-op bond, or has an elevation offer waiting. A nation can only
+# be in one bond at a time, across all co-op subclasses.
+FOE_is_bonded = {
+	OR = {
+		# Just Monarch and Loyal General
+		has_variable = FOE_loyal_general
+		has_variable = FOE_general_monarch
+		has_variable = FOE_monarch_offer_target
+		# Nemesis
+		has_variable = FOE_nemesis_rival
+		# Any co-op: an offer to this (human) nation is still open.
+		has_country_flag = FOE_elevation_offer_pending
+	}
+}
+
+# COUNTRY scope, a human nation. At most one elevation offer a year, from any co-op subclass. Whoever makes the
+# offer sets both flags on the human: FOE_elevation_offer_pending (30 days) and FOE_elevation_offer_cooldown
+# (365 days); the answer clears the pending flag.
+FOE_can_receive_elevation_offer = {
+	is_ai = no
+	NOT = { has_country_flag = FOE_elevation_offer_cooldown }
+}
+
 #Just Monarch (Ruler) and its Loyal General (a Conqueror subclass that is only ever granted, never rolled).
 # The bond: the Monarch's FOE_loyal_general and the General's FOE_general_monarch point at each other.
 FOE_is_just_monarch = {
@@ -998,6 +1026,7 @@ FOE_has_conqueror_subclass = {
 		FOE_is_chainbreaker = yes
 		FOE_is_lord_of_the_long_march = yes
 		FOE_is_loyal_general = yes
+		FOE_is_nemesis = yes
 	}
 }
 
@@ -1009,7 +1038,7 @@ FOE_is_general_candidate_basic = {
 	is_neighbor_of = ROOT
 	has_capitulated = no
 	NOT = { has_war_with = ROOT }
-	NOT = { has_variable = FOE_general_monarch }
+	NOT = { FOE_is_bonded = yes }
 	NOT = { tag = EYE }
 	NOT = { tag = SHA }
 	NOT = { tag = COM }
@@ -1051,7 +1080,7 @@ FOE_is_general_candidate_unled = {
 # Third choice: a human player, who is offered the elevation.
 FOE_is_general_candidate_human = {
 	FOE_is_general_candidate_basic = yes
-	is_ai = no
+	FOE_can_receive_elevation_offer = yes
 }
 
 FOE_has_general_candidate = {
@@ -1105,6 +1134,101 @@ FOE_is_general_tribute_state = {
 		FOE_state_has_owner = yes
 		is_owned_by = var:ROOT.FOE_general_monarch
 	}
+}
+
+#Nemesis (Conqueror co-op). Two neighbouring Conquerors bound to one decisive war after 800 days. Both carry the
+# subclass and store each other in FOE_nemesis_rival; the one that rolled it has the FOE_nemesis_founder flag.
+# The Reckoning lives on the country, so a new leader inherits it (FOE_nemesis_pass_to_successor).
+FOE_is_nemesis = {
+	FOE_has_leader_character = yes
+	var:country_leader = {
+		has_character_flag = FOE_great_leader_character
+		has_character_flag = FOE_nemesis_character
+	}
+}
+
+# COUNTRY scope. The Reckoning is still ahead, or being fought.
+FOE_has_active_reckoning = {
+	has_variable = FOE_nemesis_rival
+}
+
+# COUNTRY scope. Still racing for Preparation: the war has not begun yet.
+FOE_is_preparing_for_reckoning = {
+	FOE_has_active_reckoning = yes
+	NOT = { has_country_flag = FOE_nemesis_war_started }
+}
+
+# Foreign COUNTRY scope; ROOT is the Nemesis. Never a player, a faction member, a subject or the overlord.
+FOE_is_rival_candidate_basic = {
+	exists = yes
+	NOT = { tag = ROOT }
+	is_ai = yes
+	is_neighbor_of = ROOT
+	has_capitulated = no
+	NOT = { has_war_with = ROOT }
+	NOT = { FOE_is_bonded = yes }
+	NOT = { has_truce_with = ROOT }
+	NOT = { is_in_faction_with = ROOT }
+	NOT = { is_subject_of = ROOT }
+	NOT = { ROOT = { is_subject_of = PREV } }
+	NOT = { tag = EYE }
+	NOT = { tag = SHA }
+	NOT = { tag = COM }
+	NOT = { tag = OWE }
+	FOE_has_leader_character = yes
+	capital_scope = { is_owned_by = PREV is_controlled_by = PREV }
+}
+
+# First choice: a Conqueror without a subclass. It keeps its rank.
+FOE_is_rival_candidate_conqueror = {
+	FOE_is_rival_candidate_basic = yes
+	OR = {
+		has_country_leader_with_trait = great_leader_military_trait
+		has_country_leader_with_trait = legendary_leader_military_trait
+		has_country_leader_with_trait = mythic_leader_military_trait
+	}
+	NOT = { FOE_has_conqueror_subclass = yes }
+}
+
+# Otherwise: a nation without a Great Leader. It becomes a Great Conqueror.
+FOE_is_rival_candidate_unled = {
+	FOE_is_rival_candidate_basic = yes
+	NOT = { FOE_has_any_conqueror_tier = yes }
+	NOT = { FOE_has_any_administrator_tier = yes }
+	NOT = { FOE_has_any_industrialist_tier = yes }
+	var:country_leader = { NOT = { has_character_flag = FOE_great_leader_character } }
+}
+
+FOE_has_rival_candidate = {
+	any_neighbor_country = {
+		OR = {
+			FOE_is_rival_candidate_conqueror = yes
+			FOE_is_rival_candidate_unled = yes
+		}
+	}
+}
+
+# COUNTRY scope, a Nemesis. The war can still be declared: the Rival exists, stands, has no truce with us, and is
+# neither in our faction nor our subject or overlord. Otherwise the Reckoning is a draw.
+FOE_can_start_reckoning = {
+	has_variable = FOE_nemesis_rival
+	var:FOE_nemesis_rival = {
+		exists = yes
+		has_capitulated = no
+		NOT = { has_truce_with = PREV }
+		NOT = { is_in_faction_with = PREV }
+		NOT = { is_subject_of = PREV }
+		PREV = { NOT = { is_subject_of = PREV } }
+	}
+}
+
+# State scope; ROOT is the Nemesis. A core state we hold that can spare 1,000 ponies and is not devastated.
+FOE_is_wargames_state = {
+	is_owned_by = ROOT
+	is_controlled_by = ROOT
+	is_core_of = ROOT
+	state_population > 2000
+	NOT = { has_dynamic_modifier = { modifier = FOE_carrion_devastation } }
 }
 
 #Lawgiver
@@ -1437,8 +1561,16 @@ FOE_can_assign_deep_mine_sovereign = {
 # A Monarch needs someone to elevate. A leader whose Monarch subclass was aborted never gets it again.
 FOE_can_assign_just_monarch = {
 	FOE_great_leader_country_valid = yes
+	NOT = { FOE_is_bonded = yes }
 	var:country_leader = { NOT = { has_character_flag = FOE_monarch_aborted } }
 	FOE_has_general_candidate = yes
+}
+
+# A Nemesis needs a Rival next door.
+FOE_can_assign_nemesis = {
+	FOE_great_leader_country_valid = yes
+	NOT = { FOE_is_bonded = yes }
+	FOE_has_rival_candidate = yes
 }
 
 FOE_can_assign_lawgiver = {
@@ -1559,6 +1691,9 @@ FOE_assignment_suits_deep_mine_sovereign = {
 }
 FOE_assignment_suits_just_monarch = {
 	any_neighbor_country = { FOE_is_general_candidate_conqueror = yes }
+}
+FOE_assignment_suits_nemesis = {
+	any_neighbor_country = { FOE_is_rival_candidate_conqueror = yes }
 }
 FOE_assignment_suits_lawgiver = {
 	has_stability > 0.5

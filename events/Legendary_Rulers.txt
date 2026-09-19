@@ -926,13 +926,14 @@ country_event = {
 
 	option = {
 		name = special_rulers.25.a
+		clr_country_flag = FOE_elevation_offer_pending
 		if = {
 			limit = {
 				FROM = {
 					FOE_is_just_monarch = yes
 					has_country_flag = FOE_monarch_offer_pending
 				}
-				NOT = { has_variable = FOE_general_monarch }
+				NOT = { FOE_is_bonded = yes }
 			}
 			set_variable = { FOE_general_monarch = FROM }
 			FOE_make_loyal_general = yes
@@ -943,6 +944,7 @@ country_event = {
 	}
 	option = {
 		name = special_rulers.25.b
+		clr_country_flag = FOE_elevation_offer_pending
 		FROM = { clr_country_flag = FOE_monarch_offer_pending }
 	}
 }
@@ -972,4 +974,92 @@ country_event = {
 		name = special_rulers.27.b
 		add_stability = -0.15
 	}
+}
+
+#DEBUG: Nemesis menu (console "event special_rulers.28"). Debug paths skip the roll gate.
+country_event = {
+	id = special_rulers.28
+	title = special_rulers.28.t
+	desc = special_rulers.28.d
+	picture = GFX_event_NCR_startup
+	is_triggered_only = yes
+	fire_only_once = no
+
+	# Swaps any class trait, Mythic included, for Great Conqueror, so the victory rank-up can be seen.
+	# Needs a bordering AI Rival candidate; without one the log says "found no Rival" and nothing else happens.
+	option = {
+		name = special_rulers.28.a
+		trigger = {
+			NOT = { FOE_has_active_reckoning = yes }
+			NOT = { FOE_is_nemesis = yes }
+		}
+		FOE_remove_class_traits = yes
+		if = { limit = { has_country_leader_with_trait = mythic_leader_military_trait } remove_country_leader_trait = mythic_leader_military_trait }
+		if = { limit = { has_country_leader_with_trait = mythic_leader_admin_trait } remove_country_leader_trait = mythic_leader_admin_trait }
+		if = { limit = { has_country_leader_with_trait = mythic_leader_industry_trait } remove_country_leader_trait = mythic_leader_industry_trait }
+		add_country_leader_trait = great_leader_military_trait
+		FOE_initialize_nemesis = yes
+	}
+
+	option = {
+		name = special_rulers.28.b
+		trigger = { FOE_is_preparing_for_reckoning = yes }
+		set_variable = { FOE_nemesis_preparation = 20 }
+	}
+
+	# Day 800 now: the pact ends, war is declared (or a draw is called) and Preparation is spent.
+	option = {
+		name = special_rulers.28.c
+		trigger = { FOE_is_preparing_for_reckoning = yes }
+		FOE_nemesis_reckoning_due = yes
+	}
+
+	# As if the Rival had capitulated, then a white peace ends the war. The weekly update then resolves both sides:
+	# we win, and the Rival survives as the loser.
+	option = {
+		name = special_rulers.28.e
+		trigger = {
+			FOE_has_active_reckoning = yes
+			has_country_flag = FOE_nemesis_war_started
+			has_war_with = var:FOE_nemesis_rival
+		}
+		set_country_flag = FOE_nemesis_rival_fell
+		var:FOE_nemesis_rival = {
+			set_country_flag = FOE_nemesis_we_fell
+			PREV = { white_peace = PREV }
+		}
+	}
+
+	# Every Rival state becomes ours, so the Rival is gone. Next week we win; a Mythic victor cores them.
+	option = {
+		name = special_rulers.28.f
+		trigger = {
+			FOE_has_active_reckoning = yes
+			has_country_flag = FOE_nemesis_war_started
+			var:FOE_nemesis_rival = { exists = yes }
+		}
+		var:FOE_nemesis_rival = {
+			every_owned_state = { transfer_state_to = ROOT }
+		}
+	}
+
+	# One Conqueror rank up (Great, Legendary, Mythic), e.g. to test a Mythic victor's cores.
+	option = {
+		name = special_rulers.28.g
+		trigger = {
+			FOE_is_nemesis = yes
+			NOT = { has_country_leader_with_trait = mythic_leader_military_trait }
+		}
+		FOE_nemesis_rank_up = yes
+		FOE_update_nemesis_rank = yes
+	}
+
+	# Runs this week's update now instead of waiting.
+	option = {
+		name = special_rulers.28.h
+		trigger = { FOE_has_active_reckoning = yes }
+		FOE_update_nemesis = yes
+	}
+
+	option = { name = special_rulers.28.close }
 }

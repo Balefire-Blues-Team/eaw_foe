@@ -517,6 +517,57 @@ on_actions = {
 		}
 	}
 
+	#Nemesis actions
+	on_weekly = {
+		effect = {
+			if = {
+				limit = {
+					has_global_flag = FOE_campaign_great_leaders_enabled
+					FOE_has_active_reckoning = yes
+				}
+				FOE_update_nemesis = yes
+			}
+		}
+	}
+
+	# ROOT is the country that capitulated. Only a capitulation during the Reckoning, while the two are at war, counts.
+	on_capitulation = {
+		effect = {
+			if = {
+				limit = {
+					has_global_flag = FOE_campaign_great_leaders_enabled
+					FOE_has_active_reckoning = yes
+					has_country_flag = FOE_nemesis_war_started
+				}
+				var:FOE_nemesis_rival = {
+					if = {
+						limit = { has_war_with = PREV }
+						set_country_flag = FOE_nemesis_rival_fell
+						PREV = { set_country_flag = FOE_nemesis_we_fell }
+					}
+				}
+			}
+		}
+	}
+
+	# FROM is the army leader's country. Every 25 wins while preparing: +1 Preparation.
+	on_army_leader_won_combat = {
+		effect = {
+			if = {
+				limit = { has_global_flag = FOE_campaign_great_leaders_enabled }
+				FROM = {
+					if = {
+						limit = {
+							FOE_is_nemesis = yes
+							FOE_is_preparing_for_reckoning = yes
+						}
+						FOE_count_nemesis_victory = yes
+					}
+				}
+			}
+		}
+	}
+
 	#Lawgiver actions
 	on_monthly = {
 		effect = {

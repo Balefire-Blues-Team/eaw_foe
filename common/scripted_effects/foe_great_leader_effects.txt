@@ -11,6 +11,8 @@ FOE_mark_great_leader_roll_completed = {
 # Poll the incumbent: same-party scripted successions need not change the government.
 # Run in country scope from on_weekly so the event chain receives the successor's country as ROOT.
 FOE_check_great_leader_succession = {
+	# A Reckoning outlives the leader who swore it: the successor inherits it before any new roll.
+	FOE_nemesis_pass_to_successor = yes
 	if = {
 		limit = {
 			has_global_flag = FOE_campaign_setup_confirmed
@@ -2582,6 +2584,10 @@ FOE_roll_conqueror_subclass = {
 		if = { limit = { has_government = visionary } multiply_temp_variable = { FOE_audit_chainbreaker = 2 } }
 		if = { limit = { FOE_assignment_suits_chainbreaker = yes } multiply_temp_variable = { FOE_audit_chainbreaker = 1.5 } }
 		log = "FOE_ASSIGN [THIS.GetTag] class=conqueror candidate=chainbreaker weight=[?FOE_audit_chainbreaker] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_nemesis = 10 }
+		if = { limit = { NOT = { FOE_can_assign_nemesis = yes } } multiply_temp_variable = { FOE_audit_nemesis = 0 } }
+		if = { limit = { FOE_assignment_suits_nemesis = yes } multiply_temp_variable = { FOE_audit_nemesis = 1.5 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=conqueror candidate=nemesis weight=[?FOE_audit_nemesis] (zero=ineligible)"
 	}
 	random_list = {
 		log = yes
@@ -2655,6 +2661,12 @@ FOE_roll_conqueror_subclass = {
 			modifier = { factor = 1.5 FOE_assignment_suits_chainbreaker = yes }
 			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=conqueror selected=chainbreaker" }
 			FOE_initialize_chainbreaker = yes
+		}
+		10 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_nemesis = yes } }
+			modifier = { factor = 1.5 FOE_assignment_suits_nemesis = yes }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=conqueror selected=nemesis" }
+			FOE_initialize_nemesis = yes
 		}
 	}
 }
@@ -3970,6 +3982,8 @@ FOE_choose_loyal_general = {
 				set_variable = { FOE_monarch_offer_target = PREV }
 				set_country_flag = { flag = FOE_monarch_offer_pending value = 1 days = 30 }
 			}
+			set_country_flag = { flag = FOE_elevation_offer_pending value = 1 days = 30 }
+			set_country_flag = { flag = FOE_elevation_offer_cooldown value = 1 days = 365 }
 			country_event = { id = special_rulers.25 }
 			log = "FOE_MONARCH [ROOT.GetTag] offers elevation to [THIS.GetTag]"
 		}
@@ -4143,6 +4157,463 @@ FOE_initialize_just_monarch = {
 	}
 	FOE_choose_loyal_general = yes
 	FOE_update_just_monarch = yes
+}
+
+#Nemesis Subclass (Conqueror co-op)
+# Preparation (0-20), the victory counter and the Reckoning itself live on the country. Effects that may run for the
+# Rival from the founder's scope (make, liquidate, conclude) never use ROOT.
+
+# Country scope. Remembers the leader's Conqueror rank (1-3) so a successor can inherit it.
+FOE_update_nemesis_rank = {
+	if = {
+		limit = { FOE_has_mythic_conqueror_tier = yes }
+		set_variable = { FOE_nemesis_rank = 3 }
+	}
+	else_if = {
+		limit = { FOE_has_legendary_or_mythic_conqueror_tier = yes }
+		set_variable = { FOE_nemesis_rank = 2 }
+	}
+	else = {
+		set_variable = { FOE_nemesis_rank = 1 }
+	}
+}
+
+# Country scope, either Nemesis; FOE_nemesis_rival is already set. The subclass, the race and the countdown.
+FOE_make_nemesis = {
+	add_country_leader_trait = FOE_nemesis_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_nemesis_character
+		set_character_flag = FOE_great_leader_roll_completed
+	}
+	set_variable = { FOE_nemesis_preparation = 0 }
+	set_variable = { FOE_nemesis_victories = 0 }
+	activate_mission = FOE_nemesis_the_reckoning
+	FOE_update_nemesis_rank = yes
+}
+
+# Country scope, the founder (ROOT). Picks the Rival: a Conqueror without a subclass first, otherwise a nation
+# without a Great Leader, which becomes a Great Conqueror. The two sign a non-aggression pact until the Reckoning.
+FOE_choose_nemesis_rival = {
+	if = {
+		limit = { any_neighbor_country = { FOE_is_rival_candidate_conqueror = yes } }
+		random_neighbor_country = {
+			limit = { FOE_is_rival_candidate_conqueror = yes }
+			save_event_target_as = FOE_new_rival
+		}
+	}
+	else_if = {
+		limit = { any_neighbor_country = { FOE_is_rival_candidate_unled = yes } }
+		random_neighbor_country = {
+			limit = { FOE_is_rival_candidate_unled = yes }
+			add_country_leader_trait = great_leader_military_trait
+			save_event_target_as = FOE_new_rival
+		}
+	}
+	if = {
+		limit = { has_event_target = FOE_new_rival }
+		event_target:FOE_new_rival = {
+			set_variable = { FOE_nemesis_rival = ROOT }
+			ROOT = { set_variable = { FOE_nemesis_rival = PREV } }
+			FOE_make_nemesis = yes
+			if = {
+				limit = { NOT = { has_non_aggression_pact_with = ROOT } }
+				diplomatic_relation = {
+					country = ROOT
+					relation = non_aggression_pact
+					active = yes
+				}
+			}
+			log = "FOE_NEMESIS [ROOT.GetTag] swore a Reckoning against [THIS.GetTag]"
+		}
+	}
+}
+
+FOE_initialize_nemesis = {
+	set_country_flag = FOE_nemesis_founder
+	FOE_choose_nemesis_rival = yes
+	if = {
+		limit = { has_variable = FOE_nemesis_rival }
+		FOE_make_nemesis = yes
+	}
+	else = {
+		log = "FOE_NEMESIS [THIS.GetTag] found no Rival"
+	}
+}
+
+# Country scope. One Preparation, at most 20.
+FOE_add_nemesis_preparation = {
+	add_to_variable = { FOE_nemesis_preparation = 1 }
+	clamp_variable = { var = FOE_nemesis_preparation min = 0 max = 20 }
+}
+
+# Country scope; on_army_leader_won_combat reaches this with the army leader as ROOT. Every 25 wins: +1 Preparation.
+FOE_count_nemesis_victory = {
+	add_to_variable = { FOE_nemesis_victories = 1 }
+	if = {
+		limit = { check_variable = { FOE_nemesis_victories > 24 } }
+		set_variable = { FOE_nemesis_victories = 0 }
+		FOE_add_nemesis_preparation = yes
+	}
+}
+
+# Country scope. The Nemesis Division template, created once (the Saint's Sainted Host composition).
+FOE_create_nemesis_template = {
+	if = {
+		limit = { NOT = { has_template = "Nemesis Division" } }
+		division_template = {
+			name = "Nemesis Division"
+			is_locked = yes
+			regiments = {
+				heavy_infantry = { x = 0 y = 0 }
+				heavy_infantry = { x = 0 y = 1 }
+				heavy_infantry = { x = 0 y = 2 }
+				heavy_infantry = { x = 0 y = 3 }
+				heavy_infantry = { x = 0 y = 4 }
+				spec_ops = { x = 1 y = 0 }
+				spec_ops = { x = 1 y = 1 }
+				spec_ops = { x = 1 y = 2 }
+				spec_ops = { x = 1 y = 3 }
+				spec_ops = { x = 1 y = 4 }
+			}
+			support = {
+				medical_chem_company = { x = 0 y = 0 }
+			}
+		}
+	}
+}
+
+# Country scope, one Nemesis. The war has begun: all Preparation turns into Decisive Strike (+1% attack, organisation
+# and breakthrough each), a Nemesis Division per 2 and a military factory per 4. The Rival's states are remembered
+# for a Mythic victor's cores.
+FOE_liquidate_preparation = {
+	if = {
+		limit = { NOT = { has_country_flag = FOE_nemesis_war_started } }
+		set_country_flag = FOE_nemesis_war_started
+		clear_variable = FOE_nemesis_declaration_wait
+		if = {
+			limit = { has_active_mission = FOE_nemesis_the_reckoning }
+			remove_mission = FOE_nemesis_the_reckoning
+		}
+		save_event_target_as = FOE_liquidating_nemesis
+		clear_array = FOE_nemesis_rival_states
+		var:FOE_nemesis_rival = {
+			every_owned_state = {
+				event_target:FOE_liquidating_nemesis = { add_to_array = { FOE_nemesis_rival_states = PREV.id } }
+			}
+		}
+		set_variable = { FOE_decisive_strike = FOE_nemesis_preparation }
+		multiply_variable = { FOE_decisive_strike = 0.01 }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = FOE_decisive_strike_modifier } } }
+			add_dynamic_modifier = { modifier = FOE_decisive_strike_modifier }
+		}
+		force_update_dynamic_modifier = yes
+		FOE_create_nemesis_template = yes
+		set_temp_variable = { FOE_nemesis_left = FOE_nemesis_preparation }
+		while_loop_effect = {
+			limit = { check_variable = { FOE_nemesis_left > 1 } }
+			capital_scope = {
+				create_unit = {
+					division = "name = \"Nemesis Division\" division_template = \"Nemesis Division\" start_experience_factor = 0.5 start_equipment_factor = 1.0"
+					owner = PREV
+				}
+			}
+			subtract_from_temp_variable = { FOE_nemesis_left = 2 }
+		}
+		set_temp_variable = { FOE_nemesis_left = FOE_nemesis_preparation }
+		while_loop_effect = {
+			limit = { check_variable = { FOE_nemesis_left > 3 } }
+			if = {
+				limit = {
+					any_owned_state = {
+						is_core_of = PREV
+						is_controlled_by = PREV
+						free_building_slots = { building = arms_factory size > 0 }
+					}
+				}
+				random_owned_state = {
+					limit = {
+						is_core_of = PREV
+						is_controlled_by = PREV
+						free_building_slots = { building = arms_factory size > 0 }
+					}
+					add_building_construction = { type = arms_factory level = 1 instant_build = yes }
+				}
+			}
+			else = {
+				add_offsite_building = { type = arms_factory level = 1 }
+			}
+			subtract_from_temp_variable = { FOE_nemesis_left = 4 }
+		}
+		log = "FOE_NEMESIS [THIS.GetTag] Reckoning begins, Preparation=[?FOE_nemesis_preparation]"
+		set_variable = { FOE_nemesis_preparation = 0 }
+	}
+}
+
+# Country scope, either Nemesis. Both sides go to war footing at once.
+FOE_begin_reckoning = {
+	FOE_liquidate_preparation = yes
+	var:FOE_nemesis_rival = {
+		if = {
+			limit = { exists = yes }
+			FOE_liquidate_preparation = yes
+		}
+	}
+}
+
+# Country scope. Day 800 (either side's mission). Declares the war, or calls a draw if it cannot be declared.
+# Preparation is only spent once the war really exists; a declaration that did not go through is a draw too.
+FOE_nemesis_reckoning_due = {
+	if = {
+		limit = { FOE_is_preparing_for_reckoning = yes }
+		if = {
+			limit = { FOE_can_start_reckoning = yes }
+			var:FOE_nemesis_rival = {
+				if = {
+					limit = { NOT = { has_war_with = PREV } }
+					if = {
+						limit = { has_non_aggression_pact_with = PREV }
+						diplomatic_relation = {
+							country = PREV
+							relation = non_aggression_pact
+							active = no
+						}
+					}
+					PREV = {
+						declare_war_on = {
+							target = PREV
+							type = annex_everything
+						}
+					}
+				}
+			}
+		}
+		if = {
+			limit = {
+				FOE_can_start_reckoning = yes
+				has_war_with = var:FOE_nemesis_rival
+			}
+			FOE_begin_reckoning = yes
+		}
+		# Declared, but the war is not visible yet: the weekly update waits up to two ticks before calling a draw.
+		else_if = {
+			limit = { FOE_can_start_reckoning = yes }
+			set_variable = { FOE_nemesis_declaration_wait = 2 }
+			log = "FOE_NEMESIS [THIS.GetTag] war declared, waiting for it to register"
+		}
+		else = {
+			FOE_nemesis_draw = yes
+		}
+	}
+}
+
+# Country scope. The Reckoning could not be fought: it ends for both sides, and nothing is paid out.
+FOE_nemesis_draw = {
+	log = "FOE_NEMESIS [THIS.GetTag] the Reckoning cannot be declared: a draw"
+	var:FOE_nemesis_rival = {
+		if = {
+			limit = {
+				exists = yes
+				has_variable = FOE_nemesis_rival
+			}
+			FOE_conclude_reckoning = yes
+		}
+	}
+	FOE_conclude_reckoning = yes
+}
+
+# Country scope. One rank up: Great to Legendary, Legendary to Mythic.
+FOE_nemesis_rank_up = {
+	if = {
+		limit = { has_country_leader_with_trait = great_leader_military_trait }
+		remove_country_leader_trait = great_leader_military_trait
+		add_country_leader_trait = legendary_leader_military_trait
+	}
+	else_if = {
+		limit = { has_country_leader_with_trait = legendary_leader_military_trait }
+		remove_country_leader_trait = legendary_leader_military_trait
+		add_country_leader_trait = mythic_leader_military_trait
+	}
+}
+
+# Country scope. The Reckoning is over for this side, however it ended. Unused Preparation is lost.
+FOE_conclude_reckoning = {
+	if = {
+		limit = { has_active_mission = FOE_nemesis_the_reckoning }
+		remove_mission = FOE_nemesis_the_reckoning
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = FOE_decisive_strike_modifier } }
+		remove_dynamic_modifier = { modifier = FOE_decisive_strike_modifier }
+	}
+	clear_variable = FOE_nemesis_rival
+	clear_variable = FOE_nemesis_preparation
+	clear_variable = FOE_nemesis_victories
+	clear_variable = FOE_decisive_strike
+	clear_variable = FOE_nemesis_declaration_wait
+	clear_array = FOE_nemesis_rival_states
+	clr_country_flag = FOE_nemesis_war_started
+	clr_country_flag = FOE_nemesis_claims_laid
+	clr_country_flag = FOE_nemesis_rival_fell
+	clr_country_flag = FOE_nemesis_we_fell
+	set_country_flag = FOE_nemesis_concluded
+}
+
+# Country scope (ROOT; only from this side's own weekly update or debug). The war with the Rival is over.
+# Victory: the Rival capitulated or is gone. The victor ranks up and gains Spoils to the Victor, a Victor's Peace
+# for 365 days, and, if it is now Mythic, cores on every state it took from the Rival. A loser that survives loses
+# the subclass and its Conqueror class. Anything else is a draw.
+FOE_resolve_reckoning = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = FOE_nemesis_we_fell }
+			OR = {
+				has_country_flag = FOE_nemesis_rival_fell
+				var:FOE_nemesis_rival = { exists = no }
+			}
+		}
+		log = "FOE_NEMESIS [THIS.GetTag] won the Reckoning"
+		# The defeated Rival's claims on our land go with it.
+		var:FOE_nemesis_rival = {
+			every_state = {
+				limit = {
+					is_owned_by = ROOT
+					is_claimed_by = PREV
+				}
+				remove_claim_by = PREV
+			}
+		}
+		FOE_nemesis_rank_up = yes
+		FOE_update_nemesis_rank = yes
+		add_dynamic_modifier = { modifier = FOE_spoils_to_the_victor_modifier }
+		add_dynamic_modifier = { modifier = FOE_victors_peace_modifier days = 365 }
+		if = {
+			limit = { FOE_has_mythic_conqueror_tier = yes }
+			every_owned_state = {
+				limit = {
+					is_in_array = { array = ROOT.FOE_nemesis_rival_states value = THIS.id }
+					NOT = { is_core_of = ROOT }
+				}
+				add_core_of = ROOT
+			}
+		}
+	}
+	else_if = {
+		limit = { has_country_flag = FOE_nemesis_we_fell }
+		log = "FOE_NEMESIS [THIS.GetTag] lost the Reckoning"
+		if = { limit = { FOE_is_nemesis = yes } remove_country_leader_trait = FOE_nemesis_trait }
+		if = { limit = { has_country_leader_with_trait = great_leader_military_trait } remove_country_leader_trait = great_leader_military_trait }
+		if = { limit = { has_country_leader_with_trait = legendary_leader_military_trait } remove_country_leader_trait = legendary_leader_military_trait }
+		if = { limit = { has_country_leader_with_trait = mythic_leader_military_trait } remove_country_leader_trait = mythic_leader_military_trait }
+		if = {
+			limit = { FOE_has_leader_character = yes }
+			var:country_leader = { clr_character_flag = FOE_nemesis_character }
+			# A combo leader keeps its Multiclass trait and stays a Great Leader.
+			if = {
+				limit = {
+					NOT = { FOE_has_any_conqueror_tier = yes }
+					NOT = { FOE_has_any_administrator_tier = yes }
+					NOT = { FOE_has_any_industrialist_tier = yes }
+				}
+				var:country_leader = { clr_character_flag = FOE_great_leader_character }
+			}
+		}
+	}
+	else = {
+		log = "FOE_NEMESIS [THIS.GetTag] the Reckoning ended in a draw"
+	}
+	FOE_conclude_reckoning = yes
+}
+
+# Country scope. A new leader inherits an active Reckoning: the subclass, and the old rank if it has no class.
+FOE_nemesis_pass_to_successor = {
+	if = {
+		limit = {
+			FOE_has_active_reckoning = yes
+			FOE_has_leader_character = yes
+			NOT = { FOE_is_nemesis = yes }
+		}
+		if = {
+			limit = {
+				NOT = { FOE_has_any_conqueror_tier = yes }
+				NOT = { FOE_has_any_administrator_tier = yes }
+				NOT = { FOE_has_any_industrialist_tier = yes }
+			}
+			if = {
+				limit = { check_variable = { FOE_nemesis_rank > 2 } }
+				add_country_leader_trait = mythic_leader_military_trait
+			}
+			else_if = {
+				limit = { check_variable = { FOE_nemesis_rank > 1 } }
+				add_country_leader_trait = legendary_leader_military_trait
+			}
+			else = {
+				add_country_leader_trait = great_leader_military_trait
+			}
+		}
+		add_country_leader_trait = FOE_nemesis_trait
+		var:country_leader = {
+			set_character_flag = FOE_great_leader_character
+			set_character_flag = FOE_nemesis_character
+			set_character_flag = FOE_great_leader_roll_completed
+		}
+		log = "FOE_NEMESIS [THIS.GetTag] a new leader inherits the Reckoning"
+	}
+}
+
+# Country scope (ROOT). Weekly. Inherits, starts the war early if the pair were dragged into one, calls a draw if the
+# Rival vanished before the war, and resolves the war once the two are no longer fighting.
+FOE_update_nemesis = {
+	if = {
+		limit = { FOE_has_active_reckoning = yes }
+		FOE_nemesis_pass_to_successor = yes
+		FOE_update_nemesis_rank = yes
+		if = {
+			limit = { NOT = { has_country_flag = FOE_nemesis_war_started } }
+			if = {
+				limit = { var:FOE_nemesis_rival = { exists = no } }
+				log = "FOE_NEMESIS [THIS.GetTag] the Rival is gone before the Reckoning: a draw"
+				FOE_conclude_reckoning = yes
+			}
+			else_if = {
+				limit = { has_war_with = var:FOE_nemesis_rival }
+				log = "FOE_NEMESIS [THIS.GetTag] at war with the Rival: the Reckoning begins"
+				FOE_begin_reckoning = yes
+			}
+			else_if = {
+				limit = { has_variable = FOE_nemesis_declaration_wait }
+				subtract_from_variable = { FOE_nemesis_declaration_wait = 1 }
+				if = {
+					limit = { check_variable = { FOE_nemesis_declaration_wait < 1 } }
+					FOE_nemesis_draw = yes
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				OR = {
+					var:FOE_nemesis_rival = { exists = no }
+					NOT = { has_war_with = var:FOE_nemesis_rival }
+				}
+			}
+			FOE_resolve_reckoning = yes
+		}
+		# The first week of the war: we claim every state the Rival owns. Done here because it needs ROOT.
+		else_if = {
+			limit = { NOT = { has_country_flag = FOE_nemesis_claims_laid } }
+			set_country_flag = FOE_nemesis_claims_laid
+			var:FOE_nemesis_rival = {
+				every_owned_state = {
+					limit = {
+						NOT = { is_core_of = ROOT }
+						NOT = { is_claimed_by = ROOT }
+					}
+					add_claim_by = ROOT
+				}
+			}
+		}
+	}
 }
 
 #Lawgiver Subclass
