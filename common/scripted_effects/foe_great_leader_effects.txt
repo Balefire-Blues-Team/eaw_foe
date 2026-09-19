@@ -3173,6 +3173,10 @@ FOE_roll_magnate_subclass = {
 		if = { limit = { NOT = { FOE_can_assign_railroad_tycoon = yes } } multiply_temp_variable = { FOE_audit_railroad_tycoon = 0 } }
 		if = { limit = { FOE_assignment_suits_railroad_tycoon = yes } multiply_temp_variable = { FOE_audit_railroad_tycoon = 1.5 } }
 		log = "FOE_ASSIGN [THIS.GetTag] class=magnate candidate=railroad_tycoon weight=[?FOE_audit_railroad_tycoon] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_deep_mine_sovereign = 30 }
+		if = { limit = { NOT = { FOE_can_assign_deep_mine_sovereign = yes } } multiply_temp_variable = { FOE_audit_deep_mine_sovereign = 0 } }
+		if = { limit = { FOE_assignment_suits_deep_mine_sovereign = yes } multiply_temp_variable = { FOE_audit_deep_mine_sovereign = 1.5 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=magnate candidate=deep_mine_sovereign weight=[?FOE_audit_deep_mine_sovereign] (zero=ineligible)"
 	}
 	random_list = {
 		log = yes
@@ -3189,6 +3193,12 @@ FOE_roll_magnate_subclass = {
 			modifier = { factor = 1.5 FOE_assignment_suits_railroad_tycoon = yes }
 			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=magnate selected=railroad_tycoon" }
 			FOE_initialize_railroad_tycoon = yes
+		}
+		30 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_deep_mine_sovereign = yes } }
+			modifier = { factor = 1.5 FOE_assignment_suits_deep_mine_sovereign = yes }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=magnate selected=deep_mine_sovereign" }
+			FOE_initialize_deep_mine_sovereign = yes
 		}
 	}
 }
@@ -3495,6 +3505,289 @@ FOE_initialize_railroad_tycoon = {
 		set_character_flag = FOE_railroad_tycoon_character
 	}
 	FOE_update_railroad_tycoon = yes
+}
+
+#Deep Mine Sovereign Subclass (Magnate)
+# The mine's depth, finds and bottomless strikes live on the STATE, so they stay in the ground when it changes hands.
+# Result codes in FOE_mine_last_find: 1 metal, 2 energy, 3 water, 4 composites, 5 circuitry, 6 advanced,
+# 7 crystals, 0 dry shaft, -1 cave-in.
+
+# State scope, the mine; ROOT is the Sovereign. Strikes 2 + Depth/3 (rounded down) of a random resource.
+# Advanced resources can be struck from Depth 3, crystals from Depth 6.
+FOE_mine_strike = {
+	set_variable = { FOE_mine_find_amount = FOE_mine_depth }
+	set_temp_variable = { FOE_mine_rest = FOE_mine_depth }
+	modulo_temp_variable = { var = FOE_mine_rest value = 3 }
+	subtract_from_variable = { FOE_mine_find_amount = FOE_mine_rest }
+	divide_variable = { FOE_mine_find_amount = 3 }
+	add_to_variable = { FOE_mine_find_amount = 2 }
+	random_list = {
+		log = yes
+		30 = { set_variable = { FOE_mine_last_find = 1 } }
+		20 = { set_variable = { FOE_mine_last_find = 2 } }
+		20 = { set_variable = { FOE_mine_last_find = 3 } }
+		15 = { set_variable = { FOE_mine_last_find = 4 } }
+		15 = { set_variable = { FOE_mine_last_find = 5 } }
+		10 = {
+			modifier = { factor = 0 check_variable = { FOE_mine_depth < 3 } }
+			set_variable = { FOE_mine_last_find = 6 }
+		}
+		5 = {
+			modifier = { factor = 0 check_variable = { FOE_mine_depth < 6 } }
+			set_variable = { FOE_mine_last_find = 7 }
+		}
+	}
+	set_temp_variable = { FOE_mine_left = FOE_mine_find_amount }
+	while_loop_effect = {
+		limit = { check_variable = { FOE_mine_left > 0 } }
+		if = {
+			limit = { check_variable = { FOE_mine_last_find = 1 } }
+			add_resource = { type = metal amount = 1 }
+		}
+		else_if = {
+			limit = { check_variable = { FOE_mine_last_find = 2 } }
+			add_resource = { type = energy amount = 1 }
+		}
+		else_if = {
+			limit = { check_variable = { FOE_mine_last_find = 3 } }
+			add_resource = { type = water amount = 1 }
+		}
+		else_if = {
+			limit = { check_variable = { FOE_mine_last_find = 4 } }
+			add_resource = { type = composites amount = 1 }
+		}
+		else_if = {
+			limit = { check_variable = { FOE_mine_last_find = 5 } }
+			add_resource = { type = circuitry amount = 1 }
+		}
+		else_if = {
+			limit = { check_variable = { FOE_mine_last_find = 6 } }
+			add_resource = { type = advanced amount = 1 }
+		}
+		else = {
+			add_resource = { type = crystals amount = 1 }
+		}
+		subtract_from_temp_variable = { FOE_mine_left = 1 }
+	}
+}
+
+# Country scope. Copies the mine's last result to the country for the report event (humans only).
+FOE_report_mine_find = {
+	var:FOE_mine_state = {
+		ROOT = {
+			set_variable = { FOE_mine_last_find = PREV.FOE_mine_last_find }
+			set_variable = { FOE_mine_last_amount = PREV.FOE_mine_find_amount }
+		}
+	}
+	if = {
+		limit = { is_ai = no }
+		country_event = { id = special_rulers.24 }
+	}
+}
+
+# Country scope. The dig is over. If the leader is still the Sovereign and we still hold the mine, it goes one level deeper, its state gains a shared
+# building slot, and the shaft rolls 70% strike / 20% dry / 10% cave-in.
+FOE_sink_the_shaft = {
+	if = {
+		limit = {
+			FOE_is_deep_mine_sovereign = yes
+			FOE_holds_deep_mine = yes
+		}
+		var:FOE_mine_state = {
+			add_to_variable = { FOE_mine_depth = 1 }
+			add_extra_state_shared_building_slots = 1
+			random_list = {
+				log = yes
+				70 = { FOE_mine_strike = yes }
+				20 = {
+					set_variable = { FOE_mine_last_find = 0 }
+					set_variable = { FOE_mine_find_amount = 0 }
+				}
+				10 = {
+					set_variable = { FOE_mine_last_find = -1 }
+					set_variable = { FOE_mine_find_amount = 0 }
+					add_manpower = -500
+					ROOT = { add_dynamic_modifier = { modifier = FOE_mine_cave_in_modifier days = 60 } }
+				}
+			}
+		}
+		FOE_report_mine_find = yes
+	}
+	FOE_update_deep_mine_sovereign = yes
+}
+
+# Country scope. The mine opens under the current capital (a state that was dug before keeps its depth). If the
+# capital can't hold a mine, it opens in another state we own and control, a core if we have one. With none, we
+# have no mine until a later monthly update finds one.
+FOE_found_deep_mine = {
+	clear_variable = FOE_mine_state
+	if = {
+		limit = { capital_scope = { FOE_is_minable_state = yes } }
+		capital_scope = { save_event_target_as = FOE_new_mine }
+	}
+	else_if = {
+		limit = {
+			any_owned_state = {
+				FOE_is_held_mine = yes
+				FOE_is_minable_state = yes
+				is_core_of = ROOT
+			}
+		}
+		random_owned_state = {
+			limit = {
+				FOE_is_held_mine = yes
+				FOE_is_minable_state = yes
+				is_core_of = ROOT
+			}
+			save_event_target_as = FOE_new_mine
+		}
+	}
+	else_if = {
+		limit = {
+			any_owned_state = {
+				FOE_is_held_mine = yes
+				FOE_is_minable_state = yes
+			}
+		}
+		random_owned_state = {
+			limit = {
+				FOE_is_held_mine = yes
+				FOE_is_minable_state = yes
+			}
+			save_event_target_as = FOE_new_mine
+		}
+	}
+	if = {
+		limit = { has_event_target = FOE_new_mine }
+		event_target:FOE_new_mine = {
+			ROOT = { set_variable = { FOE_mine_state = PREV.id } }
+			if = {
+				limit = { NOT = { has_variable = FOE_mine_depth } }
+				set_variable = { FOE_mine_depth = 0 }
+				set_variable = { FOE_mine_bottomless_strikes = 0 }
+			}
+		}
+	}
+}
+
+# Country scope. Monthly. Sovereign's Hoard: +1% factory output and political power gain per 10 resources extracted
+# (all seven resources), at most 25%. The Deep Mine: +3% local resources per Depth on the mine's state while we hold
+# it. Also called after digs and on assignment, so nothing random happens here (see FOE_roll_bottomless_mine).
+# If the mine's state is no longer ours at peace, a new shaft opens (FOE_found_deep_mine).
+FOE_update_deep_mine_sovereign = {
+	if = {
+		limit = { FOE_is_deep_mine_sovereign = yes }
+		if = {
+			limit = { NOT = { has_variable = FOE_mine_state } }
+			FOE_found_deep_mine = yes
+		}
+		else_if = {
+			limit = {
+				has_war = no
+				var:FOE_mine_state = { NOT = { is_owned_by = ROOT } }
+			}
+			var:FOE_mine_state = {
+				if = {
+					limit = { has_dynamic_modifier = { modifier = FOE_deep_mine_modifier } }
+					remove_dynamic_modifier = { modifier = FOE_deep_mine_modifier }
+				}
+			}
+			FOE_found_deep_mine = yes
+		}
+		set_variable = { FOE_mine_extraction = resource_produced@metal }
+		add_to_variable = { FOE_mine_extraction = resource_produced@energy }
+		add_to_variable = { FOE_mine_extraction = resource_produced@water }
+		add_to_variable = { FOE_mine_extraction = resource_produced@composites }
+		add_to_variable = { FOE_mine_extraction = resource_produced@circuitry }
+		add_to_variable = { FOE_mine_extraction = resource_produced@advanced }
+		add_to_variable = { FOE_mine_extraction = resource_produced@crystals }
+		set_variable = { FOE_mine_hoard = FOE_mine_extraction }
+		multiply_variable = { FOE_mine_hoard = 0.001 }
+		clamp_variable = { var = FOE_mine_hoard min = 0 max = 0.25 }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = FOE_sovereigns_hoard_modifier } } }
+			add_dynamic_modifier = { modifier = FOE_sovereigns_hoard_modifier }
+		}
+		if = {
+			limit = { has_variable = FOE_mine_state }
+			var:FOE_mine_state = {
+				ROOT = { set_variable = { FOE_mine_depth_shown = PREV.FOE_mine_depth } }
+				if = {
+					limit = { FOE_is_held_mine = yes }
+					set_variable = { FOE_mine_depth_bonus = FOE_mine_depth }
+					multiply_variable = { FOE_mine_depth_bonus = 0.03 }
+					if = {
+						limit = { NOT = { has_dynamic_modifier = { modifier = FOE_deep_mine_modifier } } }
+						add_dynamic_modifier = { modifier = FOE_deep_mine_modifier }
+					}
+					force_update_dynamic_modifier = yes
+				}
+				else_if = {
+					limit = { has_dynamic_modifier = { modifier = FOE_deep_mine_modifier } }
+					remove_dynamic_modifier = { modifier = FOE_deep_mine_modifier }
+				}
+			}
+		}
+		else = {
+			set_variable = { FOE_mine_depth_shown = 0 }
+		}
+		force_update_dynamic_modifier = yes
+		log = "FOE_MINE [THIS.GetTag] extraction=[?FOE_mine_extraction] hoard=[?FOE_mine_hoard] depth=[?FOE_mine_depth_shown]"
+	}
+	else_if = {
+		limit = { has_variable = FOE_mine_state }
+		var:FOE_mine_state = {
+			if = {
+				limit = { has_dynamic_modifier = { modifier = FOE_deep_mine_modifier } }
+				remove_dynamic_modifier = { modifier = FOE_deep_mine_modifier }
+			}
+		}
+		if = {
+			limit = { has_dynamic_modifier = { modifier = FOE_sovereigns_hoard_modifier } }
+			remove_dynamic_modifier = { modifier = FOE_sovereigns_hoard_modifier }
+		}
+		clear_variable = FOE_mine_state
+		clear_variable = FOE_mine_extraction
+		clear_variable = FOE_mine_hoard
+		clear_variable = FOE_mine_depth_shown
+	}
+}
+
+# Country scope. Monthly only, from the on_action: the Bottomless Mine. At Depth 10, 10% a month for a free strike,
+# 20 strikes per mine.
+FOE_roll_bottomless_mine = {
+	if = {
+		limit = {
+			FOE_is_deep_mine_sovereign = yes
+			FOE_holds_deep_mine = yes
+		}
+		var:FOE_mine_state = {
+			if = {
+				limit = {
+					check_variable = { FOE_mine_depth > 9 }
+					check_variable = { FOE_mine_bottomless_strikes < 20 }
+				}
+				random_list = {
+					log = yes
+					10 = {
+						add_to_variable = { FOE_mine_bottomless_strikes = 1 }
+						FOE_mine_strike = yes
+						ROOT = { FOE_report_mine_find = yes }
+					}
+					90 = { }
+				}
+			}
+		}
+	}
+}
+
+FOE_initialize_deep_mine_sovereign = {
+	add_country_leader_trait = FOE_deep_mine_sovereign_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_deep_mine_sovereign_character
+	}
+	FOE_update_deep_mine_sovereign = yes
 }
 
 #Lawgiver Subclass

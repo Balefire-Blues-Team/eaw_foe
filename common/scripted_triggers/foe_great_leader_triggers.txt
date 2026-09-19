@@ -943,6 +943,32 @@ FOE_is_line_target = {
 	infrastructure < 10
 }
 
+#Deep Mine Sovereign (Magnate). Combo subclasses are always Mythic, so there are no tier triggers.
+FOE_is_deep_mine_sovereign = {
+	FOE_has_leader_character = yes
+	var:country_leader = {
+		has_character_flag = FOE_great_leader_character
+		has_character_flag = FOE_deep_mine_sovereign_character
+	}
+}
+
+# State scope; ROOT is the Sovereign. The mine only works while we own and control its state.
+FOE_is_held_mine = {
+	is_owned_by = ROOT
+	is_controlled_by = ROOT
+}
+
+# Country scope. We have a mine and hold it.
+FOE_holds_deep_mine = {
+	if = {
+		limit = { has_variable = FOE_mine_state }
+		var:FOE_mine_state = { FOE_is_held_mine = yes }
+	}
+	else = {
+		always = no
+	}
+}
+
 #Lawgiver
 FOE_is_lawgiver = {
 	FOE_has_leader_character = yes
@@ -1258,6 +1284,18 @@ FOE_can_assign_whisper_broker = {
 	any_other_country = { FOE_is_black_file_candidate = yes }
 }
 
+# State scope. The mine grows by building slots, so state categories that have none can't hold one.
+FOE_is_minable_state = {
+	NOT = { has_state_category = enclave }
+	NOT = { has_state_category = wasteland }
+	NOT = { has_state_category = tiny_island }
+}
+
+FOE_can_assign_deep_mine_sovereign = {
+	FOE_great_leader_country_valid = yes
+	capital_scope = { FOE_is_minable_state = yes }
+}
+
 FOE_can_assign_lawgiver = {
 	FOE_great_leader_country_valid = yes
 }
@@ -1370,6 +1408,9 @@ FOE_assignment_suits_railroad_tycoon = {
 }
 FOE_assignment_suits_whisper_broker = {
 	has_intelligence_agency = yes
+}
+FOE_assignment_suits_deep_mine_sovereign = {
+	capital_scope = { has_resources_amount = { resource = metal amount > 9 } }
 }
 FOE_assignment_suits_lawgiver = {
 	has_stability > 0.5

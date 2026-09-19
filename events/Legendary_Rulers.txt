@@ -623,27 +623,37 @@ country_event = {
 		if = { limit = { has_country_leader_with_trait = mythic_leader_admin_trait } remove_country_leader_trait = mythic_leader_admin_trait }
 		if = { limit = { has_country_leader_with_trait = mythic_leader_industry_trait } remove_country_leader_trait = mythic_leader_industry_trait }
 		add_country_leader_trait = mythic_leader_magnate_trait
-		FOE_initialize_railroad_tycoon = yes
+		FOE_initialize_deep_mine_sovereign = yes
 	}
 
 	option = {
 		name = special_rulers.16.f
 		trigger = {
 			has_country_leader_with_trait = mythic_leader_magnate_trait
-			NOT = { FOE_is_railroad_tycoon = yes }
+			NOT = { FOE_is_deep_mine_sovereign = yes }
 		}
-		FOE_initialize_railroad_tycoon = yes
+		FOE_initialize_deep_mine_sovereign = yes
 	}
 
-	# Caravans for the decisions, and two Railway Corps in storage without paying for them.
+	# Finishes one dig now, free: depth +1, a slot, and the strike roll, with the report event.
 	option = {
 		name = special_rulers.16.g
 		trigger = {
-			FOE_is_railroad_tycoon = yes
+			FOE_is_deep_mine_sovereign = yes
+			check_variable = { FOE_mine_depth_shown < 10 }
 		}
-		add_equipment_to_stockpile = { type = caravan_equipment amount = 25 }
-		add_to_variable = { FOE_corps_stored = 2 }
-		FOE_update_railroad_tycoon = yes
+		FOE_sink_the_shaft = yes
+	}
+
+	# Jumps the mine to Depth 10 so the Bottomless Mine starts rolling. Skipped digs grant no slots or finds.
+	option = {
+		name = special_rulers.16.k
+		trigger = {
+			FOE_is_deep_mine_sovereign = yes
+			check_variable = { FOE_mine_depth_shown < 10 }
+		}
+		var:FOE_mine_state = { set_variable = { FOE_mine_depth = 10 } }
+		FOE_update_deep_mine_sovereign = yes
 	}
 
 	option = {
@@ -868,4 +878,26 @@ country_event = {
         var:FOE_march_next = { transfer_state_to = ROOT }
     }
     option = { name = special_rulers.23.close }
+}
+
+#Deep Mine Sovereign: what the shaft found. Human players only.
+country_event = {
+	id = special_rulers.24
+	title = special_rulers.24.t
+	desc = { text = special_rulers.24.d_metal trigger = { check_variable = { FOE_mine_last_find = 1 } } }
+	desc = { text = special_rulers.24.d_energy trigger = { check_variable = { FOE_mine_last_find = 2 } } }
+	desc = { text = special_rulers.24.d_water trigger = { check_variable = { FOE_mine_last_find = 3 } } }
+	desc = { text = special_rulers.24.d_composites trigger = { check_variable = { FOE_mine_last_find = 4 } } }
+	desc = { text = special_rulers.24.d_circuitry trigger = { check_variable = { FOE_mine_last_find = 5 } } }
+	desc = { text = special_rulers.24.d_advanced trigger = { check_variable = { FOE_mine_last_find = 6 } } }
+	desc = { text = special_rulers.24.d_crystals trigger = { check_variable = { FOE_mine_last_find = 7 } } }
+	desc = { text = special_rulers.24.d_dry trigger = { check_variable = { FOE_mine_last_find = 0 } } }
+	desc = { text = special_rulers.24.d_cave_in trigger = { check_variable = { FOE_mine_last_find = -1 } } }
+	picture = GFX_event_NCR_startup
+	is_triggered_only = yes
+	fire_only_once = no
+
+	option = {
+		name = special_rulers.24.a
+	}
 }
