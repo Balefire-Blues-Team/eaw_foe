@@ -667,26 +667,38 @@ country_event = {
 		if = { limit = { has_country_leader_with_trait = mythic_leader_admin_trait } remove_country_leader_trait = mythic_leader_admin_trait }
 		if = { limit = { has_country_leader_with_trait = mythic_leader_industry_trait } remove_country_leader_trait = mythic_leader_industry_trait }
 		add_country_leader_trait = mythic_leader_ruler_trait
-		FOE_initialize_oathkeeper = yes
+		FOE_initialize_just_monarch = yes
 	}
 
+	# Without a General candidate the Monarch aborts at once and the Ruler subclass is rerolled.
 	option = {
 		name = special_rulers.16.i
 		trigger = {
 			has_country_leader_with_trait = mythic_leader_ruler_trait
-			NOT = { FOE_is_oathkeeper = yes }
+			NOT = { FOE_is_just_monarch = yes }
 		}
-		FOE_initialize_oathkeeper = yes
+		FOE_initialize_just_monarch = yes
 	}
 
-	# Runs the monthly tick now: tribute from every Oathsworn, then the Oath count and core margins.
+	# Bestow Honours becomes available now.
 	option = {
 		name = special_rulers.16.j
 		trigger = {
-			FOE_is_oathkeeper = yes
+			FOE_is_just_monarch = yes
+			has_country_flag = FOE_honours_cooldown
 		}
-		FOE_collect_oath_tribute = yes
-		FOE_update_oathkeeper = yes
+		clr_country_flag = FOE_honours_cooldown
+	}
+
+	# Breaks the bond as a leader change would, without the 180-day wait: the next weekly update picks a new General.
+	option = {
+		name = special_rulers.16.l
+		trigger = {
+			FOE_is_just_monarch = yes
+			has_variable = FOE_loyal_general
+		}
+		FOE_break_sworn_bond = yes
+		clr_country_flag = FOE_monarch_repick_delay
 	}
 }
 
@@ -899,5 +911,65 @@ country_event = {
 
 	option = {
 		name = special_rulers.24.a
+	}
+}
+
+#Just Monarch: a human neighbour is offered elevation. ROOT is the human, FROM the Monarch.
+# The Monarch's weekly update aborts it once the offer is declined or its 30 days run out.
+country_event = {
+	id = special_rulers.25
+	title = special_rulers.25.t
+	desc = special_rulers.25.d
+	picture = GFX_event_NCR_startup
+	is_triggered_only = yes
+	fire_only_once = no
+
+	option = {
+		name = special_rulers.25.a
+		if = {
+			limit = {
+				FROM = {
+					FOE_is_just_monarch = yes
+					has_country_flag = FOE_monarch_offer_pending
+				}
+				NOT = { has_variable = FOE_general_monarch }
+			}
+			set_variable = { FOE_general_monarch = FROM }
+			FOE_make_loyal_general = yes
+		}
+		else = {
+			custom_effect_tooltip = special_rulers.25.expired_tt
+		}
+	}
+	option = {
+		name = special_rulers.25.b
+		FROM = { clr_country_flag = FOE_monarch_offer_pending }
+	}
+}
+
+#Retired: the Royal Endowment used to end here. It is now counted down by FOE_update_loyal_general and reclaimed on
+# release. Kept as a no-op so copies still pending in older saves cannot take factories away.
+country_event = {
+	id = special_rulers.26
+	hidden = yes
+	is_triggered_only = yes
+}
+
+#Just Monarch: a human General is summoned to war. ROOT is the General, FROM the Monarch.
+country_event = {
+	id = special_rulers.27
+	title = special_rulers.27.t
+	desc = special_rulers.27.d
+	picture = GFX_event_NCR_startup
+	is_triggered_only = yes
+	fire_only_once = no
+
+	option = {
+		name = special_rulers.27.a
+		FROM = { FOE_summon_loyal_general = yes }
+	}
+	option = {
+		name = special_rulers.27.b
+		add_stability = -0.15
 	}
 }

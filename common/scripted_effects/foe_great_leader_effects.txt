@@ -3101,6 +3101,10 @@ FOE_roll_ruler_subclass = {
 		if = { limit = { NOT = { FOE_can_assign_oathkeeper = yes } } multiply_temp_variable = { FOE_audit_oathkeeper = 0 } }
 		if = { limit = { FOE_assignment_suits_oathkeeper = yes } multiply_temp_variable = { FOE_audit_oathkeeper = 1.5 } }
 		log = "FOE_ASSIGN [THIS.GetTag] class=ruler candidate=oathkeeper weight=[?FOE_audit_oathkeeper] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_just_monarch = 30 }
+		if = { limit = { NOT = { FOE_can_assign_just_monarch = yes } } multiply_temp_variable = { FOE_audit_just_monarch = 0 } }
+		if = { limit = { FOE_assignment_suits_just_monarch = yes } multiply_temp_variable = { FOE_audit_just_monarch = 1.5 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=ruler candidate=just_monarch weight=[?FOE_audit_just_monarch] (zero=ineligible)"
 	}
 	random_list = {
 		log = yes
@@ -3117,6 +3121,12 @@ FOE_roll_ruler_subclass = {
 			modifier = { factor = 1.5 FOE_assignment_suits_oathkeeper = yes }
 			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=ruler selected=oathkeeper" }
 			FOE_initialize_oathkeeper = yes
+		}
+		30 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_just_monarch = yes } }
+			modifier = { factor = 1.5 FOE_assignment_suits_just_monarch = yes }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=ruler selected=just_monarch" }
+			FOE_initialize_just_monarch = yes
 		}
 	}
 }
@@ -3788,6 +3798,351 @@ FOE_initialize_deep_mine_sovereign = {
 		set_character_flag = FOE_deep_mine_sovereign_character
 	}
 	FOE_update_deep_mine_sovereign = yes
+}
+
+#Just Monarch Subclass (Ruler) and Loyal General (granted Conqueror subclass)
+# The General's own Conqueror rank before the bond is kept as a character flag (FOE_general_original_1/2/3) and
+# restored when the bond breaks; a General that had no class loses it again.
+# Effects that can run inside another country's event (make, release, summon) never use ROOT.
+
+# Country scope, the new General; its FOE_general_monarch is already set. Grants the Great Conqueror class if it has
+# none, the Loyal General subclass, the faction and the opinion bond. Honours start on their 365-day cooldown.
+FOE_make_loyal_general = {
+	if = {
+		limit = { has_country_leader_with_trait = mythic_leader_military_trait }
+		var:country_leader = { set_character_flag = FOE_general_original_3 }
+	}
+	else_if = {
+		limit = { has_country_leader_with_trait = legendary_leader_military_trait }
+		var:country_leader = { set_character_flag = FOE_general_original_2 }
+	}
+	else_if = {
+		limit = { has_country_leader_with_trait = great_leader_military_trait }
+		var:country_leader = { set_character_flag = FOE_general_original_1 }
+	}
+	else = {
+		add_country_leader_trait = great_leader_military_trait
+	}
+	add_country_leader_trait = FOE_loyal_general_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_loyal_general_character
+		set_character_flag = FOE_great_leader_roll_completed
+	}
+	add_dynamic_modifier = { modifier = FOE_monarchs_favour_modifier }
+	var:FOE_general_monarch = {
+		set_variable = { FOE_loyal_general = PREV }
+		clr_country_flag = FOE_monarch_offer_pending
+		clear_variable = FOE_monarch_offer_target
+		set_country_flag = { flag = FOE_honours_cooldown value = 1 days = 365 }
+		if = {
+			limit = { is_in_faction = no }
+			FOE_create_monarch_faction = yes
+		}
+		if = {
+			limit = { NOT = { is_in_faction_with = PREV } }
+			add_to_faction = PREV
+		}
+		add_opinion_modifier = { target = PREV modifier = FOE_sworn_bond }
+		PREV = { add_opinion_modifier = { target = PREV modifier = FOE_sworn_bond } }
+		log = "FOE_MONARCH [THIS.GetTag] bonded Loyal General [PREV.GetTag]"
+	}
+}
+
+# Country scope, the Monarch. There is no reliable way to name a faction after whoever creates it, so the name
+# comes from a fixed pool.
+FOE_create_monarch_faction = {
+	random_list = {
+		log = yes
+		25 = { create_faction_from_template = { template = faction_template_generic name = FOE_monarch_faction_name_1 } }
+		25 = { create_faction_from_template = { template = faction_template_generic name = FOE_monarch_faction_name_2 } }
+		25 = { create_faction_from_template = { template = faction_template_generic name = FOE_monarch_faction_name_3 } }
+		25 = { create_faction_from_template = { template = faction_template_generic name = FOE_monarch_faction_name_4 } }
+	}
+}
+
+# Country scope, the General. Takes back an active Royal Endowment.
+FOE_end_royal_endowment = {
+	if = {
+		limit = { has_variable = FOE_endowment_weeks }
+		add_offsite_building = { type = industrial_complex level = -2 }
+		clear_variable = FOE_endowment_weeks
+	}
+}
+
+# Country scope, the General. Everything granted vanishes, an active Royal Endowment included. The faction stays.
+FOE_release_loyal_general = {
+	FOE_end_royal_endowment = yes
+	if = {
+		limit = { FOE_is_loyal_general = yes }
+		remove_country_leader_trait = FOE_loyal_general_trait
+		if = { limit = { has_country_leader_with_trait = great_leader_military_trait } remove_country_leader_trait = great_leader_military_trait }
+		if = { limit = { has_country_leader_with_trait = legendary_leader_military_trait } remove_country_leader_trait = legendary_leader_military_trait }
+		if = { limit = { has_country_leader_with_trait = mythic_leader_military_trait } remove_country_leader_trait = mythic_leader_military_trait }
+		if = {
+			limit = { var:country_leader = { has_character_flag = FOE_general_original_3 } }
+			add_country_leader_trait = mythic_leader_military_trait
+		}
+		else_if = {
+			limit = { var:country_leader = { has_character_flag = FOE_general_original_2 } }
+			add_country_leader_trait = legendary_leader_military_trait
+		}
+		else_if = {
+			limit = { var:country_leader = { has_character_flag = FOE_general_original_1 } }
+			add_country_leader_trait = great_leader_military_trait
+		}
+		else = {
+			var:country_leader = { clr_character_flag = FOE_great_leader_character }
+		}
+		var:country_leader = {
+			clr_character_flag = FOE_loyal_general_character
+			clr_character_flag = FOE_general_original_1
+			clr_character_flag = FOE_general_original_2
+			clr_character_flag = FOE_general_original_3
+		}
+	}
+	if = {
+		limit = { has_variable = FOE_general_monarch }
+		var:FOE_general_monarch = {
+			if = {
+				limit = { exists = yes }
+				remove_opinion_modifier = { target = PREV modifier = FOE_sworn_bond }
+				PREV = { remove_opinion_modifier = { target = PREV modifier = FOE_sworn_bond } }
+			}
+		}
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = FOE_monarchs_favour_modifier } }
+		remove_dynamic_modifier = { modifier = FOE_monarchs_favour_modifier }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = FOE_sworn_sword_modifier } }
+		remove_dynamic_modifier = { modifier = FOE_sworn_sword_modifier }
+	}
+	clear_variable = FOE_general_monarch
+	clear_variable = FOE_sworn_breakthrough
+	log = "FOE_MONARCH [THIS.GetTag] released as Loyal General"
+}
+
+# Country scope, the Monarch. The bond is over; a new General is chosen after 180 days.
+FOE_break_sworn_bond = {
+	if = {
+		limit = { has_variable = FOE_loyal_general }
+		var:FOE_loyal_general = {
+			if = {
+				limit = {
+					exists = yes
+					has_variable = FOE_general_monarch
+				}
+				FOE_release_loyal_general = yes
+			}
+		}
+	}
+	clear_variable = FOE_loyal_general
+	set_country_flag = { flag = FOE_monarch_repick_delay value = 1 days = 180 }
+	log = "FOE_MONARCH [THIS.GetTag] bond broken, new General in 180 days"
+}
+
+# Country scope, the Monarch (ROOT). Picks the General in order: an AI Conqueror without a subclass, an AI nation
+# without a Great Leader, a human player (by offer). With nobody, the Monarch subclass is aborted.
+FOE_choose_loyal_general = {
+	if = {
+		limit = { any_neighbor_country = { FOE_is_general_candidate_conqueror = yes } }
+		random_neighbor_country = {
+			limit = { FOE_is_general_candidate_conqueror = yes }
+			set_variable = { FOE_general_monarch = ROOT }
+			FOE_make_loyal_general = yes
+		}
+	}
+	else_if = {
+		limit = { any_neighbor_country = { FOE_is_general_candidate_unled = yes } }
+		random_neighbor_country = {
+			limit = { FOE_is_general_candidate_unled = yes }
+			set_variable = { FOE_general_monarch = ROOT }
+			FOE_make_loyal_general = yes
+		}
+	}
+	else_if = {
+		limit = { any_neighbor_country = { FOE_is_general_candidate_human = yes } }
+		random_neighbor_country = {
+			limit = { FOE_is_general_candidate_human = yes }
+			ROOT = {
+				set_variable = { FOE_monarch_offer_target = PREV }
+				set_country_flag = { flag = FOE_monarch_offer_pending value = 1 days = 30 }
+			}
+			country_event = { id = special_rulers.25 }
+			log = "FOE_MONARCH [ROOT.GetTag] offers elevation to [THIS.GetTag]"
+		}
+	}
+	else = {
+		FOE_abort_just_monarch = yes
+	}
+}
+
+# Country scope, the Monarch (ROOT). No General: the subclass goes, and the leader rolls again in the Ruler
+# pools, where FOE_monarch_aborted keeps the Monarch out.
+FOE_abort_just_monarch = {
+	log = "FOE_MONARCH [THIS.GetTag] aborted, rerolling the Ruler subclass"
+	remove_country_leader_trait = FOE_just_monarch_trait
+	var:country_leader = {
+		clr_character_flag = FOE_just_monarch_character
+		set_character_flag = FOE_monarch_aborted
+	}
+	clr_country_flag = FOE_monarch_offer_pending
+	clear_variable = FOE_monarch_offer_target
+	FOE_roll_ruler_subclass = yes
+}
+
+# Country scope, the General. One rank up: Great to Legendary, Legendary to Mythic.
+FOE_honour_loyal_general = {
+	if = {
+		limit = { has_country_leader_with_trait = great_leader_military_trait }
+		remove_country_leader_trait = great_leader_military_trait
+		add_country_leader_trait = legendary_leader_military_trait
+	}
+	else_if = {
+		limit = { has_country_leader_with_trait = legendary_leader_military_trait }
+		remove_country_leader_trait = legendary_leader_military_trait
+		add_country_leader_trait = mythic_leader_military_trait
+	}
+}
+
+# Country scope, the Monarch. Its General joins every war the Monarch fights that it is not part of yet.
+FOE_summon_loyal_general = {
+	save_event_target_as = FOE_summoning_monarch
+	var:FOE_loyal_general = { save_event_target_as = FOE_summoned_general }
+	every_enemy_country = {
+		limit = { NOT = { has_war_with = event_target:FOE_summoned_general } }
+		event_target:FOE_summoned_general = {
+			add_to_war = {
+				targeted_alliance = event_target:FOE_summoning_monarch
+				enemy = PREV
+				hostility_reason = asked_to_join
+			}
+		}
+	}
+}
+
+# Country scope, the Monarch (ROOT). Weekly. Checks the bond, picks or waits for a General, and updates Just Rule:
+# +2% political power gain and stability per General rank, +5% attack while fighting beside it.
+FOE_update_just_monarch = {
+	if = {
+		limit = { FOE_is_just_monarch = yes }
+		if = {
+			limit = {
+				has_variable = FOE_loyal_general
+				NOT = { FOE_has_valid_loyal_general = yes }
+			}
+			FOE_break_sworn_bond = yes
+		}
+		# A declined or unanswered offer aborts the subclass.
+		if = {
+			limit = {
+				has_variable = FOE_monarch_offer_target
+				NOT = { has_country_flag = FOE_monarch_offer_pending }
+			}
+			clear_variable = FOE_monarch_offer_target
+			FOE_abort_just_monarch = yes
+		}
+		else_if = {
+			limit = {
+				NOT = { has_variable = FOE_loyal_general }
+				NOT = { has_variable = FOE_monarch_offer_target }
+				NOT = { has_country_flag = FOE_monarch_repick_delay }
+			}
+			FOE_choose_loyal_general = yes
+		}
+	}
+	else_if = {
+		limit = { has_variable = FOE_loyal_general }
+		FOE_break_sworn_bond = yes
+	}
+	if = {
+		limit = { FOE_is_just_monarch = yes }
+		set_variable = { FOE_general_rank = 0 }
+		set_variable = { FOE_just_rule_attack = 0 }
+		if = {
+			limit = { FOE_has_valid_loyal_general = yes }
+			var:FOE_loyal_general = {
+				if = {
+					limit = { has_country_leader_with_trait = mythic_leader_military_trait }
+					PREV = { set_variable = { FOE_general_rank = 3 } }
+				}
+				else_if = {
+					limit = { has_country_leader_with_trait = legendary_leader_military_trait }
+					PREV = { set_variable = { FOE_general_rank = 2 } }
+				}
+				else = {
+					PREV = { set_variable = { FOE_general_rank = 1 } }
+				}
+				if = {
+					limit = { any_enemy_country = { has_war_with = ROOT } }
+					PREV = { set_variable = { FOE_just_rule_attack = 0.05 } }
+				}
+			}
+		}
+		set_variable = { FOE_just_rule = FOE_general_rank }
+		multiply_variable = { FOE_just_rule = 0.02 }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = FOE_just_rule_modifier } } }
+			add_dynamic_modifier = { modifier = FOE_just_rule_modifier }
+		}
+		force_update_dynamic_modifier = yes
+	}
+	else = {
+		clr_country_flag = FOE_monarch_offer_pending
+		clear_variable = FOE_monarch_offer_target
+		clear_variable = FOE_general_rank
+		clear_variable = FOE_just_rule
+		clear_variable = FOE_just_rule_attack
+	}
+}
+
+# Country scope, the General (ROOT). Weekly. Releases a General whose bond is gone, and updates Sworn Sword:
+# +10% attack and +5% defence while fighting an enemy of the Monarch, +10% breakthrough at Mythic rank.
+FOE_update_loyal_general = {
+	if = {
+		limit = { NOT = { FOE_has_valid_monarch = yes } }
+		FOE_release_loyal_general = yes
+	}
+	else_if = {
+		limit = { FOE_is_loyal_general = yes }
+		if = {
+			limit = { has_variable = FOE_endowment_weeks }
+			subtract_from_variable = { FOE_endowment_weeks = 1 }
+			if = {
+				limit = { check_variable = { FOE_endowment_weeks < 1 } }
+				FOE_end_royal_endowment = yes
+			}
+		}
+		if = {
+			limit = { var:FOE_general_monarch = { any_enemy_country = { has_war_with = ROOT } } }
+			set_variable = { FOE_sworn_breakthrough = 0 }
+			if = {
+				limit = { FOE_has_mythic_conqueror_tier = yes }
+				set_variable = { FOE_sworn_breakthrough = 0.10 }
+			}
+			if = {
+				limit = { NOT = { has_dynamic_modifier = { modifier = FOE_sworn_sword_modifier } } }
+				add_dynamic_modifier = { modifier = FOE_sworn_sword_modifier }
+			}
+			force_update_dynamic_modifier = yes
+		}
+		else_if = {
+			limit = { has_dynamic_modifier = { modifier = FOE_sworn_sword_modifier } }
+			remove_dynamic_modifier = { modifier = FOE_sworn_sword_modifier }
+		}
+	}
+}
+
+FOE_initialize_just_monarch = {
+	add_country_leader_trait = FOE_just_monarch_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_just_monarch_character
+	}
+	FOE_choose_loyal_general = yes
+	FOE_update_just_monarch = yes
 }
 
 #Lawgiver Subclass

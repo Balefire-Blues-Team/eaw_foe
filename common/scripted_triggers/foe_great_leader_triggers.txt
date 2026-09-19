@@ -969,6 +969,144 @@ FOE_holds_deep_mine = {
 	}
 }
 
+#Just Monarch (Ruler) and its Loyal General (a Conqueror subclass that is only ever granted, never rolled).
+# The bond: the Monarch's FOE_loyal_general and the General's FOE_general_monarch point at each other.
+FOE_is_just_monarch = {
+	FOE_has_leader_character = yes
+	var:country_leader = {
+		has_character_flag = FOE_great_leader_character
+		has_character_flag = FOE_just_monarch_character
+	}
+}
+
+FOE_is_loyal_general = {
+	FOE_has_leader_character = yes
+	var:country_leader = {
+		has_character_flag = FOE_great_leader_character
+		has_character_flag = FOE_loyal_general_character
+	}
+}
+
+# Any Conqueror subclass, the granted Loyal General included.
+FOE_has_conqueror_subclass = {
+	OR = {
+		FOE_is_nomadic_khan = yes
+		FOE_is_slaving_despot = yes
+		FOE_is_carrion_marshal = yes
+		FOE_is_iron_warden = yes
+		FOE_is_saint_of_war = yes
+		FOE_is_chainbreaker = yes
+		FOE_is_lord_of_the_long_march = yes
+		FOE_is_loyal_general = yes
+	}
+}
+
+# Foreign COUNTRY scope; ROOT is the Monarch. A bordering nation that could serve: in the Monarch's faction if it
+# has one, otherwise an independent nation in no faction.
+FOE_is_general_candidate_basic = {
+	exists = yes
+	NOT = { tag = ROOT }
+	is_neighbor_of = ROOT
+	has_capitulated = no
+	NOT = { has_war_with = ROOT }
+	NOT = { has_variable = FOE_general_monarch }
+	NOT = { tag = EYE }
+	NOT = { tag = SHA }
+	NOT = { tag = COM }
+	NOT = { tag = OWE }
+	FOE_has_leader_character = yes
+	capital_scope = { is_owned_by = PREV is_controlled_by = PREV }
+	if = {
+		limit = { ROOT = { is_in_faction = yes } }
+		is_in_faction_with = ROOT
+	}
+	else = {
+		is_in_faction = no
+		is_subject = no
+	}
+}
+
+# First choice: an AI Conqueror without a subclass. It keeps its own rank.
+FOE_is_general_candidate_conqueror = {
+	FOE_is_general_candidate_basic = yes
+	is_ai = yes
+	OR = {
+		has_country_leader_with_trait = great_leader_military_trait
+		has_country_leader_with_trait = legendary_leader_military_trait
+		has_country_leader_with_trait = mythic_leader_military_trait
+	}
+	NOT = { FOE_has_conqueror_subclass = yes }
+}
+
+# Second choice: an AI nation without a Great Leader. It becomes a Great Conqueror.
+FOE_is_general_candidate_unled = {
+	FOE_is_general_candidate_basic = yes
+	is_ai = yes
+	NOT = { FOE_has_any_conqueror_tier = yes }
+	NOT = { FOE_has_any_administrator_tier = yes }
+	NOT = { FOE_has_any_industrialist_tier = yes }
+	var:country_leader = { NOT = { has_character_flag = FOE_great_leader_character } }
+}
+
+# Third choice: a human player, who is offered the elevation.
+FOE_is_general_candidate_human = {
+	FOE_is_general_candidate_basic = yes
+	is_ai = no
+}
+
+FOE_has_general_candidate = {
+	any_neighbor_country = {
+		OR = {
+			FOE_is_general_candidate_conqueror = yes
+			FOE_is_general_candidate_unled = yes
+			FOE_is_general_candidate_human = yes
+		}
+	}
+}
+
+# Country scope, the Monarch. Our General still exists, still serves us and is not at war with us.
+FOE_has_valid_loyal_general = {
+	has_variable = FOE_loyal_general
+	var:FOE_loyal_general = {
+		exists = yes
+		FOE_is_loyal_general = yes
+		has_variable = FOE_general_monarch
+		var:FOE_general_monarch = { tag = ROOT }
+		NOT = { has_war_with = ROOT }
+	}
+}
+
+# Country scope, the General. The mirror of FOE_has_valid_loyal_general.
+FOE_has_valid_monarch = {
+	has_variable = FOE_general_monarch
+	var:FOE_general_monarch = {
+		exists = yes
+		FOE_is_just_monarch = yes
+		has_variable = FOE_loyal_general
+		var:FOE_loyal_general = { tag = ROOT }
+		NOT = { has_war_with = ROOT }
+	}
+}
+
+# Country scope, the Monarch. It fights an enemy its General is not yet at war with.
+FOE_monarch_has_war_to_join = {
+	any_enemy_country = {
+		NOT = { has_war_with = var:ROOT.FOE_loyal_general }
+	}
+}
+
+# State scope; ROOT is the General. A non-core state of ours that borders the Monarch.
+FOE_is_general_tribute_state = {
+	is_owned_by = ROOT
+	is_controlled_by = ROOT
+	NOT = { is_core_of = ROOT }
+	NOT = { is_capital = yes }
+	any_neighbor_state = {
+		FOE_state_has_owner = yes
+		is_owned_by = var:ROOT.FOE_general_monarch
+	}
+}
+
 #Lawgiver
 FOE_is_lawgiver = {
 	FOE_has_leader_character = yes
@@ -1296,6 +1434,13 @@ FOE_can_assign_deep_mine_sovereign = {
 	capital_scope = { FOE_is_minable_state = yes }
 }
 
+# A Monarch needs someone to elevate. A leader whose Monarch subclass was aborted never gets it again.
+FOE_can_assign_just_monarch = {
+	FOE_great_leader_country_valid = yes
+	var:country_leader = { NOT = { has_character_flag = FOE_monarch_aborted } }
+	FOE_has_general_candidate = yes
+}
+
 FOE_can_assign_lawgiver = {
 	FOE_great_leader_country_valid = yes
 }
@@ -1411,6 +1556,9 @@ FOE_assignment_suits_whisper_broker = {
 }
 FOE_assignment_suits_deep_mine_sovereign = {
 	capital_scope = { has_resources_amount = { resource = metal amount > 9 } }
+}
+FOE_assignment_suits_just_monarch = {
+	any_neighbor_country = { FOE_is_general_candidate_conqueror = yes }
 }
 FOE_assignment_suits_lawgiver = {
 	has_stability > 0.5
