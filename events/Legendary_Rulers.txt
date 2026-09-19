@@ -52,7 +52,7 @@ country_event = {
 	desc = special_rulers.2.desc
 	picture = GFX_event_NCR_startup
 	is_triggered_only = yes
-	trigger = { is_ai = yes }
+	trigger = { FOE_great_leader_roll_still_open = yes }
 	fire_only_once = no
 
 	option = {
@@ -94,7 +94,7 @@ country_event = {
 	desc = special_rulers.3.desc
 	picture = GFX_event_NCR_startup
 	is_triggered_only = yes
-	trigger = { is_ai = yes }
+	trigger = { FOE_great_leader_roll_still_open = yes }
 	fire_only_once = no
 
 	option = {
@@ -215,7 +215,7 @@ country_event = {
 	desc = special_rulers.4.desc
 	picture = GFX_event_NCR_startup
 	is_triggered_only = yes
-	trigger = { is_ai = yes }
+	trigger = { FOE_great_leader_roll_still_open = yes }
 	fire_only_once = no
 
 	option = {
@@ -330,7 +330,7 @@ country_event = {
 	desc = special_rulers.5.desc
 	picture = GFX_event_NCR_startup
 	is_triggered_only = yes
-	trigger = { is_ai = yes }
+	trigger = { FOE_great_leader_roll_still_open = yes }
 	fire_only_once = no
 
 	option = {
@@ -561,55 +561,36 @@ country_event = {
 	option = {
 		name = special_rulers.16.a
 		trigger = {
-			NOT = { has_country_leader_with_trait = mythic_leader_exploiter_trait }
+			NOT = { has_country_leader_with_trait = mythic_leader_industry_trait }
 		}
-		# Swaps any class trait, Mythic included, for the Exploiter's.
+		# Swaps any class trait, Mythic and Multiclass included, for the Mythic Industrialist's.
 		FOE_remove_class_traits = yes
 		if = { limit = { has_country_leader_with_trait = mythic_leader_military_trait } remove_country_leader_trait = mythic_leader_military_trait }
 		if = { limit = { has_country_leader_with_trait = mythic_leader_admin_trait } remove_country_leader_trait = mythic_leader_admin_trait }
-		if = { limit = { has_country_leader_with_trait = mythic_leader_industry_trait } remove_country_leader_trait = mythic_leader_industry_trait }
-		add_country_leader_trait = mythic_leader_exploiter_trait
-		FOE_initialize_whisper_broker = yes
+		if = { limit = { has_country_leader_with_trait = mythic_leader_ruler_trait } remove_country_leader_trait = mythic_leader_ruler_trait }
+		if = { limit = { has_country_leader_with_trait = mythic_leader_exploiter_trait } remove_country_leader_trait = mythic_leader_exploiter_trait }
+		if = { limit = { has_country_leader_with_trait = mythic_leader_magnate_trait } remove_country_leader_trait = mythic_leader_magnate_trait }
+		add_country_leader_trait = mythic_leader_industry_trait
+		FOE_initialize_founder_of_foundries = yes
 	}
 
 	option = {
 		name = special_rulers.16.b
 		trigger = {
-			has_country_leader_with_trait = mythic_leader_exploiter_trait
-			NOT = { FOE_is_whisper_broker = yes }
+			FOE_has_any_industrialist_tier = yes
+			NOT = { FOE_is_founder_of_foundries = yes }
 		}
-		FOE_initialize_whisper_broker = yes
+		FOE_initialize_founder_of_foundries = yes
 	}
 
-	# A full Dossier, a Black File on a random neighbour if we have none, both infiltration tokens against it,
-	# and the Alert lifted. Network strength and operatives still have to be built normally.
+	# A full Foundry Stock, and Slag one month short: the next monthly tick at the cap starts Slag and Smoke.
 	option = {
 		name = special_rulers.16.c
 		trigger = {
-			FOE_is_whisper_broker = yes
+			FOE_is_founder_of_foundries = yes
 		}
-		if = {
-			limit = {
-				NOT = { FOE_has_valid_black_file = yes }
-				any_neighbor_country = { FOE_is_black_file_candidate = yes }
-			}
-			random_neighbor_country = {
-				limit = { FOE_is_black_file_candidate = yes }
-				ROOT = { set_variable = { FOE_black_file = PREV } }
-			}
-		}
-		set_variable = { FOE_dossier = 6 }
-		FOE_refresh_insider_knowledge = yes
-		clr_country_flag = FOE_broker_alerted
-		if = {
-			limit = { FOE_has_valid_black_file = yes }
-			var:FOE_black_file = {
-				ROOT = {
-					add_operation_token = { tag = PREV token = token_civilian }
-					add_operation_token = { tag = PREV token = token_army }
-				}
-			}
-		}
+		set_variable = { FOE_foundry_stock = 300 }
+		set_variable = { FOE_slag_months = 2 }
 	}
 
 	option = {

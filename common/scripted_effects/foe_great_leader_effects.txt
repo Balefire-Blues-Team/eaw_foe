@@ -2181,6 +2181,141 @@ FOE_initialize_blackout_opportunist = {
 	FOE_update_blackout_opportunist = yes
 }
 
+#Founder of Foundries Subclass
+# The Foundry Stock (0-300) is filled every month by the metal we produce and spent by the decisions.
+
+# Country scope. Monthly.
+# Stock: +1 per metal produced, at most 300. Forge Fire: +0.25% factory output per metal produced, at most 15%.
+# Slag and Smoke: after three months at the cap, stability falls until the Stock is spent.
+# Mythic, The Arsenal Pours: 10 infantry equipment per metal produced, at most 500 a month.
+FOE_update_founder_of_foundries = {
+	if = {
+		limit = { FOE_is_founder_of_foundries = yes }
+		if = {
+			limit = { NOT = { has_variable = FOE_foundry_stock } }
+			set_variable = { FOE_foundry_stock = 0 }
+			set_variable = { FOE_slag_months = 0 }
+		}
+		set_variable = { FOE_founder_metal = resource_produced@metal }
+		add_to_variable = { FOE_foundry_stock = FOE_founder_metal }
+		clamp_variable = { var = FOE_foundry_stock min = 0 max = 300 }
+		set_variable = { FOE_forge_fire = FOE_founder_metal }
+		multiply_variable = { FOE_forge_fire = 0.0025 }
+		clamp_variable = { var = FOE_forge_fire min = 0 max = 0.15 }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = FOE_forge_fire_modifier } } }
+			add_dynamic_modifier = { modifier = FOE_forge_fire_modifier }
+		}
+		if = {
+			limit = { check_variable = { FOE_foundry_stock > 299 } }
+			add_to_variable = { FOE_slag_months = 1 }
+		}
+		else = {
+			set_variable = { FOE_slag_months = 0 }
+		}
+		FOE_update_slag_and_smoke = yes
+		if = {
+			limit = { FOE_is_mythic_founder_of_foundries = yes }
+			set_temp_variable = { FOE_arsenal_rifles = FOE_founder_metal }
+			multiply_temp_variable = { FOE_arsenal_rifles = 10 }
+			clamp_temp_variable = { var = FOE_arsenal_rifles min = 0 max = 500 }
+			round_temp_variable = FOE_arsenal_rifles
+			if = {
+				limit = { check_variable = { FOE_arsenal_rifles > 0 } }
+				add_equipment_to_stockpile = { type = infantry_equipment amount = FOE_arsenal_rifles }
+			}
+			set_variable = { FOE_arsenal_last = FOE_arsenal_rifles }
+		}
+		force_update_dynamic_modifier = yes
+		log = "FOE_FOUNDRY [THIS.GetTag] metal=[?FOE_founder_metal] stock=[?FOE_foundry_stock] slag_months=[?FOE_slag_months]"
+	}
+	else_if = {
+		limit = { has_variable = FOE_foundry_stock }
+		if = {
+			limit = { has_dynamic_modifier = { modifier = FOE_forge_fire_modifier } }
+			remove_dynamic_modifier = { modifier = FOE_forge_fire_modifier }
+		}
+		if = {
+			limit = { has_dynamic_modifier = { modifier = FOE_slag_and_smoke_modifier } }
+			remove_dynamic_modifier = { modifier = FOE_slag_and_smoke_modifier }
+		}
+		clear_variable = FOE_foundry_stock
+		clear_variable = FOE_slag_months
+		clear_variable = FOE_founder_metal
+		clear_variable = FOE_forge_fire
+		clear_variable = FOE_arsenal_last
+	}
+}
+
+# Country scope. Slag and Smoke is on after three months at the cap, and off as soon as the Stock is below it.
+FOE_update_slag_and_smoke = {
+	if = {
+		limit = { check_variable = { FOE_slag_months > 2 } }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = FOE_slag_and_smoke_modifier } } }
+			add_dynamic_modifier = { modifier = FOE_slag_and_smoke_modifier }
+		}
+	}
+	else_if = {
+		limit = { has_dynamic_modifier = { modifier = FOE_slag_and_smoke_modifier } }
+		remove_dynamic_modifier = { modifier = FOE_slag_and_smoke_modifier }
+	}
+}
+
+# Country scope. Every spend resets the Slag counter, so Slag and Smoke lifts at once.
+FOE_after_foundry_spend = {
+	set_variable = { FOE_slag_months = 0 }
+	FOE_update_slag_and_smoke = yes
+}
+
+# State scope; ROOT is the Founder. Iron Wall: bunkers along the state's border, level 2 from Legendary.
+FOE_raise_iron_wall = {
+	if = {
+		limit = { ROOT = { FOE_is_legendary_or_mythic_founder_of_foundries = yes } }
+		add_building_construction = {
+			type = bunker
+			level = 2
+			instant_build = yes
+			province = {
+				all_provinces = yes
+				limit_to_border = yes
+			}
+		}
+	}
+	else = {
+		add_building_construction = {
+			type = bunker
+			level = 1
+			instant_build = yes
+			province = {
+				all_provinces = yes
+				limit_to_border = yes
+			}
+		}
+	}
+}
+
+# State scope; ROOT is the Founder. Cast a Foundry: a military factory here, or offsite if there is no room.
+FOE_cast_foundry = {
+	if = {
+		limit = { free_building_slots = { building = arms_factory size > 0 } }
+		add_building_construction = { type = arms_factory level = 1 instant_build = yes }
+	}
+	else = {
+		ROOT = { add_offsite_building = { type = arms_factory level = 1 } }
+	}
+}
+
+FOE_initialize_founder_of_foundries = {
+	add_country_leader_trait = FOE_founder_of_foundries_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_founder_of_foundries_character
+	}
+	set_technology = { resource_generator_metal_tech_1 = 1 }
+	FOE_update_founder_of_foundries = yes
+}
+
 #Dreamer in Steel Subclass
 # Country scope. Exchange prices rise with every exchange of either kind:
 # civilian factory 20 + 10 per exchange, military factory 30 + 10 per exchange (heavy industrial robots).
@@ -2929,6 +3064,10 @@ FOE_roll_industrialist_subclass = {
 		if = { limit = { has_idea = advanced_research_base } multiply_temp_variable = { FOE_audit_blackout_opportunist = 0.1 } }
 		if = { limit = { FOE_assignment_suits_blackout_opportunist = yes } multiply_temp_variable = { FOE_audit_blackout_opportunist = 1.5 } }
 		log = "FOE_ASSIGN [THIS.GetTag] class=industrialist candidate=blackout_opportunist weight=[?FOE_audit_blackout_opportunist] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_founder_of_foundries = 10 }
+		if = { limit = { NOT = { FOE_can_assign_founder_of_foundries = yes } } multiply_temp_variable = { FOE_audit_founder_of_foundries = 0 } }
+		if = { limit = { FOE_assignment_suits_founder_of_foundries = yes } multiply_temp_variable = { FOE_audit_founder_of_foundries = 1.5 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=industrialist candidate=founder_of_foundries weight=[?FOE_audit_founder_of_foundries] (zero=ineligible)"
 	}
 	random_list = {
 		log = yes
@@ -2983,6 +3122,12 @@ FOE_roll_industrialist_subclass = {
 			modifier = { factor = 1.5 FOE_assignment_suits_blackout_opportunist = yes }
 			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=industrialist selected=blackout_opportunist" }
 			FOE_initialize_blackout_opportunist = yes
+		}
+		10 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_founder_of_foundries = yes } }
+			modifier = { factor = 1.5 FOE_assignment_suits_founder_of_foundries = yes }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=industrialist selected=founder_of_foundries" }
+			FOE_initialize_founder_of_foundries = yes
 		}
 	}
 }

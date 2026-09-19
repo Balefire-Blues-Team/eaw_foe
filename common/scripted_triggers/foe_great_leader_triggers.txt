@@ -799,6 +799,69 @@ FOE_is_mythic_blackout_opportunist = {
 	FOE_has_mythic_industrialist_tier = yes
 }
 
+#Founder of Foundries
+FOE_is_founder_of_foundries = {
+	FOE_has_leader_character = yes
+	var:country_leader = {
+		has_character_flag = FOE_great_leader_character
+		has_character_flag = FOE_founder_of_foundries_character
+	}
+}
+
+FOE_is_legendary_or_mythic_founder_of_foundries = {
+	FOE_is_founder_of_foundries = yes
+	FOE_has_legendary_or_mythic_industrialist_tier = yes
+}
+
+FOE_is_mythic_founder_of_foundries = {
+	FOE_is_founder_of_foundries = yes
+	FOE_has_mythic_industrialist_tier = yes
+}
+
+# State scope; ROOT is the Founder. Room for another metal generator.
+FOE_is_seam_site = {
+	is_owned_by = ROOT
+	is_controlled_by = ROOT
+	free_building_slots = { building = metal_generator size > 0 }
+}
+
+# State scope; ROOT is the Founder. One of our states on a foreign border.
+FOE_is_iron_wall_site = {
+	is_owned_by = ROOT
+	is_controlled_by = ROOT
+	any_neighbor_state = {
+		FOE_state_has_owner = yes
+		NOT = { is_owned_by = ROOT }
+	}
+}
+
+# State scope; ROOT is the Founder. A border state facing a threat: a nation at war with us, or a Conqueror.
+FOE_is_threatened_iron_wall_site = {
+	FOE_is_iron_wall_site = yes
+	any_neighbor_state = {
+		FOE_state_has_owner = yes
+		NOT = { is_owned_by = ROOT }
+		owner = {
+			OR = {
+				has_war_with = ROOT
+				FOE_has_any_conqueror_tier = yes
+			}
+		}
+	}
+}
+
+# State scope; ROOT is the Founder. A state of ours the new foundry can go to (offsite if it has no room).
+FOE_is_foundry_site = {
+	is_owned_by = ROOT
+	is_controlled_by = ROOT
+}
+
+# Country scope. The nation has metal in the ground. Read from state deposits rather than production, so it also
+# holds on day one.
+FOE_founder_has_metal = {
+	any_owned_state = { has_resources_amount = { resource = metal amount > 0 } }
+}
+
 # Country scope; ROOT is the Blackout Opportunist. A neighbour with fuel to take; at Mythic, also any enemy at war with us.
 FOE_is_siphon_target = {
 	exists = yes
@@ -1427,6 +1490,18 @@ FOE_great_leader_country_valid = {
 	capital_scope = { is_owned_by = PREV is_controlled_by = PREV }
 }
 
+# COUNTRY scope. The rank and class events (special_rulers.2-.5) fire as a queued chain. On day one every nation's
+# chain is queued at once, so a co-op subclass (Nemesis, Just Monarch) can elevate a leader whose own roll is still in
+# flight. The chain stops if this leader has meanwhile been given a class or marked as a Great Leader.
+FOE_great_leader_roll_still_open = {
+	is_ai = yes
+	NOT = { FOE_has_any_conqueror_tier = yes }
+	NOT = { FOE_has_any_administrator_tier = yes }
+	NOT = { FOE_has_any_industrialist_tier = yes }
+	FOE_has_leader_character = yes
+	var:country_leader = { NOT = { has_character_flag = FOE_great_leader_character } }
+}
+
 FOE_great_leader_roll_eligible = {
 	FOE_great_leader_country_valid = yes
 	has_global_flag = FOE_campaign_setup_confirmed
@@ -1521,6 +1596,12 @@ FOE_can_assign_biological_engineer = {
 
 FOE_can_assign_blackout_opportunist = {
 	FOE_great_leader_country_valid = yes
+}
+
+# Without metal the Foundry Stock could never fill.
+FOE_can_assign_founder_of_foundries = {
+	FOE_great_leader_country_valid = yes
+	FOE_founder_has_metal = yes
 }
 
 # The Khaganate has its own puppet system.
@@ -1673,6 +1754,9 @@ FOE_assignment_suits_biological_engineer = {
 }
 FOE_assignment_suits_blackout_opportunist = {
 	check_variable = { resource@energy < 0 }
+}
+FOE_assignment_suits_founder_of_foundries = {
+	check_variable = { resource_produced@metal > 19 }
 }
 FOE_assignment_suits_oathkeeper = {
 	any_owned_state = { FOE_is_puppet_release_target = yes }

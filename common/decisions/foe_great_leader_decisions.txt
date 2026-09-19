@@ -2274,6 +2274,188 @@ GEN_great_leader_decisions = {
 		}
 	}
 
+	#Founder of Foundries: Strike the Seam. A new metal generator; paid when started, built when the 90 days end.
+	FOE_founder_strike_the_seam = {
+		icon = GFX_decision_generic_construction
+		allowed = { always = yes }
+		state_target = yes
+		target_array = owned_states
+		on_map_mode = map_and_decisions_view
+		fire_only_once = no
+		days_remove = 90
+		visible = { FOE_is_founder_of_foundries = yes }
+		target_root_trigger = { FOE_is_founder_of_foundries = yes }
+		target_trigger = {
+			FROM = { FOE_is_seam_site = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_foundry_stock_60_tt
+				check_variable = { FOE_foundry_stock > 59 }
+			}
+			custom_trigger_tooltip = {
+				tooltip = FOE_seam_ready_tt
+				NOT = { has_country_flag = FOE_seam_cooldown }
+			}
+			FROM = { FOE_is_seam_site = yes }
+		}
+		modifier = {
+			civilian_factory_use = 5
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_founder_strike_the_seam_cost_tt
+			hidden_effect = {
+				subtract_from_variable = { FOE_foundry_stock = 60 }
+				set_country_flag = { flag = FOE_seam_cooldown value = 1 days = 180 }
+				FOE_after_foundry_spend = yes
+			}
+		}
+		remove_effect = {
+			custom_effect_tooltip = FOE_founder_strike_the_seam_tt
+			hidden_effect = {
+				FROM = {
+					if = {
+						limit = { FOE_is_seam_site = yes }
+						add_building_construction = { type = metal_generator level = 1 instant_build = yes }
+					}
+				}
+			}
+		}
+		# Metal first: the more room for generators, the better.
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	#Founder of Foundries: Iron Wall. Bunkers along a border state's border.
+	FOE_founder_iron_wall = {
+		icon = GFX_decision_generic_fortification
+		allowed = { always = yes }
+		state_target = yes
+		target_array = owned_states
+		on_map_mode = map_and_decisions_view
+		fire_only_once = no
+		visible = { FOE_is_founder_of_foundries = yes }
+		target_root_trigger = { FOE_is_founder_of_foundries = yes }
+		target_trigger = {
+			FROM = { FOE_is_iron_wall_site = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_foundry_stock_40_tt
+				check_variable = { FOE_foundry_stock > 39 }
+			}
+			custom_trigger_tooltip = {
+				tooltip = FOE_iron_wall_ready_tt
+				NOT = { has_country_flag = FOE_iron_wall_cooldown }
+			}
+			FROM = { FOE_is_iron_wall_site = yes }
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_founder_iron_wall_tt
+			hidden_effect = {
+				subtract_from_variable = { FOE_foundry_stock = 40 }
+				set_country_flag = { flag = FOE_iron_wall_cooldown value = 1 days = 30 }
+				FROM = { FOE_raise_iron_wall = yes }
+				FOE_after_foundry_spend = yes
+			}
+		}
+		# Only where a threat is.
+		ai_will_do = {
+			base = 1
+			modifier = {
+				factor = 0
+				FROM = { NOT = { FOE_is_threatened_iron_wall_site = yes } }
+			}
+			modifier = {
+				factor = 20
+				FROM = { FOE_is_threatened_iron_wall_site = yes }
+			}
+		}
+	}
+
+	#Founder of Foundries: Cast Miscellaneous Equipment. Deliberately poor value; a way out of Slag and Smoke when there is
+	# nothing better to spend the Stock on.
+	FOE_founder_cast_miscellaneous = {
+		icon = GFX_decision_generic_industry
+		allowed = { always = yes }
+		fire_only_once = no
+		visible = {
+			FOE_is_founder_of_foundries = yes
+			check_variable = { FOE_foundry_stock > 299 }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_foundry_stock_full_tt
+				check_variable = { FOE_foundry_stock > 299 }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_founder_cast_miscellaneous_tt
+			hidden_effect = {
+				subtract_from_variable = { FOE_foundry_stock = 150 }
+				add_equipment_to_stockpile = { type = support_equipment amount = 30 }
+				FOE_after_foundry_spend = yes
+			}
+		}
+		# Better value first: only once the Stock is about to turn to slag.
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 10
+				check_variable = { FOE_slag_months > 1 }
+			}
+		}
+	}
+
+	#Founder of Foundries, Legendary: Cast a Foundry. A military factory.
+	FOE_founder_cast_a_foundry = {
+		icon = GFX_decision_generic_factory
+		allowed = { always = yes }
+		state_target = yes
+		target_array = owned_states
+		on_map_mode = map_and_decisions_view
+		fire_only_once = no
+		visible = { FOE_is_legendary_or_mythic_founder_of_foundries = yes }
+		target_root_trigger = { FOE_is_legendary_or_mythic_founder_of_foundries = yes }
+		target_trigger = {
+			FROM = { FOE_is_foundry_site = yes }
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_foundry_stock_100_tt
+				check_variable = { FOE_foundry_stock > 99 }
+			}
+			custom_trigger_tooltip = {
+				tooltip = FOE_foundry_ready_tt
+				NOT = { has_country_flag = FOE_foundry_cooldown }
+			}
+			FROM = { FOE_is_foundry_site = yes }
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_founder_cast_a_foundry_tt
+			hidden_effect = {
+				subtract_from_variable = { FOE_foundry_stock = 100 }
+				set_country_flag = { flag = FOE_foundry_cooldown value = 1 days = 90 }
+				FROM = { FOE_cast_foundry = yes }
+				FOE_after_foundry_spend = yes
+			}
+		}
+		# After the seams: while a new generator could still be struck, the AI saves for it. States with room first.
+		ai_will_do = {
+			base = 30
+			modifier = {
+				factor = 0.2
+				NOT = { has_country_flag = FOE_seam_cooldown }
+				any_owned_state = { FOE_is_seam_site = yes }
+			}
+			modifier = {
+				factor = 2
+				FROM = { free_building_slots = { building = arms_factory size > 0 } }
+			}
+		}
+	}
+
 	#Lawgiver: the laws
 	FOE_lawgiver_enact_labour = {
 		icon = GFX_decision_unknown
