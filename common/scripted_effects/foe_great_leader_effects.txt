@@ -13,6 +13,8 @@ FOE_mark_great_leader_roll_completed = {
 FOE_check_great_leader_succession = {
 	# A Reckoning outlives the leader who swore it: the successor inherits it before any new roll.
 	FOE_nemesis_pass_to_successor = yes
+	# So does a Consortium charter, on either side.
+	FOE_consortium_pass_to_successor = yes
 	if = {
 		limit = {
 			has_global_flag = FOE_campaign_setup_confirmed
@@ -2316,6 +2318,420 @@ FOE_initialize_founder_of_foundries = {
 	FOE_update_founder_of_foundries = yes
 }
 
+#Industrial Consortium Subclass (Industrialist co-op)
+# Effects that can run inside the other side's event (make, merger) never use ROOT.
+
+# Country scope. The leader's Industrialist rank, 1-3 (a Multiclass leader counts as 3), kept for successors.
+FOE_update_consortium_rank = {
+	if = {
+		limit = { FOE_has_mythic_industrialist_tier = yes }
+		set_variable = { FOE_consortium_rank = 3 }
+	}
+	else_if = {
+		limit = { FOE_has_legendary_or_mythic_industrialist_tier = yes }
+		set_variable = { FOE_consortium_rank = 2 }
+	}
+	else = {
+		set_variable = { FOE_consortium_rank = 1 }
+	}
+}
+
+# Country scope. One Industrialist rank up: Great to Legendary, Legendary to Mythic.
+FOE_industrialist_rank_up = {
+	if = {
+		limit = { has_country_leader_with_trait = great_leader_industry_trait }
+		remove_country_leader_trait = great_leader_industry_trait
+		add_country_leader_trait = legendary_leader_industry_trait
+	}
+	else_if = {
+		limit = { has_country_leader_with_trait = legendary_leader_industry_trait }
+		remove_country_leader_trait = legendary_leader_industry_trait
+		add_country_leader_trait = mythic_leader_industry_trait
+	}
+}
+
+# Country scope, the new Partner; its FOE_consortium_other (the Chairman) is already set. A Partner without a class
+# becomes a Great Industrialist. Both sides sign a non-aggression pact and start with no ventures and no merger used.
+FOE_make_consortium_partner = {
+	if = {
+		limit = {
+			NOT = { FOE_has_any_conqueror_tier = yes }
+			NOT = { FOE_has_any_administrator_tier = yes }
+			NOT = { FOE_has_any_industrialist_tier = yes }
+		}
+		add_country_leader_trait = great_leader_industry_trait
+	}
+	add_country_leader_trait = FOE_consortium_partner_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_consortium_partner_character
+		set_character_flag = FOE_great_leader_roll_completed
+	}
+	clr_country_flag = FOE_elevation_offer_pending
+	clr_country_flag = FOE_consortium_merger_proposed
+	set_variable = { FOE_consortium_ventures = 0 }
+	FOE_update_consortium_rank = yes
+	var:FOE_consortium_other = {
+		set_variable = { FOE_consortium_other = PREV }
+		set_variable = { FOE_consortium_ventures = 0 }
+		clear_variable = FOE_consortium_offer_target
+		clr_country_flag = FOE_consortium_offer_pending
+		clr_country_flag = FOE_consortium_merger_proposed
+		if = {
+			limit = { NOT = { has_non_aggression_pact_with = PREV } }
+			diplomatic_relation = {
+				country = PREV
+				relation = non_aggression_pact
+				active = yes
+			}
+		}
+		add_opinion_modifier = { target = PREV modifier = FOE_consortium_charter }
+		PREV = { add_opinion_modifier = { target = PREV modifier = FOE_consortium_charter } }
+		log = "FOE_CONSORTIUM [THIS.GetTag] signed a charter with [PREV.GetTag]"
+	}
+}
+
+# Country scope, the Chairman (ROOT). Picks the Partner in order: an AI Industrialist without a subclass, an AI
+# nation without a Great Leader, a human (by offer). With nobody, it tries again in 180 days.
+FOE_choose_consortium_partner = {
+	if = {
+		limit = { any_neighbor_country = { FOE_is_consortium_candidate_industrialist = yes } }
+		random_neighbor_country = {
+			limit = { FOE_is_consortium_candidate_industrialist = yes }
+			set_variable = { FOE_consortium_other = ROOT }
+			FOE_make_consortium_partner = yes
+		}
+	}
+	else_if = {
+		limit = { any_neighbor_country = { FOE_is_consortium_candidate_unled = yes } }
+		random_neighbor_country = {
+			limit = { FOE_is_consortium_candidate_unled = yes }
+			set_variable = { FOE_consortium_other = ROOT }
+			FOE_make_consortium_partner = yes
+		}
+	}
+	else_if = {
+		limit = { any_neighbor_country = { FOE_is_consortium_candidate_human = yes } }
+		random_neighbor_country = {
+			limit = { FOE_is_consortium_candidate_human = yes }
+			ROOT = {
+				set_variable = { FOE_consortium_offer_target = PREV }
+				set_country_flag = { flag = FOE_consortium_offer_pending value = 1 days = 30 }
+			}
+			set_country_flag = { flag = FOE_elevation_offer_pending value = 1 days = 30 }
+			set_country_flag = { flag = FOE_elevation_offer_cooldown value = 1 days = 365 }
+			country_event = { id = special_rulers.29 }
+			log = "FOE_CONSORTIUM [ROOT.GetTag] offers a charter to [THIS.GetTag]"
+		}
+	}
+	else = {
+		set_country_flag = { flag = FOE_consortium_repick_delay value = 1 days = 180 }
+		log = "FOE_CONSORTIUM [THIS.GetTag] found no Partner, trying again in 180 days"
+	}
+}
+
+# Country scope, either side. The charter is over for this side. The factories stay, and the Partner keeps its class;
+# it only loses the Partner subclass. A Chairman looks for a new Partner after 180 days.
+FOE_end_consortium = {
+	if = {
+		limit = { has_variable = FOE_consortium_other }
+		var:FOE_consortium_other = {
+			if = {
+				limit = { exists = yes }
+				remove_opinion_modifier = { target = PREV modifier = FOE_consortium_charter }
+				PREV = { remove_opinion_modifier = { target = PREV modifier = FOE_consortium_charter } }
+			}
+		}
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = FOE_consortium_supply_modifier } }
+		remove_dynamic_modifier = { modifier = FOE_consortium_supply_modifier }
+	}
+	if = {
+		limit = { has_dynamic_modifier = { modifier = FOE_common_market_modifier } }
+		remove_dynamic_modifier = { modifier = FOE_common_market_modifier }
+	}
+	if = {
+		limit = { has_country_flag = FOE_consortium_chairman_country }
+		set_country_flag = { flag = FOE_consortium_repick_delay value = 1 days = 180 }
+	}
+	else_if = {
+		limit = { FOE_is_consortium_partner = yes }
+		remove_country_leader_trait = FOE_consortium_partner_trait
+		var:country_leader = { clr_character_flag = FOE_consortium_partner_character }
+	}
+	clear_variable = FOE_consortium_other
+	clear_variable = FOE_consortium_ventures
+	clr_country_flag = FOE_consortium_merger_proposed
+	clear_variable = FOE_consortium_supply_water
+	clear_variable = FOE_consortium_offer_water
+	clear_variable = FOE_consortium_supply_energy
+	clear_variable = FOE_consortium_offer_energy
+	clear_variable = FOE_consortium_supply_metal
+	clear_variable = FOE_consortium_offer_metal
+	clear_variable = FOE_consortium_supply_composites
+	clear_variable = FOE_consortium_offer_composites
+	clear_variable = FOE_consortium_supply_circuitry
+	clear_variable = FOE_consortium_offer_circuitry
+	clear_variable = FOE_consortium_supply_advanced
+	clear_variable = FOE_consortium_offer_advanced
+	clear_variable = FOE_consortium_supply_crystals
+	clear_variable = FOE_consortium_offer_crystals
+	log = "FOE_CONSORTIUM [THIS.GetTag] charter ended"
+}
+
+# Country scope. A new leader inherits the charter: the role, and the old Industrialist rank if it has no class.
+FOE_consortium_pass_to_successor = {
+	if = {
+		limit = {
+			FOE_has_leader_character = yes
+			OR = {
+				has_country_flag = FOE_consortium_chairman_country
+				has_variable = FOE_consortium_other
+			}
+			NOT = { FOE_is_consortium_chairman = yes }
+			NOT = { FOE_is_consortium_partner = yes }
+		}
+		if = {
+			limit = {
+				NOT = { FOE_has_any_conqueror_tier = yes }
+				NOT = { FOE_has_any_administrator_tier = yes }
+				NOT = { FOE_has_any_industrialist_tier = yes }
+			}
+			if = {
+				limit = { check_variable = { FOE_consortium_rank > 2 } }
+				add_country_leader_trait = mythic_leader_industry_trait
+			}
+			else_if = {
+				limit = { check_variable = { FOE_consortium_rank > 1 } }
+				add_country_leader_trait = legendary_leader_industry_trait
+			}
+			else = {
+				add_country_leader_trait = great_leader_industry_trait
+			}
+		}
+		if = {
+			limit = { has_country_flag = FOE_consortium_chairman_country }
+			add_country_leader_trait = FOE_consortium_chairman_trait
+			var:country_leader = { set_character_flag = FOE_consortium_chairman_character }
+		}
+		else = {
+			add_country_leader_trait = FOE_consortium_partner_trait
+			var:country_leader = { set_character_flag = FOE_consortium_partner_character }
+		}
+		var:country_leader = {
+			set_character_flag = FOE_great_leader_character
+			set_character_flag = FOE_great_leader_roll_completed
+		}
+		log = "FOE_CONSORTIUM [THIS.GetTag] a new leader inherits the charter"
+	}
+}
+
+# Country scope, either side. Every third venture raises the Partner one rank, never above the Chairman.
+FOE_consortium_promote_partner = {
+	FOE_update_consortium_rank = yes
+	var:FOE_consortium_other = { FOE_update_consortium_rank = yes }
+	if = {
+		limit = { has_country_flag = FOE_consortium_chairman_country }
+		var:FOE_consortium_other = {
+			if = {
+				limit = { check_variable = { FOE_consortium_rank < PREV.FOE_consortium_rank } }
+				FOE_industrialist_rank_up = yes
+				FOE_update_consortium_rank = yes
+			}
+		}
+	}
+	else = {
+		var:FOE_consortium_other = {
+			PREV = {
+				if = {
+					limit = { check_variable = { FOE_consortium_rank < PREV.FOE_consortium_rank } }
+					FOE_industrialist_rank_up = yes
+					FOE_update_consortium_rank = yes
+				}
+			}
+		}
+	}
+}
+
+# Country scope (ROOT), the side whose Joint Venture ended. It always gets its factory; the other side's factory,
+# the venture count and the Partner's promotion need the charter to still hold.
+FOE_complete_joint_venture = {
+	if = {
+		limit = {
+			any_owned_state = {
+				is_controlled_by = ROOT
+				free_building_slots = { building = industrial_complex size > 0 }
+			}
+		}
+		random_owned_state = {
+			limit = {
+				is_controlled_by = ROOT
+				free_building_slots = { building = industrial_complex size > 0 }
+			}
+			add_building_construction = { type = industrial_complex level = 1 instant_build = yes }
+		}
+	}
+	else = {
+		add_offsite_building = { type = industrial_complex level = 1 }
+	}
+	if = {
+		limit = { FOE_has_valid_consortium = yes }
+		var:FOE_consortium_other = { add_offsite_building = { type = industrial_complex level = 1 } }
+		add_to_variable = { FOE_consortium_ventures = 1 }
+		var:FOE_consortium_other = { set_variable = { FOE_consortium_ventures = PREV.FOE_consortium_ventures } }
+		set_temp_variable = { FOE_venture_step = FOE_consortium_ventures }
+		modulo_temp_variable = { var = FOE_venture_step value = 3 }
+		if = {
+			limit = { check_variable = { FOE_venture_step = 0 } }
+			FOE_consortium_promote_partner = yes
+		}
+		log = "FOE_CONSORTIUM [THIS.GetTag] joint venture done, ventures=[?FOE_consortium_ventures]"
+	}
+}
+
+FOE_initialize_consortium_chairman = {
+	add_country_leader_trait = FOE_consortium_chairman_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_consortium_chairman_character
+	}
+	set_country_flag = FOE_consortium_chairman_country
+	FOE_update_consortium_rank = yes
+	FOE_choose_consortium_partner = yes
+}
+
+# Country scope (ROOT), either side. Monthly. Inherits, ends a broken charter, handles an unanswered offer, picks a
+# Partner when due, and while active and bordering: Shared Supply (25% of the other side's own surplus of each
+# resource, at most 5 each) and, under a Mythic Chairman, the Common Market for both.
+FOE_update_consortium = {
+	FOE_consortium_pass_to_successor = yes
+	if = {
+		limit = {
+			has_variable = FOE_consortium_other
+			NOT = { FOE_has_valid_consortium = yes }
+		}
+		FOE_end_consortium = yes
+	}
+	if = {
+		limit = {
+			has_variable = FOE_consortium_offer_target
+			NOT = { has_country_flag = FOE_consortium_offer_pending }
+		}
+		clear_variable = FOE_consortium_offer_target
+		set_country_flag = { flag = FOE_consortium_repick_delay value = 1 days = 180 }
+		log = "FOE_CONSORTIUM [THIS.GetTag] the charter offer was declined or went unanswered"
+	}
+	if = {
+		limit = {
+			has_country_flag = FOE_consortium_chairman_country
+			FOE_is_consortium_chairman = yes
+			NOT = { has_variable = FOE_consortium_other }
+			NOT = { has_variable = FOE_consortium_offer_target }
+			NOT = { has_country_flag = FOE_consortium_repick_delay }
+		}
+		FOE_choose_consortium_partner = yes
+	}
+	if = {
+		limit = { FOE_has_any_industrialist_tier = yes }
+		FOE_update_consortium_rank = yes
+	}
+	if = {
+		limit = { FOE_consortium_is_active = yes }
+		# What we can offer: our surplus without what we already receive.
+		set_variable = { FOE_consortium_offer_water = resource@water }
+		subtract_from_variable = { FOE_consortium_offer_water = FOE_consortium_supply_water }
+		clamp_variable = { var = FOE_consortium_offer_water min = 0 max = 999 }
+		set_variable = { FOE_consortium_offer_energy = resource@energy }
+		subtract_from_variable = { FOE_consortium_offer_energy = FOE_consortium_supply_energy }
+		clamp_variable = { var = FOE_consortium_offer_energy min = 0 max = 999 }
+		set_variable = { FOE_consortium_offer_metal = resource@metal }
+		subtract_from_variable = { FOE_consortium_offer_metal = FOE_consortium_supply_metal }
+		clamp_variable = { var = FOE_consortium_offer_metal min = 0 max = 999 }
+		set_variable = { FOE_consortium_offer_composites = resource@composites }
+		subtract_from_variable = { FOE_consortium_offer_composites = FOE_consortium_supply_composites }
+		clamp_variable = { var = FOE_consortium_offer_composites min = 0 max = 999 }
+		set_variable = { FOE_consortium_offer_circuitry = resource@circuitry }
+		subtract_from_variable = { FOE_consortium_offer_circuitry = FOE_consortium_supply_circuitry }
+		clamp_variable = { var = FOE_consortium_offer_circuitry min = 0 max = 999 }
+		set_variable = { FOE_consortium_offer_advanced = resource@advanced }
+		subtract_from_variable = { FOE_consortium_offer_advanced = FOE_consortium_supply_advanced }
+		clamp_variable = { var = FOE_consortium_offer_advanced min = 0 max = 999 }
+		set_variable = { FOE_consortium_offer_crystals = resource@crystals }
+		subtract_from_variable = { FOE_consortium_offer_crystals = FOE_consortium_supply_crystals }
+		clamp_variable = { var = FOE_consortium_offer_crystals min = 0 max = 999 }
+		var:FOE_consortium_other = {
+				ROOT = { set_variable = { FOE_consortium_supply_water = PREV.FOE_consortium_offer_water } }
+				ROOT = { set_variable = { FOE_consortium_supply_energy = PREV.FOE_consortium_offer_energy } }
+				ROOT = { set_variable = { FOE_consortium_supply_metal = PREV.FOE_consortium_offer_metal } }
+				ROOT = { set_variable = { FOE_consortium_supply_composites = PREV.FOE_consortium_offer_composites } }
+				ROOT = { set_variable = { FOE_consortium_supply_circuitry = PREV.FOE_consortium_offer_circuitry } }
+				ROOT = { set_variable = { FOE_consortium_supply_advanced = PREV.FOE_consortium_offer_advanced } }
+				ROOT = { set_variable = { FOE_consortium_supply_crystals = PREV.FOE_consortium_offer_crystals } }
+		}
+		multiply_variable = { FOE_consortium_supply_water = 0.25 }
+		clamp_variable = { var = FOE_consortium_supply_water min = 0 max = 5 }
+		multiply_variable = { FOE_consortium_supply_energy = 0.25 }
+		clamp_variable = { var = FOE_consortium_supply_energy min = 0 max = 5 }
+		multiply_variable = { FOE_consortium_supply_metal = 0.25 }
+		clamp_variable = { var = FOE_consortium_supply_metal min = 0 max = 5 }
+		multiply_variable = { FOE_consortium_supply_composites = 0.25 }
+		clamp_variable = { var = FOE_consortium_supply_composites min = 0 max = 5 }
+		multiply_variable = { FOE_consortium_supply_circuitry = 0.25 }
+		clamp_variable = { var = FOE_consortium_supply_circuitry min = 0 max = 5 }
+		multiply_variable = { FOE_consortium_supply_advanced = 0.25 }
+		clamp_variable = { var = FOE_consortium_supply_advanced min = 0 max = 5 }
+		multiply_variable = { FOE_consortium_supply_crystals = 0.25 }
+		clamp_variable = { var = FOE_consortium_supply_crystals min = 0 max = 5 }
+		if = {
+			limit = { NOT = { has_dynamic_modifier = { modifier = FOE_consortium_supply_modifier } } }
+			add_dynamic_modifier = { modifier = FOE_consortium_supply_modifier }
+		}
+		if = {
+			limit = {
+				OR = {
+					FOE_is_mythic_consortium_chairman = yes
+					var:FOE_consortium_other = { FOE_is_mythic_consortium_chairman = yes }
+				}
+			}
+			if = {
+				limit = { NOT = { has_dynamic_modifier = { modifier = FOE_common_market_modifier } } }
+				add_dynamic_modifier = { modifier = FOE_common_market_modifier }
+			}
+		}
+		else_if = {
+			limit = { has_dynamic_modifier = { modifier = FOE_common_market_modifier } }
+			remove_dynamic_modifier = { modifier = FOE_common_market_modifier }
+		}
+		force_update_dynamic_modifier = yes
+	}
+	else = {
+		if = {
+			limit = { has_dynamic_modifier = { modifier = FOE_consortium_supply_modifier } }
+			remove_dynamic_modifier = { modifier = FOE_consortium_supply_modifier }
+		}
+		if = {
+			limit = { has_dynamic_modifier = { modifier = FOE_common_market_modifier } }
+			remove_dynamic_modifier = { modifier = FOE_common_market_modifier }
+		}
+		# Suspended: nothing is received, so nothing may be subtracted from the next offer.
+		clear_variable = FOE_consortium_supply_water
+		clear_variable = FOE_consortium_offer_water
+		clear_variable = FOE_consortium_supply_energy
+		clear_variable = FOE_consortium_offer_energy
+		clear_variable = FOE_consortium_supply_metal
+		clear_variable = FOE_consortium_offer_metal
+		clear_variable = FOE_consortium_supply_composites
+		clear_variable = FOE_consortium_offer_composites
+		clear_variable = FOE_consortium_supply_circuitry
+		clear_variable = FOE_consortium_offer_circuitry
+		clear_variable = FOE_consortium_supply_advanced
+		clear_variable = FOE_consortium_offer_advanced
+		clear_variable = FOE_consortium_supply_crystals
+		clear_variable = FOE_consortium_offer_crystals
+	}
+}
+
 #Dreamer in Steel Subclass
 # Country scope. Exchange prices rise with every exchange of either kind:
 # civilian factory 20 + 10 per exchange, military factory 30 + 10 per exchange (heavy industrial robots).
@@ -3068,6 +3484,10 @@ FOE_roll_industrialist_subclass = {
 		if = { limit = { NOT = { FOE_can_assign_founder_of_foundries = yes } } multiply_temp_variable = { FOE_audit_founder_of_foundries = 0 } }
 		if = { limit = { FOE_assignment_suits_founder_of_foundries = yes } multiply_temp_variable = { FOE_audit_founder_of_foundries = 1.5 } }
 		log = "FOE_ASSIGN [THIS.GetTag] class=industrialist candidate=founder_of_foundries weight=[?FOE_audit_founder_of_foundries] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_consortium_chairman = 10 }
+		if = { limit = { NOT = { FOE_can_assign_consortium_chairman = yes } } multiply_temp_variable = { FOE_audit_consortium_chairman = 0 } }
+		if = { limit = { FOE_assignment_suits_consortium_chairman = yes } multiply_temp_variable = { FOE_audit_consortium_chairman = 1.5 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=industrialist candidate=consortium_chairman weight=[?FOE_audit_consortium_chairman] (zero=ineligible)"
 	}
 	random_list = {
 		log = yes
@@ -3128,6 +3548,12 @@ FOE_roll_industrialist_subclass = {
 			modifier = { factor = 1.5 FOE_assignment_suits_founder_of_foundries = yes }
 			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=industrialist selected=founder_of_foundries" }
 			FOE_initialize_founder_of_foundries = yes
+		}
+		10 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_consortium_chairman = yes } }
+			modifier = { factor = 1.5 FOE_assignment_suits_consortium_chairman = yes }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=industrialist selected=consortium_chairman" }
+			FOE_initialize_consortium_chairman = yes
 		}
 	}
 }

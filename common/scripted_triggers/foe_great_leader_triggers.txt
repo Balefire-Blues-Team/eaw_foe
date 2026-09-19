@@ -1047,6 +1047,9 @@ FOE_is_bonded = {
 		has_variable = FOE_monarch_offer_target
 		# Nemesis
 		has_variable = FOE_nemesis_rival
+		# Industrial Consortium
+		has_variable = FOE_consortium_other
+		has_variable = FOE_consortium_offer_target
 		# Any co-op: an offer to this (human) nation is still open.
 		has_country_flag = FOE_elevation_offer_pending
 	}
@@ -1292,6 +1295,120 @@ FOE_is_wargames_state = {
 	is_core_of = ROOT
 	state_population > 2000
 	NOT = { has_dynamic_modifier = { modifier = FOE_carrion_devastation } }
+}
+
+#Industrial Consortium (Industrialist co-op). A Chairman and a Partner, equals bound by a charter. Each stores the
+# other in FOE_consortium_other; the Chairman's nation carries the flag FOE_consortium_chairman_country. The charter
+# binds nations, not people: a new leader on either side inherits it (FOE_consortium_pass_to_successor).
+FOE_is_consortium_chairman = {
+	FOE_has_leader_character = yes
+	var:country_leader = {
+		has_character_flag = FOE_great_leader_character
+		has_character_flag = FOE_consortium_chairman_character
+	}
+}
+
+FOE_is_mythic_consortium_chairman = {
+	FOE_is_consortium_chairman = yes
+	FOE_has_mythic_industrialist_tier = yes
+}
+
+FOE_is_consortium_partner = {
+	FOE_has_leader_character = yes
+	var:country_leader = {
+		has_character_flag = FOE_great_leader_character
+		has_character_flag = FOE_consortium_partner_character
+	}
+}
+
+# Any Industrialist subclass, the Consortium's two roles included.
+FOE_has_industrialist_subclass = {
+	OR = {
+		FOE_is_reactor_prophet = yes
+		FOE_is_autark = yes
+		FOE_is_merchant_prince = yes
+		FOE_is_biological_engineer = yes
+		FOE_is_blackout_opportunist = yes
+		FOE_is_dreamer_in_steel = yes
+		FOE_is_founder_of_foundries = yes
+		FOE_is_consortium_chairman = yes
+		FOE_is_consortium_partner = yes
+	}
+}
+
+# Foreign COUNTRY scope; ROOT is the Chairman. A bordering nation that could sign the charter.
+FOE_is_consortium_candidate_basic = {
+	exists = yes
+	is_subject = no
+	NOT = { tag = ROOT }
+	is_neighbor_of = ROOT
+	has_capitulated = no
+	NOT = { has_war_with = ROOT }
+	NOT = { has_truce_with = ROOT }
+	NOT = { FOE_is_bonded = yes }
+	NOT = { is_subject_of = ROOT }
+	NOT = { ROOT = { is_subject_of = PREV } }
+	NOT = { tag = EYE }
+	NOT = { tag = SHA }
+	NOT = { tag = COM }
+	NOT = { tag = OWE }
+	FOE_has_leader_character = yes
+	capital_scope = { is_owned_by = PREV is_controlled_by = PREV }
+}
+
+# First choice: an AI Industrialist without a subclass. It keeps its rank.
+FOE_is_consortium_candidate_industrialist = {
+	FOE_is_consortium_candidate_basic = yes
+	is_ai = yes
+	OR = {
+		has_country_leader_with_trait = great_leader_industry_trait
+		has_country_leader_with_trait = legendary_leader_industry_trait
+		has_country_leader_with_trait = mythic_leader_industry_trait
+	}
+	NOT = { FOE_has_industrialist_subclass = yes }
+}
+
+# Second choice: an AI nation without a Great Leader. It becomes a Great Industrialist.
+FOE_is_consortium_candidate_unled = {
+	FOE_is_consortium_candidate_basic = yes
+	is_ai = yes
+	NOT = { FOE_has_any_conqueror_tier = yes }
+	NOT = { FOE_has_any_administrator_tier = yes }
+	NOT = { FOE_has_any_industrialist_tier = yes }
+	var:country_leader = { NOT = { has_character_flag = FOE_great_leader_character } }
+}
+
+# Third choice: a human player, by offer.
+FOE_is_consortium_candidate_human = {
+	FOE_is_consortium_candidate_basic = yes
+	FOE_can_receive_elevation_offer = yes
+}
+
+FOE_has_consortium_candidate = {
+	any_neighbor_country = {
+		OR = {
+			FOE_is_consortium_candidate_industrialist = yes
+			FOE_is_consortium_candidate_unled = yes
+			FOE_is_consortium_candidate_human = yes
+		}
+	}
+}
+
+# Country scope (ROOT), either side. The other side still exists, still points at us, and is not at war with us.
+FOE_has_valid_consortium = {
+	has_variable = FOE_consortium_other
+	var:FOE_consortium_other = {
+		exists = yes
+		has_variable = FOE_consortium_other
+		var:FOE_consortium_other = { tag = ROOT }
+		NOT = { has_war_with = ROOT }
+	}
+}
+
+# Country scope (ROOT). Valid, and the two still share a border. Without one the Consortium is suspended.
+FOE_consortium_is_active = {
+	FOE_has_valid_consortium = yes
+	var:FOE_consortium_other = { is_neighbor_of = ROOT }
 }
 
 #Lawgiver
@@ -1604,6 +1721,14 @@ FOE_can_assign_founder_of_foundries = {
 	FOE_founder_has_metal = yes
 }
 
+# A Chairman needs a neighbour to sign the charter with.
+FOE_can_assign_consortium_chairman = {
+	FOE_great_leader_country_valid = yes
+	is_subject = no
+	NOT = { FOE_is_bonded = yes }
+	FOE_has_consortium_candidate = yes
+}
+
 # The Khaganate has its own puppet system.
 FOE_can_assign_oathkeeper = {
 	FOE_great_leader_country_valid = yes
@@ -1757,6 +1882,9 @@ FOE_assignment_suits_blackout_opportunist = {
 }
 FOE_assignment_suits_founder_of_foundries = {
 	check_variable = { resource_produced@metal > 19 }
+}
+FOE_assignment_suits_consortium_chairman = {
+	any_neighbor_country = { FOE_is_consortium_candidate_industrialist = yes }
 }
 FOE_assignment_suits_oathkeeper = {
 	any_owned_state = { FOE_is_puppet_release_target = yes }

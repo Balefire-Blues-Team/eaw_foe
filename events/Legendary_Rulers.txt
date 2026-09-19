@@ -913,6 +913,8 @@ country_event = {
 				FROM = {
 					FOE_is_just_monarch = yes
 					has_country_flag = FOE_monarch_offer_pending
+					has_variable = FOE_monarch_offer_target
+					var:FOE_monarch_offer_target = { tag = ROOT }
 				}
 				NOT = { FOE_is_bonded = yes }
 			}
@@ -926,7 +928,16 @@ country_event = {
 	option = {
 		name = special_rulers.25.b
 		clr_country_flag = FOE_elevation_offer_pending
-		FROM = { clr_country_flag = FOE_monarch_offer_pending }
+		# An old event must not cancel a newer offer made to someone else.
+		FROM = {
+			if = {
+				limit = {
+					has_variable = FOE_monarch_offer_target
+					var:FOE_monarch_offer_target = { tag = ROOT }
+				}
+				clr_country_flag = FOE_monarch_offer_pending
+			}
+		}
 	}
 }
 
@@ -1043,4 +1054,212 @@ country_event = {
 	}
 
 	option = { name = special_rulers.28.close }
+}
+
+#Industrial Consortium: a human neighbour is offered the charter. ROOT is the human, FROM the Chairman.
+# The Chairman's monthly update treats a declined or expired offer as "no Partner" and tries again in 180 days.
+country_event = {
+	id = special_rulers.29
+	title = special_rulers.29.t
+	desc = special_rulers.29.d
+	picture = GFX_event_NCR_startup
+	is_triggered_only = yes
+	fire_only_once = no
+
+	option = {
+		name = special_rulers.29.a
+		clr_country_flag = FOE_elevation_offer_pending
+		if = {
+			limit = {
+				FROM = {
+					FOE_is_consortium_chairman = yes
+					has_country_flag = FOE_consortium_offer_pending
+					has_variable = FOE_consortium_offer_target
+					var:FOE_consortium_offer_target = { tag = ROOT }
+				}
+				NOT = { FOE_is_bonded = yes }
+			}
+			set_variable = { FOE_consortium_other = FROM }
+			FOE_make_consortium_partner = yes
+		}
+		else = {
+			custom_effect_tooltip = special_rulers.29.expired_tt
+		}
+	}
+	option = {
+		name = special_rulers.29.b
+		clr_country_flag = FOE_elevation_offer_pending
+		# An old event must not cancel a newer offer made to someone else.
+		FROM = {
+			if = {
+				limit = {
+					has_variable = FOE_consortium_offer_target
+					var:FOE_consortium_offer_target = { tag = ROOT }
+				}
+				clr_country_flag = FOE_consortium_offer_pending
+			}
+		}
+	}
+}
+
+#Industrial Consortium: a merger is proposed. ROOT is asked, FROM proposes. Accepting integrates ROOT into FROM, as
+# the Unifier absorbs a nation: its states arrive as cores. FROM's leader rises one Industrialist rank.
+country_event = {
+	id = special_rulers.30
+	title = special_rulers.30.t
+	desc = special_rulers.30.d
+	picture = GFX_event_NCR_startup
+	is_triggered_only = yes
+	fire_only_once = no
+
+	option = {
+		name = special_rulers.30.a
+		ai_chance = {
+			base = 50
+			modifier = {
+				factor = 3
+				check_variable = { num_owned_states < FROM.num_owned_states }
+			}
+			modifier = {
+				factor = 0.2
+				check_variable = { num_owned_states > FROM.num_owned_states }
+			}
+		}
+		# Annexation cannot be undone: the proposal only stands while the two are still each other's charter
+		# partners, at peace, and sharing a border.
+		if = {
+			limit = {
+				FROM = {
+					exists = yes
+					has_variable = FOE_consortium_other
+					var:FOE_consortium_other = { tag = ROOT }
+					NOT = { has_war_with = ROOT }
+					is_neighbor_of = ROOT
+				}
+				has_variable = FOE_consortium_other
+				var:FOE_consortium_other = { tag = FROM }
+			}
+			FROM = {
+				FOE_industrialist_rank_up = yes
+				FOE_update_consortium_rank = yes
+				log = "FOE_CONSORTIUM [THIS.GetTag] merged with [PREV.GetTag]"
+			}
+			every_owned_state = { add_core_of = FROM }
+			FROM = { annex_country = { target = PREV transfer_troops = yes } }
+		}
+		else = {
+			custom_effect_tooltip = special_rulers.30.expired_tt
+		}
+	}
+	option = {
+		name = special_rulers.30.b
+		ai_chance = { base = 50 }
+		FROM = {
+			if = {
+				limit = { is_ai = no }
+				country_event = { id = special_rulers.31 }
+			}
+		}
+	}
+}
+
+#Industrial Consortium: a human's merger proposal was turned down. ROOT is the proposer, FROM the other side.
+country_event = {
+	id = special_rulers.31
+	title = special_rulers.31.t
+	desc = special_rulers.31.d
+	picture = GFX_event_NCR_startup
+	is_triggered_only = yes
+	fire_only_once = no
+
+	option = {
+		name = special_rulers.31.a
+	}
+}
+
+#DEBUG: Industrial Consortium menu (console "event special_rulers.32"). Debug paths skip the roll gate.
+country_event = {
+	id = special_rulers.32
+	title = special_rulers.32.t
+	desc = special_rulers.32.d
+	picture = GFX_event_NCR_startup
+	is_triggered_only = yes
+	fire_only_once = no
+
+	# Swaps any class trait, Mythic and Multiclass included, for Great Industrialist, so promotions can be seen.
+	# Needs a bordering candidate; without one the log says "found no Partner" and the Chairman waits 180 days.
+	option = {
+		name = special_rulers.32.a
+		trigger = {
+			NOT = { has_country_flag = FOE_consortium_chairman_country }
+			NOT = { has_variable = FOE_consortium_other }
+		}
+		FOE_remove_class_traits = yes
+		if = { limit = { has_country_leader_with_trait = mythic_leader_military_trait } remove_country_leader_trait = mythic_leader_military_trait }
+		if = { limit = { has_country_leader_with_trait = mythic_leader_admin_trait } remove_country_leader_trait = mythic_leader_admin_trait }
+		if = { limit = { has_country_leader_with_trait = mythic_leader_industry_trait } remove_country_leader_trait = mythic_leader_industry_trait }
+		if = { limit = { has_country_leader_with_trait = mythic_leader_ruler_trait } remove_country_leader_trait = mythic_leader_ruler_trait }
+		if = { limit = { has_country_leader_with_trait = mythic_leader_exploiter_trait } remove_country_leader_trait = mythic_leader_exploiter_trait }
+		if = { limit = { has_country_leader_with_trait = mythic_leader_magnate_trait } remove_country_leader_trait = mythic_leader_magnate_trait }
+		add_country_leader_trait = great_leader_industry_trait
+		FOE_initialize_consortium_chairman = yes
+	}
+
+	# Three ventures at once, on both sides, and the promotion a third venture brings.
+	option = {
+		name = special_rulers.32.b
+		trigger = { FOE_has_valid_consortium = yes }
+		add_to_variable = { FOE_consortium_ventures = 3 }
+		var:FOE_consortium_other = { set_variable = { FOE_consortium_ventures = PREV.FOE_consortium_ventures } }
+		FOE_consortium_promote_partner = yes
+	}
+
+	# Ten ventures on both sides: Propose Merger becomes visible (if this side has not proposed yet).
+	option = {
+		name = special_rulers.32.c
+		trigger = {
+			FOE_has_valid_consortium = yes
+			check_variable = { FOE_consortium_ventures < 10 }
+		}
+		set_variable = { FOE_consortium_ventures = 10 }
+		var:FOE_consortium_other = { set_variable = { FOE_consortium_ventures = 10 } }
+	}
+
+	# This month's update now: Shared Supply, the Common Market, suspension and breaks.
+	option = {
+		name = special_rulers.32.e
+		trigger = {
+			OR = {
+				has_country_flag = FOE_consortium_chairman_country
+				has_variable = FOE_consortium_other
+			}
+		}
+		FOE_update_consortium = yes
+	}
+
+	# Ends the charter for both sides, as a break would. A Chairman then waits 180 days for a new Partner.
+	option = {
+		name = special_rulers.32.f
+		trigger = { has_variable = FOE_consortium_other }
+		var:FOE_consortium_other = {
+			if = {
+				limit = { exists = yes }
+				FOE_end_consortium = yes
+			}
+		}
+		FOE_end_consortium = yes
+	}
+
+	# Our leader rises one Industrialist rank, e.g. to a Mythic Chairman for the Common Market.
+	option = {
+		name = special_rulers.32.g
+		trigger = {
+			FOE_has_any_industrialist_tier = yes
+			NOT = { has_country_leader_with_trait = mythic_leader_industry_trait }
+		}
+		FOE_industrialist_rank_up = yes
+		FOE_update_consortium_rank = yes
+	}
+
+	option = { name = special_rulers.32.close }
 }
