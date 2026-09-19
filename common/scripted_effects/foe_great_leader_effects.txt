@@ -2392,28 +2392,68 @@ FOE_make_consortium_partner = {
 }
 
 # Country scope, the Chairman (ROOT). Picks the Partner in order: an AI Industrialist without a subclass, an AI
-# nation without a Great Leader, a human (by offer). With nobody, it tries again in 180 days.
+# nation without a Great Leader, a human (by offer); within each step, members of our own faction first. With nobody,
+# it tries again in 180 days.
 FOE_choose_consortium_partner = {
 	if = {
 		limit = { any_neighbor_country = { FOE_is_consortium_candidate_industrialist = yes } }
-		random_neighbor_country = {
-			limit = { FOE_is_consortium_candidate_industrialist = yes }
+		# Our own faction's members first, then anyone.
+		if = {
+			limit = { any_neighbor_country = { FOE_is_consortium_candidate_industrialist = yes is_in_faction_with = ROOT } }
+			random_neighbor_country = {
+				limit = { FOE_is_consortium_candidate_industrialist = yes is_in_faction_with = ROOT }
+				save_event_target_as = FOE_chosen_candidate
+			}
+		}
+		else = {
+			random_neighbor_country = {
+				limit = { FOE_is_consortium_candidate_industrialist = yes }
+				save_event_target_as = FOE_chosen_candidate
+			}
+		}
+		event_target:FOE_chosen_candidate = {
 			set_variable = { FOE_consortium_other = ROOT }
 			FOE_make_consortium_partner = yes
 		}
 	}
 	else_if = {
 		limit = { any_neighbor_country = { FOE_is_consortium_candidate_unled = yes } }
-		random_neighbor_country = {
-			limit = { FOE_is_consortium_candidate_unled = yes }
+		# Our own faction's members first, then anyone.
+		if = {
+			limit = { any_neighbor_country = { FOE_is_consortium_candidate_unled = yes is_in_faction_with = ROOT } }
+			random_neighbor_country = {
+				limit = { FOE_is_consortium_candidate_unled = yes is_in_faction_with = ROOT }
+				save_event_target_as = FOE_chosen_candidate
+			}
+		}
+		else = {
+			random_neighbor_country = {
+				limit = { FOE_is_consortium_candidate_unled = yes }
+				save_event_target_as = FOE_chosen_candidate
+			}
+		}
+		event_target:FOE_chosen_candidate = {
 			set_variable = { FOE_consortium_other = ROOT }
 			FOE_make_consortium_partner = yes
 		}
 	}
 	else_if = {
 		limit = { any_neighbor_country = { FOE_is_consortium_candidate_human = yes } }
-		random_neighbor_country = {
-			limit = { FOE_is_consortium_candidate_human = yes }
+		# Our own faction's members first, then anyone.
+		if = {
+			limit = { any_neighbor_country = { FOE_is_consortium_candidate_human = yes is_in_faction_with = ROOT } }
+			random_neighbor_country = {
+				limit = { FOE_is_consortium_candidate_human = yes is_in_faction_with = ROOT }
+				save_event_target_as = FOE_chosen_candidate
+			}
+		}
+		else = {
+			random_neighbor_country = {
+				limit = { FOE_is_consortium_candidate_human = yes }
+				save_event_target_as = FOE_chosen_candidate
+			}
+		}
+		event_target:FOE_chosen_candidate = {
 			ROOT = {
 				set_variable = { FOE_consortium_offer_target = PREV }
 				set_country_flag = { flag = FOE_consortium_offer_pending value = 1 days = 30 }
@@ -2436,10 +2476,11 @@ FOE_end_consortium = {
 	if = {
 		limit = { has_variable = FOE_consortium_other }
 		var:FOE_consortium_other = {
+			# Ours goes even if they are gone (a released tag would otherwise find it again); theirs needs them.
+			PREV = { remove_opinion_modifier = { target = PREV modifier = FOE_consortium_charter } }
 			if = {
 				limit = { exists = yes }
 				remove_opinion_modifier = { target = PREV modifier = FOE_consortium_charter }
-				PREV = { remove_opinion_modifier = { target = PREV modifier = FOE_consortium_charter } }
 			}
 		}
 	}
@@ -2599,6 +2640,779 @@ FOE_initialize_consortium_chairman = {
 	set_country_flag = FOE_consortium_chairman_country
 	FOE_update_consortium_rank = yes
 	FOE_choose_consortium_partner = yes
+}
+
+#Mentor and Heir Subclass (Magnate co-op)
+# The Master's Craft: +20% research speed, +20% political power gain, +10% factory output, +10% construction speed.
+# The Mentor holds pool x (1 - Legacy), the Heir pool x Legacy. Legacy: +2.5% a month, +10% per Lesson.
+# Effects that can run inside the other side's event or update never use ROOT.
+
+# Country scope. One Administrator rank up: Great to Legendary, Legendary to Mythic.
+FOE_administrator_rank_up = {
+	if = {
+		limit = { has_country_leader_with_trait = great_leader_admin_trait }
+		remove_country_leader_trait = great_leader_admin_trait
+		add_country_leader_trait = legendary_leader_admin_trait
+	}
+	else_if = {
+		limit = { has_country_leader_with_trait = legendary_leader_admin_trait }
+		remove_country_leader_trait = legendary_leader_admin_trait
+		add_country_leader_trait = mythic_leader_admin_trait
+	}
+}
+
+# Research sharing: each pair takes one of five slots, and within it the group of its tier (FOE_mentorship_<slot>_<tier>,
+# 5% to 25% by Legacy: below 20% tier 1, below 40% tier 2, below 60% tier 3, below 80% tier 4, then tier 5).
+# The pair moves up a tier as Legacy grows, so no global research-sharing modifier is needed.
+
+# Country scope, the Mentor, with its Heir set. Takes the first free slot and joins its tier-1 group.
+FOE_join_mentorship_group = {
+	if = {
+		limit = { NOT = { has_global_flag = FOE_mentorship_slot_1 } }
+		set_global_flag = FOE_mentorship_slot_1
+		set_variable = { FOE_mentorship_slot = 1 }
+		var:FOE_mentor_heir = { set_variable = { FOE_mentorship_slot = 1 } }
+	}
+	else_if = {
+		limit = { NOT = { has_global_flag = FOE_mentorship_slot_2 } }
+		set_global_flag = FOE_mentorship_slot_2
+		set_variable = { FOE_mentorship_slot = 2 }
+		var:FOE_mentor_heir = { set_variable = { FOE_mentorship_slot = 2 } }
+	}
+	else_if = {
+		limit = { NOT = { has_global_flag = FOE_mentorship_slot_3 } }
+		set_global_flag = FOE_mentorship_slot_3
+		set_variable = { FOE_mentorship_slot = 3 }
+		var:FOE_mentor_heir = { set_variable = { FOE_mentorship_slot = 3 } }
+	}
+	else_if = {
+		limit = { NOT = { has_global_flag = FOE_mentorship_slot_4 } }
+		set_global_flag = FOE_mentorship_slot_4
+		set_variable = { FOE_mentorship_slot = 4 }
+		var:FOE_mentor_heir = { set_variable = { FOE_mentorship_slot = 4 } }
+	}
+	else_if = {
+		limit = { NOT = { has_global_flag = FOE_mentorship_slot_5 } }
+		set_global_flag = FOE_mentorship_slot_5
+		set_variable = { FOE_mentorship_slot = 5 }
+		var:FOE_mentor_heir = { set_variable = { FOE_mentorship_slot = 5 } }
+	}
+	set_variable = { FOE_mentorship_tier = 0 }
+	var:FOE_mentor_heir = { set_variable = { FOE_mentorship_tier = 0 } }
+	FOE_sync_mentorship_group = yes
+}
+
+# Country scope, the Mentor, with its Heir set. Moves both into the group matching the current Legacy.
+FOE_sync_mentorship_group = {
+	if = {
+		limit = { check_variable = { FOE_mentor_legacy < 0.2 } }
+		set_temp_variable = { FOE_new_mentorship_tier = 1 }
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentor_legacy < 0.4 } }
+		set_temp_variable = { FOE_new_mentorship_tier = 2 }
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentor_legacy < 0.6 } }
+		set_temp_variable = { FOE_new_mentorship_tier = 3 }
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentor_legacy < 0.8 } }
+		set_temp_variable = { FOE_new_mentorship_tier = 4 }
+	}
+	else = {
+		set_temp_variable = { FOE_new_mentorship_tier = 5 }
+	}
+	if = {
+		limit = { NOT = { check_variable = { FOE_mentorship_tier = FOE_new_mentorship_tier } } }
+		FOE_leave_mentorship_tier = yes
+		set_variable = { FOE_mentorship_tier = FOE_new_mentorship_tier }
+		FOE_join_mentorship_tier = yes
+		var:FOE_mentor_heir = {
+			FOE_leave_mentorship_tier = yes
+			set_variable = { FOE_mentorship_tier = PREV.FOE_mentorship_tier }
+			FOE_join_mentorship_tier = yes
+		}
+	}
+}
+
+# Country scope, either side. Joins the group its FOE_mentorship_slot and FOE_mentorship_tier name.
+FOE_join_mentorship_tier = {
+	if = {
+		limit = { check_variable = { FOE_mentorship_slot = 1 } }
+		set_country_flag = FOE_in_mentorship_1
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 2 } }
+		set_country_flag = FOE_in_mentorship_2
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 3 } }
+		set_country_flag = FOE_in_mentorship_3
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 4 } }
+		set_country_flag = FOE_in_mentorship_4
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 5 } }
+		set_country_flag = FOE_in_mentorship_5
+	}
+	if = {
+		limit = { check_variable = { FOE_mentorship_slot = 1 } check_variable = { FOE_mentorship_tier = 1 } }
+		add_to_tech_sharing_group = FOE_mentorship_1_1
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 1 } check_variable = { FOE_mentorship_tier = 2 } }
+		add_to_tech_sharing_group = FOE_mentorship_1_2
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 1 } check_variable = { FOE_mentorship_tier = 3 } }
+		add_to_tech_sharing_group = FOE_mentorship_1_3
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 1 } check_variable = { FOE_mentorship_tier = 4 } }
+		add_to_tech_sharing_group = FOE_mentorship_1_4
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 1 } check_variable = { FOE_mentorship_tier = 5 } }
+		add_to_tech_sharing_group = FOE_mentorship_1_5
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 2 } check_variable = { FOE_mentorship_tier = 1 } }
+		add_to_tech_sharing_group = FOE_mentorship_2_1
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 2 } check_variable = { FOE_mentorship_tier = 2 } }
+		add_to_tech_sharing_group = FOE_mentorship_2_2
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 2 } check_variable = { FOE_mentorship_tier = 3 } }
+		add_to_tech_sharing_group = FOE_mentorship_2_3
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 2 } check_variable = { FOE_mentorship_tier = 4 } }
+		add_to_tech_sharing_group = FOE_mentorship_2_4
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 2 } check_variable = { FOE_mentorship_tier = 5 } }
+		add_to_tech_sharing_group = FOE_mentorship_2_5
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 3 } check_variable = { FOE_mentorship_tier = 1 } }
+		add_to_tech_sharing_group = FOE_mentorship_3_1
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 3 } check_variable = { FOE_mentorship_tier = 2 } }
+		add_to_tech_sharing_group = FOE_mentorship_3_2
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 3 } check_variable = { FOE_mentorship_tier = 3 } }
+		add_to_tech_sharing_group = FOE_mentorship_3_3
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 3 } check_variable = { FOE_mentorship_tier = 4 } }
+		add_to_tech_sharing_group = FOE_mentorship_3_4
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 3 } check_variable = { FOE_mentorship_tier = 5 } }
+		add_to_tech_sharing_group = FOE_mentorship_3_5
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 4 } check_variable = { FOE_mentorship_tier = 1 } }
+		add_to_tech_sharing_group = FOE_mentorship_4_1
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 4 } check_variable = { FOE_mentorship_tier = 2 } }
+		add_to_tech_sharing_group = FOE_mentorship_4_2
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 4 } check_variable = { FOE_mentorship_tier = 3 } }
+		add_to_tech_sharing_group = FOE_mentorship_4_3
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 4 } check_variable = { FOE_mentorship_tier = 4 } }
+		add_to_tech_sharing_group = FOE_mentorship_4_4
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 4 } check_variable = { FOE_mentorship_tier = 5 } }
+		add_to_tech_sharing_group = FOE_mentorship_4_5
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 5 } check_variable = { FOE_mentorship_tier = 1 } }
+		add_to_tech_sharing_group = FOE_mentorship_5_1
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 5 } check_variable = { FOE_mentorship_tier = 2 } }
+		add_to_tech_sharing_group = FOE_mentorship_5_2
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 5 } check_variable = { FOE_mentorship_tier = 3 } }
+		add_to_tech_sharing_group = FOE_mentorship_5_3
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 5 } check_variable = { FOE_mentorship_tier = 4 } }
+		add_to_tech_sharing_group = FOE_mentorship_5_4
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 5 } check_variable = { FOE_mentorship_tier = 5 } }
+		add_to_tech_sharing_group = FOE_mentorship_5_5
+	}
+}
+
+# Country scope, either side. Leaves the group of its current slot and tier.
+FOE_leave_mentorship_tier = {
+	if = {
+		limit = { check_variable = { FOE_mentorship_slot = 1 } check_variable = { FOE_mentorship_tier = 1 } }
+		remove_from_tech_sharing_group = FOE_mentorship_1_1
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 1 } check_variable = { FOE_mentorship_tier = 2 } }
+		remove_from_tech_sharing_group = FOE_mentorship_1_2
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 1 } check_variable = { FOE_mentorship_tier = 3 } }
+		remove_from_tech_sharing_group = FOE_mentorship_1_3
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 1 } check_variable = { FOE_mentorship_tier = 4 } }
+		remove_from_tech_sharing_group = FOE_mentorship_1_4
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 1 } check_variable = { FOE_mentorship_tier = 5 } }
+		remove_from_tech_sharing_group = FOE_mentorship_1_5
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 2 } check_variable = { FOE_mentorship_tier = 1 } }
+		remove_from_tech_sharing_group = FOE_mentorship_2_1
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 2 } check_variable = { FOE_mentorship_tier = 2 } }
+		remove_from_tech_sharing_group = FOE_mentorship_2_2
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 2 } check_variable = { FOE_mentorship_tier = 3 } }
+		remove_from_tech_sharing_group = FOE_mentorship_2_3
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 2 } check_variable = { FOE_mentorship_tier = 4 } }
+		remove_from_tech_sharing_group = FOE_mentorship_2_4
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 2 } check_variable = { FOE_mentorship_tier = 5 } }
+		remove_from_tech_sharing_group = FOE_mentorship_2_5
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 3 } check_variable = { FOE_mentorship_tier = 1 } }
+		remove_from_tech_sharing_group = FOE_mentorship_3_1
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 3 } check_variable = { FOE_mentorship_tier = 2 } }
+		remove_from_tech_sharing_group = FOE_mentorship_3_2
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 3 } check_variable = { FOE_mentorship_tier = 3 } }
+		remove_from_tech_sharing_group = FOE_mentorship_3_3
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 3 } check_variable = { FOE_mentorship_tier = 4 } }
+		remove_from_tech_sharing_group = FOE_mentorship_3_4
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 3 } check_variable = { FOE_mentorship_tier = 5 } }
+		remove_from_tech_sharing_group = FOE_mentorship_3_5
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 4 } check_variable = { FOE_mentorship_tier = 1 } }
+		remove_from_tech_sharing_group = FOE_mentorship_4_1
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 4 } check_variable = { FOE_mentorship_tier = 2 } }
+		remove_from_tech_sharing_group = FOE_mentorship_4_2
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 4 } check_variable = { FOE_mentorship_tier = 3 } }
+		remove_from_tech_sharing_group = FOE_mentorship_4_3
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 4 } check_variable = { FOE_mentorship_tier = 4 } }
+		remove_from_tech_sharing_group = FOE_mentorship_4_4
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 4 } check_variable = { FOE_mentorship_tier = 5 } }
+		remove_from_tech_sharing_group = FOE_mentorship_4_5
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 5 } check_variable = { FOE_mentorship_tier = 1 } }
+		remove_from_tech_sharing_group = FOE_mentorship_5_1
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 5 } check_variable = { FOE_mentorship_tier = 2 } }
+		remove_from_tech_sharing_group = FOE_mentorship_5_2
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 5 } check_variable = { FOE_mentorship_tier = 3 } }
+		remove_from_tech_sharing_group = FOE_mentorship_5_3
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 5 } check_variable = { FOE_mentorship_tier = 4 } }
+		remove_from_tech_sharing_group = FOE_mentorship_5_4
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 5 } check_variable = { FOE_mentorship_tier = 5 } }
+		remove_from_tech_sharing_group = FOE_mentorship_5_5
+	}
+}
+
+# Country scope, either side. Leaves the mentorship research entirely.
+FOE_leave_mentorship_group = {
+	FOE_leave_mentorship_tier = yes
+	clr_country_flag = FOE_in_mentorship_1
+	clr_country_flag = FOE_in_mentorship_2
+	clr_country_flag = FOE_in_mentorship_3
+	clr_country_flag = FOE_in_mentorship_4
+	clr_country_flag = FOE_in_mentorship_5
+	clear_variable = FOE_mentorship_slot
+	clear_variable = FOE_mentorship_tier
+}
+
+# Country scope, the Mentor. The pair's research group is freed and both sides leave it.
+FOE_end_mentorship_group = {
+	if = {
+		limit = { check_variable = { FOE_mentorship_slot = 1 } }
+		clr_global_flag = FOE_mentorship_slot_1
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 2 } }
+		clr_global_flag = FOE_mentorship_slot_2
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 3 } }
+		clr_global_flag = FOE_mentorship_slot_3
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 4 } }
+		clr_global_flag = FOE_mentorship_slot_4
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 5 } }
+		clr_global_flag = FOE_mentorship_slot_5
+	}
+	if = {
+		limit = { has_variable = FOE_mentor_heir }
+		var:FOE_mentor_heir = {
+			if = {
+				limit = { exists = yes }
+				FOE_leave_mentorship_group = yes
+			}
+		}
+	}
+	FOE_leave_mentorship_group = yes
+}
+
+# Country scope, the Mentor. Removes the bond opinion both ways.
+FOE_remove_mentorship_opinion = {
+	if = {
+		limit = { has_variable = FOE_mentor_heir }
+		var:FOE_mentor_heir = {
+			# Ours goes even if they are gone (a released tag would otherwise find it again); theirs needs them.
+			PREV = { remove_opinion_modifier = { target = PREV modifier = FOE_mentorship_bond } }
+			if = {
+				limit = { exists = yes }
+				remove_opinion_modifier = { target = PREV modifier = FOE_mentorship_bond }
+			}
+		}
+	}
+}
+
+# Country scope, the Mentor. Its share of the Master's Craft.
+FOE_update_mentor_craft = {
+	set_temp_variable = { FOE_craft_share = 1 }
+	subtract_from_temp_variable = { FOE_craft_share = FOE_mentor_legacy }
+	clamp_temp_variable = { var = FOE_craft_share min = 0 max = 1 }
+	set_variable = { FOE_craft_research = FOE_craft_share }
+	multiply_variable = { FOE_craft_research = 0.20 }
+	set_variable = { FOE_craft_political = FOE_craft_research }
+	set_variable = { FOE_craft_output = FOE_craft_share }
+	multiply_variable = { FOE_craft_output = 0.10 }
+	set_variable = { FOE_craft_construction = FOE_craft_output }
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = FOE_masters_craft_modifier } } }
+		add_dynamic_modifier = { modifier = FOE_masters_craft_modifier }
+	}
+	force_update_dynamic_modifier = yes
+}
+
+# Country scope, the Heir. Its share, read from the Mentor while taught, otherwise the kept FOE_heir_legacy.
+FOE_update_heir_legacy = {
+	if = {
+		limit = { has_variable = FOE_heir_mentor }
+		var:FOE_heir_mentor = {
+			PREV = { set_variable = { FOE_heir_legacy = PREV.FOE_mentor_legacy } }
+		}
+	}
+	clamp_variable = { var = FOE_heir_legacy min = 0 max = 1 }
+	set_variable = { FOE_heir_research = FOE_heir_legacy }
+	multiply_variable = { FOE_heir_research = 0.20 }
+	set_variable = { FOE_heir_political = FOE_heir_research }
+	set_variable = { FOE_heir_output = FOE_heir_legacy }
+	multiply_variable = { FOE_heir_output = 0.10 }
+	set_variable = { FOE_heir_construction = FOE_heir_output }
+	if = {
+		limit = { NOT = { has_dynamic_modifier = { modifier = FOE_heirs_legacy_modifier } } }
+		add_dynamic_modifier = { modifier = FOE_heirs_legacy_modifier }
+	}
+	force_update_dynamic_modifier = yes
+}
+
+# Country scope, the new Heir; its FOE_heir_mentor is already set. A nation without a class becomes a Great
+# Administrator or Industrialist at random.
+FOE_make_heir = {
+	if = {
+		limit = {
+			NOT = { FOE_has_any_conqueror_tier = yes }
+			NOT = { FOE_has_any_administrator_tier = yes }
+			NOT = { FOE_has_any_industrialist_tier = yes }
+		}
+		random_list = {
+			log = yes
+			50 = { add_country_leader_trait = great_leader_admin_trait }
+			50 = { add_country_leader_trait = great_leader_industry_trait }
+		}
+	}
+	add_country_leader_trait = FOE_heir_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_heir_character
+		set_character_flag = FOE_great_leader_roll_completed
+	}
+	clr_country_flag = FOE_elevation_offer_pending
+	set_variable = { FOE_heir_legacy = 0 }
+	var:FOE_heir_mentor = {
+		set_variable = { FOE_mentor_heir = PREV }
+		set_variable = { FOE_mentor_legacy = 0 }
+		clear_variable = FOE_mentor_offer_target
+		clr_country_flag = FOE_mentor_offer_pending
+		add_opinion_modifier = { target = PREV modifier = FOE_mentorship_bond }
+		PREV = { add_opinion_modifier = { target = PREV modifier = FOE_mentorship_bond } }
+		FOE_join_mentorship_group = yes
+		FOE_update_mentor_craft = yes
+		log = "FOE_MENTOR [THIS.GetTag] took [PREV.GetTag] as Heir"
+	}
+	FOE_update_heir_legacy = yes
+}
+
+# Country scope, the Mentor (ROOT). Picks the Heir: an AI Administrator or Industrialist without a subclass, an AI
+# nation without a Great Leader, a human (by offer); within each step, members of our own faction first. With nobody,
+# or no free research group, it tries again in 180 days.
+FOE_choose_heir = {
+	if = {
+		limit = { NOT = { FOE_has_free_mentorship_slot = yes } }
+		set_country_flag = { flag = FOE_mentor_repick_delay value = 1 days = 180 }
+		log = "FOE_MENTOR [THIS.GetTag] all research groups are taken, trying again in 180 days"
+	}
+	else_if = {
+		limit = { any_neighbor_country = { FOE_is_heir_candidate_classed = yes } }
+		# Our own faction's members first, then anyone.
+		if = {
+			limit = { any_neighbor_country = { FOE_is_heir_candidate_classed = yes is_in_faction_with = ROOT } }
+			random_neighbor_country = {
+				limit = { FOE_is_heir_candidate_classed = yes is_in_faction_with = ROOT }
+				save_event_target_as = FOE_chosen_candidate
+			}
+		}
+		else = {
+			random_neighbor_country = {
+				limit = { FOE_is_heir_candidate_classed = yes }
+				save_event_target_as = FOE_chosen_candidate
+			}
+		}
+		event_target:FOE_chosen_candidate = {
+			set_variable = { FOE_heir_mentor = ROOT }
+			FOE_make_heir = yes
+		}
+	}
+	else_if = {
+		limit = { any_neighbor_country = { FOE_is_heir_candidate_unled = yes } }
+		# Our own faction's members first, then anyone.
+		if = {
+			limit = { any_neighbor_country = { FOE_is_heir_candidate_unled = yes is_in_faction_with = ROOT } }
+			random_neighbor_country = {
+				limit = { FOE_is_heir_candidate_unled = yes is_in_faction_with = ROOT }
+				save_event_target_as = FOE_chosen_candidate
+			}
+		}
+		else = {
+			random_neighbor_country = {
+				limit = { FOE_is_heir_candidate_unled = yes }
+				save_event_target_as = FOE_chosen_candidate
+			}
+		}
+		event_target:FOE_chosen_candidate = {
+			set_variable = { FOE_heir_mentor = ROOT }
+			FOE_make_heir = yes
+		}
+	}
+	else_if = {
+		limit = { any_neighbor_country = { FOE_is_heir_candidate_human = yes } }
+		# Our own faction's members first, then anyone.
+		if = {
+			limit = { any_neighbor_country = { FOE_is_heir_candidate_human = yes is_in_faction_with = ROOT } }
+			random_neighbor_country = {
+				limit = { FOE_is_heir_candidate_human = yes is_in_faction_with = ROOT }
+				save_event_target_as = FOE_chosen_candidate
+			}
+		}
+		else = {
+			random_neighbor_country = {
+				limit = { FOE_is_heir_candidate_human = yes }
+				save_event_target_as = FOE_chosen_candidate
+			}
+		}
+		event_target:FOE_chosen_candidate = {
+			ROOT = {
+				set_variable = { FOE_mentor_offer_target = PREV }
+				set_country_flag = { flag = FOE_mentor_offer_pending value = 1 days = 30 }
+			}
+			set_country_flag = { flag = FOE_elevation_offer_pending value = 1 days = 30 }
+			set_country_flag = { flag = FOE_elevation_offer_cooldown value = 1 days = 365 }
+			country_event = { id = special_rulers.33 }
+			log = "FOE_MENTOR [ROOT.GetTag] offers to teach [THIS.GetTag]"
+		}
+	}
+	else = {
+		set_country_flag = { flag = FOE_mentor_repick_delay value = 1 days = 180 }
+		log = "FOE_MENTOR [THIS.GetTag] found no Heir, trying again in 180 days"
+	}
+}
+
+# Country scope, the Mentor. Legacy has reached 100%: the Heir holds the whole Craft for good and rises one rank; the
+# Mentor keeps Emeritus and teaches no more.
+FOE_mentor_graduation = {
+	set_variable = { FOE_mentor_legacy = 1 }
+	FOE_remove_mentorship_opinion = yes
+	FOE_end_mentorship_group = yes
+	var:FOE_mentor_heir = {
+		set_variable = { FOE_heir_legacy = 1 }
+		clear_variable = FOE_heir_mentor
+		if = {
+			limit = {
+				FOE_has_any_administrator_tier = yes
+				NOT = { FOE_has_any_industrialist_tier = yes }
+			}
+			FOE_administrator_rank_up = yes
+		}
+		else = {
+			FOE_industrialist_rank_up = yes
+		}
+		FOE_update_heir_legacy = yes
+		log = "FOE_MENTOR [THIS.GetTag] graduated"
+	}
+	clear_variable = FOE_mentor_heir
+	set_country_flag = FOE_mentor_concluded
+	add_dynamic_modifier = { modifier = FOE_mentor_emeritus_modifier }
+	FOE_update_mentor_craft = yes
+}
+
+# Country scope, the Mentor. Legacy changed: graduate at 100%, otherwise refresh both shares.
+FOE_after_legacy_change = {
+	clamp_variable = { var = FOE_mentor_legacy min = 0 max = 1 }
+	if = {
+		limit = { check_variable = { FOE_mentor_legacy > 0.999 } }
+		FOE_mentor_graduation = yes
+	}
+	else = {
+		FOE_update_mentor_craft = yes
+		var:FOE_mentor_heir = { FOE_update_heir_legacy = yes }
+		FOE_sync_mentorship_group = yes
+	}
+}
+
+# Country scope, the Mentor (ROOT). The Heir is lost. At war, both keep what they hold and the mentorship is over for
+# good. Otherwise (the Heir's leader or nation is gone) the lessons are lost: Legacy returns to the Mentor, which
+# looks for a new Heir after 180 days.
+FOE_mentorship_heir_lost = {
+	FOE_remove_mentorship_opinion = yes
+	if = {
+		limit = {
+			var:FOE_mentor_heir = {
+				exists = yes
+				has_war_with = ROOT
+			}
+		}
+		FOE_end_mentorship_group = yes
+		var:FOE_mentor_heir = {
+			clear_variable = FOE_heir_mentor
+			FOE_update_heir_legacy = yes
+		}
+		clear_variable = FOE_mentor_heir
+		set_country_flag = FOE_mentor_concluded
+		log = "FOE_MENTOR [THIS.GetTag] at war with its Heir: the mentorship is over"
+	}
+	else = {
+		FOE_end_mentorship_group = yes
+		var:FOE_mentor_heir = {
+			if = {
+				limit = { exists = yes }
+				clear_variable = FOE_heir_mentor
+				clear_variable = FOE_heir_legacy
+			}
+		}
+		clear_variable = FOE_mentor_heir
+		set_variable = { FOE_mentor_legacy = 0 }
+		set_country_flag = { flag = FOE_mentor_repick_delay value = 1 days = 180 }
+		log = "FOE_MENTOR [THIS.GetTag] lost its Heir: Legacy returns, new Heir in 180 days"
+	}
+	FOE_update_mentor_craft = yes
+}
+
+# Country scope, the former Mentor's nation (its leader is gone). The lesson ends early: the Heir inherits the whole
+# Craft for good and gains a war goal on this nation, Avenge the Mentor.
+FOE_mentor_falls = {
+	if = {
+		limit = {
+			var:FOE_mentor_heir = {
+				exists = yes
+				FOE_is_mentor_heir = yes
+				has_variable = FOE_heir_mentor
+			}
+		}
+		var:FOE_mentor_heir = {
+			set_variable = { FOE_heir_legacy = 1 }
+			create_wargoal = { type = annex_everything target = PREV }
+			if = {
+				limit = { is_ai = no }
+				country_event = { id = special_rulers.34 }
+			}
+			log = "FOE_MENTOR [THIS.GetTag] inherits the whole Craft and swears to avenge its Mentor"
+		}
+	}
+	FOE_remove_mentorship_opinion = yes
+	FOE_end_mentorship_group = yes
+	var:FOE_mentor_heir = {
+		if = {
+			limit = { exists = yes }
+			clear_variable = FOE_heir_mentor
+			FOE_update_heir_legacy = yes
+		}
+	}
+	clear_variable = FOE_mentor_heir
+	clear_variable = FOE_mentor_legacy
+	clear_variable = FOE_craft_research
+	clear_variable = FOE_craft_political
+	clear_variable = FOE_craft_output
+	clear_variable = FOE_craft_construction
+}
+
+FOE_initialize_mentor = {
+	add_country_leader_trait = FOE_mentor_trait
+	var:country_leader = {
+		set_character_flag = FOE_great_leader_character
+		set_character_flag = FOE_mentor_character
+	}
+	set_variable = { FOE_mentor_legacy = 0 }
+	clr_country_flag = FOE_mentor_concluded
+	FOE_update_mentor_craft = yes
+	FOE_choose_heir = yes
+}
+
+# Country scope (ROOT), the Mentor's nation. Monthly.
+FOE_update_mentor = {
+	if = {
+		limit = { FOE_is_mentor = yes }
+		if = {
+			limit = {
+				has_variable = FOE_mentor_heir
+				NOT = { FOE_has_valid_mentorship = yes }
+			}
+			FOE_mentorship_heir_lost = yes
+		}
+		if = {
+			limit = {
+				has_variable = FOE_mentor_offer_target
+				NOT = { has_country_flag = FOE_mentor_offer_pending }
+			}
+			clear_variable = FOE_mentor_offer_target
+			set_country_flag = { flag = FOE_mentor_repick_delay value = 1 days = 180 }
+			log = "FOE_MENTOR [THIS.GetTag] the offer was declined or went unanswered"
+		}
+		if = {
+			limit = {
+				NOT = { has_country_flag = FOE_mentor_concluded }
+				NOT = { has_variable = FOE_mentor_heir }
+				NOT = { has_variable = FOE_mentor_offer_target }
+				NOT = { has_country_flag = FOE_mentor_repick_delay }
+			}
+			FOE_choose_heir = yes
+		}
+		if = {
+			limit = { FOE_has_valid_mentorship = yes }
+			add_to_variable = { FOE_mentor_legacy = 0.025 }
+			FOE_after_legacy_change = yes
+		}
+		else = {
+			FOE_update_mentor_craft = yes
+		}
+	}
+	else_if = {
+		limit = { has_variable = FOE_mentor_heir }
+		FOE_mentor_falls = yes
+	}
+	else = {
+		clear_variable = FOE_mentor_offer_target
+		clr_country_flag = FOE_mentor_offer_pending
+	}
+}
+
+# Country scope (ROOT), the Heir's nation. Monthly. Keeps the Heir's share current, and takes over if the Mentor's
+# nation vanished without its own update running (the Heir then keeps the whole Craft, with no one left to avenge).
+FOE_update_heir = {
+	if = {
+		limit = {
+			has_variable = FOE_heir_mentor
+			var:FOE_heir_mentor = { exists = no }
+		}
+		set_variable = { FOE_heir_legacy = 1 }
+		FOE_free_orphaned_mentorship_slot = yes
+		FOE_leave_mentorship_group = yes
+		clear_variable = FOE_heir_mentor
+	}
+	if = {
+		limit = { FOE_is_mentor_heir = yes }
+		FOE_update_heir_legacy = yes
+	}
+	else_if = {
+		limit = { NOT = { has_variable = FOE_heir_mentor } }
+		clear_variable = FOE_heir_legacy
+		clear_variable = FOE_heir_research
+		clear_variable = FOE_heir_political
+		clear_variable = FOE_heir_output
+		clear_variable = FOE_heir_construction
+	}
+}
+
+# Country scope, the Heir. Frees the pair's research group when the Mentor's nation no longer exists.
+FOE_free_orphaned_mentorship_slot = {
+	if = {
+		limit = { check_variable = { FOE_mentorship_slot = 1 } }
+		clr_global_flag = FOE_mentorship_slot_1
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 2 } }
+		clr_global_flag = FOE_mentorship_slot_2
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 3 } }
+		clr_global_flag = FOE_mentorship_slot_3
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 4 } }
+		clr_global_flag = FOE_mentorship_slot_4
+	}
+	else_if = {
+		limit = { check_variable = { FOE_mentorship_slot = 5 } }
+		clr_global_flag = FOE_mentorship_slot_5
+	}
 }
 
 # Country scope (ROOT), either side. Monthly. Inherits, ends a broken charter, handles an unanswered offer, picks a
@@ -3770,6 +4584,10 @@ FOE_roll_magnate_subclass = {
 		if = { limit = { NOT = { FOE_can_assign_deep_mine_sovereign = yes } } multiply_temp_variable = { FOE_audit_deep_mine_sovereign = 0 } }
 		if = { limit = { FOE_assignment_suits_deep_mine_sovereign = yes } multiply_temp_variable = { FOE_audit_deep_mine_sovereign = 1.5 } }
 		log = "FOE_ASSIGN [THIS.GetTag] class=magnate candidate=deep_mine_sovereign weight=[?FOE_audit_deep_mine_sovereign] (zero=ineligible)"
+		set_temp_variable = { FOE_audit_mentor = 30 }
+		if = { limit = { NOT = { FOE_can_assign_mentor = yes } } multiply_temp_variable = { FOE_audit_mentor = 0 } }
+		if = { limit = { FOE_assignment_suits_mentor = yes } multiply_temp_variable = { FOE_audit_mentor = 1.5 } }
+		log = "FOE_ASSIGN [THIS.GetTag] class=magnate candidate=mentor weight=[?FOE_audit_mentor] (zero=ineligible)"
 	}
 	random_list = {
 		log = yes
@@ -3792,6 +4610,12 @@ FOE_roll_magnate_subclass = {
 			modifier = { factor = 1.5 FOE_assignment_suits_deep_mine_sovereign = yes }
 			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=magnate selected=deep_mine_sovereign" }
 			FOE_initialize_deep_mine_sovereign = yes
+		}
+		30 = {
+			modifier = { factor = 0 NOT = { FOE_can_assign_mentor = yes } }
+			modifier = { factor = 1.5 FOE_assignment_suits_mentor = yes }
+			if = { limit = { has_global_flag = FOE_great_leader_assignment_audit } log = "FOE_ASSIGN [THIS.GetTag] class=magnate selected=mentor" }
+			FOE_initialize_mentor = yes
 		}
 	}
 }
@@ -4487,10 +5311,11 @@ FOE_release_loyal_general = {
 	if = {
 		limit = { has_variable = FOE_general_monarch }
 		var:FOE_general_monarch = {
+			# Ours goes even if they are gone (a released tag would otherwise find it again); theirs needs them.
+			PREV = { remove_opinion_modifier = { target = PREV modifier = FOE_sworn_bond } }
 			if = {
 				limit = { exists = yes }
 				remove_opinion_modifier = { target = PREV modifier = FOE_sworn_bond }
-				PREV = { remove_opinion_modifier = { target = PREV modifier = FOE_sworn_bond } }
 			}
 		}
 	}

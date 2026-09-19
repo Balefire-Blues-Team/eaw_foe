@@ -1050,9 +1050,26 @@ FOE_is_bonded = {
 		# Industrial Consortium
 		has_variable = FOE_consortium_other
 		has_variable = FOE_consortium_offer_target
+		# Mentor and Heir
+		has_variable = FOE_mentor_heir
+		has_variable = FOE_heir_mentor
+		has_variable = FOE_mentor_offer_target
 		# Any co-op: an offer to this (human) nation is still open.
 		has_country_flag = FOE_elevation_offer_pending
 	}
+}
+
+# COUNTRY scope, a human answering an elevation offer; FROM is the offerer. What made it a candidate still holds.
+# The event can stay open for weeks, so every co-op offer answer checks this before accepting.
+FOE_offer_answer_still_valid = {
+	exists = yes
+	has_capitulated = no
+	is_neighbor_of = FROM
+	NOT = { has_war_with = FROM }
+	NOT = { has_truce_with = FROM }
+	NOT = { is_subject_of = FROM }
+	NOT = { FROM = { is_subject_of = ROOT } }
+	capital_scope = { is_owned_by = ROOT is_controlled_by = ROOT }
 }
 
 # COUNTRY scope, a human nation. At most one elevation offer a year, from any co-op subclass. Whoever makes the
@@ -1333,6 +1350,7 @@ FOE_has_industrialist_subclass = {
 		FOE_is_founder_of_foundries = yes
 		FOE_is_consortium_chairman = yes
 		FOE_is_consortium_partner = yes
+		FOE_is_mentor_heir = yes
 	}
 }
 
@@ -1409,6 +1427,136 @@ FOE_has_valid_consortium = {
 FOE_consortium_is_active = {
 	FOE_has_valid_consortium = yes
 	var:FOE_consortium_other = { is_neighbor_of = ROOT }
+}
+
+#Mentor and Heir (Magnate co-op). The Mentor passes its Master's Craft to an Heir. The Mentor stores the Heir in
+# FOE_mentor_heir, the Heir the Mentor in FOE_heir_mentor; Legacy (FOE_mentor_legacy, 0-1) lives on the Mentor.
+# Both roles are leader-bound. Each pair shares research in its own group, FOE_mentorship_1 to _5.
+FOE_is_mentor = {
+	FOE_has_leader_character = yes
+	var:country_leader = {
+		has_character_flag = FOE_great_leader_character
+		has_character_flag = FOE_mentor_character
+	}
+}
+
+FOE_is_mentor_heir = {
+	FOE_has_leader_character = yes
+	var:country_leader = {
+		has_character_flag = FOE_great_leader_character
+		has_character_flag = FOE_heir_character
+	}
+}
+
+# Any Administrator subclass, the Heir included.
+FOE_has_administrator_subclass = {
+	OR = {
+		FOE_is_unifier = yes
+		FOE_is_puppetmaster = yes
+		FOE_is_architect_of_order = yes
+		FOE_is_inward_perfectionist = yes
+		FOE_is_diplomatic_parasite = yes
+		FOE_is_wild_heart = yes
+		FOE_is_lawgiver = yes
+		FOE_is_steadfast_librarian = yes
+		FOE_is_voice_of_the_machine = yes
+		FOE_is_mentor_heir = yes
+	}
+}
+
+# At most five pairs at once: one research group each.
+FOE_has_free_mentorship_slot = {
+	NOT = {
+		AND = {
+			has_global_flag = FOE_mentorship_slot_1
+			has_global_flag = FOE_mentorship_slot_2
+			has_global_flag = FOE_mentorship_slot_3
+			has_global_flag = FOE_mentorship_slot_4
+			has_global_flag = FOE_mentorship_slot_5
+		}
+	}
+}
+
+# Foreign COUNTRY scope; ROOT is the Mentor. A sovereign neighbour that could become the Heir.
+FOE_is_heir_candidate_basic = {
+	exists = yes
+	is_subject = no
+	NOT = { tag = ROOT }
+	is_neighbor_of = ROOT
+	has_capitulated = no
+	NOT = { has_war_with = ROOT }
+	NOT = { has_truce_with = ROOT }
+	NOT = { FOE_is_bonded = yes }
+	NOT = { is_subject_of = ROOT }
+	NOT = { ROOT = { is_subject_of = PREV } }
+	NOT = { tag = EYE }
+	NOT = { tag = SHA }
+	NOT = { tag = COM }
+	NOT = { tag = OWE }
+	FOE_has_leader_character = yes
+	capital_scope = { is_owned_by = PREV is_controlled_by = PREV }
+}
+
+# First choice: an AI Administrator or Industrialist without a subclass of its class. It keeps its rank.
+FOE_is_heir_candidate_classed = {
+	FOE_is_heir_candidate_basic = yes
+	is_ai = yes
+	OR = {
+		AND = {
+			OR = {
+				has_country_leader_with_trait = great_leader_admin_trait
+				has_country_leader_with_trait = legendary_leader_admin_trait
+				has_country_leader_with_trait = mythic_leader_admin_trait
+			}
+			NOT = { FOE_has_administrator_subclass = yes }
+		}
+		AND = {
+			OR = {
+				has_country_leader_with_trait = great_leader_industry_trait
+				has_country_leader_with_trait = legendary_leader_industry_trait
+				has_country_leader_with_trait = mythic_leader_industry_trait
+			}
+			NOT = { FOE_has_industrialist_subclass = yes }
+		}
+	}
+}
+
+# Second choice: an AI nation without a Great Leader. It becomes a Great Administrator or Industrialist (random).
+FOE_is_heir_candidate_unled = {
+	FOE_is_heir_candidate_basic = yes
+	is_ai = yes
+	NOT = { FOE_has_any_conqueror_tier = yes }
+	NOT = { FOE_has_any_administrator_tier = yes }
+	NOT = { FOE_has_any_industrialist_tier = yes }
+	var:country_leader = { NOT = { has_character_flag = FOE_great_leader_character } }
+}
+
+# Third choice: a human player, by offer.
+FOE_is_heir_candidate_human = {
+	FOE_is_heir_candidate_basic = yes
+	FOE_can_receive_elevation_offer = yes
+}
+
+FOE_has_heir_candidate = {
+	any_neighbor_country = {
+		OR = {
+			FOE_is_heir_candidate_classed = yes
+			FOE_is_heir_candidate_unled = yes
+			FOE_is_heir_candidate_human = yes
+		}
+	}
+}
+
+# Country scope (ROOT), the Mentor. Our Heir exists, is still our Heir, and is not at war with us.
+FOE_has_valid_mentorship = {
+	has_variable = FOE_mentor_heir
+	var:FOE_mentor_heir = {
+		exists = yes
+		FOE_is_mentor_heir = yes
+		has_variable = FOE_heir_mentor
+		var:FOE_heir_mentor = { tag = ROOT }
+		NOT = { has_war_with = ROOT }
+	}
 }
 
 #Lawgiver
@@ -1729,6 +1877,15 @@ FOE_can_assign_consortium_chairman = {
 	FOE_has_consortium_candidate = yes
 }
 
+# A Mentor needs someone to teach, and a free research group.
+FOE_can_assign_mentor = {
+	FOE_great_leader_country_valid = yes
+	is_subject = no
+	NOT = { FOE_is_bonded = yes }
+	FOE_has_free_mentorship_slot = yes
+	FOE_has_heir_candidate = yes
+}
+
 # The Khaganate has its own puppet system.
 FOE_can_assign_oathkeeper = {
 	FOE_great_leader_country_valid = yes
@@ -1885,6 +2042,9 @@ FOE_assignment_suits_founder_of_foundries = {
 }
 FOE_assignment_suits_consortium_chairman = {
 	any_neighbor_country = { FOE_is_consortium_candidate_industrialist = yes }
+}
+FOE_assignment_suits_mentor = {
+	any_neighbor_country = { FOE_is_heir_candidate_classed = yes }
 }
 FOE_assignment_suits_oathkeeper = {
 	any_owned_state = { FOE_is_puppet_release_target = yes }

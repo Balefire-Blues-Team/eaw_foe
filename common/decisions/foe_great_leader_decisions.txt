@@ -2534,6 +2534,39 @@ GEN_great_leader_decisions = {
 		}
 	}
 
+	#Mentor and Heir: Give a Lesson. +10% Legacy at once.
+	FOE_mentor_give_lesson = {
+		icon = GFX_decision_generic_industry
+		allowed = { always = yes }
+		cost = 25
+		fire_only_once = no
+		visible = {
+			FOE_is_mentor = yes
+			has_variable = FOE_mentor_heir
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_mentorship_valid_tt
+				FOE_has_valid_mentorship = yes
+			}
+			custom_trigger_tooltip = {
+				tooltip = FOE_lesson_ready_tt
+				NOT = { has_country_flag = FOE_lesson_cooldown }
+			}
+		}
+		complete_effect = {
+			custom_effect_tooltip = FOE_mentor_give_lesson_tt
+			hidden_effect = {
+				set_country_flag = { flag = FOE_lesson_cooldown value = 1 days = 90 }
+				add_to_variable = { FOE_mentor_legacy = 0.10 }
+				FOE_after_legacy_change = yes
+			}
+		}
+		ai_will_do = {
+			base = 100
+		}
+	}
+
 	#Lawgiver: the laws
 	FOE_lawgiver_enact_labour = {
 		icon = GFX_decision_unknown

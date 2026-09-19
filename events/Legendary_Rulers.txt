@@ -917,6 +917,16 @@ country_event = {
 					var:FOE_monarch_offer_target = { tag = ROOT }
 				}
 				NOT = { FOE_is_bonded = yes }
+				FOE_offer_answer_still_valid = yes
+				# The Monarch's faction rule, as at the choice.
+				if = {
+					limit = { FROM = { is_in_faction = yes } }
+					is_in_faction_with = FROM
+				}
+				else = {
+					is_in_faction = no
+					is_subject = no
+				}
 			}
 			set_variable = { FOE_general_monarch = FROM }
 			FOE_make_loyal_general = yes
@@ -1078,6 +1088,8 @@ country_event = {
 					var:FOE_consortium_offer_target = { tag = ROOT }
 				}
 				NOT = { FOE_is_bonded = yes }
+				FOE_offer_answer_still_valid = yes
+				is_subject = no
 			}
 			set_variable = { FOE_consortium_other = FROM }
 			FOE_make_consortium_partner = yes
@@ -1262,4 +1274,165 @@ country_event = {
 	}
 
 	option = { name = special_rulers.32.close }
+}
+
+#Mentor and Heir: a human neighbour is offered to become the Heir. ROOT is the human, FROM the Mentor.
+# The Mentor's monthly update treats a declined or expired offer as "no Heir" and tries again in 180 days.
+country_event = {
+	id = special_rulers.33
+	title = special_rulers.33.t
+	desc = special_rulers.33.d
+	picture = GFX_event_NCR_startup
+	is_triggered_only = yes
+	fire_only_once = no
+
+	option = {
+		name = special_rulers.33.a
+		clr_country_flag = FOE_elevation_offer_pending
+		if = {
+			limit = {
+				FROM = {
+					FOE_is_mentor = yes
+					has_country_flag = FOE_mentor_offer_pending
+					has_variable = FOE_mentor_offer_target
+					var:FOE_mentor_offer_target = { tag = ROOT }
+					FOE_has_free_mentorship_slot = yes
+				}
+				NOT = { FOE_is_bonded = yes }
+				FOE_offer_answer_still_valid = yes
+				is_subject = no
+			}
+			set_variable = { FOE_heir_mentor = FROM }
+			FOE_make_heir = yes
+		}
+		else = {
+			custom_effect_tooltip = special_rulers.33.expired_tt
+		}
+	}
+	option = {
+		name = special_rulers.33.b
+		clr_country_flag = FOE_elevation_offer_pending
+		# An old event must not cancel a newer offer made to someone else.
+		FROM = {
+			if = {
+				limit = {
+					has_variable = FOE_mentor_offer_target
+					var:FOE_mentor_offer_target = { tag = ROOT }
+				}
+				clr_country_flag = FOE_mentor_offer_pending
+			}
+		}
+	}
+}
+
+#Mentor and Heir: the Mentor has fallen. ROOT is the human Heir, FROM the former Mentor's nation.
+country_event = {
+	id = special_rulers.34
+	title = special_rulers.34.t
+	desc = special_rulers.34.d
+	picture = GFX_event_NCR_startup
+	is_triggered_only = yes
+	fire_only_once = no
+
+	option = {
+		name = special_rulers.34.a
+	}
+}
+
+#DEBUG: Mentor and Heir menu (console "event special_rulers.35"). Debug paths skip the roll gate.
+country_event = {
+	id = special_rulers.35
+	title = special_rulers.35.t
+	desc = special_rulers.35.d
+	picture = GFX_event_NCR_startup
+	is_triggered_only = yes
+	fire_only_once = no
+
+	# Swaps any class trait, Mythic and Multiclass included, for the Magnate's, then picks an Heir.
+	# Needs a bordering candidate and a free research group; otherwise the log says why and the Mentor waits 180 days.
+	option = {
+		name = special_rulers.35.a
+		trigger = {
+			NOT = { FOE_is_mentor = yes }
+			NOT = { has_variable = FOE_mentor_heir }
+		}
+		FOE_remove_class_traits = yes
+		if = { limit = { has_country_leader_with_trait = mythic_leader_military_trait } remove_country_leader_trait = mythic_leader_military_trait }
+		if = { limit = { has_country_leader_with_trait = mythic_leader_admin_trait } remove_country_leader_trait = mythic_leader_admin_trait }
+		if = { limit = { has_country_leader_with_trait = mythic_leader_industry_trait } remove_country_leader_trait = mythic_leader_industry_trait }
+		if = { limit = { has_country_leader_with_trait = mythic_leader_ruler_trait } remove_country_leader_trait = mythic_leader_ruler_trait }
+		if = { limit = { has_country_leader_with_trait = mythic_leader_exploiter_trait } remove_country_leader_trait = mythic_leader_exploiter_trait }
+		if = { limit = { has_country_leader_with_trait = mythic_leader_magnate_trait } remove_country_leader_trait = mythic_leader_magnate_trait }
+		add_country_leader_trait = mythic_leader_magnate_trait
+		FOE_initialize_mentor = yes
+	}
+
+	option = {
+		name = special_rulers.35.b
+		trigger = {
+			FOE_has_valid_mentorship = yes
+			check_variable = { FOE_mentor_legacy < 1 }
+		}
+		add_to_variable = { FOE_mentor_legacy = 0.25 }
+		FOE_after_legacy_change = yes
+	}
+
+	option = {
+		name = special_rulers.35.c
+		trigger = { FOE_has_valid_mentorship = yes }
+		set_variable = { FOE_mentor_legacy = 1 }
+		FOE_after_legacy_change = yes
+	}
+
+	# As if our leader had left office before graduation: the Heir inherits everything and gets Avenge the Mentor.
+	option = {
+		name = special_rulers.35.e
+		trigger = {
+			FOE_is_mentor = yes
+			has_variable = FOE_mentor_heir
+		}
+		remove_country_leader_trait = FOE_mentor_trait
+		var:country_leader = { clr_character_flag = FOE_mentor_character }
+		FOE_mentor_falls = yes
+	}
+
+	# This month's update now, for us and for the other side.
+	option = {
+		name = special_rulers.35.f
+		trigger = {
+			OR = {
+				FOE_is_mentor = yes
+				has_variable = FOE_mentor_heir
+				has_variable = FOE_heir_mentor
+			}
+		}
+		if = {
+			limit = {
+				OR = {
+					FOE_is_mentor = yes
+					has_variable = FOE_mentor_heir
+				}
+			}
+			FOE_update_mentor = yes
+			if = {
+				limit = { has_variable = FOE_mentor_heir }
+				var:FOE_mentor_heir = { FOE_update_heir = yes }
+			}
+		}
+		else = {
+			FOE_update_heir = yes
+		}
+	}
+
+	# Safety valve while testing: marks all five research groups free again. It does not remove anyone from a group.
+	option = {
+		name = special_rulers.35.g
+		clr_global_flag = FOE_mentorship_slot_1
+		clr_global_flag = FOE_mentorship_slot_2
+		clr_global_flag = FOE_mentorship_slot_3
+		clr_global_flag = FOE_mentorship_slot_4
+		clr_global_flag = FOE_mentorship_slot_5
+	}
+
+	option = { name = special_rulers.35.close }
 }
