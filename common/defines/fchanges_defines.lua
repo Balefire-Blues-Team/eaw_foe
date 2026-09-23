@@ -34,7 +34,6 @@ NDefines.NMilitary.ANTI_AIR_ATTACK_TO_AMOUNT = 0.0015			-- Balancing value to co
 NDefines.NMilitary.ENEMY_AIR_SUPERIORITY_SPEED_IMPACT = -0.5    -- effect on speed due to enemy air superiority
 
 NDefines.NAir.AIR_WING_MAX_SIZE = 250 							-- Max amount of airplanes in wing
-NDefines.NAI.AIR_WING_REINFORCEMENT_LIMIT = 25
 NDefines.NAir.DETECT_CHANCE_FROM_RADARS = 0.6 					-- How much the radars in area affects detection chance.
 NDefines.NAir.DETECT_CHANCE_FROM_AIRCRAFTS_EFFECTIVE_COUNT = 50 -- Max amount of aircrafts in region to give full detection bonus.
 NDefines.NAir.DETECT_CHANCE_FROM_AIRCRAFTS = 2				-- How much aircrafts in region improves air detection (up to effective count).

@@ -21,11 +21,6 @@ NDefines.NCountry.ARMY_SCORE_MULTIPLIER = 0.15
 -- Fuel shit
 NDefines.NCountry.BASE_FUEL_LAND_LEASE_SPEED = 0				-- base value for maximum fuel that can be land leased per hour
 NDefines.NCountry.FUEL_LAND_LEASE_RATIO = 0					-- multiplier for guel gain that is added to maximum fuel that can be land leased per hour
-NDefines.NCountry.FUEL_LEASE_CONVOY_RATIO = 0.00005				-- num convoys needed per fuel land lease 
-NDefines.NCountry.STARTING_FUEL_RATIO = 0						-- starting fuel ratio compared to max fuel for countries
-NDefines.NCountry.BASE_FUEL_GAIN_PER_OIL = 0						-- base amount of fuel gained hourly per excess oil
-NDefines.NCountry.BASE_FUEL_GAIN = 0							-- base amount of fuel gained hourly independent of excess oil
-NDefines.NCountry.BASE_FUEL_CAPACITY = 0.1						-- base amount of fuel capacity
 
 NDefines.NMilitary.BASE_CAPTURE_EQUIPMENT_RATIO = 0.3
 
@@ -186,8 +181,6 @@ NDefines.NAI.RESEARCH_BASE_DAYS = 60					-- AI adds a base number of days when w
 
 -- production
 NDefines.NProduction.MIN_POSSIBLE_TRAINING_MANPOWER = 3700	-- minimum amount of units able to be trained
-NDefines.NProduction.BASE_FACTORY_START_EFFICIENCY_FACTOR = 5	-- Base start efficiency for factories expressed in %.
-NDefines.NProduction.BASE_FACTORY_MAX_EFFICIENCY_FACTOR = 35
 NDefines.NProduction.BASE_FACTORY_EFFICIENCY_GAIN = 0.8
 
 NDefines.NDiplomacy.EMBARGO_COST = 5
