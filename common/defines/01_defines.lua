@@ -218,10 +218,8 @@ NDefines.NBuildings.BASE_FACTORY_REPAIR_FACTOR = 2.0	-- Factory speed modifier w
 
 --Fuel again
 --NNavy
-NDefines.NNavy.FUEL_COST_MULT = 0 --fuel multiplier for all naval missions
 
 --NMilitary
-NDefines.NMilitary.ARMY_FUEL_COST_MULT = 0 --fuel multiplier for all army missions
 
 NDefines.NMilitary.TRAINING_MAX_LEVEL = 10
 NDefines.NMilitary.DEPLOY_TRAINING_MAX_LEVEL = 5
@@ -232,7 +230,6 @@ NDefines.NMilitary.ARMY_EXP_BASE_LEVEL = 5
 NDefines.NMilitary.REGIMENTAL_SUPPORT_REQUIRED_BATTALIONS = { 2 }
 
 --NAir
-NDefines.NAir.FUEL_COST_MULT = 0 --fuel multiplier for all air missions
 NDefines.NAir.MIN_PLANE_COUNT_PARADROP = 10
 
 
