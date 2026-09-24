@@ -719,15 +719,17 @@ build_up_your_industry_early = {
 	}
 }
 
-bba_air_prod = {
-	allowed = {NOT = { original_tag = OWE }}
+# Air production by military factories (user, 2026-09-24): the AI needs a frontline before it builds planes.
+# Fighters 8, CAS 10, airships (tactical_bomber) 12, strategic bombers 30. Designs: ai_equipment/generic_planes.txt.
+bba_air_prod_fighter = {
+	allowed = { NOT = { original_tag = OWE } }
 	enable = {
 		date > 1236.1.1
+		num_of_military_factories > 7
 	}
 
 	abort_when_not_enabled = yes
 
-	#Air unit factors
 	ai_strategy = {
 		type = unit_ratio
 		id = fighter
@@ -745,14 +747,24 @@ bba_air_prod = {
 		id = fighter
 		value = 3
 	}
+}
+
+bba_air_prod_cas = {
+	allowed = { NOT = { original_tag = OWE } }
+	enable = {
+		date > 1236.1.1
+		num_of_military_factories > 9
+	}
+
+	abort_when_not_enabled = yes
 
 	ai_strategy = {
 		type = unit_ratio
 		id = cas
-		value = 100 
+		value = 100
 	}
 
- 	ai_strategy = {
+	ai_strategy = {
 		type = equipment_production_factor
 		id = cas
 		value = 10
@@ -763,6 +775,16 @@ bba_air_prod = {
 		id = cas
 		value = 2
 	}
+}
+
+bba_air_prod_airship = {
+	allowed = { NOT = { original_tag = OWE } }
+	enable = {
+		date > 1236.1.1
+		num_of_military_factories > 11
+	}
+
+	abort_when_not_enabled = yes
 
 	ai_strategy = {
 		type = unit_ratio
@@ -770,7 +792,7 @@ bba_air_prod = {
 		value = 10
 	}
 
- 	ai_strategy = {
+	ai_strategy = {
 		type = equipment_production_factor
 		id = tactical_bomber
 		value = 2
@@ -781,6 +803,16 @@ bba_air_prod = {
 		id = tactical_bomber
 		value = 1
 	}
+}
+
+# Below 30 military factories: no heavy frames at all (heavy fighters stay off for the AI in any case).
+bba_air_prod_no_heavy = {
+	allowed = { NOT = { original_tag = OWE } }
+	enable = {
+		num_of_military_factories < 30
+	}
+
+	abort_when_not_enabled = yes
 
 	ai_strategy = {
 		type = unit_ratio
@@ -791,9 +823,30 @@ bba_air_prod = {
 	ai_strategy = {
 		type = equipment_variant_production_factor
 		id = large_plane_airframe
-		value = 0
+		value = -100
+	}
+}
+
+bba_air_prod_strategic = {
+	allowed = { NOT = { original_tag = OWE } }
+	enable = {
+		date > 1236.1.1
+		num_of_military_factories > 29
 	}
 
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = unit_ratio
+		id = strategic_bomber
+		value = 10
+	}
+
+	ai_strategy = {
+		type = equipment_production_factor
+		id = strategic_bomber
+		value = 2
+	}
 }
 
 ai_motorized_production = {
