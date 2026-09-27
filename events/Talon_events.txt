@@ -1,0 +1,181 @@
+add_namespace = TalonGeneric
+
+
+#The Great War
+country_event = {
+ 	id = TalonGeneric.1
+ 	title = TalonGeneric.1.title
+ 	desc = TalonGeneric.1.desc
+	picture = GFX_event_foe_talonstart_event_image
+
+	is_triggered_only = yes
+ 	fire_only_once = no
+ 	
+ 	
+	option = {
+		name = TalonGeneric.1.a #We Came from The Heartlands
+		ai_chance = { factor = 25}
+		 
+			add_ideas = TalonHeritageHerzland
+	}
+
+	option = {
+		name = TalonGeneric.1.b #We Came From Karthinia
+		ai_chance = { factor = 25}
+		
+			add_ideas = TalonHeritageKarthinian
+	}
+	
+	option = {
+		name = TalonGeneric.1.c #We Came From Vedina
+		ai_chance = { factor = 25}
+		
+			add_ideas = TalonHeritageVedina
+	}
+	
+	option = {
+		name = TalonGeneric.1.d #We Came From Nova Griffonia
+		ai_chance = { factor = 25}
+		
+			add_ideas = TalonHeritageNova
+	}
+}
+
+#What we did
+country_event = {
+ 	id = TalonGeneric.2
+ 	title = TalonGeneric.2.title
+ 	desc = TalonGeneric.2.desc
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = no
+ 	
+ 	
+	option = {
+		name = TalonGeneric.2.a
+		ai_chance = { factor = 40}
+		 
+			random_owned_controlled_state = {
+				limit = {
+					free_building_slots = {
+						building = arms_factory
+						size > 0
+						include_locked = yes
+					}
+					OR = {
+						is_in_home_area = yes
+						NOT = {
+							owner = {
+								any_owned_state = {
+									free_building_slots = {
+										building = arms_factory
+										size > 0
+										include_locked = yes
+									}
+									is_in_home_area = yes
+								}
+							}
+						}
+					}
+				}
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = arms_factory
+					level = 1
+					instant_build = yes
+				}
+			}
+	}
+
+	option = {
+		name = TalonGeneric.2.b
+		ai_chance = { factor = 30}
+		
+			random_owned_controlled_state = {
+				limit = {
+					free_building_slots = {
+						building = industrial_complex
+						size > 0
+						include_locked = yes
+					}
+					OR = {
+						is_in_home_area = yes
+						NOT = {
+							owner = {
+								any_owned_state = {
+									free_building_slots = {
+										building = industrial_complex
+										size > 0
+										include_locked = yes
+									}
+									is_in_home_area = yes
+								}
+							}
+						}
+					}
+				}
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+	}
+	
+	option = {
+		name = TalonGeneric.2.c
+		ai_chance = { factor = 30}
+			division_template = {
+	                name = "Junior Talon Cadre"
+	                is_locked = no
+	                    regiments = {
+		                    talons = { x = 0 y = 0 }
+							infantry = { x = 1 y = 0 }
+							infantry = { x = 1 y = 1 }
+							infantry = { x = 1 y = 2 }
+							
+	                    }
+                    }
+			random_owned_controlled_state = {
+				limit = { is_capital = yes }
+					create_unit = {
+						division = "name = \"Junior Talon Cadre\" division_template = \"Junior Talon Cadre\" start_experience_factor = 0.2 start_equipment_factor = 1.0"
+						owner = ROOT
+					}
+			}
+	}
+}
+
+#Who are we now?
+country_event = {
+ 	id = Talon.3
+ 	title = Talon.3.t
+ 	desc = Talon.3.d
+	picture = GFX_event_test
+
+	is_triggered_only = yes
+ 	fire_only_once = no
+ 	
+ 	
+	option = {
+		name = Talon.3.a
+		ai_chance = { factor = 40}
+		 
+			add_ideas = GS_trade_hub	
+	}
+
+	option = {
+		name = Talon.3.b
+		ai_chance = { factor = 30}
+		
+			add_ideas = GS_industrial_city
+	}
+	
+	option = {
+		name = Talon.3.c
+		ai_chance = { factor = 30}
+			add_ideas = GS_militant_state	
+	}
+}
