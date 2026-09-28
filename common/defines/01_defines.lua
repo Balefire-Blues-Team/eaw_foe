@@ -77,6 +77,10 @@ NDefines.NAI.PLAN_ACTIVATION_PLAYER_WEIGHT_FACTOR = 0.0
 -- rather station their troops along the front
 NDefines.NAI.PLAN_MIN_SIZE_FOR_FALLBACK = 500
 
+-- Units the AI keeps on home victory points ({ min, desired, max } need), halved
+-- so small AIs commit more divisions to the front at war (tested 2026-09-28).
+NDefines.NAI.AREA_DEFENSE_HOME_VP_WEIGHT = { 0.0, 0.25, 0.5 }			-- Vanilla { 0.0, 0.5, 1.0 }
+
 -- Cancel unit production if below this to get resources out to units in the
 -- field
 NDefines.NAI.MIN_FIELD_STRENGTH_TO_BUILD_UNITS = 0.7

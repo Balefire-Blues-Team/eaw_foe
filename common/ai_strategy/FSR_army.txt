@@ -1,0 +1,491 @@
+# FSR land AI, modelled on the Sheep Mod's Poland AI (2026-09-28).
+# Width 20 pure power armour won the calculator's width round robin (infantry-combat-calculator/scenarios/fsr_width);
+# the matching templates live in ai_templates/templates_FSR.txt.
+
+### Army size
+
+# Floor: eight divisions are the minimum to cover FSR's frontline.
+FSR_army_floor = {
+	enable = {
+		original_tag = FSR
+		num_divisions < 8
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = force_build_armies
+		value = 300
+	}
+}
+
+# Cap: 8 + military factories (x1.5 at war, x1.2 at each of 20/40/60% surrender progress, x0.7 on easy against a
+# human). Above it, factories go to equipment instead of new divisions.
+FSR_army_cap = {
+	enable = {
+		original_tag = FSR
+		set_temp_variable = { division_count = num_of_military_factories }
+		add_to_temp_variable = { division_count = 8 }
+		if = {
+			limit = { has_war = yes }
+			multiply_temp_variable = { division_count = 1.5 }
+		}
+		if = {
+			limit = { surrender_progress > 0.2 }
+			multiply_temp_variable = { division_count = 1.2 }
+		}
+		if = {
+			limit = { surrender_progress > 0.4 }
+			multiply_temp_variable = { division_count = 1.2 }
+		}
+		if = {
+			limit = { surrender_progress > 0.6 }
+			multiply_temp_variable = { division_count = 1.2 }
+		}
+		if = {
+			limit = {
+				difficulty < 2
+				any_country = {
+					has_war_with = ROOT
+					is_ai = no
+				}
+			}
+			multiply_temp_variable = { division_count = 0.7 }
+		}
+		check_variable = { num_divisions > division_count }
+	}
+	abort_when_not_enabled = yes
+
+	# every role FSR_unit_production (FSR.txt) asks for
+	ai_strategy = {
+		type = build_army
+		id = power_armour
+		value = -500
+	}
+	ai_strategy = {
+		type = build_army
+		id = infantry
+		value = -500
+	}
+	ai_strategy = {
+		type = build_army
+		id = garrison
+		value = -500
+	}
+	ai_strategy = {
+		type = build_army
+		id = armor
+		value = -500
+	}
+	ai_strategy = {
+		type = build_army
+		id = support_robot
+		value = -500
+	}
+	ai_strategy = {
+		type = build_army
+		id = combat_robot
+		value = -500
+	}
+}
+
+# Special forces room: once fewer than 10 special-forces battalions are free, stop building power armour and let
+# regular units raise the cap, instead of squeezing in 2-3 battalion PA divisions (user test, 2026-09-28).
+# Cap as the engine describes it (defines SPECIAL_FORCES_CAP_BASE 0.05, SPECIAL_FORCES_CAP_MIN 24):
+# max(24 + special_forces_min, regular battalions x 0.05 x (1 + special_forces_cap)) + special_forces_cap_flat.
+FSR_special_forces_full = {
+	enable = {
+		original_tag = FSR
+		set_temp_variable = { sf_used = num_battalions_with_type@power_armour }
+		add_to_temp_variable = { sf_used = num_battalions_with_type@power_armour_fireteam_infantry }
+		add_to_temp_variable = { sf_used = num_battalions_with_type@power_armour_demolitions_infantry }
+		add_to_temp_variable = { sf_used = num_battalions_with_type@hq_power_armour }
+		set_temp_variable = { sf_cap_share = modifier@special_forces_cap }
+		add_to_temp_variable = { sf_cap_share = 1 }
+		multiply_temp_variable = { sf_cap_share = 0.05 }
+		set_temp_variable = { sf_cap = num_battalions }
+		subtract_from_temp_variable = { sf_cap = sf_used }
+		multiply_temp_variable = { sf_cap = sf_cap_share }
+		set_temp_variable = { sf_cap_min = modifier@special_forces_min }
+		add_to_temp_variable = { sf_cap_min = 24 }
+		if = {
+			limit = { check_variable = { sf_cap < sf_cap_min } }
+			set_temp_variable = { sf_cap = sf_cap_min }
+		}
+		add_to_temp_variable = { sf_cap = modifier@special_forces_cap_flat }
+		subtract_from_temp_variable = { sf_cap = sf_used }
+		check_variable = { sf_cap < 10 }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = build_army
+		id = power_armour
+		value = -500
+	}
+}
+
+### Support equipment: at least one factory each in peace (from 10 military factories), two at war,
+### paused while the stockpile covers the stage 2 template's support companies
+
+FSR_production_fireteam = {
+	enable = {
+		original_tag = FSR
+		has_tech = fireteam_weaponry_tech
+		num_of_military_factories > 9
+		NOT = { has_equipment = { fireteam_equipment > 150 } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = fireteam_equipment
+		value = 1
+	}
+}
+
+FSR_production_fireteam_war = {
+	enable = {
+		original_tag = FSR
+		has_war = yes
+		has_tech = fireteam_weaponry_tech
+		NOT = { has_equipment = { fireteam_equipment > 150 } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = fireteam_equipment
+		value = 2
+	}
+}
+
+FSR_production_demolitions = {
+	enable = {
+		original_tag = FSR
+		has_tech = demolitions_weaponry_tech
+		num_of_military_factories > 9
+		NOT = { has_equipment = { demolitions_equipment > 150 } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = demolitions_equipment
+		value = 1
+	}
+}
+
+FSR_production_demolitions_war = {
+	enable = {
+		original_tag = FSR
+		has_war = yes
+		has_tech = demolitions_weaponry_tech
+		NOT = { has_equipment = { demolitions_equipment > 150 } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = demolitions_equipment
+		value = 2
+	}
+}
+
+FSR_production_anti_tank = {
+	enable = {
+		original_tag = FSR
+		has_tech = anti_tank_equipment_tech_1
+		num_of_military_factories > 9
+		NOT = { has_equipment = { anti_tank_equipment > 200 } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = anti_tank_equipment
+		value = 1
+	}
+}
+
+FSR_production_anti_tank_war = {
+	enable = {
+		original_tag = FSR
+		has_war = yes
+		has_tech = anti_tank_equipment_tech_1
+		NOT = { has_equipment = { anti_tank_equipment > 200 } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = anti_tank_equipment
+		value = 2
+	}
+}
+
+### Research: the three support techs the stage 2 template needs
+
+FSR_research_fireteam = {
+	enable = {
+		original_tag = FSR
+		NOT = { has_tech = fireteam_weaponry_tech }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = research_weight_factor
+		id = fireteam_weaponry_tech
+		value = 300
+	}
+}
+
+FSR_research_demolitions = {
+	enable = {
+		original_tag = FSR
+		NOT = { has_tech = demolitions_weaponry_tech }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = research_weight_factor
+		id = demolitions_weaponry_tech
+		value = 300
+	}
+}
+
+FSR_research_anti_tank = {
+	enable = {
+		original_tag = FSR
+		NOT = { has_tech = anti_tank_equipment_tech_1 }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = research_weight_factor
+		id = anti_tank_equipment_tech_1
+		value = 300
+	}
+}
+
+### Defence against EYE (2026-09-28)
+# The AI cannot be told to hold a province line, and FOE switches the engine's own fallback lines off
+# (PLAN_MIN_SIZE_FOR_FALLBACK = 500 in defines/01_defines.lua). Instead the ideal fallback line
+# (9173 3322 | 15870 15878 9055 | 5374 15900, in states 545 | 542 | 536) is fortified to bunker level 2 and the
+# crossing into EYE at South End (4994) to level 3, so whichever of them the AI ends up fighting on holds.
+
+FSR_bunker_9173 = {
+	enable = {
+		original_tag = FSR
+		country_exists = EYE
+		545 = { any_province_building_level = { province = { id = 9173 } building = bunker level < 2 } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = build_building
+		id = bunker
+		target = 9173
+		value = 10
+	}
+}
+
+FSR_bunker_3322 = {
+	enable = {
+		original_tag = FSR
+		country_exists = EYE
+		545 = { any_province_building_level = { province = { id = 3322 } building = bunker level < 2 } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = build_building
+		id = bunker
+		target = 3322
+		value = 10
+	}
+}
+
+FSR_bunker_15870 = {
+	enable = {
+		original_tag = FSR
+		country_exists = EYE
+		542 = { any_province_building_level = { province = { id = 15870 } building = bunker level < 2 } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = build_building
+		id = bunker
+		target = 15870
+		value = 10
+	}
+}
+
+FSR_bunker_15878 = {
+	enable = {
+		original_tag = FSR
+		country_exists = EYE
+		542 = { any_province_building_level = { province = { id = 15878 } building = bunker level < 2 } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = build_building
+		id = bunker
+		target = 15878
+		value = 10
+	}
+}
+
+FSR_bunker_9055 = {
+	enable = {
+		original_tag = FSR
+		country_exists = EYE
+		542 = { any_province_building_level = { province = { id = 9055 } building = bunker level < 2 } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = build_building
+		id = bunker
+		target = 9055
+		value = 10
+	}
+}
+
+FSR_bunker_5374 = {
+	enable = {
+		original_tag = FSR
+		country_exists = EYE
+		536 = { any_province_building_level = { province = { id = 5374 } building = bunker level < 2 } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = build_building
+		id = bunker
+		target = 5374
+		value = 10
+	}
+}
+
+FSR_bunker_15900 = {
+	enable = {
+		original_tag = FSR
+		country_exists = EYE
+		536 = { any_province_building_level = { province = { id = 15900 } building = bunker level < 2 } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = build_building
+		id = bunker
+		target = 15900
+		value = 10
+	}
+}
+
+# South End, the crossing into EYE
+FSR_bunker_4994 = {
+	enable = {
+		original_tag = FSR
+		country_exists = EYE
+		536 = { any_province_building_level = { province = { id = 4994 } building = bunker level < 3 } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = build_building
+		id = bunker
+		target = 4994
+		value = 10
+	}
+}
+
+# Stay dug in: no manual pokes or rushed attacks out of the bunkers and good terrain
+FSR_hold_against_EYE = {
+	enable = {
+		original_tag = FSR
+		has_war_with = EYE
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = front_control
+		tag = EYE
+		priority = 10
+		ordertype = front
+		execution_type = careful
+		manual_attack = no
+	}
+}
+
+### Reserve, garrison, supply
+
+# Keep a fifth of the army in the capital (FSR's only port) against invasions, while the fronts do not already
+# cover it. Only against naval powers: in a land war the reserve just stood idle (user test, 2026-09-28).
+FSR_reserve_capital = {
+	enable = {
+		original_tag = FSR
+		has_war = yes
+		any_enemy_country = {
+			has_navy_size = { size > 10 }
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = put_unit_buffers
+		ratio = 0.2
+		states = {
+			538
+		}
+		subtract_fronts_from_need = yes
+	}
+}
+
+# FSR cannot spare divisions for garrison duty: none in peace, none at war unless an enemy can invade
+FSR_no_garrison_peace = {
+	enable = {
+		original_tag = FSR
+		has_war = no
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = garrison
+		value = -9999
+	}
+}
+
+FSR_no_garrison_land_war = {
+	enable = {
+		original_tag = FSR
+		has_war = yes
+		NOT = {
+			any_enemy_country = {
+				has_navy_size = { size > 10 }
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = garrison
+		value = -9999
+	}
+}
+
+# Caravans (FOE supply trains); vanilla gives a minor of FSR's size 8
+FSR_supply_trains = {
+	enable = {
+		original_tag = FSR
+		has_tech = brahmin_caravan
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = min_wanted_supply_trains
+		value = 8
+	}
+}
