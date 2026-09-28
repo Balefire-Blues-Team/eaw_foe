@@ -3,6 +3,11 @@
 # every width, so only their support companies are used. Strategies: ai_strategy/FSR_army.txt.
 # Fifth support company: unicorn_company, th branch. Against EYE it ties with dogs once researched
 # (scenarios/fsr_width/run_vs_eye_tech.py) but needs no extra production line and its techs are dated 1235.
+#
+# Stages: the upgrade_prio tech gates decide which target new templates aim for. Fielded divisions only move to a
+# new template through replace_with + can_upgrade_in_field on the template they match (vanilla ai_templates
+# _documentation.md; the AI copies templates, never edits them). The starting "PA Company" best matches
+# FSR_power_armour_early (imgui show ai_templates, 2026-09-28), so it upgrades in the field through that entry too.
 power_armour_FSR = {
 
 	available_for = {
@@ -30,6 +35,17 @@ power_armour_FSR = {
 			}
 		}
 
+		# field upgrade to the full template once researched and the support equipment is in stock
+		can_upgrade_in_field = {
+			has_tech = fireteam_weaponry_tech
+			has_tech = demolitions_weaponry_tech
+			has_tech = anti_tank_equipment_tech_1
+			has_tech = tech_unicorn
+			has_equipment = { fireteam_equipment > 99 }
+			has_equipment = { demolitions_equipment > 99 }
+			has_equipment = { anti_tank_equipment > 49 }
+		}
+
 		target_template = {
 
 			support = {
@@ -40,9 +56,13 @@ power_armour_FSR = {
 				power_armour = 10
 			}
 		}
+
+		replace_at_match = 0.95
+		replace_with = FSR_power_armour_full
+		target_min_match = 0.9
 	}
 
-	# The same division with fireteam, demolition, anti-tank and unicorn support, once researched and in stock
+	# The same division with fireteam, demolition, anti-tank and unicorn support
 	FSR_power_armour_full = {
 
 		upgrade_prio = {
@@ -57,12 +77,6 @@ power_armour_FSR = {
 					has_tech = tech_unicorn
 				}
 			}
-		}
-
-		can_upgrade_in_field = {
-			has_equipment = { fireteam_equipment > 99 }
-			has_equipment = { demolitions_equipment > 99 }
-			has_equipment = { anti_tank_equipment > 49 }
 		}
 
 		target_template = {
@@ -82,8 +96,8 @@ power_armour_FSR = {
 	}
 }
 
-# FSR reserve infantry: mainly raises the special forces cap and holds quiet fronts. Width 20 like the power armour;
-# its supports share the power armour's production lines.
+# FSR reserve infantry: holds quiet fronts next to the robots. Width 20 like the power armour; its supports share the
+# power armour's production lines.
 infantry_FSR = {
 
 	available_for = {
@@ -109,12 +123,25 @@ infantry_FSR = {
 			}
 		}
 
+		can_upgrade_in_field = {
+			has_tech = fireteam_weaponry_tech
+			has_tech = demolitions_weaponry_tech
+			has_tech = anti_tank_equipment_tech_1
+			has_equipment = { fireteam_equipment > 99 }
+			has_equipment = { demolitions_equipment > 99 }
+			has_equipment = { anti_tank_equipment > 49 }
+		}
+
 		target_template = {
 
 			regiments = {
 				infantry = 10
 			}
 		}
+
+		replace_at_match = 0.95
+		replace_with = FSR_infantry_full
+		target_min_match = 0.9
 	}
 
 	FSR_infantry_full = {
@@ -132,10 +159,60 @@ infantry_FSR = {
 			}
 		}
 
+		target_template = {
+
+			support = {
+				fireteam_support = 1
+				demolitions_support = 1
+				anti_tank_company = 1
+			}
+
+			regiments = {
+				infantry = 10
+			}
+		}
+	}
+}
+
+# FSR robots: the regular line holders (a third of infantry's manpower, same IC exchange against EYE;
+# scenarios/fsr_width/run_vs_eye_robots.py). Light robots first, medium robots with defence support once researched.
+combat_robot_FSR = {
+
+	available_for = {
+		FSR
+	}
+
+	role = combat_robot
+
+	upgrade_prio = {
+		factor = 2000
+	}
+
+	FSR_robot_light = {
+
+		upgrade_prio = {
+			factor = 3000
+
+			modifier = {
+				factor = 0
+				NOT = {
+					has_tech = fireteam_weaponry_tech
+					has_tech = demolitions_weaponry_tech
+					has_tech = anti_tank_equipment_tech_1
+				}
+			}
+			modifier = {
+				factor = 0
+				has_tech = robot_protectapony_tech
+				has_tech = robot_guardian_tech
+			}
+		}
+
 		can_upgrade_in_field = {
-			has_equipment = { fireteam_equipment > 99 }
-			has_equipment = { demolitions_equipment > 99 }
-			has_equipment = { anti_tank_equipment > 49 }
+			has_tech = robot_protectapony_tech
+			has_tech = robot_guardian_tech
+			has_equipment = { medium_robot_equipment > 199 }
+			has_equipment = { def_support_robot_equipment > 14 }
 		}
 
 		target_template = {
@@ -147,7 +224,43 @@ infantry_FSR = {
 			}
 
 			regiments = {
-				infantry = 10
+				light_robot = 10
+			}
+		}
+
+		replace_at_match = 0.95
+		replace_with = FSR_robot_medium
+		target_min_match = 0.9
+	}
+
+	FSR_robot_medium = {
+
+		upgrade_prio = {
+			factor = 1000
+
+			modifier = {
+				factor = 0
+				NOT = {
+					has_tech = fireteam_weaponry_tech
+					has_tech = demolitions_weaponry_tech
+					has_tech = anti_tank_equipment_tech_1
+					has_tech = robot_protectapony_tech
+					has_tech = robot_guardian_tech
+				}
+			}
+		}
+
+		target_template = {
+
+			support = {
+				fireteam_support = 1
+				demolitions_support = 1
+				anti_tank_company = 1
+				support_robot_def = 1
+			}
+
+			regiments = {
+				medium_robot = 8
 			}
 		}
 	}
