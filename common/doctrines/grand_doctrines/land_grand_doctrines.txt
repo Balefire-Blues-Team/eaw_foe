@@ -1,9 +1,9 @@
-new_mobile_warfare = {
+great_war_doctrine = {
     folder = land
 
-    name = GRAND_DOCTRINE_MOBILE_WARFARE
-    description = GRAND_DOCTRINE_MOBILE_WARFARE_DESC
-    icon = GFX_doctrine_mobile_warfare_medium
+    name = GRAND_DOCTRINE_GREAT_WAR_DOCTRINE
+    description = GRAND_DOCTRINE_GREAT_WAR_DOCTRINE_DESC
+    icon = GFX_doctrine_great_war_infantry_medium
     available = {
         always = yes
     }
@@ -13,11 +13,6 @@ new_mobile_warfare = {
 
     ai_will_do = {
         base = 1
-
-        modifier = {
-            factor = 0
-            is_major = no
-        }
     }
 
     tracks = {
@@ -30,34 +25,97 @@ new_mobile_warfare = {
     max_track_columns = 4
 
     # EFFECTS
-	planning_speed = 0.20
-	army_speed_factor = 0.10
-	armor_track_mastery_gain_factor = 0.1 #TODO EAW_SEA added check balance
-	enable_tactic = tactic_unexpected_thrust
-	
+    max_planning = 0.1
+    dig_in_speed_factor = 0.25
+    category_all_infantry = {
+        max_organisation = 5
+    }
+    enable_tactic = tactic_tactical_withdrawal
 
-   milestones = {
+    milestones = {
         {
             #Infantry
-	        org_loss_when_moving = -0.15
-            land_reinforce_rate = 0.02
+            category_all_infantry = {
+                defense = 0.05
+            }
             enable_tactic = tactic_delay
         }
         {
             #Artillery/Support
-	        planning_speed = 0.1
-            org_loss_at_low_org_factor = -0.1
-            enable_tactic = tactic_overwhelming_fire
+            coordination_bonus = 0.05
+            enable_tactic = tactic_barrage
         }
         {
             #Armor
-	        additional_brigade_column_size = 1
+            category_all_armor = {
+                breakthrough = 0.05
+            }
             enable_tactic = tactic_blitz
         }
         {
             #Operations
-	        planning_speed = 0.2
-            enable_tactic = tactic_backhand_blow   
+            max_dig_in = 2
+            planning_speed = 0.1
+        }
+    }
+}
+
+industrial_warfare = {
+    folder = land
+
+    name = GRAND_DOCTRINE_INDUSTRIAL_WARFARE
+    description = GRAND_DOCTRINE_INDUSTRIAL_WARFARE_DESC
+    icon = GFX_doctrine_superior_firepower_medium
+    available = {
+        always = yes
+    }
+
+    xp_cost = 100
+    xp_type = army
+
+    ai_will_do = {
+        base = 1
+    }
+
+    tracks = {
+        infantry
+        combat_support
+        armor
+        operations
+    }
+
+    max_track_columns = 4
+
+    # EFFECTS
+    training_time_factor = -0.1
+    land_reinforce_rate = 0.03
+    enable_tactic = tactic_relentless_assault
+
+    milestones = {
+        {
+            #Infantry
+            org_loss_when_moving = -0.1
+            category_all_infantry = {
+                max_organisation = 5
+            }
+        }
+        {
+            #Artillery/Support
+            category_support_battalions = {
+                soft_attack = 0.05
+                hard_attack = 0.05
+            }
+        }
+        {
+            #Armor
+            category_all_armor = {
+                max_organisation = 5
+            }
+            enable_tactic = tactic_breakthrough
+        }
+        {
+            #Operations
+            production_factory_max_efficiency_factor = 0.05
         }
     }
 }
@@ -75,6 +133,10 @@ wasteland_warfare = {
     xp_cost = 100
     xp_type = army
 
+    ai_will_do = {
+        base = 1
+    }
+
     tracks = {
         infantry
         combat_support
@@ -85,34 +147,35 @@ wasteland_warfare = {
     max_track_columns = 4
 
     # EFFECTS
-    enable_tactic = tactic_planned_attack
-    
-    max_planning = 0.1
-    command_power_gain = 0.25
-	operations_track_mastery_gain_factor = 0.1 #TODO EAW_SEA added check balance
+    attrition = -0.05
+    no_supply_grace = 24
+    enable_tactic = tactic_backhand_blow
 
     milestones = {
         {
-            #Infantry 
-            additional_brigade_column_size = 1
-            enable_tactic = tactic_elastic_defense
-            max_dig_in_factor = 0.05
+            #Infantry
+            category_all_infantry = {
+                maximum_speed = 0.05
+            }
+            enable_tactic = tactic_unexpected_thrust
         }
         {
             #Artillery/Support
-            coordination_bonus = 0.1
+            category_support_battalions = {
+                max_organisation = 5
+            }
             enable_tactic = tactic_overwhelming_fire
         }
         {
             #Armor
             land_reinforce_rate = 0.02
-            enable_tactic = tactic_breakthrough
-            
+            category_all_armor = {
+                reliability = 0.1
+            }
         }
         {
             #Operations
-            coordination_bonus = 0.1
-            max_command_power = 30
+            out_of_supply_factor = -0.1
         }
     }
 }

@@ -8,10 +8,10 @@ wasteland_militia = {
     xp_type = army
 
     available = {
-        always = yes
+        has_doctrine = wasteland_warfare
     }
     visible = {
-        always = yes
+        has_doctrine = wasteland_warfare
     }
 
 
@@ -31,12 +31,13 @@ wasteland_militia = {
         }
     }
 
+    xor = { raider_rampage marauder_logistics }
+
+    # EFFECTS
     militia = {
         defense = 0.1
         supply_consumption = -0.01
     }
-
-    # EFFECTS
 
     rewards = {
         service_by_lot = { 
@@ -90,10 +91,10 @@ prewar_tactics = {
     xp_type = army
 
     available = {
-        always = yes
+        has_doctrine = great_war_doctrine
     }
     visible = {
-        always = yes
+        has_doctrine = great_war_doctrine
     }
 
 
@@ -172,7 +173,10 @@ survivalist_infantry = {
     xp_type = army
 
     available = {
-        always = yes
+        has_doctrine = wasteland_warfare
+    }
+    visible = {
+        has_doctrine = wasteland_warfare
     }
 
     ai_will_do = {
@@ -236,7 +240,10 @@ legendary_gunslingers = {
     xp_type = army
 
     available = {
-        always = yes
+        has_doctrine = wasteland_warfare
+    }
+    visible = {
+        has_doctrine = wasteland_warfare
     }
 
     ai_will_do = {
@@ -304,7 +311,10 @@ technological_supremacy = {
     xp_type = army
 
     available = {
-        always = yes
+        has_doctrine = industrial_warfare
+    }
+    visible = {
+        has_doctrine = industrial_warfare
     }
 
     ai_will_do = {
@@ -367,12 +377,17 @@ raider_rampage = {
     xp_type = army
 
     available = {
-        always = yes
+        has_doctrine = wasteland_warfare
+    }
+    visible = {
+        has_doctrine = wasteland_warfare
     }
 
     ai_will_do = {
         base = 1
     }
+
+    xor = { wasteland_militia wasteland_caravans }
 
     # EFFECTS
     category_light_infantry = {
@@ -420,6 +435,141 @@ raider_rampage = {
                 breakthrough = 0.1
                 default_morale = 0.1
             }
+        }
+    }
+}
+
+zebrican_infiltrator_tactics = {
+    track = infantry
+    name = SUBDOCTRINE_ZEBRICAN_INFILTRATOR_TACTICS
+    description = SUBDOCTRINE_ZEBRICAN_INFILTRATOR_TACTICS_DESC
+    icon = GFX_doctrine_infiltration_assault_medium
+
+    xp_cost = 100
+    xp_type = army
+
+    available = {
+        has_doctrine = great_war_doctrine
+    }
+    visible = {
+        has_doctrine = great_war_doctrine
+    }
+
+    ai_will_do = {
+        base = 1
+    }
+
+    xor = { steel_ranger_brigades }
+
+    # EFFECTS
+    org_loss_when_moving = -0.05
+    enable_tactic = tactic_infantry_charge
+
+    rewards = {
+        hit_and_run = {
+        #1
+            org_loss_when_moving = -0.05
+            category_all_infantry = {
+                maximum_speed = 0.1
+            }
+        }
+
+        recon_in_depth = {
+        #2
+            land_night_attack = 0.1
+            category_light_infantry = {
+                breakthrough = 0.05
+            }
+        }
+
+        walking_fire = {
+        #3
+            category_army = {
+                breakthrough = 0.05
+            }
+        }
+
+        scorched_earth = {
+        #4
+            conscription_factor = -0.03
+            category_army = {
+                soft_attack = 0.05
+                breakthrough = 0.05
+            }
+        }
+
+        shock_and_awe = {
+        #5
+            supply_consumption_factor = 0.05
+            category_army = {
+                soft_attack = 0.1
+                hard_attack = 0.1
+            }
+            enable_tactic = tactic_breakthrough
+        }
+    }
+}
+
+waves_of_flesh_doctrine = {
+    track = infantry
+    name = SUBDOCTRINE_WAVES_OF_FLESH
+    description = SUBDOCTRINE_WAVES_OF_FLESH_DESC
+    icon = GFX_doctrine_mass_assault_medium
+
+    xp_cost = 100
+    xp_type = army
+
+    available = {
+        has_doctrine = industrial_warfare
+    }
+    visible = {
+        has_doctrine = industrial_warfare
+    }
+
+    ai_will_do = {
+        base = 1
+    }
+
+    xor = { wave_of_steel_doctrine }
+
+    # EFFECTS
+    conscription_factor = 0.05
+    category_light_infantry = {
+        max_organisation = 2
+    }
+
+    rewards = {
+        born_into_service = {
+        #1
+            monthly_population = 0.15
+        }
+
+        waves_of_flesh = {
+        #2
+            training_time_factor = -0.1
+            infantry = {
+                combat_width = -0.4
+            }
+        }
+
+        chained_legions = {
+        #3
+            category_light_infantry = {
+                soft_attack = 0.12
+                hard_attack = -0.05
+            }
+        }
+
+        bred_not_born = {
+        #4
+            conscription = 0.01
+            enable_tactic = tactic_human_wave_tactics
+        }
+
+        pressed_into_service = {
+        #5
+            non_core_manpower = 0.05
+            army_org_factor = -0.05
         }
     }
 }

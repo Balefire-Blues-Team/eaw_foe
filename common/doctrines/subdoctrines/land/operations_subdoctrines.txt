@@ -8,10 +8,10 @@ guerilla_war = {
     xp_type = army
 
     available = {
-        always = yes
+        has_doctrine = wasteland_warfare
     }
     visible = {
-        has_dlc = "No Compromise, No Surrender"
+        has_doctrine = wasteland_warfare
     }
 
     ai_will_do = { 
@@ -118,10 +118,10 @@ wasteland_caravans = {
     xp_type = army
 
     available = {
-        always = yes
+        has_doctrine = wasteland_warfare
     }
     visible = {
-        always = yes
+        has_doctrine = wasteland_warfare
     }
 
     ai_will_do = { 
@@ -136,6 +136,8 @@ wasteland_caravans = {
         }
 
     }
+
+    xor = { raider_rampage marauder_logistics }
 
     # EFFECTS
 
@@ -202,10 +204,10 @@ scavenger_fields = {
     xp_type = army
 
     available = {
-        always = yes
+        has_doctrine = wasteland_warfare
     }
     visible = {
-        always = yes
+        has_doctrine = wasteland_warfare
     }
 
     ai_will_do = { 
@@ -292,10 +294,10 @@ fortified_depots = {
     xp_type = army
 
     available = {
-        always = yes
+        has_doctrine = great_war_doctrine
     }
     visible = {
-        always = yes
+        has_doctrine = great_war_doctrine
     }
 
     ai_will_do = { 
@@ -349,7 +351,10 @@ fortified_depots = {
         
         counter_attack_reserves = {
         #4
-            enable_tactic = tactic_counterattack
+            land_reinforce_rate = 0.02
+            category_all_infantry = {
+                breakthrough = 0.05
+            }
         }
 
         bastion_networks = {
@@ -370,10 +375,10 @@ wasteland_foraging = {
     xp_type = army
 
     available = {
-        always = yes
+        has_doctrine = wasteland_warfare
     }
     visible = {
-        always = yes
+        has_doctrine = wasteland_warfare
     }
 
     ai_will_do = { 
@@ -395,13 +400,12 @@ wasteland_foraging = {
     rewards = {
         hunter_gatherer_ways = {
         #1
+            org_loss_when_moving = -0.10
             infantry = {
                 maximum_speed = 0.05
-                org_loss_when_moving = -0.10
             }
             militia = {
                 maximum_speed = 0.10
-                org_loss_when_moving = -0.10
             }
         }
 
@@ -482,10 +486,10 @@ marauder_logistics = {
     xp_type = army
 
     available = {
-        always = yes
+        has_doctrine = wasteland_warfare
     }
     visible = {
-        always = yes
+        has_doctrine = wasteland_warfare
     }
 
     ai_will_do = { 
@@ -499,6 +503,8 @@ marauder_logistics = {
             is_major = no
         }
     }
+
+    xor = { wasteland_militia wasteland_caravans }
 
     # EFFECTS
 
@@ -540,6 +546,123 @@ marauder_logistics = {
         warlords = {
         #5
             max_planning = 0.1
+        }
+    }
+}
+
+grand_battle_plan = {
+    track = operations
+    name = SUBDOCTRINE_GRAND_BATTLE_PLAN
+    description = SUBDOCTRINE_GRAND_BATTLE_PLAN_DESC
+    icon = GFX_doctrine_grand_battleplan_medium
+
+    xp_cost = 100
+    xp_type = army
+
+    available = {
+        has_doctrine = great_war_doctrine
+    }
+    visible = {
+        has_doctrine = great_war_doctrine
+    }
+
+    ai_will_do = {
+        base = 1
+    }
+
+    # EFFECTS
+    max_planning = 0.1
+    enable_tactic = tactic_elastic_defense
+
+    rewards = {
+        grand_battle_plan = {
+        #1
+            planning_speed = 0.1
+        }
+
+        prepared_defense = {
+        #2
+            dig_in_speed_factor = 0.1
+            category_light_infantry = {
+                defense = 0.1
+            }
+        }
+
+        veteran_commanders = {
+        #3
+            army_org_factor = 0.05
+            land_reinforce_rate = 0.03
+        }
+
+        military_propaganda = {
+        #4
+            conscription_factor = 0.03
+            category_light_infantry = {
+                default_morale = 0.08
+            }
+        }
+
+        grand_assault = {
+        #5
+            category_army = {
+                breakthrough = 0.1
+            }
+            enable_tactic = tactic_planned_attack
+        }
+    }
+}
+
+factory_slaves_doctrine = {
+    track = operations
+    name = SUBDOCTRINE_FACTORY_SLAVES
+    description = SUBDOCTRINE_FACTORY_SLAVES_DESC
+    icon = GFX_doctrine_low_echelon_support_medium
+
+    xp_cost = 100
+    xp_type = army
+
+    available = {
+        has_doctrine = industrial_warfare
+    }
+    visible = {
+        has_doctrine = industrial_warfare
+    }
+
+    ai_will_do = {
+        base = 1
+    }
+
+    # EFFECTS
+    industrial_capacity_factory = 0.05
+    conscription_factor = -0.03
+
+    rewards = {
+        slave_builders = {
+        #1
+            production_speed_buildings_factor = 0.05
+        }
+
+        assembly_lines = {
+        #2
+            production_factory_efficiency_gain_factor = 0.05
+            production_factory_max_efficiency_factor = 0.05
+        }
+
+        supply_caravans = {
+        #3
+            supply_consumption_factor = -0.1
+        }
+
+        secure_homefront = {
+        #4
+            army_core_defence_factor = 0.1
+            resistance_target = -0.1
+        }
+
+        ravage_new_lands = {
+        #5
+            attrition = -0.1
+            out_of_supply_factor = -0.15
         }
     }
 }
