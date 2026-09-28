@@ -1613,30 +1613,26 @@ shared_focus = {
 	prerequisite = {
 		focus = RWK_iron_kraken_doctrine
 	}
-	available = {
-		OR = {
-			has_tech = river_fleet_navy_doctrine
-			has_tech = force_concentration_navy_doctrine
-			has_tech = dispersed_formations_navy_doctrine
-		}
-	}
 	ai_will_do = { 
 	factor = 30
 	} 
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus RWK_naval_hegemon"
-		IF = {
+		if = {
 			limit = {
-				has_tech = force_concentration_navy_doctrine
+				NOT = {
+					has_doctrine = new_fleet_in_being
+					has_doctrine = new_convoy_raiding
+					has_doctrine = new_base_strike
+				}
 			}
-			set_technology = {
-				dispersed_formations_navy_doctrine = 1
-			}
+			set_grand_doctrine = new_fleet_in_being
 		}
-		ELSE = {
-			set_technology = {
-				force_concentration_navy_doctrine = 1
+		else = {
+			add_mastery = {
+				amount = 100
+				folder = naval
 			}
 		}
 	}
