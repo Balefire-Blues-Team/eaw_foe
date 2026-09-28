@@ -238,3 +238,9 @@ NDefines.NTrade.PARTY_SUPPORT_TRADE_FACTOR = 50			-- Trade factor bonus at the o
 NDefines.NTrade.ANTI_MONOPOLY_TRADE_FACTOR_THRESHOLD = 0.5	-- What percentage of resources has to be sold to the buyer for the anti-monopoly factor to take effect
 NDefines.NTrade.ANTI_MONOPOLY_TRADE_FACTOR = -100			-- This is added to the factor value when anti-monopoly threshold is exceeded
 NDefines.NTrade.NAVAL_ROUTE_ACCESS_AVOID_COST_MULT = 1		-- Naval pathfinding should avoid certain regions that you mark. High "cost multiplier" will make it less willingly go through a specific region.
+
+---------------
+-- NDoctrines --
+---------------
+-- Balefire unit manpower is ~40x below vanilla (infantry 25 vs 1000), so mastery gain is scaled to match.
+NDefines.NDoctrines.BASE_MASTERY_GAIN_TARGET_MANPOWER = 2500.0	-- Vanilla is 100000
