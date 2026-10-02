@@ -6624,3 +6624,462 @@ shared_focus = {
 		}
 	}
 }
+
+### The purification zones of the Hegemony: one tree for all of them, ROOT is the zone
+
+shared_focus = {
+	id = COM_zone_proclaimed
+	icon = GFX_goal_generic_foe_skull
+	x = 3
+	y = 0
+	cost = 4.29
+
+	available = {
+		is_subject_of = COM
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 100
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_zone_proclaimed"
+		add_ideas = COM_zone_administration_1_idea
+		COM = { add_political_power = 10 }
+	}
+}
+
+shared_focus = {
+	id = COM_zone_census_of_the_unfit
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_zone_proclaimed
+	x = 0
+	y = 1
+	cost = 4.29
+	prerequisite = { focus = COM_zone_proclaimed }
+
+	available = {
+		is_subject_of = COM
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 100
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_zone_census_of_the_unfit"
+		add_stability = -0.15
+		add_war_support = -0.20
+	}
+}
+
+shared_focus = {
+	id = COM_zone_wardens_for_the_zone
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_zone_proclaimed
+	x = -2
+	y = 2
+	cost = 4.29
+	prerequisite = { focus = COM_zone_census_of_the_unfit }
+
+	available = {
+		is_subject_of = COM
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 60
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_zone_wardens_for_the_zone"
+		custom_effect_tooltip = COM_zone_wardens_for_the_zone_tt
+		hidden_effect = {
+			division_template = {
+				name = "Zone Wardens"
+				priority = 0
+				is_locked = no
+				regiments = {
+					infantry = { x = 0 y = 0 }
+					infantry = { x = 0 y = 1 }
+					infantry = { x = 1 y = 0 }
+					infantry = { x = 1 y = 1 }
+				}
+			}
+			capital_scope = {
+				create_unit = {
+					division = "name = \"Zone Wardens\" division_template = \"Zone Wardens\" start_experience_factor = 0.2"
+					owner = ROOT
+				}
+			}
+		}
+		add_stability = 0.05
+	}
+}
+
+shared_focus = {
+	id = COM_zone_confiscation_of_arms
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_zone_proclaimed
+	x = 0
+	y = 2
+	cost = 4.29
+	prerequisite = { focus = COM_zone_census_of_the_unfit }
+
+	available = {
+		is_subject_of = COM
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 100
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_zone_confiscation_of_arms"
+		add_timed_idea = { idea = COM_zone_disarmed_idea days = 180 }
+		COM = { add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 200 } }
+	}
+}
+
+shared_focus = {
+	id = COM_zone_files_travel_east
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_zone_proclaimed
+	x = 2
+	y = 3
+	cost = 4.29
+	prerequisite = { focus = COM_zone_confiscation_of_arms }
+
+	available = {
+		is_subject_of = COM
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 60
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_zone_files_travel_east"
+		COM = { add_political_power = 10 }
+		custom_effect_tooltip = COM_zone_files_travel_east_tt
+		hidden_effect = {
+			every_neighbor_country = {
+				limit = {
+					NOT = { tag = COM }
+					NOT = { is_subject_of = COM }
+				}
+				COM = {
+					add_intel = {
+						target = PREV
+						civilian_intel = 25
+						army_intel = 25
+						navy_intel = 25
+						airforce_intel = 25
+					}
+				}
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = COM_zone_requisition_of_the_harvest
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_zone_proclaimed
+	x = 0
+	y = 3
+	cost = 4.29
+	prerequisite = { focus = COM_zone_confiscation_of_arms }
+
+	available = {
+		is_subject_of = COM
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 100
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_zone_requisition_of_the_harvest"
+		swap_ideas = { remove_idea = COM_zone_administration_1_idea add_idea = COM_zone_administration_2_idea }
+		custom_effect_tooltip = COM_zone_requisition_of_the_harvest_tt
+		hidden_effect = {
+			COM = {
+				if = { #refresh, never stack
+					limit = { has_idea = COM_requisitioned_harvests_idea }
+					remove_ideas = COM_requisitioned_harvests_idea
+				}
+				add_timed_idea = { idea = COM_requisitioned_harvests_idea days = 90 }
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = COM_zone_factories_go_west
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_zone_proclaimed
+	x = 0
+	y = 4
+	cost = 4.29
+	prerequisite = { focus = COM_zone_requisition_of_the_harvest }
+
+	available = {
+		is_subject_of = COM
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 100
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_zone_factories_go_west"
+		custom_effect_tooltip = COM_zone_factories_go_west_tt
+		if = {
+			limit = { num_of_factories > 2 }
+			COM = { add_offsite_building = { type = industrial_complex level = 1 } }
+		}
+		hidden_effect = {
+			every_owned_state = {
+				if = {
+					limit = { industrial_complex > 0 }
+					remove_building = { type = industrial_complex level = 1 }
+				}
+				if = {
+					limit = { arms_factory > 0 }
+					remove_building = { type = arms_factory level = 1 }
+				}
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = COM_zone_scrap_for_the_arsenal
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_zone_proclaimed
+	x = -2
+	y = 5
+	cost = 4.29
+	prerequisite = { focus = COM_zone_factories_go_west }
+
+	available = {
+		is_subject_of = COM
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 60
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_zone_scrap_for_the_arsenal"
+		COM = {
+			add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 150 }
+			add_equipment_to_stockpile = { type = support_equipment amount = 30 }
+		}
+	}
+}
+
+shared_focus = {
+	id = COM_zone_labour_columns
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_zone_proclaimed
+	x = 0
+	y = 5
+	cost = 4.29
+	prerequisite = { focus = COM_zone_factories_go_west }
+
+	available = {
+		is_subject_of = COM
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 100
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_zone_labour_columns"
+		custom_effect_tooltip = COM_zone_labour_columns_tt
+		hidden_effect = {
+			set_temp_variable = { COM_zone_labour = 0 }
+		}
+		hidden_effect = {
+			every_owned_state = {
+				set_temp_variable = { COM_zone_pop_change = state_population }
+				multiply_temp_variable = { COM_zone_pop_change = -0.2 }
+				add_manpower = COM_zone_pop_change
+				add_to_temp_variable = { COM_zone_labour = COM_zone_pop_change }
+			}
+		}
+		hidden_effect = { #a tenth of the ponies taken away ends up in the Hegemony's manpower pool
+			multiply_temp_variable = { COM_zone_labour = -0.1 }
+			COM = { add_manpower = COM_zone_labour }
+		}
+	}
+}
+
+shared_focus = {
+	id = COM_zone_clearances
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_zone_proclaimed
+	x = 0
+	y = 6
+	cost = 4.29
+	prerequisite = { focus = COM_zone_labour_columns }
+
+	available = {
+		is_subject_of = COM
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 100
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_zone_clearances"
+		custom_effect_tooltip = COM_zone_clearances_tt
+		hidden_effect = {
+			every_owned_state = {
+				set_temp_variable = { COM_zone_pop_change = state_population }
+				multiply_temp_variable = { COM_zone_pop_change = -0.5 }
+				add_manpower = COM_zone_pop_change
+			}
+		}
+		hidden_effect = {
+			every_country = {
+				limit = {
+					COM_become_purification_zone = yes
+					NOT = { is_subject_of = COM }
+				}
+				add_opinion_modifier = { target = COM modifier = COM_clearances }
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = COM_zone_first_settler_trains
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_zone_proclaimed
+	x = 0
+	y = 7
+	cost = 4.29
+	prerequisite = { focus = COM_zone_clearances }
+
+	available = {
+		is_subject_of = COM
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 100
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_zone_first_settler_trains"
+		swap_ideas = { remove_idea = COM_zone_administration_2_idea add_idea = COM_zone_administration_3_idea }
+		custom_effect_tooltip = COM_zone_first_settler_trains_tt
+		hidden_effect = {
+			every_owned_state = {
+				set_temp_variable = { COM_zone_pop_change = state_population }
+				multiply_temp_variable = { COM_zone_pop_change = 0.4 }
+				add_manpower = COM_zone_pop_change
+			}
+		}
+		COM = { add_manpower = -100 }
+	}
+}
+
+shared_focus = {
+	id = COM_zone_estates_for_the_loyal
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_zone_proclaimed
+	x = 2
+	y = 8
+	cost = 4.29
+	prerequisite = { focus = COM_zone_first_settler_trains }
+
+	available = {
+		is_subject_of = COM
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 60
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_zone_estates_for_the_loyal"
+		custom_effect_tooltip = COM_zone_estates_for_the_loyal_tt
+		hidden_effect = {
+			every_owned_state = {
+				set_temp_variable = { COM_zone_pop_change = state_population }
+				multiply_temp_variable = { COM_zone_pop_change = 0.25 }
+				add_manpower = COM_zone_pop_change
+			}
+		}
+		capital_scope = {
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = COM_zone_new_names_on_old_maps
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_zone_proclaimed
+	x = 0
+	y = 8
+	cost = 4.29
+	prerequisite = { focus = COM_zone_first_settler_trains }
+
+	available = {
+		is_subject_of = COM
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 100
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_zone_new_names_on_old_maps"
+		custom_effect_tooltip = COM_zone_new_names_on_old_maps_tt
+		hidden_effect = {
+			every_owned_state = {
+				add_core_of = COM
+				COM_rename_zone_state = yes
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = COM_zone_incorporation
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_zone_proclaimed
+	x = 0
+	y = 9
+	cost = 4.29
+	prerequisite = { focus = COM_zone_new_names_on_old_maps }
+
+	available = {
+		is_subject_of = COM
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 100
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_zone_incorporation"
+		custom_effect_tooltip = COM_zone_incorporation_tt
+		COM = {
+			annex_country = {
+				target = ROOT
+				transfer_troops = no
+			}
+		}
+	}
+}
