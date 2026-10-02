@@ -3,6 +3,8 @@ add_namespace = commonwealth_farther
 add_namespace = com_recon
 add_namespace = com_power
 add_namespace = com_pol
+add_namespace = com_mil
+add_namespace = com_ind
 
 country_event = {
  	id = commonwealth_start.1
@@ -2126,3 +2128,121 @@ country_event = { ### Ending: the Hegemony marches on
 	}
 }
 
+### Hegemony: Conscripts branch
+
+country_event = { ### Stand down the Battalions
+	id = com_mil.1
+	title = com_mil.1.t
+	desc = com_mil.1.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_mil.1" }
+	is_triggered_only = yes
+
+	option = { # Send them home
+		name = com_mil.1.a
+		ai_chance = { base = 50 }
+		one_random_industrial_complex = yes
+	}
+	option = { # Keep them as penal divisions
+		name = com_mil.1.b
+		ai_chance = { base = 50 }
+		custom_effect_tooltip = com_mil.1.b_tt
+		hidden_effect = {
+			division_template = {
+				name = "Penal Battalion"
+				priority = 0
+				is_locked = no
+				regiments = {
+					infantry = { x = 0 y = 0 }
+					infantry = { x = 0 y = 1 }
+					infantry = { x = 0 y = 2 }
+
+					infantry = { x = 1 y = 0 }
+					infantry = { x = 1 y = 1 }
+					infantry = { x = 1 y = 2 }
+				}
+			}
+			capital_scope = {
+				create_unit = {
+					division = "name = \"1. Penal Battalion\" division_template = \"Penal Battalion\" start_experience_factor = 0.3"
+					owner = ROOT
+				}
+				create_unit = {
+					division = "name = \"2. Penal Battalion\" division_template = \"Penal Battalion\" start_experience_factor = 0.3"
+					owner = ROOT
+				}
+			}
+		}
+	}
+}
+
+country_event = { ### The Question of the Levies
+	id = com_mil.2
+	title = com_mil.2.t
+	desc = com_mil.2.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_mil.2" }
+	is_triggered_only = yes
+
+	option = { # Disband the Youth Corps
+		name = com_mil.2.a
+		ai_chance = { base = 50 }
+		add_stability = 0.05
+	}
+	option = { # Keep them under arms
+		name = com_mil.2.b
+		ai_chance = { base = 50 }
+		add_manpower = 500
+		add_war_support = -0.05
+	}
+}
+
+### Hegemony: Industry branch
+
+country_event = { ### The Limuan Inheritance
+	id = com_ind.1
+	title = com_ind.1.t
+	desc = com_ind.1.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_ind.1" }
+	is_triggered_only = yes
+
+	option = { # Reopen the laboratories
+		name = com_ind.1.a
+		ai_chance = { base = 50 }
+		add_tech_bonus = {
+			name = COM_limuan_inheritance
+			bonus = 1.0
+			uses = 2
+			category = electronics
+			category = computing_tech
+		}
+	}
+	option = { # Strip them for the factories
+		name = com_ind.1.b
+		ai_chance = { base = 50 }
+		three_random_industrial_complex = yes
+	}
+}
+
+country_event = { ### Who works, and where
+	id = com_ind.2
+	title = com_ind.2.t
+	desc = com_ind.2.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_ind.2" }
+	is_triggered_only = yes
+
+	option = { # To the factories
+		name = com_ind.2.a
+		ai_chance = { base = 50 }
+		one_random_industrial_complex = yes
+		one_random_arms_factory = yes
+		one_random_dockyard = yes
+	}
+	option = { # To the army
+		name = com_ind.2.b
+		ai_chance = { base = 50 }
+		add_manpower = 1500
+	}
+}

@@ -2219,7 +2219,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_generals_leash"
-		swap_ideas = { remove_idea = COM_one_chain_of_command_idea add_idea = COM_split_command_idea }
+		if = {
+			limit = { has_idea = COM_one_chain_of_command_idea }
+			swap_ideas = { remove_idea = COM_one_chain_of_command_idea add_idea = COM_split_command_idea }
+		}
+		else_if = {
+			limit = { has_idea = COM_one_chain_of_command_hegemony_idea }
+			swap_ideas = { remove_idea = COM_one_chain_of_command_hegemony_idea add_idea = COM_split_command_hegemony_idea }
+		}
 		COM_big_army_loss = yes
 	}
 }
@@ -2871,6 +2878,18 @@ shared_focus = {
 			limit = { has_idea = COM_military_governors_idea }
 			swap_ideas = { remove_idea = COM_military_governors_idea add_idea = COM_military_governors_2_idea }
 		}
+		else_if = {
+			limit = { has_idea = COM_military_governors_post_idea }
+			swap_ideas = { remove_idea = COM_military_governors_post_idea add_idea = COM_military_governors_post_2_idea }
+		}
+		else_if = {
+			limit = { has_idea = COM_military_governors_wardens_idea }
+			swap_ideas = { remove_idea = COM_military_governors_wardens_idea add_idea = COM_military_governors_wardens_2_idea }
+		}
+		else_if = {
+			limit = { has_idea = COM_military_governors_warrant_idea }
+			swap_ideas = { remove_idea = COM_military_governors_warrant_idea add_idea = COM_military_governors_warrant_2_idea }
+		}
 		else = {
 			add_ideas = COM_military_governors_2_idea
 		}
@@ -3018,7 +3037,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_one_culture_one_purpose"
-		add_ideas = COM_panequestrianism_idea
+		if = {
+			limit = { has_idea = COM_oaths_to_the_state_idea }
+			swap_ideas = { remove_idea = COM_oaths_to_the_state_idea add_idea = COM_panequestrianism_idea }
+		}
+		else = {
+			add_ideas = COM_panequestrianism_idea
+		}
 	}
 }
 
@@ -3039,7 +3064,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_what_the_winter_taught_us"
-		add_ideas = COM_what_the_winter_taught_us_idea
+		if = {
+			limit = { has_idea = COM_governors_assize_idea }
+			swap_ideas = { remove_idea = COM_governors_assize_idea add_idea = COM_what_the_winter_taught_us_idea }
+		}
+		else = {
+			add_ideas = COM_what_the_winter_taught_us_idea
+		}
 	}
 }
 
@@ -3110,7 +3141,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_ponies_we_have_left"
-		
+		add_manpower = 600
+		army_experience = 20
 	}
 }
 
@@ -3130,7 +3162,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_back_to_the_rifle"
-		
+		add_doctrine_cost_reduction = {
+			name = COM_back_to_the_rifle
+			cost_reduction = 0.33
+			uses = 2
+			category = land_doctrine
+		}
 	}
 }
 
@@ -3150,7 +3187,31 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_fortress_line"
-		
+		custom_effect_tooltip = COM_fortress_line_tt
+		hidden_effect = {
+			every_owned_state = {
+				limit = {
+					is_core_of = ROOT
+					any_neighbor_state = {
+						OR = { 
+							is_owned_by = KHA 
+							is_owned_by = ARR
+							is_owned_by = DEC 
+							is_owned_by = AOS
+						}
+					}
+				}
+				add_building_construction = {
+					type = bunker
+					level = 2
+					instant_build = yes
+					province = {
+						all_provinces = yes
+						limit_to_border = yes
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -3170,7 +3231,21 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_kucykows_walls_rebuilt"
-		
+		140 = {
+			add_building_construction = {
+				type = bunker
+				level = 3
+				instant_build = yes
+				province = {
+					all_provinces = yes
+				}
+			}
+			add_building_construction = {
+				type = anti_air_building
+				level = 5
+				instant_build = yes
+			}
+		}
 	}
 }
 
@@ -3183,6 +3258,12 @@ shared_focus = {
 	cost = 4.29
 	prerequisite = { focus = COM_ponies_we_have_left }
 
+	available = {
+		OR = {
+			has_idea = COM_military_governors_idea
+			has_idea = COM_military_governors_2_idea
+		}
+	}
 	available_if_capitulated = yes
 	ai_will_do = {
 		factor = 50
@@ -3190,6 +3271,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_every_village_a_post"
+		if = {
+			limit = { has_idea = COM_military_governors_idea }
+			swap_ideas = { remove_idea = COM_military_governors_idea add_idea = COM_military_governors_post_idea }
+		}
+		else = {
+			swap_ideas = { remove_idea = COM_military_governors_2_idea add_idea = COM_military_governors_post_2_idea }
+		}
 		COM_small_guard_gain = yes
 	}
 }
@@ -3210,7 +3298,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_stand_down_the_battalions"
-		
+		country_event = { id = com_mil.1 }
 	}
 }
 
@@ -3230,7 +3318,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_gun_for_every_hoof"
-		
+		add_tech_bonus = {
+			name = COM_gun_for_every_hoof
+			bonus = 0.5
+			uses = 2
+			category = ballistic_weapon_tech
+		}
 	}
 }
 
@@ -3243,6 +3336,12 @@ shared_focus = {
 	cost = 4.29
 	prerequisite = { focus = COM_back_to_the_rifle }
 
+	available = {
+		OR = {
+			has_idea = COM_split_command_idea
+			has_idea = COM_split_command_hegemony_idea
+		}
+	}
 	available_if_capitulated = yes
 	ai_will_do = {
 		factor = 50
@@ -3250,6 +3349,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_conscription_quotas"
+		if = {
+			limit = { has_idea = COM_split_command_idea }
+			swap_ideas = { remove_idea = COM_split_command_idea add_idea = COM_split_command_2_idea }
+		}
+		else_if = {
+			limit = { has_idea = COM_split_command_hegemony_idea }
+			swap_ideas = { remove_idea = COM_split_command_hegemony_idea add_idea = COM_split_command_2_hegemony_idea }
+		}
 		COM_small_guard_gain = yes
 	}
 }
@@ -3271,7 +3378,40 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_spokow_rownyna_line"
-		
+		215 = {
+			add_building_construction = {
+				type = bunker
+				level = 3
+				instant_build = yes
+				province = 7809
+			}
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+			}
+		}
+		240 = {
+			add_building_construction = {
+				type = bunker
+				level = 3
+				instant_build = yes
+				province = 6100
+			}
+			add_building_construction = {
+				type = bunker
+				level = 3
+				instant_build = yes
+				province = 1803
+			}
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+			}
+		}
 	}
 }
 
@@ -3291,6 +3431,18 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_grey_files"
+		add_tech_bonus = {
+			name = COM_grey_files
+			bonus = 1.0
+			uses = 1
+			category = encryption_tech
+		}
+		add_tech_bonus = {
+			name = COM_grey_files
+			bonus = 1.0
+			uses = 1
+			category = decryption_tech
+		}
 		COM_big_guard_gain = yes
 	}
 }
@@ -3311,7 +3463,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_question_of_the_levies"
-		
+		country_event = { id = com_mil.2 }
 	}
 }
 
@@ -3331,7 +3483,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_dig_and_keep_digging"
-		
+		add_tech_bonus = {
+			name = COM_dig_and_keep_digging
+			bonus = 0.5
+			uses = 1
+			category = support_tech
+		}
+		add_equipment_to_stockpile = { type = support_equipment amount = 150 }
 	}
 }
 
@@ -3351,6 +3509,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_sections_not_squares"
+		if = {
+			limit = { has_idea = COM_split_command_2_idea }
+			swap_ideas = { remove_idea = COM_split_command_2_idea add_idea = COM_split_command_3_idea }
+		}
+		else_if = {
+			limit = { has_idea = COM_split_command_2_hegemony_idea }
+			swap_ideas = { remove_idea = COM_split_command_2_hegemony_idea add_idea = COM_split_command_3_hegemony_idea }
+		}
 		COM_small_army_gain = yes
 	}
 }
@@ -3371,6 +3537,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_nothing_gets_through"
+		add_tech_bonus = {
+			name = COM_nothing_gets_through
+			bonus = 0.5
+			uses = 2
+			category = fireteam_tech
+		}
 		COM_small_guard_gain = yes
 	}
 }
@@ -3391,7 +3563,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_anti_charge_obstacles"
-		
+		add_tech_bonus = {
+			name = COM_anti_charge_obstacles
+			bonus = 0.6
+			uses = 2
+			category = anti_tank_tech
+		}
 	}
 }
 
@@ -3414,6 +3591,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_wardens_not_soldiers"
+		if = {
+			limit = { has_idea = COM_military_governors_post_idea }
+			swap_ideas = { remove_idea = COM_military_governors_post_idea add_idea = COM_military_governors_wardens_idea }
+		}
+		else = {
+			swap_ideas = { remove_idea = COM_military_governors_post_2_idea add_idea = COM_military_governors_wardens_2_idea }
+		}
+		add_manpower = 300
 		COM_big_guard_gain = yes
 		COM_small_army_loss = yes
 	}
@@ -3435,7 +3620,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_veterans_rolls"
-		
+		army_experience = 30
+		add_tech_bonus = {
+			name = COM_veterans_rolls
+			bonus = 0.5
+			uses = 2
+			category = training_tech
+		}
 	}
 }
 
@@ -3448,6 +3639,9 @@ shared_focus = {
 	cost = 4.29
 	prerequisite = { focus = COM_question_of_the_levies }
 
+	available = {
+		has_manpower > 399
+	}
 	available_if_capitulated = yes
 	ai_will_do = {
 		factor = 50
@@ -3455,6 +3649,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_exemptions_and_deferments"
+		add_manpower = -400
+		one_random_arms_factory = yes
 		COM_small_nobility_gain = yes
 	}
 }
@@ -3476,7 +3672,15 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_numbers_we_can_arm"
-		
+		if = {
+			limit = { has_idea = COM_split_command_3_idea }
+			swap_ideas = { remove_idea = COM_split_command_3_idea add_idea = COM_split_command_4_idea }
+		}
+		else_if = {
+			limit = { has_idea = COM_split_command_3_hegemony_idea }
+			swap_ideas = { remove_idea = COM_split_command_3_hegemony_idea add_idea = COM_split_command_4_hegemony_idea }
+		}
+		add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 400 }
 	}
 }
 
@@ -3497,6 +3701,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_governess_generals_warrant"
+		if = {
+			limit = { has_idea = COM_military_governors_wardens_idea }
+			swap_ideas = { remove_idea = COM_military_governors_wardens_idea add_idea = COM_military_governors_warrant_idea }
+		}
+		else = {
+			swap_ideas = { remove_idea = COM_military_governors_wardens_2_idea add_idea = COM_military_governors_warrant_2_idea }
+		}
 		COM_big_guard_gain = yes
 	}
 }
@@ -3518,6 +3729,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_guard_the_guards"
+		add_political_power = 100
+		add_tech_bonus = {
+			name = COM_guard_the_guards
+			bonus = 0.5
+			uses = 1
+			category = riot_control_tech
+		}
 		COM_big_guard_loss = yes
 		COM_small_branch_gain = yes
 	}
@@ -3540,7 +3758,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_every_pony_has_a_place"
-		
+		one_random_arms_factory = yes
+		add_tech_bonus = {
+			name = COM_every_pony_has_a_place
+			bonus = 0.5
+			uses = 1
+			category = logistics_tech
+		}
 	}
 }
 
@@ -3560,6 +3784,19 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_disband_the_retinues"
+		custom_effect_tooltip = COM_disband_the_retinues_tt
+		hidden_effect = {
+			capital_scope = {
+				create_unit = {
+					division = "name = \"1st Line Regiment\" division_template = \"Kucykówi Army Division\" start_experience_factor = 0.4"
+					owner = ROOT
+				}
+				create_unit = {
+					division = "name = \"2nd Line Regiment\" division_template = \"Kucykówi Army Division\" start_experience_factor = 0.4"
+					owner = ROOT
+				}
+			}
+		}
 		COM_big_nobility_loss = yes
 		COM_small_army_gain = yes
 	}
@@ -3583,7 +3820,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_line_holds"
-		
+		if = {
+			limit = { has_idea = COM_split_command_4_idea }
+			swap_ideas = { remove_idea = COM_split_command_4_idea add_idea = COM_split_command_5_idea }
+		}
+		else_if = {
+			limit = { has_idea = COM_split_command_4_hegemony_idea }
+			swap_ideas = { remove_idea = COM_split_command_4_hegemony_idea add_idea = COM_split_command_5_hegemony_idea }
+		}
 	}
 }
 
@@ -3607,7 +3851,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_quiet_country"
-		
+		add_stability = 0.05
+		COM_lower_partisan_resistance = yes
 	}
 }
 
@@ -3628,7 +3873,18 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_ten_thousand_ponies_and_one_mission"
-		
+		if = {
+			limit = { NOT = { has_tech = infantry_tech_level_scientific } }
+			set_technology = { infantry_tech_level_scientific = 1 }
+		}
+		else = {
+			add_tech_bonus = {
+				name = COM_ten_thousand_ponies_and_one_mission
+				bonus = 1.0
+				uses = 2
+				category = infantry_tech
+			}
+		}
 	}
 }
 
@@ -3650,7 +3906,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_standing_army_at_last"
-		
+		army_experience = 25
+		add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 500 }
 	}
 }
 
@@ -3670,6 +3927,34 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_officers_privilege"
+		create_corps_commander = {
+			name = "Iron Furrow"
+			traits = { enduring_trait pony_race_trait }
+			skill = 3
+			attack_skill = 2
+			defense_skill = 4
+			planning_skill = 2
+			logistics_skill = 2
+		}
+		create_corps_commander = {
+			name = "Winter Lance"
+			traits = { agile_trait pony_race_trait }
+			skill = 3
+			attack_skill = 4
+			defense_skill = 2
+			planning_skill = 2
+			logistics_skill = 2
+		}
+		create_corps_commander = {
+			name = "Amber Rampart"
+			traits = { intelligent_trait pony_race_trait }
+			skill = 2
+			attack_skill = 1
+			defense_skill = 2
+			planning_skill = 3
+			logistics_skill = 3
+		}
+		army_experience = 15
 		COM_small_army_gain = yes
 	}
 }
@@ -3690,6 +3975,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_bring_back_the_bombardment"
+		add_tech_bonus = {
+			name = COM_bring_back_the_bombardment
+			bonus = 0.5
+			uses = 2
+			category = demolition_tech
+		}
 		COM_small_army_gain = yes
 	}
 }
@@ -3710,7 +4001,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_rails_roads_and_ledgers"
-		
+		add_tech_bonus = {
+			name = COM_rails_roads_and_ledgers
+			bonus = 0.5
+			uses = 2
+			category = logistics_tech
+		}
+		one_random_infrastructure = yes
+		one_random_infrastructure = yes
 	}
 }
 
@@ -3730,6 +4028,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_inspectorate"
+		add_tech_bonus = {
+			name = COM_inspectorate
+			bonus = 0.5
+			uses = 1
+			category = maintenance_tech
+		}
+		add_political_power = 50
 		COM_big_army_loss = yes
 		COM_small_guard_gain = yes
 	}
@@ -3754,6 +4059,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_staff_college"
+		add_doctrine_cost_reduction = {
+			name = COM_staff_college
+			cost_reduction = 0.4
+			uses = 2
+			category = land_doctrine
+		}
 		COM_big_army_gain = yes
 	}
 }
@@ -3774,6 +4085,25 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_trucks_before_tanks"
+		add_tech_bonus = {
+			name = COM_trucks_before_tanks
+			bonus = 0.6
+			uses = 2
+			ahead_reduction = 1
+			category = truck_tech
+		}
+		if = {
+			limit = {
+				OR = {
+					owns_state = 361
+					361 = { owner = { is_subject_of = ROOT } }
+				}
+			}
+			add_equipment_to_stockpile = { type = truck_equipment_1 amount = 250 }
+		}
+		else = {
+			add_equipment_to_stockpile = { type = truck_equipment_1 amount = 100 }
+		}
 		COM_small_army_gain = yes
 	}
 }
@@ -3794,6 +4124,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_separate_arsenals"
+		two_random_arms_factory = yes
 		COM_big_army_loss = yes
 		COM_small_nobility_gain = yes
 	}
@@ -3815,7 +4146,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_winter_kit"
-		
+		add_tech_bonus = {
+			name = COM_winter_kit
+			bonus = 0.5
+			uses = 2
+			category = maintenance_tech
+		}
+		add_equipment_to_stockpile = { type = support_equipment amount = 200 }
 	}
 }
 
@@ -3835,7 +4172,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_polga_flotilla"
-		
+		one_random_dockyard = yes
+		add_tech_bonus = {
+			name = COM_polga_flotilla
+			bonus = 0.6
+			uses = 1
+			category = naval_light_hull_tech
+		}
+		navy_experience = 50
 	}
 }
 
@@ -3856,6 +4200,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_promotion_by_merit"
+		custom_effect_tooltip = COM_promotion_by_merit_tt
+		hidden_effect = {
+			every_army_leader = { gain_xp = 300 }
+		}
 		COM_big_army_gain = yes
 	}
 }
@@ -3877,6 +4225,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_promotion_by_warrant"
+		add_ideas = COM_promotion_by_warrant_spirit
+		add_political_power = 100
 		COM_big_army_loss = yes
 		COM_small_nobility_gain = yes
 	}
@@ -3898,7 +4248,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_nothing_charges_twice"
-		
+		add_tech_bonus = {
+			name = COM_nothing_charges_twice
+			bonus = 0.5
+			uses = 2
+			category = anti_tank_tech
+		}
 	}
 }
 
@@ -3918,7 +4273,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_field_hospitals"
-		
+		add_tech_bonus = {
+			name = COM_field_hospitals
+			bonus = 0.66
+			uses = 2
+			category = medical_tech
+		}
 	}
 }
 
@@ -3938,7 +4298,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_master_of_the_river"
-		
+		add_doctrine_cost_reduction = {
+			name = COM_master_of_the_river
+			cost_reduction = 0.5
+			uses = 2
+			category = naval_doctrine
+		}
 	}
 }
 
@@ -3958,6 +4323,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_career_and_a_duty"
+		add_ideas = training_law_military_academy
+		army_experience = 20
+		air_experience = 20
+		navy_experience = 20
 		COM_small_army_gain = yes
 	}
 }
@@ -3978,6 +4347,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_catch_the_khan"
+		add_tech_bonus = {
+			name = COM_catch_the_khan
+			bonus = 0.5
+			uses = 2
+			category = apc_tech
+		}
 		COM_small_army_gain = yes
 	}
 }
@@ -3998,6 +4373,18 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_marching_fire"
+		add_tech_bonus = {
+			name = COM_marching_fire
+			bonus = 0.3
+			uses = 2
+			category = fireteam_tech
+		}
+		add_tech_bonus = {
+			name = COM_marching_fire
+			bonus = 0.3
+			uses = 2
+			category = ballistic_weapon_tech
+		}
 		COM_small_army_gain = yes
 	}
 }
@@ -4018,7 +4405,25 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_army_that_arrives_on_time"
-		
+		custom_effect_tooltip = COM_army_that_arrives_on_time_tt
+		hidden_effect = {
+			build_railway = {
+				level = 5
+				build_only_on_allied = yes
+				fallback = yes
+				start_state = 140
+				target_state = 344
+			}
+		}
+		82 = {
+			add_building_construction = {
+				type = supply_node
+				level = 1
+				instant_build = yes
+				province = 6563
+			}
+		}
+		add_equipment_to_stockpile = { type = supply_equipment_1 amount = 50 }
 	}
 }
 
@@ -4043,6 +4448,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_lessons_of_razorfield"
+		add_mastery = {
+			amount = 100
+			folder = land
+		}
 		COM_big_army_gain = yes
 	}
 }
@@ -4064,7 +4473,42 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_army_of_the_hegemony"
-		
+		if = {
+			limit = { NOT = { has_tech = support_tech_level_scientific } }
+			set_technology = { support_tech_level_scientific = 1 }
+		}
+		else = {
+			add_tech_bonus = {
+				name = COM_army_of_the_hegemony
+				bonus = 1.0
+				uses = 2
+				category = support_tech
+			}
+		}
+		if = {
+			limit = { has_idea = COM_one_chain_of_command_idea }
+			swap_ideas = { remove_idea = COM_one_chain_of_command_idea add_idea = COM_one_chain_of_command_hegemony_idea }
+		}
+		else_if = {
+			limit = { has_idea = COM_split_command_idea }
+			swap_ideas = { remove_idea = COM_split_command_idea add_idea = COM_split_command_hegemony_idea }
+		}
+		else_if = {
+			limit = { has_idea = COM_split_command_2_idea }
+			swap_ideas = { remove_idea = COM_split_command_2_idea add_idea = COM_split_command_2_hegemony_idea }
+		}
+		else_if = {
+			limit = { has_idea = COM_split_command_3_idea }
+			swap_ideas = { remove_idea = COM_split_command_3_idea add_idea = COM_split_command_3_hegemony_idea }
+		}
+		else_if = {
+			limit = { has_idea = COM_split_command_4_idea }
+			swap_ideas = { remove_idea = COM_split_command_4_idea add_idea = COM_split_command_4_hegemony_idea }
+		}
+		else_if = {
+			limit = { has_idea = COM_split_command_5_idea }
+			swap_ideas = { remove_idea = COM_split_command_5_idea add_idea = COM_split_command_5_hegemony_idea }
+		}
 	}
 }
 
@@ -4086,7 +4530,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_few_we_can_afford"
-		
+		army_experience = 20
+		add_tech_bonus = {
+			name = COM_few_we_can_afford
+			bonus = 0.5
+			uses = 1
+			category = special_force_tech
+		}
 	}
 }
 
@@ -4109,6 +4559,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_royal_guards_armoury"
+		add_equipment_to_stockpile = { type = power_armor_equipment_1 amount = 150 }
 		COM_small_branch_gain = yes
 	}
 }
@@ -4129,6 +4580,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_mages_to_the_colours"
+		add_tech_bonus = {
+			name = COM_mages_to_the_colours
+			bonus = 0.5
+			uses = 2
+			category = unicorn_tech
+			category = magical_tech
+		}
 		COM_small_branch_gain = yes
 	}
 }
@@ -4149,6 +4607,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_beyond_the_lines"
+		add_tech_bonus = {
+			name = COM_beyond_the_lines
+			bonus = 0.5
+			uses = 2
+			category = special_force_tech
+		}
 		COM_small_branch_gain = yes
 	}
 }
@@ -4172,7 +4636,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_wings_we_do_not_have"
-		
+		add_tech_bonus = {
+			name = COM_wings_we_do_not_have
+			bonus = 0.5
+			uses = 2
+			category = air_tech
+		}
+		air_experience = 25
 	}
 }
 
@@ -4196,7 +4666,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_retool_for_armour"
-		
+		add_tech_bonus = {
+			name = COM_retool_for_armour
+			bonus = 0.6
+			uses = 2
+			ahead_reduction = 1
+			category = power_armor_tech
+		}
 	}
 }
 
@@ -4216,7 +4692,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_shieldbearers"
-		
+		if = {
+			limit = { NOT = { has_tech = tech_unicorn } }
+			set_technology = { tech_unicorn = 1 }
+		}
+		set_technology = { COM_shieldbearers_tech = 1 }
 	}
 }
 
@@ -4236,6 +4716,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_limuas_new_curriculum"
+		add_research_slot = 1
 		COM_small_branch_gain = yes
 	}
 }
@@ -4256,7 +4737,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_raiders_of_the_steppe"
-		
+		add_tech_bonus = {
+			name = COM_raiders_of_the_steppe
+			bonus = 0.5
+			uses = 2
+			category = recon_tech
+		}
 	}
 }
 
@@ -4279,7 +4765,33 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_stratusburgian_defectors"
-		
+		add_tech_bonus = {
+			name = COM_stratusburgian_defectors
+			bonus = 0.6
+			uses = 2
+			category = pegasi_tech
+		}
+		create_equipment_variant = {
+			name = "Stratusburg Pattern"
+			type = light_plane_airframe_0
+			modules = {
+				fixed_main_weapon_slot = light_mg_4x
+				engine_type_slot = propeller_engine
+				fixed_auxiliary_weapon_slot_1 = light_mg_4x
+				special_type_slot_1 = empty
+				special_type_slot_2 = empty
+			}
+		}
+		add_equipment_to_stockpile = {
+			type = light_plane_airframe_0
+			amount = 40
+			producer = COM
+			variant_name = "Stratusburg Pattern"
+		}
+		if = {
+			limit = { NOT = { has_tech = tech_pegasi } }
+			set_technology = { tech_pegasi = 1 }
+		}
 	}
 }
 
@@ -4302,7 +4814,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_what_kills_a_yak"
-		
+		add_tech_bonus = {
+			name = COM_what_kills_a_yak
+			bonus = 0.5
+			uses = 2
+			category = energy_weapon_tech
+		}
 	}
 }
 
@@ -4323,7 +4840,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_counter_necromancy"
-		
+		add_tech_bonus = {
+			name = COM_counter_necromancy
+			bonus = 0.5
+			uses = 2
+			category = medical_tech
+		}
 	}
 }
 
@@ -4343,6 +4865,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_assassins_by_another_name"
+		set_technology = { COM_assassins_tech = 1 }
 		COM_small_branch_gain = yes
 		COM_small_guard_loss = yes
 	}
@@ -4364,6 +4887,31 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_night_companies"
+		custom_effect_tooltip = COM_night_companies_tt
+		hidden_effect = {
+			division_template = {
+				name = "Night Company"
+				priority = 2
+				is_locked = no
+				regiments = {
+					spec_ops = { x = 0 y = 0 }
+					spec_ops = { x = 0 y = 1 }
+					spec_ops = { x = 1 y = 0 }
+					spec_ops = { x = 1 y = 1 }
+				}
+			}
+			capital_scope = {
+				create_unit = {
+					division = "name = \"1st Night Company\" division_template = \"Night Company\" start_experience_factor = 0.5"
+					owner = ROOT
+				}
+				create_unit = {
+					division = "name = \"2nd Night Company\" division_template = \"Night Company\" start_experience_factor = 0.5"
+					owner = ROOT
+				}
+			}
+		}
+		set_technology = { night_vision_tech = 1 }
 		COM_small_branch_gain = yes
 	}
 }
@@ -4387,7 +4935,25 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_cloudsteel_and_canvas"
-		
+		if = {
+			limit = { NOT = { has_tech = air_tech_level_scientific } }
+			set_technology = { air_tech_level_scientific = 1 }
+		}
+		else = {
+			add_tech_bonus = {
+				name = COM_cloudsteel_and_canvas
+				bonus = 1.0
+				uses = 2
+				category = air_tech
+			}
+		}
+		121 = {
+			add_building_construction = {
+				type = air_base
+				level = 3
+				instant_build = yes
+			}
+		}
 	}
 }
 
@@ -4410,6 +4976,43 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_honour_guard"
+		if = {
+			limit = { NOT = { has_tech = power_armour_tech_level_scientific } }
+			set_technology = { power_armour_tech_level_scientific = 1 }
+		}
+		else = {
+			add_tech_bonus = {
+				name = COM_honour_guard
+				bonus = 1.0
+				uses = 2
+				category = power_armor_tech
+			}
+		}
+		custom_effect_tooltip = COM_honour_guard_tt
+		hidden_effect = {
+			division_template = {
+				name = "Honour Guard"
+				priority = 2
+				is_locked = no
+				regiments = {
+					power_armour = { x = 0 y = 0 }
+					power_armour = { x = 0 y = 1 }
+					power_armour = { x = 0 y = 2 }
+					power_armour = { x = 1 y = 0 }
+					power_armour = { x = 1 y = 1 }
+					power_armour = { x = 1 y = 2 }
+				}
+				support = {
+					power_armour_support = { x = 0 y = 0 }
+				}
+			}
+			capital_scope = {
+				create_unit = {
+					division = "name = \"The Honour Guard\" division_template = \"Honour Guard\" start_experience_factor = 0.5"
+					owner = ROOT
+				}
+			}
+		}
 		COM_big_branch_gain = yes
 	}
 }
@@ -4433,7 +5036,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_iron_few"
-		
+		add_tech_bonus = {
+			name = COM_iron_few
+			bonus = 1.0
+			uses = 1
+			ahead_reduction = 1
+			category = power_armor_tech
+		}
 	}
 }
 
@@ -4456,6 +5065,38 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_arcane_battalions"
+		custom_effect_tooltip = COM_arcane_battalions_tt
+		hidden_effect = {
+			division_template = {
+				name = "Arcane Battalion"
+				priority = 2
+				is_locked = no
+				regiments = {
+					magical_infantry = { x = 0 y = 0 }
+					magical_infantry = { x = 0 y = 1 }
+					magical_infantry = { x = 0 y = 2 }
+					magical_infantry = { x = 1 y = 0 }
+					magical_infantry = { x = 1 y = 1 }
+					magical_infantry = { x = 1 y = 2 }
+				}
+			}
+			capital_scope = {
+				create_unit = {
+					division = "name = \"1st Arcane Battalion\" division_template = \"Arcane Battalion\" start_experience_factor = 0.5"
+					owner = ROOT
+				}
+				create_unit = {
+					division = "name = \"2nd Arcane Battalion\" division_template = \"Arcane Battalion\" start_experience_factor = 0.5"
+					owner = ROOT
+				}
+			}
+		}
+		add_doctrine_cost_reduction = {
+			name = COM_arcane_battalions
+			cost_reduction = 0.5
+			uses = 1
+			category = bfb_special_forces_doctrine
+		}
 		COM_big_branch_gain = yes
 	}
 }
@@ -4477,7 +5118,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_knives_in_the_dark"
-		
+		add_doctrine_cost_reduction = {
+			name = COM_knives_in_the_dark
+			cost_reduction = 0.5
+			uses = 2
+			category = bfb_special_forces_doctrine
+		}
 	}
 }
 
@@ -4501,7 +5147,29 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_eyes_over_the_steppe"
-		
+		add_tech_bonus = {
+			name = COM_eyes_over_the_steppe
+			bonus = 0.6
+			uses = 2
+			category = air_support_tech
+		}
+		create_equipment_variant = {
+			name = "Steppe Eye"
+			type = light_plane_airframe_0
+			modules = {
+				fixed_main_weapon_slot = light_mg_2x
+				engine_type_slot = propeller_engine
+				fixed_auxiliary_weapon_slot_1 = recon_camera
+				special_type_slot_1 = empty
+				special_type_slot_2 = empty
+			}
+		}
+		add_equipment_to_stockpile = {
+			type = light_plane_airframe_0
+			amount = 20
+			producer = COM
+			variant_name = "Steppe Eye"
+		}
 	}
 }
 
@@ -4525,6 +5193,29 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_bombs_on_the_warcamp"
+		add_tech_bonus = {
+			name = COM_bombs_on_the_warcamp
+			bonus = 0.6
+			uses = 2
+			category = bomber_tech
+		}
+		create_equipment_variant = {
+			name = "Warcamp Hammer"
+			type = light_plane_airframe_0
+			modules = {
+				fixed_main_weapon_slot = bomb_locks
+				engine_type_slot = heavy_propeller_engine
+				fixed_auxiliary_weapon_slot_1 = bomb_locks
+				special_type_slot_1 = bomb_sights_1
+				special_type_slot_2 = empty
+			}
+		}
+		add_equipment_to_stockpile = {
+			type = light_plane_airframe_0
+			amount = 30
+			producer = COM
+			variant_name = "Warcamp Hammer"
+		}
 		COM_small_branch_gain = yes
 	}
 }
@@ -4547,6 +5238,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_warrant_officers"
+		custom_effect_tooltip = COM_warrant_officers_tt
+		recruit_character = COM_char_ashen_vow
+		recruit_character = COM_char_pale_signal
 		COM_big_branch_loss = yes
 	}
 }
@@ -4567,6 +5261,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_three_keys_one_lock"
+		three_random_arms_factory = yes
 		COM_small_army_loss = yes
 		COM_small_guard_loss = yes
 		COM_small_branch_loss = yes
@@ -4592,7 +5287,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_thin_sky"
-		
+		add_doctrine_cost_reduction = {
+			name = COM_thin_sky
+			cost_reduction = 0.5
+			uses = 2
+			category = air_doctrine
+		}
+		air_experience = 50
 	}
 }
 
@@ -4617,7 +5318,18 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_shield_and_the_sword"
-		
+		if = {
+			limit = { NOT = { has_tech = special_forces_tech_level_scientific } }
+			set_technology = { special_forces_tech_level_scientific = 1 }
+		}
+		else = {
+			add_tech_bonus = {
+				name = COM_shield_and_the_sword
+				bonus = 1.0
+				uses = 2
+				category = special_force_tech
+			}
+		}
 	}
 }
 
@@ -4639,7 +5351,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_ledger_of_what_remains"
-		
+		one_random_industrial_complex = yes
+		add_political_power = 75
 	}
 }
 
@@ -4659,7 +5372,20 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_rails_to_the_hinterland"
-		
+		custom_effect_tooltip = COM_rails_to_the_hinterland_tt
+		hidden_effect = {
+			every_owned_state = {
+				limit = {
+					is_core_of = ROOT
+					infrastructure < 6
+				}
+				add_building_construction = {
+					type = infrastructure
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
 	}
 }
 
@@ -4679,6 +5405,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_smoerbotts_foundries"
+		422 = {
+			add_extra_state_shared_building_slots = 3
+			add_building_construction = {
+				type = arms_factory
+				level = 3
+				instant_build = yes
+			}
+		}
 		COM_small_nobility_gain = yes
 	}
 }
@@ -4699,7 +5433,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_substitutes_for_everything"
-		
+		custom_effect_tooltip = COM_substitutes_for_everything_tt
+		set_country_flag = COM_import_substitution_flag
+		add_tech_bonus = {
+			name = COM_substitutes_for_everything
+			bonus = 0.5
+			uses = 2
+			category = recycling_tech
+		}
 	}
 }
 
@@ -4719,7 +5460,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_who_works_and_where"
-		
+		country_event = { id = com_ind.2 }
 	}
 }
 
@@ -4739,7 +5480,16 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_one_grid_one_country"
-		
+		capital_scope = {
+			add_resource = { type = energy amount = 10 }
+		}
+		add_tech_bonus = {
+			name = COM_one_grid_one_country
+			bonus = 0.5
+			uses = 2
+			category = energy_tech
+		}
+		COM_lower_shadow_economy = yes
 	}
 }
 
@@ -4759,7 +5509,49 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_polga_reopened"
-		
+		267 = {
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+		249 = {
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+		262 = {
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+		245 = {
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+		307 = {
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+		273 = {
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+		one_random_industrial_complex = yes
 	}
 }
 
@@ -4779,6 +5571,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_kucykow_rebuilt"
+		140 = {
+			add_extra_state_shared_building_slots = 3
+			add_building_construction = {
+				type = industrial_complex
+				level = 3
+				instant_build = yes
+			}
+		}
 		COM_small_nobility_gain = yes
 	}
 }
@@ -4800,6 +5600,20 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_requisition_not_purchase"
+		if = {
+			limit = { has_idea = COM_state_monopoly_idea }
+			swap_ideas = { remove_idea = COM_state_monopoly_idea add_idea = COM_requisition_idea }
+		}
+		else_if = {
+			limit = { has_idea = COM_licensed_smugglers_idea }
+			swap_ideas = { remove_idea = COM_licensed_smugglers_idea add_idea = COM_requisition_idea }
+		}
+		else = {
+			add_ideas = COM_requisition_idea
+		}
+		add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 300 }
+		add_equipment_to_stockpile = { type = support_equipment amount = 100 }
+		add_equipment_to_stockpile = { type = truck_equipment_1 amount = 50 }
 		COM_big_nobility_loss = yes
 	}
 }
@@ -4821,6 +5635,17 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_quotas_by_estate"
+		if = {
+			limit = { has_idea = COM_state_monopoly_idea }
+			swap_ideas = { remove_idea = COM_state_monopoly_idea add_idea = COM_estate_quotas_idea }
+		}
+		else_if = {
+			limit = { has_idea = COM_licensed_smugglers_idea }
+			swap_ideas = { remove_idea = COM_licensed_smugglers_idea add_idea = COM_estate_quotas_idea }
+		}
+		else = {
+			add_ideas = COM_estate_quotas_idea
+		}
 		COM_big_nobility_gain = yes
 	}
 }
@@ -4841,6 +5666,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_labour_warrants"
+		add_tech_bonus = {
+			name = COM_labour_warrants
+			bonus = 0.5
+			uses = 2
+			category = construction_tech
+		}
 		COM_big_nobility_loss = yes
 		COM_small_guard_gain = yes
 	}
@@ -4863,7 +5694,25 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_country_that_connects"
-		
+		if = {
+			limit = { has_idea = COM_shadow_economy_1_idea }
+			swap_ideas = { remove_idea = COM_shadow_economy_1_idea add_idea = COM_economic_panopticon_1_idea }
+		}
+		else_if = {
+			limit = { has_idea = COM_shadow_economy_2_idea }
+			swap_ideas = { remove_idea = COM_shadow_economy_2_idea add_idea = COM_economic_panopticon_1_idea }
+		}
+		else_if = {
+			limit = { has_idea = COM_shadow_economy_3_idea }
+			swap_ideas = { remove_idea = COM_shadow_economy_3_idea add_idea = COM_economic_panopticon_1_idea }
+		}
+		else_if = {
+			limit = { has_idea = COM_shadow_economy_4_idea }
+			swap_ideas = { remove_idea = COM_shadow_economy_4_idea add_idea = COM_economic_panopticon_1_idea }
+		}
+		else = {
+			add_ideas = COM_economic_panopticon_1_idea
+		}
 	}
 }
 
@@ -4883,6 +5732,15 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_rayoreydan_mines"
+		282 = {
+			add_resource = { type = metal amount = 12 }
+		}
+		add_tech_bonus = {
+			name = COM_rayoreydan_mines
+			bonus = 0.5
+			uses = 2
+			category = extraction_tech
+		}
 		COM_small_nobility_gain = yes
 	}
 }
@@ -4903,7 +5761,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_limuan_inheritance"
-		
+		country_event = { id = com_ind.1 }
+		COM_lower_exodus = yes
 	}
 }
 
@@ -4923,7 +5782,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_scrap_the_battlefields"
-		
+		add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 400 }
+		add_equipment_to_stockpile = { type = support_equipment amount = 150 }
+		add_equipment_to_stockpile = { type = anti_tank_equipment_1 amount = 60 }
+		capital_scope = {
+			add_resource = { type = metal amount = 8 }
+		}
 	}
 }
 
@@ -4943,6 +5807,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_prisoners_to_the_pits"
+		249 = {
+			add_resource = { type = metal amount = 8 }
+		}
+		267 = {
+			add_resource = { type = metal amount = 8 }
+		}
 		COM_small_guard_gain = yes
 	}
 }
@@ -4963,7 +5833,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_bring_back_the_engineers"
-		
+		add_tech_bonus = {
+			name = COM_bring_back_the_engineers
+			bonus = 0.5
+			uses = 2
+			category = tool_tech
+			category = production_tech
+		}
+		COM_lower_exodus = yes
 	}
 }
 
@@ -4987,6 +5864,36 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_three_cities_united_once_more"
+		140 = {
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+		}
+		318 = {
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+		}
+		422 = {
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+		}
+		add_tech_bonus = {
+			name = COM_three_cities_united_once_more
+			bonus = 0.5
+			uses = 1
+			category = production_tech
+		}
 		COM_big_nobility_gain = yes
 	}
 }
@@ -5007,7 +5914,15 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_self_sufficient_and_poorer_for_it"
-		
+		one_random_industrial_complex = yes
+		if = {
+			limit = { check_variable = { COM_autarky_self_sufficient > 4 } }
+			two_random_industrial_complex = yes
+			add_political_power = 100
+		}
+		else = {
+			custom_effect_tooltip = COM_self_sufficient_missed_tt
+		}
 	}
 }
 
@@ -5028,7 +5943,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_every_hoof_accounted"
-		
+		add_research_slot = 1
 	}
 }
 
@@ -5051,7 +5966,18 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_arsenal_warrant"
-		
+		two_random_arms_factory = yes
+		add_tech_bonus = {
+			name = COM_arsenal_warrant
+			bonus = 0.5
+			uses = 1
+			ahead_reduction = 1
+			category = production_tech
+		}
+		if = {
+			limit = { has_idea = COM_economic_panopticon_1_idea }
+			swap_ideas = { remove_idea = COM_economic_panopticon_1_idea add_idea = COM_economic_panopticon_2_idea }
+		}
 	}
 }
 
@@ -5077,7 +6003,15 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_arrias_steel_mills"
-		
+		292 = {
+			add_resource = { type = metal amount = 12 }
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = arms_factory
+				level = 2
+				instant_build = yes
+			}
+		}
 	}
 }
 
@@ -5103,7 +6037,20 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_detrot_motors"
-		
+		361 = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = arms_factory
+				level = 2
+				instant_build = yes
+			}
+		}
+		add_tech_bonus = {
+			name = COM_detrot_motors
+			bonus = 0.6
+			uses = 1
+			category = truck_tech
+		}
 	}
 }
 
@@ -5126,7 +6073,25 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_cloudyards_of_stratusburg"
-		
+		321 = {
+			add_building_construction = {
+				type = air_base
+				level = 3
+				instant_build = yes
+			}
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+			}
+		}
+		add_tech_bonus = {
+			name = COM_cloudyards_of_stratusburg
+			bonus = 0.6
+			uses = 2
+			category = airship_tech
+		}
 	}
 }
 
@@ -5146,6 +6111,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_guns_are_ready"
+		add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 2000 }
+		add_equipment_to_stockpile = { type = support_equipment amount = 500 }
+		add_equipment_to_stockpile = { type = ballistic_fireteam_equipment_2 amount = 300 }
 		COM_small_army_gain = yes
 	}
 }
@@ -5172,7 +6140,20 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_breadbasket_reclaimed"
-		
+		add_tech_bonus = {
+			name = COM_breadbasket_reclaimed
+			bonus = 0.6
+			uses = 2
+			category = agriculture_tech
+		}
+		344 = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = industrial_complex
+				level = 2
+				instant_build = yes
+			}
+		}
 	}
 }
 
@@ -5195,7 +6176,20 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_old_trade_port"
-		
+		204 = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = dockyard
+				level = 2
+				instant_build = yes
+			}
+			add_building_construction = {
+				type = naval_base
+				level = 3
+				instant_build = yes
+				province = 14226
+			}
+		}
 	}
 }
 
@@ -5218,7 +6212,33 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_gunworks_of_direfall"
-		
+		if = {
+			limit = { has_country_flag = COM_direfall_spared_flag }
+			387 = {
+				add_extra_state_shared_building_slots = 3
+				add_building_construction = {
+					type = arms_factory
+					level = 3
+					instant_build = yes
+				}
+			}
+		}
+		else = {
+			387 = {
+				add_extra_state_shared_building_slots = 2
+				add_building_construction = {
+					type = arms_factory
+					level = 2
+					instant_build = yes
+				}
+			}
+		}
+		add_tech_bonus = {
+			name = COM_gunworks_of_direfall
+			bonus = 0.6
+			uses = 2
+			category = ballistic_weapon_tech
+		}
 	}
 }
 
@@ -5238,6 +6258,20 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_fourth_citys_furnaces"
+		add_tech_bonus = {
+			name = COM_fourth_citys_furnaces
+			bonus = 0.6
+			uses = 2
+			category = metal_tech
+		}
+		292 = {
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+			}
+		}
 		COM_small_nobility_gain = yes
 	}
 }
@@ -5258,6 +6292,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_engines_for_the_columns"
+		add_equipment_to_stockpile = { type = truck_equipment_1 amount = 200 }
+		add_equipment_to_stockpile = { type = apc_equipment_1 amount = 80 }
 		COM_small_army_gain = yes
 	}
 }
@@ -5278,6 +6314,23 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_sky_of_our_own"
+		create_equipment_variant = {
+			name = "Stratusburg Pattern"
+			type = light_plane_airframe_0
+			modules = {
+				fixed_main_weapon_slot = light_mg_4x
+				engine_type_slot = propeller_engine
+				fixed_auxiliary_weapon_slot_1 = light_mg_4x
+				special_type_slot_1 = empty
+				special_type_slot_2 = empty
+			}
+		}
+		add_equipment_to_stockpile = {
+			type = light_plane_airframe_0
+			amount = 60
+			producer = COM
+			variant_name = "Stratusburg Pattern"
+		}
 		COM_small_branch_gain = yes
 	}
 }
@@ -5298,7 +6351,30 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_platinum_heart"
-		
+		capital_scope = {
+			add_resource = { type = energy amount = 24 }
+		}
+		if = {
+			limit = { NOT = { has_tech = resource_generator_power_tech_1 } }
+			set_technology = { resource_generator_power_tech_1 = 1 }
+		}
+		else_if = {
+			limit = { NOT = { has_tech = resource_generator_power_tech_2 } }
+			set_technology = { resource_generator_power_tech_2 = 1 }
+		}
+		else_if = {
+			limit = { NOT = { has_tech = resource_generator_power_tech_3 } }
+			set_technology = { resource_generator_power_tech_3 = 1 }
+		}
+		else_if = {
+			limit = { NOT = { has_tech = resource_generator_power_tech_4 } }
+			set_technology = { resource_generator_power_tech_4 = 1 }
+		}
+		else_if = {
+			limit = { NOT = { has_tech = resource_generator_power_tech_5 } }
+			set_technology = { resource_generator_power_tech_5 = 1 }
+		}
+		two_random_industrial_complex = yes
 	}
 }
 
@@ -5318,6 +6394,19 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_estates_on_the_steppe"
+		custom_effect_tooltip = COM_estates_on_the_steppe_tt
+		hidden_effect = {
+			every_state = {
+				limit = {
+					is_core_of = KHA
+					OR = {
+						is_owned_by = ROOT
+						owner = { is_subject_of = ROOT }
+					}
+				}
+				add_manpower = 15000
+			}
+		}
 		COM_small_nobility_gain = yes
 	}
 }
@@ -5338,6 +6427,20 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_eyes_on_every_manifest"
+		204 = {
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+		}
+		add_tech_bonus = {
+			name = COM_eyes_on_every_manifest
+			bonus = 1.0
+			uses = 1
+			category = decryption_tech
+		}
 		COM_small_branch_gain = yes
 	}
 }
@@ -5358,6 +6461,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_arms_for_the_wardens"
+		add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 1500 }
 		COM_small_guard_gain = yes
 	}
 }
@@ -5378,7 +6482,25 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_power_without_rationing"
-		
+		two_random_industrial_complex = yes
+		add_tech_bonus = {
+			name = COM_power_without_rationing
+			bonus = 0.5
+			uses = 2
+			category = habitation_tech
+		}
+		if = {
+			limit = { NOT = { has_tech = habitation_tech_level_scientific } }
+			set_technology = { habitation_tech_level_scientific = 1 }
+		}
+		else = {
+			add_tech_bonus = {
+				name = COM_power_without_rationing
+				bonus = 1.0
+				uses = 2
+				category = habitation_tech
+			}
+		}
 	}
 }
 
@@ -5398,7 +6520,30 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_what_the_council_left_us"
-		
+		add_tech_bonus = {
+			name = COM_what_the_council_left_us
+			bonus = 1.0
+			uses = 1
+			category = electronics
+		}
+		add_tech_bonus = {
+			name = COM_what_the_council_left_us
+			bonus = 1.0
+			uses = 1
+			category = computing_tech
+		}
+		if = {
+			limit = { NOT = { has_tech = electronics_tech_level_scientific } }
+			set_technology = { electronics_tech_level_scientific = 1 }
+		}
+		else = {
+			add_tech_bonus = {
+				name = COM_what_the_council_left_us
+				bonus = 1.0
+				uses = 2
+				category = electronics
+			}
+		}
 	}
 }
 
@@ -5419,6 +6564,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_open_the_ports_on_our_terms"
+		custom_effect_tooltip = COM_open_the_ports_on_our_terms_tt
+		clr_country_flag = no_immigrants
+		two_random_dockyards = yes
+		two_random_dockyards = yes
+		two_random_dockyards = yes
 		COM_big_nobility_gain = yes
 		set_country_flag = COM_ports_reopened_flag
 	}
@@ -5443,6 +6593,34 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_envy_of_the_plains"
-		
+		if = {
+			limit = { NOT = { has_tech = tools_tech_level_scientific } }
+			set_technology = { tools_tech_level_scientific = 1 }
+		}
+		else = {
+			add_tech_bonus = {
+				name = COM_envy_of_the_plains
+				bonus = 1.0
+				uses = 2
+				category = industry
+			}
+		}
+		if = {
+			limit = { NOT = { has_tech = exploitation_tech_level_scientific } }
+			set_technology = { exploitation_tech_level_scientific = 1 }
+		}
+		else = {
+			add_tech_bonus = {
+				name = COM_envy_of_the_plains
+				bonus = 1.0
+				uses = 2
+				category = industry
+			}
+		}
+		add_offsite_building = { type = industrial_complex level = 2 }
+		if = {
+			limit = { has_idea = COM_economic_panopticon_2_idea }
+			swap_ideas = { remove_idea = COM_economic_panopticon_2_idea add_idea = COM_economic_panopticon_3_idea }
+		}
 	}
 }
