@@ -1357,7 +1357,7 @@ shared_focus = {
 shared_focus = {
 	id = COM_coming_back_from_the_brink
 	icon = GFX_goal_generic_foe_skull
-	x = 11
+	x = 18
 	y = 0
 	cost = 1
 
@@ -1368,6 +1368,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_coming_back_from_the_brink"
+		add_stability = 0.05
+		add_political_power = 100
 	}
 }
 
@@ -1387,6 +1389,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_commonwealth_endures"
+		add_timed_idea = { idea = COM_reconstruction_idea days = 730 }
 	}
 }
 
@@ -1406,7 +1409,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_price_of_loyalty"
-		
+		add_political_power = -50
+		COM_raise_noble_support = yes
 	}
 }
 
@@ -1426,7 +1430,11 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_disarm_the_militias"
-		
+		delete_unit_template_and_units = {
+			division_template = "Royalist Militia"
+			disband = yes #manpower and rifles go back to the pool
+		}
+		COM_lower_partisan_resistance = yes
 	}
 }
 
@@ -1446,7 +1454,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_empty_lecture_halls"
-		
+		country_event = com_recon.1
 	}
 }
 
@@ -1466,7 +1474,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_lock_down_the_warehouses"
-		
+		add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 500 producer = COM }
+		COM_lower_shadow_economy = yes
 	}
 }
 
@@ -1486,7 +1495,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_fill_empty_seats"
-		
+		country_event = com_recon.2
 	}
 }
 
@@ -1506,7 +1515,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_retinues_into_regiments"
-		
+		custom_effect_tooltip = COM_retinues_into_regiments_tt
+		hidden_effect = {
+			set_variable = { COM_loyalist_regiments = 3 }
+			COM_spawn_royal_guard = yes
+		}
+		add_timed_idea = { idea = COM_retinues_into_regiments_idea days = 180 }
+		COM_army_start_plus_5 = yes
+		COM_nobility_start_minus_5 = yes
 	}
 }
 
@@ -1527,7 +1543,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_terms_of_peace"
-		
+		custom_effect_tooltip = COM_terms_of_peace_tt
+		hidden_effect = { country_event = com_recon.3 }
 	}
 }
 
@@ -1547,6 +1564,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_license_the_smugglers"
+		add_ideas = COM_licensed_smugglers_idea
+		One_random_industrial_complex = yes
+		COM_lower_shadow_economy = yes
 	}
 }
 
@@ -1566,7 +1586,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_close_the_borders"
-		
+		add_ideas = closed_borders #immigration law
+		set_country_flag = no_immigrants #locks the law until Open the Ports, on our Terms
+		add_ideas = closed_economy #trade law
+		COM_raise_shadow_economy = yes
 	}
 }
 
@@ -1587,7 +1610,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_thousand_trials"
-		
+		add_political_power = 150
+		add_stability = 0.05
+		COM_lower_noble_support = yes
 	}
 }
 
@@ -1607,6 +1632,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_pacification_office"
+		custom_effect_tooltip = COM_pacification_office_tt
+		COM_lower_partisan_resistance = yes
+		COM_guard_start_plus_5 = yes
 	}
 }
 
@@ -1627,6 +1655,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_one_buyer_one_seller"
+		swap_ideas = { remove_idea = COM_licensed_smugglers_idea add_idea = COM_state_monopoly_idea }
+		COM_lower_shadow_economy = yes
 	}
 }
 
@@ -1646,6 +1676,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_shield_guard"
+		custom_effect_tooltip = COM_shield_guard_tt
+		hidden_effect = {
+			267 = { create_unit = { division = "name = \"Shield-Guard Regiment\" division_template = \"Royalist Borderguard\" start_experience_factor = 0.2" owner = COM } }
+			267 = { create_unit = { division = "name = \"Shield-Guard Regiment\" division_template = \"Royalist Borderguard\" start_experience_factor = 0.2" owner = COM } }
+		}
+		COM_guard_start_plus_10 = yes
 	}
 }
 
@@ -1666,7 +1702,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_bureaucratic_nobility"
-		
+		COM_convert_noble_support = yes
 	}
 }
 
@@ -1686,7 +1722,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_bread_before_freedom"
-		
+		add_timed_idea = { idea = COM_bread_before_freedom_idea days = 365 }
+		One_random_industrial_complex = yes
+		COM_lower_partisan_resistance = yes
 	}
 }
 
@@ -1707,7 +1745,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_nationalize_the_universities"
-		
+		add_ideas = COM_nationalized_universities_idea
+		COM_lower_exodus = yes
 	}
 }
 
@@ -1727,7 +1766,17 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_work_towards_autarky"
-		
+		custom_effect_tooltip = COM_work_towards_autarky_tt
+		One_random_industrial_complex = yes
+		set_technology = {
+			resource_generator_water_tech_1 = 1
+			resource_generator_power_tech_1 = 1
+			resource_generator_metal_tech_1 = 1
+			resource_generator_composites_tech_1 = 1
+			resource_generator_circuitry_tech_1 = 1
+			popup = no
+		}
+		hidden_effect = { COM_update_autarky = yes }
 	}
 }
 
@@ -1748,6 +1797,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_one_chain_of_command"
+		add_ideas = COM_one_chain_of_command_idea
+		COM_army_start_plus_10 = yes
 	}
 }
 
@@ -1768,6 +1819,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_nation_that_obeys"
+		add_stability = 0.10
 	}
 }
 
@@ -1788,6 +1840,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_regencys_end"
+		add_country_leader_trait = COM_governess_general
+		add_political_power = 100
 	}
 }
 
@@ -1809,6 +1863,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_office_of_the_governess_general"
+		COM_start_power_struggle = yes
+		set_party_name = { ideology = survivalism long_name = COM_officer_nobility_party_long name = COM_officer_nobility_party }
+		set_party_name = { ideology = visionary long_name = COM_reform_movement_party_long name = COM_reform_movement_party }
+		set_party_name = { ideology = destruction long_name = COM_defense_consensus_party_long name = COM_defense_consensus_party }
+		set_party_name = { ideology = continuation long_name = COM_hegemonists_party_long name = COM_hegemonists_party }
+		add_political_power = 50
 	}
 }
 
@@ -1828,7 +1888,10 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_quiet_household"
-		
+		remove_unit_leader_role = { character = COM_char_gleaming_aegis }
+		add_stability = 0.05
+		COM_big_army_loss = yes
+		hidden_effect = { country_event = { id = com_pol.2 days = 28 } }
 	}
 }
 
@@ -1848,7 +1911,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_loyalty_rolls"
-		
+		add_ideas = COM_oaths_to_the_state_idea
 	}
 }
 
@@ -1868,7 +1931,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_warrant_of_the_three_cities"
-		
+		add_ideas = COM_military_governors_idea
+		COM_small_nobility_gain = yes
 	}
 }
 
@@ -1888,7 +1952,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_bill_for_razorfield"
-		
+		add_timed_idea = { idea = COM_political_reorganisation_idea days = 365 }
+		One_random_industrial_complex = yes
+		One_random_industrial_complex = yes
 	}
 }
 
@@ -1908,7 +1974,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_no_heir_no_pretender"
-		
+		if = {
+			limit = { has_idea = COM_prince_meltdown_idea }
+			remove_ideas = COM_prince_meltdown_idea
+		}
+		add_stability = -0.05
+		add_political_power = 100
 	}
 }
 
@@ -1929,7 +2000,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_question_of_the_prince"
-		
+		country_event = com_pol.1
 	}
 }
 
@@ -1949,7 +2020,27 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_smithsroad_and_carrotsburg"
-		
+		custom_effect_tooltip = COM_smithsroad_and_carrotsburg_tt
+		hidden_effect = {
+			314 = {
+				if = {
+					limit = {
+						FOE_state_has_owner = yes #unowned wasteland has nopony to ask
+						NOT = { is_owned_by = ROOT }
+					}
+					owner = { country_event = com_pol.3 }
+				}
+			}
+			352 = {
+				if = {
+					limit = {
+						FOE_state_has_owner = yes #unowned wasteland has nopony to ask
+						NOT = { is_owned_by = ROOT }
+					}
+					owner = { country_event = com_pol.4 }
+				}
+			}
+		}
 	}
 }
 
@@ -1963,6 +2054,12 @@ shared_focus = {
 	prerequisite = { focus = COM_warrant_of_the_three_cities }
 	prerequisite = { focus = COM_bill_for_razorfield }
 
+	bypass = {
+		OR = {
+			NOT = { country_exists = DEC }
+			DEC = { has_government = visionary }
+		}
+	}
 	available_if_capitulated = yes
 	ai_will_do = {
 		factor = 50
@@ -1970,7 +2067,20 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_contacts_in_detrot"
-		
+		if = { #Destruction Detrot stands by the Khan: we work on its ponies instead
+			limit = { DEC = { has_government = destruction } }
+			add_collaboration = { target = DEC value = 0.3 }
+		}
+		else = { #peeled off the Khan
+			DEC = {
+				if = {
+					limit = { is_in_faction = yes }
+					leave_faction = yes
+				}
+			}
+			diplomatic_relation = { country = DEC relation = non_aggression_pact active = yes }
+			hidden_effect = { set_country_flag = COM_detrot_peeled_flag }
+		}
 	}
 }
 
@@ -1990,7 +2100,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_creditors_not_friends"
-		
+		add_political_power = -100
+		diplomatic_relation = { country = NOV relation = non_aggression_pact active = yes }
+		diplomatic_relation = { country = DSB relation = non_aggression_pact active = yes }
+		NOV = { One_random_industrial_complex = yes }
+		DSB = { One_random_industrial_complex = yes }
+		custom_effect_tooltip = COM_creditors_not_friends_tt
+		hidden_effect = { country_event = { id = com_pol.7 days = 150 } }
 	}
 }
 
@@ -2010,7 +2126,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_one_voice_on_the_wire"
-		
+		add_war_support = 0.10
+		add_stability = 0.05
+		COM_small_branch_gain = yes
 	}
 }
 
@@ -2030,7 +2148,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_commission_of_enquiry"
-		
+		custom_effect_tooltip = COM_commission_of_enquiry_tt
+		COM_small_guard_gain = yes
+		COM_small_nobility_loss = yes
 	}
 }
 
@@ -2050,7 +2170,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_pacify_bordolis"
-		
+		custom_effect_tooltip = COM_claims_on_BOR_tt
+		hidden_effect = {
+			every_state = {
+				limit = { is_core_of = BOR }
+				add_claim_by = ROOT
+			}
+		}
+		create_wargoal = { type = annex_everything target = BOR }
 	}
 }
 
@@ -2070,6 +2197,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_empty_throne"
+		remove_country_leader_trait = COM_governess_general
+		add_country_leader_trait = COM_governess_general_2
 	}
 }
 
@@ -2090,7 +2219,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_generals_leash"
-		
+		swap_ideas = { remove_idea = COM_one_chain_of_command_idea add_idea = COM_split_command_idea }
+		COM_big_army_loss = yes
 	}
 }
 
@@ -2111,7 +2241,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_governors_assize"
-		
+		if = {
+			limit = { has_idea = COM_assembly_of_hearts }
+			swap_ideas = { remove_idea = COM_assembly_of_hearts add_idea = COM_governors_assize_idea }
+		}
+		else = {
+			add_ideas = COM_governors_assize_idea
+		}
+		COM_big_nobility_gain = yes
 	}
 }
 
@@ -2131,7 +2268,25 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_stalwart_settlement"
-		
+		custom_effect_tooltip = COM_stalwart_settlement_tt
+		hidden_effect = {
+			267 = {
+				add_manpower = 2000
+				add_dynamic_modifier = { modifier = COM_stalwart_stronghold_modifier }
+			}
+			249 = {
+				add_manpower = 2000
+				add_dynamic_modifier = { modifier = COM_stalwart_stronghold_modifier }
+			}
+			240 = {
+				add_manpower = 2000
+				add_dynamic_modifier = { modifier = COM_stalwart_stronghold_modifier }
+			}
+			215 = {
+				add_manpower = 2000
+				add_dynamic_modifier = { modifier = COM_stalwart_stronghold_modifier }
+			}
+		}
 	}
 }
 
@@ -2151,7 +2306,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_official_history"
-		
+		add_ideas = COM_official_history_idea
 	}
 }
 
@@ -2172,6 +2327,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_expand_the_shield_guard"
+		add_manpower = 3000
+		COM_big_guard_gain = yes
 	}
 }
 
@@ -2191,6 +2348,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_house_in_order"
+		COM_house_in_order = yes
 	}
 }
 
@@ -2212,6 +2370,15 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_operation_final_onslaught"
+		custom_effect_tooltip = COM_claims_on_KHA_tt
+		hidden_effect = {
+			every_state = {
+				limit = { is_core_of = KHA }
+				add_claim_by = ROOT
+			}
+		}
+		create_wargoal = { type = annex_everything target = KHA }
+		add_timed_idea = { idea = COM_operation_final_onslaught_idea days = 730 }
 	}
 }
 
@@ -2231,7 +2398,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_break_the_hundred_days"
-		
+		add_timed_idea = { idea = COM_break_the_hundred_days_idea days = 100 }
 	}
 }
 
@@ -2244,6 +2411,10 @@ shared_focus = {
 	cost = 4.29
 	prerequisite = { focus = COM_operation_final_onslaught }
 
+	available = {
+		has_war_with = ARR
+		ARR = { surrender_progress > 0.2 }
+	}
 	available_if_capitulated = yes
 	ai_will_do = {
 		factor = 50
@@ -2251,7 +2422,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_fourth_city"
-		
+		country_event = com_pol.10
 	}
 }
 
@@ -2271,7 +2442,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_rally_around_the_flag"
-		
+		add_war_support = 0.10
+		COM_lower_partisan_resistance = yes
 	}
 }
 
@@ -2284,6 +2456,9 @@ shared_focus = {
 	cost = 4.29
 	prerequisite = { focus = COM_break_the_hundred_days }
 
+	available = {
+		any_owned_state = { is_core_of = KHA }
+	}
 	available_if_capitulated = yes
 	ai_will_do = {
 		factor = 50
@@ -2291,7 +2466,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_yak_question"
-		
+		country_event = com_pol.11
 	}
 }
 
@@ -2304,6 +2479,9 @@ shared_focus = {
 	cost = 4.29
 	prerequisite = { focus = COM_fourth_city }
 
+	available = {
+		owns_state = 387
+	}
 	available_if_capitulated = yes
 	ai_will_do = {
 		factor = 50
@@ -2311,7 +2489,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_direfall_answers"
-		
+		country_event = com_pol.12
 	}
 }
 
@@ -2324,6 +2502,9 @@ shared_focus = {
 	cost = 4.29
 	prerequisite = { focus = COM_fourth_city }
 
+	available = {
+		owns_state = 344
+	}
 	available_if_capitulated = yes
 	ai_will_do = {
 		factor = 50
@@ -2331,6 +2512,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_warcamp_burns"
+		add_political_power = 50
+		add_mastery = {
+			amount = 50
+			folder = land
+		}
+		COM_small_army_gain = yes
 	}
 }
 
@@ -2343,6 +2530,9 @@ shared_focus = {
 	cost = 4.29
 	prerequisite = { focus = COM_rally_around_the_flag }
 
+	available = {
+		COM_khaganate_is_beaten = yes
+	}
 	available_if_capitulated = yes
 	ai_will_do = {
 		factor = 50
@@ -2350,7 +2540,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_queen_avenged"
-		
+		add_stability = 0.10
+		country_event = com_pol.13
 	}
 }
 
@@ -2366,6 +2557,9 @@ shared_focus = {
 	prerequisite = { focus = COM_yak_question }
 	prerequisite = { focus = COM_warcamp_burns }
 
+	available = {
+		COM_khaganate_is_beaten = yes
+	}
 	available_if_capitulated = yes
 	ai_will_do = {
 		factor = 50
@@ -2373,6 +2567,29 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_peace_on_the_polga"
+		if = {
+			limit = { has_idea = COM_operation_final_onslaught_idea }
+			remove_ideas = COM_operation_final_onslaught_idea
+		}
+		One_random_industrial_complex = yes
+		One_random_industrial_complex = yes
+		if = { #Detrot was peeled off the Khan
+			limit = {
+				has_country_flag = COM_detrot_peeled_flag
+				country_exists = DEC
+				DEC = { is_subject = no }
+			}
+			custom_effect_tooltip = COM_peace_detrot_tt
+			hidden_effect = { country_event = { id = com_pol.14 days = 10 } }
+		}
+		if = { #Arria turned to our side
+			limit = {
+				has_country_flag = COM_arria_turned_flag
+				country_exists = ARR
+			}
+			custom_effect_tooltip = COM_peace_arria_tt
+			hidden_effect = { country_event = { id = com_pol.15 days = 20 } }
+		}
 	}
 }
 
@@ -2392,7 +2609,22 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_commonwealth_whole"
-		
+		custom_effect_tooltip = COM_claims_on_NOV_tt
+		hidden_effect = {
+			every_state = {
+				limit = { is_core_of = NOV }
+				add_claim_by = ROOT
+			}
+		}
+		create_wargoal = { type = annex_everything target = NOV }
+		custom_effect_tooltip = COM_claims_on_DSB_tt
+		hidden_effect = {
+			every_state = {
+				limit = { is_core_of = DSB }
+				add_claim_by = ROOT
+			}
+		}
+		create_wargoal = { type = annex_everything target = DSB }
 	}
 }
 
@@ -2412,7 +2644,12 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_hegemony_system"
-		
+		set_cosmetic_tag = COM_hegemony_cosm
+		custom_effect_tooltip = COM_hegemony_system_tt
+		hidden_effect = {
+			set_country_flag = COM_hegemony_system_flag
+			COM_establish_purification_zones = yes
+		}
 	}
 }
 
@@ -2432,6 +2669,23 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_weight_of_history"
+		custom_effect_tooltip = COM_weight_of_history_tt
+		hidden_effect = {
+			every_state = {
+				limit = {
+					FOE_state_has_owner = yes
+					owner = { COM_is_broken_plains_country = yes }
+				}
+				add_claim_by = ROOT
+			}
+		}
+		if = {
+			limit = { has_idea = COM_official_history_idea }
+			swap_ideas = { remove_idea = COM_official_history_idea add_idea = COM_official_history_2_idea }
+		}
+		else = {
+			add_ideas = COM_official_history_2_idea
+		}
 	}
 }
 
@@ -2451,7 +2705,21 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_polga_watch"
-		
+		custom_effect_tooltip = COM_polga_watch_tt
+		hidden_effect = {
+			every_owned_state = { #forts on every border with Severyana
+				limit = { any_neighbor_state = { FOE_state_has_owner = yes owner = { has_country_flag = Country_Severyana_Flag } } }
+				add_building_construction = { type = bunker level = 2 instant_build = yes province = { all_provinces = yes limit_to_border = yes } }
+			}
+			every_country = { #collaborators in the north
+				limit = {
+					has_country_flag = Country_Severyana_Flag
+					is_neighbor_of = ROOT
+				}
+				ROOT = { add_collaboration = { target = PREV value = 0.2 } }
+			}
+		}
+		COM_small_guard_gain = yes
 	}
 }
 
@@ -2471,6 +2739,9 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_taxes_at_gunpoint"
+		add_ideas = COM_extortive_economy
+		set_country_flag = economic_laws_blocked #the other economy laws become unavailable
+		COM_small_army_gain = yes
 	}
 }
 
@@ -2490,7 +2761,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_stratusburg_brought_low"
-		
+		custom_effect_tooltip = COM_cores_on_DSB_tt
+		hidden_effect = {
+			every_state = {
+				limit = { is_core_of = DSB }
+				add_core_of = ROOT
+			}
+		}
 	}
 }
 
@@ -2510,7 +2787,13 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_novochernusk_returns"
-		
+		custom_effect_tooltip = COM_cores_on_NOV_tt
+		hidden_effect = {
+			every_state = {
+				limit = { is_core_of = NOV }
+				add_core_of = ROOT
+			}
+		}
 	}
 }
 
@@ -2530,7 +2813,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_purefires_ghost"
-		
+		country_event = com_pol.22
 	}
 }
 
@@ -2550,7 +2833,21 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_northern_concert"
-		
+		if = {
+			limit = { is_in_faction = no }
+			create_faction_from_template = faction_template_northern_concert
+		}
+		custom_effect_tooltip = COM_northern_concert_tt
+		hidden_effect = {
+			every_country = {
+				limit = {
+					COM_is_hornsmith_country = yes
+					NOT = { tag = ROOT }
+					NOT = { is_subject_of = ROOT }
+				}
+				country_event = com_pol.20
+			}
+		}
 	}
 }
 
@@ -2570,6 +2867,14 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_garrisons_and_guarantees"
+		if = {
+			limit = { has_idea = COM_military_governors_idea }
+			swap_ideas = { remove_idea = COM_military_governors_idea add_idea = COM_military_governors_2_idea }
+		}
+		else = {
+			add_ideas = COM_military_governors_2_idea
+		}
+		COM_small_army_gain = yes
 	}
 }
 
@@ -2590,7 +2895,17 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_one_flag_over_the_plains"
-		
+		custom_effect_tooltip = COM_one_flag_over_the_plains_tt
+		hidden_effect = {
+			every_country = {
+				limit = {
+					COM_is_broken_plains_country = yes
+					NOT = { tag = ROOT }
+					NOT = { is_subject_of = ROOT }
+				}
+				ROOT = { create_wargoal = { type = annex_everything target = PREV } }
+			}
+		}
 	}
 }
 
@@ -2610,6 +2925,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_exhort_pony_supremacy"
+		add_stability = -0.15
+		add_tech_bonus = { name = robotics_tech_bonus bonus = 0.5 uses = 3 category = race_tech }
 	}
 }
 
@@ -2629,7 +2946,17 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_second_expedition"
-		
+		custom_effect_tooltip = COM_second_expedition_tt
+		hidden_effect = {
+			every_country = {
+				limit = {
+					has_country_flag = Country_Severyana_Flag
+					NOT = { tag = ROOT }
+					NOT = { is_subject_of = ROOT }
+				}
+				ROOT = { create_wargoal = { type = annex_everything target = PREV } }
+			}
+		}
 	}
 }
 
@@ -2650,7 +2977,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_nopony_lives_forever"
-		
+		country_event = com_pol.21
 	}
 }
 
@@ -2670,7 +2997,8 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_one_tongue_one_people"
-		
+		custom_effect_tooltip = COM_one_tongue_one_people_tt
+		set_variable = { coring_cost_country_factor = -0.90 }
 	}
 }
 
@@ -2690,7 +3018,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_one_culture_one_purpose"
-		
+		add_ideas = COM_panequestrianism_idea
 	}
 }
 
@@ -2711,6 +3039,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_what_the_winter_taught_us"
+		add_ideas = COM_what_the_winter_taught_us_idea
 	}
 }
 
@@ -2733,7 +3062,7 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_ponykinds_destiny"
-		
+		country_event = com_pol.23
 	}
 }
 
@@ -2753,6 +3082,2367 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COM_hegemony_reigns_supreme"
+		if = {
+			limit = { has_country_flag = COM_ending_isolation_flag }
+			country_event = com_pol.24
+		}
+		else = {
+			country_event = com_pol.25
+		}
+	}
+}
+
+### The Hegemony proper: Conscripts Branch
+
+shared_focus = {
+	id = COM_ponies_we_have_left
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_coming_back_from_the_brink
+	x = 13
+	y = 9
+	cost = 4.29
+	prerequisite = { focus = COM_office_of_the_governess_general }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_ponies_we_have_left"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_back_to_the_rifle
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = -6
+	y = 1
+	cost = 4.29
+	prerequisite = { focus = COM_ponies_we_have_left }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_back_to_the_rifle"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_fortress_line
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = -3
+	y = 1
+	cost = 4.29
+	prerequisite = { focus = COM_ponies_we_have_left }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_fortress_line"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_kucykows_walls_rebuilt
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = -1
+	y = 1
+	cost = 4.29
+	prerequisite = { focus = COM_ponies_we_have_left }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_kucykows_walls_rebuilt"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_every_village_a_post
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = 1
+	y = 1
+	cost = 4.29
+	prerequisite = { focus = COM_ponies_we_have_left }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_every_village_a_post"
+		COM_small_guard_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_stand_down_the_battalions
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = 4
+	y = 1
+	cost = 4.29
+	prerequisite = { focus = COM_ponies_we_have_left }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_stand_down_the_battalions"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_gun_for_every_hoof
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = -7
+	y = 2
+	cost = 4.29
+	prerequisite = { focus = COM_back_to_the_rifle }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_gun_for_every_hoof"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_conscription_quotas
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = -5
+	y = 2
+	cost = 4.29
+	prerequisite = { focus = COM_back_to_the_rifle }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_conscription_quotas"
+		COM_small_guard_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_spokow_rownyna_line
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = -2
+	y = 2
+	cost = 4.29
+	prerequisite = { focus = COM_fortress_line }
+	prerequisite = { focus = COM_kucykows_walls_rebuilt }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_spokow_rownyna_line"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_grey_files
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = 1
+	y = 2
+	cost = 4.29
+	prerequisite = { focus = COM_every_village_a_post }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_grey_files"
+		COM_big_guard_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_question_of_the_levies
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = 4
+	y = 2
+	cost = 4.29
+	prerequisite = { focus = COM_stand_down_the_battalions }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_question_of_the_levies"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_dig_and_keep_digging
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = -7
+	y = 3
+	cost = 4.29
+	prerequisite = { focus = COM_gun_for_every_hoof }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_dig_and_keep_digging"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_sections_not_squares
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = -5
+	y = 3
+	cost = 4.29
+	prerequisite = { focus = COM_conscription_quotas }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_sections_not_squares"
+		COM_small_army_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_nothing_gets_through
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = -3
+	y = 3
+	cost = 4.29
+	prerequisite = { focus = COM_spokow_rownyna_line }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_nothing_gets_through"
+		COM_small_guard_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_anti_charge_obstacles
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = -1
+	y = 3
+	cost = 4.29
+	prerequisite = { focus = COM_spokow_rownyna_line }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_anti_charge_obstacles"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_wardens_not_soldiers
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = 1
+	y = 3
+	cost = 4.29
+	prerequisite = { focus = COM_grey_files }
+
+	available = {
+		COM_guard_is_at_least_meddling = yes
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_wardens_not_soldiers"
+		COM_big_guard_gain = yes
+		COM_small_army_loss = yes
+	}
+}
+
+shared_focus = {
+	id = COM_veterans_rolls
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = 3
+	y = 3
+	cost = 4.29
+	prerequisite = { focus = COM_question_of_the_levies }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_veterans_rolls"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_exemptions_and_deferments
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = 5
+	y = 3
+	cost = 4.29
+	prerequisite = { focus = COM_question_of_the_levies }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_exemptions_and_deferments"
+		COM_small_nobility_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_numbers_we_can_arm
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = -6
+	y = 4
+	cost = 4.29
+	prerequisite = { focus = COM_dig_and_keep_digging }
+	prerequisite = { focus = COM_sections_not_squares }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_numbers_we_can_arm"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_governess_generals_warrant
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = 0
+	y = 4
+	cost = 4.29
+	prerequisite = { focus = COM_wardens_not_soldiers }
+	mutually_exclusive = { focus = COM_guard_the_guards }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_governess_generals_warrant"
+		COM_big_guard_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_guard_the_guards
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = 2
+	y = 4
+	cost = 4.29
+	prerequisite = { focus = COM_wardens_not_soldiers }
+	mutually_exclusive = { focus = COM_governess_generals_warrant }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_guard_the_guards"
+		COM_big_guard_loss = yes
+		COM_small_branch_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_every_pony_has_a_place
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = 4
+	y = 4
+	cost = 4.29
+	prerequisite = { focus = COM_veterans_rolls }
+	prerequisite = { focus = COM_exemptions_and_deferments }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_every_pony_has_a_place"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_disband_the_retinues
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = 6
+	y = 4
+	cost = 4.29
+	prerequisite = { focus = COM_exemptions_and_deferments }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_disband_the_retinues"
+		COM_big_nobility_loss = yes
+		COM_small_army_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_line_holds
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = -4
+	y = 5
+	cost = 4.29
+	prerequisite = { focus = COM_anti_charge_obstacles }
+	prerequisite = { focus = COM_numbers_we_can_arm }
+	prerequisite = { focus = COM_nothing_gets_through }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_line_holds"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_quiet_country
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = 2
+	y = 5
+	cost = 4.29
+	prerequisite = { focus = COM_governess_generals_warrant focus = COM_guard_the_guards }
+	prerequisite = { focus = COM_every_pony_has_a_place }
+
+	available = {
+		COM_guard_is_influential = yes
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_quiet_country"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_ten_thousand_ponies_and_one_mission
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ponies_we_have_left
+	x = 0
+	y = 6
+	cost = 4.29
+	prerequisite = { focus = COM_line_holds }
+	prerequisite = { focus = COM_quiet_country }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_ten_thousand_ponies_and_one_mission"
+		
+	}
+}
+
+### The Hegemony proper: Regulars Branch
+
+shared_focus = {
+	id = COM_standing_army_at_last
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_coming_back_from_the_brink
+	x = 28
+	y = 9
+	cost = 4.29
+	prerequisite = { focus = COM_office_of_the_governess_general }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_standing_army_at_last"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_officers_privilege
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_standing_army_at_last
+	x = -4
+	y = 1
+	cost = 4.29
+	prerequisite = { focus = COM_standing_army_at_last }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_officers_privilege"
+		COM_small_army_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_bring_back_the_bombardment
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_standing_army_at_last
+	x = -1
+	y = 1
+	cost = 4.29
+	prerequisite = { focus = COM_standing_army_at_last }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_bring_back_the_bombardment"
+		COM_small_army_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_rails_roads_and_ledgers
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_standing_army_at_last
+	x = 3
+	y = 1
+	cost = 4.29
+	prerequisite = { focus = COM_standing_army_at_last }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_rails_roads_and_ledgers"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_inspectorate
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_standing_army_at_last
+	x = -6
+	y = 2
+	cost = 4.29
+	prerequisite = { focus = COM_officers_privilege }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_inspectorate"
+		COM_big_army_loss = yes
+		COM_small_guard_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_staff_college
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_standing_army_at_last
+	x = -4
+	y = 2
+	cost = 4.29
+	prerequisite = { focus = COM_officers_privilege }
+
+	available = {
+		COM_army_is_at_least_meddling = yes
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_staff_college"
+		COM_big_army_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_trucks_before_tanks
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_standing_army_at_last
+	x = -1
+	y = 2
+	cost = 4.29
+	prerequisite = { focus = COM_bring_back_the_bombardment }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_trucks_before_tanks"
+		COM_small_army_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_separate_arsenals
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_standing_army_at_last
+	x = 1
+	y = 2
+	cost = 4.29
+	prerequisite = { focus = COM_bring_back_the_bombardment }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_separate_arsenals"
+		COM_big_army_loss = yes
+		COM_small_nobility_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_winter_kit
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_standing_army_at_last
+	x = 3
+	y = 2
+	cost = 4.29
+	prerequisite = { focus = COM_rails_roads_and_ledgers }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_winter_kit"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_polga_flotilla
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_standing_army_at_last
+	x = 5
+	y = 2
+	cost = 4.29
+	prerequisite = { focus = COM_rails_roads_and_ledgers }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_polga_flotilla"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_promotion_by_merit
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_standing_army_at_last
+	x = -5
+	y = 3
+	cost = 4.29
+	prerequisite = { focus = COM_staff_college }
+	mutually_exclusive = { focus = COM_promotion_by_warrant }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_promotion_by_merit"
+		COM_big_army_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_promotion_by_warrant
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_standing_army_at_last
+	x = -3
+	y = 3
+	cost = 4.29
+	prerequisite = { focus = COM_staff_college }
+	mutually_exclusive = { focus = COM_promotion_by_merit }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_promotion_by_warrant"
+		COM_big_army_loss = yes
+		COM_small_nobility_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_nothing_charges_twice
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_standing_army_at_last
+	x = -1
+	y = 3
+	cost = 4.29
+	prerequisite = { focus = COM_trucks_before_tanks }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_nothing_charges_twice"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_field_hospitals
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_standing_army_at_last
+	x = 3
+	y = 3
+	cost = 4.29
+	prerequisite = { focus = COM_winter_kit }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_field_hospitals"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_master_of_the_river
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_standing_army_at_last
+	x = 5
+	y = 3
+	cost = 4.29
+	prerequisite = { focus = COM_polga_flotilla }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_master_of_the_river"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_career_and_a_duty
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_standing_army_at_last
+	x = -4
+	y = 4
+	cost = 4.29
+	prerequisite = { focus = COM_promotion_by_merit focus = COM_promotion_by_warrant }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_career_and_a_duty"
+		COM_small_army_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_catch_the_khan
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_standing_army_at_last
+	x = -2
+	y = 4
+	cost = 4.29
+	prerequisite = { focus = COM_nothing_charges_twice }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_catch_the_khan"
+		COM_small_army_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_marching_fire
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_standing_army_at_last
+	x = 0
+	y = 4
+	cost = 4.29
+	prerequisite = { focus = COM_nothing_charges_twice }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_marching_fire"
+		COM_small_army_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_army_that_arrives_on_time
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_standing_army_at_last
+	x = 3
+	y = 4
+	cost = 4.29
+	prerequisite = { focus = COM_field_hospitals }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_army_that_arrives_on_time"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_lessons_of_razorfield
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_standing_army_at_last
+	x = -2
+	y = 5
+	cost = 4.29
+	prerequisite = { focus = COM_catch_the_khan }
+	prerequisite = { focus = COM_career_and_a_duty }
+	prerequisite = { focus = COM_marching_fire }
+
+	available = {
+		COM_army_is_influential = yes
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_lessons_of_razorfield"
+		COM_big_army_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_army_of_the_hegemony
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_standing_army_at_last
+	x = 0
+	y = 6
+	cost = 4.29
+	prerequisite = { focus = COM_lessons_of_razorfield }
+	prerequisite = { focus = COM_army_that_arrives_on_time }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_army_of_the_hegemony"
+		
+	}
+}
+
+### The Hegemony proper: Elites Branch
+
+shared_focus = {
+	id = COM_few_we_can_afford
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_coming_back_from_the_brink
+	x = 20
+	y = 16
+	cost = 4.29
+	prerequisite = { focus = COM_office_of_the_governess_general }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_few_we_can_afford"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_royal_guards_armoury
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_few_we_can_afford
+	x = -5
+	y = 1
+	cost = 4.29
+	prerequisite = { focus = COM_few_we_can_afford }
+
+	available = {
+		COM_elite_imports_available = yes
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_royal_guards_armoury"
+		COM_small_branch_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_mages_to_the_colours
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_few_we_can_afford
+	x = -2
+	y = 1
+	cost = 4.29
+	prerequisite = { focus = COM_few_we_can_afford }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_mages_to_the_colours"
+		COM_small_branch_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_beyond_the_lines
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_few_we_can_afford
+	x = 1
+	y = 1
+	cost = 4.29
+	prerequisite = { focus = COM_few_we_can_afford }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_beyond_the_lines"
+		COM_small_branch_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_wings_we_do_not_have
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_few_we_can_afford
+	x = 4
+	y = 1
+	cost = 4.29
+	prerequisite = { focus = COM_few_we_can_afford }
+
+	available = {
+		COM_elite_imports_available = yes
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_wings_we_do_not_have"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_retool_for_armour
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_few_we_can_afford
+	x = -5
+	y = 2
+	cost = 4.29
+	prerequisite = { focus = COM_royal_guards_armoury }
+
+	available = {
+		COM_nobility_is_at_least_meddling = yes
+		COM_elite_imports_available = yes
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_retool_for_armour"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_shieldbearers
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_few_we_can_afford
+	x = -3
+	y = 2
+	cost = 4.29
+	prerequisite = { focus = COM_mages_to_the_colours }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_shieldbearers"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_limuas_new_curriculum
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_few_we_can_afford
+	x = -1
+	y = 2
+	cost = 4.29
+	prerequisite = { focus = COM_mages_to_the_colours }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_limuas_new_curriculum"
+		COM_small_branch_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_raiders_of_the_steppe
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_few_we_can_afford
+	x = 1
+	y = 2
+	cost = 4.29
+	prerequisite = { focus = COM_beyond_the_lines }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_raiders_of_the_steppe"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_stratusburgian_defectors
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_few_we_can_afford
+	x = 4
+	y = 2
+	cost = 4.29
+	prerequisite = { focus = COM_wings_we_do_not_have }
+
+	available = {
+		COM_elite_imports_available = yes
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_stratusburgian_defectors"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_what_kills_a_yak
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_few_we_can_afford
+	x = -5
+	y = 3
+	cost = 4.29
+	prerequisite = { focus = COM_retool_for_armour }
+
+	available = {
+		COM_elite_imports_available = yes
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_what_kills_a_yak"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_counter_necromancy
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_few_we_can_afford
+	x = -2
+	y = 3
+	cost = 4.29
+	prerequisite = { focus = COM_limuas_new_curriculum }
+	prerequisite = { focus = COM_shieldbearers }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_counter_necromancy"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_assassins_by_another_name
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_few_we_can_afford
+	x = 0
+	y = 3
+	cost = 4.29
+	prerequisite = { focus = COM_raiders_of_the_steppe }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_assassins_by_another_name"
+		COM_small_branch_gain = yes
+		COM_small_guard_loss = yes
+	}
+}
+
+shared_focus = {
+	id = COM_night_companies
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_few_we_can_afford
+	x = 2
+	y = 3
+	cost = 4.29
+	prerequisite = { focus = COM_raiders_of_the_steppe }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_night_companies"
+		COM_small_branch_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_cloudsteel_and_canvas
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_few_we_can_afford
+	x = 4
+	y = 3
+	cost = 4.29
+	prerequisite = { focus = COM_stratusburgian_defectors }
+
+	available = {
+		COM_elite_imports_available = yes
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_cloudsteel_and_canvas"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_honour_guard
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_few_we_can_afford
+	x = -6
+	y = 4
+	cost = 4.29
+	prerequisite = { focus = COM_what_kills_a_yak }
+
+	available = {
+		COM_elite_imports_available = yes
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_honour_guard"
+		COM_big_branch_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_iron_few
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_few_we_can_afford
+	x = -4
+	y = 4
+	cost = 4.29
+	prerequisite = { focus = COM_what_kills_a_yak }
+
+	available = {
+		COM_elite_imports_available = yes
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_iron_few"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_arcane_battalions
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_few_we_can_afford
+	x = -2
+	y = 4
+	cost = 4.29
+	prerequisite = { focus = COM_counter_necromancy }
+
+	available = {
+		COM_branch_is_at_least_meddling = yes
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_arcane_battalions"
+		COM_big_branch_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_knives_in_the_dark
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_few_we_can_afford
+	x = 1
+	y = 4
+	cost = 4.29
+	prerequisite = { focus = COM_night_companies }
+	prerequisite = { focus = COM_assassins_by_another_name }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_knives_in_the_dark"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_eyes_over_the_steppe
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_few_we_can_afford
+	x = 3
+	y = 4
+	cost = 4.29
+	prerequisite = { focus = COM_cloudsteel_and_canvas }
+	mutually_exclusive = { focus = COM_bombs_on_the_warcamp }
+
+	available = {
+		COM_elite_imports_available = yes
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_eyes_over_the_steppe"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_bombs_on_the_warcamp
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_few_we_can_afford
+	x = 5
+	y = 4
+	cost = 4.29
+	prerequisite = { focus = COM_cloudsteel_and_canvas }
+	mutually_exclusive = { focus = COM_eyes_over_the_steppe }
+
+	available = {
+		COM_elite_imports_available = yes
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_bombs_on_the_warcamp"
+		COM_small_branch_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_warrant_officers
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_few_we_can_afford
+	x = -3
+	y = 5
+	cost = 4.29
+	prerequisite = { focus = COM_honour_guard }
+	prerequisite = { focus = COM_iron_few }
+	prerequisite = { focus = COM_arcane_battalions }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_warrant_officers"
+		COM_big_branch_loss = yes
+	}
+}
+
+shared_focus = {
+	id = COM_three_keys_one_lock
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_few_we_can_afford
+	x = 1
+	y = 5
+	cost = 4.29
+	prerequisite = { focus = COM_knives_in_the_dark }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_three_keys_one_lock"
+		COM_small_army_loss = yes
+		COM_small_guard_loss = yes
+		COM_small_branch_loss = yes
+	}
+}
+
+shared_focus = {
+	id = COM_thin_sky
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_few_we_can_afford
+	x = 4
+	y = 5
+	cost = 4.29
+	prerequisite = { focus = COM_eyes_over_the_steppe focus = COM_bombs_on_the_warcamp }
+
+	available = {
+		COM_elite_imports_available = yes
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_thin_sky"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_shield_and_the_sword
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_few_we_can_afford
+	x = 0
+	y = 6
+	cost = 4.29
+	prerequisite = { focus = COM_thin_sky }
+	prerequisite = { focus = COM_warrant_officers }
+	prerequisite = { focus = COM_three_keys_one_lock }
+
+	available = {
+		COM_branch_is_influential = yes
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_shield_and_the_sword"
+		
+	}
+}
+
+### The Hegemony proper: Industry Branch
+
+shared_focus = {
+	id = COM_ledger_of_what_remains
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_coming_back_from_the_brink
+	x = -12
+	y = 9
+	cost = 4.29
+	prerequisite = { focus = COM_office_of_the_governess_general }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_ledger_of_what_remains"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_rails_to_the_hinterland
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = -5
+	y = 1
+	cost = 4.29
+	prerequisite = { focus = COM_ledger_of_what_remains }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_rails_to_the_hinterland"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_smoerbotts_foundries
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = -2
+	y = 1
+	cost = 4.29
+	prerequisite = { focus = COM_ledger_of_what_remains }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_smoerbotts_foundries"
+		COM_small_nobility_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_substitutes_for_everything
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = 2
+	y = 1
+	cost = 4.29
+	prerequisite = { focus = COM_ledger_of_what_remains }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_substitutes_for_everything"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_who_works_and_where
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = 5
+	y = 1
+	cost = 4.29
+	prerequisite = { focus = COM_ledger_of_what_remains }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_who_works_and_where"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_one_grid_one_country
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = -6
+	y = 2
+	cost = 4.29
+	prerequisite = { focus = COM_rails_to_the_hinterland }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_one_grid_one_country"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_polga_reopened
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = -4
+	y = 2
+	cost = 4.29
+	prerequisite = { focus = COM_rails_to_the_hinterland }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_polga_reopened"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_kucykow_rebuilt
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = -2
+	y = 2
+	cost = 4.29
+	prerequisite = { focus = COM_smoerbotts_foundries }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_kucykow_rebuilt"
+		COM_small_nobility_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_requisition_not_purchase
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = 1
+	y = 2
+	cost = 4.29
+	prerequisite = { focus = COM_substitutes_for_everything }
+	mutually_exclusive = { focus = COM_quotas_by_estate }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_requisition_not_purchase"
+		COM_big_nobility_loss = yes
+	}
+}
+
+shared_focus = {
+	id = COM_quotas_by_estate
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = 3
+	y = 2
+	cost = 4.29
+	prerequisite = { focus = COM_substitutes_for_everything }
+	mutually_exclusive = { focus = COM_requisition_not_purchase }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_quotas_by_estate"
+		COM_big_nobility_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_labour_warrants
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = 5
+	y = 2
+	cost = 4.29
+	prerequisite = { focus = COM_who_works_and_where }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_labour_warrants"
+		COM_big_nobility_loss = yes
+		COM_small_guard_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_country_that_connects
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = -5
+	y = 4
+	cost = 4.29
+	prerequisite = { focus = COM_polga_reopened }
+	prerequisite = { focus = COM_one_grid_one_country }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_country_that_connects"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_rayoreydan_mines
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = -3
+	y = 3
+	cost = 4.29
+	prerequisite = { focus = COM_kucykow_rebuilt }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_rayoreydan_mines"
+		COM_small_nobility_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_limuan_inheritance
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = -1
+	y = 3
+	cost = 4.29
+	prerequisite = { focus = COM_kucykow_rebuilt }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_limuan_inheritance"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_scrap_the_battlefields
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = 2
+	y = 3
+	cost = 4.29
+	prerequisite = { focus = COM_requisition_not_purchase focus = COM_quotas_by_estate }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_scrap_the_battlefields"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_prisoners_to_the_pits
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = 4
+	y = 3
+	cost = 4.29
+	prerequisite = { focus = COM_labour_warrants }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_prisoners_to_the_pits"
+		COM_small_guard_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_bring_back_the_engineers
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = 6
+	y = 3
+	cost = 4.29
+	prerequisite = { focus = COM_labour_warrants }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_bring_back_the_engineers"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_three_cities_united_once_more
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = -2
+	y = 4
+	cost = 4.29
+	prerequisite = { focus = COM_limuan_inheritance }
+	prerequisite = { focus = COM_rayoreydan_mines }
+
+	available = {
+		COM_nobility_is_at_least_meddling = yes
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_three_cities_united_once_more"
+		COM_big_nobility_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_self_sufficient_and_poorer_for_it
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = 2
+	y = 4
+	cost = 4.29
+	prerequisite = { focus = COM_scrap_the_battlefields }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_self_sufficient_and_poorer_for_it"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_every_hoof_accounted
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = 5
+	y = 4
+	cost = 4.29
+	prerequisite = { focus = COM_prisoners_to_the_pits }
+	prerequisite = { focus = COM_bring_back_the_engineers }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_every_hoof_accounted"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_arsenal_warrant
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = 0
+	y = 5
+	cost = 4.29
+	prerequisite = { focus = COM_country_that_connects }
+	prerequisite = { focus = COM_three_cities_united_once_more }
+	prerequisite = { focus = COM_self_sufficient_and_poorer_for_it }
+	prerequisite = { focus = COM_every_hoof_accounted }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_arsenal_warrant"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_arrias_steel_mills
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = -6
+	y = 6
+	cost = 4.29
+	prerequisite = { focus = COM_arsenal_warrant }
+
+	available = {
+		OR = {
+			owns_state = 292
+			292 = { owner = { is_subject_of = ROOT } }
+		}
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_arrias_steel_mills"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_detrot_motors
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = -4
+	y = 6
+	cost = 4.29
+	prerequisite = { focus = COM_arsenal_warrant }
+
+	available = {
+		OR = {
+			owns_state = 361
+			361 = { owner = { is_subject_of = ROOT } }
+		}
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_detrot_motors"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_cloudyards_of_stratusburg
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = -2
+	y = 6
+	cost = 4.29
+	prerequisite = { focus = COM_arsenal_warrant }
+
+	available = {
+		owns_state = 321
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_cloudyards_of_stratusburg"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_guns_are_ready
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = 0
+	y = 6
+	cost = 4.29
+	prerequisite = { focus = COM_arsenal_warrant }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_guns_are_ready"
+		COM_small_army_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_breadbasket_reclaimed
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = 2
+	y = 6
+	cost = 4.29
+	prerequisite = { focus = COM_arsenal_warrant }
+
+	available = {
+		OR = { #a purification zone holding it counts too
+			owns_state = 344
+			344 = { owner = { is_subject_of = ROOT } }
+		}
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_breadbasket_reclaimed"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_old_trade_port
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = 4
+	y = 6
+	cost = 4.29
+	prerequisite = { focus = COM_arsenal_warrant }
+
+	available = {
+		owns_state = 204
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_old_trade_port"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_gunworks_of_direfall
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = 6
+	y = 6
+	cost = 4.29
+	prerequisite = { focus = COM_arsenal_warrant }
+
+	available = {
+		owns_state = 387
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_gunworks_of_direfall"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_fourth_citys_furnaces
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = -6
+	y = 7
+	cost = 4.29
+	prerequisite = { focus = COM_arrias_steel_mills }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_fourth_citys_furnaces"
+		COM_small_nobility_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_engines_for_the_columns
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = -4
+	y = 7
+	cost = 4.29
+	prerequisite = { focus = COM_detrot_motors }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_engines_for_the_columns"
+		COM_small_army_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_sky_of_our_own
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = -2
+	y = 7
+	cost = 4.29
+	prerequisite = { focus = COM_cloudyards_of_stratusburg }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_sky_of_our_own"
+		COM_small_branch_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_platinum_heart
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = 0
+	y = 7
+	cost = 4.29
+	prerequisite = { focus = COM_guns_are_ready }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_platinum_heart"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_estates_on_the_steppe
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = 2
+	y = 7
+	cost = 4.29
+	prerequisite = { focus = COM_breadbasket_reclaimed }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_estates_on_the_steppe"
+		COM_small_nobility_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_eyes_on_every_manifest
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = 4
+	y = 7
+	cost = 4.29
+	prerequisite = { focus = COM_old_trade_port }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_eyes_on_every_manifest"
+		COM_small_branch_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_arms_for_the_wardens
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = 6
+	y = 7
+	cost = 4.29
+	prerequisite = { focus = COM_gunworks_of_direfall }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_arms_for_the_wardens"
+		COM_small_guard_gain = yes
+	}
+}
+
+shared_focus = {
+	id = COM_power_without_rationing
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = -1
+	y = 8
+	cost = 4.29
+	prerequisite = { focus = COM_platinum_heart }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_power_without_rationing"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_what_the_council_left_us
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = 1
+	y = 8
+	cost = 4.29
+	prerequisite = { focus = COM_platinum_heart }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_what_the_council_left_us"
+		
+	}
+}
+
+shared_focus = {
+	id = COM_open_the_ports_on_our_terms
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = 0
+	y = 9
+	cost = 4.29
+	prerequisite = { focus = COM_power_without_rationing }
+	prerequisite = { focus = COM_what_the_council_left_us }
+
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_open_the_ports_on_our_terms"
+		COM_big_nobility_gain = yes
+		set_country_flag = COM_ports_reopened_flag
+	}
+}
+
+shared_focus = {
+	id = COM_envy_of_the_plains
+	icon = GFX_goal_generic_foe_skull
+	relative_position_id = COM_ledger_of_what_remains
+	x = 0
+	y = 10
+	cost = 4.29
+	prerequisite = { focus = COM_open_the_ports_on_our_terms }
+
+	available = {
+		COM_nobility_is_influential = yes
+	}
+	available_if_capitulated = yes
+	ai_will_do = {
+		factor = 50
+	}
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus COM_envy_of_the_plains"
 		
 	}
 }

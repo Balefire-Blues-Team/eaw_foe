@@ -1,5 +1,8 @@
 add_namespace = commonwealth_start
 add_namespace = commonwealth_farther
+add_namespace = com_recon
+add_namespace = com_power
+add_namespace = com_pol
 
 country_event = {
  	id = commonwealth_start.1
@@ -1275,9 +1278,13 @@ country_event = {
 				COM_noble_support_2_idea 
 				COM_partisan_resistance_6_idea
 				COM_exodus_of_intellectuals_4_idea
-				COM_shadow_economy_1_idea
+				COM_shadow_economy_4_idea
 			}
-		   	#country_event = { id = cossacksfree.6 days = 20}
+			#Reconstruction foci add to these; they become the factions' head start in the power struggle
+			set_variable = { COM_army_start_bonus = 0 }
+			set_variable = { COM_guard_start_bonus = 0 }
+			set_variable = { COM_nobility_start_bonus = 0 }
+			set_variable = { COM_lenient_terms = 0 }
 		   	add_ideas = low_economic_mobilisation
 		   	add_ideas = limited_conscription
 	    }
@@ -1289,22 +1296,833 @@ country_event = {
 }
 
 
+### Reconstruction (post-war tree)
+
+country_event = { ### Empty Lecture Halls
+	id = com_recon.1
+	title = com_recon.1.t
+	desc = com_recon.1.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_recon.1" }
+	is_triggered_only = yes
+
+	option = {
+		name = com_recon.1.a
+		ai_chance = { base = 60 }
+		add_timed_idea = { idea = COM_academic_privileges_idea days = 730 }
+		COM_lower_exodus = yes
+	}
+	option = {
+		name = com_recon.1.b
+		ai_chance = { base = 40 }
+		add_stability = -0.05
+		COM_lower_exodus = yes
+	}
+}
+
+country_event = { ### Fill empty Seats
+	id = com_recon.2
+	title = com_recon.2.t
+	desc = com_recon.2.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_recon.2" }
+	is_triggered_only = yes
+
+	option = {
+		name = com_recon.2.a
+		ai_chance = { base = 50 }
+		add_political_power = 100
+		COM_lower_noble_support = yes
+		COM_nobility_start_plus_10 = yes
+	}
+	option = {
+		name = com_recon.2.b
+		ai_chance = { base = 50 }
+		add_political_power = 50
+		COM_nobility_start_plus_5 = yes
+	}
+}
+
+country_event = { ### The Terms of Peace: the Vermillionists
+	id = com_recon.3
+	title = com_recon.3.t
+	desc = com_recon.3.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_recon.3" }
+	is_triggered_only = yes
+
+	option = {
+		name = com_recon.3.a
+		ai_chance = { base = 50 }
+		One_random_industrial_complex = yes
+		hidden_effect = { country_event = com_recon.4 }
+	}
+	option = {
+		name = com_recon.3.b
+		ai_chance = { base = 50 }
+		custom_effect_tooltip = COM_lenient_terms_tt
+		hidden_effect = { add_to_variable = { COM_lenient_terms = 1 } }
+		hidden_effect = { country_event = com_recon.4 }
+	}
+}
+
+country_event = { ### The Terms of Peace: the Cossacks
+	id = com_recon.4
+	title = com_recon.4.t
+	desc = com_recon.4.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_recon.4" }
+	is_triggered_only = yes
+
+	option = {
+		name = com_recon.4.a
+		ai_chance = { base = 50 }
+		add_manpower = 1000
+		hidden_effect = { country_event = com_recon.5 }
+	}
+	option = {
+		name = com_recon.4.b
+		ai_chance = { base = 50 }
+		custom_effect_tooltip = COM_lenient_terms_tt
+		hidden_effect = { add_to_variable = { COM_lenient_terms = 1 } }
+		hidden_effect = { country_event = com_recon.5 }
+	}
+}
+
+country_event = { ### The Terms of Peace: the Magocrats
+	id = com_recon.5
+	title = com_recon.5.t
+	desc = com_recon.5.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_recon.5" }
+	is_triggered_only = yes
+
+	option = {
+		name = com_recon.5.a
+		ai_chance = { base = 50 }
+		One_random_arms_factory = yes
+		COM_conclude_terms_of_peace = yes
+	}
+	option = {
+		name = com_recon.5.b
+		ai_chance = { base = 50 }
+		custom_effect_tooltip = COM_lenient_terms_tt
+		hidden_effect = { add_to_variable = { COM_lenient_terms = 1 } }
+		COM_conclude_terms_of_peace = yes
+	}
+}
 
 
+### Power struggle of the Hegemony
 
+country_event = { ### Army overreaches
+	id = com_power.1
+	title = com_power.1.t
+	desc = com_power.1.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_power.1" }
+	is_triggered_only = yes
 
+	option = { #Buy them off
+		name = com_power.crisis.a
+		ai_chance = { base = 70 }
+		trigger = { check_variable = { COM_power_crisis_count < 3 } }
+		if = {
+			limit = { check_variable = { COM_power_crisis_count < 2 } }
+			add_political_power = -200
+		}
+		else = {
+			add_political_power = -400
+		}
+		custom_effect_tooltip = COM_army_back_to_influential_tt
+		custom_effect_tooltip = COM_power_crisis_warning_tt
+		hidden_effect = {
+			set_variable = { COM_army_influence = 60 }
+			clr_country_flag = COM_army_crisis_flag
+			COM_update_army_tier = yes
+		}
+	}
+	option = { #Purge them
+		name = com_power.crisis.b
+		ai_chance = { base = 30 }
+		trigger = { check_variable = { COM_power_crisis_count < 3 } }
+		if = {
+			limit = { check_variable = { COM_power_crisis_count < 2 } }
+			add_stability = -0.10
+		}
+		else = {
+			add_stability = -0.20
+		}
+		add_war_support = -0.05
+		custom_effect_tooltip = COM_army_back_to_meddling_tt
+		custom_effect_tooltip = COM_power_crisis_warning_tt
+		hidden_effect = {
+			set_variable = { COM_army_influence = 35 }
+			clr_country_flag = COM_army_crisis_flag
+			COM_update_army_tier = yes
+		}
+	}
+	option = { #Third crisis: the Anarchy of 36
+		name = com_power.crisis.c
+		trigger = { check_variable = { COM_power_crisis_count > 2 } }
+		COM_power_struggle_collapse = yes
+	}
+}
 
+country_event = { ### Shield-Guard overreaches
+	id = com_power.2
+	title = com_power.2.t
+	desc = com_power.2.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_power.2" }
+	is_triggered_only = yes
 
+	option = { #Buy them off
+		name = com_power.crisis.a
+		ai_chance = { base = 70 }
+		trigger = { check_variable = { COM_power_crisis_count < 3 } }
+		if = {
+			limit = { check_variable = { COM_power_crisis_count < 2 } }
+			add_political_power = -200
+		}
+		else = {
+			add_political_power = -400
+		}
+		custom_effect_tooltip = COM_guard_back_to_influential_tt
+		custom_effect_tooltip = COM_power_crisis_warning_tt
+		hidden_effect = {
+			set_variable = { COM_guard_influence = 60 }
+			clr_country_flag = COM_guard_crisis_flag
+			COM_update_guard_tier = yes
+		}
+	}
+	option = { #Purge them
+		name = com_power.crisis.b
+		ai_chance = { base = 30 }
+		trigger = { check_variable = { COM_power_crisis_count < 3 } }
+		if = {
+			limit = { check_variable = { COM_power_crisis_count < 2 } }
+			add_stability = -0.10
+		}
+		else = {
+			add_stability = -0.20
+		}
+		add_war_support = -0.05
+		custom_effect_tooltip = COM_guard_back_to_meddling_tt
+		custom_effect_tooltip = COM_power_crisis_warning_tt
+		hidden_effect = {
+			set_variable = { COM_guard_influence = 35 }
+			clr_country_flag = COM_guard_crisis_flag
+			COM_update_guard_tier = yes
+		}
+	}
+	option = { #Third crisis: the Anarchy of 36
+		name = com_power.crisis.c
+		trigger = { check_variable = { COM_power_crisis_count > 2 } }
+		COM_power_struggle_collapse = yes
+	}
+}
 
+country_event = { ### Special Branch overreaches
+	id = com_power.3
+	title = com_power.3.t
+	desc = com_power.3.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_power.3" }
+	is_triggered_only = yes
 
+	option = { #Buy them off
+		name = com_power.crisis.a
+		ai_chance = { base = 70 }
+		trigger = { check_variable = { COM_power_crisis_count < 3 } }
+		if = {
+			limit = { check_variable = { COM_power_crisis_count < 2 } }
+			add_political_power = -200
+		}
+		else = {
+			add_political_power = -400
+		}
+		custom_effect_tooltip = COM_branch_back_to_influential_tt
+		custom_effect_tooltip = COM_power_crisis_warning_tt
+		hidden_effect = {
+			set_variable = { COM_branch_influence = 60 }
+			clr_country_flag = COM_branch_crisis_flag
+			COM_update_branch_tier = yes
+		}
+	}
+	option = { #Purge them
+		name = com_power.crisis.b
+		ai_chance = { base = 30 }
+		trigger = { check_variable = { COM_power_crisis_count < 3 } }
+		if = {
+			limit = { check_variable = { COM_power_crisis_count < 2 } }
+			add_stability = -0.10
+		}
+		else = {
+			add_stability = -0.20
+		}
+		add_war_support = -0.05
+		custom_effect_tooltip = COM_branch_back_to_meddling_tt
+		custom_effect_tooltip = COM_power_crisis_warning_tt
+		hidden_effect = {
+			set_variable = { COM_branch_influence = 35 }
+			clr_country_flag = COM_branch_crisis_flag
+			COM_update_branch_tier = yes
+		}
+	}
+	option = { #Third crisis: the Anarchy of 36
+		name = com_power.crisis.c
+		trigger = { check_variable = { COM_power_crisis_count > 2 } }
+		COM_power_struggle_collapse = yes
+	}
+}
 
+country_event = { ### Officer-Nobility overreaches
+	id = com_power.4
+	title = com_power.4.t
+	desc = com_power.4.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_power.4" }
+	is_triggered_only = yes
 
+	option = { #Buy them off
+		name = com_power.crisis.a
+		ai_chance = { base = 70 }
+		trigger = { check_variable = { COM_power_crisis_count < 3 } }
+		if = {
+			limit = { check_variable = { COM_power_crisis_count < 2 } }
+			add_political_power = -200
+		}
+		else = {
+			add_political_power = -400
+		}
+		custom_effect_tooltip = COM_nobility_back_to_influential_tt
+		custom_effect_tooltip = COM_power_crisis_warning_tt
+		hidden_effect = {
+			set_variable = { COM_nobility_influence = 60 }
+			clr_country_flag = COM_nobility_crisis_flag
+			COM_update_nobility_tier = yes
+		}
+	}
+	option = { #Purge them
+		name = com_power.crisis.b
+		ai_chance = { base = 30 }
+		trigger = { check_variable = { COM_power_crisis_count < 3 } }
+		if = {
+			limit = { check_variable = { COM_power_crisis_count < 2 } }
+			add_stability = -0.10
+		}
+		else = {
+			add_stability = -0.20
+		}
+		add_war_support = -0.05
+		custom_effect_tooltip = COM_nobility_back_to_meddling_tt
+		custom_effect_tooltip = COM_power_crisis_warning_tt
+		hidden_effect = {
+			set_variable = { COM_nobility_influence = 35 }
+			clr_country_flag = COM_nobility_crisis_flag
+			COM_update_nobility_tier = yes
+		}
+	}
+	option = { #Third crisis: the Anarchy of 36
+		name = com_power.crisis.c
+		trigger = { check_variable = { COM_power_crisis_count > 2 } }
+		COM_power_struggle_collapse = yes
+	}
+}
 
+country_event = { ### Army makes a demand
+	id = com_power.11
+	title = com_power.11.t
+	desc = com_power.11.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_power.11" }
+	is_triggered_only = yes
 
+	option = {
+		name = com_power.demand.a
+		custom_effect_tooltip = COM_faction_demand_explained_tt
+	}
+}
 
+country_event = { ### Shield-Guard makes a demand
+	id = com_power.12
+	title = com_power.12.t
+	desc = com_power.12.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_power.12" }
+	is_triggered_only = yes
 
+	option = {
+		name = com_power.demand.a
+		custom_effect_tooltip = COM_faction_demand_explained_tt
+	}
+}
 
+country_event = { ### Special Branch makes a demand
+	id = com_power.13
+	title = com_power.13.t
+	desc = com_power.13.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_power.13" }
+	is_triggered_only = yes
 
+	option = {
+		name = com_power.demand.a
+		custom_effect_tooltip = COM_faction_demand_explained_tt
+	}
+}
 
+country_event = { ### Officer-Nobility makes a demand
+	id = com_power.14
+	title = com_power.14.t
+	desc = com_power.14.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_power.14" }
+	is_triggered_only = yes
 
+	option = {
+		name = com_power.demand.a
+		custom_effect_tooltip = COM_faction_demand_explained_tt
+	}
+}
+
+### Hegemony: political branch
+
+country_event = { ### The Question of the Prince
+	id = com_pol.1
+	title = com_pol.1.t
+	desc = com_pol.1.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_pol.1" }
+	is_triggered_only = yes
+
+	option = {
+		name = com_pol.1.a
+		ai_chance = { base = 40 }
+		add_stability = 0.05
+	}
+	option = {
+		name = com_pol.1.b
+		ai_chance = { base = 40 }
+		add_political_power = 50
+		COM_small_nobility_gain = yes
+	}
+	option = {
+		name = com_pol.1.c
+		ai_chance = { base = 20 }
+		add_political_power = 100
+		add_stability = -0.05
+		COM_small_branch_gain = yes
+	}
+}
+
+country_event = { ### Aegis takes up the Reform-Movement
+	id = com_pol.2
+	title = com_pol.2.t
+	desc = com_pol.2.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_pol.2" }
+	is_triggered_only = yes
+
+	option = {
+		name = com_pol.2.a
+		ai_chance = { base = 100 }
+		add_country_leader_role = {
+			character = COM_char_gleaming_aegis
+			promote_leader = yes
+			country_leader = {
+				ideology = protector
+				expire = "1965.1.1.1"
+				traits = { }
+			}
+		}
+		add_popularity = { ideology = visionary popularity = 0.05 }
+		hidden_effect = { set_country_flag = COM_aegis_leads_reform_flag }
+	}
+}
+
+country_event = { ### The Hegemony demands state 314 (sent to its owner; FROM is the Commonwealth)
+	id = com_pol.3
+	title = com_pol.3.t
+	desc = com_pol.3.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_pol.3" }
+	is_triggered_only = yes
+
+	option = {
+		name = com_pol.3.a
+		ai_chance = { base = 50 }
+		FROM = { transfer_state = 314 }
+		hidden_effect = { FROM = { country_event = com_pol.5 } }
+	}
+	option = {
+		name = com_pol.3.b
+		ai_chance = { base = 50 }
+		FROM = { create_wargoal = { type = annex_everything target = ROOT } }
+		hidden_effect = { FROM = { country_event = com_pol.6 } }
+	}
+}
+
+country_event = { ### The Hegemony demands state 352 (sent to its owner; FROM is the Commonwealth)
+	id = com_pol.4
+	title = com_pol.4.t
+	desc = com_pol.4.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_pol.4" }
+	is_triggered_only = yes
+
+	option = {
+		name = com_pol.4.a
+		ai_chance = { base = 50 }
+		FROM = { transfer_state = 352 }
+		hidden_effect = { FROM = { country_event = com_pol.5 } }
+	}
+	option = {
+		name = com_pol.4.b
+		ai_chance = { base = 50 }
+		FROM = { create_wargoal = { type = annex_everything target = ROOT } }
+		hidden_effect = { FROM = { country_event = com_pol.6 } }
+	}
+}
+
+country_event = { ### They hand the city over (FROM is the former owner)
+	id = com_pol.5
+	title = com_pol.5.t
+	desc = com_pol.5.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_pol.5" }
+	is_triggered_only = yes
+
+	option = {
+		name = com_pol.5.a
+		ai_chance = { base = 100 }
+	}
+}
+
+country_event = { ### They refuse (FROM is the owner)
+	id = com_pol.6
+	title = com_pol.6.t
+	desc = com_pol.6.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_pol.6" }
+	is_triggered_only = yes
+
+	option = {
+		name = com_pol.6.a
+		ai_chance = { base = 100 }
+	}
+}
+
+country_event = { ### Creditors, not Friends: the trade pays off
+	id = com_pol.7
+	title = com_pol.7.t
+	desc = com_pol.7.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_pol.7" }
+	is_triggered_only = yes
+
+	option = {
+		name = com_pol.7.a
+		ai_chance = { base = 100 }
+		if = {
+			limit = { country_exists = NOV }
+			One_random_industrial_complex = yes
+		}
+		if = {
+			limit = { country_exists = DSB }
+			One_random_industrial_complex = yes
+		}
+	}
+}
+
+### Hegemony: the war with the Khan
+
+country_event = { ### The Fourth City: Dried Ink turns or hangs
+	id = com_pol.10
+	title = com_pol.10.t
+	desc = com_pol.10.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_pol.10" }
+	is_triggered_only = yes
+
+	option = {
+		name = com_pol.10.a
+		ai_chance = { base = 50 }
+		white_peace = ARR
+		puppet = ARR
+		hidden_effect = { set_country_flag = COM_arria_turned_flag }
+	}
+	option = {
+		name = com_pol.10.b
+		ai_chance = { base = 50 }
+		add_timed_idea = { idea = COM_no_quarter_for_arria_idea days = 60 }
+	}
+}
+
+country_event = { ### The Yak Question
+	id = com_pol.11
+	title = com_pol.11.t
+	desc = com_pol.11.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_pol.11" }
+	is_triggered_only = yes
+
+	option = {
+		name = com_pol.11.a
+		ai_chance = { base = 60 }
+		add_stability = -0.05
+		every_owned_state = {
+			limit = { is_core_of = KHA }
+			add_compliance = 15
+		}
+		COM_small_guard_gain = yes
+	}
+	option = {
+		name = com_pol.11.b
+		ai_chance = { base = 40 }
+		add_stability = -0.10
+		add_war_support = 0.05
+		every_owned_state = {
+			limit = { is_core_of = KHA }
+			add_resistance = -30
+		}
+		custom_effect_tooltip = COM_announced_extermination_tt
+		hidden_effect = {
+			every_country = {
+				limit = { COM_become_purification_zone = yes }
+				add_opinion_modifier = { target = ROOT modifier = COM_announced_extermination }
+			}
+		}
+		COM_small_branch_gain = yes
+	}
+}
+
+country_event = { ### Direfall answers
+	id = com_pol.12
+	title = com_pol.12.t
+	desc = com_pol.12.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_pol.12" }
+	is_triggered_only = yes
+
+	option = {
+		name = com_pol.12.a
+		ai_chance = { base = 50 }
+		387 = {
+			add_manpower = -3000
+			add_dynamic_modifier = { modifier = COM_direfall_reprisals_modifier }
+		}
+		add_war_support = 0.05
+		COM_small_guard_gain = yes
+	}
+	option = {
+		name = com_pol.12.b
+		ai_chance = { base = 50 }
+		387 = { add_compliance = 20 }
+		add_war_support = -0.05
+		custom_effect_tooltip = COM_direfall_spared_tt
+		hidden_effect = { set_country_flag = COM_direfall_spared_flag }
+	}
+}
+
+country_event = { ### The Queen avenged: Grimsmasher's body
+	id = com_pol.13
+	title = com_pol.13.t
+	desc = com_pol.13.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_pol.13" }
+	is_triggered_only = yes
+
+	option = {
+		name = com_pol.13.a
+		ai_chance = { base = 40 }
+		add_stability = 0.05
+	}
+	option = {
+		name = com_pol.13.b
+		ai_chance = { base = 30 }
+		add_war_support = 0.10
+		every_owned_state = {
+			limit = { is_core_of = KHA }
+			add_resistance = 10
+		}
+	}
+	option = {
+		name = com_pol.13.c
+		ai_chance = { base = 30 }
+		add_tech_bonus = { name = robotics_tech_bonus bonus = 0.5 uses = 2 category = magical_tech }
+		COM_small_branch_gain = yes
+		hidden_effect = { set_country_flag = COM_grimsmasher_to_limua_flag }
+	}
+}
+
+country_event = { ### Peace on the Polga: Detrot, peeled off the Khan
+	id = com_pol.14
+	title = com_pol.14.t
+	desc = com_pol.14.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_pol.14" }
+	is_triggered_only = yes
+
+	option = {
+		name = com_pol.14.a
+		ai_chance = { base = 50 }
+		puppet = DEC
+	}
+	option = {
+		name = com_pol.14.b
+		ai_chance = { base = 50 }
+		add_political_power = 50
+	}
+}
+
+country_event = { ### Peace on the Polga: Arria, which turned
+	id = com_pol.15
+	title = com_pol.15.t
+	desc = com_pol.15.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_pol.15" }
+	is_triggered_only = yes
+
+	option = {
+		name = com_pol.15.a
+		ai_chance = { base = 50 }
+		every_state = {
+			limit = { is_owned_by = ARR }
+			add_core_of = ROOT
+		}
+		annex_country = { target = ARR transfer_troops = yes }
+	}
+	option = {
+		name = com_pol.15.b
+		ai_chance = { base = 50 }
+		ARR = { One_random_industrial_complex = yes }
+		add_stability = 0.05
+	}
+}
+
+### Hegemony: the three endings
+
+country_event = { ### The Northern Concert: submit or face war (sent to every Hornsmith country; FROM is the Hegemony)
+	id = com_pol.20
+	title = com_pol.20.t
+	desc = com_pol.20.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_pol.20" }
+	is_triggered_only = yes
+
+	option = {
+		name = com_pol.20.a
+		ai_chance = { base = 50 }
+		FROM = {
+			puppet = ROOT
+			add_to_faction = ROOT
+		}
+	}
+	option = {
+		name = com_pol.20.b
+		ai_chance = { base = 50 }
+		FROM = { create_wargoal = { type = annex_everything target = ROOT } }
+	}
+}
+
+country_event = { ### Nopony lives Forever: the succession
+	id = com_pol.21
+	title = com_pol.21.t
+	desc = com_pol.21.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_pol.21" }
+	is_triggered_only = yes
+
+	option = {
+		name = com_pol.21.a
+		ai_chance = { base = 25 }
+		COM_big_army_gain = yes
+		hidden_effect = { set_country_flag = COM_successor_army_flag }
+	}
+	option = {
+		name = com_pol.21.b
+		ai_chance = { base = 25 }
+		COM_big_guard_gain = yes
+		hidden_effect = { set_country_flag = COM_successor_guard_flag }
+	}
+	option = {
+		name = com_pol.21.c
+		ai_chance = { base = 25 }
+		COM_big_branch_gain = yes
+		hidden_effect = { set_country_flag = COM_successor_branch_flag }
+	}
+	option = {
+		name = com_pol.21.e
+		ai_chance = { base = 25 }
+		COM_big_nobility_gain = yes
+		hidden_effect = { set_country_flag = COM_successor_nobility_flag }
+	}
+}
+
+country_event = { ### Purefire's Ghost
+	id = com_pol.22
+	title = com_pol.22.t
+	desc = com_pol.22.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_pol.22" }
+	is_triggered_only = yes
+
+	option = {
+		name = com_pol.22.a
+		ai_chance = { base = 50 }
+		add_war_support = 0.05
+	}
+}
+
+country_event = { ### Ponykind's Destiny
+	id = com_pol.23
+	title = com_pol.23.t
+	desc = com_pol.23.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_pol.23" }
+	is_triggered_only = yes
+
+	option = {
+		name = com_pol.23.a
+		ai_chance = { base = 50 }
+		add_stability = 0.10
+		hidden_effect = { set_country_flag = COM_ending_isolation_flag }
+	}
+	option = {
+		name = com_pol.23.b
+		ai_chance = { base = 50 }
+		add_war_support = 0.10
+		hidden_effect = { set_country_flag = COM_ending_conquest_flag }
+	}
+}
+
+country_event = { ### Ending: the Hegemony turns inward
+	id = com_pol.24
+	title = com_pol.24.t
+	desc = com_pol.24.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_pol.24" }
+	is_triggered_only = yes
+
+	option = {
+		name = com_pol.24.a
+		ai_chance = { base = 100 }
+	}
+}
+
+country_event = { ### Ending: the Hegemony marches on
+	id = com_pol.25
+	title = com_pol.25.t
+	desc = com_pol.25.d
+	picture = GFX_event_test
+	immediate = { log = "[GetDateText]: [Root.GetName]: event com_pol.25" }
+	is_triggered_only = yes
+
+	option = {
+		name = com_pol.25.a
+		ai_chance = { base = 100 }
+	}
+}
 

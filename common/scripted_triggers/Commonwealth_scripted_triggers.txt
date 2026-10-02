@@ -1,0 +1,342 @@
+### Autarky
+COM_is_self_sufficient_in_water = {
+	check_variable = { resource@water > -0.01 }
+	check_variable = { resource_imported@water < 0.1 }
+}
+
+COM_is_self_sufficient_in_energy = {
+	check_variable = { resource@energy > -0.01 }
+	check_variable = { resource_imported@energy < 0.1 }
+}
+
+COM_is_self_sufficient_in_metal = {
+	check_variable = { resource@metal > -0.01 }
+	check_variable = { resource_imported@metal < 0.1 }
+}
+
+COM_is_self_sufficient_in_composites = {
+	check_variable = { resource@composites > -0.01 }
+	check_variable = { resource_imported@composites < 0.1 }
+}
+
+COM_is_self_sufficient_in_circuitry = {
+	check_variable = { resource@circuitry > -0.01 }
+	check_variable = { resource_imported@circuitry < 0.1 }
+}
+
+# State scope; ROOT is the country. A core state with room for another generator.
+COM_is_autarky_supply_site = {
+	is_owned_by = ROOT
+	is_controlled_by = ROOT
+	is_core_of = ROOT
+	OR = {
+		free_building_slots = { building = water_generator size > 0 }
+		free_building_slots = { building = electricity_generator size > 0 }
+		free_building_slots = { building = metal_generator size > 0 }
+		free_building_slots = { building = composites_generator size > 0 }
+		free_building_slots = { building = circuitry_generator size > 0 }
+	}
+}
+
+
+### Tier checks for the power struggle of the Hegemony, for focus and decision gates
+
+COM_army_is_at_least_meddling = {
+	custom_trigger_tooltip = {
+		tooltip = COM_army_is_at_least_meddling_tt
+		OR = {
+			has_idea = COM_army_meddling
+			has_idea = COM_army_influential
+		}
+	}
+}
+
+COM_army_is_influential = {
+	custom_trigger_tooltip = {
+		tooltip = COM_army_is_influential_tt
+		has_idea = COM_army_influential
+	}
+}
+
+COM_guard_is_at_least_meddling = {
+	custom_trigger_tooltip = {
+		tooltip = COM_guard_is_at_least_meddling_tt
+		OR = {
+			has_idea = COM_guard_meddling
+			has_idea = COM_guard_influential
+		}
+	}
+}
+
+COM_guard_is_influential = {
+	custom_trigger_tooltip = {
+		tooltip = COM_guard_is_influential_tt
+		has_idea = COM_guard_influential
+	}
+}
+
+COM_branch_is_at_least_meddling = {
+	custom_trigger_tooltip = {
+		tooltip = COM_branch_is_at_least_meddling_tt
+		OR = {
+			has_idea = COM_branch_meddling
+			has_idea = COM_branch_influential
+		}
+	}
+}
+
+COM_branch_is_influential = {
+	custom_trigger_tooltip = {
+		tooltip = COM_branch_is_influential_tt
+		has_idea = COM_branch_influential
+	}
+}
+
+COM_nobility_is_at_least_meddling = {
+	custom_trigger_tooltip = {
+		tooltip = COM_nobility_is_at_least_meddling_tt
+		OR = {
+			has_idea = COM_nobility_meddling
+			has_idea = COM_nobility_influential
+		}
+	}
+}
+
+COM_nobility_is_influential = {
+	custom_trigger_tooltip = {
+		tooltip = COM_nobility_is_influential_tt
+		has_idea = COM_nobility_influential
+	}
+}
+
+### Autarky strangles the Elites
+# COM_ports_reopened_flag is set by the Industry focus Open the Ports, on our Terms.
+COM_elite_imports_available = {
+	custom_trigger_tooltip = {
+		tooltip = COM_elite_imports_available_tt
+		OR = {
+			NOT = { has_completed_focus = COM_close_the_borders }
+			has_country_flag = COM_ports_reopened_flag
+		}
+	}
+}
+
+### A faction is overreaching, or its crisis event is waiting for an answer
+COM_any_faction_overreaching = {
+	OR = {
+		has_idea = COM_army_overreaching
+		has_country_flag = COM_army_crisis_flag
+		has_idea = COM_guard_overreaching
+		has_country_flag = COM_guard_crisis_flag
+		has_idea = COM_branch_overreaching
+		has_country_flag = COM_branch_crisis_flag
+		has_idea = COM_nobility_overreaching
+		has_country_flag = COM_nobility_crisis_flag
+	}
+}
+
+### Regions and the Khan
+COM_is_hornsmith_country = {
+	OR = {
+		original_tag = ZEX
+		original_tag = LOS
+		original_tag = PCM
+		original_tag = JUD
+		original_tag = BOR
+		original_tag = JAD
+		original_tag = ACV
+		original_tag = NMZ
+		original_tag = WTC
+		original_tag = UND
+		original_tag = PAR
+		original_tag = PEN
+		original_tag = SDO
+	}
+}
+
+COM_is_eastcoast_country = {
+	OR = {
+		original_tag = HYD
+		original_tag = SOL
+		original_tag = AUR
+		original_tag = ALB
+		original_tag = ARI
+		original_tag = NLO
+		original_tag = CAN
+	}
+}
+
+COM_is_greater_commonwealth_country = {
+	OR = {
+		original_tag = COM
+		original_tag = COR
+		original_tag = COL
+		original_tag = COC
+		original_tag = ARR
+		original_tag = KHA
+		original_tag = AOS
+		original_tag = TAR
+		original_tag = DEC
+		original_tag = DSB
+		original_tag = NOV
+	}
+}
+
+COM_is_nurior_country = {
+	OR = {
+		original_tag = SLC
+		original_tag = RTA
+		original_tag = NGL
+		original_tag = PHE
+		original_tag = SML
+		original_tag = TMS
+		original_tag = DEP
+		original_tag = TFL
+		original_tag = VOI
+	}
+}
+
+COM_is_neighgara_country = {
+	OR = {
+		original_tag = SKY
+		original_tag = TOL
+		original_tag = DFF
+		original_tag = NOO
+		original_tag = NGU
+		original_tag = WTR
+		original_tag = NTF
+		original_tag = BLC
+	}
+}
+
+COM_is_hollow_shades_country = {
+	OR = {
+		original_tag = NII
+		original_tag = FLB
+		original_tag = MOU
+		original_tag = QEU
+		original_tag = SHP
+		original_tag = KNT
+		original_tag = HTK
+		original_tag = SUN
+	}
+}
+
+COM_is_broken_plains_country = {
+	OR = {
+		#Hornsmith
+		original_tag = ZEX
+		original_tag = LOS
+		original_tag = PCM
+		original_tag = JUD
+		original_tag = BOR
+		original_tag = JAD
+		original_tag = ACV
+		original_tag = NMZ
+		original_tag = WTC
+		original_tag = UND
+		original_tag = PAR
+		original_tag = PEN
+		original_tag = SDO
+		#East-Coast
+		original_tag = HYD
+		original_tag = SOL
+		original_tag = AUR
+		original_tag = ALB
+		original_tag = ARI
+		original_tag = NLO
+		original_tag = CAN
+		#Greater Commonwealth
+		original_tag = COM
+		original_tag = COR
+		original_tag = COL
+		original_tag = COC
+		original_tag = ARR
+		original_tag = KHA
+		original_tag = AOS
+		original_tag = TAR
+		original_tag = DEC
+		original_tag = DSB
+		original_tag = NOV
+		#Nurior
+		original_tag = SLC
+		original_tag = RTA
+		original_tag = NGL
+		original_tag = PHE
+		original_tag = SML
+		original_tag = TMS
+		original_tag = DEP
+		original_tag = TFL
+		original_tag = VOI
+		#Neighgara
+		original_tag = SKY
+		original_tag = TOL
+		original_tag = DFF
+		original_tag = NOO
+		original_tag = NGU
+		original_tag = WTR
+		original_tag = NTF
+		original_tag = BLC
+		#Hollow Shades
+		original_tag = NII
+		original_tag = FLB
+		original_tag = MOU
+		original_tag = QEU
+		original_tag = SHP
+		original_tag = KNT
+		original_tag = HTK
+		original_tag = SUN
+	}
+}
+
+COM_khaganate_is_beaten = {
+	custom_trigger_tooltip = {
+		tooltip = COM_khaganate_is_beaten_tt
+		OR = {
+			NOT = { country_exists = KHA }
+			KHA = { has_capitulated = yes }
+			KHA = { is_subject_of = ROOT }
+		}
+	}
+}
+
+COM_become_purification_zone = {
+	OR = {
+		original_tag = KHA
+		original_tag = SML
+		original_tag = NGL
+		original_tag = RTA
+		original_tag = TOL
+		original_tag = NTF
+		original_tag = BLC
+		original_tag = SHP
+		original_tag = ARI
+		original_tag = PEN
+		original_tag = UND
+		original_tag = SDO
+		original_tag = BFS
+		original_tag = WHJ
+		original_tag = EXC
+		original_tag = EIL
+		original_tag = LAU
+		original_tag = VLC
+		original_tag = ABO
+		original_tag = FOX
+		original_tag = BLA
+		original_tag = MOO
+		original_tag = MAW
+		original_tag = KON
+		original_tag = PIG
+		original_tag = VRX
+		original_tag = VRY
+		original_tag = VRZ
+		original_tag = WLN
+		original_tag = CCD
+		original_tag = CAL
+		original_tag = SCI
+		original_tag = GLY
+		original_tag = SPV
+		original_tag = FTA
+		original_tag = STP
+	}
+}
