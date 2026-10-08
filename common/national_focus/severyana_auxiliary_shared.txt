@@ -1,0 +1,774 @@
+################################
+###Sladkiy Tractor Collective###
+################################
+# Replaces the political branch of the settler tree. Every focus is positioned relative to the branch root.
+
+### Opening ###
+
+shared_focus = {
+	id = SYT_council_at_the_tractor_works
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = gs_opening3
+	x = 0
+	y = 7
+	available = {
+		has_completed_focus = gs_opening3
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SYT_council_at_the_tractor_works"
+		add_political_power = 75
+	}
+}
+
+shared_focus = {
+	id = SYT_quotas_and_quarrels
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SYT_council_at_the_tractor_works
+	x = 0
+	y = 1
+	prerequisite = {
+		focus = SYT_council_at_the_tractor_works
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SYT_quotas_and_quarrels"
+		swap_ideas = {
+			remove_idea = SYT_squabbling_settlements_1
+			add_idea = SYT_squabbling_settlements_2
+		}
+		91 = {
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = SYT_konzan_question
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SYT_council_at_the_tractor_works
+	x = 0
+	y = 2
+	prerequisite = {
+		focus = SYT_quotas_and_quarrels
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SYT_konzan_question"
+		add_war_support = 0.10
+		army_experience = 15
+		add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 500 producer = SYT }
+	}
+}
+
+### Survivalism: Tricksy Trott keeps the council of farms ###
+
+shared_focus = {
+	id = SYT_every_farm_a_vote
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SYT_council_at_the_tractor_works
+	x = -3
+	y = 3
+	prerequisite = {
+		focus = SYT_konzan_question
+	}
+	mutually_exclusive = {
+		focus = SYT_central_committee
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SYT_every_farm_a_vote"
+		swap_ideas = {
+			remove_idea = SYT_squabbling_settlements_2
+			add_idea = SYT_free_association
+		}
+		add_stability = 0.05
+	}
+}
+
+shared_focus = {
+	id = SYT_envoys_to_the_bridge
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SYT_council_at_the_tractor_works
+	x = -4
+	y = 4
+	prerequisite = {
+		focus = SYT_every_farm_a_vote
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SYT_envoys_to_the_bridge"
+		if = {
+			limit = {
+				is_in_faction = no
+			}
+			create_faction_from_template = faction_template_konzan_river_pact
+		}
+		if = {
+			limit = {
+				country_exists = BRG
+			}
+			add_opinion_modifier = { target = BRG modifier = SYT_river_pact }
+			BRG = {
+				add_opinion_modifier = { target = ROOT modifier = SYT_river_pact }
+			}
+		}
+		if = {
+			limit = {
+				is_faction_leader = yes
+				BRG = {
+					exists = yes
+					is_ai = yes
+					is_in_faction = no
+					is_subject = no
+					NOT = { has_war_with = ROOT }
+				}
+			}
+			add_to_faction = BRG
+		}
+		else = {
+			custom_effect_tooltip = SYT_envoys_to_the_bridge_refused_tt
+		}
+	}
+}
+
+shared_focus = {
+	id = SYT_harvest_militias
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SYT_council_at_the_tractor_works
+	x = -2
+	y = 4
+	prerequisite = {
+		focus = SYT_every_farm_a_vote
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SYT_harvest_militias"
+		custom_effect_tooltip = SYT_harvest_militias_tt
+		hidden_effect = {
+			capital_scope = {
+				create_unit = {
+					division = "name = \"Harvest Militia\" division_template = \"Militia\" start_experience_factor = 0.2"
+					owner = ROOT
+				}
+				create_unit = {
+					division = "name = \"Harvest Militia\" division_template = \"Militia\" start_experience_factor = 0.2"
+					owner = ROOT
+				}
+			}
+		}
+		add_manpower = 400
+		add_doctrine_cost_reduction = {
+			name = SYT_harvest_militias
+			cost_reduction = 0.3
+			uses = 1
+			category = land_doctrine
+		}
+	}
+}
+
+shared_focus = {
+	id = SYT_drive_out_the_raiders
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SYT_council_at_the_tractor_works
+	x = -3
+	y = 5
+	prerequisite = {
+		focus = SYT_envoys_to_the_bridge
+	}
+	prerequisite = {
+		focus = SYT_harvest_militias
+	}
+	bypass = {
+		NOT = { country_exists = KZR }
+	}
+	will_lead_to_war_with = KZR
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SYT_drive_out_the_raiders"
+		create_wargoal = {
+			type = annex_everything
+			target = KZR
+		}
+		add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 600 producer = SYT }
+		army_experience = 15
+	}
+}
+
+shared_focus = {
+	id = SYT_bridge_accord
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SYT_council_at_the_tractor_works
+	x = -3
+	y = 6
+	prerequisite = {
+		focus = SYT_drive_out_the_raiders
+	}
+	available = {
+		# East-Konzan is taken from the raiders, by us or by the Bridgekeepers at our side
+		OR = {
+			owns_state = 716
+			BRG = {
+				owns_state = 716
+				is_in_faction_with = ROOT
+			}
+		}
+		OR = {
+			owns_state = 521
+			BRG = { is_in_faction_with = ROOT }
+		}
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SYT_bridge_accord"
+		if = {
+			limit = {
+				BRG = {
+					exists = yes
+					is_ai = yes
+					is_in_faction_with = ROOT
+				}
+			}
+			annex_country = {
+				target = BRG
+				transfer_troops = yes
+			}
+		}
+		swap_ideas = {
+			remove_idea = SYT_free_association
+			add_idea = SYT_farms_united
+		}
+	}
+}
+
+### Visionary: Kalasch Longbarrel builds a central state ###
+
+shared_focus = {
+	id = SYT_central_committee
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SYT_council_at_the_tractor_works
+	x = 3
+	y = 3
+	prerequisite = {
+		focus = SYT_konzan_question
+	}
+	mutually_exclusive = {
+		focus = SYT_every_farm_a_vote
+	}
+	available = {
+		custom_trigger_tooltip = {
+			tooltip = GS_allowed_change_ideology_tt
+			NOT = {
+				AND = {
+					is_ai = yes
+					has_country_flag = forbidden_to_change_ideology_flag
+					NOT = {
+						has_government = visionary
+					}
+				}
+			}
+		}
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SYT_central_committee"
+		set_politics = {
+			ruling_party = visionary
+			elections_allowed = no
+		}
+		add_popularity = {
+			ideology = visionary
+			popularity = 0.15
+		}
+		swap_ideas = {
+			remove_idea = SYT_squabbling_settlements_2
+			add_idea = SYT_central_plan
+		}
+	}
+}
+
+shared_focus = {
+	id = SYT_tractors_into_armour
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SYT_council_at_the_tractor_works
+	x = 2
+	y = 4
+	prerequisite = {
+		focus = SYT_central_committee
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SYT_tractors_into_armour"
+		149 = {
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+			}
+		}
+		add_equipment_to_stockpile = { type = truck_equipment_1 amount = 60 producer = SYT }
+		add_tech_bonus = {
+			name = SYT_tractors_into_armour
+			bonus = 0.5
+			uses = 2
+			category = vehicle_tech
+		}
+	}
+}
+
+shared_focus = {
+	id = SYT_letters_to_kucykow
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SYT_council_at_the_tractor_works
+	x = 4
+	y = 4
+	prerequisite = {
+		focus = SYT_central_committee
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SYT_letters_to_kucykow"
+		army_experience = 25
+		if = {
+			limit = {
+				country_exists = COR
+			}
+			add_opinion_modifier = { target = COR modifier = SYT_comradely_letters }
+			COR = {
+				add_opinion_modifier = { target = ROOT modifier = SYT_comradely_letters }
+			}
+			add_doctrine_cost_reduction = {
+				name = SYT_letters_to_kucykow
+				cost_reduction = 0.3
+				uses = 2
+				category = land_doctrine
+			}
+		}
+		else = {
+			add_political_power = 100
+		}
+	}
+}
+
+shared_focus = {
+	id = SYT_enemies_of_the_revolution
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SYT_council_at_the_tractor_works
+	x = 3
+	y = 5
+	prerequisite = {
+		focus = SYT_tractors_into_armour
+	}
+	prerequisite = {
+		focus = SYT_letters_to_kucykow
+	}
+	will_lead_to_war_with = KZR
+	will_lead_to_war_with = BRG
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SYT_enemies_of_the_revolution"
+		if = {
+			limit = {
+				country_exists = KZR
+			}
+			create_wargoal = {
+				type = annex_everything
+				target = KZR
+			}
+		}
+		if = {
+			limit = {
+				country_exists = BRG
+			}
+			create_wargoal = {
+				type = annex_everything
+				target = BRG
+			}
+		}
+		add_war_support = 0.10
+		add_manpower = 300
+	}
+}
+
+shared_focus = {
+	id = SYT_commissars_for_the_villages
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SYT_council_at_the_tractor_works
+	x = 3
+	y = 6
+	prerequisite = {
+		focus = SYT_enemies_of_the_revolution
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SYT_commissars_for_the_villages"
+		swap_ideas = {
+			remove_idea = SYT_central_plan
+			add_idea = SYT_one_collective
+		}
+		add_political_power = 100
+	}
+}
+
+### After the formable: Princessyn or the south ###
+
+shared_focus = {
+	id = SYT_east_severyanan_collective
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SYT_council_at_the_tractor_works
+	x = 0
+	y = 7
+	prerequisite = {
+		focus = SYT_bridge_accord
+		focus = SYT_commissars_for_the_villages
+	}
+	available = {
+		has_cosmetic_tag = SYT_eastern_collective
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SYT_east_severyanan_collective"
+		add_research_slot = 1
+		521 = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+		}
+		if = {
+			limit = {
+				has_government = visionary
+			}
+			add_war_support = 0.05
+		}
+		else = {
+			add_stability = 0.05
+		}
+	}
+}
+
+shared_focus = {
+	id = SYT_word_from_princessyn
+	icon = GFX_goal_unknown
+	cost = 4.29
+	relative_position_id = SYT_council_at_the_tractor_works
+	x = 0
+	y = 8
+	prerequisite = {
+		focus = SYT_east_severyanan_collective
+	}
+	available = {
+		custom_trigger_tooltip = {
+			tooltip = SYT_zone_has_fallen_tt
+			OR = {
+				NOT = { country_exists = SEZ }
+				SEZ = { has_country_flag = SEZ_new_tree_flag }
+			}
+		}
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SYT_word_from_princessyn"
+		custom_effect_tooltip = SYT_word_from_princessyn_tt
+		if = {
+			# Novaya Rodina has won the struggle for Princessyn
+			limit = {
+				NVR = {
+					exists = yes
+					owns_state = 658
+				}
+				NOT = { has_war_with = NVR }
+				NOT = { country_exists = SEZ }
+				NOT = { country_exists = RST }
+				NOT = { country_exists = LEE }
+				NOT = { country_exists = NAC }
+				NOT = { country_exists = SDI }
+			}
+			country_event = severyana.20
+		}
+		else = {
+			add_political_power = 50
+		}
+	}
+}
+
+shared_focus = {
+	id = SYT_iron_from_the_hills
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SYT_council_at_the_tractor_works
+	x = -2
+	y = 9
+	prerequisite = {
+		focus = SYT_word_from_princessyn
+	}
+	available = {
+		is_subject = no
+	}
+	bypass = {
+		NOT = { country_exists = IFT }
+	}
+	will_lead_to_war_with = IFT
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SYT_iron_from_the_hills"
+		create_wargoal = {
+			type = annex_everything
+			target = IFT
+		}
+		add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 400 producer = SYT }
+	}
+}
+
+shared_focus = {
+	id = SYT_silence_the_seers
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SYT_council_at_the_tractor_works
+	x = 0
+	y = 9
+	prerequisite = {
+		focus = SYT_word_from_princessyn
+	}
+	available = {
+		is_subject = no
+	}
+	bypass = {
+		NOT = { country_exists = SFO }
+	}
+	will_lead_to_war_with = SFO
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SYT_silence_the_seers"
+		create_wargoal = {
+			type = annex_everything
+			target = SFO
+		}
+		army_experience = 20
+	}
+}
+
+shared_focus = {
+	id = SYT_break_the_stronghoofs
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SYT_council_at_the_tractor_works
+	x = 2
+	y = 9
+	prerequisite = {
+		focus = SYT_word_from_princessyn
+	}
+	available = {
+		is_subject = no
+	}
+	bypass = {
+		NOT = { country_exists = SHT }
+	}
+	will_lead_to_war_with = SHT
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SYT_break_the_stronghoofs"
+		create_wargoal = {
+			type = annex_everything
+			target = SHT
+		}
+		add_manpower = 300
+	}
+}
+
+shared_focus = {
+	id = SYT_fields_for_the_south
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SYT_council_at_the_tractor_works
+	x = 0
+	y = 10
+	prerequisite = {
+		focus = SYT_iron_from_the_hills
+	}
+	prerequisite = {
+		focus = SYT_silence_the_seers
+	}
+	prerequisite = {
+		focus = SYT_break_the_stronghoofs
+	}
+	available = {
+		owns_state = 181
+		owns_state = 248
+		owns_state = 191
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SYT_fields_for_the_south"
+		Core_original_IFT = yes
+		Core_original_SFO = yes
+		Core_original_SHT = yes
+		one_random_industrial_complex = yes
+		swap_ideas = {
+			remove_idea = SYT_mechanized_agriculture
+			add_idea = SYT_mechanized_agriculture_2
+		}
+	}
+}
+
+shared_focus = {
+	id = SYT_march_on_princessyn
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SYT_council_at_the_tractor_works
+	x = 0
+	y = 11
+	prerequisite = {
+		focus = SYT_fields_for_the_south
+	}
+	available = {
+		is_subject = no
+	}
+	will_lead_to_war_with = AMR
+	will_lead_to_war_with = NSU
+	will_lead_to_war_with = NVS
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SYT_march_on_princessyn"
+		custom_effect_tooltip = SYT_march_on_princessyn_tt
+		hidden_effect = {
+			# the states of the city are those of Core_original_SEZ; AMR, NSU and NVS lie between us and the city
+			every_other_country = {
+				limit = {
+					OR = {
+						any_owned_state = {
+							OR = {
+								state = 720
+								state = 168
+								state = 667
+								state = 676
+								state = 677
+								state = 163
+								state = 151
+								state = 718
+								state = 733
+								state = 732
+								state = 159
+								state = 729
+								state = 658
+							}
+						}
+						original_tag = AMR
+						original_tag = NSU
+						original_tag = NVS
+					}
+					NOT = { is_in_faction_with = ROOT }
+					NOT = { is_subject_of = ROOT }
+				}
+				ROOT = {
+					create_wargoal = {
+						type = annex_everything
+						target = PREV
+					}
+				}
+			}
+		}
+		add_war_support = 0.10
+		army_experience = 25
+		add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 800 producer = SYT }
+	}
+}
+
+shared_focus = {
+	id = SYT_living_dream
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SYT_council_at_the_tractor_works
+	x = 0
+	y = 12
+	prerequisite = {
+		focus = SYT_march_on_princessyn
+	}
+	available = {
+		owns_state = 658
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SYT_living_dream"
+		Core_original_SEZ = yes
+		two_random_industrial_complex = yes
+		add_stability = 0.10
+		add_political_power = 150
+		# the Collective becomes Stalliongrad, with the old Administration Tower as its capital
+		drop_cosmetic_tag = yes
+		set_cosmetic_tag = SYT_stalliongrad
+		set_capital = {
+			state = 658
+			remember_old_capital = no
+		}
+		658 = { set_state_name = SYT_stalliongrad_state }
+		set_province_name = {
+			id = 12748
+			name = SYT_stalliongrad_state
+		}
+	}
+}
