@@ -349,6 +349,17 @@ on_actions = {
 	#ROOT = nation being puppeted, FROM = overlord
 	on_puppet = {
 		effect = {
+			# Unseen Council, destruction path: its puppets become tax districts
+			if = {
+				limit = {
+					FROM = {
+						original_tag = USC
+						has_completed_focus = USC_everypony_pays
+					}
+				}
+				USC_become_tax_district = yes
+			}
+
 			if = {
 				limit = {
 					ROOT = {
@@ -1158,6 +1169,20 @@ on_actions = {
 					}
 					NCG = { country_event = neocastle.33 }
 				}
+			}
+		}
+	}
+
+	# ROOT = the former subject, FROM = the former overlord
+	on_subject_free = {
+		effect = {
+			# a tax district of the Unseen Council gets its own name back
+			if = {
+				limit = {
+					has_country_flag = USC_tax_district_flag
+				}
+				drop_cosmetic_tag = yes
+				clr_country_flag = USC_tax_district_flag
 			}
 		}
 	}

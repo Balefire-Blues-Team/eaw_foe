@@ -1599,3 +1599,757 @@ shared_focus = {
 		}
 	}
 }
+
+####################
+###Unseen Council###
+####################
+
+### Opening ###
+
+shared_focus = {
+	id = USC_death_and_taxes
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = gs_opening3
+	x = 0
+	y = 7
+	available = {
+		has_completed_focus = gs_opening3
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus USC_death_and_taxes"
+		add_political_power = 75
+		add_stability = 0.05
+	}
+}
+
+shared_focus = {
+	id = USC_we_have_what_it_takes
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = USC_death_and_taxes
+	x = 0
+	y = 1
+	prerequisite = {
+		focus = USC_death_and_taxes
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus USC_we_have_what_it_takes"
+		add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 400 producer = USC }
+		army_experience = 15
+	}
+}
+
+shared_focus = {
+	id = USC_audit_of_the_alliance
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = USC_death_and_taxes
+	x = 0
+	y = 2
+	prerequisite = {
+		focus = USC_we_have_what_it_takes
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus USC_audit_of_the_alliance"
+		392 = {
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = USC_letters_of_assessment
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = USC_death_and_taxes
+	x = 0
+	y = 4
+	prerequisite = {
+		focus = USC_audit_of_the_alliance
+	}
+	available = {
+		is_faction_leader = yes
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus USC_letters_of_assessment"
+		custom_effect_tooltip = USC_letters_of_assessment_tt
+		if = {
+			limit = {
+				VLC = {
+					exists = yes
+					is_ai = yes
+					is_subject = no
+					is_in_faction = no
+					NOT = { has_war_with = ROOT }
+				}
+			}
+			add_to_faction = VLC
+			VLC = {
+				set_country_flag = SDF_alliance_flag
+				if = {
+					limit = {
+						ROOT = { has_idea = SDF_charter_member }
+					}
+					add_ideas = SDF_charter_member
+				}
+				else = {
+					add_ideas = SDF_united_protectors
+				}
+			}
+			USC = { add_ai_strategy = { type = alliance id = "VLC" value = 200 } add_opinion_modifier = { target = VLC modifier = huge_increase } }
+			SDF = { add_ai_strategy = { type = alliance id = "VLC" value = 200 } add_opinion_modifier = { target = VLC modifier = huge_increase } }
+			VLC = { add_ai_strategy = { type = alliance id = "SDF" value = 200 } add_opinion_modifier = { target = SDF modifier = huge_increase } }
+			VLC = { add_ai_strategy = { type = alliance id = "USC" value = 200 } add_opinion_modifier = { target = USC modifier = huge_increase } }
+		}
+		if = {
+			limit = {
+				PFI = {
+					exists = yes
+					is_ai = yes
+					is_subject = no
+					is_in_faction = no
+					NOT = { has_war_with = ROOT }
+				}
+			}
+			add_to_faction = PFI
+			PFI = {
+				set_country_flag = SDF_alliance_flag
+				if = {
+					limit = {
+						ROOT = { has_idea = SDF_charter_member }
+					}
+					add_ideas = SDF_charter_member
+				}
+				else = {
+					add_ideas = SDF_united_protectors
+				}
+			}
+			USC = { add_ai_strategy = { type = alliance id = "PFI" value = 200 } add_opinion_modifier = { target = PFI modifier = huge_increase } }
+			SDF = { add_ai_strategy = { type = alliance id = "PFI" value = 200 } add_opinion_modifier = { target = PFI modifier = huge_increase } }
+			PFI = { add_ai_strategy = { type = alliance id = "SDF" value = 200 } add_opinion_modifier = { target = SDF modifier = huge_increase } }
+			PFI = { add_ai_strategy = { type = alliance id = "USC" value = 200 } add_opinion_modifier = { target = USC modifier = huge_increase } }
+		}
+		if = {
+			limit = {
+				RSW = {
+					exists = yes
+					is_ai = yes
+					is_subject = no
+					is_in_faction = no
+					NOT = { has_war_with = ROOT }
+				}
+			}
+			add_to_faction = RSW
+			RSW = {
+				set_country_flag = SDF_alliance_flag
+				if = {
+					limit = {
+						ROOT = { has_idea = SDF_charter_member }
+					}
+					add_ideas = SDF_charter_member
+				}
+				else = {
+					add_ideas = SDF_united_protectors
+				}
+			}
+			USC = { add_ai_strategy = { type = alliance id = "RSW" value = 200 } add_opinion_modifier = { target = RSW modifier = huge_increase } }
+			SDF = { add_ai_strategy = { type = alliance id = "RSW" value = 200 } add_opinion_modifier = { target = RSW modifier = huge_increase } }
+			RSW = { add_ai_strategy = { type = alliance id = "SDF" value = 200 } add_opinion_modifier = { target = SDF modifier = huge_increase } }
+			RSW = { add_ai_strategy = { type = alliance id = "USC" value = 200 } add_opinion_modifier = { target = USC modifier = huge_increase } }
+			# the alliance comes to the defence of a member that joins while at war
+			hidden_effect = {
+				RSW = {
+					every_enemy_country = {
+						ROOT = {
+							add_to_war = {
+								targeted_alliance = RSW
+								enemy = PREV
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+### Continuation: the alliance is united through a common treasury ###
+
+shared_focus = {
+	id = USC_ledger_binds
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = USC_death_and_taxes
+	x = -2
+	y = 3
+	prerequisite = {
+		focus = USC_audit_of_the_alliance
+	}
+	mutually_exclusive = {
+		focus = USC_everypony_pays
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus USC_ledger_binds"
+		swap_ideas = {
+			remove_idea = USC_tax_collectors
+			add_idea = USC_revenue_service
+		}
+		add_stability = 0.05
+	}
+}
+
+shared_focus = {
+	id = USC_common_treasury
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = USC_death_and_taxes
+	x = -3
+	y = 4
+	prerequisite = {
+		focus = USC_ledger_binds
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus USC_common_treasury"
+		custom_effect_tooltip = USC_common_treasury_tt
+		hidden_effect = {
+			every_other_country = {
+				limit = {
+					is_in_faction_with = ROOT
+				}
+				one_random_industrial_complex = yes
+				add_opinion_modifier = { target = ROOT modifier = USC_common_treasury_opinion }
+				ROOT = {
+					add_opinion_modifier = { target = PREV modifier = USC_common_treasury_opinion }
+				}
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = USC_chancellor_presides
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = USC_death_and_taxes
+	x = -3
+	y = 5
+	prerequisite = {
+		focus = USC_common_treasury
+	}
+	available = {
+		is_in_faction = yes
+		is_subject = no
+		custom_trigger_tooltip = {
+			tooltip = SDA_no_other_uniter_tt
+			NOT = { has_global_flag = SDA_uniter_chosen_flag }
+		}
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus USC_chancellor_presides"
+		custom_effect_tooltip = USC_takes_the_chair_tt
+		set_faction_leader = yes
+		custom_effect_tooltip = SDA_may_unite_tt
+		set_country_flag = SDA_may_unite_flag
+		set_global_flag = SDA_uniter_chosen_flag
+		add_political_power = 100
+	}
+}
+
+shared_focus = {
+	id = USC_aston_mint
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = USC_death_and_taxes
+	x = -2
+	y = 6
+	prerequisite = {
+		focus = USC_chancellor_presides
+	}
+	available = {
+		OR = {
+			has_cosmetic_tag = Severyana_defense_alliance_cosm
+			has_cosmetic_tag = Severyana_defense_command_cosm
+		}
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus USC_aston_mint"
+		392 = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = industrial_complex
+				level = 2
+				instant_build = yes
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = USC_blackwell_reopened
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = USC_death_and_taxes
+	x = -4
+	y = 6
+	prerequisite = {
+		focus = USC_chancellor_presides
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus USC_blackwell_reopened"
+		392 = {
+			add_resource = { type = circuitry amount = 8 }
+			add_resource = { type = advanced amount = 6 }
+		}
+		add_tech_bonus = {
+			name = USC_blackwell_reopened
+			bonus = 0.5
+			uses = 2
+			category = electronics
+		}
+	}
+}
+
+shared_focus = {
+	id = USC_bonded_warehouses
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = USC_death_and_taxes
+	x = -2
+	y = 7
+	prerequisite = {
+		focus = USC_aston_mint
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus USC_bonded_warehouses"
+		392 = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = arms_factory
+				level = 2
+				instant_build = yes
+			}
+			add_resource = { type = metal amount = 10 }
+			add_resource = { type = energy amount = 8 }
+		}
+	}
+}
+
+shared_focus = {
+	id = USC_every_bit_accounted_for
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = USC_death_and_taxes
+	x = -4
+	y = 7
+	prerequisite = {
+		focus = USC_blackwell_reopened
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus USC_every_bit_accounted_for"
+		swap_ideas = {
+			remove_idea = USC_revenue_service
+			add_idea = USC_every_bit_accounted_for_idea
+		}
+		392 = {
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+				instant_build = yes
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = USC_nothing_is_certain_but_us
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = USC_death_and_taxes
+	x = -3
+	y = 8
+	prerequisite = {
+		focus = USC_every_bit_accounted_for
+	}
+	prerequisite = {
+		focus = USC_bonded_warehouses
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus USC_nothing_is_certain_but_us"
+		add_research_slot = 1
+		two_random_industrial_complex = yes
+		add_political_power = 150
+	}
+}
+
+### Destruction: the collectors turn the members into tributaries and go south ###
+
+shared_focus = {
+	id = USC_everypony_pays
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = USC_death_and_taxes
+	x = 2
+	y = 3
+	prerequisite = {
+		focus = USC_audit_of_the_alliance
+	}
+	mutually_exclusive = {
+		focus = USC_ledger_binds
+	}
+	available = {
+		custom_trigger_tooltip = {
+			tooltip = GS_allowed_change_ideology_tt
+			NOT = {
+				AND = {
+					is_ai = yes
+					has_country_flag = forbidden_to_change_ideology_flag
+					NOT = {
+						has_government = destruction
+					}
+				}
+			}
+		}
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus USC_everypony_pays"
+		set_politics = {
+			ruling_party = destruction
+			elections_allowed = no
+		}
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.25
+		}
+		swap_ideas = {
+			remove_idea = USC_tax_collectors
+			add_idea = USC_collectors
+		}
+	}
+}
+
+shared_focus = {
+	id = USC_armed_assessors
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = USC_death_and_taxes
+	x = 3
+	y = 4
+	prerequisite = {
+		focus = USC_everypony_pays
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus USC_armed_assessors"
+		custom_effect_tooltip = USC_armed_assessors_tt
+		hidden_effect = {
+			capital_scope = {
+				create_unit = {
+					division = "name = \"Armed Assessors\" division_template = \"Tax Collectors\" start_experience_factor = 0.2"
+					owner = ROOT
+				}
+				create_unit = {
+					division = "name = \"Armed Assessors\" division_template = \"Tax Collectors\" start_experience_factor = 0.2"
+					owner = ROOT
+				}
+			}
+		}
+		add_manpower = 600
+	}
+}
+
+shared_focus = {
+	id = USC_final_notice
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = USC_death_and_taxes
+	x = 3
+	y = 5
+	prerequisite = {
+		focus = USC_armed_assessors
+	}
+	available = {
+		is_in_faction = yes
+		is_subject = no
+		custom_trigger_tooltip = {
+			tooltip = SDA_no_other_uniter_tt
+			NOT = { has_global_flag = SDA_uniter_chosen_flag }
+		}
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus USC_final_notice"
+		custom_effect_tooltip = USC_takes_the_chair_tt
+		set_faction_leader = yes
+		set_global_flag = SDA_uniter_chosen_flag
+		custom_effect_tooltip = USC_final_notice_tt
+		hidden_effect = {
+			every_other_country = {
+				limit = {
+					is_in_faction_with = ROOT
+					is_subject = no
+				}
+				if = {
+					limit = {
+						is_ai = yes
+					}
+					ROOT = {
+						set_autonomy = {
+							target = PREV
+							autonomy_state = autonomy_puppet
+						}
+					}
+					USC_become_tax_district = yes
+				}
+				else = {
+					# a player decides for themselves
+					country_event = severyana.21
+				}
+			}
+		}
+		add_political_power = 100
+	}
+}
+
+shared_focus = {
+	id = USC_wahamishaji_in_arrears
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = USC_death_and_taxes
+	x = 2
+	y = 6
+	prerequisite = {
+		focus = USC_final_notice
+	}
+	bypass = {
+		NOT = { country_exists = WHJ }
+	}
+	will_lead_to_war_with = WHJ
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus USC_wahamishaji_in_arrears"
+		create_wargoal = {
+			type = puppet_wargoal_focus
+			target = WHJ
+		}
+		add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 500 producer = USC }
+	}
+}
+
+shared_focus = {
+	id = USC_petershoof_audit
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = USC_death_and_taxes
+	x = 4
+	y = 6
+	prerequisite = {
+		focus = USC_final_notice
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus USC_petershoof_audit"
+		add_war_support = 0.10
+		army_experience = 25
+		one_random_arms_factory = yes
+	}
+}
+
+shared_focus = {
+	id = USC_exchange_defaults
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = USC_death_and_taxes
+	x = 2
+	y = 7
+	prerequisite = {
+		focus = USC_petershoof_audit
+	}
+	prerequisite = {
+		focus = USC_wahamishaji_in_arrears
+	}
+	bypass = {
+		NOT = { country_exists = EXC }
+		NOT = { country_exists = BFS }
+	}
+	will_lead_to_war_with = EXC
+	will_lead_to_war_with = BFS
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus USC_exchange_defaults"
+		if = {
+			limit = {
+				country_exists = EXC
+			}
+			create_wargoal = {
+				type = puppet_wargoal_focus
+				target = EXC
+			}
+		}
+		if = {
+			limit = {
+				country_exists = BFS
+			}
+			create_wargoal = {
+				type = puppet_wargoal_focus
+				target = BFS
+			}
+		}
+		add_manpower = 500
+	}
+}
+
+shared_focus = {
+	id = USC_two_legions_one_bill
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = USC_death_and_taxes
+	x = 4
+	y = 7
+	prerequisite = {
+		focus = USC_petershoof_audit
+	}
+	prerequisite = {
+		focus = USC_wahamishaji_in_arrears
+	}
+	bypass = {
+		NOT = { country_exists = EIL }
+		NOT = { country_exists = LAU }
+	}
+	will_lead_to_war_with = EIL
+	will_lead_to_war_with = LAU
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus USC_two_legions_one_bill"
+		if = {
+			limit = {
+				country_exists = EIL
+			}
+			create_wargoal = {
+				type = puppet_wargoal_focus
+				target = EIL
+			}
+		}
+		if = {
+			limit = {
+				country_exists = LAU
+			}
+			create_wargoal = {
+				type = puppet_wargoal_focus
+				target = LAU
+			}
+		}
+		add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 800 producer = USC }
+		add_equipment_to_stockpile = { type = support_equipment amount = 300 producer = USC }
+	}
+}
+
+shared_focus = {
+	id = USC_we_have_what_you_had
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = USC_death_and_taxes
+	x = 3
+	y = 8
+	prerequisite = {
+		focus = USC_exchange_defaults
+	}
+	prerequisite = {
+		focus = USC_two_legions_one_bill
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus USC_we_have_what_you_had"
+		swap_ideas = {
+			remove_idea = USC_collectors
+			add_idea = USC_have_what_you_had
+		}
+		# one off-map civilian factory per subject, six at most
+		custom_effect_tooltip = USC_we_have_what_you_had_tt
+		hidden_effect = {
+			if = {
+				limit = { num_subjects > 5 }
+				add_offsite_building = { type = industrial_complex level = 6 }
+			}
+			else_if = {
+				limit = { num_subjects > 4 }
+				add_offsite_building = { type = industrial_complex level = 5 }
+			}
+			else_if = {
+				limit = { num_subjects > 3 }
+				add_offsite_building = { type = industrial_complex level = 4 }
+			}
+			else_if = {
+				limit = { num_subjects > 2 }
+				add_offsite_building = { type = industrial_complex level = 3 }
+			}
+			else_if = {
+				limit = { num_subjects > 1 }
+				add_offsite_building = { type = industrial_complex level = 2 }
+			}
+			else_if = {
+				limit = { num_subjects > 0 }
+				add_offsite_building = { type = industrial_complex level = 1 }
+			}
+		}
+		add_political_power = 150
+	}
+}
