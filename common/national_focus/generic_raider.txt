@@ -1,21 +1,10 @@
-### search_filters = {FOCUS_FILTER_POLITICAL}
-### search_filters = {FOCUS_FILTER_RESEARCH}
-### search_filters = {FOCUS_FILTER_INDUSTRY}
-### search_filters = {FOCUS_FILTER_STABILITY}
-### search_filters = {FOCUS_FILTER_WAR_SUPPORT}
-### search_filters = {FOCUS_FILTER_MANPOWER}
-### search_filters = {FOCUS_FILTER_ANNEXATION}
-
-
-
-###Starting Focuses###
 
 focus_tree = {
 	id = GR_focus
-	country =  {
+	country = {
 		factor = 0
-		modifier =  {
-			OR =  {
+		modifier = {
+			OR = {
 				has_country_flag = is_raider_nation_flag
 				original_tag = LRA
 				original_tag = OAP
@@ -42,7 +31,6 @@ focus_tree = {
 				original_tag = WRA
 				original_tag = RTH
 				original_tag = AAQ
-				original_tag = SDR
 				original_tag = NPL
 				original_tag = GAC
 				original_tag = RVR
@@ -50,2396 +38,1973 @@ focus_tree = {
 			add = 10
 		}
 	}
-	
 	default = no
 	reset_on_civilwar = no
-
-	#Basecamp
-	focus = { 
-		id = GR_basecamp
-		icon = GFX_goal_basecamp
-		x = 9
+	continuous_focus_position = {
+		x = 100
 		y = 0
-		cost = 1
-
-		available_if_capitulated = yes  
-		ai_will_do = { 
-			factor = 1000
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_basecamp"
-			country_event = { id = GR.1 }
-			hidden_effect ={
-            set_country_flag = GR_advisors 
-       		}
-
 	}
-	search_filters = {FOCUS_FILTER_INDUSTRY}
-	
+	shared_focus = GR_gangs_origin
+	shared_focus = GR_how_to_split_loot
+	shared_focus = GR_tools_of_the_trade
 }
 
-#Trade Routes
-focus = { 
-		id = GR_traderoutes
-		icon = GFX_goal_generic_bunkers_focus
-		x = 9
-		y = 1
-		cost = 1
+### Opening: who the gang is ###
 
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_basecamp } 
-		ai_will_do = { 
-			factor = 1000
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_traderoutes"
-			country_event = { id = GR.3}
+shared_focus = {
+	id = GR_gangs_origin
+	icon = GFX_goal_unknown
+	x = 9
+	y = 0
+	cost = 1
+	ai_will_do = {
+		factor = 100
 	}
-	search_filters = {FOCUS_FILTER_STABILITY}
-
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_gangs_origin"
+		add_dynamic_modifier = {
+			modifier = GR_the_gang_modifier
+		}
+		country_event = {
+			id = GR.101
+		}
+	}
 }
 
-#
-focus = { 
-		id = GR_grow_our_base
-		icon = GFX_goal_generic_cities_focus
-		x = 9
-		y = 2
-		cost = 1
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_traderoutes } 
-		ai_will_do = { 
-			factor = 1000
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_grow_our_base"
-			country_event = { id = GR.4}
-			set_country_flag = GR_third_focus_finished
+shared_focus = {
+	id = GR_our_first_raid
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_gangs_origin
 	}
-	search_filters = {FOCUS_FILTER_INDUSTRY}
-
+	x = 0
+	y = 1
+	relative_position_id = GR_gangs_origin
+	cost = 1
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_our_first_raid"
+		country_event = {
+			id = GR.102
+		}
+	}
 }
 
-####Factory Focuses####
+shared_focus = {
+	id = GR_our_boss
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_our_first_raid
+	}
+	x = 0
+	y = 2
+	relative_position_id = GR_gangs_origin
+	cost = 1
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_our_boss"
+		country_event = {
+			id = GR.103
+		}
+	}
+}
 
-#
-focus = { 
-		id = GR_building_shacks
-		icon = GFX_goal_generic_slums_focus
-		x = 12
-		y = 3
-		cost = 10
+### Raiding: brutal (left) or sustainable (right) ###
 
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_grow_our_base } 
-		ai_will_do = { 
-			factor = 80
-		} 
+shared_focus = {
+	id = GR_brutal_raiding
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_our_boss
+	}
+	mutually_exclusive = {
+		focus = GR_sustainable_raiding
+	}
+	x = -7
+	y = 3
+	relative_position_id = GR_gangs_origin
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_brutal_raiding"
+		add_ideas = GR_brutal_raiding_idea_1
+	}
+}
 
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_building_shacks"
-				random_owned_controlled_state = {
+shared_focus = {
+	id = GR_leave_nothing_behind
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_brutal_raiding
+	}
+	x = -7
+	y = 4
+	relative_position_id = GR_gangs_origin
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_leave_nothing_behind"
+		random_list = {
+			20 = {
+				add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 400 producer = OWE }
+			}
+			20 = {
+				add_equipment_to_stockpile = { type = demolitions_equipment_1 amount = 150 producer = OWE }
+			}
+			20 = {
+				add_equipment_to_stockpile = { type = fireteam_equipment_1 amount = 150 producer = OWE }
+			}
+			20 = {
+				add_equipment_to_stockpile = { type = anti_tank_equipment_1 amount = 100 producer = OWE }
+			}
+			20 = {
+				add_equipment_to_stockpile = { type = support_equipment_1 amount = 200 producer = OWE }
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = GR_take_the_ponies_too
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_leave_nothing_behind
+	}
+	x = -7
+	y = 5
+	relative_position_id = GR_gangs_origin
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_take_the_ponies_too"
+		every_owned_state = {
 			limit = {
-				free_building_slots = {
-					building = industrial_complex
-					size > 0
-					include_locked = yes
-				}
-				OR = {
-					is_in_home_area = yes
-					NOT = {
-						owner = {
-							any_owned_state = {
-								free_building_slots = {
-									building = industrial_complex
-									size > 0
-									include_locked = yes
-								}
-								is_in_home_area = yes
-							}
-						}
-					}
-				}
+				is_core_of = ROOT
 			}
-			add_extra_state_shared_building_slots = 1
-			add_building_construction = {
-				type = industrial_complex
-				level = 1
-				instant_build = yes
-			}
+			add_manpower = 500
 		}
 	}
-	search_filters = {FOCUS_FILTER_INDUSTRY}
 }
 
-#
-focus = { 
-		id = GR_terrorize_villages
-		icon = GFX_goal_purge_opposition
-		x = 16
-		y = 3
-		cost = 5
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_grow_our_base } 
-		ai_will_do = { 
-			factor = 80
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_terrorize_villages"
-			add_political_power = 75
-			add_war_support = 0.10
+shared_focus = {
+	id = GR_take_everything
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_take_the_ponies_too
 	}
-	search_filters = {FOCUS_FILTER_POLITICAL}
-
+	x = -7
+	y = 6
+	relative_position_id = GR_gangs_origin
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_take_everything"
+		swap_ideas = {
+			remove_idea = GR_brutal_raiding_idea_1
+			add_idea = GR_brutal_raiding_idea_2
+		}
+	}
 }
 
-#
-focus = { 
-		id = GR_Take_control
-		icon = GFX_goal_generic_demand_territory
-		x = 16
-		y = 4
-		cost = 5
+shared_focus = {
+	id = GR_sustainable_raiding
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_our_boss
+	}
+	mutually_exclusive = {
+		focus = GR_brutal_raiding
+	}
+	x = -5
+	y = 3
+	relative_position_id = GR_gangs_origin
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_sustainable_raiding"
+		add_ideas = GR_sustainable_raiding_idea_1
+	}
+}
 
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_terrorize_villages } 
-		ai_will_do = { 
-			factor = 40
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_Take_control"
-			country_event = { id = GR.8 }
-			hidden_effect = { country_event = { id = GR.12 days = 30 }
-			}
+shared_focus = {
+	id = GR_ignore_the_defenseless
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_sustainable_raiding
+	}
+	x = -5
+	y = 4
+	relative_position_id = GR_gangs_origin
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_ignore_the_defenseless"
+		swap_ideas = {
+			remove_idea = GR_sustainable_raiding_idea_1
+			add_idea = GR_sustainable_raiding_idea_2
 		}
 	}
+}
 
-#
-focus = { 
-		id = GR_Forced_recruitment
-		icon = GFX_goal_slavery
-		x = 18
-		y = 5
-		cost = 10
+shared_focus = {
+	id = GR_take_tech_too
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_ignore_the_defenseless
+	}
+	x = -5
+	y = 5
+	relative_position_id = GR_gangs_origin
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_take_tech_too"
+		add_research_slot = 1
+	}
+}
 
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_Take_control } 
-		available = {NOT = {has_completed_focus = GR_basecamp_raid}}
+shared_focus = {
+	id = GR_set_up_some_tribute
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_take_tech_too
+	}
+	x = -5
+	y = 6
+	relative_position_id = GR_gangs_origin
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_set_up_some_tribute"
+		add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 800 producer = OWE }
+	}
+}
 
-		ai_will_do = { 
-			factor = 40
-		} 
-
-		available = {
-			hidden_trigger = {
-				NOT = {
-    				has_country_flag = GR_dead_boss
-				}
-			}
+shared_focus = {
+	id = GR_what_about_our_ponies
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_take_everything
+		focus = GR_set_up_some_tribute
+	}
+	x = -6
+	y = 7
+	relative_position_id = GR_gangs_origin
+	cost = 4.29
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_what_about_our_ponies"
+		add_political_power = 25
+		country_event = {
+			id = GR.104
 		}
+	}
+}
 
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_Forced recruitment"
-			
-			if = {
+shared_focus = {
+	id = GR_join_or_die
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_what_about_our_ponies
+	}
+	mutually_exclusive = {
+		focus = GR_spare_our_land
+	}
+	x = -7
+	y = 8
+	relative_position_id = GR_gangs_origin
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_join_or_die"
+		custom_effect_tooltip = GR_join_or_die_tt
+		hidden_effect = {
+			GR_prepare_raider_mob = yes
+			every_owned_state = {
 				limit = {
-				has_idea = extensive_conscription  
+					is_core_of = ROOT
 				}
-				add_ideas = service_by_requirement  
+				random_select_amount = 6
+				GR_spawn_raider_mob = yes
 			}
-			else = {
-				add_ideas = extensive_conscription  
-			}
-	}
-	search_filters = {FOCUS_FILTER_MANPOWER}
-}
-
-#
-focus = { 
-		id = GR_burn_village
-		icon = GFX_goal_fire
-		x = 16
-		y = 5
-		cost = 10
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_Take_control } 
-
-		ai_will_do = { 
-			factor = 20
-		} 
-
-		available = {
-			NOT = {has_completed_focus = GR_basecamp_raid}
-			hidden_trigger = {
-				NOT = {
-    				has_country_flag = GR_dead_boss
-				}
-			}
-		}
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_burn_village"
-			country_event = { id = GR.10 }
-			hidden_effect = { country_event = { id = GR.11 days = 10 }
 		}
 	}
 }
 
-#
-focus = { 
-		id = GR_villager_workforce
-		icon = GFX_goal_industrial_pony
-		x = 17
-		y = 6
-		cost = 10
-
-		available_if_capitulated = yes 
-		available = {NOT = {has_completed_focus = GR_basecamp_raid}}
-		prerequisite = { focus = GR_burn_village } 
-
-		ai_will_do = { 
-			factor = 20
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_villager_workforce"
-			add_ideas = GR_villager_workforce
+shared_focus = {
+	id = GR_all_for_the_raids
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_join_or_die
 	}
-	search_filters = {FOCUS_FILTER_INDUSTRY}
-}
-
-#
-focus = { 
-		id = GR_village_tax
-		icon = GFX_goal_endless_money
-		x = 15
-		y = 6
-		cost = 10
-
-		available_if_capitulated = yes 
-		available = {NOT = {has_completed_focus = GR_basecamp_raid}}
-		prerequisite = { focus = GR_burn_village } 
-
-		ai_will_do = { 
-			factor = 20
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_village_tax"
-			add_ideas = GR_village_tax
+	x = -7
+	y = 9
+	relative_position_id = GR_gangs_origin
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
 	}
-	search_filters = {FOCUS_FILTER_INDUSTRY}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_all_for_the_raids"
+		custom_effect_tooltip = GR_all_for_the_raids_tt
+	}
 }
 
-#
-focus = { 
-		id = GR_expand_our_borders
-		icon = GFX_goal_generic_raider_explosions
-		x = 16
-		y = 7
-		cost = 10
-
-		available_if_capitulated = yes 
-		available = {NOT = {has_completed_focus = GR_basecamp_raid}}
-		prerequisite = { focus = GR_village_tax }
-		prerequisite = { focus = GR_villager_workforce }  
-
-		ai_will_do = { 
-			factor = 50
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_expand_our_borders"
-			add_ideas = GR_expand_borders
-		}
-
+shared_focus = {
+	id = GR_spare_our_land
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_what_about_our_ponies
+	}
+	mutually_exclusive = {
+		focus = GR_join_or_die
+	}
+	x = -5
+	y = 8
+	relative_position_id = GR_gangs_origin
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_spare_our_land"
+		add_stability = 0.10
+		add_political_power = 100
+	}
 }
 
-
-#
-focus = { 
-		id = GR_steal_generators
-		icon = GFX_goal_generic_electricity_focus
-		x = 14
-		y = 5
-		cost = 10
-
-		available_if_capitulated = yes 
-		available = {NOT = {has_completed_focus = GR_basecamp_raid}}
-		prerequisite = { focus = GR_Take_control } 
-
-		ai_will_do = { 
-			factor = 0
-		} 
-
-		available = {
-			hidden_trigger = {
-				NOT = {
-    				has_country_flag = GR_dead_boss
-				}
-			}
-		}
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_steal_generators"
-		
+shared_focus = {
+	id = GR_allow_travelers
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_spare_our_land
+	}
+	x = -5
+	y = 9
+	relative_position_id = GR_gangs_origin
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_allow_travelers"
 		random_owned_controlled_state = {
-			add_resource = {
-					type = energy
-					amount = 6
-				}
+			limit = {
+				is_core_of = ROOT
 			}
-		}	
-}
-
-#
-focus = { 
-		id = GR_drugged_raiders
-		icon = GFX_goal_VEG_Addiction_For_Sale
-		x = 13
-		y = 6
-		cost = 10
-
-		available_if_capitulated = yes 
-		available = {NOT = {has_completed_focus = GR_basecamp_raid}}
-		prerequisite = { focus = GR_build_drugs_factory } 
-
-		ai_will_do = { 
-			factor = 0
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_Drugged_raiders"
-			add_ideas = GR_drugged_raiders
-	}
-}
-
-#
-focus = { 
-		id = GR_raid_armory
-		icon = GFX_goal_generic_raider_machine_gun
-		x = 8
-		y = 3
-		cost = 5
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_grow_our_base } 
-		ai_will_do = { 
-			factor = 80
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_raid_armory"
-			add_equipment_to_stockpile = { type = infantry_equipment_1 amount = 100 producer = ROOT }
-	}
-}
-
-#
-focus = { 
-		id = GR_weapons_factory
-		icon = GFX_goal_generic_construct_mil_factory
-		x = 8
-		y = 4
-		cost = 10
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_raid_armory } 
-		ai_will_do = { 
-			factor = 60
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_weapons_factory"
-
-				random_owned_controlled_state = {
-				limit = {
-					free_building_slots = {
-						building = arms_factory
-						size > 0
-						include_locked = yes
-					}
-					OR = {
-						is_in_home_area = yes
-						NOT = {
-							owner = {
-								any_owned_state = {
-									free_building_slots = {
-										building = arms_factory
-										size > 0
-										include_locked = yes
-									}
-									is_in_home_area = yes
-								}
-							}
-						}
-					}
-				}
-				add_extra_state_shared_building_slots = 1
-				add_building_construction = {
-					type = arms_factory
-					level = 1
-					instant_build = yes
-				}
-			}
+			GR_random_resource_12 = yes
 		}
-		search_filters = {FOCUS_FILTER_INDUSTRY}
-	}
-
-#
-focus = { 
-		id = GR_copy_military_weapons
-		icon = GFX_goal_generic_regular_firearms_focus
-		x = 7
-		y = 5
-		cost = 10
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_weapons_factory } 
-		ai_will_do = { 
-			factor = 50
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_copy_military_weapons"
-
-		add_tech_bonus = {
-				name = ballistic_weapon_tech_bonus
-				bonus = 0.5
-				uses = 2
-				category = ballistic_weapon_tech
+		every_owned_state = {
+			limit = {
+				is_core_of = ROOT
 			}
-	}
-	search_filters = {FOCUS_FILTER_RESEARCH}
-}
-
-#
-focus = { 
-		id = GR_design_our_own_bikes
-		icon = GFX_goal_generic_army_motorized
-		x = 7
-		y = 6
-		cost = 10
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_copy_military_weapons } 
-		ai_will_do = { 
-			factor = 50
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_design_our_own_bikes"
-
-			add_tech_bonus = {
-				name = industry_bonus
-				bonus = 1.00
-				uses = 2
-				#category = vehicle_tech
-				category = bike_tech
-			}
-		}
-		search_filters = {FOCUS_FILTER_RESEARCH}
-	}
-
-
-#
-focus = { 
-		id = GR_extend_weapons_factory
-		icon = GFX_goal_generic_construct_mil_factory
-		x = 9
-		y = 5
-		cost = 10
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_weapons_factory } 
-		ai_will_do = { 
-			factor = 50
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_extend_weapons_factory"
-
-				random_owned_controlled_state = {
-				limit = {
-					free_building_slots = {
-						building = arms_factory
-						size > 0
-						include_locked = yes
-					}
-					OR = {
-						is_in_home_area = yes
-						NOT = {
-							owner = {
-								any_owned_state = {
-									free_building_slots = {
-										building = arms_factory
-										size > 0
-										include_locked = yes
-									}
-									is_in_home_area = yes
-								}
-							}
-						}
-					}
-				}
-				add_extra_state_shared_building_slots = 1
-				add_building_construction = {
-					type = arms_factory
-					level = 1
-					instant_build = yes
-				}
-			}
-		}
-		search_filters = {FOCUS_FILTER_INDUSTRY}
-	}
-
-#
-focus = { 
-		id = GR_repair_roads
-		icon = GFX_goal_generic_construct_infrastructure
-		x = 12
-		y = 4
-		cost = 10
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_building_shacks } 
-		ai_will_do = { 
-			factor = 60
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_repair_roads"
-
-			random_owned_controlled_state = {
-			
-				add_building_construction = {
+			add_building_construction = {
 				type = infrastructure
 				level = 1
 				instant_build = yes
 			}
 		}
 	}
-	search_filters = {FOCUS_FILTER_INDUSTRY}
 }
 
-#
-focus = { 
-		id = GR_build_drugs_factory
-		icon = GFX_goal_generic_construct_civ_factory
-		x = 12
-		y = 5
-		cost = 10
+### Industry: an actual industry (left) or the raider-industrial complex (right) ###
 
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_repair_roads } 
-		ai_will_do = { 
-			factor = 50
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_build_drugs_factory"
-
-			random_owned_controlled_state = {
-			
-				add_building_construction = {
-				type = industrial_complex
-				level = 1
-				instant_build = yes
-			}
-		}
+shared_focus = {
+	id = GR_an_actual_industry
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_our_boss
 	}
-	search_filters = {FOCUS_FILTER_INDUSTRY}
-}
-
-#
-focus = { 
-		id = GR_extend_drugs_production
-		icon = GFX_goal_generic_construct_civ_factory
-		relative_position_id = GR_build_drugs_factory
-		x = -1
-		y = 1
-		cost = 10
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_build_drugs_factory } 
-		ai_will_do = { 
-			factor = 50
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: GR_extend_drugs_production"
-
-			random_owned_controlled_state = {
-			
-				add_building_construction = {
-				type = industrial_complex
-				level = 1
-				instant_build = yes
-			}
-		}
+	mutually_exclusive = {
+		focus = GR_raider_industrial_complex
 	}
-	search_filters = {FOCUS_FILTER_INDUSTRY}
-}
-
-#
-focus = { 
-		id = GR_arms_research
-		icon = GFX_focus_research
-		x = 9
-		y = 6
-		cost = 10
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_extend_weapons_factory } 
-		ai_will_do = { 
-			factor = 20
-		} 
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_extend_weapons_factory"
-			add_research_slot = 1
+	x = 5
+	y = 3
+	relative_position_id = GR_gangs_origin
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
 	}
-	search_filters = {FOCUS_FILTER_RESEARCH}
-}
-
-
-#Slaves
-
-#
-focus = { 
-		id = GR_slaves
-		icon = GFX_goal_city_slaves
-		x = 3
-		y = 3
-		cost = 5
-
-		available_if_capitulated = yes 
-		available = {NOT = {has_completed_focus = GR_basecamp_raid}}
-		prerequisite = { focus = GR_grow_our_base } 
-		ai_will_do = { 
-			factor = 80
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_slaves"
-			country_event = { id = GR.2 }
-	}
-}
-
-#
-focus = { 
-		id = GR_slave_workforce
-		icon = GFX_goal_slavery
-		x = 1
-		y = 4
-		cost = 5
-
-		available_if_capitulated = yes 
-		available = {NOT = {has_completed_focus = GR_basecamp_raid}}
-		prerequisite = { focus = GR_slaves } 
-		ai_will_do = { 
-			factor = 100
-		} 
-		mutually_exclusive = { 
-        focus = GR_slave_decorations
-        }
-
-        mutually_exclusive = { 
-        focus = GR_slave_auction
-        }
-        available = {
-			has_country_flag = GR_slave_labor
-		}
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_slave_workforce"
-			country_event = { id = GR.5 }
-	}
-}
-
-#
-focus = { 
-		id = GR_slave_decorations
-		icon = GFX_goal_slave_decorations
-		x = 3
-		y = 4
-		cost = 5
-
-		available_if_capitulated = yes 
-		available = {NOT = {has_completed_focus = GR_basecamp_raid}}
-		prerequisite = { focus = GR_slaves } 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		mutually_exclusive = { 
-        focus = GR_slave_workforce
-        }
-
-        mutually_exclusive = { 
-        focus = GR_slave_auction
-        }
-        available = {
-			has_country_flag = GR_raider_decoration
-		}
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_slave_decorations"
-			country_event = { id = GR.6 }
-	}
-}
-
-#
-focus = { 
-		id = GR_slave_auction
-		icon = GFX_goal_DOM_The_Trial
-		x = 5
-		y = 4
-		cost = 5
-
-		available_if_capitulated = yes 
-		available = {NOT = {has_completed_focus = GR_basecamp_raid}}
-		prerequisite = { focus = GR_slaves } 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		mutually_exclusive = { 
-        focus = GR_slave_workforce
-        }
-
-        mutually_exclusive = { 
-        focus = GR_slave_decorations
-        }
-        available = {
-			has_country_flag = GR_slave_sale
-		}
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_slave_auction"
-			country_event = { id = GR.7 }
-	}
-}
-
-#
-focus = { 
-		id = GR_war_paint
-		icon = GFX_goal_red_war_paint
-		x = 3
-		y = 5
-		cost = 10
-
-		available_if_capitulated = yes 
-		available = {NOT = {has_completed_focus = GR_basecamp_raid}}
-		prerequisite = { focus = GR_slave_decorations } 
-		ai_will_do = { 
-			factor = 50
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_war_paint"
-			swap_ideas = { remove_idea = GR_raider_decoration add_idea = GR_raider_decoration2 }
-	}
-}
-
-#
-focus = { 
-		id = GR_train_to_fillydelphia
-		icon = GFX_goal_rct_fancy_train
-		x = 5
-		y = 5
-		cost = 10
-
-		available_if_capitulated = yes 
-		available = {NOT = {has_completed_focus = GR_basecamp_raid}}
-		prerequisite = { focus = GR_slave_auction } 
-		ai_will_do = { 
-			factor = 50
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_train_to_fillydelphia"
-			swap_ideas = { remove_idea = GR_slave_sale add_idea = GR_slave_sale2 }
-	}
-}
-
-#
-focus = { 
-		id = GR_increased_workhours
-		icon = GFX_goal_industrial_pony
-		x = 1
-		y = 5
-		cost = 10
-
-		available_if_capitulated = yes 
-		available = {NOT = {has_completed_focus = GR_basecamp_raid}}
-		prerequisite = { focus = GR_slave_workforce } 
-		ai_will_do = { 
-			factor = 50
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_slave_workforce"
-			swap_ideas = { remove_idea = GR_slave_labor add_idea = GR_slave_labor2 }
-	}
-}
-
-###ideology Focuses###
-#
-focus = { 
-		id = GR_dead_boss
-		icon = GFX_goal_dead_boss
-		x = 7
-		y = 8
-		cost = 5
-
-		available_if_capitulated = yes 
-		prerequisite = {  } 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		available = {
-			has_country_flag = GR_dead_boss
-		}
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_dead_boss"
-	}
-	search_filters = {FOCUS_FILTER_POLITICAL}
-}
-
-#
-focus = { 
-		id = GR_resisting_vilages  					
-		icon = GFX_goal_resisting_villages
-		x = 7
-		y = 9
-		cost = 5
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_dead_boss } 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_resisting_vilages"
-			add_political_power = -200
-			country_event = { id = GR.13 }
-	}
-	search_filters = {FOCUS_FILTER_POLITICAL}
-}
-
-#
-focus = { 
-		id = GR_losing_grip 					
-		icon = GFX_goal_lost_grip
-		x = 5
-		y = 10
-		cost = 5
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_resisting_vilages } 
-		ai_will_do = { 
-			factor = 0
-		}
-
-		mutually_exclusive = { 
-        focus = GR_our_new_boss
-        }
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_losing_grip"
-			country_event = { id = GR.19 }
-		}
-		search_filters = {FOCUS_FILTER_POLITICAL}
-}
-
-#
-focus = { 
-		id = GR_basecamp_raid				
-		icon = GFX_goal_villagers_gates
-		x = 5
-		y = 11
-		cost = 5
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_losing_grip } 
-		ai_will_do = { 
-			factor = 0
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_basecamp_raid"
-			country_event = { id = GR.20 }
-	}
-	search_filters = {FOCUS_FILTER_POLITICAL}
-}
-
-#
-focus = { 
-		id = GR_our_new_boss							# destruction, raider
-		icon = GFX_goal_new_boss
-		x = 9
-		y = 10
-		cost = 5
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_resisting_vilages } 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		mutually_exclusive = { 
-        focus = GR_losing_grip
-        }
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_our_new_boss"
-			country_event = { id = GR.14 }
-
-	}
-	search_filters = {FOCUS_FILTER_POLITICAL}
-}
-
-#
-focus = { 
-		id = GR_reaffirm_control							
-		icon = GFX_goal_reaffirm_control
-		x = 9
-		y = 11
-		cost = 5
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_our_new_boss } 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_reaffirm_control"
-			country_event = { id = GR.15 }
-	}
-	search_filters = {FOCUS_FILTER_POLITICAL}
-}
-
-#
-focus = { 
-		id = GR_reward_loyal_raiders						
-		icon = GFX_goal_reward_raiders
-		x = 8
-		y = 12
-		cost = 5
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_reaffirm_control } 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_reward_loyal_raiders"
-			country_event = { id = GR.18 }
-		}
-		search_filters = {FOCUS_FILTER_POLITICAL}
-}
-
-#
-focus = { 
-		id = GR_crackdown_villages							
-		icon = GFX_goal_crackdown_villages
-		x = 10
-		y = 12
-		cost = 5
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_reaffirm_control } 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_crackdown_villages"
-			country_event = { id = GR.16 }
-	}
-	search_filters = {FOCUS_FILTER_POLITICAL}
-}
-
-#
-focus = { 
-		id = GR_punish_village_leaders							
-		icon = GFX_goal_punish_village_leaders
-		x = 9
-		y = 13
-		cost = 5
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_crackdown_villages } 
-		prerequisite = { focus = GR_reward_loyal_raiders }
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_punish_village_leaders"
-			country_event = { id = GR.17 }
-	}
-	search_filters = {FOCUS_FILTER_POLITICAL}
-}
-
-#
-focus = { 
-		id = GR_never_forget						 
-		icon = GFX_goal_never_forget
-		x = 6
-		y = 12
-		cost = 5
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_basecamp_raid } 
-		ai_will_do = { 
-			factor = 50
-		} 
-
-		mutually_exclusive = { 
-        focus = GR_never_again
-        }
-
-        available = {
-			has_country_flag = GR_never_forget
-		}
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_never_forget"
-			remove_ideas = GR_lost_control
-	}
-	search_filters = {FOCUS_FILTER_POLITICAL}
-}
-
-#
-focus = { 
-		id = GR_elections							# survivalism, freed_slaves_surv
-		icon = GFX_goal_organize_elections
-		x = 6
-		y = 13
-		cost = 5
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_never_forget } 
-		ai_will_do = { 
-			factor = 50
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_elections"
-			set_politics = {
-			ruling_party = survivalism
-			elections_allowed = no
-			}
-			add_political_power = 200
-			hidden_effect = {
-				set_country_flag = is_settler_nation
-			}
-	}
-	search_filters = {FOCUS_FILTER_POLITICAL}
-}
-
-#
-focus = { 
-		id = GR_never_again							 
-		icon = GFX_goal_never_again
-		x = 4
-		y = 12
-		cost = 5
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_basecamp_raid } 
-		ai_will_do = { 
-			factor = 50
-		}
-
-		available = {
-			has_country_flag = GR_never_again
-		}
-
-		mutually_exclusive = { 
-        focus = GR_never_forget
-        }
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_never_again"
-			remove_ideas = GR_lost_control
-	}
-	search_filters = {FOCUS_FILTER_POLITICAL}
-}
-
-#
-focus = { 
-		id = GR_wasteland_rangers							# visionary, justice 
-		icon = GFX_goal_royal_guard 
-		x = 4
-		y = 13
-		cost = 5
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_never_again	 } 
-		ai_will_do = { 
-			factor = 50
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_wasteland_rangers"
-			set_politics = {
-			ruling_party = visionary
-			elections_allowed = no
-			}
-			add_political_power = 200
-			hidden_effect = {
-				set_country_flag = is_settler_nation
-			}
-    }
-    search_filters = {FOCUS_FILTER_POLITICAL}
-}
-
-
-###Doctrines###
-
-#
-focus = { 
-		id = GR_military_tactics
-		icon = GFX_goal_generic_raider_army_xp
-		x = 29
-		y = 1
-		cost = 10
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		available = {
-			hidden_trigger = {
-    			has_country_flag = GR_third_focus_finished
-			}
-		}
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_aviation_focus"
-			air_experience = 5
-			army_experience = 5
-			navy_experience = 5
-	}
-}
-
-###Airforce###
-
-#
-focus = { 
-		id = GR_aviation_focus
-		icon = GFX_goal_generic_build_airforce 
-		x = 24
-		y = 3
-		cost = 10
-
-		available_if_capitulated = yes
-		prerequisite = { focus = GR_military_tactics }
-
-		ai_will_do = { 
-			factor = 20
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_aviation_focus"
-			air_experience = 20
-	}
-}
-
-#
-focus = { 
-		id = GR_air_superiority
-		icon = GFX_goal_generic_air_fighter	 
-		x = 23
-		y = 4
-		cost = 10
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_aviation_focus } 
-
-		mutually_exclusive = { 
-        focus = GR_bombs_away
-		}
-
-		ai_will_do = { 
-			factor = 20
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_air_superiority"
-			add_tech_bonus = {
-				name = fighter_bonus
-				bonus = 1.0
-				uses = 1
-				category = fighter_tech
-			}
-	}
-	search_filters = {FOCUS_FILTER_RESEARCH}
-}
-
-#
-focus = { 
-		id = GR_bombs_away
-		icon = GFX_goal_generic_air_bomber	 
-		x = 25
-		y = 4
-		cost = 10
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_aviation_focus }
-
-		mutually_exclusive = { 
-        focus = GR_air_superiority
-        }
-
-		ai_will_do = { 
-			factor = 20
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_bombs_away"
-			add_tech_bonus = {
-				name = cas_bonus
-				bonus = 1.0
-				uses = 1
-				category = air_support_tech
-			}
-	}
-	search_filters = {FOCUS_FILTER_RESEARCH}
-}
-
-
-#
-focus = { 
-		id = GR_build_airfield
-		icon = GFX_focus_YUG_rogozarski 
-		x = 23
-		y = 6
-		cost = 10
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_air_superiority focus = GR_bombs_away}
-		
-		ai_will_do = { 
-			factor = 20
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus "
-			random_owned_controlled_state = {
-			limit = {
-				free_building_slots = {
-					building = air_base
-					size > 0
-				}
-				OR = {
-					is_in_home_area = yes
-					NOT = {
-						owner = {
-							any_owned_state = {
-								free_building_slots = {
-									building = air_base
-									size > 0
-								}
-								is_in_home_area = yes
-							}
-						}
-					}
-				}
-			}
-			add_extra_state_shared_building_slots = 1
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_an_actual_industry"
+		capital_scope = {
+			add_extra_state_shared_building_slots = 2
 			add_building_construction = {
-				type = air_base
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+			add_building_construction = {
+				type = arms_factory
 				level = 1
 				instant_build = yes
 			}
 		}
 	}
-	search_filters = {FOCUS_FILTER_INDUSTRY}
 }
 
-#
-focus = { 
-		id = GR_air_doctrine_focus
-		icon = GFX_goal_generic_air_doctrine
-		x = 24
-		y = 5
-		cost = 10
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_aviation_focus }
-		ai_will_do = { 
-			factor = 20
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_army_focus"
-			army_experience = 20
+shared_focus = {
+	id = GR_assembly_line
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_an_actual_industry
+	}
+	x = 5
+	y = 4
+	relative_position_id = GR_gangs_origin
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_assembly_line"
+		add_ideas = GR_actual_industry_idea_1
 	}
 }
 
-#
-focus = { 
-		id = GR_bomb_ships
-		icon = GFX_goal_generic_air_naval_bomber	 
-		x = 25
-		y = 6
-		cost = 10
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_air_superiority focus = GR_bombs_away}
-
-		ai_will_do = { 
-			factor = 20
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus "
-			add_tech_bonus = {
-				name = _bonus
-				bonus = 1.0
-				uses = 1
-				category = bomber_tech
-			}
+shared_focus = {
+	id = GR_automation
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_assembly_line
 	}
-	search_filters = {FOCUS_FILTER_RESEARCH}
-}
-
-
-###Army###
-
-#
-focus = { 
-		id = GR_army_focus
-		icon = GFX_goal_generic_allies_build_infantry 
-		x = 29
-		y = 3
-		cost = 10
-
-		available_if_capitulated = yes
-		prerequisite = { focus = GR_military_tactics }
-
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_army_focus"
-			army_experience = 20
+	x = 5
+	y = 5
+	relative_position_id = GR_gangs_origin
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_automation"
+		swap_ideas = {
+			remove_idea = GR_actual_industry_idea_1
+			add_idea = GR_actual_industry_idea_2
+		}
 	}
 }
 
-#
-focus = { 
-		id = GR_conventional_warfare
-		icon = GFX_goal_generic_army_doctrines	 
-		x = 30
-		y = 4
-		cost = 10
-
-		prerequisite = { focus = GR_army_focus }
-
-		mutually_exclusive = { 
-        focus = GR_assymmetric_warfare
-        }
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_army_focus"
-			add_tech_bonus = {
-				bonus = 1.0
-				uses = 1
-				category = cat_grand_army
-			}		
+shared_focus = {
+	id = GR_workers_compensation
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_automation
 	}
-	search_filters = {FOCUS_FILTER_RESEARCH}
-}
-
-#
-focus = { 
-		id = GR_assymmetric_warfare
-		icon = GFX_goal_generic_army_doctrines	 
-		x = 28
-		y = 4
-		cost = 10
-
-		prerequisite = { focus = GR_army_focus }
-
-		mutually_exclusive = { 
-        focus = GR_conventional_warfare
-        }
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_army_focus"	
-			add_tech_bonus = {
-				bonus = 1.0
-				uses = 1
-				category = cat_terror_tactics
-			}	
+	x = 5
+	y = 6
+	relative_position_id = GR_gangs_origin
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
 	}
-	search_filters = {FOCUS_FILTER_RESEARCH}
-}
-
-#
-focus = { 
-		id = GR_motorized_army
-		icon = GFX_goal_generic_army_motorized  
-		x = 31
-		y = 5
-		cost = 10
-
-		prerequisite = {focus = GR_conventional_warfare }
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_army_focus"	
-			add_tech_bonus = {
-				bonus = 1.0
-				uses = 1
-				category = motorized_equipment
-			}		
-	}
-	search_filters = {FOCUS_FILTER_RESEARCH}
-}
-
-#
-focus = { 
-		id = GR_support_army
-		icon = GFX_goal_generic_army_artillery
-		x = 27
-		y = 5
-		cost = 10
-
-		prerequisite = {focus = GR_assymmetric_warfare }
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_support_army"	
-			add_tech_bonus = {
-				bonus = 1.0
-				uses = 1
-				category = support_tech
-			}	
-	}
-	search_filters = {FOCUS_FILTER_RESEARCH}
-}
-
-#
-focus = { 
-		id = GR_improved_weapon_army
-		icon = GFX_goal_generic_small_arms
-		x = 29
-		y = 5
-		cost = 10
-
-		prerequisite = {focus = GR_army_focus }
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_improved_weapon_army"
-			add_tech_bonus = {
-				bonus = 1.0
-				uses = 1
-				category = infantry_tech
-			}		
-	}
-	search_filters = {FOCUS_FILTER_RESEARCH}
-}
-
-###Naval###
-
-#
-focus = { 
-		id = GR_naval_focus
-		icon = GFX_goal_generic_construct_naval_dockyard 
-		x = 35
-		y = 3
-		cost = 10
-
-		available_if_capitulated = yes 
-		prerequisite = { focus = GR_military_tactics }
-
-		ai_will_do = { 
-			factor = 10
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_army_focus"
-			army_experience = 20
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_workers_compensation"
+		swap_ideas = {
+			remove_idea = GR_actual_industry_idea_2
+			add_idea = GR_actual_industry_idea_3
+		}
 	}
 }
 
-#
-focus = { 
-		id = GR_fast_navy
-		icon = GFX_goal_generic_build_navy 
-		x = 33
-		y = 4
-		cost = 10
-
-		mutually_exclusive = { 
-        focus = GR_heavy_navy
-        }
-
-        mutually_exclusive = { 
-        focus = GR_medium_navy
-        }
-
-		prerequisite = {focus = GR_naval_focus }
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 10
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_army_focus"
-			add_tech_bonus = {
-				bonus = 1.0
-				uses = 1
-				category = naval_light_hull_tech
-			}	
+shared_focus = {
+	id = GR_raider_industrial_complex
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_our_boss
 	}
-	search_filters = {FOCUS_FILTER_RESEARCH}
+	mutually_exclusive = {
+		focus = GR_an_actual_industry
+	}
+	x = 7
+	y = 3
+	relative_position_id = GR_gangs_origin
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_raider_industrial_complex"
+		add_ideas = GR_raider_industrial_idea_1
+	}
 }
 
-#
-focus = { 
-		id = GR_heavy_navy
-		icon = GFX_goal_generic_navy_battleship
-		x = 37
-		y = 4
-		cost = 10
-
-		mutually_exclusive = { 
-        focus = GR_fast_navy
-        }
-
-        mutually_exclusive = { 
-        focus = GR_medium_navy
-        }
-
-		prerequisite = {focus = GR_naval_focus }
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 10
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_army_focus"
-			add_tech_bonus = {
-				bonus = 1.0
-				uses = 1
-				category = naval_heavy_hull_tech
-			}	
+shared_focus = {
+	id = GR_yours_doesnt_exist
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_raider_industrial_complex
 	}
-	search_filters = {FOCUS_FILTER_RESEARCH}
+	x = 7
+	y = 4
+	relative_position_id = GR_gangs_origin
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_yours_doesnt_exist"
+		two_random_arms_factory = yes
+		swap_ideas = {
+			remove_idea = GR_raider_industrial_idea_1
+			add_idea = GR_raider_industrial_idea_2
+		}
+	}
 }
 
-#
-focus = { 
-		id = GR_medium_navy
-		icon = GFX_goal_generic_navy_cruiser 
-		x = 35
-		y = 4
-		cost = 10
-
-		mutually_exclusive = { 
-        focus = GR_heavy_navy
-        }
-
-        mutually_exclusive = { 
-        focus = GR_fast_navy
-        }
-
-		prerequisite = {focus = GR_naval_focus }
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 10
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_army_focus"
-			add_tech_bonus = {
-				bonus = 1.0
-				uses = 1
-				category = naval_medium_hull_tech
-			}	
+shared_focus = {
+	id = GR_mine_all_mine
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_yours_doesnt_exist
 	}
-	search_filters = {FOCUS_FILTER_RESEARCH}
+	x = 7
+	y = 5
+	relative_position_id = GR_gangs_origin
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_mine_all_mine"
+		two_random_arms_factory = yes
+		one_random_industrial_complex = yes
+		swap_ideas = {
+			remove_idea = GR_raider_industrial_idea_2
+			add_idea = GR_raider_industrial_idea_3
+		}
+	}
 }
 
-
-#
-focus = { 
-		id = GR_naval_armor
-		icon = GFX_focus_generic_navy_battleship2
-		x = 37
-		y = 5
-		cost = 10
-
-		prerequisite = {focus = GR_heavy_navy focus = GR_fast_navy focus = GR_medium_navy }
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 10
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_army_focus"
-			add_tech_bonus = {
-				bonus = 1.0
-				uses = 1
-				category = naval_armour_tech
-			}
+shared_focus = {
+	id = GR_fuck_you_got_mine
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_mine_all_mine
 	}
-	search_filters = {FOCUS_FILTER_RESEARCH}
+	x = 7
+	y = 6
+	relative_position_id = GR_gangs_origin
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_fuck_you_got_mine"
+		three_random_arms_factory = yes
+		swap_ideas = {
+			remove_idea = GR_raider_industrial_idea_3
+			add_idea = GR_raider_industrial_idea_4
+		}
+	}
 }
 
-#
-focus = { 
-		id = GR_naval_engine
-		icon = GFX_focus_generic_destroyer
-		x = 33
-		y = 5
-		cost = 10
-
-		prerequisite = {focus = GR_heavy_navy focus = GR_fast_navy focus = GR_medium_navy }
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 10
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_army_focus"
-			add_tech_bonus = {
-				bonus = 1.0
-				uses = 1
-				category = naval_engine_tech
-			}
+shared_focus = {
+	id = GR_now_what
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_workers_compensation
+		focus = GR_fuck_you_got_mine
 	}
-	search_filters = {FOCUS_FILTER_RESEARCH}
+	x = 6
+	y = 7
+	relative_position_id = GR_gangs_origin
+	cost = 4.29
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_now_what"
+		add_research_slot = 1
+		country_event = {
+			id = GR.107
+		}
+	}
 }
 
-#
-focus = { 
-		id = GR_naval_detection
-		icon = GFX_goal_generic_navy_doctrines_tactics
-		x = 35
-		y = 5
-		cost = 10
-
-		prerequisite = {focus = GR_heavy_navy focus = GR_fast_navy focus = GR_medium_navy }
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 10
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_army_focus"
-			add_tech_bonus = {
-				bonus = 1.0
-				uses = 1
-				category = naval_detection_tech
-			}
+shared_focus = {
+	id = GR_lets_fucking_kill
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_now_what
 	}
-	search_filters = {FOCUS_FILTER_RESEARCH}
-}
-
-
-##################
-###Militia-Tree###
-##################
-
-focus = { 
-		id = GR_militia_ini
-		icon = GFX_goal_royal_guard
-		x = 1
-		y = 2
-		cost = 5
-
-		available = {has_completed_focus = GR_wasteland_rangers}
-		relative_position_id = GR_build_airfield
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_militia_ini"
-			add_popularity = { ideology = visionary popularity = 0.15}
-			army_experience = 15
-			
+	mutually_exclusive = {
+		focus = GR_line_go_up
 	}
-	search_filters = {FOCUS_FILTER_POLITICAL}
-}
-
-focus = { 
-		id = GR_militia_hunt_raiders
-		icon = GFX_goal_punish_village_leaders
-		x = -1
-		y = 1
-		cost = 8.58
-
-		prerequisite = {focus = GR_militia_ini}
-		relative_position_id = GR_militia_ini
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_militia_hunt_raiders"
-			add_popularity = { ideology = destruction popularity = -0.2}
-			add_stability = 0.1
-			
+	x = 5
+	y = 8
+	relative_position_id = GR_gangs_origin
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
 	}
-	search_filters = {FOCUS_FILTER_STABILITY}
-}
-
-focus = { 
-		id = GR_militia_leadership
-		icon = GFX_goal_wasteland_generals
-		x = 1
-		y = 1
-		cost = 8.58
-
-		prerequisite = {focus = GR_militia_ini}
-		relative_position_id = GR_militia_ini
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_militia_leadership"
-			every_army_leader = {add_defense = 1 add_planning = 1}
-			add_ideas = training_law_veterans
-			
-	}
-	search_filters = {FOCUS_FILTER_POLITICAL}
-}
-
-focus = { 
-		id = GR_militia_chems
-		icon = GFX_goal_ban_chems
-		x = -2
-		y = 2
-		cost = 8.58
-
-		prerequisite = {focus = GR_militia_hunt_raiders}
-		relative_position_id = GR_militia_ini
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_militia_chems"
-			add_ideas = chems_banned
-			set_country_flag = bans_drugs
-			add_political_power = 100
-	}
-	search_filters = {FOCUS_FILTER_POLITICAL}
-}
-
-focus = { 
-		id = GR_militia_traderoute
-		icon = GFX_goal_generic_construct_infrastructure
-		x = -2
-		y = 3
-		cost = 8.58
-
-		prerequisite = {focus = GR_militia_chems}
-		relative_position_id = GR_militia_ini
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_militia_traderoute"
-			one_random_infrastructure = yes
-			one_random_infrastructure = yes
-			
-	}
-	search_filters = {FOCUS_FILTER_INDUSTRY}
-}
-
-focus = { 
-		id = GR_militia_mildustry
-		icon = GFX_goal_economy_for_the_militia
-		x = -2
-		y = 4
-		cost = 8.58
-
-		prerequisite = {focus = GR_militia_traderoute}
-		relative_position_id = GR_militia_ini
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_militia_mildustry"
-			add_ideas = war_economy
-			add_ideas = free_trade
-			add_war_support = 0.08
-			
-	}
-	search_filters = {FOCUS_FILTER_INDUSTRY}
-}
-
-focus = { 
-		id = GR_militia_raise
-		icon = GFX_goal_expand_the_militia
-		x = 0
-		y = 2
-		cost = 8.58
-
-		prerequisite = {focus = GR_militia_hunt_raiders}
-		prerequisite = {focus = GR_militia_leadership}
-		relative_position_id = GR_militia_ini
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_militia_raise"
-			if = {
-				    limit = { 
-			            NOT = { 
-						    has_template = "Guard Militia"
-						}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_lets_fucking_kill"
+		every_neighbor_country = {
+			every_owned_state = {
+				limit = {
+					any_neighbor_state = {
+						is_owned_by = ROOT
 					}
-					division_template = {
-	                name = "Guard Militia"
-	                is_locked = no
-	                    regiments = {
-		                    infantry = { x = 0 y = 0 }
-							infantry = { x = 0 y = 1 }
-							infantry = { x = 1 y = 0 }
-							infantry = { x = 1 y = 1 }
-	                    }
-                    }
 				}
-			capital_scope = {
-				create_unit = {
-						division = "name = \"First Guard Militia\" division_template = \"Guard Militia\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
-						owner = ROOT
-					}
-				create_unit = {
-						division = "name = \"First Guard Militia\" division_template = \"Guard Militia\" start_experience_factor = 0.05 start_equipment_factor = 1.0"
-						owner = ROOT
-					}
+				add_claim_by = ROOT
 			}
+		}
 	}
-	search_filters = {FOCUS_FILTER_MANPOWER}
 }
 
-focus = { 
-		id = GR_militia_gun_work
-		icon = GFX_goal_generic_construct_mil_factory
-		x = 2
-		y = 2
-		cost = 8.58
-
-		prerequisite = {focus = GR_militia_leadership}
-		relative_position_id = GR_militia_ini
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_militia_gun_work"
-			one_random_arms_factory = yes
+shared_focus = {
+	id = GR_let_the_blood_flow
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_lets_fucking_kill
 	}
-	search_filters = {FOCUS_FILTER_INDUSTRY}
+	x = 5
+	y = 9
+	relative_position_id = GR_gangs_origin
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_let_the_blood_flow"
+		custom_effect_tooltip = GR_gang_justify_m50_tt
+		hidden_effect = {
+			add_to_variable = { GR_gang_justify = -0.5 }
+			force_update_dynamic_modifier = yes
+		}
+	}
 }
 
-focus = { 
-		id = GR_militia_bold_glory
-		icon = GFX_goal_arise_ye_bold_and_brave
-		x = 1
-		y = 3
-		cost = 8.58
-
-		prerequisite = {focus = GR_militia_raise}
-		prerequisite = {focus = GR_militia_gun_work}
-		relative_position_id = GR_militia_ini
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_militia_bold_glory"
-			add_ideas = GR_militia_idea_1
+shared_focus = {
+	id = GR_line_go_up
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_now_what
 	}
-	search_filters = {FOCUS_FILTER_MANPOWER}
+	mutually_exclusive = {
+		focus = GR_lets_fucking_kill
+	}
+	x = 7
+	y = 8
+	relative_position_id = GR_gangs_origin
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_line_go_up"
+		custom_effect_tooltip = GR_gang_output_p10_tt
+		custom_effect_tooltip = GR_gang_resources_p10_tt
+		hidden_effect = {
+			add_to_variable = { GR_gang_output = 0.1 }
+			add_to_variable = { GR_gang_resources = 0.1 }
+			force_update_dynamic_modifier = yes
+		}
+	}
 }
 
-focus = { 
-		id = GR_militia_tools_guns
-		icon = GFX_goal_generic_regular_firearms_focus
-		x = 0
-		y = 4
-		cost = 8.58
+shared_focus = {
+	id = GR_an_actual_economy
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_line_go_up
+	}
+	x = 7
+	y = 9
+	relative_position_id = GR_gangs_origin
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_an_actual_economy"
+		add_ideas = free_trade
+		country_event = {
+			id = GR.108
+		}
+	}
+}
 
-		prerequisite = {focus = GR_militia_bold_glory}
-		relative_position_id = GR_militia_ini
+### Political: its own root, so an auxiliary tree can replace it (needs GR_our_boss) ###
 
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
+shared_focus = {
+	id = GR_how_to_split_loot
+	icon = GFX_goal_unknown
+	x = 0
+	y = 3
+	relative_position_id = GR_gangs_origin
+	cost = 4.29
+	available = {
+		has_completed_focus = GR_our_boss
+	}
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_how_to_split_loot"
+		add_political_power = 50
+		country_event = {
+			id = GR.105
+		}
+	}
+}
 
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_militia_tools_guns"
-			add_tech_bonus = {
-			name = infantry_bonus
-			bonus = 2.0
-			uses = 1
+shared_focus = {
+	id = GR_trinkets_for_tots
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_how_to_split_loot
+	}
+	mutually_exclusive = {
+		focus = GR_baubles_for_the_boss
+		focus = GR_weapons_for_the_war
+	}
+	x = -2
+	y = 1
+	relative_position_id = GR_how_to_split_loot
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_trinkets_for_tots"
+		add_ideas = GR_trinkets_for_tots_idea
+	}
+}
+
+shared_focus = {
+	id = GR_loot_for_the_ladies
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_trinkets_for_tots
+	}
+	x = -2
+	y = 2
+	relative_position_id = GR_how_to_split_loot
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_loot_for_the_ladies"
+		custom_effect_tooltip = GR_loot_for_the_ladies_tt
+	}
+}
+
+shared_focus = {
+	id = GR_shit_for_the_stallions
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_loot_for_the_ladies
+	}
+	x = -2
+	y = 3
+	relative_position_id = GR_how_to_split_loot
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_shit_for_the_stallions"
+		custom_effect_tooltip = GR_shit_for_the_stallions_tt
+	}
+}
+
+shared_focus = {
+	id = GR_baubles_for_the_boss
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_how_to_split_loot
+	}
+	mutually_exclusive = {
+		focus = GR_trinkets_for_tots
+		focus = GR_weapons_for_the_war
+	}
+	x = 0
+	y = 1
+	relative_position_id = GR_how_to_split_loot
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_baubles_for_the_boss"
+		add_ideas = GR_baubles_for_the_boss_idea
+	}
+}
+
+shared_focus = {
+	id = GR_goods_for_the_greats
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_baubles_for_the_boss
+	}
+	x = 0
+	y = 2
+	relative_position_id = GR_how_to_split_loot
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_goods_for_the_greats"
+		create_corps_commander = {
+			skill = 4
+			attack_skill = 4
+			defense_skill = 3
+			planning_skill = 3
+			logistics_skill = 3
+		}
+	}
+}
+
+shared_focus = {
+	id = GR_gifts_for_the_gangs
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_goods_for_the_greats
+	}
+	x = 0
+	y = 3
+	relative_position_id = GR_how_to_split_loot
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_gifts_for_the_gangs"
+		custom_effect_tooltip = GR_gifts_for_the_gangs_tt
+	}
+}
+
+shared_focus = {
+	id = GR_weapons_for_the_war
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_how_to_split_loot
+	}
+	mutually_exclusive = {
+		focus = GR_trinkets_for_tots
+		focus = GR_baubles_for_the_boss
+	}
+	x = 2
+	y = 1
+	relative_position_id = GR_how_to_split_loot
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_weapons_for_the_war"
+		add_tech_bonus = {
+			name = GR_weapons_for_the_war
+			bonus = 1
+			uses = 2
 			category = ballistic_weapon_tech
+			category = energy_weapon_tech
+		}
+	}
+}
+
+shared_focus = {
+	id = GR_bullets_for_the_bois
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_weapons_for_the_war
+	}
+	x = 2
+	y = 2
+	relative_position_id = GR_how_to_split_loot
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_bullets_for_the_bois"
+		custom_effect_tooltip = GR_bullets_for_the_bois_tt
+	}
+}
+
+shared_focus = {
+	id = GR_armor_for_the_assault
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_bullets_for_the_bois
+	}
+	x = 2
+	y = 3
+	relative_position_id = GR_how_to_split_loot
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_armor_for_the_assault"
+		add_tech_bonus = {
+			name = GR_armor_for_the_assault
+			bonus = 1.5
+			uses = 2
+			category = specops_tech
+			category = special_forces_tech
+		}
+	}
+}
+
+shared_focus = {
+	id = GR_what_are_conquered_lands
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_shit_for_the_stallions
+		focus = GR_gifts_for_the_gangs
+		focus = GR_armor_for_the_assault
+	}
+	x = 0
+	y = 4
+	relative_position_id = GR_how_to_split_loot
+	cost = 4.29
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_what_are_conquered_lands"
+		add_political_power = 50
+		country_event = {
+			id = GR.106
+		}
+	}
+}
+
+shared_focus = {
+	id = GR_assist_the_assailed
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_what_are_conquered_lands
+	}
+	mutually_exclusive = {
+		focus = GR_payment_for_peace
+		focus = GR_raising_raiders
+	}
+	x = -2
+	y = 5
+	relative_position_id = GR_how_to_split_loot
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_assist_the_assailed"
+		add_ideas = GR_assist_the_assailed_idea
+	}
+}
+
+shared_focus = {
+	id = GR_formalize_the_future
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_assist_the_assailed
+	}
+	x = -2
+	y = 6
+	relative_position_id = GR_how_to_split_loot
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_formalize_the_future"
+		custom_effect_tooltip = FOE_50_percent_core_cost_reduction_tt
+		set_variable = { coring_cost_country_factor = -0.50 }
+	}
+}
+
+shared_focus = {
+	id = GR_reap_the_rewards
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_formalize_the_future
+	}
+	x = -2
+	y = 7
+	relative_position_id = GR_how_to_split_loot
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_reap_the_rewards"
+		custom_effect_tooltip = GR_reap_the_rewards_tt
+		hidden_effect = {
+			add_to_variable = { loot = GR_states_cored }
+		}
+	}
+}
+
+shared_focus = {
+	id = GR_payment_for_peace
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_what_are_conquered_lands
+	}
+	mutually_exclusive = {
+		focus = GR_assist_the_assailed
+		focus = GR_raising_raiders
+	}
+	x = 0
+	y = 5
+	relative_position_id = GR_how_to_split_loot
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_payment_for_peace"
+		custom_effect_tooltip = GR_payment_for_peace_tt
+	}
+}
+
+shared_focus = {
+	id = GR_tribute_for_treatment
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_payment_for_peace
+	}
+	x = 0
+	y = 6
+	relative_position_id = GR_how_to_split_loot
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_tribute_for_treatment"
+		custom_effect_tooltip = GR_tribute_for_treatment_tt
+	}
+}
+
+shared_focus = {
+	id = GR_bow_and_benefit
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_tribute_for_treatment
+	}
+	x = 0
+	y = 7
+	relative_position_id = GR_how_to_split_loot
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_bow_and_benefit"
+		every_owned_state = {
+			limit = {
+				NOT = { is_core_of = ROOT }
 			}
+			add_resistance = -15
+			add_compliance = 15
+		}
 	}
-	search_filters = {FOCUS_FILTER_RESEARCH}
 }
 
-focus = { 
-		id = GR_militia_honour
-		icon = GFX_goal_fight_with_honr_die_with_glory
-		x = 2
-		y = 4
-		cost = 8.58
-
-		prerequisite = {focus = GR_militia_bold_glory}
-		relative_position_id = GR_militia_ini
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_militia_honour"
-			swap_ideas = {remove_idea = GR_militia_idea_1 add_idea = GR_militia_idea_2}
+shared_focus = {
+	id = GR_raising_raiders
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_what_are_conquered_lands
 	}
-	search_filters = {FOCUS_FILTER_MANPOWER}
-}
-
-focus = { 
-		id = GR_militia_finish
-		icon = GFX_goal_nation_without_raiders
-		x = 0
-		y = 5
-		cost = 8.58
-
-		prerequisite = {focus = GR_militia_mildustry}
-		prerequisite = {focus = GR_militia_tools_guns}
-		prerequisite = {focus = GR_militia_honour}
-		relative_position_id = GR_militia_ini
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_militia_finish"
-			add_ideas = wasteland_society
+	mutually_exclusive = {
+		focus = GR_assist_the_assailed
+		focus = GR_payment_for_peace
 	}
-	search_filters = {FOCUS_FILTER_POLITICAL}
-}
-
-
-################
-###Mayor-Tree###
-################
-
-
-focus = { 
-		id = GR_mayor_ini
-		icon = GFX_goal_organize_elections
-		x = 10
-		y = 2
-		cost = 5
-
-		available = {has_completed_focus = GR_elections}
-		relative_position_id = GR_build_airfield
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_mayor_ini"
-			add_popularity = { ideology = survivalism popularity = 0.15}
-			add_political_power = 50
-			
+	x = 2
+	y = 5
+	relative_position_id = GR_how_to_split_loot
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
 	}
-	search_filters = {FOCUS_FILTER_POLITICAL}
-}
-
-focus = { 
-		id = GR_mayor_reform
-		icon = GFX_goal_generic_construct_civ_factory
-		x = 8
-		y = 3
-		cost = 8.58
-
-		prerequisite = {focus = GR_mayor_ini}
-		relative_position_id = GR_build_airfield
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_mayor_reform"
-			one_random_industrial_complex = yes
-	}
-	search_filters = {FOCUS_FILTER_INDUSTRY}
-}
-
-focus = { 
-		id = GR_mayor_trade
-		icon = GFX_goal_embrace_trade
-		x = 7
-		y = 4
-		cost = 8.58
-
-		prerequisite = {focus = GR_mayor_reform}
-		relative_position_id = GR_build_airfield
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_mayor_trade"
-			add_ideas = free_trade
-			one_random_infrastructure = yes
-	}
-	search_filters = {FOCUS_FILTER_POLITICAL}
-}
-
-focus = { 
-		id = GR_mayor_trade_winds
-		icon = GFX_goal_what_the_winds_of_trade_bring
-		x = 7
-		y = 5
-		cost = 8.58
-
-		prerequisite = {focus = GR_mayor_trade}
-		relative_position_id = GR_build_airfield
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_mayor_trade_winds"
-			random_list = {
-				25 = {
-					capital_scope = { add_resource = {type = metal amount = 10}}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_raising_raiders"
+		custom_effect_tooltip = GR_raising_raiders_tt
+		hidden_effect = {
+			GR_prepare_raider_mob = yes
+			every_owned_state = {
+				limit = {
+					NOT = { is_core_of = ROOT }
 				}
-				25 = {
-					capital_scope = { add_resource = {type = composites amount = 10}}
-				}
-				25 = {
-					capital_scope = { add_resource = {type = circuitry amount = 6}}
-				}
-				25 = {
-					capital_scope = { add_resource = {type = advanced amount = 6}}
+				random_select_amount = 8
+				GR_spawn_raider_mob = yes
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = GR_amassing_an_army
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_raising_raiders
+	}
+	x = 2
+	y = 6
+	relative_position_id = GR_how_to_split_loot
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_amassing_an_army"
+		add_ideas = GR_amassing_an_army_idea
+	}
+}
+
+shared_focus = {
+	id = GR_horrifying_hordes
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_amassing_an_army
+	}
+	x = 2
+	y = 7
+	relative_position_id = GR_how_to_split_loot
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_horrifying_hordes"
+		add_manpower = 1000
+	}
+}
+
+### Army tree: open from the start ###
+
+shared_focus = {
+	id = GR_tools_of_the_trade
+	icon = GFX_goal_unknown
+	x = 25
+	y = 2
+	cost = 4.29
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_tools_of_the_trade"
+		country_event = {
+			id = GR.109
+		}
+	}
+}
+
+### Navy (needs a coastal state) ###
+
+shared_focus = {
+	id = GR_the_fuck_is_a_boat
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_tools_of_the_trade
+	}
+	x = -5
+	y = 1
+	relative_position_id = GR_tools_of_the_trade
+	cost = 8.58
+	available = {
+		any_owned_state = {
+			is_coastal = yes
+		}
+	}
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_the_fuck_is_a_boat"
+		add_tech_bonus = {
+			name = GR_the_fuck_is_a_boat
+			bonus = 0.5
+			uses = 2
+			category = naval_tech
+		}
+	}
+}
+
+shared_focus = {
+	id = GR_watch_some_pirate_movies
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_the_fuck_is_a_boat
+	}
+	x = -5
+	y = 2
+	relative_position_id = GR_tools_of_the_trade
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_watch_some_pirate_movies"
+		custom_effect_tooltip = GR_naval_tech_level_tt
+		if = {
+			limit = {
+				NOT = { has_tech = naval_tech_level_settler }
+			}
+			set_technology = {
+				naval_tech_level_settler = 1
+				popup = no
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = GR_hoist_the_skulls_and_crossbones
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_watch_some_pirate_movies
+	}
+	x = -5
+	y = 3
+	relative_position_id = GR_tools_of_the_trade
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_hoist_the_skulls_and_crossbones"
+		custom_effect_tooltip = BAN_TT_4_loot
+		hidden_effect = {
+			add_to_variable = { loot = 4 }
+		}
+	}
+}
+
+shared_focus = {
+	id = GR_steal_some_ships
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_hoist_the_skulls_and_crossbones
+	}
+	x = -5
+	y = 4
+	relative_position_id = GR_tools_of_the_trade
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_steal_some_ships"
+		add_equipment_to_stockpile = { type = convoy_1 amount = 100 producer = OWE }
+	}
+}
+
+shared_focus = {
+	id = GR_raiding_on_the_high_seas
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_steal_some_ships
+	}
+	x = -5
+	y = 5
+	relative_position_id = GR_tools_of_the_trade
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_raiding_on_the_high_seas"
+		custom_effect_tooltip = GR_gang_convoy_raid_p15_tt
+		custom_effect_tooltip = GR_gang_naval_speed_p10_tt
+		hidden_effect = {
+			add_to_variable = { GR_gang_convoy_raid = 0.15 }
+			add_to_variable = { GR_gang_naval_speed = 0.1 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+### Army: all in on the chosen tool (left), a solid base (middle) or every tool (right) ###
+
+shared_focus = {
+	id = GR_lean_into_our_specialty
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_tools_of_the_trade
+	}
+	mutually_exclusive = {
+		focus = GR_factories_first
+		focus = GR_diversify_our_shit
+	}
+	x = -2
+	y = 1
+	relative_position_id = GR_tools_of_the_trade
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_lean_into_our_specialty"
+		if = {
+			limit = {
+				has_country_flag = GR_tool_demolitions
+			}
+			add_equipment_to_stockpile = { type = demolitions_equipment_1 amount = 300 producer = OWE }
+		}
+		else_if = {
+			limit = {
+				has_country_flag = GR_tool_fireteams
+			}
+			add_equipment_to_stockpile = { type = fireteam_equipment_1 amount = 300 producer = OWE }
+		}
+		else_if = {
+			limit = {
+				has_country_flag = GR_tool_can_openers
+			}
+			add_equipment_to_stockpile = { type = anti_tank_equipment_1 amount = 200 producer = OWE }
+		}
+		else_if = {
+			limit = {
+				has_country_flag = GR_tool_chems
+			}
+			add_equipment_to_stockpile = { type = support_equipment_1 amount = 400 producer = OWE }
+		}
+	}
+}
+
+shared_focus = {
+	id = GR_no_holding_back
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_lean_into_our_specialty
+	}
+	x = -2
+	y = 2
+	relative_position_id = GR_tools_of_the_trade
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_no_holding_back"
+		if = {
+			limit = {
+				has_country_flag = GR_tool_demolitions
+			}
+			add_equipment_to_stockpile = { type = demolitions_equipment_1 amount = 500 producer = OWE }
+		}
+		else_if = {
+			limit = {
+				has_country_flag = GR_tool_fireteams
+			}
+			add_equipment_to_stockpile = { type = fireteam_equipment_1 amount = 500 producer = OWE }
+		}
+		else_if = {
+			limit = {
+				has_country_flag = GR_tool_can_openers
+			}
+			add_equipment_to_stockpile = { type = anti_tank_equipment_1 amount = 350 producer = OWE }
+		}
+		else_if = {
+			limit = {
+				has_country_flag = GR_tool_chems
+			}
+			add_equipment_to_stockpile = { type = support_equipment_1 amount = 700 producer = OWE }
+		}
+	}
+}
+
+shared_focus = {
+	id = GR_better_than_anyone
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_no_holding_back
+	}
+	x = -2
+	y = 3
+	relative_position_id = GR_tools_of_the_trade
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_better_than_anyone"
+		if = {
+			limit = {
+				has_country_flag = GR_tool_demolitions
+			}
+			add_ideas = GR_specialty_demolitions_extreme
+		}
+		else_if = {
+			limit = {
+				has_country_flag = GR_tool_fireteams
+			}
+			add_ideas = GR_specialty_fireteams_extreme
+		}
+		else_if = {
+			limit = {
+				has_country_flag = GR_tool_can_openers
+			}
+			add_ideas = GR_specialty_can_openers_extreme
+		}
+		else_if = {
+			limit = {
+				has_country_flag = GR_tool_chems
+			}
+			custom_effect_tooltip = GR_chems_extreme_tt
+			add_ideas = GR_specialty_chems_extreme
+			hidden_effect = {
+				set_technology = {
+					GR_chems_extreme_tech = 1
+					popup = no
 				}
 			}
+		}
 	}
-	search_filters = {FOCUS_FILTER_INDUSTRY}
 }
 
-focus = { 
-		id = GR_mayor_wells
-		icon = GFX_goal_dig_wells_for_water
-		x = 9
-		y = 4
-		cost = 8.58
-
-		prerequisite = {focus = GR_mayor_reform}
-		relative_position_id = GR_build_airfield
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_mayor_wells"
-			capital_scope = { add_resource = {type = water amount = 8}}
+shared_focus = {
+	id = GR_the_best_around
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_better_than_anyone
 	}
-	search_filters = {FOCUS_FILTER_INDUSTRY}
-}
-
-focus = { 
-		id = GR_mayor_cottage
-		icon = GFX_goal_generic_construct_civ_factory
-		x = 9
-		y = 5
-		cost = 8.58
-
-		prerequisite = {focus = GR_mayor_wells}
-		relative_position_id = GR_build_airfield
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_mayor_cottage"
-			one_random_industrial_complex = yes
-			capital_scope = { add_extra_state_shared_building_slots = 2}
+	x = -2
+	y = 4
+	relative_position_id = GR_tools_of_the_trade
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
 	}
-	search_filters = {FOCUS_FILTER_INDUSTRY}
-}
-
-focus = { 
-		id = GR_mayor_strong_eco
-		icon = GFX_goal_the_economic_miracle
-		x = 8
-		y = 6
-		cost = 8.58
-
-		prerequisite = {focus = GR_mayor_trade_winds}
-		prerequisite = {focus = GR_mayor_cottage}
-		relative_position_id = GR_build_airfield
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_mayor_strong_eco"
-			add_ideas = GR_mayor_idea_1
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_the_best_around"
+		if = {
+			limit = {
+				has_country_flag = GR_tool_demolitions
+			}
+			add_tech_bonus = {
+				name = GR_the_best_around
+				bonus = 3
+				uses = 1
+				category = demolition_tech
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = GR_tool_fireteams
+			}
+			add_tech_bonus = {
+				name = GR_the_best_around
+				bonus = 3
+				uses = 1
+				category = fireteam_tech
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = GR_tool_can_openers
+			}
+			add_tech_bonus = {
+				name = GR_the_best_around
+				bonus = 3
+				uses = 1
+				category = anti_tank_tech
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = GR_tool_chems
+			}
+			add_tech_bonus = {
+				name = GR_the_best_around
+				bonus = 3
+				uses = 1
+				category = medical_tech
+			}
+		}
 	}
-	search_filters = {FOCUS_FILTER_POLITICAL}
 }
 
-focus = { 
-		id = GR_mayor_order
-		icon = GFX_goal_enforce_new_order
-		x = 12
-		y = 3
-		cost = 8.58
-
-		prerequisite = {focus = GR_mayor_ini}
-		relative_position_id = GR_build_airfield
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_mayor_order"
-			add_stability = 0.1
-			add_popularity = { ideology = survivalism popularity = 0.1}
+shared_focus = {
+	id = GR_factories_first
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_tools_of_the_trade
 	}
-	search_filters = {FOCUS_FILTER_STABILITY}
-}
-
-focus = { 
-		id = GR_mayor_wealth
-		icon = GFX_goal_endless_money
-		x = 12
-		y = 4
-		cost = 8.58
-
-		prerequisite = {focus = GR_mayor_order}
-		relative_position_id = GR_build_airfield
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_mayor_wealth"
-			add_ideas = GR_mayor_idea_2
+	mutually_exclusive = {
+		focus = GR_lean_into_our_specialty
+		focus = GR_diversify_our_shit
 	}
-	search_filters = {FOCUS_FILTER_POLITICAL}
-}
-
-focus = { 
-		id = GR_mayor_freedom
-		icon = GFX_goal_freedom_brings_prosperity
-		x = 11
-		y = 5
-		cost = 8.58
-
-		prerequisite = {focus = GR_mayor_wealth}
-		mutually_exclusive = {focus = GR_mayor_chains}
-		relative_position_id = GR_build_airfield
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_mayor_freedom"
-			add_ideas = wasteland_society
+	x = 0
+	y = 1
+	relative_position_id = GR_tools_of_the_trade
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
 	}
-	search_filters = {FOCUS_FILTER_POLITICAL}
-}
-
-focus = { 
-		id = GR_mayor_chains
-		icon = GFX_goal_prosperity_in_chains
-		x = 13
-		y = 5
-		cost = 8.58
-
-		prerequisite = {focus = GR_mayor_wealth}
-		mutually_exclusive = {focus = GR_mayor_freedom}
-		relative_position_id = GR_build_airfield
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_mayor_chains"
-			add_ideas = slaver_society
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_factories_first"
+		capital_scope = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = arms_factory
+				level = 2
+				instant_build = yes
+			}
+		}
 	}
-	search_filters = {FOCUS_FILTER_POLITICAL}
 }
 
-focus = { 
-		id = GR_mayor_research
-		icon = GFX_goal_local_schoolhouses
-		x = 12
-		y = 6
-		cost = 8.58
-
-		prerequisite = {focus = GR_mayor_chains focus = GR_mayor_freedom}
-		relative_position_id = GR_build_airfield
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_mayor_research"
-			add_research_slot = 1
+shared_focus = {
+	id = GR_build_on_the_basics
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_factories_first
 	}
-	search_filters = {FOCUS_FILTER_RESEARCH}
-}
-
-focus = { 
-		id = GR_mayor_prosper
-		icon = GFX_goal_a_prosperous_nation
-		x = 10
-		y = 7
-		cost = 8.58
-
-		prerequisite = {focus = GR_mayor_strong_eco}
-		prerequisite = {focus = GR_mayor_research}
-		relative_position_id = GR_build_airfield
-
-		available_if_capitulated = yes 
-		ai_will_do = { 
-			factor = 100
-		} 
-
-		completion_reward = {
-			log = "[GetDateText]: [Root.GetName]: Focus GR_mayor_prosper"
-			remove_ideas = GR_mayor_idea_2
-			swap_ideas = {remove_idea = GR_mayor_idea_1 add_idea = GR_mayor_idea_3}
+	x = 0
+	y = 2
+	relative_position_id = GR_tools_of_the_trade
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
 	}
-	search_filters = {FOCUS_FILTER_POLITICAL}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_build_on_the_basics"
+		if = {
+			limit = {
+				has_country_flag = GR_tool_demolitions
+			}
+			add_ideas = GR_specialty_demolitions_basics
+		}
+		else_if = {
+			limit = {
+				has_country_flag = GR_tool_fireteams
+			}
+			add_ideas = GR_specialty_fireteams_basics
+		}
+		else_if = {
+			limit = {
+				has_country_flag = GR_tool_can_openers
+			}
+			add_ideas = GR_specialty_can_openers_basics
+		}
+		else_if = {
+			limit = {
+				has_country_flag = GR_tool_chems
+			}
+			custom_effect_tooltip = GR_chems_basics_tt
+			add_ideas = GR_specialty_chems_basics
+			hidden_effect = {
+				set_technology = {
+					GR_chems_basics_tech = 1
+					popup = no
+				}
+			}
+		}
+	}
 }
 
-
-
-
-
-
-
-
-
+shared_focus = {
+	id = GR_specialize_the_specialty
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_build_on_the_basics
+	}
+	x = 0
+	y = 3
+	relative_position_id = GR_tools_of_the_trade
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_specialize_the_specialty"
+		if = {
+			limit = {
+				has_country_flag = GR_tool_demolitions
+			}
+			swap_ideas = {
+				remove_idea = GR_specialty_demolitions_basics
+				add_idea = GR_specialty_demolitions_special
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = GR_tool_fireteams
+			}
+			swap_ideas = {
+				remove_idea = GR_specialty_fireteams_basics
+				add_idea = GR_specialty_fireteams_special
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = GR_tool_can_openers
+			}
+			swap_ideas = {
+				remove_idea = GR_specialty_can_openers_basics
+				add_idea = GR_specialty_can_openers_special
+			}
+		}
+		else_if = {
+			limit = {
+				has_country_flag = GR_tool_chems
+			}
+			custom_effect_tooltip = GR_chems_special_tt
+			hidden_effect = {
+				set_technology = {
+					GR_chems_special_tech = 1
+					popup = no
+				}
+			}
+		}
+	}
 }
 
+shared_focus = {
+	id = GR_put_the_eggheads_to_work
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_specialize_the_specialty
+	}
+	x = 0
+	y = 4
+	relative_position_id = GR_tools_of_the_trade
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_put_the_eggheads_to_work"
+		add_tech_bonus = {
+			name = GR_put_the_eggheads_to_work
+			bonus = 1
+			uses = 2
+			category = support_tech
+		}
+	}
+}
 
+shared_focus = {
+	id = GR_diversify_our_shit
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_tools_of_the_trade
+	}
+	mutually_exclusive = {
+		focus = GR_lean_into_our_specialty
+		focus = GR_factories_first
+	}
+	x = 2
+	y = 1
+	relative_position_id = GR_tools_of_the_trade
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_diversify_our_shit"
+		add_tech_bonus = {
+			name = GR_diversify_our_shit
+			bonus = 0.5
+			uses = 5
+			category = support_tech
+		}
+	}
+}
 
+shared_focus = {
+	id = GR_produce_more_and_more
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_diversify_our_shit
+	}
+	x = 2
+	y = 2
+	relative_position_id = GR_tools_of_the_trade
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_produce_more_and_more"
+		random_list = {
+			20 = {
+				add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 600 producer = OWE }
+			}
+			20 = {
+				add_equipment_to_stockpile = { type = demolitions_equipment_1 amount = 300 producer = OWE }
+			}
+			20 = {
+				add_equipment_to_stockpile = { type = fireteam_equipment_1 amount = 300 producer = OWE }
+			}
+			20 = {
+				add_equipment_to_stockpile = { type = anti_tank_equipment_1 amount = 200 producer = OWE }
+			}
+			20 = {
+				add_equipment_to_stockpile = { type = support_equipment_1 amount = 400 producer = OWE }
+			}
+		}
+	}
+}
 
+shared_focus = {
+	id = GR_learn_other_tools
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_produce_more_and_more
+	}
+	x = 2
+	y = 3
+	relative_position_id = GR_tools_of_the_trade
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_learn_other_tools"
+		add_tech_bonus = {
+			name = GR_learn_other_tools
+			bonus = 0
+			ahead_reduction = 2
+			uses = 2
+			category = support_tech
+		}
+	}
+}
 
+shared_focus = {
+	id = GR_perfect_our_system
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_learn_other_tools
+	}
+	x = 2
+	y = 4
+	relative_position_id = GR_tools_of_the_trade
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_perfect_our_system"
+		if = {
+			limit = {
+				has_tech = support_tech_level_settler
+			}
+			custom_effect_tooltip = GR_support_tech_level_advanced_tt
+			set_technology = {
+				support_tech_level_scientific = 1
+				popup = no
+			}
+		}
+		else = {
+			custom_effect_tooltip = GR_support_tech_level_settled_tt
+			set_technology = {
+				support_tech_level_settler = 1
+				popup = no
+			}
+		}
+	}
+}
 
+shared_focus = {
+	id = GR_the_bois_are_better_than_ever
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_the_best_around
+		focus = GR_put_the_eggheads_to_work
+		focus = GR_perfect_our_system
+	}
+	x = 0
+	y = 5
+	relative_position_id = GR_tools_of_the_trade
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_the_bois_are_better_than_ever"
+		custom_effect_tooltip = GR_gang_org_p5_tt
+		custom_effect_tooltip = GR_gang_breakthrough_p5_tt
+		hidden_effect = {
+			add_to_variable = { GR_gang_org = 0.05 }
+			add_to_variable = { GR_gang_breakthrough = 0.05 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
 
+### Air ###
 
+shared_focus = {
+	id = GR_we_can_fly
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_tools_of_the_trade
+	}
+	x = 5
+	y = 1
+	relative_position_id = GR_tools_of_the_trade
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_we_can_fly"
+		add_tech_bonus = {
+			name = GR_we_can_fly
+			bonus = 0.5
+			uses = 2
+			category = air_tech
+		}
+	}
+}
 
+shared_focus = {
+	id = GR_fly_like_a_chicken
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_we_can_fly
+	}
+	x = 5
+	y = 2
+	relative_position_id = GR_tools_of_the_trade
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_fly_like_a_chicken"
+		custom_effect_tooltip = GR_air_tech_level_tt
+		if = {
+			limit = {
+				NOT = { has_tech = air_tech_level_settler }
+			}
+			set_technology = {
+				air_tech_level_settler = 1
+				popup = no
+			}
+		}
+	}
+}
 
+shared_focus = {
+	id = GR_shoot_down_the_turkeys
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_fly_like_a_chicken
+	}
+	x = 5
+	y = 3
+	relative_position_id = GR_tools_of_the_trade
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_shoot_down_the_turkeys"
+		custom_effect_tooltip = GR_gang_air_attack_p10_tt
+		hidden_effect = {
+			add_to_variable = { GR_gang_air_attack = 0.1 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
 
+shared_focus = {
+	id = GR_big_ass_flying_thing
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_shoot_down_the_turkeys
+	}
+	x = 5
+	y = 4
+	relative_position_id = GR_tools_of_the_trade
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_big_ass_flying_thing"
+		add_tech_bonus = {
+			name = GR_big_ass_flying_thing
+			bonus = 1
+			uses = 1
+			category = airship_tech
+		}
+	}
+}
 
+shared_focus = {
+	id = GR_raiding_from_above
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_big_ass_flying_thing
+	}
+	x = 5
+	y = 5
+	relative_position_id = GR_tools_of_the_trade
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_raiding_from_above"
+		custom_effect_tooltip = GR_gang_air_agility_p5_tt
+		custom_effect_tooltip = GR_gang_air_range_p10_tt
+		hidden_effect = {
+			add_to_variable = { GR_gang_air_agility = 0.05 }
+			add_to_variable = { GR_gang_air_range = 0.1 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
 
+### Capstone: the army branch and either the navy or the air branch ###
 
-
-
-
-
-
-
+shared_focus = {
+	id = GR_now_the_fun_begins
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GR_the_bois_are_better_than_ever
+	}
+	prerequisite = {
+		focus = GR_raiding_on_the_high_seas
+		focus = GR_raiding_from_above
+	}
+	x = 0
+	y = 6
+	relative_position_id = GR_tools_of_the_trade
+	cost = 4.29
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GR_now_the_fun_begins"
+		country_event = {
+			id = GR.110
+		}
+	}
+}

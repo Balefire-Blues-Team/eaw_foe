@@ -245,6 +245,9 @@ foe_raiding_category = {
 	
 	divide_loot = {
 		icon = pony_skull
+		visible = {
+			NOT = { has_completed_focus = GR_payment_for_peace }
+		}
 		available = {
 			hidden_trigger = {
 				check_variable  = {
@@ -272,7 +275,64 @@ foe_raiding_category = {
 		}
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision remove divide_loot"
-			add_stability = 0.05
+			if = {
+				limit = {
+					has_completed_focus = GR_loot_for_the_ladies
+				}
+				add_stability = 0.08
+			}
+			else = {
+				add_stability = 0.05
+			}
+			add_war_support = 0.05
+			add_political_power = 25
+		}
+		ai_will_do = {
+			factor = 40
+		}
+	}
+	# the same decision at half price, from the generic raider tree
+	divide_loot_payment = {
+		icon = pony_skull
+		visible = {
+			has_completed_focus = GR_payment_for_peace
+		}
+		available = {
+			hidden_trigger = {
+				check_variable  = {
+					var = loot
+					value = 0
+					compare = greater_than
+				}
+			}
+		}
+		custom_cost_trigger = {
+			check_variable  = {
+				var = loot
+				value = 0
+				compare = greater_than
+			}
+		}
+		custom_cost_text = decision_cost_1_loot
+		days_remove = 20
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision divide_loot_payment"
+			subtract_from_variable = {
+				var = loot
+				value = 1
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove divide_loot_payment"
+			if = {
+				limit = {
+					has_completed_focus = GR_loot_for_the_ladies
+				}
+				add_stability = 0.08
+			}
+			else = {
+				add_stability = 0.05
+			}
 			add_war_support = 0.05
 			add_political_power = 25
 		}
@@ -283,6 +343,9 @@ foe_raiding_category = {
 
 	fresh_blood = {
 		icon = pony_skull
+		visible = {
+			NOT = { has_completed_focus = GR_tribute_for_treatment }
+		}
 		available = {
 			hidden_trigger = {
 				check_variable  = {
@@ -310,7 +373,62 @@ foe_raiding_category = {
 		}
 		remove_effect = {
 			log = "[GetDateText]: [Root.GetName]: Decision remove fresh_blood"
-			add_manpower = 280
+			if = {
+				limit = {
+					has_completed_focus = GR_gifts_for_the_gangs
+				}
+				add_manpower = 450
+			}
+			else = {
+				add_manpower = 280
+			}
+		}
+		ai_will_do = {
+			factor = 70
+		}
+	}
+	# the same decision at half price, from the generic raider tree
+	fresh_blood_tribute = {
+		icon = pony_skull
+		visible = {
+			has_completed_focus = GR_tribute_for_treatment
+		}
+		available = {
+			hidden_trigger = {
+				check_variable  = {
+					var = loot
+					value = 0
+					compare = greater_than
+				}
+			}
+		}
+		custom_cost_trigger = {
+			check_variable  = {
+				var = loot
+				value = 0
+				compare = greater_than
+			}
+		}
+		custom_cost_text = decision_cost_1_loot
+		days_remove = 30
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision fresh_blood_tribute"
+			subtract_from_variable = {
+				var = loot
+				value = 1
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove fresh_blood_tribute"
+			if = {
+				limit = {
+					has_completed_focus = GR_gifts_for_the_gangs
+				}
+				add_manpower = 450
+			}
+			else = {
+				add_manpower = 280
+			}
 		}
 		ai_will_do = {
 			factor = 70
@@ -376,6 +494,41 @@ foe_raiding_category = {
 					instant_build = yes
 				}
 			}
+			if = {
+				limit = {
+					has_completed_focus = GR_shit_for_the_stallions
+				}
+				random_owned_controlled_state = {
+					limit = {
+						free_building_slots = {
+							building = industrial_complex
+							size > 0
+							include_locked = yes
+						}
+						OR = {
+							is_in_home_area = yes
+							NOT = {
+								owner = {
+									any_owned_state = {
+										free_building_slots = {
+											building = industrial_complex
+											size > 0
+											include_locked = yes
+										}
+										is_in_home_area = yes
+									}
+								}
+							}
+						}
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = industrial_complex
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
 		}
 		ai_will_do = {
 			factor = 100
@@ -439,6 +592,41 @@ foe_raiding_category = {
 					type = arms_factory
 					level = 1
 					instant_build = yes
+				}
+			}
+			if = {
+				limit = {
+					has_completed_focus = GR_bullets_for_the_bois
+				}
+				random_owned_controlled_state = {
+					limit = {
+						free_building_slots = {
+							building = arms_factory
+							size > 0
+							include_locked = yes
+						}
+						OR = {
+							is_in_home_area = yes
+							NOT = {
+								owner = {
+									any_owned_state = {
+										free_building_slots = {
+											building = arms_factory
+											size > 0
+											include_locked = yes
+										}
+										is_in_home_area = yes
+									}
+								}
+							}
+						}
+					}
+					add_extra_state_shared_building_slots = 1
+					add_building_construction = {
+						type = arms_factory
+						level = 1
+						instant_build = yes
+					}
 				}
 			}
 		}

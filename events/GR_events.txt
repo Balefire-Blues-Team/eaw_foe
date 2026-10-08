@@ -367,7 +367,6 @@ country_event = {
 		ai_chance = { factor = 10}
 		set_country_flag = GR_dead_boss
 		add_ideas = GR_no_boss
-		hidden_effect = { complete_national_focus = GR_dead_boss }
  	}
 }
 
@@ -551,7 +550,6 @@ country_event = {
 		ai_chance = { factor = 10}
 		set_country_flag = GR_never_again
 		add_popularity = { ideology = visionary popularity = 0.25}
-		complete_national_focus = GR_never_again
 
 	}	
 
@@ -561,7 +559,6 @@ country_event = {
 		ai_chance = { factor = 10}
 		set_country_flag = GR_never_forget
 		add_popularity = { ideology = survivalism popularity = 0.25}
-		complete_national_focus = GR_never_forget
 	}	
 }
 
@@ -574,7 +571,10 @@ country_event = {
 	fire_only_once = yes
 
 	trigger = {
-		has_completed_focus = GR_losing_grip
+		OR = {
+			has_completed_focus = MRA_losing_grip
+			has_completed_focus = PRA_losing_grip
+		}
 	}
 
  	fire_only_once = yes
@@ -584,5 +584,390 @@ country_event = {
 		ai_chance = { factor = 1000}
 
 		set_country_flag = GR_dead_generals
+	}
+}
+
+### New generic raider tree (2026-10-08) ###
+
+country_event = {
+	id = GR.101
+	title = GR.101.title
+	desc = GR.101.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = GR.101.a
+		set_country_flag = GR_origin_delinquents
+		add_political_power = 75
+		add_stability = 0.05
+		add_war_support = 0.05
+	}
+	option = {
+		name = GR.101.b
+		set_country_flag = GR_origin_reserves
+		add_ideas = GR_army_surplus_1
+	}
+	option = {
+		name = GR.101.c
+		set_country_flag = GR_origin_survivors
+		custom_effect_tooltip = GR_gang_core_defence_p10_tt
+		custom_effect_tooltip = GR_gang_resources_p10_tt
+		hidden_effect = {
+			add_to_variable = { GR_gang_core_defence = 0.1 }
+			add_to_variable = { GR_gang_resources = 0.1 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+	option = {
+		name = GR.101.d
+		set_country_flag = GR_origin_mercenaries
+		add_manpower = 400
+		add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 400 producer = OWE }
+	}
+}
+
+country_event = {
+	id = GR.102
+	title = GR.102.title
+	desc = GR.102.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = GR.102.a
+		custom_effect_tooltip = GR_gang_speed_p5_tt
+		hidden_effect = {
+			add_to_variable = { GR_gang_speed = 0.05 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+	option = {
+		name = GR.102.b
+		custom_effect_tooltip = GR_gang_attack_p5_tt
+		custom_effect_tooltip = GR_gang_breakthrough_p5_tt
+		hidden_effect = {
+			add_to_variable = { GR_gang_attack = 0.05 }
+			add_to_variable = { GR_gang_breakthrough = 0.05 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+	option = {
+		name = GR.102.c
+		capital_scope = {
+			GR_random_resource_8 = yes
+			GR_random_resource_8 = yes
+			GR_random_resource_8 = yes
+		}
+	}
+	option = {
+		name = GR.102.d
+		trigger = {
+			has_country_flag = GR_origin_delinquents
+		}
+		every_owned_state = {
+			limit = {
+				is_core_of = ROOT
+			}
+			add_manpower = 500
+		}
+	}
+	option = {
+		name = GR.102.e
+		trigger = {
+			has_country_flag = GR_origin_reserves
+		}
+		custom_effect_tooltip = GR_gang_research_p5_tt
+		hidden_effect = {
+			add_to_variable = { GR_gang_research = 0.05 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+	option = {
+		name = GR.102.f
+		trigger = {
+			has_country_flag = GR_origin_survivors
+		}
+		every_owned_state = {
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+		custom_effect_tooltip = GR_gang_infra_speed_p10_tt
+		hidden_effect = {
+			add_to_variable = { GR_gang_infra_speed = 0.1 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+	option = {
+		name = GR.102.g
+		trigger = {
+			has_country_flag = GR_origin_mercenaries
+		}
+		capital_scope = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+			}
+		}
+	}
+}
+
+country_event = {
+	id = GR.103
+	title = GR.103.title
+	desc = GR.103.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = GR.103.a
+		custom_effect_tooltip = GR_gang_stability_p5_tt
+		custom_effect_tooltip = GR_gang_war_support_p5_tt
+		hidden_effect = {
+			add_to_variable = { GR_gang_stability = 0.05 }
+			add_to_variable = { GR_gang_war_support = 0.05 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+	option = {
+		name = GR.103.b
+		custom_effect_tooltip = GR_gang_sf_attack_p5_tt
+		custom_effect_tooltip = GR_gang_sf_defence_p5_tt
+		hidden_effect = {
+			add_to_variable = { GR_gang_sf_attack = 0.05 }
+			add_to_variable = { GR_gang_sf_defence = 0.05 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+	option = {
+		name = GR.103.c
+		add_research_slot = 1
+	}
+	option = {
+		name = GR.103.d
+		trigger = {
+			has_country_flag = GR_origin_delinquents
+		}
+		custom_effect_tooltip = GR_gang_speed_p5_tt
+		custom_effect_tooltip = GR_gang_core_attack_p10_tt
+		hidden_effect = {
+			add_to_variable = { GR_gang_speed = 0.05 }
+			add_to_variable = { GR_gang_core_attack = 0.1 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+	option = {
+		name = GR.103.e
+		trigger = {
+			has_country_flag = GR_origin_reserves
+		}
+		swap_ideas = {
+			remove_idea = GR_army_surplus_1
+			add_idea = GR_army_surplus_2
+		}
+	}
+	option = {
+		name = GR.103.f
+		trigger = {
+			has_country_flag = GR_origin_survivors
+		}
+		custom_effect_tooltip = GR_gang_supply_m10_tt
+		custom_effect_tooltip = GR_gang_attrition_m15_tt
+		hidden_effect = {
+			add_to_variable = { GR_gang_supply = -0.1 }
+			add_to_variable = { GR_gang_attrition = -0.15 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+	option = {
+		name = GR.103.g
+		trigger = {
+			has_country_flag = GR_origin_mercenaries
+		}
+		custom_effect_tooltip = GR_gang_training_p10_tt
+		custom_effect_tooltip = GR_gang_org_p5_tt
+		hidden_effect = {
+			add_to_variable = { GR_gang_training = 0.1 }
+			add_to_variable = { GR_gang_org = 0.05 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+country_event = {
+	id = GR.104
+	title = GR.104.title
+	desc = GR.104.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = GR.104.a
+		# flavour only: the choice is made in the focus tree
+	}
+}
+
+country_event = {
+	id = GR.105
+	title = GR.105.title
+	desc = GR.105.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = GR.105.a
+		# flavour only: the choice is made in the focus tree
+	}
+}
+
+country_event = {
+	id = GR.106
+	title = GR.106.title
+	desc = GR.106.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = GR.106.a
+		# flavour only: the choice is made in the focus tree
+	}
+}
+
+country_event = {
+	id = GR.107
+	title = GR.107.title
+	desc = GR.107.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = GR.107.a
+		# flavour only: the choice is made in the focus tree
+	}
+}
+
+country_event = {
+	id = GR.108
+	title = GR.108.title
+	desc = GR.108.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = GR.108.a
+		trigger = {
+			OR = {
+				has_idea = raider_society
+				has_idea = slaver_society
+			}
+		}
+		if = {
+			limit = {
+				has_idea = slaver_society
+			}
+			swap_ideas = {
+				remove_idea = slaver_society
+				add_idea = wasteland_society
+			}
+		}
+		else = {
+			swap_ideas = {
+				remove_idea = raider_society
+				add_idea = wasteland_society
+			}
+		}
+	}
+	option = {
+		name = GR.108.b
+		add_war_support = 0.05
+	}
+}
+
+country_event = {
+	id = GR.109
+	title = GR.109.title
+	desc = GR.109.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = GR.109.a
+		set_country_flag = GR_tool_demolitions
+		custom_effect_tooltip = GR_tool_choice_tt
+	}
+	option = {
+		name = GR.109.b
+		set_country_flag = GR_tool_fireteams
+		custom_effect_tooltip = GR_tool_choice_tt
+	}
+	option = {
+		name = GR.109.c
+		set_country_flag = GR_tool_can_openers
+		custom_effect_tooltip = GR_tool_choice_tt
+	}
+	option = {
+		name = GR.109.d
+		set_country_flag = GR_tool_chems
+		custom_effect_tooltip = GR_tool_choice_tt
+		if = {
+			limit = {
+				NOT = { has_tech = med_company_tech_1 }
+			}
+			set_technology = {
+				med_company_tech_1 = 1
+			}
+		}
+	}
+}
+
+country_event = {
+	id = GR.110
+	title = GR.110.title
+	desc = GR.110.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = GR.110.a
+		add_ideas = GR_fun_infantry_idea
+	}
+	option = {
+		name = GR.110.b
+		custom_effect_tooltip = GR_gang_sf_cap_p10_tt
+		hidden_effect = {
+			add_to_variable = { GR_gang_sf_cap = 0.1 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+	option = {
+		name = GR.110.c
+		add_ideas = GR_fun_vehicles_idea
+		add_tech_bonus = {
+			name = GR_now_the_fun_begins
+			bonus = 1
+			uses = 2
+			category = motorized_equipment
+			category = apc_tech
+		}
+	}
+	option = {
+		name = GR.110.d
+		add_ideas = GR_fun_zappers_idea
+		add_tech_bonus = {
+			name = GR_now_the_fun_begins
+			bonus = 1
+			uses = 1
+			category = robotics_tech
+		}
 	}
 }
