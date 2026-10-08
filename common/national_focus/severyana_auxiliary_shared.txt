@@ -772,3 +772,830 @@ shared_focus = {
 		}
 	}
 }
+
+##############################
+###Severyanan Defense Force###
+##############################
+# Replaces the political branch of the settler tree.
+
+### Opening ###
+
+shared_focus = {
+	id = SDF_creed_of_the_polga
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = gs_opening3
+	x = 0
+	y = 7
+	available = {
+		has_completed_focus = gs_opening3
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SDF_creed_of_the_polga"
+		add_political_power = 75
+		add_stability = 0.05
+	}
+}
+
+shared_focus = {
+	id = SDF_chernusk_conference
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SDF_creed_of_the_polga
+	x = 0
+	y = 1
+	prerequisite = {
+		focus = SDF_creed_of_the_polga
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SDF_chernusk_conference"
+		army_experience = 15
+		add_doctrine_cost_reduction = {
+			name = SDF_chernusk_conference
+			cost_reduction = 0.3
+			uses = 1
+			category = land_doctrine
+		}
+	}
+}
+
+### Continuation: Valiant Guard unites the alliance as equals ###
+
+shared_focus = {
+	id = SDF_council_of_equals
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SDF_creed_of_the_polga
+	x = -4
+	y = 2
+	prerequisite = {
+		focus = SDF_chernusk_conference
+	}
+	mutually_exclusive = {
+		focus = SDF_one_command
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SDF_council_of_equals"
+		custom_effect_tooltip = SDF_council_of_equals_tt
+		swap_ideas = {
+			remove_idea = SDF_united_protectors
+			add_idea = SDF_charter_member
+		}
+		hidden_effect = {
+			every_other_country = {
+				limit = {
+					is_in_faction_with = ROOT
+					has_idea = SDF_united_protectors
+				}
+				swap_ideas = {
+					remove_idea = SDF_united_protectors
+					add_idea = SDF_charter_member
+				}
+			}
+		}
+		add_stability = 0.05
+	}
+}
+
+shared_focus = {
+	id = SDF_shared_arsenals
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SDF_creed_of_the_polga
+	x = -4
+	y = 3
+	prerequisite = {
+		focus = SDF_council_of_equals
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SDF_shared_arsenals"
+		228 = {
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+			}
+		}
+		custom_effect_tooltip = SDF_shared_arsenals_tt
+		hidden_effect = {
+			every_other_country = {
+				limit = {
+					is_in_faction_with = ROOT
+				}
+				add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 300 producer = SDF }
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = SDF_alliance_charter
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SDF_creed_of_the_polga
+	x = -3
+	y = 5
+	prerequisite = {
+		focus = SDF_shared_arsenals
+	}
+	prerequisite = {
+		focus = SDF_hunt_down_the_wraiths
+	}
+	available = {
+		is_faction_leader = yes
+		custom_trigger_tooltip = {
+			tooltip = SDA_no_other_uniter_tt
+			NOT = { has_global_flag = SDA_uniter_chosen_flag }
+		}
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SDF_alliance_charter"
+		custom_effect_tooltip = SDA_may_unite_tt
+		set_country_flag = SDA_may_unite_flag
+		set_global_flag = SDA_uniter_chosen_flag
+		add_political_power = 100
+		add_research_slot = 1
+	}
+}
+
+### Destruction: Square File puts the alliance under one command ###
+
+shared_focus = {
+	id = SDF_one_command
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SDF_creed_of_the_polga
+	x = 4
+	y = 2
+	prerequisite = {
+		focus = SDF_chernusk_conference
+	}
+	mutually_exclusive = {
+		focus = SDF_council_of_equals
+	}
+	available = {
+		custom_trigger_tooltip = {
+			tooltip = GS_allowed_change_ideology_tt
+			NOT = {
+				AND = {
+					is_ai = yes
+					has_country_flag = forbidden_to_change_ideology_flag
+					NOT = {
+						has_government = destruction
+					}
+				}
+			}
+		}
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SDF_one_command"
+		set_politics = {
+			ruling_party = destruction
+			elections_allowed = no
+		}
+		add_popularity = {
+			ideology = destruction
+			popularity = 0.35
+		}
+		swap_ideas = {
+			remove_idea = SDF_united_protectors
+			add_idea = SDF_under_sdf_command
+		}
+	}
+}
+
+shared_focus = {
+	id = SDF_garrisons_in_every_town
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SDF_creed_of_the_polga
+	x = 4
+	y = 3
+	prerequisite = {
+		focus = SDF_one_command
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SDF_garrisons_in_every_town"
+		custom_effect_tooltip = SDF_garrisons_in_every_town_tt
+		hidden_effect = {
+			capital_scope = {
+				create_unit = {
+					division = "name = \"Town Garrison\" division_template = \"Citizen Division\" start_experience_factor = 0.2"
+					owner = ROOT
+				}
+				create_unit = {
+					division = "name = \"Town Garrison\" division_template = \"Citizen Division\" start_experience_factor = 0.2"
+					owner = ROOT
+				}
+			}
+		}
+		add_manpower = 600
+	}
+}
+
+shared_focus = {
+	id = SDF_chernusk_directive
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SDF_creed_of_the_polga
+	x = 3
+	y = 5
+	prerequisite = {
+		focus = SDF_garrisons_in_every_town
+	}
+	prerequisite = {
+		focus = SDF_hunt_down_the_wraiths
+	}
+	available = {
+		is_faction_leader = yes
+		custom_trigger_tooltip = {
+			tooltip = SDA_no_other_uniter_tt
+			NOT = { has_global_flag = SDA_uniter_chosen_flag }
+		}
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SDF_chernusk_directive"
+		custom_effect_tooltip = SDA_may_unite_tt
+		set_country_flag = SDA_may_unite_flag
+		set_global_flag = SDA_uniter_chosen_flag
+		add_political_power = 100
+		add_research_slot = 1
+	}
+}
+
+### The alliance: open to both paths ###
+
+shared_focus = {
+	id = SDF_membership_for_the_congregation
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SDF_creed_of_the_polga
+	x = -2
+	y = 3
+	prerequisite = {
+		focus = SDF_council_of_equals
+		focus = SDF_one_command
+	}
+	available = {
+		is_faction_leader = yes
+	}
+	bypass = {
+		OR = {
+			NOT = { country_exists = VLC }
+			VLC = { is_in_faction_with = ROOT }
+		}
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SDF_membership_for_the_congregation"
+		if = {
+			limit = {
+				VLC = {
+					is_ai = yes
+					is_subject = no
+					is_in_faction = no
+					NOT = { has_war_with = ROOT }
+				}
+			}
+			add_to_faction = VLC
+			VLC = {
+				set_country_flag = SDF_alliance_flag
+				if = {
+					limit = {
+						ROOT = { has_idea = SDF_charter_member }
+					}
+					add_ideas = SDF_charter_member
+				}
+				else = {
+					add_ideas = SDF_united_protectors
+				}
+			}
+			USC = { add_ai_strategy = { type = alliance id = "VLC" value = 200 } add_opinion_modifier = { target = VLC modifier = huge_increase } }
+			SDF = { add_ai_strategy = { type = alliance id = "VLC" value = 200 } add_opinion_modifier = { target = VLC modifier = huge_increase } }
+			VLC = { add_ai_strategy = { type = alliance id = "SDF" value = 200 } add_opinion_modifier = { target = SDF modifier = huge_increase } }
+			VLC = { add_ai_strategy = { type = alliance id = "USC" value = 200 } add_opinion_modifier = { target = USC modifier = huge_increase } }
+		}
+		else = {
+			custom_effect_tooltip = SDF_invitation_refused_tt
+		}
+	}
+}
+
+shared_focus = {
+	id = SDF_protect_the_fisherponies
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SDF_creed_of_the_polga
+	x = 0
+	y = 3
+	prerequisite = {
+		focus = SDF_council_of_equals
+		focus = SDF_one_command
+	}
+	available = {
+		is_faction_leader = yes
+	}
+	bypass = {
+		OR = {
+			NOT = { country_exists = PFI }
+			PFI = { is_in_faction_with = ROOT }
+		}
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SDF_protect_the_fisherponies"
+		if = {
+			limit = {
+				PFI = {
+					is_ai = yes
+					is_subject = no
+					is_in_faction = no
+					NOT = { has_war_with = ROOT }
+				}
+			}
+			add_to_faction = PFI
+			PFI = {
+				set_country_flag = SDF_alliance_flag
+				if = {
+					limit = {
+						ROOT = { has_idea = SDF_charter_member }
+					}
+					add_ideas = SDF_charter_member
+				}
+				else = {
+					add_ideas = SDF_united_protectors
+				}
+			}
+			USC = { add_ai_strategy = { type = alliance id = "PFI" value = 200 } add_opinion_modifier = { target = PFI modifier = huge_increase } }
+			SDF = { add_ai_strategy = { type = alliance id = "PFI" value = 200 } add_opinion_modifier = { target = PFI modifier = huge_increase } }
+			PFI = { add_ai_strategy = { type = alliance id = "SDF" value = 200 } add_opinion_modifier = { target = SDF modifier = huge_increase } }
+			PFI = { add_ai_strategy = { type = alliance id = "USC" value = 200 } add_opinion_modifier = { target = USC modifier = huge_increase } }
+		}
+		else = {
+			custom_effect_tooltip = SDF_invitation_refused_tt
+		}
+	}
+}
+
+shared_focus = {
+	id = SDF_stewards_into_the_alliance
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SDF_creed_of_the_polga
+	x = 2
+	y = 3
+	prerequisite = {
+		focus = SDF_council_of_equals
+		focus = SDF_one_command
+	}
+	available = {
+		is_faction_leader = yes
+	}
+	bypass = {
+		OR = {
+			NOT = { country_exists = RSW }
+			RSW = { is_in_faction_with = ROOT }
+		}
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SDF_stewards_into_the_alliance"
+		if = {
+			limit = {
+				RSW = {
+					is_ai = yes
+					is_subject = no
+					is_in_faction = no
+					NOT = { has_war_with = ROOT }
+				}
+			}
+			# unlike the old decision, the Stewards may join while at war: the alliance comes to their defence
+			add_to_faction = RSW
+			RSW = {
+				set_country_flag = SDF_alliance_flag
+				if = {
+					limit = {
+						ROOT = { has_idea = SDF_charter_member }
+					}
+					add_ideas = SDF_charter_member
+				}
+				else = {
+					add_ideas = SDF_united_protectors
+				}
+			}
+			USC = { add_ai_strategy = { type = alliance id = "RSW" value = 200 } add_opinion_modifier = { target = RSW modifier = huge_increase } }
+			SDF = { add_ai_strategy = { type = alliance id = "RSW" value = 200 } add_opinion_modifier = { target = RSW modifier = huge_increase } }
+			RSW = { add_ai_strategy = { type = alliance id = "SDF" value = 200 } add_opinion_modifier = { target = SDF modifier = huge_increase } }
+			RSW = { add_ai_strategy = { type = alliance id = "USC" value = 200 } add_opinion_modifier = { target = USC modifier = huge_increase } }
+			custom_effect_tooltip = SDF_stewards_into_the_alliance_tt
+			hidden_effect = {
+				RSW = {
+					every_enemy_country = {
+						ROOT = {
+							add_to_war = {
+								targeted_alliance = RSW
+								enemy = PREV
+							}
+						}
+					}
+				}
+			}
+		}
+		else = {
+			custom_effect_tooltip = SDF_invitation_refused_tt
+		}
+	}
+}
+
+shared_focus = {
+	id = SDF_hunt_down_the_wraiths
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SDF_creed_of_the_polga
+	x = 0
+	y = 4
+	prerequisite = {
+		focus = SDF_membership_for_the_congregation
+	}
+	prerequisite = {
+		focus = SDF_protect_the_fisherponies
+	}
+	prerequisite = {
+		focus = SDF_stewards_into_the_alliance
+	}
+	bypass = {
+		NOT = { country_exists = WRA }
+	}
+	will_lead_to_war_with = WRA
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SDF_hunt_down_the_wraiths"
+		create_wargoal = {
+			type = annex_everything
+			target = WRA
+		}
+		add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 500 producer = SDF }
+	}
+}
+
+### After the unification: the river, the Wahamishaji and the Spire ###
+
+shared_focus = {
+	id = SDF_severyana_defense_alliance
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SDF_creed_of_the_polga
+	x = 0
+	y = 6
+	prerequisite = {
+		focus = SDF_alliance_charter
+		focus = SDF_chernusk_directive
+	}
+	available = {
+		OR = {
+			has_cosmetic_tag = Severyana_defense_alliance_cosm
+			has_cosmetic_tag = Severyana_defense_command_cosm
+		}
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SDF_severyana_defense_alliance"
+		custom_effect_tooltip = SDF_rewards_follow_the_path_tt
+		228 = {
+			add_extra_state_shared_building_slots = 2
+		}
+		if = {
+			limit = {
+				has_completed_focus = SDF_one_command
+			}
+			228 = {
+				add_building_construction = {
+					type = arms_factory
+					level = 1
+					instant_build = yes
+				}
+			}
+			add_war_support = 0.10
+		}
+		else = {
+			228 = {
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+			add_stability = 0.10
+		}
+	}
+}
+
+shared_focus = {
+	id = SDF_polga_line
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SDF_creed_of_the_polga
+	x = -1
+	y = 7
+	prerequisite = {
+		focus = SDF_severyana_defense_alliance
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SDF_polga_line"
+		# the Polga border: Tarnstead, Padstow, Chernusk and Peresech
+		if = {
+			limit = {
+				has_completed_focus = SDF_one_command
+			}
+			custom_effect_tooltip = SDF_polga_line_command_tt
+			hidden_effect = {
+				every_state = {
+					limit = {
+						OR = {
+							state = 232
+							state = 407
+							state = 228
+							state = 340
+						}
+						OR = {
+							is_owned_by = ROOT
+							owner = { is_in_faction_with = ROOT }
+						}
+					}
+					add_building_construction = {
+						type = bunker
+						level = 3
+						instant_build = yes
+						province = {
+							all_provinces = yes
+							limit_to_border = yes
+						}
+					}
+				}
+			}
+		}
+		else = {
+			custom_effect_tooltip = SDF_polga_line_equals_tt
+			hidden_effect = {
+				every_state = {
+					limit = {
+						OR = {
+							state = 232
+							state = 407
+							state = 228
+							state = 340
+						}
+						OR = {
+							is_owned_by = ROOT
+							owner = { is_in_faction_with = ROOT }
+						}
+					}
+					add_building_construction = {
+						type = bunker
+						level = 2
+						instant_build = yes
+						province = {
+							all_provinces = yes
+							limit_to_border = yes
+						}
+					}
+					add_building_construction = {
+						type = infrastructure
+						level = 1
+						instant_build = yes
+					}
+				}
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = SDF_guns_on_the_bluffs
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SDF_creed_of_the_polga
+	x = -1
+	y = 8
+	prerequisite = {
+		focus = SDF_polga_line
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SDF_guns_on_the_bluffs"
+		swap_ideas = {
+			remove_idea = SDF_eternal_vigilance
+			add_idea = SDF_eternal_vigilance_2
+		}
+		if = {
+			limit = {
+				has_completed_focus = SDF_one_command
+			}
+			add_equipment_to_stockpile = { type = support_equipment amount = 400 producer = SDF }
+		}
+		else = {
+			add_tech_bonus = {
+				name = SDF_guns_on_the_bluffs
+				bonus = 0.5
+				uses = 2
+				category = support_tech
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = SDF_stewards_lost_banks
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SDF_creed_of_the_polga
+	x = 1
+	y = 7
+	prerequisite = {
+		focus = SDF_severyana_defense_alliance
+	}
+	bypass = {
+		NOT = { country_exists = WHJ }
+	}
+	will_lead_to_war_with = WHJ
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SDF_stewards_lost_banks"
+		create_wargoal = {
+			type = annex_everything
+			target = WHJ
+		}
+		army_experience = 20
+		if = {
+			limit = {
+				has_completed_focus = SDF_one_command
+			}
+			add_manpower = 500
+		}
+		else = {
+			add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 600 producer = SDF }
+		}
+	}
+}
+
+shared_focus = {
+	id = SDF_envoys_to_the_grand_spire
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SDF_creed_of_the_polga
+	x = 1
+	y = 8
+	prerequisite = {
+		focus = SDF_stewards_lost_banks
+	}
+	bypass = {
+		NOT = { country_exists = SPA }
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SDF_envoys_to_the_grand_spire"
+		if = {
+			# One Command: an ultimatum the Spire will not accept
+			limit = {
+				has_completed_focus = SDF_one_command
+			}
+			create_wargoal = {
+				type = annex_everything
+				target = SPA
+			}
+			add_war_support = 0.10
+		}
+		else = {
+			add_opinion_modifier = { target = SPA modifier = SDF_envoys_to_the_spire }
+			SPA = {
+				add_opinion_modifier = { target = ROOT modifier = SDF_envoys_to_the_spire }
+			}
+			if = {
+				limit = {
+					is_faction_leader = yes
+					SPA = {
+						is_ai = yes
+						is_subject = no
+						is_in_faction = no
+						NOT = { has_war_with = ROOT }
+					}
+				}
+				add_to_faction = SPA
+			}
+			else = {
+				custom_effect_tooltip = SDF_envoys_to_the_grand_spire_refused_tt
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = SDF_north_stands_guard
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = SDF_creed_of_the_polga
+	x = 0
+	y = 9
+	prerequisite = {
+		focus = SDF_guns_on_the_bluffs
+	}
+	prerequisite = {
+		focus = SDF_envoys_to_the_grand_spire
+	}
+	available = {
+		owns_state = 244
+		OR = {
+			owns_state = 110
+			SPA = { is_in_faction_with = ROOT }
+		}
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus SDF_north_stands_guard"
+		if = {
+			limit = {
+				SPA = {
+					exists = yes
+					is_ai = yes
+					is_in_faction_with = ROOT
+				}
+			}
+			annex_country = {
+				target = SPA
+				transfer_troops = yes
+			}
+			every_state = {
+				limit = {
+					is_core_of = SPA
+				}
+				add_core_of = SDF
+			}
+		}
+		Core_original_WHJ = yes
+		Core_original_SPA = yes
+		add_political_power = 150
+		set_variable = { coring_cost_country_factor = -0.25 }
+		custom_effect_tooltip = FOE_25_percent_core_cost_reduction_tt
+		if = {
+			limit = {
+				has_completed_focus = SDF_one_command
+			}
+			swap_ideas = {
+				remove_idea = SDF_under_sdf_command
+				add_idea = SDF_northern_command
+			}
+		}
+		else = {
+			swap_ideas = {
+				remove_idea = SDF_charter_member
+				add_idea = SDF_northern_federation
+			}
+		}
+	}
+}
