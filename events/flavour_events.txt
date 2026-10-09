@@ -201,38 +201,49 @@ country_event = {
 	}
 }
 
+# Wraiths: the Nightwraiths offer to take over the gang. Fired 50 days after focus GR_our_boss.
 country_event = {
 	id = flavour.6
 	title = flavour.6.t
 	desc = flavour.6.d
-   picture = GFX_event_test
+	picture = GFX_event_test
 
-    trigger = {
-		tag = WRA
-		date > 1236.01.01
-		is_ai = yes
-	}
+	is_triggered_only = yes
 	fire_only_once = yes
 
-   option = {
-	   name = flavour.6.a
-	   ai_chance = { factor = 80}
-	   add_stability = 0.10
-   }
-   
-   option = {
-	   name = flavour.6.b
-	   ai_chance = { factor = 20}
-	   set_country_flag = WRA_expert_movement_flag
-	   add_manpower = 500
-	   add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 500 producer = OWE }
-	   add_research_slot = 1
-	   army_experience = 100
-	   add_state_claim = 27
-	   add_state_claim = 340
-	   add_state_claim = 228
-	   add_state_claim = 193
-   }
+	# the Boss stays in charge: the Wraiths keep the generic raider tree
+	option = {
+		name = flavour.6.a
+		ai_chance = {
+			factor = 30
+		}
+		add_stability = 0.10
+	}
+
+	# the Nightwraiths take over: Winter Fox leads, and the Nightwraith branch is added to the focus tree
+	option = {
+		name = flavour.6.b
+		ai_chance = {
+			factor = 70
+		}
+		set_country_flag = WRA_expert_movement_flag
+		set_politics = {
+			ruling_party = visionary
+			elections_allowed = no
+		}
+		add_popularity = {
+			ideology = visionary
+			popularity = 0.30
+		}
+		army_experience = 25
+		custom_effect_tooltip = WRA_nightwraith_branch_tt
+		hidden_effect = {
+			load_focus_tree = {
+				tree = genraiders_wra
+				keep_completed = yes
+			}
+		}
+	}
 }
 
 country_event = {

@@ -2353,3 +2353,1083 @@ shared_focus = {
 		add_political_power = 150
 	}
 }
+
+#############
+###Wraiths###
+#############
+# Added beside the generic raider tree once the Nightwraiths take over (event flavour.6).
+
+shared_focus = {
+	id = WRA_nightwraiths_take_command
+	icon = GFX_goal_unknown
+	cost = 4.29
+	x = 34
+	y = 2
+	available = {
+		has_country_flag = WRA_expert_movement_flag
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_nightwraiths_take_command"
+		add_political_power = 100
+		add_war_support = 0.10
+	}
+}
+
+shared_focus = {
+	id = WRA_old_muster_roll
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = -1
+	y = 1
+	prerequisite = {
+		focus = WRA_nightwraiths_take_command
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_old_muster_roll"
+		swap_ideas = {
+			remove_idea = WRA_nightwraiths
+			add_idea = WRA_nightwraiths_2
+		}
+	}
+}
+
+shared_focus = {
+	id = WRA_garages_of_prizrak
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = 1
+	y = 1
+	prerequisite = {
+		focus = WRA_nightwraiths_take_command
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_garages_of_prizrak"
+		swap_ideas = {
+			remove_idea = WRA_prizrak_army_depot
+			add_idea = WRA_prizrak_army_depot_2
+		}
+		214 = {
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = WRA_drill_the_rabble
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = 1
+	y = 2
+	prerequisite = {
+		focus = WRA_garages_of_prizrak
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_drill_the_rabble"
+		army_experience = 25
+		add_doctrine_cost_reduction = {
+			name = WRA_drill_the_rabble
+			cost_reduction = 0.5
+			uses = 2
+			category = land_doctrine
+		}
+		if = {
+			limit = {
+				has_idea = raider_society
+			}
+			swap_ideas = {
+				remove_idea = raider_society
+				add_idea = slaver_society
+			}
+		}
+		set_country_flag = slavery_allowed
+		custom_effect_tooltip = foe_4_gain_slave_tt
+		add_to_variable = {
+			var = foe_slaves_var
+			value = 4
+		}
+	}
+}
+
+shared_focus = {
+	id = WRA_nopony_knows_where_we_are
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = -1
+	y = 2
+	prerequisite = {
+		focus = WRA_nightwraiths_take_command
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_nopony_knows_where_we_are"
+		swap_ideas = {
+			remove_idea = WRA_nightwraiths_2
+			add_idea = WRA_nightwraiths_3
+		}
+		add_equipment_to_stockpile = { type = truck_equipment_1 amount = 200 producer = OWE }
+		add_tech_bonus = {
+			name = WRA_nopony_knows_where_we_are
+			bonus = 1
+			uses = 2
+			category = vehicle_tech
+		}
+	}
+}
+
+shared_focus = {
+	id = WRA_race_to_the_polga
+	icon = GFX_goal_unknown
+	cost = 4.29
+	relative_position_id = WRA_nightwraiths_take_command
+	x = 0
+	y = 3
+	prerequisite = {
+		focus = WRA_nopony_knows_where_we_are
+	}
+	prerequisite = {
+		focus = WRA_drill_the_rabble
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_race_to_the_polga"
+		army_experience = 25
+		226 = {
+			add_claim_by = ROOT
+		}
+		340 = {
+			add_claim_by = ROOT
+		}
+		27 = {
+			add_claim_by = ROOT
+		}
+		472 = {
+			add_claim_by = ROOT
+		}
+	}
+}
+
+shared_focus = {
+	id = WRA_net_the_fillies
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = -1
+	y = 4
+	prerequisite = {
+		focus = WRA_race_to_the_polga
+	}
+	will_lead_to_war_with = PFI
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_net_the_fillies"
+		if = {
+			limit = {
+				PFI = {
+					exists = yes
+					NOT = { is_subject_of = ROOT }
+					NOT = { has_war_with = ROOT }
+				}
+			}
+			create_wargoal = {
+				type = annex_everything
+				target = PFI
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = WRA_silence_the_congregation
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = 1
+	y = 4
+	prerequisite = {
+		focus = WRA_race_to_the_polga
+	}
+	will_lead_to_war_with = VLC
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_silence_the_congregation"
+		if = {
+			limit = {
+				VLC = {
+					exists = yes
+					NOT = { is_subject_of = ROOT }
+					NOT = { has_war_with = ROOT }
+				}
+			}
+			create_wargoal = {
+				type = annex_everything
+				target = VLC
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = WRA_river_crossings
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = -1
+	y = 5
+	prerequisite = {
+		focus = WRA_net_the_fillies
+	}
+	available = {
+		owns_state = 226
+		owns_state = 340
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_river_crossings"
+		226 = {
+			add_compliance = 40
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+		340 = {
+			add_compliance = 40
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+		if = {
+			limit = {
+				PFI = {
+					NOT = { has_country_flag = SDF_alliance_flag }
+				}
+			}
+			custom_effect_tooltip = WRA_won_the_race_tt
+			226 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = industrial_complex
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = WRA_quiet_fields
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = 1
+	y = 5
+	prerequisite = {
+		focus = WRA_silence_the_congregation
+	}
+	available = {
+		owns_state = 27
+		owns_state = 472
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_quiet_fields"
+		27 = {
+			add_compliance = 40
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+		472 = {
+			add_compliance = 40
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+		if = {
+			limit = {
+				VLC = {
+					NOT = { has_country_flag = SDF_alliance_flag }
+				}
+			}
+			custom_effect_tooltip = WRA_won_the_race_tt
+			472 = {
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = arms_factory
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = WRA_faster_than_their_couriers
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = 0
+	y = 6
+	prerequisite = {
+		focus = WRA_river_crossings
+	}
+	prerequisite = {
+		focus = WRA_quiet_fields
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_faster_than_their_couriers"
+		army_experience = 50
+		add_doctrine_cost_reduction = {
+			name = WRA_faster_than_their_couriers
+			cost_reduction = 0.5
+			uses = 2
+			category = land_doctrine
+		}
+		create_corps_commander = {
+			skill = 3
+			attack_skill = 4
+			defense_skill = 2
+			planning_skill = 3
+			logistics_skill = 2
+		}
+	}
+}
+
+### Phase 3: breaking the alliance ###
+
+shared_focus = {
+	id = WRA_ghosts_at_chernusk
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = 0
+	y = 7
+	prerequisite = {
+		focus = WRA_faster_than_their_couriers
+	}
+	will_lead_to_war_with = SDF
+	will_lead_to_war_with = USC
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_ghosts_at_chernusk"
+		if = {
+			limit = {
+				SDF = {
+					exists = yes
+					NOT = { is_subject_of = ROOT }
+					NOT = { has_war_with = ROOT }
+				}
+			}
+			create_wargoal = {
+				type = annex_everything
+				target = SDF
+			}
+		}
+		if = {
+			limit = {
+				USC = {
+					exists = yes
+					NOT = { is_subject_of = ROOT }
+					NOT = { has_war_with = ROOT }
+				}
+			}
+			create_wargoal = {
+				type = annex_everything
+				target = USC
+			}
+		}
+		add_war_support = 0.05
+	}
+}
+
+shared_focus = {
+	id = WRA_hunters_hunted
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = -3
+	y = 8
+	prerequisite = {
+		focus = WRA_ghosts_at_chernusk
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_hunters_hunted"
+		add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 500 producer = OWE }
+		add_manpower = 300
+		# longer if the Defense Force came for us first (its focus SDF_hunt_down_the_wraiths)
+		if = {
+			limit = {
+				SDF = { has_completed_focus = SDF_hunt_down_the_wraiths }
+			}
+			add_timed_idea = {
+				idea = WRA_hunters_hunted_idea
+				days = 730
+			}
+		}
+		else = {
+			add_timed_idea = {
+				idea = WRA_hunters_hunted_idea
+				days = 365
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = WRA_chernusk_falls
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = -1
+	y = 8
+	prerequisite = {
+		focus = WRA_ghosts_at_chernusk
+	}
+	available = {
+		owns_state = 228
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_chernusk_falls"
+		228 = {
+			add_compliance = 40
+		}
+		228 = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+			}
+		}
+		custom_effect_tooltip = BAN_TT_4_loot
+		hidden_effect = {
+			add_to_variable = { loot = 4 }
+		}
+	}
+}
+
+shared_focus = {
+	id = WRA_audit_the_auditors
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = 1
+	y = 8
+	prerequisite = {
+		focus = WRA_ghosts_at_chernusk
+	}
+	available = {
+		OR = {
+			owns_state = 232
+			owns_state = 407
+		}
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_audit_the_auditors"
+		custom_effect_tooltip = BAN_TT_6_loot
+		hidden_effect = {
+			add_to_variable = { loot = 6 }
+		}
+		add_political_power = 75
+	}
+}
+
+shared_focus = {
+	id = WRA_blackwell_engines
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = 0
+	y = 9
+	prerequisite = {
+		focus = WRA_audit_the_auditors
+	}
+	prerequisite = {
+		focus = WRA_chernusk_falls
+	}
+	available = {
+		owns_state = 392
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_blackwell_engines"
+		392 = {
+			add_compliance = 40
+		}
+		392 = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = arms_factory
+				level = 2
+				instant_build = yes
+			}
+		}
+		add_research_slot = 1
+	}
+}
+
+shared_focus = {
+	id = WRA_stewards_stand_aside
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = 3
+	y = 8
+	prerequisite = {
+		focus = WRA_ghosts_at_chernusk
+	}
+	will_lead_to_war_with = WHJ
+	will_lead_to_war_with = RSW
+	ai_will_do = {
+		factor = 20
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_stewards_stand_aside"
+		if = {
+			limit = {
+				WHJ = { owns_state = 408 }
+			}
+			if = {
+				limit = {
+					WHJ = {
+						exists = yes
+						NOT = { is_subject_of = ROOT }
+						NOT = { has_war_with = ROOT }
+					}
+				}
+				create_wargoal = {
+					type = annex_everything
+					target = WHJ
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				RSW = {
+					exists = yes
+					is_ai = yes
+					is_subject = no
+					is_in_faction = no
+					NOT = { has_war_with = ROOT }
+				}
+			}
+			set_autonomy = {
+				target = RSW
+				autonomy_state = autonomy_puppet
+			}
+		}
+		else = {
+			if = {
+				limit = {
+					RSW = {
+						exists = yes
+						NOT = { is_subject_of = ROOT }
+						NOT = { has_war_with = ROOT }
+					}
+				}
+				create_wargoal = {
+					type = annex_everything
+					target = RSW
+				}
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = WRA_the_lost_host
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = 0
+	y = 10
+	prerequisite = {
+		focus = WRA_chernusk_falls
+	}
+	prerequisite = {
+		focus = WRA_blackwell_engines
+	}
+	available = {
+		custom_trigger_tooltip = {
+			tooltip = WRA_owns_the_north_tt
+			owns_state = 131
+			owns_state = 214
+			owns_state = 270
+			owns_state = 226
+			owns_state = 340
+			owns_state = 27
+			owns_state = 472
+			owns_state = 228
+			owns_state = 231
+			owns_state = 433
+			owns_state = 232
+			owns_state = 392
+			owns_state = 407
+		}
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_the_lost_host"
+		Core_original_WRA = yes
+		Core_original_PFI = yes
+		Core_original_VLC = yes
+		Core_original_SDF = yes
+		Core_original_USC = yes
+		drop_cosmetic_tag = yes
+		set_cosmetic_tag = WRA_lost_host
+		add_stability = 0.10
+		add_political_power = 100
+	}
+}
+
+shared_focus = {
+	id = WRA_banners_of_the_expedition
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = -3
+	y = 11
+	prerequisite = {
+		focus = WRA_the_lost_host
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_banners_of_the_expedition"
+		swap_ideas = {
+			remove_idea = WRA_nightwraiths_3
+			add_idea = WRA_nightwraiths_4
+		}
+	}
+}
+
+shared_focus = {
+	id = WRA_depot_to_arsenal
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = -1
+	y = 11
+	prerequisite = {
+		focus = WRA_the_lost_host
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_depot_to_arsenal"
+		swap_ideas = {
+			remove_idea = WRA_prizrak_army_depot_2
+			add_idea = WRA_prizrak_army_depot_3
+		}
+		214 = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = arms_factory
+				level = 2
+				instant_build = yes
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = WRA_hetpone_of_the_north
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = 1
+	y = 11
+	prerequisite = {
+		focus = WRA_the_lost_host
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_hetpone_of_the_north"
+		add_political_power = 150
+		add_stability = 0.10
+		create_corps_commander = {
+			skill = 4
+			attack_skill = 4
+			defense_skill = 3
+			planning_skill = 4
+			logistics_skill = 3
+		}
+	}
+}
+
+shared_focus = {
+	id = WRA_bridges_over_the_polga
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = 3
+	y = 11
+	prerequisite = {
+		focus = WRA_the_lost_host
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_bridges_over_the_polga"
+		232 = {
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+				instant_build = yes
+			}
+		}
+		407 = {
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+				instant_build = yes
+			}
+		}
+		228 = {
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+				instant_build = yes
+			}
+		}
+		340 = {
+			add_building_construction = {
+				type = infrastructure
+				level = 2
+				instant_build = yes
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = WRA_winter_quarters
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = 0
+	y = 12
+	prerequisite = {
+		focus = WRA_banners_of_the_expedition
+	}
+	prerequisite = {
+		focus = WRA_depot_to_arsenal
+	}
+	prerequisite = {
+		focus = WRA_hetpone_of_the_north
+	}
+	prerequisite = {
+		focus = WRA_bridges_over_the_polga
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_winter_quarters"
+		add_manpower = 1500
+		add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 1000 producer = OWE }
+		add_equipment_to_stockpile = { type = truck_equipment_1 amount = 300 producer = OWE }
+		add_war_support = 0.10
+	}
+}
+
+### Phase 5: the vengeful homecoming ###
+
+shared_focus = {
+	id = WRA_secure_the_flanks
+	icon = GFX_goal_unknown
+	cost = 4.29
+	relative_position_id = WRA_nightwraiths_take_command
+	x = 0
+	y = 13
+	prerequisite = {
+		focus = WRA_winter_quarters
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_secure_the_flanks"
+		189 = {
+			add_claim_by = ROOT
+		}
+		193 = {
+			add_claim_by = ROOT
+		}
+		286 = {
+			add_claim_by = ROOT
+		}
+		110 = {
+			add_claim_by = ROOT
+		}
+		171 = {
+			add_claim_by = ROOT
+		}
+		625 = {
+			add_claim_by = ROOT
+		}
+	}
+}
+
+shared_focus = {
+	id = WRA_bitter_end
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = -2
+	y = 14
+	prerequisite = {
+		focus = WRA_secure_the_flanks
+	}
+	will_lead_to_war_with = BTT
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_bitter_end"
+		if = {
+			limit = {
+				BTT = {
+					exists = yes
+					NOT = { is_subject_of = ROOT }
+					NOT = { has_war_with = ROOT }
+				}
+			}
+			create_wargoal = {
+				type = annex_everything
+				target = BTT
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = WRA_crack_the_stable
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = 0
+	y = 14
+	prerequisite = {
+		focus = WRA_secure_the_flanks
+	}
+	will_lead_to_war_with = SNS
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_crack_the_stable"
+		if = {
+			limit = {
+				SNS = {
+					exists = yes
+					NOT = { is_subject_of = ROOT }
+					NOT = { has_war_with = ROOT }
+				}
+			}
+			create_wargoal = {
+				type = annex_everything
+				target = SNS
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = WRA_topple_the_spire
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = 2
+	y = 14
+	prerequisite = {
+		focus = WRA_secure_the_flanks
+	}
+	will_lead_to_war_with = SPA
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_topple_the_spire"
+		if = {
+			limit = {
+				SPA = {
+					exists = yes
+					NOT = { is_subject_of = ROOT }
+					NOT = { has_war_with = ROOT }
+				}
+			}
+			create_wargoal = {
+				type = annex_everything
+				target = SPA
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = WRA_the_king_who_left_us
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = 0
+	y = 15
+	prerequisite = {
+		focus = WRA_bitter_end
+		focus = WRA_crack_the_stable
+		focus = WRA_topple_the_spire
+	}
+	available = {
+		custom_trigger_tooltip = {
+			tooltip = WRA_two_flanks_tt
+			OR = {
+				AND = {
+					has_completed_focus = WRA_bitter_end
+					has_completed_focus = WRA_crack_the_stable
+				}
+				AND = {
+					has_completed_focus = WRA_bitter_end
+					has_completed_focus = WRA_topple_the_spire
+				}
+				AND = {
+					has_completed_focus = WRA_crack_the_stable
+					has_completed_focus = WRA_topple_the_spire
+				}
+			}
+		}
+		# the Commonwealth and the Khaganate have finished their war: one side of it is gone
+		custom_trigger_tooltip = {
+			tooltip = WRA_war_in_the_south_over_tt
+			OR = {
+				KHA = { exists = no }
+				NOT = {
+					OR = {
+						COM = { exists = yes }
+						COR = { exists = yes }
+						COL = { exists = yes }
+						COC = { exists = yes }
+					}
+				}
+			}
+		}
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_the_king_who_left_us"
+		add_war_support = 0.15
+		army_experience = 50
+	}
+}
+
+shared_focus = {
+	id = WRA_vengeful_homecoming
+	icon = GFX_goal_unknown
+	cost = 8.58
+	relative_position_id = WRA_nightwraiths_take_command
+	x = 0
+	y = 16
+	prerequisite = {
+		focus = WRA_the_king_who_left_us
+	}
+	available = {
+		is_subject = no
+	}
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus WRA_vengeful_homecoming"
+		custom_effect_tooltip = WRA_vengeful_homecoming_tt
+		hidden_effect = {
+			every_other_country = {
+				limit = {
+					COM_is_greater_commonwealth_country = yes
+					NOT = { is_in_faction_with = ROOT }
+					NOT = { is_subject_of = ROOT }
+				}
+				ROOT = {
+					create_wargoal = {
+						type = annex_everything
+						target = PREV
+					}
+				}
+			}
+		}
+		add_timed_idea = {
+			idea = WRA_homecoming_idea
+			days = 730
+		}
+	}
+}
