@@ -3077,30 +3077,17 @@ shared_focus = {
 			}
 			country_event = cossacksfree.14
 		}
+		# Loyalist majority, but at least one of the two factions is armed well enough to contest it
 		else_if = {
 			limit = {
 				check_variable = {
 					COC_independant_influence > 50
 				}
-				check_variable = {
-					COC_hetponatist_power > 3
-				}
-				check_variable = { COC_izbawi_power > 3 }
 			}
 			country_event = cossacksfree.15
 		}
-		else_if = {
-			limit = {
-				check_variable = {
-					COC_independant_influence < 50
-				}
-				check_variable = {
-					COC_hetponatist_influence < 50
-				}
-				check_variable = {
-					COC_izbawi_influence < 50
-				}
-			}
+		# nobody holds a majority
+		else = {
 			country_event = cossacksfree.16
 		}
 	}
@@ -4426,7 +4413,31 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_blanket_amnesty"
-		
+		# advisors of the three other civil war sides come over to the federation
+		custom_effect_tooltip = COC_blanket_amnesty_tt
+		hidden_effect = {
+			COL_char_sister_nightshade = {
+				set_nationality = COC
+			}
+			COL_char_grigori_kopytin = {
+				set_nationality = COC
+			}
+			COL_char_ilse_sternkraut = {
+				set_nationality = COC
+			}
+			COR_char_light_ray = {
+				set_nationality = COC
+			}
+			COR_char_swift_mercy = {
+				set_nationality = COC
+			}
+			COR_char_airsick = {
+				set_nationality = COC
+			}
+			COM_char_riverboat = {
+				set_nationality = COC
+			}
+		}
 	}
 }
 
@@ -4446,6 +4457,45 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_personal_freedom"
+		# locked into the law; a refund if we are on it already
+		if = {
+			limit = {
+				has_idea = chems_legalised
+			}
+			add_political_power = 50
+		}
+		else = {
+			add_ideas = chems_legalised
+		}
+		set_country_flag = needs_drugs
+		custom_effect_tooltip = COC_locked_chems_tt
+		# locked into the law; a refund if we are on it already
+		if = {
+			limit = {
+				has_idea = outsider_law_batallions
+			}
+			add_political_power = 50
+		}
+		else = {
+			add_ideas = outsider_law_batallions
+		}
+		set_country_flag = needs_outsiders
+		custom_effect_tooltip = COC_locked_outsiders_tt
+		# mutants: both tolerant laws stay open, only the ban is locked away
+		if = {
+			limit = {
+				OR = {
+					has_idea = mutant_law_all_nonviolent
+					has_idea = mutant_law_all
+				}
+			}
+			add_political_power = 50
+		}
+		else = {
+			add_ideas = mutant_law_all_nonviolent
+		}
+		set_country_flag = needs_mutants
+		custom_effect_tooltip = COC_locked_mutants_tt
 		swap_ideas = {remove_idea = COC_truly_federal_rada_idea add_idea = COC_truly_federal_rada_idea2}
 	}
 }
@@ -4664,6 +4714,18 @@ shared_focus = {
 
 	completion_reward = {
 		log = "[GetDateText]: [Root.GetName]: Focus COC_invite_foreign_settlers"
+		# locked into the law; a refund if we are on it already
+		if = {
+			limit = {
+				has_idea = open_borders
+			}
+			add_political_power = 50
+		}
+		else = {
+			add_ideas = open_borders
+		}
+		set_country_flag = needs_immigrants
+		custom_effect_tooltip = COC_locked_open_borders_tt
 		every_country = {
 			limit = {
 				is_ally_with = COC
@@ -5080,9 +5142,9 @@ shared_focus = {
 			IF = {
 				limit = {
 					OR = {
-						any_allied_country = {
+						COC = {any_allied_country = {
 							controls_state = 152
-						}
+						}}
 						COC = {owns_state = 152}
 					}
 				}
@@ -5091,9 +5153,9 @@ shared_focus = {
 			IF = {
 				limit = {
 					OR = {
-						any_allied_country = {
+						COC = {any_allied_country = {
 							controls_state = 359
-						}
+						}}
 						COC = {owns_state = 359}
 					}
 				}
@@ -5102,9 +5164,9 @@ shared_focus = {
 			IF = {
 				limit = {
 					OR = {
-						any_allied_country = {
+						COC = {any_allied_country = {
 							controls_state = 68
-						}
+						}}
 						COC = {owns_state = 68}
 					}
 				}
@@ -5117,15 +5179,17 @@ shared_focus = {
 			freedom_level = 0.5
 			end_wars = yes
 		}
+		# once it holds land: the generic settler tree replaces whatever tree it had
+		DEC = { COC_administration_takes_settler_tree = yes }
 		AOS = {
 			set_cosmetic_tag = COC_AOS_federation_puppet
 			transfer_state = 387
 			IF = {
 				limit = {
 					OR = {
-						any_allied_country = {
+						COC = {any_allied_country = {
 							owns_state = 73
-						}
+						}}
 						COC = {owns_state = 73}
 					}
 				}
@@ -5134,9 +5198,9 @@ shared_focus = {
 			IF = {
 				limit = {
 					OR = {
-						any_allied_country = {
+						COC = {any_allied_country = {
 							owns_state = 105
-						}
+						}}
 						COC = {owns_state = 105}
 					}
 				}
@@ -5145,9 +5209,9 @@ shared_focus = {
 			IF = {
 				limit = {
 					OR = {
-						any_allied_country = {
+						COC = {any_allied_country = {
 							owns_state = 363
-						}
+						}}
 						COC = {owns_state = 363}
 					}
 				}
@@ -5160,15 +5224,17 @@ shared_focus = {
 			freedom_level = 0.5
 			end_wars = yes
 		}
+		# once it holds land: the generic settler tree replaces whatever tree it had
+		AOS = { COC_administration_takes_settler_tree = yes }
 		KHA = {
 			set_cosmetic_tag = COC_KHA_federation_puppet
 			transfer_state = 344
 			IF = {
 				limit = {
 					OR = {
-						any_allied_country = {
+						COC = {any_allied_country = {
 							owns_state = 351
-						}
+						}}
 						COC = {owns_state = 351}
 					}
 				}
@@ -5177,9 +5243,9 @@ shared_focus = {
 			IF = {
 				limit = {
 					OR = {
-						any_allied_country = {
+						COC = {any_allied_country = {
 							owns_state = 357
-						}
+						}}
 						COC = {owns_state = 357}
 					}
 				}
@@ -5188,9 +5254,9 @@ shared_focus = {
 			IF = {
 				limit = {
 					OR = {
-						any_allied_country = {
+						COC = {any_allied_country = {
 							owns_state = 209
-						}
+						}}
 						COC = {owns_state = 209}
 					}
 				}
@@ -5203,15 +5269,17 @@ shared_focus = {
 			freedom_level = 0.5
 			end_wars = yes
 		}
+		# once it holds land: the generic settler tree replaces whatever tree it had
+		KHA = { COC_administration_takes_settler_tree = yes }
 		ARR = {
 			set_cosmetic_tag = COC_ARR_federation_puppet
 			transfer_state = 292
 			IF = {
 				limit = {
 					OR = {
-						any_allied_country = {
+						COC = {any_allied_country = {
 							owns_state = 174
-						}
+						}}
 						COC = {owns_state = 174}
 					}
 				}
@@ -5220,9 +5288,9 @@ shared_focus = {
 			IF = {
 				limit = {
 					OR = {
-						any_allied_country = {
+						COC = {any_allied_country = {
 							owns_state = 170
-						}
+						}}
 						COC = {owns_state = 170}
 					}
 				}
@@ -5231,9 +5299,9 @@ shared_focus = {
 			IF = {
 				limit = {
 					OR = {
-						any_allied_country = {
+						COC = {any_allied_country = {
 							owns_state = 291
-						}
+						}}
 						COC = {owns_state = 291}
 					}
 				}
@@ -5246,29 +5314,33 @@ shared_focus = {
 			freedom_level = 0.5
 			end_wars = yes
 		}
+		# once it holds land: the generic settler tree replaces whatever tree it had
+		ARR = { COC_administration_takes_settler_tree = yes }
 		IF = {
 			limit = {
 				OR = {
-					any_allied_country = {
+					COC = {any_allied_country = {
 						owns_state = 268
-					}
+					}}
 					COC = {owns_state = 268}
 				}
 			}
 			PHE = {
 				set_cosmetic_tag = COC_PHE_federation_puppet
 				transfer_state = 268
-				set_autonomy = {
-					target = PHE
-					autonomy_state = autonomy_COCfederation_puppet
-					freedom_level = 0.5
-					end_wars = yes
-				}
 			}
+			set_autonomy = {
+				target = PHE
+				autonomy_state = autonomy_COCfederation_puppet
+				freedom_level = 0.5
+				end_wars = yes
+			}
+			# once it holds land: the generic settler tree replaces whatever tree it had
+			PHE = { COC_administration_takes_settler_tree = yes }
 			every_country = {
 				limit ={
 					is_ally_with = COC
-					NOT = {tag = DET}
+					NOT = {tag = DEC}
 				}
 				every_owned_state = {
 					limit = {
@@ -5281,22 +5353,24 @@ shared_focus = {
 		IF = {
 			limit = {
 				OR = {
-					any_allied_country = {
+					COC = {any_allied_country = {
 						owns_state = 395
-					}
+					}}
 					COC = {owns_state = 395}
 				}
 			}
 			TAR = {
 				set_cosmetic_tag = COC_TAR_federation_puppet
 				transfer_state = 395
-				set_autonomy = {
-					target = TAR
-					autonomy_state = autonomy_COCfederation_puppet
-					freedom_level = 0.5
-					end_wars = yes
-				}
 			}
+			set_autonomy = {
+				target = TAR
+				autonomy_state = autonomy_COCfederation_puppet
+				freedom_level = 0.5
+				end_wars = yes
+			}
+			# once it holds land: the generic settler tree replaces whatever tree it had
+			TAR = { COC_administration_takes_settler_tree = yes }
 			every_country = {
 				limit ={
 					is_ally_with = COC
@@ -5313,26 +5387,28 @@ shared_focus = {
 		IF = {
 			limit = {
 				OR = {
-					any_allied_country = {
+					COC = {any_allied_country = {
 						owns_state = 401
-					}
+					}}
 					COC = {owns_state = 401}
 				}
 			}
 			SLC = {
 				set_cosmetic_tag = COC_SLC_federation_puppet
 				transfer_state = 401
-				set_autonomy = {
-					target = SLC
-					autonomy_state = autonomy_COCfederation_puppet
-					freedom_level = 0.5
-					end_wars = yes
-				}
 			}
+			set_autonomy = {
+				target = SLC
+				autonomy_state = autonomy_COCfederation_puppet
+				freedom_level = 0.5
+				end_wars = yes
+			}
+			# once it holds land: the generic settler tree replaces whatever tree it had
+			SLC = { COC_administration_takes_settler_tree = yes }
 			every_country = {
 				limit ={
 					is_ally_with = COC
-					NOT = {tag = DET}
+					NOT = {tag = DEC}
 				}
 				every_owned_state = {
 					limit = {
@@ -5345,28 +5421,30 @@ shared_focus = {
 		IF = {
 			limit = {
 				OR = {
-					any_allied_country = {
+					COC = {any_allied_country = {
 						owns_state = 331
-					}
+					}}
 					COC = {owns_state = 331}
 				}
 			}
 			SOL = {
 				set_cosmetic_tag = COC_SOL_federation_puppet
 				transfer_state = 331
-				set_autonomy = {
-					target = SOL
-					autonomy_state = autonomy_COCfederation_puppet
-					freedom_level = 0.5
-					end_wars = yes
-				}
 			}
+			set_autonomy = {
+				target = SOL
+				autonomy_state = autonomy_COCfederation_puppet
+				freedom_level = 0.5
+				end_wars = yes
+			}
+			# once it holds land: the generic settler tree replaces whatever tree it had
+			SOL = { COC_administration_takes_settler_tree = yes }
 			every_country = {
 				limit ={
 					is_ally_with = COC
 					NOT = {
 						OR = {
-							tag = DET
+							tag = DEC
 							tag = COC
 						}
 					}
