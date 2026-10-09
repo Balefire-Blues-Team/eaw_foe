@@ -702,6 +702,8 @@ country_event = {
 			limit = {has_country_flag = COC_loyalist_tree_flag}
 			load_focus_tree = COC_loyalist_focus
 		}
+		# the post-war tree is gone: what it left of Cultural Enmity and Economic Ruin fades over time
+		country_event = { id = cossacksfree.1601 days = 100 }
 	}
 
 	option = {
@@ -709,6 +711,54 @@ country_event = {
 		ai_chance = { factor = 50}
 		
 		
+	}
+}
+
+# Every 100 days after the power struggle: one level less of Cultural Enmity and of Economic Ruin,
+# until Enmity is gone and Ruin has become Burgeoning Economy
+country_event = {
+	id = cossacksfree.1601
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = {
+				OR = {
+					has_idea = COC_cultural_emnity_4
+					has_idea = COC_cultural_emnity_3
+					has_idea = COC_cultural_emnity_2
+					has_idea = COC_cultural_emnity_1
+				}
+			}
+			COC_lower_emnity = yes
+		}
+		if = {
+			limit = {
+				OR = {
+					has_idea = COC_economic_ruin_4
+					has_idea = COC_economic_ruin_3
+					has_idea = COC_economic_ruin_2
+					has_idea = COC_economic_ruin_1
+				}
+			}
+			COC_lower_ruin = yes
+		}
+		if = {
+			limit = {
+				OR = {
+					has_idea = COC_cultural_emnity_4
+					has_idea = COC_cultural_emnity_3
+					has_idea = COC_cultural_emnity_2
+					has_idea = COC_cultural_emnity_1
+					has_idea = COC_economic_ruin_4
+					has_idea = COC_economic_ruin_3
+					has_idea = COC_economic_ruin_2
+					has_idea = COC_economic_ruin_1
+				}
+			}
+			country_event = { id = cossacksfree.1601 days = 100 }
+		}
 	}
 }
 
@@ -1261,7 +1311,14 @@ country_event = {
 
 	option = {
 		name = cossacksfree.35.a
-		ai_chance = { factor = 10}
+		ai_chance = {
+			factor = 10
+			# a Destruction government wants no part of a voluntary federation
+			modifier = {
+				factor = 0
+				has_government = destruction
+			}
+		}
 		diplomatic_relation = {
 			country = COC
 			relation = non_aggression_pact
@@ -1277,7 +1334,13 @@ country_event = {
 	
 	option = {
 		name = cossacksfree.35.b
-		ai_chance = { factor = 0}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOT = { has_government = destruction }
+			}
+		}
 		add_political_power = 25
 	}
 }
@@ -1311,7 +1374,14 @@ country_event = {
 
 	option = {
 		name = cossacksfree.37.a
-		ai_chance = { factor = 10}
+		ai_chance = {
+			factor = 10
+			# a Destruction government wants no part of a voluntary federation
+			modifier = {
+				factor = 0
+				has_government = destruction
+			}
+		}
 		diplomatic_relation = {
 			country = COC
 			relation = non_aggression_pact
@@ -1333,7 +1403,13 @@ country_event = {
 	
 	option = {
 		name = cossacksfree.37.b
-		ai_chance = { factor = 0}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOT = { has_government = destruction }
+			}
+		}
 		add_political_power = 25
 		COC = {country_event = cossacksfree.39}
 	}
@@ -1387,7 +1463,14 @@ country_event = {
 
 	option = {
 		name = cossacksfree.40.a
-		ai_chance = { factor = 10}
+		ai_chance = {
+			factor = 10
+			# a Destruction government wants no part of a voluntary federation
+			modifier = {
+				factor = 0
+				has_government = destruction
+			}
+		}
 		diplomatic_relation = {
 			country = COC
 			relation = non_aggression_pact
@@ -1409,7 +1492,13 @@ country_event = {
 	
 	option = {
 		name = cossacksfree.40.b
-		ai_chance = { factor = 0}
+		ai_chance = {
+			factor = 1
+			modifier = {
+				factor = 0
+				NOT = { has_government = destruction }
+			}
+		}
 		add_political_power = 25
 		COC = {country_event = cossacksfree.42}
 	}
@@ -1481,7 +1570,14 @@ country_event = {
 
 	option = {
 		name = cossacksfree.44.a
-		ai_chance = { factor = 15}
+		ai_chance = {
+			factor = 15
+			# a Destruction government wants no part of a voluntary federation
+			modifier = {
+				factor = 0
+				has_government = destruction
+			}
+		}
 		IF = {
 			limit = {is_faction_leader = yes}
 			dismantle_faction = yes
@@ -1587,7 +1683,14 @@ country_event = {
 
 	option = {
 		name = cossacksfree.49.a
-		ai_chance = { factor = 15}
+		ai_chance = {
+			factor = 15
+			# a Destruction government wants no part of a voluntary federation
+			modifier = {
+				factor = 0
+				has_government = destruction
+			}
+		}
 		IF = {
 			limit = {is_faction_leader = yes}
 			dismantle_faction = yes

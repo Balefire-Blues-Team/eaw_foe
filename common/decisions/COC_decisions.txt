@@ -1382,12 +1382,126 @@ COC_fed_debug_cat = {
 			}
 		}
 	}
+
+	COC_steppe_will_be_free = {
+		icon = GFX_decision_rifles
+		cost = 50
+		fire_only_once = yes
+		visible = {
+			tag = COC
+			has_country_flag = COC_izbawi_tree_flag
+			has_completed_focus = COC_centralize_fed_recruitment
+		}
+		available = {
+			OR = {
+				date > 1242.1.1
+				KHA = { exists = no }
+			}
+			custom_trigger_tooltip = {
+				tooltip = COC_steppe_will_be_free_target_tt
+				any_other_country = {
+					OR = {
+						owns_state = 292
+						owns_state = 361
+						owns_state = 344
+						owns_state = 387
+					}
+					NOT = { is_in_faction_with = ROOT }
+					NOT = { is_subject_of = ROOT }
+					NOT = { has_war_with = ROOT }
+				}
+			}
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COC_steppe_will_be_free"
+			custom_effect_tooltip = COC_steppe_will_be_free_tt
+			hidden_effect = {
+				every_other_country = {
+					limit = {
+						OR = {
+							owns_state = 292
+							owns_state = 361
+							owns_state = 344
+							owns_state = 387
+						}
+						NOT = { is_in_faction_with = ROOT }
+						NOT = { is_subject_of = ROOT }
+						NOT = { has_war_with = ROOT }
+					}
+					ROOT = {
+						create_wargoal = {
+							type = puppet_wargoal_focus
+							target = PREV
+						}
+					}
+				}
+			}
+			if = {
+				limit = {
+					has_completed_focus = COC_towards_pacifism
+				}
+				add_stability = -0.05
+			}
+		}
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	COC_renew_call_for_liberty = {
+		icon = GFX_decision_megaphone
+		cost = 25
+		fire_only_once = no
+		days_re_enable = 180
+		visible = {
+			tag = COC
+			has_completed_focus = COC_liberty_across_wasteland
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = COC_renew_call_for_liberty_target_tt
+				any_other_country = {
+					OR = {
+						has_idea = slaver_society
+						has_idea = raider_society
+					}
+					NOT = { is_ally_with = COC }
+					NOT = { has_war_with = ROOT }
+					ROOT = {
+						NOT = { has_wargoal_against = PREV }
+					}
+				}
+			}
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision COC_renew_call_for_liberty"
+			every_other_country = {
+				limit = {
+					OR = {
+						has_idea = slaver_society
+						has_idea = raider_society
+					}
+					NOT = { is_ally_with = COC }
+					NOT = { has_war_with = ROOT }
+					ROOT = {
+						NOT = { has_wargoal_against = PREV }
+					}
+				}
+				ROOT = {
+					grant_wargoals_on_core_states_of_prev = yes
+				}
+			}
+		}
+		ai_will_do = {
+			base = 100
+		}
+	}
 	
 
 	
 }
 
-# One decision per member of the federation (FROM), puppet or not
+
 COC_fed_civilian_cat = {
 
 	COC_civilian_help = {
