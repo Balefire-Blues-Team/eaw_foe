@@ -5,6 +5,10 @@ SEZ_grant_state_buildpoint = {
 		var = SEZ_build_points
 		value = 1
 		}
+	if = {
+		limit = { has_state_flag = SEZ_state_inspected_flag }
+		hidden_effect = { SEZ_refresh_district_readout = yes }
+	}
 }
 
 SEZ_grant_2_state_buildpoint = {
@@ -13,6 +17,10 @@ SEZ_grant_2_state_buildpoint = {
 		var = SEZ_build_points
 		value = 2
 		}
+	if = {
+		limit = { has_state_flag = SEZ_state_inspected_flag }
+		hidden_effect = { SEZ_refresh_district_readout = yes }
+	}
 }
 
 
@@ -22,6 +30,10 @@ SEZ_grant_3_state_buildpoint = {
 		var = SEZ_build_points
 		value = 3
 		}
+	if = {
+		limit = { has_state_flag = SEZ_state_inspected_flag }
+		hidden_effect = { SEZ_refresh_district_readout = yes }
+	}
 }
 
 RST_increase_drums = {
@@ -578,4 +590,72 @@ SEZ_set_standard_of_living_6 = {
 		limit = { NOT = { has_idea = SEZ_standard_of_living_6_idea } }
 		add_ideas = SEZ_standard_of_living_6_idea
 	}
+}
+
+### Princessyn city screen ###
+
+# State scope, ROOT is the country using the screen: this becomes the one selected district
+SEZ_select_district = {
+	every_state = {
+		limit = { has_state_flag = SEZ_state_inspected_flag }
+		clr_state_flag = SEZ_state_inspected_flag
+	}
+	set_state_flag = SEZ_state_inspected_flag
+	# older saves could hold negative points
+	clamp_variable = {
+		var = SEZ_build_points
+		min = 0
+		max = 1000
+	}
+	SEZ_refresh_district_readout = yes
+	ROOT = { set_variable = { sez_gui_cons_var = 1 } }
+}
+
+# Country scope: closes the build menu and forgets the selection
+SEZ_clear_district_selection = {
+	set_variable = { sez_gui_cons_var = 0 }
+	every_state = {
+		limit = { has_state_flag = SEZ_state_inspected_flag }
+		clr_state_flag = SEZ_state_inspected_flag
+	}
+}
+
+# State scope, ROOT is the country: copies the district's points and upgrade levels to where the screen's texts read them
+SEZ_refresh_district_readout = {
+	set_temp_variable = { SEZ_points = SEZ_build_points }
+	ROOT = { set_variable = { SEZ_shown_points = SEZ_points } }
+	set_temp_variable = { SEZ_lvl = SEZ_civilian_dm }
+	divide_temp_variable = { SEZ_lvl = 0.1 }
+	round_temp_variable = SEZ_lvl
+	ROOT = { set_variable = { SEZ_shown_civilian_lvl = SEZ_lvl } }
+	set_temp_variable = { SEZ_lvl = SEZ_defense_dm }
+	divide_temp_variable = { SEZ_lvl = 0.1 }
+	round_temp_variable = SEZ_lvl
+	ROOT = { set_variable = { SEZ_shown_defense_lvl = SEZ_lvl } }
+	set_temp_variable = { SEZ_lvl = SEZ_industry_dm }
+	divide_temp_variable = { SEZ_lvl = 0.1 }
+	round_temp_variable = SEZ_lvl
+	ROOT = { set_variable = { SEZ_shown_industry_lvl = SEZ_lvl } }
+	set_temp_variable = { SEZ_lvl = SEZ_naval_dm }
+	divide_temp_variable = { SEZ_lvl = 0.15 }
+	round_temp_variable = SEZ_lvl
+	ROOT = { set_variable = { SEZ_shown_naval_lvl = SEZ_lvl } }
+	set_temp_variable = { SEZ_lvl = SEZ_militarization_dm }
+	divide_temp_variable = { SEZ_lvl = 0.1 }
+	round_temp_variable = SEZ_lvl
+	ROOT = { set_variable = { SEZ_shown_militarization_lvl = SEZ_lvl } }
+}
+
+# State scope, ROOT is the country: one point spent, and no further works here for 120 days
+SEZ_spend_upgrade_point = {
+	subtract_from_variable = {
+		var = SEZ_build_points
+		value = 1
+	}
+	set_state_flag = {
+		flag = SEZ_state_construction_active_flag
+		days = 120
+		value = 1
+	}
+	SEZ_refresh_district_readout = yes
 }

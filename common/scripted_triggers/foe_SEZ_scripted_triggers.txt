@@ -14,12 +14,51 @@
 #
 
 #Princessyn Coring
-SEZ_is_coring_allowed = { 
-	any_owned_state = {
-		AND = {
-			NOT = { is_core_of = ROOT }
+SEZ_is_coring_allowed = {
+	custom_trigger_tooltip = {
+		tooltip = SEZ_req_not_core_tt
+		any_owned_state = {
 			has_state_flag = SEZ_state_inspected_flag
-        	compliance > 39
+			NOT = { is_core_of = ROOT }
+		}
+	}
+	custom_trigger_tooltip = {
+		tooltip = SEZ_req_compliance_tt
+		any_owned_state = {
+			has_state_flag = SEZ_state_inspected_flag
+			compliance > 39
+		}
+	}
+}
+
+# Country scope: what every upgrade of the selected district needs
+SEZ_selected_district_can_upgrade = {
+	custom_trigger_tooltip = {
+		tooltip = SEZ_req_core_tt
+		any_owned_state = {
+			has_state_flag = SEZ_state_inspected_flag
+			is_core_of = ROOT
+		}
+	}
+	custom_trigger_tooltip = {
+		tooltip = SEZ_req_controlled_tt
+		any_owned_state = {
+			has_state_flag = SEZ_state_inspected_flag
+			is_fully_controlled_by = ROOT
+		}
+	}
+	custom_trigger_tooltip = {
+		tooltip = SEZ_req_point_tt
+		any_owned_state = {
+			has_state_flag = SEZ_state_inspected_flag
+			check_variable = { SEZ_build_points > 0 }
+		}
+	}
+	custom_trigger_tooltip = {
+		tooltip = SEZ_req_no_works_tt
+		any_owned_state = {
+			has_state_flag = SEZ_state_inspected_flag
+			NOT = { has_state_flag = SEZ_state_construction_active_flag }
 		}
 	}
 }
