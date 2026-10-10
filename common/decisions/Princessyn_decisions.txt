@@ -607,3 +607,215 @@ SDI_syndicate_relations_cat = {
 	}
 
 }
+
+SEZ_reconstruction_authority_cat = {
+
+	# an Upgrade Point for a district of Princessyn
+	SEZ_queue_district_works = {
+		icon = GFX_decision_unknown
+		state_target = yes
+		target_array = owned_states
+		on_map_mode = map_and_decisions_view
+		cost = 40
+		fire_only_once = no
+		visible = {
+			original_tag = SEZ
+			has_completed_focus = SEZ_resume_reconstruction_queue
+		}
+		target_root_trigger = {
+			original_tag = SEZ
+			has_completed_focus = SEZ_resume_reconstruction_queue
+		}
+		target_trigger = {
+			FROM = {
+				is_owned_by = ROOT
+				SEZ_is_princessyn_district = yes
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = SEZ_queue_cooldown_tt
+				NOT = { has_country_flag = SEZ_queue_cooldown_flag }
+			}
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SEZ_queue_district_works in [From.GetName]"
+			FROM = { SEZ_grant_state_buildpoint = yes }
+			hidden_effect = {
+				set_country_flag = {
+					flag = SEZ_queue_cooldown_flag
+					days = 60
+					value = 1
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+
+	# against a power from outside Severyana
+	SEZ_invoke_hold_the_line = {
+		icon = GFX_decision_unknown
+		cost = 50
+		fire_only_once = no
+		days_re_enable = 365
+		visible = {
+			original_tag = SEZ
+			has_completed_focus = SEZ_threat_model_external
+		}
+		available = {
+			has_defensive_war = yes
+			custom_trigger_tooltip = {
+				tooltip = SEZ_outside_attacker_tt
+				any_enemy_country = {
+					NOT = { has_country_flag = Country_Severyana_Flag }
+				}
+			}
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SEZ_invoke_hold_the_line"
+			add_timed_idea = {
+				idea = SEZ_hold_the_line_invoked_idea
+				days = 180
+			}
+		}
+		ai_will_do = {
+			base = 100
+		}
+	}
+
+	# Unrestricted: the Reverse Want-It-Need-It megaspell, aimed
+	SEZ_fire_the_deterrent_field = {
+		icon = GFX_decision_unknown
+		state_target = yes
+		target_array = owned_states
+		on_map_mode = map_and_decisions_view
+		fire_only_once = no
+		visible = {
+			original_tag = SEZ
+			has_completed_focus = SEZ_deterrent_field_restored
+		}
+		target_root_trigger = {
+			original_tag = SEZ
+			has_completed_focus = SEZ_deterrent_field_restored
+		}
+		target_trigger = {
+			FROM = {
+				is_owned_by = ROOT
+				NOT = { is_core_of = ROOT }
+				resistance > 0
+			}
+		}
+		available = {
+			has_fuel > 1999
+			FROM = { is_controlled_by = ROOT }
+			custom_trigger_tooltip = {
+				tooltip = SEZ_deterrent_cooldown_tt
+				NOT = { has_country_flag = SEZ_deterrent_cooldown_flag }
+			}
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SEZ_fire_the_deterrent_field in [From.GetName]"
+			custom_effect_tooltip = SEZ_deterrent_fuel_tt
+			custom_effect_tooltip = SEZ_deterrent_effect_tt
+			hidden_effect = {
+				add_fuel = -2000
+				set_country_flag = {
+					flag = SEZ_deterrent_cooldown_flag
+					days = 60
+					value = 1
+				}
+				FROM = {
+					set_resistance = 0
+					add_compliance = 40
+					add_resistance_target = {
+						id = 6581
+						amount = -50
+						days = 365
+						tooltip = SEZ_deterrent_field_resistance_tt
+					}
+					# the stampede: roughly one in twenty do not come back
+					if = {
+						limit = { state_population > 20000 }
+						add_manpower = -1000
+					}
+					else_if = {
+						limit = { state_population > 10000 }
+						add_manpower = -500
+					}
+					else = {
+						add_manpower = -250
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 0
+				fuel_ratio < 0.75
+			}
+			modifier = {
+				factor = 0
+				FROM = { resistance < 40 }
+			}
+		}
+	}
+
+	# Restricted: the slow and clean way
+	SEZ_morale_campaign = {
+		icon = GFX_decision_unknown
+		state_target = yes
+		target_array = owned_states
+		on_map_mode = map_and_decisions_view
+		cost = 75
+		fire_only_once = no
+		days_remove = 90
+		visible = {
+			original_tag = SEZ
+			has_completed_focus = SEZ_know_your_neighbours
+		}
+		target_root_trigger = {
+			original_tag = SEZ
+			has_completed_focus = SEZ_know_your_neighbours
+		}
+		target_trigger = {
+			FROM = {
+				is_owned_by = ROOT
+				NOT = { is_core_of = ROOT }
+			}
+		}
+		available = {
+			FROM = { is_controlled_by = ROOT }
+			custom_trigger_tooltip = {
+				tooltip = SEZ_morale_campaign_running_tt
+				NOT = { has_country_flag = SEZ_morale_campaign_flag }
+			}
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision SEZ_morale_campaign in [From.GetName]"
+			hidden_effect = { set_country_flag = SEZ_morale_campaign_flag }
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove SEZ_morale_campaign in [From.GetName]"
+			clr_country_flag = SEZ_morale_campaign_flag
+			FROM = {
+				add_compliance = 25
+				add_resistance_target = {
+					id = 6582
+					amount = -20
+					days = 180
+					tooltip = SEZ_morale_campaign_resistance_tt
+				}
+			}
+		}
+		ai_will_do = {
+			base = 20
+			modifier = {
+				factor = 0
+				has_political_power < 150
+			}
+		}
+	}
+}

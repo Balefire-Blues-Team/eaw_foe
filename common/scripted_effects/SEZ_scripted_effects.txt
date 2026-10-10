@@ -262,4 +262,320 @@ SDI_move_centre = {
 	}
 }
 
+### Severyanan Reconstruction Authority ###
 
+# State scope, ROOT is the Authority: the state becomes a core, its new citizens wait in the census queue
+SEZ_integrate_state = {
+	add_core_of = ROOT
+	if = {
+		limit = { ROOT = { has_country_flag = SEZ_reconciliation_flag } }
+		add_dynamic_modifier = {
+			modifier = SEZ_census_backlog_modifier
+			days = 180
+		}
+	}
+	else = {
+		add_dynamic_modifier = {
+			modifier = SEZ_census_backlog_modifier
+			days = 365
+		}
+	}
+}
+
+# State scope, ROOT is the Authority
+SEZ_spawn_garrison_robots = {
+	create_unit = {
+		division = "name = \"Garrison Robots\" division_template = \"Garrison Robots\" start_experience_factor = 0.2"
+		owner = ROOT
+	}
+}
+
+# The AI cannot use the Princessyn screen, so its Upgrade Points are spent for it
+SEZ_ai_place_upgrades = {
+	if = {
+		limit = { is_ai = yes }
+		every_owned_state = {
+			limit = { check_variable = { SEZ_build_points > 0 } }
+			add_to_variable = { SEZ_industry_dm = 0.10 }
+			add_to_variable = { SEZ_militarization_dm = 0.10 }
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+			}
+			set_variable = { SEZ_build_points = 0 }
+		}
+	}
+}
+
+SEZ_peacekeeping_level_up = {
+	if = {
+		limit = { has_idea = SEZ_peacekeeping_1_idea }
+		swap_ideas = {
+			remove_idea = SEZ_peacekeeping_1_idea
+			add_idea = SEZ_peacekeeping_2_idea
+		}
+	}
+	else_if = {
+		limit = { has_idea = SEZ_peacekeeping_2_idea }
+		swap_ideas = {
+			remove_idea = SEZ_peacekeeping_2_idea
+			add_idea = SEZ_peacekeeping_3_idea
+		}
+	}
+	else_if = {
+		limit = { has_idea = SEZ_peacekeeping_mixed_idea }
+		swap_ideas = {
+			remove_idea = SEZ_peacekeeping_mixed_idea
+			add_idea = SEZ_peacekeeping_mixed_2_idea
+		}
+	}
+	else_if = {
+		limit = { has_idea = SEZ_peacekeeping_autonomous_idea }
+		swap_ideas = {
+			remove_idea = SEZ_peacekeeping_autonomous_idea
+			add_idea = SEZ_peacekeeping_autonomous_2_idea
+		}
+	}
+}
+
+SEZ_peacekeeping_to_mixed = {
+	if = {
+		limit = { has_idea = SEZ_peacekeeping_3_idea }
+		swap_ideas = {
+			remove_idea = SEZ_peacekeeping_3_idea
+			add_idea = SEZ_peacekeeping_mixed_2_idea
+		}
+	}
+	else = {
+		swap_ideas = {
+			remove_idea = SEZ_peacekeeping_2_idea
+			add_idea = SEZ_peacekeeping_mixed_idea
+		}
+	}
+}
+
+SEZ_peacekeeping_to_autonomous = {
+	if = {
+		limit = { has_idea = SEZ_peacekeeping_3_idea }
+		swap_ideas = {
+			remove_idea = SEZ_peacekeeping_3_idea
+			add_idea = SEZ_peacekeeping_autonomous_2_idea
+		}
+	}
+	else = {
+		swap_ideas = {
+			remove_idea = SEZ_peacekeeping_2_idea
+			add_idea = SEZ_peacekeeping_autonomous_idea
+		}
+	}
+}
+
+SEZ_set_standard_of_living_2 = {
+	if = {
+		limit = { has_idea = SEZ_standard_of_living_1_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_1_idea
+			add_idea = SEZ_standard_of_living_2_idea
+		}
+	}
+	else_if = {
+		limit = { has_idea = SEZ_standard_of_living_3_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_3_idea
+			add_idea = SEZ_standard_of_living_2_idea
+		}
+	}
+	else_if = {
+		limit = { has_idea = SEZ_standard_of_living_4_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_4_idea
+			add_idea = SEZ_standard_of_living_2_idea
+		}
+	}
+	else_if = {
+		limit = { has_idea = SEZ_standard_of_living_5_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_5_idea
+			add_idea = SEZ_standard_of_living_2_idea
+		}
+	}
+	else_if = {
+		limit = { has_idea = SEZ_standard_of_living_6_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_6_idea
+			add_idea = SEZ_standard_of_living_2_idea
+		}
+	}
+	else_if = {
+		limit = { NOT = { has_idea = SEZ_standard_of_living_2_idea } }
+		add_ideas = SEZ_standard_of_living_2_idea
+	}
+}
+
+SEZ_set_standard_of_living_3 = {
+	if = {
+		limit = { has_idea = SEZ_standard_of_living_1_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_1_idea
+			add_idea = SEZ_standard_of_living_3_idea
+		}
+	}
+	else_if = {
+		limit = { has_idea = SEZ_standard_of_living_2_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_2_idea
+			add_idea = SEZ_standard_of_living_3_idea
+		}
+	}
+	else_if = {
+		limit = { has_idea = SEZ_standard_of_living_4_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_4_idea
+			add_idea = SEZ_standard_of_living_3_idea
+		}
+	}
+	else_if = {
+		limit = { has_idea = SEZ_standard_of_living_5_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_5_idea
+			add_idea = SEZ_standard_of_living_3_idea
+		}
+	}
+	else_if = {
+		limit = { has_idea = SEZ_standard_of_living_6_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_6_idea
+			add_idea = SEZ_standard_of_living_3_idea
+		}
+	}
+	else_if = {
+		limit = { NOT = { has_idea = SEZ_standard_of_living_3_idea } }
+		add_ideas = SEZ_standard_of_living_3_idea
+	}
+}
+
+SEZ_set_standard_of_living_4 = {
+	if = {
+		limit = { has_idea = SEZ_standard_of_living_1_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_1_idea
+			add_idea = SEZ_standard_of_living_4_idea
+		}
+	}
+	else_if = {
+		limit = { has_idea = SEZ_standard_of_living_2_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_2_idea
+			add_idea = SEZ_standard_of_living_4_idea
+		}
+	}
+	else_if = {
+		limit = { has_idea = SEZ_standard_of_living_3_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_3_idea
+			add_idea = SEZ_standard_of_living_4_idea
+		}
+	}
+	else_if = {
+		limit = { has_idea = SEZ_standard_of_living_5_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_5_idea
+			add_idea = SEZ_standard_of_living_4_idea
+		}
+	}
+	else_if = {
+		limit = { has_idea = SEZ_standard_of_living_6_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_6_idea
+			add_idea = SEZ_standard_of_living_4_idea
+		}
+	}
+	else_if = {
+		limit = { NOT = { has_idea = SEZ_standard_of_living_4_idea } }
+		add_ideas = SEZ_standard_of_living_4_idea
+	}
+}
+
+SEZ_set_standard_of_living_5 = {
+	if = {
+		limit = { has_idea = SEZ_standard_of_living_1_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_1_idea
+			add_idea = SEZ_standard_of_living_5_idea
+		}
+	}
+	else_if = {
+		limit = { has_idea = SEZ_standard_of_living_2_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_2_idea
+			add_idea = SEZ_standard_of_living_5_idea
+		}
+	}
+	else_if = {
+		limit = { has_idea = SEZ_standard_of_living_3_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_3_idea
+			add_idea = SEZ_standard_of_living_5_idea
+		}
+	}
+	else_if = {
+		limit = { has_idea = SEZ_standard_of_living_4_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_4_idea
+			add_idea = SEZ_standard_of_living_5_idea
+		}
+	}
+	else_if = {
+		limit = { has_idea = SEZ_standard_of_living_6_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_6_idea
+			add_idea = SEZ_standard_of_living_5_idea
+		}
+	}
+	else_if = {
+		limit = { NOT = { has_idea = SEZ_standard_of_living_5_idea } }
+		add_ideas = SEZ_standard_of_living_5_idea
+	}
+}
+
+SEZ_set_standard_of_living_6 = {
+	if = {
+		limit = { has_idea = SEZ_standard_of_living_1_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_1_idea
+			add_idea = SEZ_standard_of_living_6_idea
+		}
+	}
+	else_if = {
+		limit = { has_idea = SEZ_standard_of_living_2_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_2_idea
+			add_idea = SEZ_standard_of_living_6_idea
+		}
+	}
+	else_if = {
+		limit = { has_idea = SEZ_standard_of_living_3_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_3_idea
+			add_idea = SEZ_standard_of_living_6_idea
+		}
+	}
+	else_if = {
+		limit = { has_idea = SEZ_standard_of_living_4_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_4_idea
+			add_idea = SEZ_standard_of_living_6_idea
+		}
+	}
+	else_if = {
+		limit = { has_idea = SEZ_standard_of_living_5_idea }
+		swap_ideas = {
+			remove_idea = SEZ_standard_of_living_5_idea
+			add_idea = SEZ_standard_of_living_6_idea
+		}
+	}
+	else_if = {
+		limit = { NOT = { has_idea = SEZ_standard_of_living_6_idea } }
+		add_ideas = SEZ_standard_of_living_6_idea
+	}
+}
