@@ -248,3 +248,9 @@ NDefines.NTrade.NAVAL_ROUTE_ACCESS_AVOID_COST_MULT = 1		-- Naval pathfinding sho
 ---------------
 -- Balefire unit manpower is ~40x below vanilla (infantry 25 vs 1000), so mastery gain is scaled to match.
 NDefines.NDoctrines.BASE_MASTERY_GAIN_TARGET_MANPOWER = 2500.0	-- Vanilla is 100000
+
+--------------
+-- NProject --
+--------------
+-- Balefire techs carry no specialisation tags, so idle scientists are the only source of breakthrough points.
+NDefines.NProject.BREAKTHROUGH_DAILY_SCIENTIST_SKILL_GAIN = 30	-- Vanilla is 5 (1/100th of a percent per skill level per day)
