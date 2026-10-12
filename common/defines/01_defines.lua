@@ -252,5 +252,5 @@ NDefines.NDoctrines.BASE_MASTERY_GAIN_TARGET_MANPOWER = 2500.0	-- Vanilla is 100
 --------------
 -- NProject --
 --------------
--- Balefire techs carry no specialisation tags, so idle scientists are the only source of breakthrough points.
-NDefines.NProject.BREAKTHROUGH_DAILY_SCIENTIST_SKILL_GAIN = 30	-- Vanilla is 5 (1/100th of a percent per skill level per day)
+-- Research on tagged techs is the main source of breakthrough points; idle scientists add a little on top.
+NDefines.NProject.BREAKTHROUGH_DAILY_SCIENTIST_SKILL_GAIN = 15	-- Vanilla is 5 (1/100th of a percent per skill level per day)
