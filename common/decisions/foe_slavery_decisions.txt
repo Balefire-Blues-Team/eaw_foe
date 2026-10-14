@@ -1,6 +1,9 @@
 foe_slaving_cat = {
 ### Generics ###
 	foe_slave_mil_factory = {
+		visible = {
+			NOT = { has_completed_focus = GSL_rebuild_the_old_works }
+		}
 		icon = GFX_dec_reclaim_an_arms_factory
 		cost = 40
 
@@ -35,6 +38,9 @@ foe_slaving_cat = {
 	}
 
 	foe_slave_civ_factory = {
+		visible = {
+			NOT = { has_completed_focus = GSL_rebuild_the_old_works }
+		}
 		icon = GFX_dec_reclaim_a_goods_factory
 		cost = 50
 
@@ -129,6 +135,7 @@ foe_slaving_cat = {
 
 		visible = {
 			NOT = {
+				has_completed_focus = GSL_chain_the_conquered
 				tag = EYE
 				has_country_flag = EYE_slavery_abolished
 				FOE_is_slaving_despot = yes
@@ -1144,5 +1151,896 @@ foe_slaving_cat = {
 			
 			
 
+	}
+
+	# copies of the generic decisions above, cheaper through the generic slaver tree
+	GSL_slave_enslave_non_core = {
+		icon = GFX_dec_enslave_counquered_population
+		cost = 5
+
+		available = {
+			any_owned_state = {
+				is_controlled_by = ROOT
+				NOT = { is_core_of = ROOT }
+				state_population > 5000
+			}
+		}
+
+		visible = {
+			has_completed_focus = GSL_chain_the_conquered
+			NOT = {
+				tag = EYE
+				has_country_flag = EYE_slavery_abolished
+				FOE_is_slaving_despot = yes
+			}
+		}
+
+		days_remove = 50
+		days_re_enable = 15
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision EYE_slave_enslave_non_core"
+
+			save_current_manpower = yes
+			random_owned_controlled_state = {
+				limit = {
+					NOT = { is_core_of = ROOT }
+					state_population > 5000
+				}
+				add_manpower = -2000
+			}
+			restore_previous_manpower = yes
+
+			custom_effect_tooltip = foe_3_gain_slave_tt
+			add_to_variable = {
+				var = foe_slaves_var
+				value = 3
+			}
+		}
+
+		ai_will_do = {
+			base = 20
+			modifier = {
+				add = 100
+				tag = EYE
+				check_variable = {
+    				foe_slaves_var < 10
+				}
+			}
+			modifier = {
+				add = 100
+				tag = OAP
+				check_variable = {
+    				foe_slaves_var < 3
+				}
+			}
+		}
+	}
+	GSL_slave_mil_factory = {
+		visible = {
+			has_completed_focus = GSL_rebuild_the_old_works
+		}
+		icon = GFX_dec_reclaim_an_arms_factory
+		cost = 30
+
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = foe_2_cost_slave_tt
+				check_variable = {
+					foe_slaves_var > 1
+				}
+			}
+		}
+
+		days_remove = 60
+		days_re_enable = 40
+		complete_effect = {
+			custom_effect_tooltip = foe_2_lose_slave_tt
+			subtract_from_variable = {
+				var = foe_slaves_var
+				value = 2
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision EYE_slave_counter"
+
+			one_random_arms_factory = yes
+
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+	GSL_slave_civ_factory = {
+		visible = {
+			has_completed_focus = GSL_rebuild_the_old_works
+		}
+		icon = GFX_dec_reclaim_a_goods_factory
+		cost = 38
+
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = foe_3_cost_slave_tt
+				check_variable = {
+					foe_slaves_var > 2
+				}
+			}
+		}
+
+		days_remove = 60
+		days_re_enable = 40
+		complete_effect = {
+			custom_effect_tooltip = foe_3_lose_slave_tt
+			subtract_from_variable = {
+				var = foe_slaves_var
+				value = 3
+			}
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision EYE_slave_counter"
+
+			one_random_industrial_complex = yes
+
+		}
+
+		ai_will_do = {
+			base = 50
+		}
+	}
+
+	### Generic slaver tree (2026-10-14): slave market, expeditions, gangs ###
+	GSL_market_sell_surplus = {
+		icon = GFX_dec_buy_slaves_from_the_west
+		visible = {
+			OR = {
+				NOT = { has_focus_tree = GSL_focus }
+				has_completed_focus = GSL_the_auction_block
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = foe_1_cost_slave_tt
+				check_variable = { foe_slaves_var > 0.99 }
+			}
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GSL_market_sell_surplus"
+			custom_effect_tooltip = foe_1_lose_slave_tt
+			custom_effect_tooltip = GSL_market_sell_surplus_tt
+			hidden_effect = {
+				GSL_init_market = yes
+				subtract_from_variable = { foe_slaves_var = 1 }
+				set_temp_variable = { surplus = global.GSL_price }
+				multiply_temp_variable = { surplus = GSL_sell_mult }
+				GSL_pay_surplus = yes
+				GSL_market_sold = yes
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 40
+				check_variable = { foe_slaves_var > 1.9 }
+				OR = {
+					NOT = { has_variable = GSL_hold_cap }
+					check_variable = { GSL_held > GSL_hold_cap }
+					check_variable = { GSL_held = GSL_hold_cap }
+				}
+				OR = {
+					has_focus_tree = GSL_focus
+					check_variable = { foe_slaves_var > 9.9 }
+				}
+			}
+		}
+	}
+	GSL_market_sell_pp = {
+		icon = GFX_dec_buy_slaves_from_the_west
+		visible = {
+			OR = {
+				NOT = { has_focus_tree = GSL_focus }
+				has_completed_focus = GSL_the_auction_block
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = foe_1_cost_slave_tt
+				check_variable = { foe_slaves_var > 0.99 }
+			}
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GSL_market_sell_pp"
+			custom_effect_tooltip = foe_1_lose_slave_tt
+			custom_effect_tooltip = GSL_market_sell_pp_tt
+			hidden_effect = {
+				GSL_init_market = yes
+				subtract_from_variable = { foe_slaves_var = 1 }
+				set_temp_variable = { pay = global.GSL_sell_pp }
+				multiply_temp_variable = { pay = GSL_sell_mult }
+				add_political_power = var:pay
+				GSL_market_sold = yes
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 20
+				has_political_power < 30
+				check_variable = { foe_slaves_var > 2.9 }
+				OR = {
+					NOT = { has_variable = GSL_hold_cap }
+					check_variable = { GSL_held > GSL_hold_cap }
+					check_variable = { GSL_held = GSL_hold_cap }
+				}
+				OR = {
+					has_focus_tree = GSL_focus
+					check_variable = { foe_slaves_var > 9.9 }
+				}
+			}
+		}
+	}
+	GSL_market_sell_guns = {
+		icon = GFX_dec_buy_slaves_from_the_west
+		visible = {
+			OR = {
+				NOT = { has_focus_tree = GSL_focus }
+				has_completed_focus = GSL_the_auction_block
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = foe_1_cost_slave_tt
+				check_variable = { foe_slaves_var > 0.99 }
+			}
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GSL_market_sell_guns"
+			custom_effect_tooltip = foe_1_lose_slave_tt
+			custom_effect_tooltip = GSL_market_sell_guns_tt
+			hidden_effect = {
+				GSL_init_market = yes
+				subtract_from_variable = { foe_slaves_var = 1 }
+				set_temp_variable = { pay = global.GSL_sell_guns }
+				multiply_temp_variable = { pay = GSL_sell_mult }
+				add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = var:pay producer = OWE }
+				GSL_market_sold = yes
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 20
+				has_war = yes
+				check_variable = { foe_slaves_var > 2.9 }
+				OR = {
+					NOT = { has_variable = GSL_hold_cap }
+					check_variable = { GSL_held > GSL_hold_cap }
+					check_variable = { GSL_held = GSL_hold_cap }
+				}
+				OR = {
+					has_focus_tree = GSL_focus
+					check_variable = { foe_slaves_var > 9.9 }
+				}
+			}
+		}
+	}
+	GSL_market_buy_factories = {
+		icon = GFX_dec_buy_slaves_from_the_west
+		visible = {
+			OR = {
+				NOT = { has_focus_tree = GSL_focus }
+				has_completed_focus = GSL_the_auction_block
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = GSL_pool_trigger_tt
+				check_variable = { global.GSL_pool > 0.99 }
+			}
+			num_of_available_civilian_factories > 0
+			custom_trigger_tooltip = {
+				tooltip = GSL_debt_cap_trigger_tt
+				NOT = { check_variable = { GSL_debt_days > 360 } }
+			}
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GSL_market_buy_factories"
+			custom_effect_tooltip = foe_1_gain_slave_tt
+			custom_effect_tooltip = GSL_market_buy_factories_tt
+			hidden_effect = {
+				GSL_init_market = yes
+				add_to_variable = { foe_slaves_var = 1 }
+				set_temp_variable = { days = global.GSL_buy_days }
+				multiply_temp_variable = { days = GSL_buy_mult }
+				GSL_add_debt = yes
+				GSL_market_bought = yes
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 30
+				has_focus_tree = GSL_focus
+				check_variable = { foe_slaves_var < 1 }
+				check_variable = { GSL_held < GSL_hold_cap }
+				check_variable = { global.GSL_price < 750 }
+				check_variable = { GSL_debt_days < 150 }
+				num_of_available_civilian_factories > 1
+			}
+		}
+	}
+	GSL_market_buy_pp = {
+		icon = GFX_dec_buy_slaves_from_the_west
+		visible = {
+			OR = {
+				NOT = { has_focus_tree = GSL_focus }
+				has_completed_focus = GSL_the_auction_block
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = GSL_pool_trigger_tt
+				check_variable = { global.GSL_pool > 0.99 }
+			}
+			custom_trigger_tooltip = {
+				tooltip = GSL_market_buy_pp_trigger_tt
+				check_variable = { has_political_power > global.GSL_buy_pp }
+			}
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GSL_market_buy_pp"
+			custom_effect_tooltip = foe_1_gain_slave_tt
+			custom_effect_tooltip = GSL_market_buy_pp_tt
+			hidden_effect = {
+				GSL_init_market = yes
+				add_to_variable = { foe_slaves_var = 1 }
+				set_temp_variable = { pay = global.GSL_buy_pp }
+				multiply_temp_variable = { pay = GSL_buy_mult }
+				multiply_temp_variable = { pay = -1 }
+				add_political_power = var:pay
+				GSL_market_bought = yes
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 20
+				has_focus_tree = GSL_focus
+				check_variable = { foe_slaves_var < 1 }
+				check_variable = { GSL_held < GSL_hold_cap }
+				has_political_power > 150
+			}
+		}
+	}
+	GSL_market_buy_guns = {
+		icon = GFX_dec_buy_slaves_from_the_west
+		visible = {
+			OR = {
+				NOT = { has_focus_tree = GSL_focus }
+				has_completed_focus = GSL_the_auction_block
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = GSL_pool_trigger_tt
+				check_variable = { global.GSL_pool > 0.99 }
+			}
+			custom_trigger_tooltip = {
+				tooltip = GSL_market_buy_guns_trigger_tt
+				check_variable = { num_equipment@infantry_equipment > global.GSL_buy_guns }
+			}
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GSL_market_buy_guns"
+			custom_effect_tooltip = foe_1_gain_slave_tt
+			custom_effect_tooltip = GSL_market_buy_guns_tt
+			hidden_effect = {
+				GSL_init_market = yes
+				add_to_variable = { foe_slaves_var = 1 }
+				set_temp_variable = { pay = global.GSL_buy_guns }
+				multiply_temp_variable = { pay = GSL_buy_mult }
+				multiply_temp_variable = { pay = -1 }
+				add_equipment_to_stockpile = { type = infantry_equipment amount = var:pay }
+				GSL_market_bought = yes
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+	GSL_market_standing_order = {
+		icon = GFX_dec_buy_slaves_from_the_west
+		visible = {
+			has_completed_focus = GSL_standing_orders
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = GSL_pool_6_trigger_tt
+				check_variable = { global.GSL_pool > 5.99 }
+			}
+			num_of_available_civilian_factories > 1
+			NOT = { has_dynamic_modifier = { modifier = GSL_standing_order_modifier } }
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GSL_market_standing_order"
+			custom_effect_tooltip = GSL_market_standing_order_tt
+			hidden_effect = {
+				GSL_init_market = yes
+				subtract_from_variable = { global.GSL_pool = 6 }
+				set_variable = { GSL_order_left = 6 }
+				# six batches at 20% off, paid with two factories: 6 x 0.8 / 2 = 2.4 times one batch's factory days
+				set_variable = { GSL_order_days = global.GSL_buy_days }
+				multiply_variable = { GSL_order_days = GSL_buy_mult }
+				multiply_variable = { GSL_order_days = 2.4 }
+				add_dynamic_modifier = {
+					modifier = GSL_standing_order_modifier
+				}
+				multiply_variable = { global.GSL_price = 1.1 }
+				GSL_reprice = yes
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 10
+				check_variable = { foe_slaves_var < 2 }
+				num_of_available_civilian_factories > 4
+			}
+		}
+	}
+	GSL_market_broker = {
+		icon = GFX_dec_buy_slaves_from_the_west
+		target_root_trigger = {
+			has_completed_focus = GSL_brokers_abroad
+		}
+		target_trigger = {
+			FROM = {
+				exists = yes
+				NOT = { tag = ROOT }
+				has_country_flag = slavery_allowed
+				NOT = { has_war_with = ROOT }
+				num_of_available_civilian_factories > 0
+			}
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = foe_1_cost_slave_tt
+				check_variable = { foe_slaves_var > 0.99 }
+			}
+		}
+		days_re_enable = 90
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GSL_market_broker on [From.GetName]"
+			custom_effect_tooltip = foe_1_lose_slave_tt
+			custom_effect_tooltip = GSL_market_broker_tt
+			hidden_effect = {
+				GSL_init_market = yes
+				subtract_from_variable = { foe_slaves_var = 1 }
+				set_temp_variable = { surplus = global.GSL_price }
+				multiply_temp_variable = { surplus = GSL_sell_mult }
+				multiply_temp_variable = { surplus = 1.25 }
+				GSL_pay_surplus = yes
+				FROM = {
+					add_to_variable = { foe_slaves_var = 1 }
+					set_temp_variable = { days = global.GSL_buy_days }
+					GSL_add_debt = yes
+					add_opinion_modifier = {
+						target = ROOT
+						modifier = GSL_broker_opinion
+					}
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 10
+				check_variable = { foe_slaves_var > 5.9 }
+			}
+		}
+	}
+	GSL_hire_guns = {
+		icon = GFX_decision_generic_military
+		visible = {
+			has_completed_focus = GSL_hired_guns
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = foe_3_cost_slave_tt
+				check_variable = { foe_slaves_var > 2.99 }
+			}
+		}
+		days_re_enable = 180
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GSL_hire_guns"
+			custom_effect_tooltip = foe_3_lose_slave_tt
+			custom_effect_tooltip = GSL_hire_guns_tt
+			hidden_effect = {
+				subtract_from_variable = { foe_slaves_var = 3 }
+				GSL_prepare_hired_guns = yes
+				create_unit = {
+					division = "name = \"Hired Guns\" division_template = \"Hired Guns\" start_experience_factor = 0.5"
+					owner = ROOT
+				}
+				create_unit = {
+					division = "name = \"Hired Guns\" division_template = \"Hired Guns\" start_experience_factor = 0.5"
+					owner = ROOT
+				}
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 30
+				has_war = yes
+				check_variable = { foe_slaves_var > 4.9 }
+			}
+		}
+	}
+	GSL_slaving_expedition = {
+		icon = GFX_dec_enslave_counquered_population
+		target_root_trigger = {
+			has_completed_focus = GSL_mark_the_hunting_grounds
+		}
+		target_trigger = {
+			FROM = {
+				exists = yes
+				is_neighbor_of = ROOT
+				NOT = { is_in_faction_with = ROOT }
+				any_owned_state = {
+					is_controlled_by = PREV
+					state_population > 3000
+				}
+			}
+		}
+		available = {
+			NOT = { has_country_flag = GSL_expedition_cooldown_flag }
+			if = {
+				limit = { has_completed_focus = GSL_catchers_on_retainer }
+				has_political_power > 14
+				has_manpower > 124
+			}
+			else = {
+				has_political_power > 24
+				has_manpower > 249
+			}
+			has_equipment = { infantry_equipment > 99 }
+		}
+		days_remove = 60
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GSL_slaving_expedition on [From.GetName]"
+			set_country_flag = { flag = GSL_expedition_cooldown_flag days = 150 value = 1 }
+			if = {
+				limit = { has_completed_focus = GSL_catchers_on_retainer }
+				add_political_power = -15
+				add_manpower = -125
+			}
+			else = {
+				add_political_power = -25
+				add_manpower = -250
+			}
+			add_equipment_to_stockpile = { type = infantry_equipment amount = -100 }
+		}
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision remove GSL_slaving_expedition on [From.GetName]"
+			custom_effect_tooltip = GSL_expedition_yield_tt
+			hidden_effect = {
+				random_list = {
+					50 = { add_to_variable = { foe_slaves_var = 1 } }
+					50 = { add_to_variable = { foe_slaves_var = 2 } }
+				}
+				if = {
+					limit = { has_completed_focus = GSL_deeper_into_the_waste }
+					add_to_variable = { foe_slaves_var = 1 }
+				}
+				if = {
+					limit = { has_completed_focus = GSL_no_empty_collars }
+					add_to_variable = { foe_slaves_var = 1 }
+				}
+			}
+			if = {
+				limit = { has_completed_focus = GSL_catchers_on_retainer }
+				add_manpower = 100
+			}
+			else = {
+				add_manpower = 200
+			}
+			FROM = {
+				random_owned_controlled_state = {
+					limit = {
+						state_population > 3000
+					}
+					GSL_take_population = yes
+				}
+				add_opinion_modifier = {
+					target = ROOT
+					modifier = GSL_slaving_expedition_opinion
+				}
+			}
+		}
+		ai_will_do = {
+			base = 40
+			modifier = {
+				factor = 0
+				check_variable = { foe_slaves_var > 5.9 }
+			}
+			modifier = {
+				factor = 0.5
+				has_war = yes
+			}
+		}
+	}
+	GSL_gang_slave_trade = {
+		icon = GFX_dec_buy_slaves_from_the_west
+		target_root_trigger = {
+			has_completed_focus = GSL_buy_from_the_gangs
+		}
+		target_trigger = {
+			FROM = {
+				exists = yes
+				NOT = { tag = ROOT }
+				is_raider_nation = yes
+				NOT = { has_war_with = ROOT }
+				# only gangs that think well of us, which also keeps the list short
+				has_opinion = {
+					target = ROOT
+					value > 0
+				}
+			}
+		}
+		available = {
+			NOT = { has_country_flag = GSL_gang_trade_cooldown_flag }
+			has_equipment = { infantry_equipment > 99 }
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GSL_gang_slave_trade with [From.GetName]"
+			set_country_flag = { flag = GSL_gang_trade_cooldown_flag days = 60 value = 1 }
+			add_equipment_to_stockpile = { type = infantry_equipment amount = -100 }
+			FROM = {
+				add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 100 producer = OWE }
+			}
+			custom_effect_tooltip = foe_1_gain_slave_tt
+			hidden_effect = {
+				add_to_variable = { foe_slaves_var = 1 }
+			}
+		}
+		ai_will_do = {
+			base = 10
+			modifier = {
+				factor = 0
+				check_variable = { foe_slaves_var > 2.9 }
+			}
+		}
+	}
+	GSL_assign_field_gang = {
+		icon = GFX_decision_generic_construction
+		visible = {
+			has_completed_focus = GSL_put_them_to_work
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = foe_1_cost_slave_tt
+				check_variable = { foe_slaves_var > 0.99 }
+			}
+			custom_trigger_tooltip = {
+				tooltip = GSL_hold_cap_trigger_tt
+				check_variable = { GSL_held < GSL_hold_cap }
+			}
+			custom_trigger_tooltip = {
+				tooltip = GSL_gang_cap_trigger_tt
+				check_variable = { GSL_gang_field < 3 }
+			}
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GSL_assign_field_gang"
+			custom_effect_tooltip = GSL_assign_field_gang_tt
+			hidden_effect = {
+				subtract_from_variable = { foe_slaves_var = 1 }
+				add_to_variable = { GSL_gang_field = 1 }
+				GSL_update_pens = yes
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 40
+				has_stability > 0.35
+			}
+		}
+	}
+	GSL_release_field_gang = {
+		icon = GFX_decision_generic_construction
+		visible = {
+			check_variable = { GSL_gang_field > 0 }
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GSL_release_field_gang"
+			custom_effect_tooltip = GSL_release_gang_tt
+			hidden_effect = {
+				add_to_variable = { foe_slaves_var = 1 }
+				subtract_from_variable = { GSL_gang_field = 1 }
+				GSL_update_pens = yes
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 100
+				has_stability < 0.25
+			}
+		}
+	}
+	GSL_assign_factory_gang = {
+		icon = GFX_decision_generic_construction
+		visible = {
+			has_completed_focus = GSL_factory_gangs
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = foe_1_cost_slave_tt
+				check_variable = { foe_slaves_var > 0.99 }
+			}
+			custom_trigger_tooltip = {
+				tooltip = GSL_hold_cap_trigger_tt
+				check_variable = { GSL_held < GSL_hold_cap }
+			}
+			custom_trigger_tooltip = {
+				tooltip = GSL_gang_cap_trigger_tt
+				check_variable = { GSL_gang_factory < 3 }
+			}
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GSL_assign_factory_gang"
+			custom_effect_tooltip = GSL_assign_factory_gang_tt
+			hidden_effect = {
+				subtract_from_variable = { foe_slaves_var = 1 }
+				add_to_variable = { GSL_gang_factory = 1 }
+				GSL_update_pens = yes
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 40
+				has_stability > 0.35
+			}
+		}
+	}
+	GSL_release_factory_gang = {
+		icon = GFX_decision_generic_construction
+		visible = {
+			check_variable = { GSL_gang_factory > 0 }
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GSL_release_factory_gang"
+			custom_effect_tooltip = GSL_release_gang_tt
+			hidden_effect = {
+				add_to_variable = { foe_slaves_var = 1 }
+				subtract_from_variable = { GSL_gang_factory = 1 }
+				GSL_update_pens = yes
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 100
+				has_stability < 0.25
+			}
+		}
+	}
+	GSL_assign_road_gang = {
+		icon = GFX_decision_generic_construction
+		visible = {
+			has_completed_focus = GSL_road_gangs
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = foe_1_cost_slave_tt
+				check_variable = { foe_slaves_var > 0.99 }
+			}
+			custom_trigger_tooltip = {
+				tooltip = GSL_hold_cap_trigger_tt
+				check_variable = { GSL_held < GSL_hold_cap }
+			}
+			custom_trigger_tooltip = {
+				tooltip = GSL_gang_cap_trigger_tt
+				check_variable = { GSL_gang_road < 3 }
+			}
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GSL_assign_road_gang"
+			custom_effect_tooltip = GSL_assign_road_gang_tt
+			hidden_effect = {
+				subtract_from_variable = { foe_slaves_var = 1 }
+				add_to_variable = { GSL_gang_road = 1 }
+				GSL_update_pens = yes
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 40
+				has_stability > 0.35
+			}
+		}
+	}
+	GSL_release_road_gang = {
+		icon = GFX_decision_generic_construction
+		visible = {
+			check_variable = { GSL_gang_road > 0 }
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GSL_release_road_gang"
+			custom_effect_tooltip = GSL_release_gang_tt
+			hidden_effect = {
+				add_to_variable = { foe_slaves_var = 1 }
+				subtract_from_variable = { GSL_gang_road = 1 }
+				GSL_update_pens = yes
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 100
+				has_stability < 0.25
+			}
+		}
+	}
+	GSL_assign_levy_gang = {
+		icon = GFX_decision_generic_construction
+		visible = {
+			has_completed_focus = GSL_the_levy
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = foe_1_cost_slave_tt
+				check_variable = { foe_slaves_var > 0.99 }
+			}
+			custom_trigger_tooltip = {
+				tooltip = GSL_hold_cap_trigger_tt
+				check_variable = { GSL_held < GSL_hold_cap }
+			}
+			custom_trigger_tooltip = {
+				tooltip = GSL_gang_cap_trigger_tt
+				check_variable = { GSL_gang_levy < 3 }
+			}
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GSL_assign_levy_gang"
+			custom_effect_tooltip = GSL_assign_levy_gang_tt
+			hidden_effect = {
+				subtract_from_variable = { foe_slaves_var = 1 }
+				add_to_variable = { GSL_gang_levy = 1 }
+				GSL_update_pens = yes
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 40
+				has_stability > 0.35
+			}
+		}
+	}
+	GSL_release_levy_gang = {
+		icon = GFX_decision_generic_construction
+		visible = {
+			check_variable = { GSL_gang_levy > 0 }
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision GSL_release_levy_gang"
+			custom_effect_tooltip = GSL_release_gang_tt
+			hidden_effect = {
+				add_to_variable = { foe_slaves_var = 1 }
+				subtract_from_variable = { GSL_gang_levy = 1 }
+				GSL_update_pens = yes
+			}
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 100
+				has_stability < 0.25
+			}
+		}
 	}
 }

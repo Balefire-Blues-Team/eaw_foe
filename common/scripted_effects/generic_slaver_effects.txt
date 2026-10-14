@@ -1,0 +1,408 @@
+### Generic slaver tree (2026-10-14): the house, the gangs and The Pens, the slave market, expeditions ###
+### Slaves are counted in thousands: foe_slaves_var holds the free ones, GSL_gang_<type> the ones held in gangs.
+
+# Country scope: defaults of the slave system, from the first history focus
+GSL_init_house = {
+	add_dynamic_modifier = {
+		modifier = GSL_the_house_modifier
+	}
+	set_variable = { GSL_pens_cost_mult = 1 }
+	set_variable = { GSL_gang_bonus_mult = 1 }
+	set_variable = { GSL_levy_mult = 1 }
+	set_variable = { GSL_hold_cap = 4 }
+	set_variable = { GSL_event_mult = 1 }
+	GSL_init_market = yes
+}
+
+# Country scope: recomputes what the slaves in the gangs give and cost
+GSL_update_pens = {
+	set_variable = { GSL_held = GSL_gang_field }
+	add_to_variable = { GSL_held = GSL_gang_factory }
+	add_to_variable = { GSL_held = GSL_gang_road }
+	add_to_variable = { GSL_held = GSL_gang_levy }
+	set_temp_variable = { cost_mult = GSL_pens_cost_mult }
+	clamp_temp_variable = { var = cost_mult min = 0.1 }
+	set_variable = { GSL_pens_stability = GSL_held }
+	multiply_variable = { GSL_pens_stability = cost_mult }
+	multiply_variable = { GSL_pens_stability = -0.02 }
+	set_variable = { GSL_pens_research = GSL_held }
+	multiply_variable = { GSL_pens_research = cost_mult }
+	multiply_variable = { GSL_pens_research = -0.01 }
+	set_variable = { GSL_pens_metal = GSL_gang_field }
+	multiply_variable = { GSL_pens_metal = GSL_gang_bonus_mult }
+	set_variable = { GSL_pens_energy = GSL_pens_metal }
+	set_variable = { GSL_pens_output = GSL_gang_factory }
+	multiply_variable = { GSL_pens_output = GSL_gang_bonus_mult }
+	multiply_variable = { GSL_pens_output = 0.03 }
+	set_variable = { GSL_pens_construction = GSL_gang_road }
+	multiply_variable = { GSL_pens_construction = GSL_gang_bonus_mult }
+	multiply_variable = { GSL_pens_construction = 0.04 }
+	set_variable = { GSL_pens_recruit = GSL_gang_levy }
+	multiply_variable = { GSL_pens_recruit = GSL_gang_bonus_mult }
+	multiply_variable = { GSL_pens_recruit = GSL_levy_mult }
+	multiply_variable = { GSL_pens_recruit = 0.03 }
+	force_update_dynamic_modifier = yes
+}
+
+# Country scope: one thousand held slaves are lost (runaways, ringleaders), from the largest gang
+GSL_lose_held_slave = {
+	if = {
+		limit = {
+			check_variable = { GSL_held > 0 }
+		}
+		if = {
+			limit = {
+				check_variable = { GSL_gang_field > 0 }
+				check_variable = { GSL_gang_field > GSL_gang_factory }
+				check_variable = { GSL_gang_field > GSL_gang_road }
+				check_variable = { GSL_gang_field > GSL_gang_levy }
+			}
+			subtract_from_variable = { GSL_gang_field = 1 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { GSL_gang_factory > 0 }
+				check_variable = { GSL_gang_factory > GSL_gang_road }
+				check_variable = { GSL_gang_factory > GSL_gang_levy }
+			}
+			subtract_from_variable = { GSL_gang_factory = 1 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { GSL_gang_road > 0 }
+				check_variable = { GSL_gang_road > GSL_gang_levy }
+			}
+			subtract_from_variable = { GSL_gang_road = 1 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { GSL_gang_levy > 0 }
+			}
+			subtract_from_variable = { GSL_gang_levy = 1 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { GSL_gang_field > 0 }
+			}
+			subtract_from_variable = { GSL_gang_field = 1 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { GSL_gang_factory > 0 }
+			}
+			subtract_from_variable = { GSL_gang_factory = 1 }
+		}
+		else = {
+			subtract_from_variable = { GSL_gang_road = 1 }
+		}
+		GSL_update_pens = yes
+	}
+}
+
+# Country scope: monthly upkeep of The Pens: one flavour event at most every 90 days while 3 thousand or more are held.
+# Chance per month: 3% per thousand held, times GSL_event_mult (Works x1.5, Market x0.5, Overseer Corps x0.5)
+GSL_pens_monthly = {
+	if = {
+		limit = {
+			has_dynamic_modifier = { modifier = GSL_the_pens_modifier }
+			check_variable = { GSL_held > 2.9 }
+			NOT = { has_country_flag = GSL_pens_event_cooldown_flag }
+		}
+		set_temp_variable = { chance = GSL_held }
+		multiply_temp_variable = { chance = 3 }
+		multiply_temp_variable = { chance = GSL_event_mult }
+		set_temp_variable_to_random = { var = roll min = 0 max = 100 }
+		if = {
+			limit = {
+				check_variable = { roll < chance }
+			}
+			set_country_flag = { flag = GSL_pens_event_cooldown_flag days = 90 value = 1 }
+			random_list = {
+				40 = { country_event = { id = GSL.1 } }
+				30 = { country_event = { id = GSL.2 } }
+				30 = { country_event = { id = GSL.3 } }
+			}
+		}
+	}
+}
+
+# State scope (a state of PREV): the state loses 1000 inhabitants without touching its owner's manpower pool
+GSL_take_population = {
+	OWNER = {
+		save_current_manpower = yes
+	}
+	add_manpower = -1000
+	OWNER = {
+		restore_previous_manpower = yes
+	}
+}
+
+### Slave market. global.GSL_price is the going price of one thousand slaves in Economic Capacity Surplus,
+### global.GSL_pool the slaves on offer. Sellers get the price times GSL_sell_mult, buyers pay 20% more times GSL_buy_mult.
+
+# Country scope: market defaults (any slaver nation, not only the tree's)
+GSL_init_market = {
+	if = {
+		limit = {
+			NOT = { has_variable = GSL_sell_mult }
+		}
+		set_variable = { GSL_sell_mult = 1 }
+		set_variable = { GSL_buy_mult = 1 }
+	}
+}
+
+# Any country scope: starting market, from on_startup (and the first monthly tick of an older save)
+GSL_init_global_market = {
+	if = {
+		limit = {
+			NOT = { has_global_flag = GSL_market_started_flag }
+		}
+		set_global_flag = GSL_market_started_flag
+		set_variable = { global.GSL_price = 600 }
+		set_variable = { global.GSL_pool = 10 }
+		GSL_reprice = yes
+	}
+}
+
+# Global: the prices in political power, guns and factory days that follow the going price
+GSL_reprice = {
+	clamp_variable = { var = global.GSL_price min = 300 max = 1200 }
+	set_variable = { global.GSL_sell_pp = global.GSL_price }
+	multiply_variable = { global.GSL_sell_pp = 0.0417 }
+	set_variable = { global.GSL_sell_guns = global.GSL_price }
+	multiply_variable = { global.GSL_sell_guns = 0.1667 }
+	set_variable = { global.GSL_buy_pp = global.GSL_price }
+	multiply_variable = { global.GSL_buy_pp = 0.0667 }
+	set_variable = { global.GSL_buy_guns = global.GSL_price }
+	multiply_variable = { global.GSL_buy_guns = 0.2083 }
+	set_variable = { global.GSL_buy_days = global.GSL_price }
+	multiply_variable = { global.GSL_buy_days = 0.24 }
+	round_variable = global.GSL_sell_pp
+	round_variable = global.GSL_sell_guns
+	round_variable = global.GSL_buy_pp
+	round_variable = global.GSL_buy_guns
+	round_variable = global.GSL_buy_days
+}
+
+# Country scope: a batch was sold to the market (the slaves are already taken off the seller)
+GSL_market_sold = {
+	add_to_variable = { global.GSL_pool = 1 }
+	multiply_variable = { global.GSL_price = 0.95 }
+	GSL_reprice = yes
+	if = {
+		limit = {
+			has_completed_focus = GSL_payment_on_delivery
+		}
+		add_political_power = 10
+	}
+}
+
+# Country scope: a batch was bought from the market
+GSL_market_bought = {
+	subtract_from_variable = { global.GSL_pool = 1 }
+	multiply_variable = { global.GSL_price = 1.05 }
+	GSL_reprice = yes
+}
+
+# Country scope: pays temp variable surplus into the bank (add_cic in steps of 10)
+GSL_pay_surplus = {
+	set_temp_variable = { steps = surplus }
+	divide_temp_variable = { steps = 10 }
+	round_temp_variable = steps
+	while_loop_effect = {
+		limit = {
+			check_variable = { steps > 0 }
+		}
+		add_cic = 10
+		subtract_from_temp_variable = { steps = 1 }
+	}
+}
+
+# Country scope: adds temp variable days to our market contract (one civilian factory tied up until paid off)
+GSL_add_debt = {
+	add_to_variable = { GSL_debt_days = days }
+	if = {
+		limit = {
+			NOT = { has_dynamic_modifier = { modifier = GSL_market_debt_modifier } }
+		}
+		add_dynamic_modifier = {
+			modifier = GSL_market_debt_modifier
+		}
+	}
+}
+
+# Global, once a month: the price drifts 10% of the way back to 600 and a little stock arrives from far away
+GSL_market_monthly = {
+	# saves started before the market existed set it up here
+	GSL_init_global_market = yes
+	if = {
+		limit = {
+			NOT = { has_global_flag = GSL_market_drift_flag }
+		}
+		set_global_flag = { flag = GSL_market_drift_flag days = 25 value = 1 }
+		set_temp_variable = { gap = 600 }
+		subtract_from_temp_variable = { gap = global.GSL_price }
+		multiply_temp_variable = { gap = 0.1 }
+		add_to_variable = { global.GSL_price = gap }
+		if = {
+			limit = {
+				check_variable = { global.GSL_pool < 10 }
+			}
+			add_to_variable = { global.GSL_pool = 0.5 }
+		}
+		GSL_reprice = yes
+	}
+}
+
+# Country scope, monthly: contracts, standing orders, debts, tribute
+GSL_country_monthly = {
+	if = {
+		limit = {
+			has_dynamic_modifier = { modifier = GSL_market_debt_modifier }
+		}
+		subtract_from_variable = { GSL_debt_days = 30 }
+		if = {
+			limit = {
+				check_variable = { GSL_debt_days < 1 }
+			}
+			set_variable = { GSL_debt_days = 0 }
+			remove_dynamic_modifier = { modifier = GSL_market_debt_modifier }
+		}
+	}
+	if = {
+		limit = {
+			has_dynamic_modifier = { modifier = GSL_standing_order_modifier }
+		}
+		if = {
+			limit = {
+				check_variable = { GSL_order_left > 0 }
+			}
+			add_to_variable = { foe_slaves_var = 1 }
+			subtract_from_variable = { GSL_order_left = 1 }
+		}
+		subtract_from_variable = { GSL_order_days = 30 }
+		if = {
+			limit = {
+				check_variable = { GSL_order_days < 1 }
+				check_variable = { GSL_order_left < 1 }
+			}
+			remove_dynamic_modifier = { modifier = GSL_standing_order_modifier }
+		}
+	}
+	if = {
+		limit = {
+			OR = {
+				has_completed_focus = GSL_debts_paid_in_years
+				has_completed_focus = GSL_tribute_in_flesh
+			}
+		}
+		add_to_variable = { GSL_quarter = 1 }
+		if = {
+			limit = {
+				check_variable = { GSL_quarter > 2 }
+			}
+			set_variable = { GSL_quarter = 0 }
+			if = {
+				limit = {
+					has_completed_focus = GSL_debts_paid_in_years
+					capital_scope = { state_population > 2000 }
+				}
+				add_to_variable = { foe_slaves_var = 1 }
+				capital_scope = { GSL_take_population = yes }
+			}
+			if = {
+				limit = {
+					has_completed_focus = GSL_tribute_in_flesh
+				}
+				every_subject_country = {
+					limit = {
+						capital_scope = { state_population > 2000 }
+					}
+					ROOT = { add_to_variable = { foe_slaves_var = 1 } }
+					capital_scope = { GSL_take_population = yes }
+				}
+			}
+		}
+	}
+	GSL_pens_monthly = yes
+}
+
+GSL_prepare_hired_guns = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = GSL_template_hired_guns_flag }
+		}
+		set_country_flag = GSL_template_hired_guns_flag
+		division_template = {
+			name = "Hired Guns"
+			priority = 1
+			regiments = {
+				infantry = { x = 0 y = 0 }
+				infantry = { x = 0 y = 1 }
+				infantry = { x = 0 y = 2 }
+				infantry = { x = 0 y = 3 }
+			}
+		}
+	}
+}
+
+GSL_prepare_freedmen = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = GSL_template_freedmen_flag }
+		}
+		set_country_flag = GSL_template_freedmen_flag
+		division_template = {
+			name = "Freedmen"
+			priority = 1
+			regiments = {
+				infantry = { x = 0 y = 0 }
+				infantry = { x = 0 y = 1 }
+				infantry = { x = 0 y = 2 }
+				infantry = { x = 0 y = 3 }
+			}
+		}
+	}
+}
+
+GSL_prepare_fodder = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = GSL_template_fodder_flag }
+		}
+		set_country_flag = GSL_template_fodder_flag
+		division_template = {
+			name = "Fodder Gang"
+			priority = 1
+			regiments = {
+				militia = { x = 0 y = 0 }
+				militia = { x = 0 y = 1 }
+				militia = { x = 0 y = 2 }
+				militia = { x = 0 y = 3 }
+				militia = { x = 0 y = 4 }
+				militia = { x = 0 y = 5 }
+			}
+		}
+	}
+}
+
+GSL_prepare_catchers = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = GSL_template_catchers_flag }
+		}
+		set_country_flag = GSL_template_catchers_flag
+		division_template = {
+			name = "Catchers"
+			priority = 1
+			regiments = {
+				infantry = { x = 0 y = 0 }
+				infantry = { x = 0 y = 1 }
+				infantry = { x = 0 y = 2 }
+			}
+			support = {
+				recon_company = { x = 0 y = 0 }
+			}
+		}
+	}
+}

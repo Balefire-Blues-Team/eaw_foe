@@ -1,0 +1,207 @@
+add_namespace = GSL
+
+### Generic slaver tree (2026-10-14) ###
+
+### History (focus events) ###
+
+country_event = {
+	id = GSL.101
+	title = GSL.101.title
+	desc = GSL.101.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = GSL.101.a
+		custom_effect_tooltip = foe_2_gain_slave_tt
+		hidden_effect = {
+			add_to_variable = { foe_slaves_var = 2 }
+		}
+	}
+	option = {
+		name = GSL.101.b
+		custom_effect_tooltip = GSL_house_stability_p5_tt
+		custom_effect_tooltip = GSL_house_garrison_m10_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_stability = 0.05 }
+			add_to_variable = { GSL_house_garrison = -0.1 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+	option = {
+		name = GSL.101.c
+		custom_effect_tooltip = GSL_house_war_support_p5_tt
+		custom_effect_tooltip = GSL_house_recruit_p3_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_war_support = 0.05 }
+			add_to_variable = { GSL_house_recruit = 0.03 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+country_event = {
+	id = GSL.102
+	title = GSL.102.title
+	desc = GSL.102.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = GSL.102.a
+		custom_effect_tooltip = GSL_house_output_p5_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_output = 0.05 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+	option = {
+		name = GSL.102.b
+		custom_effect_tooltip = GSL_house_metal_p100_tt
+		custom_effect_tooltip = GSL_house_energy_p100_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_metal = 1 }
+			add_to_variable = { GSL_house_energy = 1 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+	option = {
+		name = GSL.102.c
+		army_experience = 10
+		custom_effect_tooltip = GSL_house_xp_gain_p5_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_xp_gain = 0.05 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+country_event = {
+	id = GSL.103
+	title = GSL.103.title
+	desc = GSL.103.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = GSL.103.a
+		custom_effect_tooltip = GSL_pens_cost_m25_tt
+		hidden_effect = {
+			add_to_variable = { GSL_pens_cost_mult = -0.25 }
+			GSL_update_pens = yes
+		}
+	}
+	option = {
+		name = GSL.103.b
+		custom_effect_tooltip = GSL_house_pp_gain_p10_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_pp_gain = 0.1 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+	option = {
+		name = GSL.103.c
+		capital_scope = {
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+		}
+	}
+}
+
+### Flavour events of The Pens (fired by GSL_pens_monthly) ###
+
+country_event = {
+	id = GSL.1
+	title = GSL.1.title
+	desc = GSL.1.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = GSL.1.a
+		trigger = {
+			has_political_power > 24
+		}
+		add_political_power = -25
+	}
+	option = {
+		name = GSL.1.b
+		custom_effect_tooltip = GSL_lose_1_held_tt
+		hidden_effect = {
+			GSL_lose_held_slave = yes
+		}
+	}
+}
+
+country_event = {
+	id = GSL.2
+	title = GSL.2.title
+	desc = GSL.2.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = GSL.2.a
+		add_timed_idea = {
+			idea = GSL_crackdown_idea
+			days = 90
+		}
+	}
+	option = {
+		name = GSL.2.b
+		custom_effect_tooltip = GSL_sabotage_tt
+		hidden_effect = {
+			random_owned_controlled_state = {
+				limit = {
+					OR = {
+						industrial_complex > 0
+						arms_factory > 0
+					}
+				}
+				if = {
+					limit = {
+						industrial_complex > 0
+					}
+					damage_building = {
+						type = industrial_complex
+						damage = 1
+					}
+				}
+				else = {
+					damage_building = {
+						type = arms_factory
+						damage = 1
+					}
+				}
+			}
+		}
+	}
+}
+
+country_event = {
+	id = GSL.3
+	title = GSL.3.title
+	desc = GSL.3.desc
+
+	is_triggered_only = yes
+
+	option = {
+		name = GSL.3.a
+		add_timed_idea = {
+			idea = GSL_made_an_example_idea
+			days = 180
+		}
+	}
+	option = {
+		name = GSL.3.b
+		custom_effect_tooltip = GSL_lose_2_held_tt
+		hidden_effect = {
+			GSL_lose_held_slave = yes
+			GSL_lose_held_slave = yes
+		}
+	}
+}

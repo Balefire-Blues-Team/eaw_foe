@@ -1,0 +1,2085 @@
+### Generic slaver tree (2026-10-14), built from shared foci so slaver nations can get auxiliary trees.
+### Roots: GSL_where_the_chains_came_from (history, opening, supply, estate, three directions, endgame),
+### GSL_who_holds_the_whip (politics, opens after the third history focus), GSL_guns_for_the_overseers (army).
+### Mechanics (gangs, The Pens, slave market, expeditions) live in generic_slaver_effects.txt and foe_slavery_decisions.txt.
+
+focus_tree = {
+	id = GSL_focus
+	country = {
+		factor = 0
+		modifier = {
+			OR = {
+				has_country_flag = is_slaver_nation_flag
+				original_tag = VRX
+				original_tag = JAD
+				original_tag = TOL
+			}
+			add = 20
+		}
+	}
+	default = no
+	reset_on_civilwar = no
+	continuous_focus_position = {
+		x = 3300
+		y = 900
+	}
+	shared_focus = GSL_where_the_chains_came_from
+	shared_focus = GSL_who_holds_the_whip
+	shared_focus = GSL_guns_for_the_overseers
+}
+
+### Root 1, The Trade: history (three choice events) ###
+
+shared_focus = {
+	id = GSL_where_the_chains_came_from
+	icon = GFX_goal_unknown
+	x = 12
+	y = 0
+	cost = 1
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_where_the_chains_came_from"
+		GSL_init_house = yes
+		country_event = {
+			id = GSL.101
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_the_first_collar
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_where_the_chains_came_from
+	}
+	x = 0
+	y = 1
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 1
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_the_first_collar"
+		country_event = {
+			id = GSL.102
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_master_of_the_house
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_the_first_collar
+	}
+	x = 0
+	y = 2
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 1
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_master_of_the_house"
+		country_event = {
+			id = GSL.103
+		}
+	}
+}
+
+### Opening ###
+
+shared_focus = {
+	id = GSL_count_the_stock
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_master_of_the_house
+	}
+	x = 0
+	y = 3
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 4.29
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_count_the_stock"
+		custom_effect_tooltip = GSL_count_the_stock_tt
+		hidden_effect = {
+			set_country_flag = slavery_allowed
+			set_country_flag = is_slaver_nation_flag
+			if = {
+				limit = {
+					check_variable = { foe_slaves_var < 2 }
+				}
+				set_variable = { foe_slaves_var = 2 }
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_mark_the_hunting_grounds
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_count_the_stock
+	}
+	x = -9
+	y = 4
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 4.29
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_mark_the_hunting_grounds"
+		custom_effect_tooltip = GSL_unlock_expedition_tt
+	}
+}
+
+shared_focus = {
+	id = GSL_the_auction_block
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_count_the_stock
+	}
+	x = 0
+	y = 4
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 4.29
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_the_auction_block"
+		custom_effect_tooltip = GSL_unlock_market_tt
+	}
+}
+
+shared_focus = {
+	id = GSL_put_them_to_work
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_count_the_stock
+	}
+	x = 9
+	y = 4
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 4.29
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_put_them_to_work"
+		custom_effect_tooltip = GSL_unlock_field_gang_tt
+		hidden_effect = {
+			add_dynamic_modifier = {
+				modifier = GSL_the_pens_modifier
+			}
+			GSL_update_pens = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_house_rules
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_the_auction_block
+	}
+	prerequisite = {
+		focus = GSL_put_them_to_work
+	}
+	x = 0
+	y = 5
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 4.29
+	ai_will_do = {
+		factor = 100
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_house_rules"
+		add_political_power = 50
+	}
+}
+
+### Supply ###
+
+shared_focus = {
+	id = GSL_catchers_on_retainer
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_mark_the_hunting_grounds
+	}
+	x = -10
+	y = 5
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_catchers_on_retainer"
+		custom_effect_tooltip = GSL_catchers_on_retainer_tt
+	}
+}
+
+shared_focus = {
+	id = GSL_buy_from_the_gangs
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_mark_the_hunting_grounds
+	}
+	x = -8
+	y = 5
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_buy_from_the_gangs"
+		custom_effect_tooltip = GSL_unlock_buy_from_gangs_tt
+	}
+}
+
+shared_focus = {
+	id = GSL_deeper_into_the_waste
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_catchers_on_retainer
+	}
+	x = -10
+	y = 6
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_deeper_into_the_waste"
+		custom_effect_tooltip = GSL_deeper_into_the_waste_tt
+	}
+}
+
+shared_focus = {
+	id = GSL_debts_paid_in_years
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_buy_from_the_gangs
+	}
+	x = -8
+	y = 6
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_debts_paid_in_years"
+		custom_effect_tooltip = GSL_debts_paid_in_years_tt
+	}
+}
+
+shared_focus = {
+	id = GSL_spoils_of_war
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_deeper_into_the_waste
+	}
+	x = -10
+	y = 7
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_spoils_of_war"
+		custom_effect_tooltip = GSL_spoils_of_war_tt
+	}
+}
+
+shared_focus = {
+	id = GSL_convict_labour
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_debts_paid_in_years
+	}
+	x = -8
+	y = 7
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_convict_labour"
+		custom_effect_tooltip = foe_1_gain_slave_tt
+		hidden_effect = {
+			add_to_variable = { foe_slaves_var = 1 }
+		}
+		custom_effect_tooltip = GSL_house_stability_p3_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_stability = 0.03 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_chain_the_conquered
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_spoils_of_war
+	}
+	x = -10
+	y = 8
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_chain_the_conquered"
+		custom_effect_tooltip = GSL_chain_the_conquered_tt
+	}
+}
+
+shared_focus = {
+	id = GSL_no_empty_collars
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_chain_the_conquered
+	}
+	prerequisite = {
+		focus = GSL_convict_labour
+	}
+	x = -9
+	y = 9
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_no_empty_collars"
+		custom_effect_tooltip = GSL_hold_cap_p2_tt
+		hidden_effect = {
+			add_to_variable = { GSL_hold_cap = 2 }
+		}
+		custom_effect_tooltip = GSL_no_empty_collars_tt
+	}
+}
+
+### Estate ###
+
+shared_focus = {
+	id = GSL_the_caravan_yard
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_put_them_to_work
+	}
+	x = 8
+	y = 5
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_the_caravan_yard"
+		capital_scope = {
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+		custom_effect_tooltip = GSL_house_supply_m5_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_supply = -0.05 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_the_first_mill
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_put_them_to_work
+	}
+	x = 10
+	y = 5
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_the_first_mill"
+		capital_scope = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_the_storehouses
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_the_caravan_yard
+	}
+	x = 8
+	y = 6
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_the_storehouses"
+		add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 200 producer = OWE }
+		add_equipment_to_stockpile = { type = demolitions_equipment_1 amount = 100 producer = OWE }
+	}
+}
+
+shared_focus = {
+	id = GSL_lettered_slaves
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_the_first_mill
+	}
+	x = 10
+	y = 6
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_lettered_slaves"
+		add_research_slot = 1
+	}
+}
+
+shared_focus = {
+	id = GSL_roads_for_the_wagons
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_the_storehouses
+	}
+	x = 8
+	y = 7
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_roads_for_the_wagons"
+		every_owned_state = {
+			random_select_amount = 2
+			limit = {
+				is_core_of = ROOT
+				is_controlled_by = ROOT
+			}
+			add_building_construction = {
+				type = infrastructure
+				level = 1
+				instant_build = yes
+			}
+		}
+		custom_effect_tooltip = GSL_house_construction_p5_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_construction = 0.05 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_resource_rights
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_lettered_slaves
+	}
+	x = 10
+	y = 7
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_resource_rights"
+		custom_effect_tooltip = GSL_house_metal_p200_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_metal = 2 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_the_big_house
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_roads_for_the_wagons
+	}
+	prerequisite = {
+		focus = GSL_resource_rights
+	}
+	x = 9
+	y = 8
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_the_big_house"
+		custom_effect_tooltip = GSL_house_pp_gain_p15_tt
+		custom_effect_tooltip = GSL_house_stability_p5_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_pp_gain = 0.15 }
+			add_to_variable = { GSL_house_stability = 0.05 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+### Direction: Market ###
+
+shared_focus = {
+	id = GSL_licensed_auction_house
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_house_rules
+	}
+	mutually_exclusive = {
+		focus = GSL_factory_gangs
+		focus = GSL_the_levy
+	}
+	x = -4
+	y = 6
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_licensed_auction_house"
+		custom_effect_tooltip = GSL_sell_p15_tt
+		custom_effect_tooltip = GSL_buy_m10_tt
+		hidden_effect = {
+			add_to_variable = { GSL_sell_mult = 0.15 }
+			add_to_variable = { GSL_buy_mult = -0.1 }
+			GSL_update_pens = yes
+		}
+		custom_effect_tooltip = GSL_event_chance_market_tt
+		hidden_effect = {
+			multiply_variable = { GSL_event_mult = 0.5 }
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_payment_on_delivery
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_licensed_auction_house
+	}
+	x = -5
+	y = 7
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_payment_on_delivery"
+		custom_effect_tooltip = GSL_payment_on_delivery_tt
+	}
+}
+
+shared_focus = {
+	id = GSL_standing_orders
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_licensed_auction_house
+	}
+	x = -3
+	y = 7
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_standing_orders"
+		custom_effect_tooltip = GSL_unlock_standing_order_tt
+	}
+}
+
+shared_focus = {
+	id = GSL_brokers_abroad
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_payment_on_delivery
+	}
+	x = -5
+	y = 8
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_brokers_abroad"
+		custom_effect_tooltip = GSL_unlock_brokers_tt
+	}
+}
+
+shared_focus = {
+	id = GSL_collared_and_insured
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_standing_orders
+	}
+	x = -3
+	y = 8
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_collared_and_insured"
+		custom_effect_tooltip = GSL_pens_cost_m25_tt
+		hidden_effect = {
+			add_to_variable = { GSL_pens_cost_mult = -0.25 }
+			GSL_update_pens = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_free_port
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_brokers_abroad
+	}
+	x = -5
+	y = 9
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_free_port"
+		capital_scope = {
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+		}
+		custom_effect_tooltip = GSL_house_consumer_m5_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_consumer = -0.05 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_hired_guns
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_collared_and_insured
+	}
+	x = -3
+	y = 9
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_hired_guns"
+		custom_effect_tooltip = GSL_unlock_hired_guns_tt
+	}
+}
+
+shared_focus = {
+	id = GSL_the_price_of_everything
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_free_port
+	}
+	prerequisite = {
+		focus = GSL_hired_guns
+	}
+	x = -4
+	y = 10
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_the_price_of_everything"
+		custom_effect_tooltip = GSL_sell_p10_tt
+		hidden_effect = {
+			add_to_variable = { GSL_sell_mult = 0.1 }
+			GSL_update_pens = yes
+		}
+		custom_effect_tooltip = GSL_house_pp_factor_p10_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_pp_factor = 0.1 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_everypony_has_a_price
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_the_price_of_everything
+	}
+	x = -4
+	y = 11
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_everypony_has_a_price"
+		add_ideas = GSL_everypony_has_a_price_idea
+		custom_effect_tooltip = GSL_sell_p15_tt
+		custom_effect_tooltip = GSL_buy_m15_tt
+		hidden_effect = {
+			add_to_variable = { GSL_sell_mult = 0.15 }
+			add_to_variable = { GSL_buy_mult = -0.15 }
+			GSL_update_pens = yes
+		}
+		custom_effect_tooltip = GSL_everypony_opinion_tt
+		hidden_effect = {
+			every_other_country = {
+				limit = {
+					has_country_flag = slavery_allowed
+				}
+				add_opinion_modifier = {
+					target = ROOT
+					modifier = GSL_everypony_opinion
+				}
+			}
+		}
+	}
+}
+
+### Direction: Works ###
+
+shared_focus = {
+	id = GSL_factory_gangs
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_house_rules
+	}
+	mutually_exclusive = {
+		focus = GSL_licensed_auction_house
+		focus = GSL_the_levy
+	}
+	x = 0
+	y = 6
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_factory_gangs"
+		custom_effect_tooltip = GSL_unlock_factory_gang_tt
+		custom_effect_tooltip = GSL_event_chance_works_tt
+		hidden_effect = {
+			multiply_variable = { GSL_event_mult = 1.5 }
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_road_gangs
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_factory_gangs
+	}
+	x = -1
+	y = 7
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_road_gangs"
+		custom_effect_tooltip = GSL_unlock_road_gang_tt
+	}
+}
+
+shared_focus = {
+	id = GSL_the_foremans_ledger
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_factory_gangs
+	}
+	x = 1
+	y = 7
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_the_foremans_ledger"
+		custom_effect_tooltip = GSL_gang_bonus_p25_tt
+		hidden_effect = {
+			add_to_variable = { GSL_gang_bonus_mult = 0.25 }
+			GSL_update_pens = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_company_town
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_road_gangs
+	}
+	x = -1
+	y = 8
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_company_town"
+		capital_scope = {
+			add_extra_state_shared_building_slots = 3
+			add_building_construction = {
+				type = industrial_complex
+				level = 2
+				instant_build = yes
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_the_twelve_hour_bell
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_the_foremans_ledger
+	}
+	x = 1
+	y = 8
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_the_twelve_hour_bell"
+		custom_effect_tooltip = GSL_gang_bonus_p25_tt
+		custom_effect_tooltip = GSL_pens_cost_p25_tt
+		hidden_effect = {
+			add_to_variable = { GSL_gang_bonus_mult = 0.25 }
+			add_to_variable = { GSL_pens_cost_mult = 0.25 }
+			GSL_update_pens = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_rebuild_the_old_works
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_company_town
+	}
+	x = -1
+	y = 9
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_rebuild_the_old_works"
+		custom_effect_tooltip = GSL_rebuild_the_old_works_tt
+	}
+}
+
+shared_focus = {
+	id = GSL_overseer_corps
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_the_twelve_hour_bell
+	}
+	x = 1
+	y = 9
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_overseer_corps"
+		custom_effect_tooltip = GSL_pens_cost_m25_tt
+		hidden_effect = {
+			add_to_variable = { GSL_pens_cost_mult = -0.25 }
+			GSL_update_pens = yes
+		}
+		custom_effect_tooltip = GSL_hold_cap_p3_tt
+		hidden_effect = {
+			add_to_variable = { GSL_hold_cap = 3 }
+		}
+		custom_effect_tooltip = GSL_event_chance_overseers_tt
+		hidden_effect = {
+			multiply_variable = { GSL_event_mult = 0.5 }
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_slag_and_smoke
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_rebuild_the_old_works
+	}
+	prerequisite = {
+		focus = GSL_overseer_corps
+	}
+	x = 0
+	y = 10
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_slag_and_smoke"
+		capital_scope = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = arms_factory
+				level = 2
+				instant_build = yes
+			}
+		}
+		custom_effect_tooltip = GSL_house_efficiency_cap_p5_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_efficiency_cap = 0.05 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_a_little_fillydelphia
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_slag_and_smoke
+	}
+	x = 0
+	y = 11
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_a_little_fillydelphia"
+		add_ideas = GSL_a_little_fillydelphia_idea
+		custom_effect_tooltip = GSL_hold_cap_p3_tt
+		hidden_effect = {
+			add_to_variable = { GSL_hold_cap = 3 }
+		}
+	}
+}
+
+### Direction: Pens ###
+
+shared_focus = {
+	id = GSL_the_levy
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_house_rules
+	}
+	mutually_exclusive = {
+		focus = GSL_licensed_auction_house
+		focus = GSL_factory_gangs
+	}
+	x = 4
+	y = 6
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_the_levy"
+		custom_effect_tooltip = GSL_unlock_levy_gang_tt
+	}
+}
+
+shared_focus = {
+	id = GSL_bomb_collars
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_the_levy
+	}
+	x = 3
+	y = 7
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_bomb_collars"
+		custom_effect_tooltip = GSL_pens_cost_m20_tt
+		hidden_effect = {
+			add_to_variable = { GSL_pens_cost_mult = -0.2 }
+			GSL_update_pens = yes
+		}
+		custom_effect_tooltip = GSL_house_recruit_p2_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_recruit = 0.02 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_front_rank_fodder
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_the_levy
+	}
+	x = 5
+	y = 7
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_front_rank_fodder"
+		custom_effect_tooltip = GSL_house_training_m15_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_training = -0.15 }
+			force_update_dynamic_modifier = yes
+		}
+		custom_effect_tooltip = GSL_fodder_template_tt
+		hidden_effect = {
+			GSL_prepare_fodder = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_the_fighting_pits
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_bomb_collars
+	}
+	x = 3
+	y = 8
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_the_fighting_pits"
+		army_experience = 50
+		custom_effect_tooltip = GSL_house_sf_cap_p5_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_sf_cap = 0.05 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_drivers_behind_the_line
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_front_rank_fodder
+	}
+	x = 5
+	y = 8
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_drivers_behind_the_line"
+		custom_effect_tooltip = GSL_house_org_p5_tt
+		custom_effect_tooltip = GSL_house_defence_p5_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_org = 0.05 }
+			add_to_variable = { GSL_house_defence = 0.05 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_freedom_for_service
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_the_fighting_pits
+	}
+	x = 3
+	y = 9
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_freedom_for_service"
+		custom_effect_tooltip = GSL_freedmen_tt
+		hidden_effect = {
+			GSL_prepare_freedmen = yes
+			create_unit = {
+				division = "name = \"Freedmen\" division_template = \"Freedmen\" start_experience_factor = 0.5"
+				owner = ROOT
+			}
+			create_unit = {
+				division = "name = \"Freedmen\" division_template = \"Freedmen\" start_experience_factor = 0.5"
+				owner = ROOT
+			}
+		}
+		custom_effect_tooltip = GSL_house_recruit_p2_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_recruit = 0.02 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_chains_on_the_march
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_drivers_behind_the_line
+	}
+	x = 5
+	y = 9
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_chains_on_the_march"
+		custom_effect_tooltip = GSL_house_supply_m10_tt
+		custom_effect_tooltip = GSL_house_speed_p5_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_supply = -0.1 }
+			add_to_variable = { GSL_house_speed = 0.05 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_the_arena
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_freedom_for_service
+	}
+	prerequisite = {
+		focus = GSL_chains_on_the_march
+	}
+	x = 4
+	y = 10
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_the_arena"
+		custom_effect_tooltip = GSL_house_war_support_p10_tt
+		custom_effect_tooltip = GSL_house_pp_gain_p10_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_war_support = 0.1 }
+			add_to_variable = { GSL_house_pp_gain = 0.1 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_the_chained_host
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_the_arena
+	}
+	x = 4
+	y = 11
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_the_chained_host"
+		add_ideas = GSL_the_chained_host_idea
+		custom_effect_tooltip = GSL_levy_p50_tt
+		hidden_effect = {
+			add_to_variable = { GSL_levy_mult = 0.5 }
+			GSL_update_pens = yes
+		}
+	}
+}
+
+### Endgame ###
+
+shared_focus = {
+	id = GSL_new_hunting_grounds
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_everypony_has_a_price
+		focus = GSL_a_little_fillydelphia
+		focus = GSL_the_chained_host
+	}
+	x = -2
+	y = 12
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_new_hunting_grounds"
+		custom_effect_tooltip = GSL_new_hunting_grounds_tt
+		hidden_effect = {
+			every_neighbor_country = {
+				limit = {
+					NOT = { is_in_faction_with = ROOT }
+				}
+				every_owned_state = {
+					limit = {
+						state_population > 3000
+					}
+					add_claim_by = ROOT
+				}
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_break_them_in
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_everypony_has_a_price
+		focus = GSL_a_little_fillydelphia
+		focus = GSL_the_chained_host
+	}
+	x = 2
+	y = 12
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_break_them_in"
+		custom_effect_tooltip = FOE_50_percent_core_cost_reduction_tt
+		set_variable = { coring_cost_country_factor = -0.50 }
+	}
+}
+
+shared_focus = {
+	id = GSL_tribute_in_flesh
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_new_hunting_grounds
+	}
+	x = -2
+	y = 13
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_tribute_in_flesh"
+		custom_effect_tooltip = GSL_tribute_in_flesh_tt
+	}
+}
+
+shared_focus = {
+	id = GSL_masters_of_the_waste
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_tribute_in_flesh
+	}
+	prerequisite = {
+		focus = GSL_break_them_in
+	}
+	x = 0
+	y = 14
+	relative_position_id = GSL_where_the_chains_came_from
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_masters_of_the_waste"
+		add_ideas = GSL_masters_of_the_waste_idea
+		custom_effect_tooltip = GSL_pens_cost_m25_tt
+		hidden_effect = {
+			add_to_variable = { GSL_pens_cost_mult = -0.25 }
+			GSL_update_pens = yes
+		}
+	}
+}
+
+### Root 2: Who Holds the Whip (politics) ###
+
+shared_focus = {
+	id = GSL_who_holds_the_whip
+	icon = GFX_goal_unknown
+	x = 28
+	y = 0
+	cost = 8.58
+	available = {
+		has_completed_focus = GSL_master_of_the_house
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_who_holds_the_whip"
+		add_political_power = 50
+	}
+}
+
+shared_focus = {
+	id = GSL_the_whip_hand
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_who_holds_the_whip
+	}
+	mutually_exclusive = {
+		focus = GSL_seats_at_the_table
+		focus = GSL_shareholders
+	}
+	x = -2
+	y = 1
+	relative_position_id = GSL_who_holds_the_whip
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_the_whip_hand"
+		custom_effect_tooltip = GSL_house_pp_factor_p15_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_pp_factor = 0.15 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_one_voice
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_the_whip_hand
+	}
+	x = -2
+	y = 2
+	relative_position_id = GSL_who_holds_the_whip
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_one_voice"
+		custom_effect_tooltip = GSL_house_war_support_p10_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_war_support = 0.1 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_crown_of_chains
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_one_voice
+	}
+	x = -2
+	y = 3
+	relative_position_id = GSL_who_holds_the_whip
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_crown_of_chains"
+		add_ideas = GSL_crown_of_chains_idea
+	}
+}
+
+shared_focus = {
+	id = GSL_seats_at_the_table
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_who_holds_the_whip
+	}
+	mutually_exclusive = {
+		focus = GSL_the_whip_hand
+		focus = GSL_shareholders
+	}
+	x = 0
+	y = 1
+	relative_position_id = GSL_who_holds_the_whip
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_seats_at_the_table"
+		custom_effect_tooltip = GSL_house_stability_p10_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_stability = 0.1 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_the_houses_agree
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_seats_at_the_table
+	}
+	x = 0
+	y = 2
+	relative_position_id = GSL_who_holds_the_whip
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_the_houses_agree"
+		capital_scope = {
+			add_extra_state_shared_building_slots = 1
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+		}
+		custom_effect_tooltip = GSL_house_consumer_m5_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_consumer = -0.05 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_rule_of_the_ledger
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_the_houses_agree
+	}
+	x = 0
+	y = 3
+	relative_position_id = GSL_who_holds_the_whip
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_rule_of_the_ledger"
+		add_ideas = GSL_rule_of_the_ledger_idea
+	}
+}
+
+shared_focus = {
+	id = GSL_shareholders
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_who_holds_the_whip
+	}
+	mutually_exclusive = {
+		focus = GSL_the_whip_hand
+		focus = GSL_seats_at_the_table
+	}
+	x = 2
+	y = 1
+	relative_position_id = GSL_who_holds_the_whip
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_shareholders"
+		custom_effect_tooltip = GSL_house_output_p5_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_output = 0.05 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_dividends
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_shareholders
+	}
+	x = 2
+	y = 2
+	relative_position_id = GSL_who_holds_the_whip
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_dividends"
+		capital_scope = {
+			add_extra_state_shared_building_slots = 2
+			add_building_construction = {
+				type = industrial_complex
+				level = 1
+				instant_build = yes
+			}
+			add_building_construction = {
+				type = arms_factory
+				level = 1
+				instant_build = yes
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_the_board_decides
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_dividends
+	}
+	x = 2
+	y = 3
+	relative_position_id = GSL_who_holds_the_whip
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_the_board_decides"
+		add_ideas = GSL_the_board_decides_idea
+	}
+}
+
+shared_focus = {
+	id = GSL_the_house_endures
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_crown_of_chains
+		focus = GSL_rule_of_the_ledger
+		focus = GSL_the_board_decides
+	}
+	x = 0
+	y = 4
+	relative_position_id = GSL_who_holds_the_whip
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_the_house_endures"
+		add_stability = 0.05
+		add_political_power = 100
+	}
+}
+
+shared_focus = {
+	id = GSL_law_of_the_lash
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_the_house_endures
+	}
+	x = 0
+	y = 5
+	relative_position_id = GSL_who_holds_the_whip
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_law_of_the_lash"
+		custom_effect_tooltip = GSL_house_justify_m25_tt
+		custom_effect_tooltip = GSL_house_war_support_p5_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_justify = -0.25 }
+			add_to_variable = { GSL_house_war_support = 0.05 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+### Root 3: Whips and Guns (army) ###
+
+shared_focus = {
+	id = GSL_guns_for_the_overseers
+	icon = GFX_goal_unknown
+	x = 38
+	y = 0
+	cost = 8.58
+	available = {
+		has_completed_focus = GSL_count_the_stock
+	}
+	ai_will_do = {
+		factor = 50
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_guns_for_the_overseers"
+		add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = 300 producer = OWE }
+	}
+}
+
+shared_focus = {
+	id = GSL_catchers_corps
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_guns_for_the_overseers
+	}
+	x = -3
+	y = 1
+	relative_position_id = GSL_guns_for_the_overseers
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_catchers_corps"
+		custom_effect_tooltip = GSL_catchers_template_tt
+		hidden_effect = {
+			GSL_prepare_catchers = yes
+		}
+		custom_effect_tooltip = GSL_house_speed_p5_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_speed = 0.05 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_nets_and_snares
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_catchers_corps
+	}
+	x = -4
+	y = 2
+	relative_position_id = GSL_guns_for_the_overseers
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_nets_and_snares"
+		custom_effect_tooltip = GSL_house_capture_p10_tt
+		custom_effect_tooltip = GSL_house_attack_p5_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_capture = 0.1 }
+			add_to_variable = { GSL_house_attack = 0.05 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_stun_rods
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_catchers_corps
+	}
+	x = -2
+	y = 2
+	relative_position_id = GSL_guns_for_the_overseers
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_stun_rods"
+		add_tech_bonus = {
+			name = GSL_stun_rods
+			bonus = 0.5
+			uses = 1
+			category = melee_weapon_tech
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_run_them_down
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_nets_and_snares
+	}
+	prerequisite = {
+		focus = GSL_stun_rods
+	}
+	x = -3
+	y = 3
+	relative_position_id = GSL_guns_for_the_overseers
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_run_them_down"
+		custom_effect_tooltip = GSL_house_breakthrough_p5_tt
+		custom_effect_tooltip = GSL_house_speed_p5_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_breakthrough = 0.05 }
+			add_to_variable = { GSL_house_speed = 0.05 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_bring_them_back_alive
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_run_them_down
+	}
+	x = -3
+	y = 4
+	relative_position_id = GSL_guns_for_the_overseers
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_bring_them_back_alive"
+		custom_effect_tooltip = GSL_house_capture_p10_tt
+		custom_effect_tooltip = GSL_house_xp_gain_p10_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_capture = 0.1 }
+			add_to_variable = { GSL_house_xp_gain = 0.1 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_watchtowers
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_guns_for_the_overseers
+	}
+	x = 3
+	y = 1
+	relative_position_id = GSL_guns_for_the_overseers
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_watchtowers"
+		capital_scope = {
+			add_building_construction = {
+				type = bunker
+				level = 2
+				instant_build = yes
+				province = {
+					all_provinces = yes
+					limit_to_border = yes
+				}
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_garrison_duty
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_watchtowers
+	}
+	x = 2
+	y = 2
+	relative_position_id = GSL_guns_for_the_overseers
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_garrison_duty"
+		custom_effect_tooltip = GSL_house_garrison_m20_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_garrison = -0.2 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_suppression_drills
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_watchtowers
+	}
+	x = 4
+	y = 2
+	relative_position_id = GSL_guns_for_the_overseers
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_suppression_drills"
+		custom_effect_tooltip = GSL_house_resistance_m20_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_resistance = -0.2 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_the_wall_of_chains
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_garrison_duty
+	}
+	prerequisite = {
+		focus = GSL_suppression_drills
+	}
+	x = 3
+	y = 3
+	relative_position_id = GSL_guns_for_the_overseers
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_the_wall_of_chains"
+		every_owned_state = {
+			random_select_amount = 2
+			limit = {
+				is_core_of = ROOT
+				is_controlled_by = ROOT
+				any_neighbor_state = {
+					NOT = { is_owned_by = ROOT }
+				}
+			}
+			add_building_construction = {
+				type = bunker
+				level = 1
+				instant_build = yes
+				province = {
+					all_provinces = yes
+					limit_to_border = yes
+				}
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_wardens_pride
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_the_wall_of_chains
+	}
+	x = 3
+	y = 4
+	relative_position_id = GSL_guns_for_the_overseers
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_wardens_pride"
+		custom_effect_tooltip = GSL_house_core_defence_p10_tt
+		hidden_effect = {
+			add_to_variable = { GSL_house_core_defence = 0.1 }
+			force_update_dynamic_modifier = yes
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_better_iron
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_guns_for_the_overseers
+	}
+	x = 0
+	y = 1
+	relative_position_id = GSL_guns_for_the_overseers
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_better_iron"
+		add_tech_bonus = {
+			name = GSL_better_iron
+			bonus = 0.5
+			uses = 1
+			category = ballistic_weapon_tech
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_support_the_line
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_better_iron
+	}
+	x = 0
+	y = 2
+	relative_position_id = GSL_guns_for_the_overseers
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_support_the_line"
+		add_tech_bonus = {
+			name = GSL_support_the_line
+			bonus = 0.5
+			uses = 1
+			category = support_tech
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_doctrine_of_the_lash
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_support_the_line
+	}
+	x = 0
+	y = 3
+	relative_position_id = GSL_guns_for_the_overseers
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_doctrine_of_the_lash"
+		add_doctrine_cost_reduction = {
+			name = GSL_doctrine_of_the_lash
+			cost_reduction = 0.25
+			uses = 2
+			category = land_doctrine
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_slave_barges
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_doctrine_of_the_lash
+	}
+	x = -1
+	y = 4
+	relative_position_id = GSL_guns_for_the_overseers
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_slave_barges"
+		add_equipment_to_stockpile = { type = convoy_1 amount = 50 producer = OWE }
+		if = {
+			limit = {
+				any_owned_state = {
+					is_coastal = yes
+					is_controlled_by = ROOT
+				}
+			}
+			random_owned_controlled_state = {
+				limit = {
+					is_coastal = yes
+				}
+				add_extra_state_shared_building_slots = 1
+				add_building_construction = {
+					type = dockyard
+					level = 1
+					instant_build = yes
+				}
+			}
+		}
+	}
+}
+
+shared_focus = {
+	id = GSL_sky_catchers
+	icon = GFX_goal_unknown
+	prerequisite = {
+		focus = GSL_doctrine_of_the_lash
+	}
+	x = 1
+	y = 4
+	relative_position_id = GSL_guns_for_the_overseers
+	cost = 8.58
+	ai_will_do = {
+		factor = 10
+	}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: Focus GSL_sky_catchers"
+		capital_scope = {
+			add_building_construction = {
+				type = air_base
+				level = 1
+				instant_build = yes
+			}
+		}
+		add_tech_bonus = {
+			name = GSL_sky_catchers
+			bonus = 0.5
+			uses = 1
+			category = air_tech
+		}
+	}
+}

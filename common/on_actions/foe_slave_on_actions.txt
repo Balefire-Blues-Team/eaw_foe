@@ -1,6 +1,10 @@
 on_actions = {
 	on_startup = {
 		effect = {
+			# Generic slaver tree: the slave market (on_startup has no scope, the effect needs a country)
+			random_country = {
+				GSL_init_global_market = yes
+			}
 			every_country = {
 				###Setting starting conditions
 				#if = { #this is here for testing purposes
@@ -16,6 +20,39 @@ on_actions = {
 				#else = {
 				#	set_variable = { healing_spell_amount = 0 }
 				#}
+			}
+		}
+	}
+
+	# Generic slaver tree: market drift, contracts, debts, tribute, events of The Pens
+	on_monthly = {
+		effect = {
+			if = {
+				limit = {
+					has_country_flag = slavery_allowed
+				}
+				GSL_market_monthly = yes
+				GSL_country_monthly = yes
+			}
+		}
+	}
+
+	# Generic slaver tree, Spoils of War: ROOT is the new controller, FROM.FROM the state
+	on_state_control_changed = {
+		effect = {
+			if = {
+				limit = {
+					has_completed_focus = GSL_spoils_of_war
+					FROM.FROM = {
+						NOT = { is_core_of = ROOT }
+						NOT = { has_state_flag = GSL_spoils_taken_flag }
+						state_population > 2999
+					}
+				}
+				FROM.FROM = {
+					set_state_flag = GSL_spoils_taken_flag
+				}
+				add_to_variable = { foe_slaves_var = 1 }
 			}
 		}
 	}
