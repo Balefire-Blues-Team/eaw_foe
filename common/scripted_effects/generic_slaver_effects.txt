@@ -160,13 +160,29 @@ GSL_init_global_market = {
 		set_global_flag = GSL_market_started_flag
 		set_variable = { global.GSL_price = 600 }
 		set_variable = { global.GSL_pool = 10 }
+		set_variable = { global.GSL_base_price = 600 }
 		GSL_reprice = yes
 	}
 }
 
 # Global: the prices in political power, guns and factory days that follow the going price
 GSL_reprice = {
-	clamp_variable = { var = global.GSL_price min = 300 max = 1200 }
+	# saves from before the normal price existed
+	if = {
+		limit = {
+			check_variable = { global.GSL_base_price < 1 }
+		}
+		set_variable = { global.GSL_base_price = 600 }
+	}
+	# the price stays between half and double the normal price
+	set_temp_variable = { low = global.GSL_base_price }
+	multiply_temp_variable = { low = 0.5 }
+	set_temp_variable = { high = global.GSL_base_price }
+	multiply_temp_variable = { high = 2 }
+	clamp_variable = { var = global.GSL_price min = low max = high }
+	set_variable = { global.GSL_autorenew_limit = global.GSL_base_price }
+	multiply_variable = { global.GSL_autorenew_limit = 1.25 }
+	round_variable = global.GSL_autorenew_limit
 	set_variable = { global.GSL_sell_pp = global.GSL_price }
 	multiply_variable = { global.GSL_sell_pp = 0.0417 }
 	set_variable = { global.GSL_sell_guns = global.GSL_price }
@@ -231,16 +247,22 @@ GSL_add_debt = {
 	}
 }
 
-# Global, once a month: the price drifts 10% of the way back to 600 and a little stock arrives from far away
+# Global, once a month: the price drifts 10% of the way back to the normal price and a little stock arrives from far away
 GSL_market_monthly = {
 	# saves started before the market existed set it up here
 	GSL_init_global_market = yes
 	if = {
 		limit = {
+			check_variable = { global.GSL_base_price < 1 }
+		}
+		set_variable = { global.GSL_base_price = 600 }
+	}
+	if = {
+		limit = {
 			NOT = { has_global_flag = GSL_market_drift_flag }
 		}
 		set_global_flag = { flag = GSL_market_drift_flag days = 25 value = 1 }
-		set_temp_variable = { gap = 600 }
+		set_temp_variable = { gap = global.GSL_base_price }
 		subtract_from_temp_variable = { gap = global.GSL_price }
 		multiply_temp_variable = { gap = 0.1 }
 		add_to_variable = { global.GSL_price = gap }
@@ -251,6 +273,93 @@ GSL_market_monthly = {
 			add_to_variable = { global.GSL_pool = 0.5 }
 		}
 		GSL_reprice = yes
+		GSL_market_watch = yes
+	}
+}
+
+### Market hooks: call these from any event, focus, decision or on_action (any country scope) ###
+
+# A shock moves the price and the pool now; the monthly drift erodes it again (about half is gone after 7 months).
+# Set temp variables before the call: shock_price (factor, e.g. 1.25 or 0.85), shock_pool (thousands, may be negative)
+GSL_market_shock = {
+	multiply_variable = { global.GSL_price = shock_price }
+	add_to_variable = { global.GSL_pool = shock_pool }
+	clamp_variable = { var = global.GSL_pool min = 0 }
+	GSL_reprice = yes
+}
+
+# A shift moves the normal price the drift returns to, for good (until another shift).
+# Set temp variable shift_price (added, e.g. 150 or -100) before the call. The normal price stays between 300 and 1200.
+GSL_market_shift = {
+	add_to_variable = { global.GSL_base_price = shift_price }
+	clamp_variable = { var = global.GSL_base_price min = 300 max = 1200 }
+	GSL_reprice = yes
+}
+
+# Every slaver nation hears about a market event (temp variable market_event = number of the GSL.2xx event)
+GSL_market_notice = {
+	every_country = {
+		limit = {
+			has_country_flag = slavery_allowed
+		}
+		if = {
+			limit = { check_variable = { market_event = 201 } }
+			country_event = { id = GSL.201 }
+		}
+		else_if = {
+			limit = { check_variable = { market_event = 202 } }
+			country_event = { id = GSL.202 }
+		}
+	}
+}
+
+# Global, monthly: market events that are watched for rather than fired by their cause
+GSL_market_watch = {
+	# Fillydelphia's industry passes 100 factories: lasting demand for hands
+	if = {
+		limit = {
+			NOT = { has_global_flag = GSL_eye_industry_boom_flag }
+			country_exists = EYE
+			EYE = {
+				num_of_factories > 99
+			}
+		}
+		set_global_flag = GSL_eye_industry_boom_flag
+		set_temp_variable = { shift_price = 150 }
+		GSL_market_shift = yes
+		set_temp_variable = { shock_price = 1.1 }
+		set_temp_variable = { shock_pool = 0 }
+		GSL_market_shock = yes
+		set_temp_variable = { market_event = 201 }
+		GSL_market_notice = yes
+	}
+}
+
+# Country scope (the buyer), monthly: renews a paid-off contract when auto-renew is on and the price is acceptable
+GSL_autorenew_monthly = {
+	if = {
+		limit = {
+			has_country_flag = GSL_autorenew_flag
+			NOT = { has_dynamic_modifier = { modifier = GSL_market_debt_modifier } }
+		}
+		if = {
+			limit = {
+				check_variable = { global.GSL_price > global.GSL_autorenew_limit }
+			}
+			set_country_flag = GSL_autorenew_paused_flag
+		}
+		else = {
+			clr_country_flag = GSL_autorenew_paused_flag
+			if = {
+				limit = {
+					GSL_can_buy_factories = yes
+				}
+				GSL_trade_buy_factories = yes
+			}
+		}
+	}
+	else = {
+		clr_country_flag = GSL_autorenew_paused_flag
 	}
 }
 
@@ -269,6 +378,7 @@ GSL_country_monthly = {
 			remove_dynamic_modifier = { modifier = GSL_market_debt_modifier }
 		}
 	}
+	GSL_autorenew_monthly = yes
 	if = {
 		limit = {
 			has_dynamic_modifier = { modifier = GSL_standing_order_modifier }
@@ -406,3 +516,68 @@ GSL_prepare_catchers = {
 		}
 	}
 }
+
+### Slave market trades, shared by the market panel (players) and the market decisions (AI) ###
+
+# Country scope
+GSL_trade_sell_surplus = {
+	GSL_init_market = yes
+	subtract_from_variable = { foe_slaves_var = 1 }
+	set_temp_variable = { surplus = global.GSL_price }
+	multiply_temp_variable = { surplus = GSL_sell_mult }
+	GSL_pay_surplus = yes
+	GSL_market_sold = yes
+}
+
+# Country scope
+GSL_trade_sell_pp = {
+	GSL_init_market = yes
+	subtract_from_variable = { foe_slaves_var = 1 }
+	set_temp_variable = { pay = global.GSL_sell_pp }
+	multiply_temp_variable = { pay = GSL_sell_mult }
+	add_political_power = var:pay
+	GSL_market_sold = yes
+}
+
+# Country scope
+GSL_trade_sell_guns = {
+	GSL_init_market = yes
+	subtract_from_variable = { foe_slaves_var = 1 }
+	set_temp_variable = { pay = global.GSL_sell_guns }
+	multiply_temp_variable = { pay = GSL_sell_mult }
+	add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = var:pay producer = OWE }
+	GSL_market_sold = yes
+}
+
+# Country scope
+GSL_trade_buy_factories = {
+	GSL_init_market = yes
+	add_to_variable = { foe_slaves_var = 1 }
+	set_temp_variable = { days = global.GSL_buy_days }
+	multiply_temp_variable = { days = GSL_buy_mult }
+	GSL_add_debt = yes
+	GSL_market_bought = yes
+}
+
+# Country scope
+GSL_trade_buy_pp = {
+	GSL_init_market = yes
+	add_to_variable = { foe_slaves_var = 1 }
+	set_temp_variable = { pay = global.GSL_buy_pp }
+	multiply_temp_variable = { pay = GSL_buy_mult }
+	multiply_temp_variable = { pay = -1 }
+	add_political_power = var:pay
+	GSL_market_bought = yes
+}
+
+# Country scope
+GSL_trade_buy_guns = {
+	GSL_init_market = yes
+	add_to_variable = { foe_slaves_var = 1 }
+	set_temp_variable = { pay = global.GSL_buy_guns }
+	multiply_temp_variable = { pay = GSL_buy_mult }
+	multiply_temp_variable = { pay = -1 }
+	add_equipment_to_stockpile = { type = infantry_equipment amount = var:pay }
+	GSL_market_bought = yes
+}
+

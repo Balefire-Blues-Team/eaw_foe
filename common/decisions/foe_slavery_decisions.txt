@@ -802,6 +802,16 @@ foe_slaving_cat = {
 				var = foe_slaves_var
 				value = 14
 			}
+
+			# Generic slaver tree: the slave market is flooded
+			custom_effect_tooltip = GSL_sunnyshore_market_tt
+			hidden_effect = {
+				set_temp_variable = { shock_price = 0.85 }
+				set_temp_variable = { shock_pool = 5 }
+				GSL_market_shock = yes
+				set_temp_variable = { market_event = 202 }
+				GSL_market_notice = yes
+			}
 		}
 
 		ai_will_do = {
@@ -1292,10 +1302,9 @@ foe_slaving_cat = {
 	GSL_market_sell_surplus = {
 		icon = GFX_dec_buy_slaves_from_the_west
 		visible = {
-			OR = {
-				NOT = { has_focus_tree = GSL_focus }
-				has_completed_focus = GSL_the_auction_block
-			}
+			# players trade in the market panel; the AI does not click GUI buttons
+			is_ai = yes
+			GSL_market_open = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1308,12 +1317,7 @@ foe_slaving_cat = {
 			custom_effect_tooltip = foe_1_lose_slave_tt
 			custom_effect_tooltip = GSL_market_sell_surplus_tt
 			hidden_effect = {
-				GSL_init_market = yes
-				subtract_from_variable = { foe_slaves_var = 1 }
-				set_temp_variable = { surplus = global.GSL_price }
-				multiply_temp_variable = { surplus = GSL_sell_mult }
-				GSL_pay_surplus = yes
-				GSL_market_sold = yes
+				GSL_trade_sell_surplus = yes
 			}
 		}
 		ai_will_do = {
@@ -1336,10 +1340,9 @@ foe_slaving_cat = {
 	GSL_market_sell_pp = {
 		icon = GFX_dec_buy_slaves_from_the_west
 		visible = {
-			OR = {
-				NOT = { has_focus_tree = GSL_focus }
-				has_completed_focus = GSL_the_auction_block
-			}
+			# players trade in the market panel; the AI does not click GUI buttons
+			is_ai = yes
+			GSL_market_open = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1352,12 +1355,7 @@ foe_slaving_cat = {
 			custom_effect_tooltip = foe_1_lose_slave_tt
 			custom_effect_tooltip = GSL_market_sell_pp_tt
 			hidden_effect = {
-				GSL_init_market = yes
-				subtract_from_variable = { foe_slaves_var = 1 }
-				set_temp_variable = { pay = global.GSL_sell_pp }
-				multiply_temp_variable = { pay = GSL_sell_mult }
-				add_political_power = var:pay
-				GSL_market_sold = yes
+				GSL_trade_sell_pp = yes
 			}
 		}
 		ai_will_do = {
@@ -1381,10 +1379,9 @@ foe_slaving_cat = {
 	GSL_market_sell_guns = {
 		icon = GFX_dec_buy_slaves_from_the_west
 		visible = {
-			OR = {
-				NOT = { has_focus_tree = GSL_focus }
-				has_completed_focus = GSL_the_auction_block
-			}
+			# players trade in the market panel; the AI does not click GUI buttons
+			is_ai = yes
+			GSL_market_open = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1397,12 +1394,7 @@ foe_slaving_cat = {
 			custom_effect_tooltip = foe_1_lose_slave_tt
 			custom_effect_tooltip = GSL_market_sell_guns_tt
 			hidden_effect = {
-				GSL_init_market = yes
-				subtract_from_variable = { foe_slaves_var = 1 }
-				set_temp_variable = { pay = global.GSL_sell_guns }
-				multiply_temp_variable = { pay = GSL_sell_mult }
-				add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = var:pay producer = OWE }
-				GSL_market_sold = yes
+				GSL_trade_sell_guns = yes
 			}
 		}
 		ai_will_do = {
@@ -1426,10 +1418,9 @@ foe_slaving_cat = {
 	GSL_market_buy_factories = {
 		icon = GFX_dec_buy_slaves_from_the_west
 		visible = {
-			OR = {
-				NOT = { has_focus_tree = GSL_focus }
-				has_completed_focus = GSL_the_auction_block
-			}
+			# players trade in the market panel; the AI does not click GUI buttons
+			is_ai = yes
+			GSL_market_open = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1447,12 +1438,7 @@ foe_slaving_cat = {
 			custom_effect_tooltip = foe_1_gain_slave_tt
 			custom_effect_tooltip = GSL_market_buy_factories_tt
 			hidden_effect = {
-				GSL_init_market = yes
-				add_to_variable = { foe_slaves_var = 1 }
-				set_temp_variable = { days = global.GSL_buy_days }
-				multiply_temp_variable = { days = GSL_buy_mult }
-				GSL_add_debt = yes
-				GSL_market_bought = yes
+				GSL_trade_buy_factories = yes
 			}
 		}
 		ai_will_do = {
@@ -1471,10 +1457,9 @@ foe_slaving_cat = {
 	GSL_market_buy_pp = {
 		icon = GFX_dec_buy_slaves_from_the_west
 		visible = {
-			OR = {
-				NOT = { has_focus_tree = GSL_focus }
-				has_completed_focus = GSL_the_auction_block
-			}
+			# players trade in the market panel; the AI does not click GUI buttons
+			is_ai = yes
+			GSL_market_open = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1491,13 +1476,7 @@ foe_slaving_cat = {
 			custom_effect_tooltip = foe_1_gain_slave_tt
 			custom_effect_tooltip = GSL_market_buy_pp_tt
 			hidden_effect = {
-				GSL_init_market = yes
-				add_to_variable = { foe_slaves_var = 1 }
-				set_temp_variable = { pay = global.GSL_buy_pp }
-				multiply_temp_variable = { pay = GSL_buy_mult }
-				multiply_temp_variable = { pay = -1 }
-				add_political_power = var:pay
-				GSL_market_bought = yes
+				GSL_trade_buy_pp = yes
 			}
 		}
 		ai_will_do = {
@@ -1514,10 +1493,9 @@ foe_slaving_cat = {
 	GSL_market_buy_guns = {
 		icon = GFX_dec_buy_slaves_from_the_west
 		visible = {
-			OR = {
-				NOT = { has_focus_tree = GSL_focus }
-				has_completed_focus = GSL_the_auction_block
-			}
+			# players trade in the market panel; the AI does not click GUI buttons
+			is_ai = yes
+			GSL_market_open = yes
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1534,13 +1512,7 @@ foe_slaving_cat = {
 			custom_effect_tooltip = foe_1_gain_slave_tt
 			custom_effect_tooltip = GSL_market_buy_guns_tt
 			hidden_effect = {
-				GSL_init_market = yes
-				add_to_variable = { foe_slaves_var = 1 }
-				set_temp_variable = { pay = global.GSL_buy_guns }
-				multiply_temp_variable = { pay = GSL_buy_mult }
-				multiply_temp_variable = { pay = -1 }
-				add_equipment_to_stockpile = { type = infantry_equipment amount = var:pay }
-				GSL_market_bought = yes
+				GSL_trade_buy_guns = yes
 			}
 		}
 		ai_will_do = {
