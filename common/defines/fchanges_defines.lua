@@ -79,3 +79,5 @@ NDefines.NNavy.FUEL_COST_MULT = 0.1								--fuel multiplier for all naval missi
 NDefines.NNavy.IN_COMBAT_FUEL_COST = 1.5						-- ships in combat will get this ratio for fuel cost
 NDefines.NNavy.MAX_FUEL_FLOW_MULT = 4.0						-- max fuel flow ratio for ships, which will be multiplied by supply
 NDefines.NNavy.NAVAL_RANGE_TO_INGAME_DISTANCE = 0.35		-- Scale the ship stats "naval_range" to the ingame distance
+NDefines.NNavy.DOMINANCE_PER_SHIP_PER_RANGE_NEUTRAL = 700	-- vanilla 2000: our ranges are scaled by 0.35 instead of 0.12, so 2000 * 0.12 / 0.35
+NDefines.NNavy.DOMINANCE_PER_SHIP_PER_SPEED_NEUTRAL = 12	-- vanilla 20: our ships sail at about 60% of vanilla speeds
