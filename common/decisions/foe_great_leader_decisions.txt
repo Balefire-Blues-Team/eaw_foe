@@ -695,7 +695,10 @@ GEN_great_leader_decisions = {
 			FROM = { is_subject_of = ROOT }
 		}
 		available = {
-			has_equipment = { infantry_equipment > 149 }
+			OR = {
+				has_equipment = { infantry_equipment > 149 }
+				has_equipment = { mew_equipment > 149 }
+			}
 			FROM = {
 				is_subject_of = ROOT
 				custom_trigger_tooltip = {
@@ -705,7 +708,13 @@ GEN_great_leader_decisions = {
 			}
 		}
 		complete_effect = {
-			add_equipment_to_stockpile = { type = infantry_equipment amount = -150 }
+			if = {
+				limit = { has_equipment = { infantry_equipment > 149 } }
+				add_equipment_to_stockpile = { type = infantry_equipment amount = -150 }
+			}
+			else = {
+				add_equipment_to_stockpile = { type = mew_equipment amount = -150 }
+			}
 			custom_effect_tooltip = FOE_puppet_arm_proxy_tt
 			hidden_effect = {
 				FROM = {
@@ -725,6 +734,7 @@ GEN_great_leader_decisions = {
 			modifier = {
 				factor = 0
 				has_equipment = { infantry_equipment < 300 }
+				has_equipment = { mew_equipment < 300 }
 			}
 			modifier = {
 				factor = 2
@@ -1916,7 +1926,10 @@ GEN_great_leader_decisions = {
 				check_variable = { FOE_corps_stored < FOE_corps_max }
 			}
 			has_manpower > 249
-			has_equipment = { infantry_equipment > 99 }
+			OR = {
+				has_equipment = { infantry_equipment > 99 }
+				has_equipment = { mew_equipment > 99 }
+			}
 			has_equipment = { caravan_equipment > 4 }
 		}
 		complete_effect = {
@@ -2207,14 +2220,23 @@ GEN_great_leader_decisions = {
 				NOT = { has_country_flag = FOE_nemesis_muster_cooldown }
 			}
 			has_manpower > 249
-			has_equipment = { infantry_equipment > 199 }
+			OR = {
+				has_equipment = { infantry_equipment > 199 }
+				has_equipment = { mew_equipment > 199 }
+			}
 		}
 		complete_effect = {
 			custom_effect_tooltip = FOE_nemesis_muster_tt
 			hidden_effect = {
 				set_country_flag = { flag = FOE_nemesis_muster_cooldown value = 1 days = 60 }
 				add_manpower = -250
-				add_equipment_to_stockpile = { type = infantry_equipment amount = -200 }
+				if = {
+					limit = { has_equipment = { infantry_equipment > 199 } }
+					add_equipment_to_stockpile = { type = infantry_equipment amount = -200 }
+				}
+				else = {
+					add_equipment_to_stockpile = { type = mew_equipment amount = -200 }
+				}
 				FOE_add_nemesis_preparation = yes
 			}
 		}

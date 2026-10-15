@@ -466,3 +466,437 @@ foe_military_command_cat = {
 	}
 
 }
+
+# Armoury Doctrine (2026-10): permanent weapon choice for each special-forces unit
+foe_armoury_cat = {
+	foe_armoury_spec_ops_mew_dec = {
+		icon = GFX_decision_generic_research
+		cost = 25
+		fire_only_once = yes
+
+		visible = {
+			has_tech = energy_weaponry_tech_1
+			has_tech = spec_ops_equipment_tech_1
+			NOT = { has_tech = spec_ops_mew_conversion_tech }
+			NOT = { has_tech = spec_ops_ballistic_kit_tech }
+			NOT = { has_country_flag = foe_armoury_spec_ops_ballistic_started }
+		}
+
+		days_remove = 100
+		modifier = {
+			research_speed_factor = -0.15
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision foe_armoury_spec_ops_mew_dec"
+			set_country_flag = foe_armoury_spec_ops_mew_started
+		}
+
+		remove_effect = {
+			custom_effect_tooltip = FOE_tech_spec_ops_mew_tt
+			set_technology = { spec_ops_mew_conversion_tech = 1 popup = no }
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 10
+				OR = {
+					has_equipment = { mew_equipment > 199 }
+					has_template_containing_unit = great_war_infantry
+				}
+			}
+		}
+	}
+
+	foe_armoury_spec_ops_ballistic_dec = {
+		icon = GFX_decision_buy_guns
+		cost = 25
+		fire_only_once = yes
+
+		visible = {
+			has_tech = energy_weaponry_tech_1
+			has_tech = spec_ops_equipment_tech_1
+			NOT = { has_tech = spec_ops_mew_conversion_tech }
+			NOT = { has_tech = spec_ops_ballistic_kit_tech }
+			NOT = { has_country_flag = foe_armoury_spec_ops_mew_started }
+		}
+
+		days_remove = 100
+		modifier = {
+			research_speed_factor = -0.15
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision foe_armoury_spec_ops_ballistic_dec"
+			set_country_flag = foe_armoury_spec_ops_ballistic_started
+		}
+
+		remove_effect = {
+			custom_effect_tooltip = FOE_tech_spec_ops_ballistic_tt
+			set_technology = { spec_ops_ballistic_kit_tech = 1 popup = no }
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 10
+				NOT = { has_equipment = { mew_equipment > 199 } }
+				NOT = { has_template_containing_unit = great_war_infantry }
+				OR = {
+					# Energy Weapons 1 from history or a focus: owned since the start or close to it
+					AND = {
+						NOT = { has_country_flag = foe_energy_weapons_researched }
+						date > 1237.1.1
+					}
+					has_country_flag = { flag = foe_energy_weapons_researched days > 730 }
+				}
+			}
+		}
+	}
+
+	foe_armoury_pa_mew_dec = {
+		icon = GFX_decision_generic_research
+		cost = 25
+		fire_only_once = yes
+
+		visible = {
+			has_tech = energy_weaponry_tech_1
+			has_tech = stripped_pa_tech
+			NOT = { has_tech = pa_mew_conversion_tech }
+			NOT = { has_tech = pa_ballistic_kit_tech }
+			NOT = { has_country_flag = foe_armoury_pa_ballistic_started }
+		}
+
+		days_remove = 100
+		modifier = {
+			research_speed_factor = -0.15
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision foe_armoury_pa_mew_dec"
+			set_country_flag = foe_armoury_pa_mew_started
+		}
+
+		remove_effect = {
+			custom_effect_tooltip = FOE_tech_pa_mew_tt
+			set_technology = { pa_mew_conversion_tech = 1 popup = no }
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 10
+				OR = {
+					has_equipment = { mew_equipment > 199 }
+					has_template_containing_unit = great_war_infantry
+				}
+			}
+		}
+	}
+
+	foe_armoury_pa_ballistic_dec = {
+		icon = GFX_decision_buy_guns
+		cost = 25
+		fire_only_once = yes
+
+		visible = {
+			has_tech = energy_weaponry_tech_1
+			has_tech = stripped_pa_tech
+			NOT = { has_tech = pa_mew_conversion_tech }
+			NOT = { has_tech = pa_ballistic_kit_tech }
+			NOT = { has_country_flag = foe_armoury_pa_mew_started }
+		}
+
+		days_remove = 100
+		modifier = {
+			research_speed_factor = -0.15
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision foe_armoury_pa_ballistic_dec"
+			set_country_flag = foe_armoury_pa_ballistic_started
+		}
+
+		remove_effect = {
+			custom_effect_tooltip = FOE_tech_pa_ballistic_tt
+			set_technology = { pa_ballistic_kit_tech = 1 popup = no }
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 10
+				NOT = { has_equipment = { mew_equipment > 199 } }
+				NOT = { has_template_containing_unit = great_war_infantry }
+				OR = {
+					# Energy Weapons 1 from history or a focus: owned since the start or close to it
+					AND = {
+						NOT = { has_country_flag = foe_energy_weapons_researched }
+						date > 1237.1.1
+					}
+					has_country_flag = { flag = foe_energy_weapons_researched days > 730 }
+				}
+			}
+		}
+	}
+
+	foe_armoury_pegasi_mew_dec = {
+		icon = GFX_decision_generic_research
+		cost = 25
+		fire_only_once = yes
+
+		visible = {
+			has_tech = energy_weaponry_tech_1
+			has_tech = tech_pegasi
+			NOT = { has_tech = pegasi_mew_conversion_tech }
+			NOT = { has_tech = pegasi_ballistic_kit_tech }
+			NOT = { has_country_flag = foe_armoury_pegasi_ballistic_started }
+		}
+
+		days_remove = 100
+		modifier = {
+			research_speed_factor = -0.15
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision foe_armoury_pegasi_mew_dec"
+			set_country_flag = foe_armoury_pegasi_mew_started
+		}
+
+		remove_effect = {
+			custom_effect_tooltip = FOE_tech_pegasi_mew_tt
+			set_technology = { pegasi_mew_conversion_tech = 1 popup = no }
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 10
+				OR = {
+					has_equipment = { mew_equipment > 199 }
+					has_template_containing_unit = great_war_infantry
+				}
+			}
+		}
+	}
+
+	foe_armoury_pegasi_ballistic_dec = {
+		icon = GFX_decision_buy_guns
+		cost = 25
+		fire_only_once = yes
+
+		visible = {
+			has_tech = energy_weaponry_tech_1
+			has_tech = tech_pegasi
+			NOT = { has_tech = pegasi_mew_conversion_tech }
+			NOT = { has_tech = pegasi_ballistic_kit_tech }
+			NOT = { has_country_flag = foe_armoury_pegasi_mew_started }
+		}
+
+		days_remove = 100
+		modifier = {
+			research_speed_factor = -0.15
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision foe_armoury_pegasi_ballistic_dec"
+			set_country_flag = foe_armoury_pegasi_ballistic_started
+		}
+
+		remove_effect = {
+			custom_effect_tooltip = FOE_tech_pegasi_ballistic_tt
+			set_technology = { pegasi_ballistic_kit_tech = 1 popup = no }
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 10
+				NOT = { has_equipment = { mew_equipment > 199 } }
+				NOT = { has_template_containing_unit = great_war_infantry }
+				OR = {
+					# Energy Weapons 1 from history or a focus: owned since the start or close to it
+					AND = {
+						NOT = { has_country_flag = foe_energy_weapons_researched }
+						date > 1237.1.1
+					}
+					has_country_flag = { flag = foe_energy_weapons_researched days > 730 }
+				}
+			}
+		}
+	}
+
+	foe_armoury_legion_mew_dec = {
+		icon = GFX_decision_generic_research
+		cost = 25
+		fire_only_once = yes
+
+		visible = {
+			has_tech = energy_weaponry_tech_1
+			has_tech = tech_legion
+			NOT = { has_tech = legion_mew_conversion_tech }
+			NOT = { has_tech = legion_ballistic_kit_tech }
+			NOT = { has_country_flag = foe_armoury_legion_ballistic_started }
+		}
+
+		days_remove = 100
+		modifier = {
+			research_speed_factor = -0.15
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision foe_armoury_legion_mew_dec"
+			set_country_flag = foe_armoury_legion_mew_started
+		}
+
+		remove_effect = {
+			custom_effect_tooltip = FOE_tech_legion_mew_tt
+			set_technology = { legion_mew_conversion_tech = 1 popup = no }
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 10
+				OR = {
+					has_equipment = { mew_equipment > 199 }
+					has_template_containing_unit = great_war_infantry
+				}
+			}
+		}
+	}
+
+	foe_armoury_legion_ballistic_dec = {
+		icon = GFX_decision_buy_guns
+		cost = 25
+		fire_only_once = yes
+
+		visible = {
+			has_tech = energy_weaponry_tech_1
+			has_tech = tech_legion
+			NOT = { has_tech = legion_mew_conversion_tech }
+			NOT = { has_tech = legion_ballistic_kit_tech }
+			NOT = { has_country_flag = foe_armoury_legion_mew_started }
+		}
+
+		days_remove = 100
+		modifier = {
+			research_speed_factor = -0.15
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision foe_armoury_legion_ballistic_dec"
+			set_country_flag = foe_armoury_legion_ballistic_started
+		}
+
+		remove_effect = {
+			custom_effect_tooltip = FOE_tech_legion_ballistic_tt
+			set_technology = { legion_ballistic_kit_tech = 1 popup = no }
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 10
+				NOT = { has_equipment = { mew_equipment > 199 } }
+				NOT = { has_template_containing_unit = great_war_infantry }
+				OR = {
+					# Energy Weapons 1 from history or a focus: owned since the start or close to it
+					AND = {
+						NOT = { has_country_flag = foe_energy_weapons_researched }
+						date > 1237.1.1
+					}
+					has_country_flag = { flag = foe_energy_weapons_researched days > 730 }
+				}
+			}
+		}
+	}
+
+	foe_armoury_unicorn_mew_dec = {
+		icon = GFX_decision_generic_research
+		cost = 25
+		fire_only_once = yes
+
+		visible = {
+			has_tech = energy_weaponry_tech_1
+			has_tech = tech_unicorn
+			NOT = { has_tech = unicorn_mew_conversion_tech }
+			NOT = { has_tech = unicorn_ballistic_kit_tech }
+			NOT = { has_country_flag = foe_armoury_unicorn_ballistic_started }
+		}
+
+		days_remove = 100
+		modifier = {
+			research_speed_factor = -0.15
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision foe_armoury_unicorn_mew_dec"
+			set_country_flag = foe_armoury_unicorn_mew_started
+		}
+
+		remove_effect = {
+			custom_effect_tooltip = FOE_tech_unicorn_mew_tt
+			set_technology = { unicorn_mew_conversion_tech = 1 popup = no }
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 10
+				OR = {
+					has_equipment = { mew_equipment > 199 }
+					has_template_containing_unit = great_war_infantry
+				}
+			}
+		}
+	}
+
+	foe_armoury_unicorn_ballistic_dec = {
+		icon = GFX_decision_buy_guns
+		cost = 25
+		fire_only_once = yes
+
+		visible = {
+			has_tech = energy_weaponry_tech_1
+			has_tech = tech_unicorn
+			NOT = { has_tech = unicorn_mew_conversion_tech }
+			NOT = { has_tech = unicorn_ballistic_kit_tech }
+			NOT = { has_country_flag = foe_armoury_unicorn_mew_started }
+		}
+
+		days_remove = 100
+		modifier = {
+			research_speed_factor = -0.15
+		}
+
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision foe_armoury_unicorn_ballistic_dec"
+			set_country_flag = foe_armoury_unicorn_ballistic_started
+		}
+
+		remove_effect = {
+			custom_effect_tooltip = FOE_tech_unicorn_ballistic_tt
+			set_technology = { unicorn_ballistic_kit_tech = 1 popup = no }
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 10
+				NOT = { has_equipment = { mew_equipment > 199 } }
+				NOT = { has_template_containing_unit = great_war_infantry }
+				OR = {
+					# Energy Weapons 1 from history or a focus: owned since the start or close to it
+					AND = {
+						NOT = { has_country_flag = foe_energy_weapons_researched }
+						date > 1237.1.1
+					}
+					has_country_flag = { flag = foe_energy_weapons_researched days > 730 }
+				}
+			}
+		}
+	}
+
+}
