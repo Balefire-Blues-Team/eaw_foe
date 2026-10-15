@@ -1113,3 +1113,105 @@ EYE_slave_recruitment_speed_effect = {
 			}
 	}
 }
+
+### Worked to Death ###
+
+# Country scope: recomputes the Worked to Death modifier from the slaves consumed so far and the current slave spirit
+EYE_update_worked_to_death = {
+	set_variable = { EYE_wtd_construction = 0 }
+	set_variable = { EYE_wtd_output = 0 }
+	set_variable = { EYE_wtd_efficiency = 0 }
+	set_variable = { EYE_wtd_stability = 0 }
+	set_variable = { EYE_wtd_war_support = 0 }
+	set_variable = { EYE_wtd_surrender = 0 }
+	if = {
+		limit = { has_idea = slave_labor }
+		set_temp_variable = { bonus = EYE_worked_to_death }
+		clamp_temp_variable = { var = bonus max = 10 }
+		set_temp_variable = { malus = EYE_worked_to_death }
+		clamp_temp_variable = { var = malus max = 25 }
+		set_variable = { EYE_wtd_construction = bonus }
+		multiply_variable = { EYE_wtd_construction = 0.01 }
+		set_variable = { EYE_wtd_output = bonus }
+		multiply_variable = { EYE_wtd_output = 0.005 }
+		set_variable = { EYE_wtd_stability = malus }
+		multiply_variable = { EYE_wtd_stability = -0.01 }
+		set_variable = { EYE_wtd_surrender = malus }
+		multiply_variable = { EYE_wtd_surrender = -0.01 }
+	}
+	else_if = {
+		limit = { has_idea = pony_slave_labor }
+		set_temp_variable = { bonus = EYE_worked_to_death }
+		clamp_temp_variable = { var = bonus max = 10 }
+		set_temp_variable = { malus = EYE_worked_to_death }
+		clamp_temp_variable = { var = malus max = 24 }
+		set_variable = { EYE_wtd_construction = bonus }
+		multiply_variable = { EYE_wtd_construction = 0.015 }
+		set_variable = { EYE_wtd_efficiency = bonus }
+		multiply_variable = { EYE_wtd_efficiency = 0.01 }
+		set_variable = { EYE_wtd_stability = malus }
+		multiply_variable = { EYE_wtd_stability = -0.0125 }
+		set_variable = { EYE_wtd_war_support = malus }
+		multiply_variable = { EYE_wtd_war_support = -0.005 }
+	}
+	else_if = {
+		limit = { has_idea = the_way_it_is_idea }
+		set_temp_variable = { bonus = EYE_worked_to_death }
+		clamp_temp_variable = { var = bonus max = 15 }
+		set_temp_variable = { malus = EYE_worked_to_death }
+		clamp_temp_variable = { var = malus max = 40 }
+		set_variable = { EYE_wtd_construction = bonus }
+		multiply_variable = { EYE_wtd_construction = 0.01 }
+		set_variable = { EYE_wtd_output = bonus }
+		multiply_variable = { EYE_wtd_output = 0.005 }
+		set_variable = { EYE_wtd_stability = malus }
+		multiply_variable = { EYE_wtd_stability = -0.005 }
+	}
+	force_update_dynamic_modifier = yes
+}
+
+# Country scope, monthly while slavery is allowed: above 10 thousand slaves, Fillydelphia works some to death
+EYE_worked_to_death_monthly = {
+	if = {
+		limit = {
+			OR = {
+				has_idea = slave_labor
+				has_idea = pony_slave_labor
+				has_idea = the_way_it_is_idea
+			}
+		}
+		if = {
+			limit = {
+				NOT = { has_dynamic_modifier = { modifier = EYE_worked_to_death_modifier } }
+			}
+			add_dynamic_modifier = {
+				modifier = EYE_worked_to_death_modifier
+			}
+		}
+		if = {
+			limit = {
+				check_variable = { foe_slaves_var > 10 }
+			}
+			# The Way It Is burns two a month, while it stays above the threshold
+			if = {
+				limit = {
+					has_idea = the_way_it_is_idea
+					check_variable = { foe_slaves_var > 11 }
+				}
+				subtract_from_variable = { foe_slaves_var = 2 }
+				add_to_variable = { EYE_worked_to_death = 2 }
+			}
+			else = {
+				subtract_from_variable = { foe_slaves_var = 1 }
+				add_to_variable = { EYE_worked_to_death = 1 }
+			}
+		}
+		EYE_update_worked_to_death = yes
+	}
+	else_if = {
+		limit = {
+			has_dynamic_modifier = { modifier = EYE_worked_to_death_modifier }
+		}
+		remove_dynamic_modifier = { modifier = EYE_worked_to_death_modifier }
+	}
+}

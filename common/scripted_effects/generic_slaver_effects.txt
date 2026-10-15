@@ -140,6 +140,17 @@ GSL_take_population = {
 ### Slave market. global.GSL_price is the going price of one thousand slaves in Economic Capacity Surplus,
 ### global.GSL_pool the slaves on offer. Sellers get the price times GSL_sell_mult, buyers pay 20% more times GSL_buy_mult.
 
+# State scope (a state of PREV): 1000 freed slaves settle in the state, without touching its owner's manpower pool
+GSL_settle_population = {
+	OWNER = {
+		save_current_manpower = yes
+	}
+	add_manpower = 1000
+	OWNER = {
+		restore_previous_manpower = yes
+	}
+}
+
 # Country scope: market defaults (any slaver nation, not only the tree's)
 GSL_init_market = {
 	if = {
@@ -148,7 +159,46 @@ GSL_init_market = {
 		}
 		set_variable = { GSL_sell_mult = 1 }
 		set_variable = { GSL_buy_mult = 1 }
+		# Old Appleloosa, the centre of the slave trade
+		if = {
+			limit = { has_idea = OAP_centre_of_slave_trade }
+			add_to_variable = { GSL_sell_mult = 0.1 }
+			add_to_variable = { GSL_buy_mult = -0.1 }
+		}
+		else_if = {
+			limit = { has_idea = OAP_centre_of_slave_trade2 }
+			add_to_variable = { GSL_sell_mult = 0.2 }
+			add_to_variable = { GSL_buy_mult = -0.2 }
+		}
+		# Red Eye: Fillydelphia pays any price
+		if = {
+			limit = { original_tag = EYE }
+			add_to_variable = { GSL_buy_mult = 0.5 }
+		}
 	}
+}
+
+# Country scope: opens The Pens for a nation without the slaver tree (gangs are unlocked separately, by flag)
+GSL_open_pens = {
+	if = {
+		limit = {
+			NOT = { has_variable = GSL_hold_cap }
+		}
+		set_variable = { GSL_pens_cost_mult = 1 }
+		set_variable = { GSL_gang_bonus_mult = 1 }
+		set_variable = { GSL_levy_mult = 1 }
+		set_variable = { GSL_hold_cap = 4 }
+		set_variable = { GSL_event_mult = 1 }
+	}
+	if = {
+		limit = {
+			NOT = { has_dynamic_modifier = { modifier = GSL_the_pens_modifier } }
+		}
+		add_dynamic_modifier = {
+			modifier = GSL_the_pens_modifier
+		}
+	}
+	GSL_update_pens = yes
 }
 
 # Any country scope: starting market, from on_startup (and the first monthly tick of an older save)
@@ -301,6 +351,7 @@ GSL_market_notice = {
 	every_country = {
 		limit = {
 			has_country_flag = slavery_allowed
+			NOT = { original_tag = RWK }
 		}
 		if = {
 			limit = { check_variable = { market_event = 201 } }
@@ -309,6 +360,18 @@ GSL_market_notice = {
 		else_if = {
 			limit = { check_variable = { market_event = 202 } }
 			country_event = { id = GSL.202 }
+		}
+		else_if = {
+			limit = { check_variable = { market_event = 203 } }
+			country_event = { id = GSL.203 }
+		}
+		else_if = {
+			limit = { check_variable = { market_event = 204 } }
+			country_event = { id = GSL.204 }
+		}
+		else_if = {
+			limit = { check_variable = { market_event = 205 } }
+			country_event = { id = GSL.205 }
 		}
 	}
 }
@@ -553,6 +616,16 @@ GSL_trade_sell_guns = {
 GSL_trade_buy_factories = {
 	GSL_init_market = yes
 	add_to_variable = { foe_slaves_var = 1 }
+	# Old Appleloosa: a second thousand comes up from the Southwest with every contract
+	if = {
+		limit = {
+			OR = {
+				has_idea = OAP_centre_of_slave_trade
+				has_idea = OAP_centre_of_slave_trade2
+			}
+		}
+		add_to_variable = { foe_slaves_var = 1 }
+	}
 	set_temp_variable = { days = global.GSL_buy_days }
 	multiply_temp_variable = { days = GSL_buy_mult }
 	GSL_add_debt = yes
@@ -639,3 +712,314 @@ GSL_release_levy_gang = {
 	GSL_update_pens = yes
 }
 
+### Abolition: shared by every nation that ends slavery ###
+
+# Country scope: every slave we hold, free or in gangs, is freed and settles in our core states (the capital when we
+# own none). The Pens close, contracts, standing orders and auto-renew end, and the slave market closes to us.
+GSL_abolish = {
+	custom_effect_tooltip = GSL_abolish_tt
+	hidden_effect = {
+		set_temp_variable = { freed = foe_slaves_var }
+		add_to_temp_variable = { freed = GSL_gang_field }
+		add_to_temp_variable = { freed = GSL_gang_factory }
+		add_to_temp_variable = { freed = GSL_gang_road }
+		add_to_temp_variable = { freed = GSL_gang_levy }
+		# Rustwreck: everyone serving a Crimson Quota term goes home
+		add_to_temp_variable = { freed = RWK_service_total }
+		round_temp_variable = freed
+		while_loop_effect = {
+			limit = {
+				check_variable = { freed > 0 }
+			}
+			if = {
+				limit = {
+					any_owned_state = { is_core_of = ROOT }
+				}
+				random_owned_state = {
+					limit = { is_core_of = ROOT }
+					GSL_settle_population = yes
+				}
+			}
+			else = {
+				capital_scope = { GSL_settle_population = yes }
+			}
+			subtract_from_temp_variable = { freed = 1 }
+		}
+		set_variable = { foe_slaves_var = 0 }
+		set_variable = { GSL_gang_field = 0 }
+		set_variable = { GSL_gang_factory = 0 }
+		set_variable = { GSL_gang_road = 0 }
+		set_variable = { GSL_gang_levy = 0 }
+		if = {
+			limit = {
+				has_dynamic_modifier = { modifier = GSL_the_pens_modifier }
+			}
+			GSL_update_pens = yes
+			remove_dynamic_modifier = { modifier = GSL_the_pens_modifier }
+		}
+		if = {
+			limit = {
+				has_dynamic_modifier = { modifier = GSL_market_debt_modifier }
+			}
+			remove_dynamic_modifier = { modifier = GSL_market_debt_modifier }
+		}
+		set_variable = { GSL_debt_days = 0 }
+		if = {
+			limit = {
+				has_dynamic_modifier = { modifier = GSL_standing_order_modifier }
+			}
+			remove_dynamic_modifier = { modifier = GSL_standing_order_modifier }
+		}
+		set_variable = { GSL_order_left = 0 }
+		set_variable = { GSL_order_days = 0 }
+		clr_country_flag = GSL_autorenew_flag
+		clr_country_flag = GSL_autorenew_paused_flag
+		clr_country_flag = slavery_allowed
+		if = {
+			limit = {
+				has_country_flag = RWK_crimson_quotas_flag
+			}
+			RWK_end_crimson_quotas = yes
+		}
+		# Red Eye: Fillydelphia stops working slaves to death
+		if = {
+			limit = {
+				has_dynamic_modifier = { modifier = EYE_worked_to_death_modifier }
+			}
+			remove_dynamic_modifier = { modifier = EYE_worked_to_death_modifier }
+		}
+	}
+}
+
+### Rustwreck: Crimson Quotas (2026-10-15). Citizens drafted on fixed terms (about a year) and lent out by sector;
+### RWK_quota_<sector> is the target, RWK_service_<sector> those in service, foe_slaves_var the jungle captives waiting.
+
+# Country scope: opens the Crimson Quotas (The Future in Chains)
+RWK_open_crimson_quotas = {
+	set_country_flag = RWK_crimson_quotas_flag
+	set_variable = { RWK_quota_projects = 0 }
+	set_variable = { RWK_service_projects = 0 }
+	set_variable = { RWK_quota_army = 0 }
+	set_variable = { RWK_service_army = 0 }
+	set_variable = { RWK_quota_concessions = 0 }
+	set_variable = { RWK_service_concessions = 0 }
+	set_variable = { RWK_quota_total = 0 }
+	set_variable = { RWK_service_total = 0 }
+	set_variable = { RWK_service_cap = 6 }
+	set_variable = { RWK_return_acc = 0 }
+	add_dynamic_modifier = {
+		modifier = RWK_crimson_quotas_modifier
+	}
+	RWK_update_crimson_quotas = yes
+}
+
+# Country scope: recomputes the totals and the Crimson Quotas modifier
+RWK_update_crimson_quotas = {
+	set_variable = { RWK_service_total = RWK_service_projects }
+	add_to_variable = { RWK_service_total = RWK_service_army }
+	add_to_variable = { RWK_service_total = RWK_service_concessions }
+	set_variable = { RWK_cq_construction = RWK_service_projects }
+	multiply_variable = { RWK_cq_construction = 0.03 }
+	set_variable = { RWK_cq_supply = RWK_service_army }
+	multiply_variable = { RWK_cq_supply = -0.03 }
+	set_variable = { RWK_cq_forts = RWK_service_army }
+	multiply_variable = { RWK_cq_forts = 0.03 }
+	set_variable = { RWK_cq_consumer = RWK_service_concessions }
+	multiply_variable = { RWK_cq_consumer = -0.03 }
+	set_variable = { RWK_cq_stability = RWK_service_total }
+	multiply_variable = { RWK_cq_stability = -0.01 }
+	force_update_dynamic_modifier = yes
+}
+
+# Country scope: one labourer's term ends (those above their quota first, then the largest sector); they settle as citizens
+RWK_end_one_term = {
+	if = {
+		limit = {
+			check_variable = { RWK_service_projects > RWK_quota_projects }
+		}
+		subtract_from_variable = { RWK_service_projects = 1 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { RWK_service_army > RWK_quota_army }
+		}
+		subtract_from_variable = { RWK_service_army = 1 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { RWK_service_concessions > RWK_quota_concessions }
+		}
+		subtract_from_variable = { RWK_service_concessions = 1 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { RWK_service_projects > 0 }
+			NOT = { check_variable = { RWK_service_projects < RWK_service_army } }
+			NOT = { check_variable = { RWK_service_projects < RWK_service_concessions } }
+		}
+		subtract_from_variable = { RWK_service_projects = 1 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { RWK_service_army > 0 }
+			NOT = { check_variable = { RWK_service_army < RWK_service_concessions } }
+		}
+		subtract_from_variable = { RWK_service_army = 1 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { RWK_service_concessions > 0 }
+		}
+		subtract_from_variable = { RWK_service_concessions = 1 }
+	}
+	if = {
+		limit = {
+			any_owned_state = { is_core_of = ROOT }
+		}
+		random_owned_state = {
+			limit = { is_core_of = ROOT }
+			GSL_settle_population = yes
+		}
+	}
+	else = {
+		capital_scope = { GSL_settle_population = yes }
+	}
+	subtract_from_variable = { RWK_service_total = 1 }
+}
+
+# Country scope: fills the quotas, with jungle captives first, then with citizens drafted from a core state
+RWK_crimson_quotas_fill = {
+	RWK_update_crimson_quotas = yes
+	while_loop_effect = {
+		limit = {
+			check_variable = { RWK_service_total < RWK_service_cap }
+			OR = {
+				check_variable = { RWK_service_projects < RWK_quota_projects }
+				check_variable = { RWK_service_army < RWK_quota_army }
+				check_variable = { RWK_service_concessions < RWK_quota_concessions }
+			}
+			OR = {
+				check_variable = { foe_slaves_var > 0.99 }
+				any_owned_state = {
+					is_core_of = ROOT
+					state_population > 5000
+				}
+			}
+		}
+		if = {
+			limit = {
+				check_variable = { foe_slaves_var > 0.99 }
+			}
+			subtract_from_variable = { foe_slaves_var = 1 }
+		}
+		else = {
+			random_owned_state = {
+				limit = {
+					is_core_of = ROOT
+					state_population > 5000
+				}
+				GSL_take_population = yes
+			}
+		}
+		if = {
+			limit = {
+				check_variable = { RWK_service_projects < RWK_quota_projects }
+			}
+			add_to_variable = { RWK_service_projects = 1 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { RWK_service_army < RWK_quota_army }
+			}
+			add_to_variable = { RWK_service_army = 1 }
+		}
+		else_if = {
+			limit = {
+				check_variable = { RWK_service_concessions < RWK_quota_concessions }
+			}
+			add_to_variable = { RWK_service_concessions = 1 }
+		}
+		add_to_variable = { RWK_service_total = 1 }
+	}
+	RWK_update_crimson_quotas = yes
+}
+
+# Country scope, monthly: terms end (a twelfth of those in service, on average), then the gaps are filled
+RWK_crimson_quotas_monthly = {
+	set_temp_variable = { ending = RWK_service_total }
+	divide_temp_variable = { ending = 12 }
+	add_to_variable = { RWK_return_acc = ending }
+	while_loop_effect = {
+		limit = {
+			check_variable = { RWK_return_acc > 0.99 }
+			check_variable = { RWK_service_total > 0 }
+		}
+		RWK_end_one_term = yes
+		subtract_from_variable = { RWK_return_acc = 1 }
+	}
+	if = {
+		limit = {
+			check_variable = { RWK_service_total < 1 }
+		}
+		set_variable = { RWK_return_acc = 0 }
+	}
+	RWK_crimson_quotas_fill = yes
+}
+
+# Country scope
+RWK_raise_quota_projects = {
+	add_to_variable = { RWK_quota_projects = 1 }
+	add_to_variable = { RWK_quota_total = 1 }
+	RWK_crimson_quotas_fill = yes
+}
+
+# Country scope: the extra labourers go home at the end of their term, not at once
+RWK_lower_quota_projects = {
+	subtract_from_variable = { RWK_quota_projects = 1 }
+	subtract_from_variable = { RWK_quota_total = 1 }
+}
+
+# Country scope
+RWK_raise_quota_army = {
+	add_to_variable = { RWK_quota_army = 1 }
+	add_to_variable = { RWK_quota_total = 1 }
+	RWK_crimson_quotas_fill = yes
+}
+
+# Country scope: the extra labourers go home at the end of their term, not at once
+RWK_lower_quota_army = {
+	subtract_from_variable = { RWK_quota_army = 1 }
+	subtract_from_variable = { RWK_quota_total = 1 }
+}
+
+# Country scope
+RWK_raise_quota_concessions = {
+	add_to_variable = { RWK_quota_concessions = 1 }
+	add_to_variable = { RWK_quota_total = 1 }
+	RWK_crimson_quotas_fill = yes
+}
+
+# Country scope: the extra labourers go home at the end of their term, not at once
+RWK_lower_quota_concessions = {
+	subtract_from_variable = { RWK_quota_concessions = 1 }
+	subtract_from_variable = { RWK_quota_total = 1 }
+}
+
+# Country scope: the Crimson Quotas end (abolition settles those in service, see GSL_abolish)
+RWK_end_crimson_quotas = {
+	clr_country_flag = RWK_crimson_quotas_flag
+	set_variable = { RWK_quota_projects = 0 }
+	set_variable = { RWK_service_projects = 0 }
+	set_variable = { RWK_quota_army = 0 }
+	set_variable = { RWK_service_army = 0 }
+	set_variable = { RWK_quota_concessions = 0 }
+	set_variable = { RWK_service_concessions = 0 }
+	set_variable = { RWK_quota_total = 0 }
+	set_variable = { RWK_service_total = 0 }
+	if = {
+		limit = {
+			has_dynamic_modifier = { modifier = RWK_crimson_quotas_modifier }
+		}
+		remove_dynamic_modifier = { modifier = RWK_crimson_quotas_modifier }
+	}
+}

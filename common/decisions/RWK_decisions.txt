@@ -3763,3 +3763,235 @@ RWK_reconstruction_cat = {
 
 
 }
+
+# Crimson Quotas: the jungle raids, and the quota decisions for the AI (players use the panel)
+RWK_crimson_quotas_cat = {
+	# always visible while the quotas run (a category without a visible decision is not shown)
+	RWK_early_release = {
+		icon = GFX_dec_forced_settlement
+		cost = 25
+		visible = {
+			has_country_flag = RWK_crimson_quotas_flag
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = RWK_early_release_trigger_tt
+				OR = {
+					check_variable = { RWK_service_projects > RWK_quota_projects }
+					check_variable = { RWK_service_army > RWK_quota_army }
+					check_variable = { RWK_service_concessions > RWK_quota_concessions }
+				}
+			}
+		}
+		complete_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_early_release"
+			custom_effect_tooltip = RWK_early_release_tt
+			hidden_effect = {
+				while_loop_effect = {
+					limit = {
+						OR = {
+							check_variable = { RWK_service_projects > RWK_quota_projects }
+							check_variable = { RWK_service_army > RWK_quota_army }
+							check_variable = { RWK_service_concessions > RWK_quota_concessions }
+						}
+					}
+					RWK_end_one_term = yes
+				}
+				RWK_update_crimson_quotas = yes
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+	RWK_raid_jungle_slaves = {
+		icon = slavery
+		cost = 40
+
+		visible = {
+			original_tag = RWK
+			has_completed_focus = RWK_raid_jungle_slaves
+		}
+
+		days_remove = 50
+		modifier = {
+			stability_factor = -0.05
+		}
+		days_re_enable = 50
+		remove_effect = {
+			log = "[GetDateText]: [Root.GetName]: Decision RWK_raid_jungle_slaves"
+			random_list = {
+				25 = {
+
+				}
+				25 = {
+					custom_effect_tooltip = RWK_1_captives_tt
+					add_to_variable = {
+						var = foe_slaves_var
+						value = 1
+					}
+				}
+				25 = {
+					custom_effect_tooltip = RWK_2_captives_tt
+					add_to_variable = {
+						var = foe_slaves_var
+						value = 2
+					}
+				}
+				25 = {
+					custom_effect_tooltip = RWK_3_captives_tt
+					add_to_variable = {
+						var = foe_slaves_var
+						value = 3
+					}
+				}
+			}
+		}
+
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 50
+				check_variable = {
+					var = foe_slaves_var
+					value = 5
+					compare = less_than_or_equals
+				}
+			}
+			modifier = {
+				add = 10
+				check_variable = {
+					var = foe_slaves_var
+					value = 10
+					compare = less_than_or_equals
+				}
+			}
+		}
+	}
+
+	# the AI does not click GUI buttons
+	RWK_ai_raise_quota_projects = {
+		icon = GFX_dec_forced_settlement
+		visible = {
+			is_ai = yes
+			has_country_flag = RWK_quota_projects_flag
+		}
+		available = {
+			RWK_can_raise_quota_projects = yes
+		}
+		complete_effect = {
+			RWK_raise_quota_projects = yes
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 40
+				has_stability > 0.45
+			}
+		}
+	}
+	RWK_ai_lower_quota_projects = {
+		icon = GFX_dec_forced_settlement
+		visible = {
+			is_ai = yes
+			has_country_flag = RWK_quota_projects_flag
+		}
+		available = {
+			RWK_can_lower_quota_projects = yes
+		}
+		complete_effect = {
+			RWK_lower_quota_projects = yes
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 100
+				has_stability < 0.3
+			}
+		}
+	}
+
+	# the AI does not click GUI buttons
+	RWK_ai_raise_quota_army = {
+		icon = GFX_dec_forced_settlement
+		visible = {
+			is_ai = yes
+			has_country_flag = RWK_quota_army_flag
+		}
+		available = {
+			RWK_can_raise_quota_army = yes
+		}
+		complete_effect = {
+			RWK_raise_quota_army = yes
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 40
+				has_stability > 0.45
+			}
+		}
+	}
+	RWK_ai_lower_quota_army = {
+		icon = GFX_dec_forced_settlement
+		visible = {
+			is_ai = yes
+			has_country_flag = RWK_quota_army_flag
+		}
+		available = {
+			RWK_can_lower_quota_army = yes
+		}
+		complete_effect = {
+			RWK_lower_quota_army = yes
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 100
+				has_stability < 0.3
+			}
+		}
+	}
+
+	# the AI does not click GUI buttons
+	RWK_ai_raise_quota_concessions = {
+		icon = GFX_dec_forced_settlement
+		visible = {
+			is_ai = yes
+			has_country_flag = RWK_quota_concessions_flag
+		}
+		available = {
+			RWK_can_raise_quota_concessions = yes
+		}
+		complete_effect = {
+			RWK_raise_quota_concessions = yes
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 40
+				has_stability > 0.45
+			}
+		}
+	}
+	RWK_ai_lower_quota_concessions = {
+		icon = GFX_dec_forced_settlement
+		visible = {
+			is_ai = yes
+			has_country_flag = RWK_quota_concessions_flag
+		}
+		available = {
+			RWK_can_lower_quota_concessions = yes
+		}
+		complete_effect = {
+			RWK_lower_quota_concessions = yes
+		}
+		ai_will_do = {
+			base = 0
+			modifier = {
+				add = 100
+				has_stability < 0.3
+			}
+		}
+	}
+}

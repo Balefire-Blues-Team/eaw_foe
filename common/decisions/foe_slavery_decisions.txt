@@ -34,6 +34,15 @@ foe_slaving_cat = {
 
 		ai_will_do = {
 			base = 50
+			# Red Eye's AI keeps a stock for Worked to Death and political power for advisors
+			modifier = {
+				factor = 0
+				original_tag = EYE
+				OR = {
+					check_variable = { foe_slaves_var < 20 }
+					has_political_power < 150
+				}
+			}
 		}
 	}
 
@@ -71,6 +80,15 @@ foe_slaving_cat = {
 
 		ai_will_do = {
 			base = 50
+			# Red Eye's AI keeps a stock for Worked to Death and political power for advisors
+			modifier = {
+				factor = 0
+				original_tag = EYE
+				OR = {
+					check_variable = { foe_slaves_var < 20 }
+					has_political_power < 150
+				}
+			}
 		}
 	}
 
@@ -118,6 +136,15 @@ foe_slaving_cat = {
 
 		ai_will_do = {
 			base = 50
+			# Red Eye's AI keeps a stock for Worked to Death and political power for advisors
+			modifier = {
+				factor = 0
+				original_tag = EYE
+				OR = {
+					check_variable = { foe_slaves_var < 20 }
+					has_political_power < 150
+				}
+			}
 		}
 	}
 
@@ -178,103 +205,6 @@ foe_slaving_cat = {
 				tag = OAP
 				check_variable = {
     				foe_slaves_var < 3
-				}
-			}
-		}
-	}
-
-	### OAP - Old Appleloosa ###
-	OAP_western_slaves = {
-		icon = GFX_dec_buy_slaves_from_the_west
-		cost = 80
-		allowed = {
-			original_tag = OAP
-		}
-		visible = {
-			
-			NOT = {has_completed_focus = OAP_southwest_trade}
-		}
-
-		days_remove = 50
-		modifier = {
-			consumer_goods_factor = 0.05
-			political_power_gain = -0.1
-		}
-		days_re_enable = 80
-		remove_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision OAP_western_slave"
-
-			custom_effect_tooltip = foe_2_gain_slave_tt
-			add_to_variable = {
-				var = foe_slaves_var
-				value = 2
-			}
-		}
-
-		ai_will_do = {
-			base = 0
-			modifier = {
-				add = 50
-				check_variable = {
-					var = foe_slaves_var
-					value = 5
-					compare = less_than_or_equals
-				}
-			}
-			modifier = {
-				add = 10
-				check_variable = {
-					var = foe_slaves_var
-					value = 10
-					compare = less_than_or_equals
-				}
-			}
-		}
-	}
-	
-	OAP_western_slaves_2 = {
-		icon = GFX_dec_buy_slaves_from_the_west
-		cost = 40
-
-		visible = {
-			has_completed_focus = OAP_southwest_trade
-		}
-		allowed = {
-			original_tag = OAP
-		}
-
-		days_remove = 50
-		modifier = {
-			consumer_goods_factor = 0.05
-			political_power_gain = -0.1
-		}
-		days_re_enable = 30
-		remove_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision OAP_western_slave"
-
-			custom_effect_tooltip = foe_2_gain_slave_tt
-			add_to_variable = {
-				var = foe_slaves_var
-				value = 2
-			}
-		}
-
-		ai_will_do = {
-			base = 0
-			modifier = {
-				add = 50
-				check_variable = {
-					var = foe_slaves_var
-					value = 5
-					compare = less_than_or_equals
-				}
-			}
-			modifier = {
-				add = 10
-				check_variable = {
-					var = foe_slaves_var
-					value = 10
-					compare = less_than_or_equals
 				}
 			}
 		}
@@ -451,6 +381,12 @@ foe_slaving_cat = {
 
 		ai_will_do = {
 			factor = 20
+			# Red Eye's AI keeps political power for advisors
+			modifier = {
+				factor = 0
+				original_tag = EYE
+				has_political_power < 150
+			}
 		}
 	}
 	EYE_alicorn_creation = {
@@ -620,6 +556,12 @@ foe_slaving_cat = {
 				factor = 0
         		has_equipment = { infantry_equipment < 300}
 			}
+			# Red Eye's AI keeps political power for advisors
+			modifier = {
+				factor = 0
+				original_tag = EYE
+				has_political_power < 150
+			}
 		}
 	}
 	EYE_slave_trade_with_raiders = {
@@ -686,6 +628,12 @@ foe_slaving_cat = {
     				foe_slaves_var < 5
 				}
 			}
+			# Red Eye's AI keeps political power for advisors
+			modifier = {
+				factor = 0
+				original_tag = EYE
+				has_political_power < 150
+			}
 		}
 	}
 
@@ -735,6 +683,12 @@ foe_slaving_cat = {
 
 		ai_will_do = {
 			factor = 100
+			# Red Eye's AI keeps political power for advisors
+			modifier = {
+				factor = 0
+				original_tag = EYE
+				has_political_power < 150
+			}
 		}
 	}
 	EYE_slave_enslave_sunnyshore = {
@@ -873,6 +827,16 @@ foe_slaving_cat = {
 				var = foe_slaves_var
 				value = 10
 			}
+
+			# Generic slaver tree: the slave market is flooded
+			custom_effect_tooltip = GSL_rangers_market_tt
+			hidden_effect = {
+				set_temp_variable = { shock_price = 0.9 }
+				set_temp_variable = { shock_pool = 3 }
+				GSL_market_shock = yes
+				set_temp_variable = { market_event = 204 }
+				GSL_market_notice = yes
+			}
 		}
 
 		ai_will_do = {
@@ -948,6 +912,16 @@ foe_slaving_cat = {
 				var = foe_slaves_var
 				value = 13
 			}
+
+			# Generic slaver tree: the slave market is flooded
+			custom_effect_tooltip = GSL_mareway_market_tt
+			hidden_effect = {
+				set_temp_variable = { shock_price = 0.85 }
+				set_temp_variable = { shock_pool = 4 }
+				GSL_market_shock = yes
+				set_temp_variable = { market_event = 205 }
+				GSL_market_notice = yes
+			}
 		}
 
 		ai_will_do = {
@@ -955,71 +929,6 @@ foe_slaving_cat = {
 		}
 	}
 
-	### Rustwreck ###
-	RWK_raid_jungle_slaves = {
-		icon = slavery
-		cost = 40
-
-		visible = {
-			original_tag = RWK
-			has_completed_focus = RWK_raid_jungle_slaves
-		}
-
-		days_remove = 50
-		modifier = {
-			stability_factor = -0.05
-		}
-		days_re_enable = 50
-		remove_effect = {
-			log = "[GetDateText]: [Root.GetName]: Decision RWK_raid_jungle_slaves"
-			random_list = {
-				25 = {
-
-				}
-				25 = {
-					custom_effect_tooltip = foe_1_gain_slave_tt
-					add_to_variable = {
-						var = foe_slaves_var
-						value = 1
-					}
-				}
-				25 = {
-					custom_effect_tooltip = foe_2_gain_slave_tt
-					add_to_variable = {
-						var = foe_slaves_var
-						value = 2
-					}
-				}
-				25 = {
-					custom_effect_tooltip = foe_3_gain_slave_tt
-					add_to_variable = {
-						var = foe_slaves_var
-						value = 3
-					}
-				}
-			}
-		}
-
-		ai_will_do = {
-			base = 0
-			modifier = {
-				add = 50
-				check_variable = {
-					var = foe_slaves_var
-					value = 5
-					compare = less_than_or_equals
-				}
-			}
-			modifier = {
-				add = 10
-				check_variable = {
-					var = foe_slaves_var
-					value = 10
-					compare = less_than_or_equals
-				}
-			}
-		}
-	}
 
 	drugs_for_slaves_trade = {
 		icon = slavery
@@ -1137,6 +1046,12 @@ foe_slaving_cat = {
 		
 		ai_will_do = {
 			factor = 50
+			# Red Eye's AI keeps political power for advisors
+			modifier = {
+				factor = 0
+				original_tag = EYE
+				has_political_power < 150
+			}
 		}
 
 		visible = {
@@ -1301,6 +1216,7 @@ foe_slaving_cat = {
 	GSL_market_sell_surplus = {
 		icon = GFX_dec_buy_slaves_from_the_west
 		visible = {
+			NOT = { original_tag = EYE }
 			# players trade in the market panel; the AI does not click GUI buttons
 			is_ai = yes
 			GSL_market_open = yes
@@ -1339,6 +1255,7 @@ foe_slaving_cat = {
 	GSL_market_sell_pp = {
 		icon = GFX_dec_buy_slaves_from_the_west
 		visible = {
+			NOT = { original_tag = EYE }
 			# players trade in the market panel; the AI does not click GUI buttons
 			is_ai = yes
 			GSL_market_open = yes
@@ -1378,6 +1295,7 @@ foe_slaving_cat = {
 	GSL_market_sell_guns = {
 		icon = GFX_dec_buy_slaves_from_the_west
 		visible = {
+			NOT = { original_tag = EYE }
 			# players trade in the market panel; the AI does not click GUI buttons
 			is_ai = yes
 			GSL_market_open = yes
@@ -1521,7 +1439,7 @@ foe_slaving_cat = {
 	GSL_market_standing_order = {
 		icon = GFX_dec_buy_slaves_from_the_west
 		visible = {
-			has_completed_focus = GSL_standing_orders
+			has_country_flag = GSL_standing_orders_flag
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1561,13 +1479,14 @@ foe_slaving_cat = {
 	GSL_market_broker = {
 		icon = GFX_dec_buy_slaves_from_the_west
 		target_root_trigger = {
-			has_completed_focus = GSL_brokers_abroad
+			has_country_flag = GSL_brokers_flag
 		}
 		target_trigger = {
 			FROM = {
 				exists = yes
 				NOT = { tag = ROOT }
 				has_country_flag = slavery_allowed
+				NOT = { original_tag = RWK }
 				NOT = { has_war_with = ROOT }
 				num_of_available_civilian_factories > 0
 			}
@@ -1795,7 +1714,7 @@ GSL_pens_cat = {
 		visible = {
 			# players use the market panel; the AI does not click GUI buttons
 			is_ai = yes
-			has_completed_focus = GSL_put_them_to_work
+			has_country_flag = GSL_field_gangs_flag
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1855,7 +1774,7 @@ GSL_pens_cat = {
 		visible = {
 			# players use the market panel; the AI does not click GUI buttons
 			is_ai = yes
-			has_completed_focus = GSL_factory_gangs
+			has_country_flag = GSL_factory_gangs_flag
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1915,7 +1834,7 @@ GSL_pens_cat = {
 		visible = {
 			# players use the market panel; the AI does not click GUI buttons
 			is_ai = yes
-			has_completed_focus = GSL_road_gangs
+			has_country_flag = GSL_road_gangs_flag
 		}
 		available = {
 			custom_trigger_tooltip = {
@@ -1975,7 +1894,7 @@ GSL_pens_cat = {
 		visible = {
 			# players use the market panel; the AI does not click GUI buttons
 			is_ai = yes
-			has_completed_focus = GSL_the_levy
+			has_country_flag = GSL_levy_gangs_flag
 		}
 		available = {
 			custom_trigger_tooltip = {
