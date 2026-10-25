@@ -1,0 +1,958 @@
+###Regulators###
+
+#Event to Silver Alliance asking for weapons and vollenteers, on a yes the Alliance sends 400 guns. If no remove 'DeadTree_armsdeal1'
+shared_focus = { 
+	id = STR_NeedForWeapons
+	icon = GFX_idea_DeadTreeSimmering
+	x = -6
+	y = 0
+	
+	cost = 12
+	available = {
+						has_completed_focus = gs_industry_6
+						has_completed_focus = gs_know_1
+						has_completed_focus = gs_guard_patrol_routines
+					}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus STR_NeedForWeapons"
+		add_political_power = 100
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+
+#Recruiting local settlers
+shared_focus = { 
+	id = STR_SourcingMarepower
+	icon = GFX_LIT_goal_recruit_honorary_warbands
+	x = 2
+	y = 1
+	relative_position_id = STR_NeedForWeapons
+
+	cost = 12
+	prerequisite = { focus = STR_NeedForWeapons }
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus STR_SourcingMarepower"
+		add_political_power = -30
+		add_manpower = 150
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+
+# add 200 low-tech guns
+shared_focus = { 
+	id = STR_SourcingBadGuns
+	icon = GFX_LIT_goal_more_guns
+	x = -2
+	y = 1
+	relative_position_id = STR_NeedForWeapons
+
+	cost = 12
+	prerequisite = { focus = STR_NeedForWeapons }
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus STR_SourcingBadGuns"
+		add_political_power = -30
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+
+# Add Infrastructure
+shared_focus = { 
+	id = STR_ReinforceTheTrails
+	icon = GFX_LIT_goal_build_streets_between_settlements
+	x = 0
+	y = 2
+	relative_position_id = STR_NeedForWeapons
+
+	cost = 12
+	prerequisite = { focus = STR_SourcingBadGuns }
+	prerequisite = { focus = STR_SourcingMarepower }
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus STR_ReinforceTheTrails"
+		add_political_power = -20
+		one_random_infrastructure = yes	
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+
+#Attack the Scouts before they attack you
+shared_focus = { 
+	id = STR_AttackFillyScouts
+	icon = GFX_goal_hunt_down_the_stragglers
+	x = -2
+	y = 3
+	relative_position_id = STR_NeedForWeapons
+	mutually_exclusive = { focus =  STR_AttackSlavers }
+
+	cost = 12
+	prerequisite = { focus = STR_ReinforceTheTrails }
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus STR_AttackFillyScouts"
+		declare_war_on = { target = FSE }
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+
+shared_focus = { 
+	id = STR_AttackSlavers
+	icon = GFX_goal_EYE_crush_gangs
+	x = 2
+	y = 3
+	relative_position_id = STR_NeedForWeapons
+	mutually_exclusive = { focus =  STR_AttackFillyScouts }
+
+	cost = 12
+	prerequisite = { focus = STR_ReinforceTheTrails }
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus STR_AttackFillyScouts"
+		declare_war_on = { target = STM }
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+#Player-swap to SLV
+shared_focus = { 
+	id = STR_JoinTheHerd
+	icon = GFX_goal_generic_dangerous_deal_pony_pony
+	x = -1
+	y = 4
+	relative_position_id = STR_NeedForWeapons
+	mutually_exclusive = { focus =  STR_LeaveTheHerd }
+	cost = 1
+	prerequisite = { focus = STR_AttackFillyScouts  focus = STR_AttackSlavers }
+	available = {
+			NOT = { country_exists = FSE }
+			NOT = { country_exists = RRG }
+			NOT = { country_exists = STM }
+		}
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus STRJoinTheHerd"
+		play_tag = { SLV }
+		SLV = { annex_country = {
+            target = STR    
+            transfer_troops = yes 
+        		}
+			}
+		SLV = { every_state = {
+        limit = {	is_owned_by = STR  }
+        add_state_core = ROOT
+    }	
+    	}
+	}
+	
+	ai_will_do = {
+		factor = 160
+	}
+}
+#Continue playing regulators
+shared_focus = { 
+	id = STR_LeaveTheHerd
+	icon = GFX_goal_generic_dangerous_deal_pony_pony
+	x = 1
+	y = 4
+	relative_position_id = STR_NeedForWeapons
+	mutually_exclusive = { focus =  STR_JoinTheHerd }
+	cost = 1
+	prerequisite = { focus = STR_AttackFillyScouts  focus = STR_AttackSlavers }
+	available = {
+			NOT = { country_exists = FSE }
+			NOT = { country_exists = RRG }
+			NOT = { country_exists = STM }
+		}
+
+	completion_reward = {
+        add_stability = 0.05
+        SLV = { puppet = STR }
+		SLV = { set_autonomy = { target = STR autonomy_state = autonomy_dominion } }
+		set_politics = { ruling_party = visionary elections_allowed = yes }
+		add_political_power = 100
+		add_popularity = { ideology = visionary popularity = 0.3}
+        
+        
+    }
+
+	
+	ai_will_do = {
+		factor = 160
+	}
+}
+
+#Core Stormrider Territory and add local ponypower
+shared_focus = { 
+	id = STR_LiberateSlaves
+	icon = GFX_generic_goal_wasteland_industry
+	x = 2
+	y = 5
+	relative_position_id = STR_NeedForWeapons
+	cost = 1
+	prerequisite = { focus = STR_LeaveTheHerd }
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus STR_LiberateSlaves"
+        
+        
+    }
+
+	
+	ai_will_do = {
+		factor = 160
+	}
+}
+
+# Add water - an arms factory - and a commercial factory
+shared_focus = { 
+	id = STR_ExploitTheMarshes
+	icon = GFX_LIT_goal_repair_some_of_the_cloud_factories
+	x = 3
+	y = 6
+	relative_position_id = STR_NeedForWeapons
+	cost = 1
+	prerequisite = { focus = STR_LiberateSlaves }
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus STR_ExploitTheMarshes"
+        
+        
+    }
+
+	
+	ai_will_do = {
+		factor = 160
+	}
+}
+
+# core Red Rabbit territory
+shared_focus = { 
+	id = STR_OrganizePreventativeHunting
+	icon = GFX_goal_EYE_drums_of_war
+	x = 0
+	y = 5
+	relative_position_id = STR_NeedForWeapons
+	cost = 1
+	prerequisite = { focus = STR_LeaveTheHerd }
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus STR_OrganizePreventativeHunting"
+        
+        
+    }
+
+	
+	ai_will_do = {
+		factor = 160
+	}
+}
+
+# Core Filly Scouts Territory
+shared_focus = { 
+	id = STR_RepurposeChemLabs
+	icon = GFX_generic_goal_scavenge_camp
+	x = -2
+	y = 5
+	relative_position_id = STR_NeedForWeapons
+	cost = 1
+	prerequisite = { focus = STR_LeaveTheHerd }
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus STR_RepurposeChemLabs"
+        
+        
+    }
+
+	
+	ai_will_do = {
+		factor = 160
+	}
+}
+
+# add 2 commercial factories to state
+shared_focus = { 
+	id = STR_ExpandCommercialFacilities
+	icon = GFX_generic_goal_the_industry_of_science
+	x = -3
+	y = 6
+	relative_position_id = STR_NeedForWeapons
+	cost = 1
+	prerequisite = { focus = STR_RepurposeChemLabs }
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus STR_ExpandCommercialFacilities"
+        
+        
+    }
+
+	
+	ai_will_do = {
+		factor = 160
+	}
+}
+
+# prepare for war with OAP
+shared_focus = { 
+	id = STR_StaringSouth
+	icon = GFX_LIT_goal_down_in_mixie
+	x = 0
+	y = 7
+	relative_position_id = STR_NeedForWeapons
+	cost = 1
+	prerequisite = { focus = STR_LiberateSlaves }
+	prerequisite = { focus = STR_OrganizePreventativeHunting }
+	prerequisite = { focus = STR_RepurposeChemLabs }
+
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus STR_StaringSouth"
+        
+        
+    }
+
+	
+	ai_will_do = {
+		factor = 160
+	}
+}
+
+# If Rangers took OAP, make friends and end tree for now
+shared_focus = {
+	id = STR_DesertRangers
+	icon = GFX_OAP_goal_azuria_ranger_military_cooperation
+	x = -4
+	y = 2
+	relative_position_id = STR_StaringSouth
+	cost = 1
+	prerequisite = { focus = STR_StaringSouth }
+	mutually_exclusive = { focus =  STR_SlaverScum }
+	available = {	OAP = {	has_government = visionary	}	}
+
+	completion_reward = {
+        
+      
+    	}
+	ai_will_do = {
+		factor = 160
+	}  
+}
+
+# Adds idea for both factions that lowers resistance target. end of tree.
+shared_focus = {
+	id = STR_DesertFriends
+	icon = GFX_independant_army_command
+	x = -5
+	y = 3
+	relative_position_id = STR_StaringSouth
+	cost = 1
+	prerequisite = { focus = STR_DesertRangers }
+	
+
+	completion_reward = {
+        
+      
+    	}
+	ai_will_do = {
+		factor = 160
+	}  
+}
+
+# Adds idea for both factions that provides +2% bonus to soft and hard attack. end of tree. Also add 'Back-Shots' as a leader
+shared_focus = {
+	id = STR_DesertCooporation
+	icon = GFX_OAP_goal_a_new_appleloosan_defense_force
+	x = -3
+	y = 3
+	relative_position_id = STR_StaringSouth
+	cost = 1
+	prerequisite = { focus = STR_DesertRangers }
+	
+
+	completion_reward = {
+        
+      
+    	}
+	ai_will_do = {
+		factor = 160
+	}  
+}
+
+# Add event involving a regulator rescuing some escaped slaves
+shared_focus = {
+	id = STR_SlaverScum
+	icon = GFX_goal_EYE_slave_question
+	x = 3
+	y = 2
+	relative_position_id = STR_StaringSouth
+	cost = 1
+	prerequisite = { focus = STR_StaringSouth }
+	mutually_exclusive = { focus =  STR_DesertRangers }
+	available = {	OAP = {	has_government = destruction	} OAP = {	has_government = continuation	}	}
+
+	completion_reward = {
+        
+      
+    	}
+	ai_will_do = {
+		factor = 160
+	}  
+}
+
+# add event where slaves quietly share word that the slavers are on edge
+shared_focus = {
+	id = STR_SpreadTheWord
+	icon = GFX_goal_EYE_inspire_masses
+	x = 4
+	y = 3
+	relative_position_id = STR_StaringSouth
+	cost = 1
+	prerequisite = { focus = STR_SlaverScum }
+	available = {	OAP = {	has_government = destruction	} OAP = {	has_government = continuation	}	}
+
+	completion_reward = {
+        
+      
+    	}
+	ai_will_do = {
+		factor = 160
+	}  
+}
+
+# add event where OAP Rangers join up with the Regulators, adds new leader with humorous but sad backstory named 'Back-shots'
+shared_focus = {
+	id = STR_RallySomeHelp
+	icon = GFX_OAP_goal_a_new_appleloosan_defense_force
+	x = 2
+	y = 3
+	relative_position_id = STR_StaringSouth
+	cost = 1
+	prerequisite = { focus = STR_SlaverScum }
+	available = {	OAP = {	has_government = destruction	} OAP = {	has_government = continuation	}	}
+
+	completion_reward = {
+        
+      
+    	}
+	ai_will_do = {
+		factor = 160
+	}  
+}
+
+# Event for STR and OAP relating to the killing of several ranking slavers in OAP Territory
+shared_focus = {
+	id = STR_PickSomeTargets
+	icon = GFX_goal_EYE_lessons_in_brutality
+	x = 0
+	y = 3
+	relative_position_id = STR_StaringSouth
+	cost = 1
+	prerequisite = { focus = STR_SlaverScum }
+	available = {	OAP = {	has_government = destruction	} OAP = {	has_government = continuation	}	}
+
+	completion_reward = {
+        
+      
+    	}
+	ai_will_do = {
+		factor = 160
+	}  
+}
+
+# War Declared on OAP
+shared_focus = {
+	id = STR_LightAFire
+	icon = GFX_goal_resisting_villages
+	x = 2
+	y = 4
+	relative_position_id = STR_StaringSouth
+	cost = 1
+	prerequisite = { focus = STR_PickSomeTargets }
+	prerequisite = { focus = STR_SpreadTheWord }
+	prerequisite = { focus = STR_RallySomeHelp }
+	available = {	OAP = {	has_government = destruction	} OAP = {	has_government = continuation	}	}
+
+	completion_reward = {	declare_war_on = { target = OAP }	}
+	ai_will_do = {
+		factor = 160
+	}  
+}
+
+# Add local manpower to OAP territory
+shared_focus = {
+	id = STR_FreeSlaves
+	icon = GFX_OAP_goal_stop_the_slave_trade
+	x = 1
+	y = 5
+	relative_position_id = STR_StaringSouth
+	cost = 1
+	prerequisite = { focus = STR_LightAFire }
+	
+	available = {	NOT = { country_exists = OAP }	}
+
+	completion_reward = {		}
+	ai_will_do = {
+		factor = 160
+	}  
+}
+
+# Core OAP Territory
+shared_focus = {
+	id = STR_SecureLand
+	icon = GFX_OAP_goal_azuria_ranger_military_cooperation
+	x = 3
+	y = 5
+	relative_position_id = STR_StaringSouth
+	cost = 1
+	prerequisite = { focus = STR_LightAFire }
+	
+	available = {	NOT = { country_exists = OAP }	}
+
+	completion_reward = {	STR = { every_state = {
+        limit = {	is_owned_by = STR  }
+        add_state_core = ROOT
+    }	
+    	}	}
+	ai_will_do = {
+		factor = 160
+	}  
+}
+
+
+###Filly Scouts###
+shared_focus = { 
+	id = FSE_BelowAverageSales
+	icon = GFX_goal_fire
+	x = -3
+	y = 0
+	
+	cost = 12
+	available = {
+						has_completed_focus = gs_opening3
+					}
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus FSE_BelowAverageSales"
+		add_political_power = 100
+		hidden_effect ={    set_country_flag = GR_advisors }
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+#Regulator Irritation#
+shared_focus = { 
+	id = FSE_WesternAnnoyance
+	icon = GFX_goal_fire
+	x = 3
+	y = 1
+	relative_position_id = FSE_BelowAverageSales
+	cost = 12
+	prerequisite = { focus = FSE_BelowAverageSales }
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus FSE_WesternAnnoyance"
+		
+		
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+
+shared_focus = { 
+	id = FSE_IntensifySalesEfforts
+	icon = GFX_goal_fire
+	x = 1
+	y = 2
+	relative_position_id = FSE_BelowAverageSales
+	cost = 12
+	prerequisite = { focus = FSE_WesternAnnoyance }
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus FSE_IntensifySalesEfforts"
+		
+		
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+
+shared_focus = { 
+	id = FSE_PickOffTroublemakers
+	icon = GFX_goal_fire
+	x = 3
+	y = 2
+	relative_position_id = FSE_BelowAverageSales
+	cost = 12
+	prerequisite = { focus = FSE_WesternAnnoyance }
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus FSE_PickOffTroublemakers"
+		
+		
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+
+shared_focus = { 
+	id = FSE_IncreaseBakingEfforts
+	icon = GFX_goal_fire
+	x = 5
+	y = 2
+	relative_position_id = FSE_BelowAverageSales
+	cost = 12
+	prerequisite = { focus = FSE_WesternAnnoyance }
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus FSE_IncreaseBakingEfforts"
+		one_random_industrial_complex = yes
+		
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+
+shared_focus = { 
+	id = FSE_BreakKneecaps
+	icon = GFX_goal_fire
+	x = 2
+	y = 3
+	relative_position_id = FSE_BelowAverageSales
+	cost = 12
+	prerequisite = { focus = FSE_IntensifySalesEfforts }
+	prerequisite = { focus = FSE_IncreaseBakingEfforts}
+	prerequisite = { focus = FSE_PickOffTroublemakers}
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus FSE_BreakKneecaps"
+		
+		
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+
+#Stormland Troubles#
+shared_focus = { 
+	id = FSE_TroubleToTheSouth
+	icon = GFX_goal_fire
+	x = -3
+	y = 1
+	relative_position_id = FSE_BelowAverageSales
+	cost = 12
+	prerequisite = { focus = FSE_BelowAverageSales }
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus FSE_TroubleToTheSouth"
+		add_political_power = 100
+		
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+
+shared_focus = { 
+	id = FSE_SendTheScouts
+	icon = GFX_goal_fire
+	x = -3
+	y = 2
+	relative_position_id = FSE_BelowAverageSales
+	cost = 12
+	prerequisite = { focus = FSE_TroubleToTheSouth }
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus FSE_SendTheScouts"
+		
+		
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+
+shared_focus = { 
+	id = FSE_PunativeStrikes
+	icon = GFX_goal_fire
+	x = -5
+	y = 3
+	relative_position_id = FSE_BelowAverageSales
+	cost = 12
+	prerequisite = { focus = FSE_SendTheScouts }
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus FSE_PunativeStrikes"
+		
+		
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+
+shared_focus = { 
+	id = FSE_StealingBackCustomers
+	icon = GFX_goal_fire
+	x = -1
+	y = 3
+	relative_position_id = FSE_BelowAverageSales
+	cost = 12
+	prerequisite = { focus = FSE_SendTheScouts }
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus FSE_StealingBackCustomers"
+		
+		
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+
+}
+
+#Pick Your Fight - Star War With the Regulators or Slavers - You kill both eventually, but pick your first target~#
+shared_focus = { 
+	id = FSE_FightRegulators
+	icon = GFX_OAP_goal_deal_with_farsight
+	x = -2
+	y = 4
+	relative_position_id = FSE_BelowAverageSales
+	cost = 12
+	prerequisite = { focus = FSE_PunativeStrikes }
+	prerequisite = { focus = FSE_StealingBackCustomers }
+	prerequisite = { focus = FSE_BreakKneecaps }
+	mutually_exclusive = { focus =  FSE_FightSlavers }
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus FSE_FightRegulators"
+		
+		
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+
+#FightSlavers
+shared_focus = { 
+	id = FSE_RegulatorWar1
+	icon = GFX_goal_fire
+	x = -3
+	y = 5
+	relative_position_id = FSE_BelowAverageSales
+	cost = 12
+	prerequisite = { focus = FSE_FightRegulators }
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus FSE_RegulatorWar1"
+		
+		
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+
+#Celebrate Victory and Core territory#
+shared_focus = { 
+	id = FSE_RegulatorWar2
+	icon = GFX_goal_fire
+	x = -4
+	y = 6
+	relative_position_id = FSE_BelowAverageSales
+	cost = 12
+	prerequisite = { focus = FSE_RegulatorWar1 }
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus FSE_RegulatorWar2"
+		
+		
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+
+#Now Hit the Slavers~#
+shared_focus = { 
+	id = FSE_RegulatorWar3
+	icon = GFX_goal_fire
+	x = -3
+	y = 7
+	relative_position_id = FSE_BelowAverageSales
+	cost = 12
+	prerequisite = { focus = FSE_RegulatorWar2 }
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus FSE_RegulatorWar3"
+		
+		
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+
+shared_focus = { 
+	id = FSE_FightSlavers
+	icon = GFX_goal_fire
+	x = 0
+	y = 4
+	relative_position_id = FSE_BelowAverageSales
+	cost = 12
+	prerequisite = { focus = FSE_PunativeStrikes }
+	prerequisite = { focus = FSE_StealingBackCustomers }
+	prerequisite = { focus = FSE_BreakKneecaps }
+	mutually_exclusive = { focus =  FSE_FightRegulators }
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus FSE_FightRegulators"
+		
+		
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+
+#FightSlavers
+shared_focus = { 
+	id = FSE_SlaverWar1
+	icon = GFX_goal_fire
+	x = 1
+	y = 5
+	relative_position_id = FSE_BelowAverageSales
+	cost = 12
+	prerequisite = { focus = FSE_FightSlavers }
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus FSE_SlaverWar1"
+		
+		
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+
+#Celebrate Victory and Core territory#
+shared_focus = { 
+	id = FSE_SlaverWar2
+	icon = GFX_goal_fire
+	x = 2
+	y = 6
+	relative_position_id = FSE_BelowAverageSales
+	cost = 12
+	prerequisite = { focus = FSE_SlaverWar1 }
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus FSE_SlaverWar2"
+		
+		
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+
+#Now Hit the Regulators~#
+shared_focus = { 
+	id = FSE_SlaverWar3
+	icon = GFX_goal_fire
+	x = 1
+	y = 7
+	relative_position_id = FSE_BelowAverageSales
+	cost = 12
+	prerequisite = { focus = FSE_SlaverWar2 }
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus FSE_SlaverWar3"
+		
+		
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+
+#Center-line Focuses
+shared_focus = { 
+	id = FSE_DrumUpHooves
+	icon = GFX_goal_fire
+	x = -1
+	y = 6
+	relative_position_id = FSE_BelowAverageSales
+	cost = 12
+	prerequisite = { focus = FSE_FightRegulators }
+	prerequisite = { focus = FSE_FightSlavers }
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus FSE_DrumUpHooves"
+		
+		
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+
+shared_focus = { 
+	id = FSE_
+	icon = GFX_goal_fire
+	x = 0
+	y = 1
+	relative_position_id = FSE_BelowAverageSales
+	cost = 12
+	prerequisite = { focus = FSE_ }
+	
+	completion_reward = {
+		log = "[GetDateText]: [Root.GetName]: focus FSE_"
+		
+		
+	}
+	
+	ai_will_do = {
+		factor = 60
+	}
+}
+
