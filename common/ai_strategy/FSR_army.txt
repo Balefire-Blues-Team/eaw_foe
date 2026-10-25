@@ -312,13 +312,15 @@ FSR_research_anti_tank = {
 	}
 }
 
-# Robots: medium robots (protectapony) and their defence support company (guardian)
+# Robots: medium robots (protectapony) and their defence (guardian) and offence (liberator) support companies;
+# infiltration and deepstrike lead to liberator.
 FSR_research_robots = {
 	enable = {
 		original_tag = FSR
-		NOT = {
-			has_tech = robot_protectapony_tech
-			has_tech = robot_guardian_tech
+		OR = {
+			NOT = { has_tech = robot_protectapony_tech }
+			NOT = { has_tech = robot_guardian_tech }
+			NOT = { has_tech = robot_liberator_tech_1 }
 		}
 	}
 	abort_when_not_enabled = yes
@@ -352,6 +354,24 @@ FSR_research_robots = {
 		id = robot_guardian_tech
 		value = 300
 	}
+
+	ai_strategy = {
+		type = research_weight_factor
+		id = robot_infiltration_tech
+		value = 300
+	}
+
+	ai_strategy = {
+		type = research_weight_factor
+		id = robot_deepstrike_tech
+		value = 300
+	}
+
+	ai_strategy = {
+		type = research_weight_factor
+		id = robot_liberator_tech_1
+		value = 300
+	}
 }
 
 FSR_production_defence_robots = {
@@ -366,6 +386,39 @@ FSR_production_defence_robots = {
 	ai_strategy = {
 		type = equipment_production_min_factories_archetype
 		id = def_support_robot_equipment
+		value = 1
+	}
+}
+
+FSR_production_offence_robots = {
+	enable = {
+		original_tag = FSR
+		has_tech = robot_liberator_tech_1
+		num_of_military_factories > 9
+		NOT = { has_equipment = { off_support_robot_equipment > 45 } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = off_support_robot_equipment
+		value = 1
+	}
+}
+
+# Dogs for the medium robot template: 40 per division, paused above three divisions' worth
+FSR_production_dogs = {
+	enable = {
+		original_tag = FSR
+		has_tech = dog_equipment_tech_1
+		num_of_military_factories > 9
+		NOT = { has_equipment = { dogs_equipment > 119 } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = equipment_production_min_factories_archetype
+		id = dogs_equipment
 		value = 1
 	}
 }
@@ -596,6 +649,8 @@ FSR_supply_trains = {
 # While EYE stands, FSR ignores the support lines it does not field: energy fireteams and explosive demolitions
 # (FSR fields Machine-Gun Teams and Flamer Teams) and the recon, logistics, maintenance and medical companies
 # (the fifth support company is unicorn_company), and dogs. -90 = 90% less attractive; they are caught up after EYE falls.
+# Exception (2026-10-25): dog_equipment_tech_1 and logistics_company_tech_1 are no longer held back, the medium robot
+# template uses both companies.
 FSR_research_focus_vs_EYE = {
 	enable = {
 		original_tag = FSR
@@ -702,12 +757,6 @@ FSR_research_focus_vs_EYE = {
 
 	ai_strategy = {
 		type = research_weight_factor
-		id = dog_equipment_tech_1
-		value = -90
-	}
-
-	ai_strategy = {
-		type = research_weight_factor
 		id = dog_tech_1
 		value = -90
 	}
@@ -769,12 +818,6 @@ FSR_research_focus_vs_EYE = {
 	ai_strategy = {
 		type = research_weight_factor
 		id = recon_company_tech_6
-		value = -90
-	}
-
-	ai_strategy = {
-		type = research_weight_factor
-		id = logistics_company_tech_1
 		value = -90
 	}
 

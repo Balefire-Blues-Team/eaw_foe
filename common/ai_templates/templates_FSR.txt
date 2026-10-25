@@ -180,6 +180,10 @@ infantry_FSR = {
 
 # FSR robots: the regular line holders (a third of infantry's manpower, same IC exchange against EYE;
 # scenarios/fsr_width/run_vs_eye_robots.py). Light robots first, medium robots with defence support once researched.
+# Medium stage support from the 2026-10-25 defence search (scenarios/fsr_vs_eye/robot_templates.py): dog, logistics,
+# both support robots and unicorn hold every EYE template at the real odds; the old anti-tank + defence robot
+# support scored 3.09 against 4.44. Both stages switch on robot_protectapony_tech alone: the AI adds the support
+# companies as their techs come in (vanilla _documentation.md), so a slow dog or logistics tech cannot stall it.
 combat_robot_FSR = {
 
 	available_for = {
@@ -208,15 +212,12 @@ combat_robot_FSR = {
 			modifier = {
 				factor = 0
 				has_tech = robot_protectapony_tech
-				has_tech = robot_guardian_tech
 			}
 		}
 
 		can_upgrade_in_field = {
 			has_tech = robot_protectapony_tech
-			has_tech = robot_guardian_tech
 			has_equipment = { medium_robot_equipment > 199 }
-			has_equipment = { def_support_robot_equipment > 14 }
 		}
 
 		target_template = {
@@ -242,21 +243,18 @@ combat_robot_FSR = {
 
 			modifier = {
 				factor = 0
-				NOT = {
-					has_tech = fireteam_weaponry_tech
-					has_tech = demolitions_weaponry_tech
-					has_tech = anti_tank_equipment_tech_1
-					has_tech = robot_protectapony_tech
-					has_tech = robot_guardian_tech
-				}
+				NOT = { has_tech = robot_protectapony_tech }
 			}
 		}
 
 		target_template = {
 
 			support = {
-				anti_tank_company = 1
+				dog_company = 1
+				logistics_company = 1
 				support_robot_def = 1
+				support_robot_off = 1
+				unicorn_company = 1
 			}
 
 			regiments = {
