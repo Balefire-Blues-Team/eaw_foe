@@ -1,7 +1,11 @@
+# Generic robot templates (every nation but FSR and SEZ). Tested 2026-10-26 with SEZ's 1236 techs against SEZ's first-wave
+# enemies (calculator scenarios/sez_robots/run_sez.py, Brainstorming/SEZ_ROBOT_TEMPLATES.md): anti-tank and dog
+# companies beat logistics / maintenance / recon in combat on every robot line (anti-tank pierces LEE's armour).
 robot_support_default_template = {
 
 	blocked_for = {
 		FSR # own templates in templates_FSR.txt
+		SEZ # own templates in templates_SEZ.txt
 	}
 
 	role = support_robot
@@ -23,7 +27,8 @@ robot_support_default_template = {
 		}
 
 		can_upgrade_in_field = {
-			has_equipment = { light_robot_equipment < 50 }
+			has_tech = robot_protectapony_tech
+			has_equipment = { medium_robot_equipment > 199 }
 		}
 
 		target_template = {
@@ -31,9 +36,8 @@ robot_support_default_template = {
 			support = {
 				support_robot_def = 1
 				support_robot_off = 1
-				logistics_company = 1
 				anti_tank_company = 1
-				recon_company = 1
+				dog_company = 1
 			}
 
 			regiments = {
@@ -59,17 +63,13 @@ robot_support_default_template = {
 		}
 
 
-		can_upgrade_in_field = {
-			has_equipment = { light_robot_equipment < 50 }
-		}
-
 		target_template = {
 			
 			support = {
 				support_robot_def = 1
 				support_robot_off = 1
-				logistics_company = 1
-				maintenance_company = 1
+				anti_tank_company = 1
+				dog_company = 1
 			}
 
 			regiments = {
@@ -77,9 +77,7 @@ robot_support_default_template = {
 				medium_robot = 8
 			}
 		}
-		replace_at_match = 0.4
-		replace_with = combat_robot_default
-		target_min_match = 0.5
+		# last stage of the support_robot role: the replace chain only picks targets within one role
 	}
 }
 
@@ -87,6 +85,7 @@ robot_combat_default_template = {
 
 	blocked_for = {
 		FSR # own templates in templates_FSR.txt
+		SEZ # own templates in templates_SEZ.txt
 	}
 
 	role = combat_robot
@@ -113,7 +112,8 @@ robot_combat_default_template = {
 		}
 
 		can_upgrade_in_field = {
-			has_equipment = { heavy_robot_equipment < 50 }
+			has_tech = robot_industrial_robots_tech
+			has_equipment = { heavy_robot_equipment > 199 }
 		}
 
 		target_template = {
@@ -121,8 +121,8 @@ robot_combat_default_template = {
 			support = {
 				support_robot_def = 1
 				support_robot_off = 1
-				maintenance_company = 1
-				logistics_company = 1
+				anti_tank_company = 1
+				dog_company = 1
 			}
 
 			regiments = {
@@ -130,6 +130,9 @@ robot_combat_default_template = {
 			}
 		}
 
+		replace_at_match = 0.95
+		replace_with = combat_robot_heavy
+		target_min_match = 0.9
 	}
 	
 	combat_robot_heavy = {
@@ -141,20 +144,26 @@ robot_combat_default_template = {
 
 			modifier = {
 				factor = 40
+				has_tech = robot_industrial_robots_tech
+			}
+
+			modifier = {
+				factor = 0
+				NOT = { has_tech = robot_industrial_robots_tech }
 			}
 		}
 
+		# no replace_with: last stage, so this field-upgrade check has no effect
 		can_upgrade_in_field = {
-			has_equipment = { heavy_robot_equipment < 50 }
+			has_equipment = { heavy_robot_equipment > 199 }
 		}
 
 		target_template = {
 			support = {
 				support_robot_def = 1
 				support_robot_off = 1
-				maintenance_company = 1
-				logistics_company = 1
-				recon_company = 1
+				anti_tank_company = 1
+				dog_company = 1
 			}
 
 			regiments = {
