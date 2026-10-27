@@ -1,6 +1,3 @@
-# FSR land AI, modelled on the Sheep Mod's Poland AI (2026-09-28).
-# Width 20 pure power armour won the calculator's width round robin (infantry-combat-calculator/scenarios/fsr_width);
-# the matching templates live in ai_templates/templates_FSR.txt.
 
 ### Army size
 
@@ -89,7 +86,7 @@ FSR_army_cap = {
 }
 
 # Special forces room: once fewer than 10 special-forces battalions are free, stop building power armour and let
-# regular units raise the cap, instead of squeezing in 2-3 battalion PA divisions (user test, 2026-09-28).
+# regular units raise the cap, instead of squeezing in 2-3 battalion PA divisions
 # Cap as the engine describes it (defines SPECIAL_FORCES_CAP_BASE 0.05, SPECIAL_FORCES_CAP_MIN 24):
 # max(24 + special_forces_min, regular battalions x 0.05 x (1 + special_forces_cap)) + special_forces_cap_flat.
 FSR_special_forces_full = {
@@ -423,11 +420,7 @@ FSR_production_dogs = {
 	}
 }
 
-### Defence against EYE (2026-09-28)
-# The AI cannot be told to hold a province line, and FOE switches the engine's own fallback lines off
-# (PLAN_MIN_SIZE_FOR_FALLBACK = 500 in defines/01_defines.lua). Instead the ideal fallback line
-# (9173 3322 | 15870 15878 9055 | 5374 15900, in states 545 | 542 | 536) is fortified to bunker level 2 and the
-# crossing into EYE at South End (4994) to level 3, so whichever of them the AI ends up fighting on holds.
+### Defence against EYE
 
 FSR_bunker_9173 = {
 	enable = {
@@ -576,10 +569,38 @@ FSR_hold_against_EYE = {
 	}
 }
 
+# Visionary FSR does not attack EYE before it has 16 divisions: it holds the line and puts its factories into new
+# divisions. Overrides FSR_hold_against_EYE (priority 10) until then, and takes over again whenever losses push FSR
+# back below 16.
+FSR_hold_until_ready = {
+	enable = {
+		original_tag = FSR
+		has_government = visionary
+		has_war_with = EYE
+		num_divisions < 16
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = front_control
+		tag = EYE
+		priority = 20
+		ordertype = front
+		execution_type = careful
+		execute_order = no
+		manual_attack = no
+	}
+
+	ai_strategy = {
+		type = force_build_armies
+		value = 300
+	}
+}
+
 ### Reserve, garrison, supply
 
 # Keep a fifth of the army in the capital (FSR's only port) against invasions, while the fronts do not already
-# cover it. Only against naval powers: in a land war the reserve just stood idle (user test, 2026-09-28).
+# cover it.
 FSR_reserve_capital = {
 	enable = {
 		original_tag = FSR
