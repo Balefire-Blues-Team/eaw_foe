@@ -1,0 +1,57 @@
+###########################################################################
+# Antagonist System (Campaign Setup option Off / Hard / Brutal).
+###########################################################################
+
+#Distances come from the country distance table
+FOE_is_antagonist_candidate = {
+	is_ai = yes
+	is_subject = no
+	capital_scope = { is_owned_by = PREV is_controlled_by = PREV }
+	NOT = { is_neighbor_of = ROOT }
+	NOT = { is_in_faction_with = ROOT }
+	check_variable = { closest_distance_to@ROOT > 0 }
+}
+
+#Ranked Antagonist choice-bnads
+FOE_is_antagonist_in_band = {
+	has_variable = FOE_antagonist_rank_pct
+	NOT = { has_country_flag = FOE_antagonist }
+	NOT = { any_neighbor_country = { has_country_flag = FOE_antagonist } }
+	NOT = { check_variable = { FOE_antagonist_rank_pct < FOE_band_low } }
+	NOT = { check_variable = { FOE_antagonist_rank_pct > FOE_band_high } }
+	OR = {
+		check_variable = { num_owned_states > 2 }
+		FOE_has_finished_lore_tree = yes
+	}
+	has_war = no
+}
+
+#Prefer flavourful countries to be antagonists
+FOE_has_finished_lore_tree = {
+	OR = {
+		tag = CAL
+		tag = COM
+		tag = DEC
+		tag = ERA
+		tag = EYE
+		tag = FRT
+		tag = FSR
+		tag = KHA
+		tag = LIT
+		tag = MAS
+		tag = MRA
+		tag = MSR
+		tag = MWY
+		tag = NCG
+		tag = NEV
+		tag = NMZ
+		tag = OAP
+		tag = RWK
+		tag = SEZ
+		tag = SHA
+		tag = SHP
+		tag = SLV
+		tag = TEN
+		tag = UNI
+	}
+}

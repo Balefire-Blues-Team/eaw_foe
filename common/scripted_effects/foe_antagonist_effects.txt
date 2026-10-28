@@ -1,0 +1,1331 @@
+###########################################################################
+# Antagonist System 
+###########################################################################
+
+# Rings are bands of that rank (0% = bordering): Rival 10-25%, Archenemy 40-60%, Reserve 65-85%.
+FOE_select_antagonists = {
+	set_variable = { global.FOE_antagonist_player = ROOT }
+
+	set_temp_variable = { FOE_pool_size = 0 }
+	every_country = {
+		limit = { FOE_is_antagonist_candidate = yes }
+		set_variable = { FOE_antagonist_rank_pct = 0 }
+		add_to_temp_variable = { FOE_pool_size = 1 }
+	}
+
+	every_country = {
+		limit = { has_variable = FOE_antagonist_rank_pct }
+		# Rank = how many candidates are closer to the player than this one.
+		set_temp_variable = { FOE_own_distance = closest_distance_to@ROOT }
+		every_country = {
+			limit = {
+				has_variable = FOE_antagonist_rank_pct
+				check_variable = { closest_distance_to@ROOT < FOE_own_distance }
+			}
+			PREV = { add_to_variable = { FOE_antagonist_rank_pct = 1 } }
+		}
+		multiply_variable = { FOE_antagonist_rank_pct = 100 }
+		divide_variable = { FOE_antagonist_rank_pct = FOE_pool_size }
+
+		# Weight = owned states squared
+		set_variable = { FOE_antagonist_weight = num_owned_states }
+		clamp_variable = {
+			var = FOE_antagonist_weight
+			max = 10
+		}
+		multiply_variable = { FOE_antagonist_weight = FOE_antagonist_weight }
+		if = {
+			limit = { FOE_has_finished_lore_tree = yes }
+			multiply_variable = { FOE_antagonist_weight = 3 }
+		}
+
+		if = {
+			limit = { has_global_flag = FOE_antagonist_selection_audit }
+			log = "FOE_ANTAGONIST_AUDIT [THIS.GetTag] rank_pct=[?FOE_antagonist_rank_pct] weight=[?FOE_antagonist_weight] distance=[?FOE_own_distance] pool=[?FOE_pool_size]"
+		}
+	}
+
+	set_temp_variable = { FOE_ring = 1 }
+	set_temp_variable = { FOE_band_low = 10 }
+	set_temp_variable = { FOE_band_high = 25 }
+	FOE_pick_antagonist = yes
+
+	set_temp_variable = { FOE_ring = 2 }
+	set_temp_variable = { FOE_band_low = 40 }
+	set_temp_variable = { FOE_band_high = 60 }
+	FOE_pick_antagonist = yes
+
+	set_temp_variable = { FOE_ring = 3 }
+	set_temp_variable = { FOE_band_low = 65 }
+	set_temp_variable = { FOE_band_high = 85 }
+	FOE_pick_antagonist = yes
+
+	every_country = {
+		limit = { has_variable = FOE_antagonist_rank_pct }
+		clear_variable = FOE_antagonist_rank_pct
+		clear_variable = FOE_antagonist_weight
+	}
+
+	country_event = { id = foe_antagonists.1 }
+}
+
+# Temp FOE_ring
+FOE_pick_antagonist = {
+	set_temp_variable = { FOE_picked = 0 }
+	set_temp_variable = { FOE_widenings = 0 }
+	while_loop_effect = {
+		limit = {
+			check_variable = { FOE_picked = 0 }
+			check_variable = { FOE_widenings < 5 }
+		}
+		set_temp_variable = { FOE_total_weight = 0 }
+		every_country = {
+			limit = { FOE_is_antagonist_in_band = yes }
+			add_to_temp_variable = { FOE_total_weight = FOE_antagonist_weight }
+		}
+		if = {
+			limit = { check_variable = { FOE_total_weight > 0 } }
+			set_temp_variable = { FOE_roll = random }
+			multiply_temp_variable = { FOE_roll = FOE_total_weight }
+			every_country = {
+				limit = { FOE_is_antagonist_in_band = yes }
+				if = {
+					limit = { check_variable = { FOE_picked = 0 } }
+					subtract_from_temp_variable = { FOE_roll = FOE_antagonist_weight }
+					if = {
+						limit = { check_variable = { FOE_roll < 0 } }
+						FOE_make_antagonist = yes
+					}
+				}
+			}
+			# Prevent NULL via Rounding
+			if = {
+				limit = { check_variable = { FOE_picked = 0 } }
+				random_country = {
+					limit = { FOE_is_antagonist_in_band = yes }
+					FOE_make_antagonist = yes
+				}
+			}
+		}
+		if = {
+			limit = { check_variable = { FOE_picked = 0 } }
+			subtract_from_temp_variable = { FOE_band_low = 10 }
+			add_to_temp_variable = { FOE_band_high = 10 }
+			add_to_temp_variable = { FOE_widenings = 1 }
+		}
+	}
+	if = {
+		limit = { check_variable = { FOE_picked = 0 } }
+		log = "FOE_ANTAGONIST ring=[?FOE_ring] no candidate found"
+	}
+}
+
+# Assign Antagonist
+FOE_make_antagonist = {
+	set_country_flag = FOE_antagonist
+	set_variable = { FOE_antagonist_ring = FOE_ring }
+	FOE_set_antagonist_formable_states = yes
+	if = {
+		limit = { check_variable = { FOE_ring = 1 } }
+		set_variable = { global.FOE_antagonist_rival = THIS }
+	}
+	else_if = {
+		limit = { check_variable = { FOE_ring = 2 } }
+		set_variable = { global.FOE_antagonist_archenemy = THIS }
+	}
+	else = {
+		set_variable = { global.FOE_antagonist_reserve = THIS }
+	}
+	set_temp_variable = { FOE_picked = 1 }
+	log = "FOE_ANTAGONIST ring=[?FOE_ring] selected=[THIS.GetTag] rank_pct=[?FOE_antagonist_rank_pct] weight=[?FOE_antagonist_weight] band=[?FOE_band_low]-[?FOE_band_high]"
+}
+
+# Removes every Antagonist
+FOE_clear_antagonists = {
+	every_country = {
+		limit = { has_country_flag = FOE_antagonist }
+		clr_country_flag = FOE_antagonist
+		clear_variable = FOE_antagonist_ring
+		clear_array = FOE_antagonist_formable_states
+		clear_variable = FOE_antagonist_stall_months
+		clear_variable = FOE_antagonist_nudge_months
+		clear_variable = FOE_antagonist_wargoal_target
+		clear_variable = FOE_antagonist_new_target
+		set_variable = { FOE_antagonist_industry_step = 0 }
+		set_variable = { FOE_antagonist_research_step = 0 }
+		FOE_set_antagonist_industry_idea = yes
+		FOE_set_antagonist_research_idea = yes
+		clear_variable = FOE_antagonist_industry_step
+		clear_variable = FOE_antagonist_research_step
+		clear_variable = FOE_antagonist_army_step
+		clear_variable = FOE_antagonist_phase
+		clear_variable = FOE_antagonist_contact_months
+		clear_variable = FOE_antagonist_strike_cooldown
+	}
+	every_state = {
+		limit = { has_variable = FOE_antagonist_forts }
+		clear_variable = FOE_antagonist_forts
+	}
+	clear_variable = global.FOE_antagonist_rival
+	clear_variable = global.FOE_antagonist_archenemy
+	clear_variable = global.FOE_antagonist_reserve
+}
+
+FOE_log_antagonists = {
+	if = {
+		limit = { has_global_flag = FOE_campaign_antagonists_brutal }
+		log = "FOE_ANTAGONIST mode=Brutal"
+	}
+	else_if = {
+		limit = { has_global_flag = FOE_campaign_antagonists_enabled }
+		log = "FOE_ANTAGONIST mode=Hard"
+	}
+	else = {
+		log = "FOE_ANTAGONIST mode=Off"
+	}
+	every_country = {
+		limit = { has_country_flag = FOE_antagonist }
+		log = "FOE_ANTAGONIST [THIS.GetTag] ring=[?FOE_antagonist_ring] industry=[?FOE_antagonist_industry_step] army=[?FOE_antagonist_army_step] research=[?FOE_antagonist_research_step] phase=[?FOE_antagonist_phase]"
+	}
+}
+
+# Determine Countries that the Antagonist should target; Runs Monthly
+FOE_update_antagonist_expansion = {
+	if = {
+		limit = {
+			has_war = no
+			is_subject = no
+		}
+		set_temp_variable = { FOE_nudge_wait = 2 }
+		set_temp_variable = { FOE_stall_wait = 6 }
+		set_temp_variable = { FOE_factory_target = 0.7 }
+		if = {
+			limit = { has_global_flag = FOE_campaign_antagonists_brutal }
+			set_temp_variable = { FOE_nudge_wait = 1 }
+			set_temp_variable = { FOE_stall_wait = 3 }
+			set_temp_variable = { FOE_factory_target = 1 }
+		}
+		# The system only pushes an Antagonist that lags behind the player
+		set_temp_variable = { FOE_own_factories = num_of_factories }
+		var:global.FOE_antagonist_player = {
+			set_temp_variable = { FOE_player_factories = num_of_factories }
+		}
+		multiply_temp_variable = { FOE_player_factories = FOE_factory_target }
+		set_temp_variable = { FOE_lagging = 0 }
+		if = {
+			limit = { check_variable = { FOE_own_factories < FOE_player_factories } }
+			set_temp_variable = { FOE_lagging = 1 }
+		}
+		FOE_scan_antagonist_targets = yes
+
+		if = {
+			limit = { has_variable = FOE_antagonist_wargoal_target }
+			set_variable = { FOE_antagonist_stall_months = 0 }
+			add_to_variable = { FOE_antagonist_nudge_months = 1 }
+			if = {
+				limit = {
+					NOT = { check_variable = { FOE_antagonist_nudge_months < FOE_nudge_wait } }
+					check_variable = { FOE_lagging = 1 }
+				}
+				set_variable = { FOE_antagonist_nudge_months = 0 }
+				var:FOE_antagonist_wargoal_target = {
+					if = {
+						limit = { has_non_aggression_pact_with = ROOT }
+						diplomatic_relation = {
+							country = ROOT
+							relation = non_aggression_pact
+							active = no
+						}
+					}
+					ROOT = {
+						declare_war_on = {
+							target = PREV
+							type = annex_everything
+						}
+					}
+					if = {
+						limit = { has_war_with = ROOT }
+						log = "FOE_ANTAGONIST_EXPANSION [ROOT.GetTag] declares war on [THIS.GetTag]"
+					}
+					else = {
+						log = "FOE_ANTAGONIST_EXPANSION [ROOT.GetTag] declared on [THIS.GetTag] but is not at war with it yet"
+					}
+				}
+			}
+		}
+		else = {
+			set_variable = { FOE_antagonist_nudge_months = 0 }
+			add_to_variable = { FOE_antagonist_stall_months = 1 }
+			if = {
+				limit = {
+					NOT = { check_variable = { FOE_antagonist_stall_months < FOE_stall_wait } }
+					check_variable = { FOE_lagging = 1 }
+				}
+				if = {
+					limit = { has_variable = FOE_antagonist_new_target }
+					set_variable = { FOE_antagonist_stall_months = 0 }
+					var:FOE_antagonist_new_target = {
+						ROOT = {
+							create_wargoal = {
+								type = annex_everything
+								target = PREV
+							}
+						}
+						log = "FOE_ANTAGONIST_EXPANSION [ROOT.GetTag] stalled: war goal on [THIS.GetTag] (formable=[?FOE_best_new_formable] divisions=[?FOE_best_new_divisions])"
+					}
+				}
+				else_if = {
+					limit = { check_variable = { FOE_antagonist_stall_months = FOE_stall_wait } }
+					log = "FOE_ANTAGONIST_EXPANSION [ROOT.GetTag] stalled: no beatable neighbour in its region, retrying monthly"
+				}
+			}
+		}
+		# Logged once, when a timer runs out while it is ahead.
+		if = {
+			limit = {
+				check_variable = { FOE_lagging = 0 }
+				OR = {
+					check_variable = { FOE_antagonist_stall_months = FOE_stall_wait }
+					check_variable = { FOE_antagonist_nudge_months = FOE_nudge_wait }
+				}
+			}
+			log = "FOE_ANTAGONIST_EXPANSION [ROOT.GetTag] is ahead of the player ([?FOE_own_factories] factories, help stops at [?FOE_player_factories]): system help paused"
+		}
+	}
+	else = {
+		set_variable = { FOE_antagonist_stall_months = 0 }
+		set_variable = { FOE_antagonist_nudge_months = 0 }
+	}
+}
+
+# Check elligible expansion routes
+FOE_scan_antagonist_targets = {
+	clear_variable = FOE_antagonist_wargoal_target
+	clear_variable = FOE_antagonist_new_target
+	set_temp_variable = { FOE_best_wargoal_divisions = -1 }
+	set_temp_variable = { FOE_best_new_divisions = -1 }
+	set_temp_variable = { FOE_best_new_formable = 0 }
+	every_neighbor_country = {
+		limit = {
+			is_ai = yes
+			is_subject = no
+			is_in_faction = no
+			NOT = { has_country_flag = FOE_antagonist }
+			NOT = { has_truce_with = ROOT }
+			NOT = { any_country = { has_guaranteed = PREV } }
+			strength_ratio = {
+				tag = ROOT
+				ratio < 0.67
+			}
+		}
+		# Don't step on other antagonist's toes
+		set_temp_variable = { FOE_distance_to_us = closest_distance_to@ROOT }
+		set_temp_variable = { FOE_in_region = 1 }
+		var:global.FOE_antagonist_player = {
+			if = {
+				limit = { NOT = { check_variable = { closest_distance_to@PREV > FOE_distance_to_us } } }
+				set_temp_variable = { FOE_in_region = 0 }
+			}
+		}
+		every_country = {
+			limit = {
+				has_country_flag = FOE_antagonist
+				NOT = { tag = ROOT }
+				NOT = { check_variable = { closest_distance_to@PREV > FOE_distance_to_us } }
+			}
+			set_temp_variable = { FOE_in_region = 0 }
+		}
+
+		if = {
+			limit = { check_variable = { FOE_in_region = 1 } }
+			set_temp_variable = { FOE_divisions = num_divisions }
+			if = {
+				limit = {
+					ROOT = { has_wargoal_against = PREV }
+					OR = {
+						check_variable = { FOE_best_wargoal_divisions < 0 }
+						check_variable = { FOE_divisions < FOE_best_wargoal_divisions }
+					}
+				}
+				ROOT = { set_variable = { FOE_antagonist_wargoal_target = PREV } }
+				set_temp_variable = { FOE_best_wargoal_divisions = FOE_divisions }
+			}
+			set_temp_variable = { FOE_formable = 0 }
+			if = {
+				limit = {
+					any_of_scopes = {
+						array = ROOT.FOE_antagonist_formable_states
+						is_owned_by = PREV
+					}
+				}
+				set_temp_variable = { FOE_formable = 1 }
+			}
+			if = {
+				limit = {
+					OR = {
+						check_variable = { FOE_best_new_divisions < 0 }
+						check_variable = { FOE_formable > FOE_best_new_formable }
+						AND = {
+							check_variable = { FOE_formable = FOE_best_new_formable }
+							check_variable = { FOE_divisions < FOE_best_new_divisions }
+						}
+					}
+				}
+				ROOT = { set_variable = { FOE_antagonist_new_target = PREV } }
+				set_temp_variable = { FOE_best_new_divisions = FOE_divisions }
+				set_temp_variable = { FOE_best_new_formable = FOE_formable }
+			}
+		}
+	}
+}
+
+
+# Rubber Band Effects - Let's the Antagonist keep up with a player that is outscaling them
+FOE_update_antagonist_rubber_band = {
+	set_temp_variable = { FOE_share = 0.7 }
+	set_temp_variable = { FOE_research_share = 0.9 }
+	if = {
+		limit = { has_global_flag = FOE_campaign_antagonists_brutal }
+		set_temp_variable = { FOE_share = 1 }
+		set_temp_variable = { FOE_research_share = 1 }
+	}
+	var:global.FOE_antagonist_player = {
+		set_temp_variable = { FOE_player_factories = num_of_factories }
+		set_temp_variable = { FOE_player_divisions = num_divisions }
+		set_temp_variable = { FOE_player_techs = num_researched_technologies }
+	}
+
+	# Industry.
+	set_temp_variable = { FOE_band_own = num_of_factories }
+	set_temp_variable = { FOE_band_target = FOE_player_factories }
+	multiply_temp_variable = { FOE_band_target = FOE_share }
+	FOE_antagonist_band_step = yes
+	if = {
+		limit = { NOT = { check_variable = { FOE_antagonist_industry_step = FOE_band_step } } }
+		set_variable = { FOE_antagonist_industry_step = FOE_band_step }
+		FOE_set_antagonist_industry_idea = yes
+		log = "FOE_ANTAGONIST_BAND [ROOT.GetTag] industry step [?FOE_antagonist_industry_step] ([?FOE_band_own] factories, target [?FOE_band_target])"
+	}
+
+	# Military
+	set_temp_variable = { FOE_band_own = num_divisions }
+	set_temp_variable = { FOE_band_target = FOE_player_divisions }
+	multiply_temp_variable = { FOE_band_target = FOE_share }
+	FOE_antagonist_band_step = yes
+	set_variable = { FOE_antagonist_army_step = FOE_band_step }
+	if = {
+		limit = { check_variable = { FOE_antagonist_army_step > 0 } }
+		set_temp_variable = { FOE_army_drip = FOE_antagonist_army_step }
+		multiply_temp_variable = { FOE_army_drip = 50 }
+		add_manpower = FOE_army_drip
+		FOE_give_antagonist_weapons = yes
+	}
+
+	# Research
+	set_temp_variable = { FOE_band_own = num_researched_technologies }
+	set_temp_variable = { FOE_band_target = FOE_player_techs }
+	multiply_temp_variable = { FOE_band_target = FOE_research_share }
+	FOE_antagonist_band_step = yes
+	if = {
+		limit = { NOT = { check_variable = { FOE_antagonist_research_step = FOE_band_step } } }
+		set_variable = { FOE_antagonist_research_step = FOE_band_step }
+		FOE_set_antagonist_research_idea = yes
+		log = "FOE_ANTAGONIST_BAND [ROOT.GetTag] research step [?FOE_antagonist_research_step] ([?FOE_band_own] techs, target [?FOE_band_target])"
+	}
+
+	if = {
+		limit = { has_global_flag = FOE_antagonist_band_audit }
+		log = "FOE_ANTAGONIST_BAND [ROOT.GetTag] industry=[?FOE_antagonist_industry_step] army=[?FOE_antagonist_army_step] research=[?FOE_antagonist_research_step]"
+	}
+}
+
+# Determine how much of a boost the Antagonist gets
+FOE_antagonist_band_step = {
+	set_temp_variable = { FOE_band_step = 0 }
+	if = {
+		limit = { check_variable = { FOE_band_target > 0 } }
+		set_temp_variable = { FOE_band_ratio = FOE_band_own }
+		divide_temp_variable = { FOE_band_ratio = FOE_band_target }
+		if = {
+			limit = { check_variable = { FOE_band_ratio < 0.3 } }
+			set_temp_variable = { FOE_band_step = 5 }
+		}
+		else_if = {
+			limit = { check_variable = { FOE_band_ratio < 0.45 } }
+			set_temp_variable = { FOE_band_step = 4 }
+		}
+		else_if = {
+			limit = { check_variable = { FOE_band_ratio < 0.6 } }
+			set_temp_variable = { FOE_band_step = 3 }
+		}
+		else_if = {
+			limit = { check_variable = { FOE_band_ratio < 0.75 } }
+			set_temp_variable = { FOE_band_step = 2 }
+		}
+		else_if = {
+			limit = { check_variable = { FOE_band_ratio < 0.9 } }
+			set_temp_variable = { FOE_band_step = 1 }
+		}
+	}
+}
+
+# Script to give most recent Antagonist weapon
+FOE_give_antagonist_weapons = {
+	set_temp_variable = { FOE_rifles = FOE_army_drip }
+	set_temp_variable = { FOE_energy = 0 }
+	set_temp_variable = { FOE_energy_need = num_target_equipment_in_armies@mew_equipment }
+	if = {
+		limit = { check_variable = { FOE_energy_need > 0 } }
+		#Give Energy weapons if they are being used
+		set_temp_variable = { FOE_weapon_need = num_target_equipment_in_armies@infantry_equipment }
+		add_to_temp_variable = { FOE_weapon_need = FOE_energy_need }
+		set_temp_variable = { FOE_energy = FOE_energy_need }
+		divide_temp_variable = { FOE_energy = FOE_weapon_need }
+		multiply_temp_variable = { FOE_energy = FOE_army_drip }
+		round_temp_variable = FOE_energy
+		subtract_from_temp_variable = { FOE_rifles = FOE_energy }
+	}
+	if = {
+		limit = { check_variable = { FOE_rifles > 0 } }
+		if = {
+			limit = { has_tech = ballistic_weaponry_tech_4 }
+			add_equipment_to_stockpile = { type = ballistic_equipment_4 amount = FOE_rifles producer = OWE }
+		}
+		else_if = {
+			limit = { has_tech = ballistic_weaponry_tech_3 }
+			add_equipment_to_stockpile = { type = ballistic_equipment_3 amount = FOE_rifles producer = OWE }
+		}
+		else_if = {
+			limit = { has_tech = ballistic_weaponry_tech_2 }
+			add_equipment_to_stockpile = { type = ballistic_equipment_2 amount = FOE_rifles producer = OWE }
+		}
+		else_if = {
+			limit = { has_tech = ballistic_weaponry_tech_1 }
+			add_equipment_to_stockpile = { type = ballistic_equipment_1 amount = FOE_rifles producer = OWE }
+		}
+		else = {
+			add_equipment_to_stockpile = { type = infantry_equipment_1 amount = FOE_rifles producer = OWE }
+		}
+	}
+	if = {
+		limit = { check_variable = { FOE_energy > 0 } }
+		if = {
+			limit = { has_tech = energy_weaponry_tech_4 }
+			add_equipment_to_stockpile = { type = energy_equipment_4 amount = FOE_energy producer = OWE }
+		}
+		else_if = {
+			limit = { has_tech = energy_weaponry_tech_3 }
+			add_equipment_to_stockpile = { type = energy_equipment_3 amount = FOE_energy producer = OWE }
+		}
+		else_if = {
+			limit = { has_tech = energy_weaponry_tech_2 }
+			add_equipment_to_stockpile = { type = energy_equipment_2 amount = FOE_energy producer = OWE }
+		}
+		else = {
+			add_equipment_to_stockpile = { type = energy_equipment_1 amount = FOE_energy producer = OWE }
+		}
+	}
+	if = {
+		limit = { has_global_flag = FOE_antagonist_band_audit }
+		log = "FOE_ANTAGONIST_BAND [ROOT.GetTag] weapons: [?FOE_rifles] rifles, [?FOE_energy] energy weapons"
+	}
+}
+
+# Swaps the hidden industry idea to FOE_antagonist_industry_step
+FOE_set_antagonist_industry_idea = {
+	if = {
+		limit = { has_idea = FOE_antagonist_industry_1 }
+		remove_ideas = FOE_antagonist_industry_1
+	}
+	if = {
+		limit = { has_idea = FOE_antagonist_industry_2 }
+		remove_ideas = FOE_antagonist_industry_2
+	}
+	if = {
+		limit = { has_idea = FOE_antagonist_industry_3 }
+		remove_ideas = FOE_antagonist_industry_3
+	}
+	if = {
+		limit = { has_idea = FOE_antagonist_industry_4 }
+		remove_ideas = FOE_antagonist_industry_4
+	}
+	if = {
+		limit = { has_idea = FOE_antagonist_industry_5 }
+		remove_ideas = FOE_antagonist_industry_5
+	}
+	if = {
+		limit = { check_variable = { FOE_antagonist_industry_step = 1 } }
+		add_ideas = FOE_antagonist_industry_1
+	}
+	else_if = {
+		limit = { check_variable = { FOE_antagonist_industry_step = 2 } }
+		add_ideas = FOE_antagonist_industry_2
+	}
+	else_if = {
+		limit = { check_variable = { FOE_antagonist_industry_step = 3 } }
+		add_ideas = FOE_antagonist_industry_3
+	}
+	else_if = {
+		limit = { check_variable = { FOE_antagonist_industry_step = 4 } }
+		add_ideas = FOE_antagonist_industry_4
+	}
+	else_if = {
+		limit = { check_variable = { FOE_antagonist_industry_step = 5 } }
+		add_ideas = FOE_antagonist_industry_5
+	}
+}
+
+# Swaps the hidden research idea to FOE_antagonist_research_step
+FOE_set_antagonist_research_idea = {
+	if = {
+		limit = { has_idea = FOE_antagonist_research_1 }
+		remove_ideas = FOE_antagonist_research_1
+	}
+	if = {
+		limit = { has_idea = FOE_antagonist_research_2 }
+		remove_ideas = FOE_antagonist_research_2
+	}
+	if = {
+		limit = { has_idea = FOE_antagonist_research_3 }
+		remove_ideas = FOE_antagonist_research_3
+	}
+	if = {
+		limit = { has_idea = FOE_antagonist_research_4 }
+		remove_ideas = FOE_antagonist_research_4
+	}
+	if = {
+		limit = { has_idea = FOE_antagonist_research_5 }
+		remove_ideas = FOE_antagonist_research_5
+	}
+	if = {
+		limit = { check_variable = { FOE_antagonist_research_step = 1 } }
+		add_ideas = FOE_antagonist_research_1
+	}
+	else_if = {
+		limit = { check_variable = { FOE_antagonist_research_step = 2 } }
+		add_ideas = FOE_antagonist_research_2
+	}
+	else_if = {
+		limit = { check_variable = { FOE_antagonist_research_step = 3 } }
+		add_ideas = FOE_antagonist_research_3
+	}
+	else_if = {
+		limit = { check_variable = { FOE_antagonist_research_step = 4 } }
+		add_ideas = FOE_antagonist_research_4
+	}
+	else_if = {
+		limit = { check_variable = { FOE_antagonist_research_step = 5 } }
+		add_ideas = FOE_antagonist_research_5
+	}
+}
+
+#Determine if Confrontation can happen this month
+FOE_update_antagonist_confrontation = {
+	set_temp_variable = { FOE_contact_wait = 6 }
+	set_temp_variable = { FOE_strike_cooldown = 12 }
+	set_temp_variable = { FOE_fort_cap = 2 }
+	if = {
+		limit = { has_global_flag = FOE_campaign_antagonists_brutal }
+		set_temp_variable = { FOE_contact_wait = 3 }
+		set_temp_variable = { FOE_strike_cooldown = 6 }
+		set_temp_variable = { FOE_fort_cap = 4 }
+	}
+
+	# Phases
+	if = {
+		limit = { check_variable = { FOE_antagonist_phase > 0 } }
+		add_to_variable = { FOE_antagonist_contact_months = 1 }
+	}
+	else_if = {
+		limit = {
+			var:global.FOE_antagonist_player = {
+				OR = {
+					is_neighbor_of = ROOT
+					has_war_with = ROOT
+				}
+			}
+		}
+		FOE_antagonist_contact = yes
+	}
+	if = {
+		limit = {
+			check_variable = { FOE_antagonist_phase < 2 }
+			has_war_with = var:global.FOE_antagonist_player
+		}
+		set_variable = { FOE_antagonist_phase = 2 }
+		log = "FOE_ANTAGONIST_CONFRONTATION [ROOT.GetTag] Confrontation: at war with the player"
+	}
+
+	# Cooldown
+	if = {
+		limit = { has_war_with = var:global.FOE_antagonist_player }
+		set_variable = { FOE_antagonist_strike_cooldown = FOE_strike_cooldown }
+	}
+	else_if = {
+		limit = { check_variable = { FOE_antagonist_strike_cooldown > 0 } }
+		subtract_from_variable = { FOE_antagonist_strike_cooldown = 1 }
+	}
+
+	# Forts
+	if = {
+		limit = {
+			check_variable = { FOE_antagonist_phase > 0 }
+			NOT = { has_war_with = var:global.FOE_antagonist_player }
+		}
+		every_owned_state = {
+			limit = {
+				check_variable = { FOE_antagonist_forts < FOE_fort_cap }
+				any_neighbor_state = {
+					owner = { tag = var:global.FOE_antagonist_player }
+				}
+			}
+			add_building_construction = {
+				type = bunker
+				level = 1
+				instant_build = yes
+				province = {
+					all_provinces = yes
+					limit_to_border = yes
+				}
+			}
+			add_to_variable = { FOE_antagonist_forts = 1 }
+		}
+	}
+
+	#Begin First strike, preferably forcing 2-front war
+	if = {
+		limit = {
+			check_variable = { FOE_antagonist_phase > 0 }
+			NOT = { check_variable = { FOE_antagonist_contact_months < FOE_contact_wait } }
+			NOT = { check_variable = { FOE_antagonist_strike_cooldown > 0 } }
+			has_war = no
+			is_subject = no
+			var:global.FOE_antagonist_player = {
+				is_neighbor_of = ROOT
+				NOT = { is_in_faction_with = ROOT }
+			}
+		}
+		set_temp_variable = { FOE_strike = 0 }
+		if = {
+			limit = { has_global_flag = FOE_campaign_antagonists_brutal }
+			if = {
+				limit = {
+					var:global.FOE_antagonist_player = {
+						OR = {
+							strength_ratio = {
+								tag = ROOT
+								ratio < 0.84
+							}
+							AND = {
+								has_war = yes
+								strength_ratio = {
+									tag = ROOT
+									ratio < 2.5
+								}
+							}
+						}
+					}
+				}
+				set_temp_variable = { FOE_strike = 1 }
+			}
+		}
+		else_if = {
+			limit = {
+				var:global.FOE_antagonist_player = {
+					#Antagonists never pile on in Hard.
+					any_enemy_country = {
+						NOT = { has_country_flag = FOE_antagonist }
+					}
+					strength_ratio = {
+						tag = ROOT
+						ratio < 1.67
+					}
+				}
+			}
+			set_temp_variable = { FOE_strike = 1 }
+		}
+		if = {
+			limit = { check_variable = { FOE_strike = 1 } }
+			FOE_antagonist_first_strike = yes
+		}
+	}
+
+	if = {
+		limit = { has_global_flag = FOE_antagonist_band_audit }
+		log = "FOE_ANTAGONIST_CONFRONTATION [ROOT.GetTag] phase=[?FOE_antagonist_phase] contact_months=[?FOE_antagonist_contact_months] cooldown=[?FOE_antagonist_strike_cooldown]"
+	}
+}
+
+# Fight, begin
+FOE_antagonist_contact = {
+	set_variable = { FOE_antagonist_phase = 1 }
+	set_variable = { FOE_antagonist_contact_months = 0 }
+	var:global.FOE_antagonist_player = {
+		country_event = { id = foe_antagonists.4 }
+	}
+	log = "FOE_ANTAGONIST_CONFRONTATION [ROOT.GetTag] Contact: borders the player"
+}
+
+#Declare war on player
+FOE_antagonist_first_strike = {
+	var:global.FOE_antagonist_player = {
+		if = {
+			limit = { has_non_aggression_pact_with = ROOT }
+			diplomatic_relation = {
+				country = ROOT
+				relation = non_aggression_pact
+				active = no
+			}
+		}
+		ROOT = {
+			declare_war_on = {
+				target = PREV
+				type = annex_everything
+			}
+		}
+		if = {
+			limit = { has_war_with = ROOT }
+			country_event = { id = foe_antagonists.5 }
+			log = "FOE_ANTAGONIST_CONFRONTATION [ROOT.GetTag] first strike on the player [THIS.GetTag]"
+		}
+		else = {
+			log = "FOE_ANTAGONIST_CONFRONTATION [ROOT.GetTag] declared on the player [THIS.GetTag] but is not at war with them yet"
+		}
+	}
+}
+
+#AI-GENERATED#
+#Pretty much just tracks existing formables and makes the Antagonist expand within those first.
+FOE_set_antagonist_formable_states = {
+	clear_array = FOE_antagonist_formable_states
+	if = {
+		limit = {
+			OR = {
+				original_tag = ACV
+				original_tag = BLN
+				original_tag = BOR
+				original_tag = JAD
+				original_tag = JUD
+				original_tag = PCM
+				original_tag = UND
+				original_tag = WTC
+				original_tag = ZEX
+			}
+		}
+		add_to_array = { FOE_antagonist_formable_states = 837 }
+		add_to_array = { FOE_antagonist_formable_states = 842 }
+		add_to_array = { FOE_antagonist_formable_states = 845 }
+	}
+	if = {
+		limit = {
+			OR = {
+				original_tag = ALB
+				original_tag = AUR
+			}
+		}
+		add_to_array = { FOE_antagonist_formable_states = 103 }
+		add_to_array = { FOE_antagonist_formable_states = 836 }
+	}
+	if = {
+		limit = {
+			OR = {
+				original_tag = ARB
+				original_tag = FRI
+				original_tag = MAR
+				original_tag = MRA
+				original_tag = TEN
+			}
+		}
+		add_to_array = { FOE_antagonist_formable_states = 15 }
+		add_to_array = { FOE_antagonist_formable_states = 18 }
+		add_to_array = { FOE_antagonist_formable_states = 21 }
+		add_to_array = { FOE_antagonist_formable_states = 39 }
+		add_to_array = { FOE_antagonist_formable_states = 45 }
+		add_to_array = { FOE_antagonist_formable_states = 48 }
+		add_to_array = { FOE_antagonist_formable_states = 49 }
+		add_to_array = { FOE_antagonist_formable_states = 51 }
+		add_to_array = { FOE_antagonist_formable_states = 54 }
+		add_to_array = { FOE_antagonist_formable_states = 469 }
+		add_to_array = { FOE_antagonist_formable_states = 478 }
+		add_to_array = { FOE_antagonist_formable_states = 532 }
+		add_to_array = { FOE_antagonist_formable_states = 536 }
+		add_to_array = { FOE_antagonist_formable_states = 538 }
+		add_to_array = { FOE_antagonist_formable_states = 542 }
+		add_to_array = { FOE_antagonist_formable_states = 545 }
+		add_to_array = { FOE_antagonist_formable_states = 601 }
+		add_to_array = { FOE_antagonist_formable_states = 812 }
+	}
+	if = {
+		limit = {
+			OR = {
+				original_tag = ARR
+				original_tag = NOV
+			}
+		}
+		add_to_array = { FOE_antagonist_formable_states = 140 }
+		add_to_array = { FOE_antagonist_formable_states = 318 }
+		add_to_array = { FOE_antagonist_formable_states = 422 }
+	}
+	if = {
+		limit = {
+			OR = {
+				original_tag = BFS
+				original_tag = EIL
+				original_tag = EXC
+				original_tag = LAU
+				original_tag = WHJ
+			}
+		}
+		add_to_array = { FOE_antagonist_formable_states = 329 }
+		add_to_array = { FOE_antagonist_formable_states = 390 }
+		add_to_array = { FOE_antagonist_formable_states = 460 }
+		add_to_array = { FOE_antagonist_formable_states = 466 }
+	}
+	if = {
+		limit = {
+			OR = {
+				original_tag = BIT
+				original_tag = CLK
+				original_tag = DON
+				original_tag = INF
+				original_tag = LGE
+				original_tag = NTH
+				original_tag = STE
+				original_tag = SUD
+				original_tag = TSR
+			}
+		}
+		add_to_array = { FOE_antagonist_formable_states = 14 }
+		add_to_array = { FOE_antagonist_formable_states = 16 }
+		add_to_array = { FOE_antagonist_formable_states = 17 }
+		add_to_array = { FOE_antagonist_formable_states = 20 }
+		add_to_array = { FOE_antagonist_formable_states = 29 }
+		add_to_array = { FOE_antagonist_formable_states = 90 }
+		add_to_array = { FOE_antagonist_formable_states = 182 }
+		add_to_array = { FOE_antagonist_formable_states = 190 }
+		add_to_array = { FOE_antagonist_formable_states = 223 }
+		add_to_array = { FOE_antagonist_formable_states = 227 }
+		add_to_array = { FOE_antagonist_formable_states = 283 }
+		add_to_array = { FOE_antagonist_formable_states = 320 }
+		add_to_array = { FOE_antagonist_formable_states = 426 }
+		add_to_array = { FOE_antagonist_formable_states = 497 }
+		add_to_array = { FOE_antagonist_formable_states = 879 }
+		add_to_array = { FOE_antagonist_formable_states = 880 }
+		add_to_array = { FOE_antagonist_formable_states = 881 }
+		add_to_array = { FOE_antagonist_formable_states = 882 }
+		add_to_array = { FOE_antagonist_formable_states = 883 }
+		add_to_array = { FOE_antagonist_formable_states = 884 }
+		add_to_array = { FOE_antagonist_formable_states = 885 }
+	}
+	if = {
+		limit = { original_tag = BOG }
+		add_to_array = { FOE_antagonist_formable_states = 303 }
+		add_to_array = { FOE_antagonist_formable_states = 511 }
+		add_to_array = { FOE_antagonist_formable_states = 526 }
+		add_to_array = { FOE_antagonist_formable_states = 528 }
+		add_to_array = { FOE_antagonist_formable_states = 557 }
+	}
+	if = {
+		limit = {
+			OR = {
+				original_tag = CAT
+				original_tag = EYE
+				original_tag = FLT
+			}
+		}
+		add_to_array = { FOE_antagonist_formable_states = 502 }
+		add_to_array = { FOE_antagonist_formable_states = 532 }
+		add_to_array = { FOE_antagonist_formable_states = 593 }
+	}
+	if = {
+		limit = {
+			OR = {
+				original_tag = COT
+				original_tag = GTC
+				original_tag = SHA
+				original_tag = SHC
+				original_tag = TPU
+			}
+		}
+		add_to_array = { FOE_antagonist_formable_states = 254 }
+		add_to_array = { FOE_antagonist_formable_states = 578 }
+		add_to_array = { FOE_antagonist_formable_states = 588 }
+		add_to_array = { FOE_antagonist_formable_states = 808 }
+	}
+	if = {
+		limit = {
+			OR = {
+				original_tag = DEP
+				original_tag = TFL
+				original_tag = TMS
+				original_tag = VOI
+			}
+		}
+		add_to_array = { FOE_antagonist_formable_states = 330 }
+		add_to_array = { FOE_antagonist_formable_states = 341 }
+		add_to_array = { FOE_antagonist_formable_states = 371 }
+		add_to_array = { FOE_antagonist_formable_states = 874 }
+	}
+	if = {
+		limit = {
+			OR = {
+				original_tag = DFF
+				original_tag = NGU
+				original_tag = NOO
+				original_tag = WTR
+			}
+		}
+		add_to_array = { FOE_antagonist_formable_states = 301 }
+		add_to_array = { FOE_antagonist_formable_states = 706 }
+		add_to_array = { FOE_antagonist_formable_states = 857 }
+		add_to_array = { FOE_antagonist_formable_states = 863 }
+	}
+	if = {
+		limit = { original_tag = DSB }
+		add_to_array = { FOE_antagonist_formable_states = 140 }
+	}
+	if = {
+		limit = { original_tag = EMP }
+		add_to_array = { FOE_antagonist_formable_states = 19 }
+		add_to_array = { FOE_antagonist_formable_states = 44 }
+		add_to_array = { FOE_antagonist_formable_states = 49 }
+		add_to_array = { FOE_antagonist_formable_states = 442 }
+		add_to_array = { FOE_antagonist_formable_states = 601 }
+		add_to_array = { FOE_antagonist_formable_states = 642 }
+		add_to_array = { FOE_antagonist_formable_states = 816 }
+	}
+	if = {
+		limit = {
+			OR = {
+				original_tag = FER
+				original_tag = LGH
+			}
+		}
+		add_to_array = { FOE_antagonist_formable_states = 18 }
+		add_to_array = { FOE_antagonist_formable_states = 21 }
+		add_to_array = { FOE_antagonist_formable_states = 39 }
+		add_to_array = { FOE_antagonist_formable_states = 45 }
+		add_to_array = { FOE_antagonist_formable_states = 48 }
+		add_to_array = { FOE_antagonist_formable_states = 49 }
+		add_to_array = { FOE_antagonist_formable_states = 58 }
+		add_to_array = { FOE_antagonist_formable_states = 448 }
+		add_to_array = { FOE_antagonist_formable_states = 461 }
+		add_to_array = { FOE_antagonist_formable_states = 469 }
+		add_to_array = { FOE_antagonist_formable_states = 478 }
+		add_to_array = { FOE_antagonist_formable_states = 503 }
+		add_to_array = { FOE_antagonist_formable_states = 508 }
+		add_to_array = { FOE_antagonist_formable_states = 532 }
+		add_to_array = { FOE_antagonist_formable_states = 808 }
+	}
+	if = {
+		limit = {
+			OR = {
+				original_tag = FLB
+				original_tag = HTK
+				original_tag = KNT
+				original_tag = MOU
+				original_tag = NII
+				original_tag = QEU
+				original_tag = SHP
+				original_tag = SUN
+			}
+		}
+		add_to_array = { FOE_antagonist_formable_states = 409 }
+		add_to_array = { FOE_antagonist_formable_states = 819 }
+		add_to_array = { FOE_antagonist_formable_states = 824 }
+		add_to_array = { FOE_antagonist_formable_states = 830 }
+	}
+	if = {
+		limit = { original_tag = FTA }
+		add_to_array = { FOE_antagonist_formable_states = 192 }
+		add_to_array = { FOE_antagonist_formable_states = 196 }
+		add_to_array = { FOE_antagonist_formable_states = 548 }
+		add_to_array = { FOE_antagonist_formable_states = 557 }
+		add_to_array = { FOE_antagonist_formable_states = 561 }
+	}
+	if = {
+		limit = {
+			OR = {
+				original_tag = GAC
+				original_tag = NPL
+			}
+		}
+		add_to_array = { FOE_antagonist_formable_states = 136 }
+		add_to_array = { FOE_antagonist_formable_states = 144 }
+	}
+	if = {
+		limit = { original_tag = GLY }
+		add_to_array = { FOE_antagonist_formable_states = 45 }
+		add_to_array = { FOE_antagonist_formable_states = 48 }
+		add_to_array = { FOE_antagonist_formable_states = 65 }
+		add_to_array = { FOE_antagonist_formable_states = 134 }
+		add_to_array = { FOE_antagonist_formable_states = 180 }
+		add_to_array = { FOE_antagonist_formable_states = 234 }
+		add_to_array = { FOE_antagonist_formable_states = 303 }
+		add_to_array = { FOE_antagonist_formable_states = 415 }
+		add_to_array = { FOE_antagonist_formable_states = 458 }
+		add_to_array = { FOE_antagonist_formable_states = 476 }
+		add_to_array = { FOE_antagonist_formable_states = 477 }
+		add_to_array = { FOE_antagonist_formable_states = 481 }
+		add_to_array = { FOE_antagonist_formable_states = 486 }
+		add_to_array = { FOE_antagonist_formable_states = 511 }
+		add_to_array = { FOE_antagonist_formable_states = 518 }
+		add_to_array = { FOE_antagonist_formable_states = 525 }
+		add_to_array = { FOE_antagonist_formable_states = 528 }
+		add_to_array = { FOE_antagonist_formable_states = 532 }
+		add_to_array = { FOE_antagonist_formable_states = 544 }
+		add_to_array = { FOE_antagonist_formable_states = 557 }
+		add_to_array = { FOE_antagonist_formable_states = 797 }
+	}
+	if = {
+		limit = { original_tag = GOR }
+		add_to_array = { FOE_antagonist_formable_states = 526 }
+		add_to_array = { FOE_antagonist_formable_states = 557 }
+	}
+	if = {
+		limit = { original_tag = GUT }
+		add_to_array = { FOE_antagonist_formable_states = 15 }
+		add_to_array = { FOE_antagonist_formable_states = 18 }
+		add_to_array = { FOE_antagonist_formable_states = 21 }
+		add_to_array = { FOE_antagonist_formable_states = 39 }
+		add_to_array = { FOE_antagonist_formable_states = 49 }
+		add_to_array = { FOE_antagonist_formable_states = 51 }
+		add_to_array = { FOE_antagonist_formable_states = 54 }
+		add_to_array = { FOE_antagonist_formable_states = 469 }
+		add_to_array = { FOE_antagonist_formable_states = 478 }
+		add_to_array = { FOE_antagonist_formable_states = 601 }
+	}
+	if = {
+		limit = { original_tag = HSC }
+		add_to_array = { FOE_antagonist_formable_states = 792 }
+		add_to_array = { FOE_antagonist_formable_states = 793 }
+	}
+	if = {
+		limit = { original_tag = HSW }
+		add_to_array = { FOE_antagonist_formable_states = 26 }
+		add_to_array = { FOE_antagonist_formable_states = 187 }
+		add_to_array = { FOE_antagonist_formable_states = 220 }
+		add_to_array = { FOE_antagonist_formable_states = 549 }
+		add_to_array = { FOE_antagonist_formable_states = 553 }
+		add_to_array = { FOE_antagonist_formable_states = 571 }
+		add_to_array = { FOE_antagonist_formable_states = 575 }
+		add_to_array = { FOE_antagonist_formable_states = 581 }
+		add_to_array = { FOE_antagonist_formable_states = 594 }
+		add_to_array = { FOE_antagonist_formable_states = 789 }
+		add_to_array = { FOE_antagonist_formable_states = 792 }
+		add_to_array = { FOE_antagonist_formable_states = 793 }
+		add_to_array = { FOE_antagonist_formable_states = 794 }
+		add_to_array = { FOE_antagonist_formable_states = 804 }
+	}
+	if = {
+		limit = { original_tag = KOE }
+		add_to_array = { FOE_antagonist_formable_states = 115 }
+		add_to_array = { FOE_antagonist_formable_states = 128 }
+		add_to_array = { FOE_antagonist_formable_states = 419 }
+	}
+	if = {
+		limit = {
+			OR = {
+				original_tag = LIT
+				original_tag = NAP
+				original_tag = OAP
+				original_tag = ROK
+			}
+		}
+		add_to_array = { FOE_antagonist_formable_states = 36 }
+		add_to_array = { FOE_antagonist_formable_states = 550 }
+		add_to_array = { FOE_antagonist_formable_states = 563 }
+		add_to_array = { FOE_antagonist_formable_states = 596 }
+		add_to_array = { FOE_antagonist_formable_states = 798 }
+	}
+	if = {
+		limit = { original_tag = LOS }
+		add_to_array = { FOE_antagonist_formable_states = 31 }
+		add_to_array = { FOE_antagonist_formable_states = 145 }
+		add_to_array = { FOE_antagonist_formable_states = 847 }
+	}
+	if = {
+		limit = { original_tag = LRA }
+		add_to_array = { FOE_antagonist_formable_states = 597 }
+		add_to_array = { FOE_antagonist_formable_states = 747 }
+	}
+	if = {
+		limit = { original_tag = PBN }
+		add_to_array = { FOE_antagonist_formable_states = 36 }
+		add_to_array = { FOE_antagonist_formable_states = 42 }
+		add_to_array = { FOE_antagonist_formable_states = 303 }
+		add_to_array = { FOE_antagonist_formable_states = 526 }
+		add_to_array = { FOE_antagonist_formable_states = 550 }
+		add_to_array = { FOE_antagonist_formable_states = 563 }
+		add_to_array = { FOE_antagonist_formable_states = 575 }
+		add_to_array = { FOE_antagonist_formable_states = 596 }
+		add_to_array = { FOE_antagonist_formable_states = 795 }
+		add_to_array = { FOE_antagonist_formable_states = 808 }
+	}
+	if = {
+		limit = { original_tag = PEN }
+		add_to_array = { FOE_antagonist_formable_states = 837 }
+	}
+	if = {
+		limit = { original_tag = RAR }
+		add_to_array = { FOE_antagonist_formable_states = 18 }
+		add_to_array = { FOE_antagonist_formable_states = 21 }
+		add_to_array = { FOE_antagonist_formable_states = 39 }
+		add_to_array = { FOE_antagonist_formable_states = 44 }
+		add_to_array = { FOE_antagonist_formable_states = 45 }
+		add_to_array = { FOE_antagonist_formable_states = 48 }
+		add_to_array = { FOE_antagonist_formable_states = 49 }
+		add_to_array = { FOE_antagonist_formable_states = 58 }
+		add_to_array = { FOE_antagonist_formable_states = 442 }
+		add_to_array = { FOE_antagonist_formable_states = 448 }
+		add_to_array = { FOE_antagonist_formable_states = 461 }
+		add_to_array = { FOE_antagonist_formable_states = 469 }
+		add_to_array = { FOE_antagonist_formable_states = 478 }
+		add_to_array = { FOE_antagonist_formable_states = 503 }
+		add_to_array = { FOE_antagonist_formable_states = 508 }
+		add_to_array = { FOE_antagonist_formable_states = 532 }
+		add_to_array = { FOE_antagonist_formable_states = 808 }
+		add_to_array = { FOE_antagonist_formable_states = 816 }
+	}
+	if = {
+		limit = { original_tag = REP }
+		add_to_array = { FOE_antagonist_formable_states = 303 }
+		add_to_array = { FOE_antagonist_formable_states = 526 }
+		add_to_array = { FOE_antagonist_formable_states = 528 }
+		add_to_array = { FOE_antagonist_formable_states = 544 }
+		add_to_array = { FOE_antagonist_formable_states = 557 }
+	}
+	if = {
+		limit = { original_tag = RTA }
+		add_to_array = { FOE_antagonist_formable_states = 44 }
+		add_to_array = { FOE_antagonist_formable_states = 49 }
+		add_to_array = { FOE_antagonist_formable_states = 442 }
+		add_to_array = { FOE_antagonist_formable_states = 816 }
+	}
+	if = {
+		limit = { original_tag = SCI }
+		add_to_array = { FOE_antagonist_formable_states = 5 }
+		add_to_array = { FOE_antagonist_formable_states = 45 }
+		add_to_array = { FOE_antagonist_formable_states = 48 }
+		add_to_array = { FOE_antagonist_formable_states = 50 }
+		add_to_array = { FOE_antagonist_formable_states = 65 }
+		add_to_array = { FOE_antagonist_formable_states = 74 }
+		add_to_array = { FOE_antagonist_formable_states = 78 }
+		add_to_array = { FOE_antagonist_formable_states = 81 }
+		add_to_array = { FOE_antagonist_formable_states = 85 }
+		add_to_array = { FOE_antagonist_formable_states = 101 }
+		add_to_array = { FOE_antagonist_formable_states = 125 }
+		add_to_array = { FOE_antagonist_formable_states = 134 }
+		add_to_array = { FOE_antagonist_formable_states = 180 }
+		add_to_array = { FOE_antagonist_formable_states = 217 }
+		add_to_array = { FOE_antagonist_formable_states = 234 }
+		add_to_array = { FOE_antagonist_formable_states = 410 }
+		add_to_array = { FOE_antagonist_formable_states = 415 }
+		add_to_array = { FOE_antagonist_formable_states = 446 }
+		add_to_array = { FOE_antagonist_formable_states = 451 }
+		add_to_array = { FOE_antagonist_formable_states = 458 }
+		add_to_array = { FOE_antagonist_formable_states = 473 }
+		add_to_array = { FOE_antagonist_formable_states = 474 }
+		add_to_array = { FOE_antagonist_formable_states = 475 }
+		add_to_array = { FOE_antagonist_formable_states = 476 }
+		add_to_array = { FOE_antagonist_formable_states = 477 }
+		add_to_array = { FOE_antagonist_formable_states = 479 }
+		add_to_array = { FOE_antagonist_formable_states = 480 }
+		add_to_array = { FOE_antagonist_formable_states = 481 }
+		add_to_array = { FOE_antagonist_formable_states = 483 }
+		add_to_array = { FOE_antagonist_formable_states = 484 }
+		add_to_array = { FOE_antagonist_formable_states = 486 }
+		add_to_array = { FOE_antagonist_formable_states = 487 }
+		add_to_array = { FOE_antagonist_formable_states = 491 }
+		add_to_array = { FOE_antagonist_formable_states = 492 }
+		add_to_array = { FOE_antagonist_formable_states = 498 }
+		add_to_array = { FOE_antagonist_formable_states = 502 }
+		add_to_array = { FOE_antagonist_formable_states = 504 }
+		add_to_array = { FOE_antagonist_formable_states = 505 }
+		add_to_array = { FOE_antagonist_formable_states = 510 }
+		add_to_array = { FOE_antagonist_formable_states = 512 }
+		add_to_array = { FOE_antagonist_formable_states = 513 }
+		add_to_array = { FOE_antagonist_formable_states = 518 }
+		add_to_array = { FOE_antagonist_formable_states = 523 }
+		add_to_array = { FOE_antagonist_formable_states = 525 }
+		add_to_array = { FOE_antagonist_formable_states = 529 }
+		add_to_array = { FOE_antagonist_formable_states = 532 }
+		add_to_array = { FOE_antagonist_formable_states = 533 }
+		add_to_array = { FOE_antagonist_formable_states = 536 }
+		add_to_array = { FOE_antagonist_formable_states = 538 }
+		add_to_array = { FOE_antagonist_formable_states = 542 }
+		add_to_array = { FOE_antagonist_formable_states = 543 }
+		add_to_array = { FOE_antagonist_formable_states = 545 }
+		add_to_array = { FOE_antagonist_formable_states = 546 }
+		add_to_array = { FOE_antagonist_formable_states = 554 }
+		add_to_array = { FOE_antagonist_formable_states = 558 }
+		add_to_array = { FOE_antagonist_formable_states = 593 }
+		add_to_array = { FOE_antagonist_formable_states = 669 }
+		add_to_array = { FOE_antagonist_formable_states = 797 }
+		add_to_array = { FOE_antagonist_formable_states = 813 }
+		add_to_array = { FOE_antagonist_formable_states = 814 }
+	}
+	if = {
+		limit = { original_tag = SRC }
+		add_to_array = { FOE_antagonist_formable_states = 390 }
+		add_to_array = { FOE_antagonist_formable_states = 460 }
+		add_to_array = { FOE_antagonist_formable_states = 466 }
+	}
+	if = {
+		limit = {
+			OR = {
+				original_tag = SSC
+				original_tag = SSR
+				original_tag = SSS
+			}
+		}
+		add_to_array = { FOE_antagonist_formable_states = 5 }
+		add_to_array = { FOE_antagonist_formable_states = 554 }
+		add_to_array = { FOE_antagonist_formable_states = 558 }
+	}
+	if = {
+		limit = { original_tag = STT }
+		add_to_array = { FOE_antagonist_formable_states = 440 }
+		add_to_array = { FOE_antagonist_formable_states = 448 }
+		add_to_array = { FOE_antagonist_formable_states = 462 }
+	}
+	if = {
+		limit = { original_tag = SYT }
+		add_to_array = { FOE_antagonist_formable_states = 149 }
+		add_to_array = { FOE_antagonist_formable_states = 521 }
+		add_to_array = { FOE_antagonist_formable_states = 716 }
+	}
+	if = {
+		limit = {
+			OR = {
+				original_tag = VRX
+				original_tag = VRY
+				original_tag = VRZ
+			}
+		}
+		add_to_array = { FOE_antagonist_formable_states = 3 }
+		add_to_array = { FOE_antagonist_formable_states = 9 }
+		add_to_array = { FOE_antagonist_formable_states = 95 }
+		add_to_array = { FOE_antagonist_formable_states = 96 }
+		add_to_array = { FOE_antagonist_formable_states = 97 }
+		add_to_array = { FOE_antagonist_formable_states = 102 }
+		add_to_array = { FOE_antagonist_formable_states = 109 }
+		add_to_array = { FOE_antagonist_formable_states = 139 }
+		add_to_array = { FOE_antagonist_formable_states = 257 }
+		add_to_array = { FOE_antagonist_formable_states = 579 }
+		add_to_array = { FOE_antagonist_formable_states = 595 }
+		add_to_array = { FOE_antagonist_formable_states = 630 }
+		add_to_array = { FOE_antagonist_formable_states = 692 }
+		add_to_array = { FOE_antagonist_formable_states = 698 }
+		add_to_array = { FOE_antagonist_formable_states = 758 }
+	}
+	if = {
+		limit = { original_tag = WLN }
+		add_to_array = { FOE_antagonist_formable_states = 3 }
+		add_to_array = { FOE_antagonist_formable_states = 9 }
+		add_to_array = { FOE_antagonist_formable_states = 96 }
+		add_to_array = { FOE_antagonist_formable_states = 102 }
+		add_to_array = { FOE_antagonist_formable_states = 109 }
+		add_to_array = { FOE_antagonist_formable_states = 257 }
+	}
+}

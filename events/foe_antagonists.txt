@@ -1,0 +1,178 @@
+
+### Antagonist System events
+
+add_namespace = foe_antagonists
+
+# Reveal Antagonists
+country_event = {
+	id = foe_antagonists.1
+	title = foe_antagonists.1.t
+	desc = foe_antagonists.1.d
+	picture = GFX_report_event_military_planning
+	is_triggered_only = yes
+
+	option = {
+		name = foe_antagonists.1.a
+	}
+}
+
+#DEBUG menu
+country_event = {
+	id = foe_antagonists.2
+	title = foe_antagonists.2.t
+	desc = foe_antagonists.2.d
+	picture = GFX_event_test
+	is_triggered_only = yes
+
+	# Reroll the Antagonists
+	option = {
+		name = foe_antagonists.2.a
+		set_global_flag = FOE_campaign_antagonists_enabled
+		FOE_clear_antagonists = yes
+		FOE_select_antagonists = yes
+	}
+	# Toggle Brutal
+	option = {
+		name = foe_antagonists.2.b
+		if = {
+			limit = { has_global_flag = FOE_campaign_antagonists_brutal }
+			clr_global_flag = FOE_campaign_antagonists_brutal
+		}
+		else = {
+			set_global_flag = FOE_campaign_antagonists_enabled
+			set_global_flag = FOE_campaign_antagonists_brutal
+		}
+		FOE_log_antagonists = yes
+	}
+	option = {
+		name = foe_antagonists.2.c
+		FOE_log_antagonists = yes
+	}
+	# Switch the system off
+	option = {
+		name = foe_antagonists.2.e
+		FOE_clear_antagonists = yes
+		clr_global_flag = FOE_campaign_antagonists_enabled
+		clr_global_flag = FOE_campaign_antagonists_brutal
+	}
+	# Run the monthly update now (rubber band + expansion), in each Antagonist's own scope.
+	option = {
+		name = foe_antagonists.2.g
+		every_country = {
+			limit = { has_country_flag = FOE_antagonist }
+			country_event = { id = foe_antagonists.3 }
+		}
+	}
+	# Run both timers out now
+	option = {
+		name = foe_antagonists.2.h
+		every_country = {
+			limit = { has_country_flag = FOE_antagonist }
+			if = {
+				limit = { has_global_flag = FOE_campaign_antagonists_brutal }
+				set_variable = { FOE_antagonist_stall_months = 2 }
+				set_variable = { FOE_antagonist_nudge_months = 0 }
+			}
+			else = {
+				set_variable = { FOE_antagonist_stall_months = 5 }
+				set_variable = { FOE_antagonist_nudge_months = 1 }
+			}
+			country_event = { id = foe_antagonists.3 }
+		}
+	}
+	# Force Contact for every Antagonist
+	option = {
+		name = foe_antagonists.2.i
+		every_country = {
+			limit = {
+				has_country_flag = FOE_antagonist
+				NOT = { check_variable = { FOE_antagonist_phase > 0 } }
+			}
+			country_event = { id = foe_antagonists.6 }
+		}
+	}
+	# Force a first strike from the Rival
+	option = {
+		name = foe_antagonists.2.j
+		if = {
+			limit = { has_variable = global.FOE_antagonist_rival }
+			var:global.FOE_antagonist_rival = {
+				country_event = { id = foe_antagonists.7 }
+			}
+		}
+	}
+	option = {
+		name = foe_antagonists.2.f
+	}
+}
+
+# Hidden. Runs the monthly update
+country_event = {
+	id = foe_antagonists.3
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		FOE_update_antagonist_rubber_band = yes
+		FOE_update_antagonist_expansion = yes
+		FOE_update_antagonist_confrontation = yes
+	}
+}
+
+# Contact
+country_event = {
+	id = foe_antagonists.4
+	title = foe_antagonists.4.t
+	desc = foe_antagonists.4.d
+	picture = GFX_report_event_military_planning
+	is_triggered_only = yes
+
+	immediate = {
+		FROM = {
+			add_ai_strategy = {
+				type = prepare_for_war
+				id = ROOT
+				value = 100
+			}
+		}
+	}
+
+	option = {
+		name = foe_antagonists.4.a
+	}
+}
+
+# First strike
+country_event = {
+	id = foe_antagonists.5
+	title = foe_antagonists.5.t
+	desc = foe_antagonists.5.d
+	picture = GFX_event_foe_artillery_loading
+	is_triggered_only = yes
+
+	option = {
+		name = foe_antagonists.5.a
+	}
+}
+
+# Hidden. Forces Contact for this Antagonist
+country_event = {
+	id = foe_antagonists.6
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		FOE_antagonist_contact = yes
+	}
+}
+
+# Hidden. Forces a first strike from this Antagonist
+country_event = {
+	id = foe_antagonists.7
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		FOE_antagonist_first_strike = yes
+	}
+}

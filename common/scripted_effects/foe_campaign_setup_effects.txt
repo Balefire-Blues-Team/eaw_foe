@@ -1,8 +1,17 @@
 FOE_confirm_campaign_setup = {
 	if = {
 		limit = { FOE_campaign_setup_editable = yes }
-		# Lock before dispatching events: repeated clicks/reopening cannot reroll.
 		set_global_flag = FOE_campaign_setup_confirmed
+		# Antagonists are picked before the Great Leaders
+		if = {
+			limit = { check_variable = { FOE_campaign_setup_antagonists > 0 } }
+			set_global_flag = FOE_campaign_antagonists_enabled
+			if = {
+				limit = { check_variable = { FOE_campaign_setup_antagonists = 2 } }
+				set_global_flag = FOE_campaign_antagonists_brutal
+			}
+			FOE_select_antagonists = yes
+		}
 		if = {
 			limit = { has_country_flag = FOE_campaign_setup_great_leaders_selected }
 			set_global_flag = FOE_campaign_great_leaders_enabled
@@ -12,5 +21,6 @@ FOE_confirm_campaign_setup = {
 			}
 		}
 		clr_country_flag = FOE_campaign_setup_great_leaders_selected
+		clear_variable = FOE_campaign_setup_antagonists
 	}
 }

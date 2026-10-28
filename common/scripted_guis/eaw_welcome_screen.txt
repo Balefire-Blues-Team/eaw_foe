@@ -250,6 +250,39 @@ scripted_gui = {
 			}
 			leaders_on_click_enabled = { FOE_campaign_setup_editable = yes }
 			leaders_off_click_enabled = { FOE_campaign_setup_editable = yes }
+			# Off -> Hard -> Brutal -> Off
+			# unset = Off, 1 = Hard, 2 = Brutal
+			antagonists_off_visible = {
+				NOT = { has_global_flag = FOE_campaign_antagonists_enabled }
+				OR = {
+					NOT = { FOE_campaign_setup_editable = yes }
+					check_variable = { FOE_campaign_setup_antagonists = 0 }
+				}
+			}
+			antagonists_hard_visible = {
+				OR = {
+					AND = {
+						FOE_campaign_setup_editable = yes
+						check_variable = { FOE_campaign_setup_antagonists = 1 }
+					}
+					AND = {
+						has_global_flag = FOE_campaign_antagonists_enabled
+						NOT = { has_global_flag = FOE_campaign_antagonists_brutal }
+					}
+				}
+			}
+			antagonists_brutal_visible = {
+				OR = {
+					AND = {
+						FOE_campaign_setup_editable = yes
+						check_variable = { FOE_campaign_setup_antagonists = 2 }
+					}
+					has_global_flag = FOE_campaign_antagonists_brutal
+				}
+			}
+			antagonists_off_click_enabled = { FOE_campaign_setup_editable = yes }
+			antagonists_hard_click_enabled = { FOE_campaign_setup_editable = yes }
+			antagonists_brutal_click_enabled = { FOE_campaign_setup_editable = yes }
 			confirm_setup_visible = { FOE_campaign_setup_editable = yes }
 			confirm_setup_click_enabled = { FOE_campaign_setup_editable = yes }
 			setup_pending_visible = { FOE_campaign_setup_editable = yes }
@@ -270,6 +303,24 @@ scripted_gui = {
 				if = {
 					limit = { FOE_campaign_setup_editable = yes }
 					clr_country_flag = FOE_campaign_setup_great_leaders_selected
+				}
+			}
+			antagonists_off_click = {
+				if = {
+					limit = { FOE_campaign_setup_editable = yes }
+					set_variable = { FOE_campaign_setup_antagonists = 1 }
+				}
+			}
+			antagonists_hard_click = {
+				if = {
+					limit = { FOE_campaign_setup_editable = yes }
+					set_variable = { FOE_campaign_setup_antagonists = 2 }
+				}
+			}
+			antagonists_brutal_click = {
+				if = {
+					limit = { FOE_campaign_setup_editable = yes }
+					clear_variable = FOE_campaign_setup_antagonists
 				}
 			}
 			confirm_setup_click = { FOE_confirm_campaign_setup = yes }
