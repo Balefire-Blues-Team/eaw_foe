@@ -1,0 +1,164 @@
+#Restored
+ability = {
+	siege_artillery = {
+		name = ABILITY_SIEGE_ARTILLERY
+		desc = ABILITY_SIEGE_ARTILLERY_DESC
+		
+		type = army_leader
+		
+		allowed = {
+			has_ability = siege_artillery
+			is_border_war = no
+		}
+		
+		unit_modifiers = {
+			fort = {
+				attack = 0.2
+			}
+			fortification_damage = 2.0
+			fortification_collateral_chance = 2.0
+		}
+		cost = 0.1
+		duration = 168
+		
+		
+		ai_will_do = {
+			factor = -1
+			modifier = {
+				FROM = {
+					command_power > 1.5
+				}
+				
+				set_temp_variable = { temp = num_units_offensive_combats }
+				check_variable = { temp > 6 }
+				set_temp_variable = { temp2 = num_units_offensive_combats_against@fort }
+				divide_temp_variable = { temp2 = temp }
+				check_variable = { temp2 > 0.5 }
+				
+				add = 2
+			}
+		}
+	}
+	
+	glider_planes = {
+		name = ABILITY_GLIDER_PLANES_ARTILLERY
+		desc = ABILITY_GLIDER_PLANES_ARTILLERY_DESC
+		
+		type = army_leader
+		
+		allowed = {
+			has_ability = glider_planes
+			is_border_war = no
+		}
+		
+		unit_modifiers = {
+			paratrooper_weight_factor = -0.10
+			paradrop_organization_factor = 2.0
+			paratrooper_aa_defense = 0.5
+		}
+		
+		cost = 0.1
+		duration = 168
+	}
+	faster_naval_invasion_planning = {
+		name = ABILITY_FASTER_NAVAL_PLANNING
+		desc = ABILITY_FASTER_NAVAL_PLANNING_DESC
+		
+		type = army_leader
+		
+		allowed = {
+			has_ability = faster_naval_invasion_planning
+			is_border_war = no
+		}
+		
+		unit_modifiers = {
+			naval_invasion_prep_speed = 0.5
+		}
+		
+		cost = 0.1
+		duration = 168
+	}
+	
+	probing_attack = {
+		name = ABILITY_PROBING_ATTACK
+		desc = ABILITY_PROBING_ATTACK_DESC
+		
+		type = army_leader
+		
+		allowed = {
+			has_ability = probing_attack
+			is_border_war = no
+		}
+		
+		unit_modifiers = {
+			dont_lose_dig_in_on_attack = 1.0
+			offence = -0.2
+		}
+		
+		cancelable = yes
+		cost = 0.1
+		duration = -1
+	}
+	
+	makeshift_bridges = {
+		name = ABILITY_MAKESHIFT_BRIDGES
+		desc = ABILITY_MAKESHIFT_BRIDGES_DESC
+		
+		type = army_leader
+		
+		allowed = {
+			has_ability = makeshift_bridges
+			is_border_war = no
+		}
+		
+		
+		unit_modifiers = {
+			river_crossing_factor = -0.4
+			river = {
+				attack = 0.2
+			}
+		}
+		
+		cost = 0.1
+		duration = 168
+		
+		ai_will_do = {
+			factor = -1
+			modifier = {
+				FROM = {
+					command_power > 2.0
+				}
+				check_variable = { num_units_crossing_river > 5 }
+				
+				add = 2
+			}
+		}
+	}
+	
+	extra_suplies = {
+		name = ABILITY_EXTRA_SUPLIES
+		desc = ABILITY_EXTRA_SUPLIES_DESC
+		
+		type = army_leader
+		
+		allowed = {
+			has_ability = extra_suplies
+			is_border_war = no
+			OWNER = {
+				NOT = { has_country_flag = has_quinine }
+			}
+		}
+		
+		unit_modifiers = {
+			no_supply_grace = 168
+		}
+		
+		one_time_effect = {
+			supply_units = 168
+		}
+		
+		cost = 0.2
+		duration = 168
+		cooldown = 504
+	}
+}

@@ -14,12 +14,35 @@ ai_decryption_target_scorer = {
 				has_capitulated = yes
 				factor = 0 
 			}
-			# strat is directly added
+			#strat is directly added
 			modifier = {
 				add = FROM.ai_strategy_decrypt_target@THIS
 			}
+
+			#Whisper Broker
+			modifier = {
+				FROM = {
+					FOE_is_whisper_broker = yes
+					has_variable = FOE_black_file
+				}
+				tag = var:FROM.FOE_black_file
+				is_subject = no
+				NOT = { is_in_faction_with = FROM }
+				NOT = { FROM = { is_subject_of = PREV } }
+				add = 100
+			}
+			#At war with the Broker
+			modifier = {
+				FROM = {
+					FOE_is_whisper_broker = yes
+					has_variable = FOE_black_file
+				}
+				tag = var:FROM.FOE_black_file
+				has_war_with = FROM
+				add = 200
+			}
 		
-			# continue existing decryptions
+			#continue existing decryptions
 			modifier = {
 				FROM = {
 					is_decrypting = PREV
