@@ -72,6 +72,32 @@ FOE_select_antagonists = {
 # Temp FOE_ring
 FOE_pick_antagonist = {
 	set_temp_variable = { FOE_picked = 0 }
+
+	# Historical rivals first, in 2 of 3 campaigns
+	if = {
+		limit = {
+			any_country = {
+				FOE_is_historical_rival = yes
+				FOE_is_antagonist_eligible = yes
+			}
+		}
+		random_list = {
+			2 = {
+				random_country = {
+					limit = {
+						FOE_is_historical_rival = yes
+						FOE_is_antagonist_eligible = yes
+					}
+					log = "FOE_ANTAGONIST ring=[?FOE_ring] historical rival [THIS.GetTag]"
+					FOE_make_antagonist = yes
+				}
+			}
+			1 = {
+				log = "FOE_ANTAGONIST ring=[?FOE_ring] historical rival skipped, normal roll"
+			}
+		}
+	}
+
 	set_temp_variable = { FOE_widenings = 0 }
 	while_loop_effect = {
 		limit = {
@@ -161,6 +187,7 @@ FOE_clear_antagonists = {
 		clear_variable = FOE_antagonist_phase
 		clear_variable = FOE_antagonist_contact_months
 		clear_variable = FOE_antagonist_strike_cooldown
+		clear_variable = FOE_antagonist_gl_tier
 	}
 	every_state = {
 		limit = { has_variable = FOE_antagonist_forts }
@@ -654,6 +681,11 @@ FOE_update_antagonist_confrontation = {
 		}
 		set_variable = { FOE_antagonist_phase = 2 }
 		log = "FOE_ANTAGONIST_CONFRONTATION [ROOT.GetTag] Confrontation: at war with the player"
+		# The Archenemy ranks up at Confrontation
+		if = {
+			limit = { check_variable = { FOE_antagonist_ring = 2 } }
+			FOE_antagonist_leader_rank_up = yes
+		}
 	}
 
 	# Cooldown
@@ -760,6 +792,11 @@ FOE_update_antagonist_confrontation = {
 FOE_antagonist_contact = {
 	set_variable = { FOE_antagonist_phase = 1 }
 	set_variable = { FOE_antagonist_contact_months = 0 }
+	# The Rival and the Distant Threat rank up at Contact
+	if = {
+		limit = { NOT = { check_variable = { FOE_antagonist_ring = 2 } } }
+		FOE_antagonist_leader_rank_up = yes
+	}
 	var:global.FOE_antagonist_player = {
 		country_event = { id = foe_antagonists.4 }
 	}
@@ -791,6 +828,364 @@ FOE_antagonist_first_strike = {
 		else = {
 			log = "FOE_ANTAGONIST_CONFRONTATION [ROOT.GetTag] declared on the player [THIS.GetTag] but is not at war with them yet"
 		}
+	}
+}
+
+###########################################################################
+# Antagonist Great Leaders (only while the Great Leader system is on too)
+###########################################################################
+
+# Country scope, an Antagonist whose leader is not a Great Leader. Tier FOE_antagonist_gl_tier 1-3 is set on the
+# first call: Great for the Rival and the Distant Threat, Legendary for the Archenemy, one higher on Brutal. Later
+# leaders take the tier the Antagonist has reached, without the starting gifts.
+# Class and subclass: the historical one if listed, else 70% Conqueror / 30% Industrialist, always with a subclass.
+FOE_assign_antagonist_great_leader = {
+	if = {
+		limit = {
+			has_global_flag = FOE_campaign_great_leaders_enabled
+			FOE_great_leader_country_valid = yes
+		}
+		set_temp_variable = { FOE_antagonist_first_leader = 0 }
+		if = {
+			limit = { NOT = { has_variable = FOE_antagonist_gl_tier } }
+			set_temp_variable = { FOE_antagonist_first_leader = 1 }
+			set_variable = { FOE_antagonist_gl_tier = 1 }
+			if = {
+				limit = { check_variable = { FOE_antagonist_ring = 2 } }
+				set_variable = { FOE_antagonist_gl_tier = 2 }
+			}
+			if = {
+				limit = { has_global_flag = FOE_campaign_antagonists_brutal }
+				add_to_variable = { FOE_antagonist_gl_tier = 1 }
+			}
+		}
+		FOE_mark_great_leader_roll_completed = yes
+		set_country_flag = great_leader_flag
+		set_country_flag = hyper_aggressive_ai
+		set_country_flag = dont_change_ideology_flag
+		set_temp_variable = { FOE_subclass_tier = FOE_antagonist_gl_tier }
+
+		# Historical subclasses: listed leaders first, then nations. A failed subclass gate falls through
+		# to the next entry and finally to the roll.
+		# Nightseer (all four)
+		if = {
+			limit = {
+				OR = {
+					has_country_leader = { character = CAL_char_Nightseer_cont ruling_only = yes }
+					has_country_leader = { character = CAL_char_Nightseer_dest ruling_only = yes }
+					has_country_leader = { character = CAL_char_Nightseer_visi ruling_only = yes }
+					has_country_leader = { character = CAL_char_Nightseer_surv ruling_only = yes }
+				}
+				FOE_can_assign_carrion_marshal = yes
+			}
+			FOE_give_antagonist_conqueror_tier = yes
+			FOE_initialize_carrion_marshal = yes
+		}
+		# [REDACTED]
+		else_if = {
+			limit = {
+				has_country_leader = { character = DEC_char_redacted ruling_only = yes }
+				FOE_can_assign_whisper_broker = yes
+			}
+			FOE_give_antagonist_conqueror_tier = yes
+			FOE_initialize_whisper_broker = yes
+		}
+		# Blood Mane
+		else_if = {
+			limit = {
+				has_country_leader = { character = ERA_char_blood_mane ruling_only = yes }
+				FOE_can_assign_iron_warden = yes
+			}
+			FOE_give_antagonist_conqueror_tier = yes
+			FOE_initialize_iron_warden = yes
+		}
+		# Strawberry Lemonade
+		else_if = {
+			limit = {
+				has_country_leader = { character = FSR_char_strawberry_lemonade ruling_only = yes }
+				FOE_can_assign_founder_of_foundries = yes
+			}
+			FOE_give_antagonist_industrialist_tier = yes
+			FOE_initialize_founder_of_foundries = yes
+		}
+		# Hook Hoof
+		else_if = {
+			limit = {
+				has_country_leader = { character = LIT_char_Hook_Hoof ruling_only = yes }
+				FOE_can_assign_blackout_opportunist = yes
+			}
+			FOE_give_antagonist_industrialist_tier = yes
+			FOE_initialize_blackout_opportunist = yes
+		}
+		# Queen Star Gazer
+		else_if = {
+			limit = {
+				has_country_leader = { character = MWY_char_star_gazer ruling_only = yes }
+				FOE_can_assign_inward_perfectionist = yes
+			}
+			FOE_give_antagonist_administrator_tier = yes
+			FOE_initialize_inward_perfectionist = yes
+		}
+		# Archmagos Tezla
+		else_if = {
+			limit = {
+				has_country_leader = { character = NCG_char_Tezla ruling_only = yes }
+				FOE_can_assign_dreamer_in_steel = yes
+			}
+			FOE_give_antagonist_industrialist_tier = yes
+			FOE_initialize_dreamer_in_steel = yes
+		}
+		# Autumn Leaf
+		else_if = {
+			limit = {
+				has_country_leader = { character = NEV_char_autumnleaf ruling_only = yes }
+				FOE_can_assign_carrion_marshal = yes
+			}
+			FOE_give_antagonist_conqueror_tier = yes
+			FOE_initialize_carrion_marshal = yes
+		}
+		# Ranger-General Farsight
+		else_if = {
+			limit = {
+				has_country_leader = { character = OAP_char_Farsight ruling_only = yes }
+				FOE_can_assign_lawgiver = yes
+			}
+			FOE_give_antagonist_administrator_tier = yes
+			FOE_initialize_lawgiver = yes
+		}
+		# Crimson Waters
+		else_if = {
+			limit = {
+				has_country_leader = { character = RWK_char_Crimson_Waters ruling_only = yes }
+				FOE_can_assign_autark = yes
+			}
+			FOE_give_antagonist_industrialist_tier = yes
+			FOE_initialize_autark = yes
+		}
+		# Wavebreaker
+		else_if = {
+			limit = {
+				has_country_leader = { character = RWK_char_Wavebreaker ruling_only = yes }
+				FOE_can_assign_architect_of_order = yes
+			}
+			FOE_give_antagonist_administrator_tier = yes
+			FOE_initialize_architect_of_order = yes
+		}
+		# Gawdyna Grimfeathers
+		else_if = {
+			limit = {
+				has_country_leader = { character = SHA_char_Gawd ruling_only = yes }
+				FOE_can_assign_chainbreaker = yes
+			}
+			FOE_give_antagonist_conqueror_tier = yes
+			FOE_initialize_chainbreaker = yes
+		}
+		# Vermillion Grace (COR and COM)
+		else_if = {
+			limit = {
+				OR = {
+					has_country_leader = { character = COR_char_vermillion_grace ruling_only = yes }
+					has_country_leader = { character = COM_char_vermillion_grace ruling_only = yes }
+				}
+				FOE_can_assign_chainbreaker = yes
+			}
+			FOE_give_antagonist_conqueror_tier = yes
+			FOE_initialize_chainbreaker = yes
+		}
+		# Crystal Drop
+		else_if = {
+			limit = {
+				has_country_leader = { character = COR_char_crystal_drop ruling_only = yes }
+				FOE_can_assign_autark = yes
+			}
+			FOE_give_antagonist_industrialist_tier = yes
+			FOE_initialize_autark = yes
+		}
+		# Nations
+		else_if = {
+			limit = {
+				tag = EYE
+				FOE_can_assign_slaving_despot = yes
+			}
+			FOE_give_antagonist_conqueror_tier = yes
+			FOE_initialize_slaving_despot = yes
+		}
+		else_if = {
+			limit = {
+				tag = KHA
+				FOE_can_assign_nomadic_khan = yes
+			}
+			FOE_give_antagonist_conqueror_tier = yes
+			FOE_initialize_nomadic_khan = yes
+		}
+		else_if = {
+			limit = {
+				tag = SEZ
+				FOE_can_assign_voice_of_the_machine = yes
+			}
+			FOE_give_antagonist_administrator_tier = yes
+			FOE_initialize_voice_of_the_machine = yes
+		}
+		else_if = {
+			limit = {
+				tag = COM
+				FOE_can_assign_architect_of_order = yes
+			}
+			FOE_give_antagonist_administrator_tier = yes
+			FOE_initialize_architect_of_order = yes
+		}
+		else_if = {
+			limit = {
+				tag = SHP
+				FOE_can_assign_biological_engineer = yes
+			}
+			FOE_give_antagonist_industrialist_tier = yes
+			FOE_initialize_biological_engineer = yes
+		}
+		# Placeholder until a mercenary subclass exists (TODO.md)
+		else_if = {
+			limit = {
+				tag = BLA
+				FOE_can_assign_slaving_despot = yes
+			}
+			FOE_give_antagonist_conqueror_tier = yes
+			FOE_initialize_slaving_despot = yes
+		}
+		else_if = {
+			limit = {
+				tag = SRC
+				FOE_can_assign_merchant_prince = yes
+			}
+			FOE_give_antagonist_industrialist_tier = yes
+			FOE_initialize_merchant_prince = yes
+		}
+		else_if = {
+			limit = {
+				tag = LAU
+				FOE_can_assign_saint_of_war = yes
+			}
+			FOE_give_antagonist_conqueror_tier = yes
+			FOE_initialize_saint_of_war = yes
+		}
+		else = {
+			random_list = {
+				70 = {
+					FOE_give_antagonist_conqueror_tier = yes
+					FOE_roll_conqueror_subclass = yes
+				}
+				30 = {
+					FOE_give_antagonist_industrialist_tier = yes
+					FOE_roll_industrialist_subclass = yes
+				}
+			}
+		}
+		log = "FOE_ANTAGONIST_GL [THIS.GetTag] ring=[?FOE_antagonist_ring] tier=[?FOE_antagonist_gl_tier] first_leader=[?FOE_antagonist_first_leader]"
+	}
+}
+
+# Country scope, temp FOE_antagonist_first_leader. The tier's Conqueror trait; the first leader also gets the gifts.
+FOE_give_antagonist_conqueror_tier = {
+	if = {
+		limit = { check_variable = { FOE_antagonist_gl_tier = 1 } }
+		add_country_leader_trait = great_leader_military_trait
+		if = {
+			limit = { check_variable = { FOE_antagonist_first_leader = 1 } }
+			add_equipment_to_stockpile = { type = ballistic_equipment_2 amount = 250 producer = OWE }
+			army_experience = 100
+		}
+	}
+	else_if = {
+		limit = { check_variable = { FOE_antagonist_gl_tier = 2 } }
+		add_country_leader_trait = legendary_leader_military_trait
+		if = {
+			limit = { check_variable = { FOE_antagonist_first_leader = 1 } }
+			add_equipment_to_stockpile = { type = ballistic_equipment_2 amount = 500 producer = OWE }
+			army_experience = 200
+		}
+	}
+	else = {
+		add_country_leader_trait = mythic_leader_military_trait
+		if = {
+			limit = { check_variable = { FOE_antagonist_first_leader = 1 } }
+			add_equipment_to_stockpile = { type = ballistic_equipment_2 amount = 1000 producer = OWE }
+			army_experience = 500
+		}
+	}
+	var:country_leader = { set_character_flag = FOE_great_leader_character }
+	log = "FOE_ANTAGONIST_GL [THIS.GetTag] class=conqueror"
+}
+
+# Country scope, temp FOE_antagonist_first_leader. The tier's Administrator trait, only from the historical table.
+# No non-aggression pacts with the neighbours (the normal Administrator gift), they would stop the expansion.
+FOE_give_antagonist_administrator_tier = {
+	if = {
+		limit = { check_variable = { FOE_antagonist_gl_tier = 1 } }
+		add_country_leader_trait = great_leader_admin_trait
+	}
+	else_if = {
+		limit = { check_variable = { FOE_antagonist_gl_tier = 2 } }
+		add_country_leader_trait = legendary_leader_admin_trait
+	}
+	else = {
+		add_country_leader_trait = mythic_leader_admin_trait
+		if = {
+			limit = { check_variable = { FOE_antagonist_first_leader = 1 } }
+			add_to_variable = { coring_cost_country_factor = -0.50 }
+		}
+	}
+	var:country_leader = { set_character_flag = FOE_great_leader_character }
+	log = "FOE_ANTAGONIST_GL [THIS.GetTag] class=administrator"
+}
+
+# Country scope, temp FOE_antagonist_first_leader. The tier's Industrialist trait; the first leader also gets the gifts.
+FOE_give_antagonist_industrialist_tier = {
+	if = {
+		limit = { check_variable = { FOE_antagonist_gl_tier = 1 } }
+		add_country_leader_trait = great_leader_industry_trait
+		if = {
+			limit = { check_variable = { FOE_antagonist_first_leader = 1 } }
+			add_offsite_building = { type = industrial_complex level = 1 }
+			add_offsite_building = { type = arms_factory level = 1 }
+			add_offsite_building = { type = dockyard level = 1 }
+		}
+	}
+	else_if = {
+		limit = { check_variable = { FOE_antagonist_gl_tier = 2 } }
+		add_country_leader_trait = legendary_leader_industry_trait
+		if = {
+			limit = { check_variable = { FOE_antagonist_first_leader = 1 } }
+			add_offsite_building = { type = industrial_complex level = 2 }
+			add_offsite_building = { type = arms_factory level = 2 }
+			add_offsite_building = { type = dockyard level = 2 }
+		}
+	}
+	else = {
+		add_country_leader_trait = mythic_leader_industry_trait
+		if = {
+			limit = { check_variable = { FOE_antagonist_first_leader = 1 } }
+			add_offsite_building = { type = industrial_complex level = 4 }
+			add_offsite_building = { type = arms_factory level = 4 }
+			add_offsite_building = { type = dockyard level = 4 }
+		}
+	}
+	var:country_leader = { set_character_flag = FOE_great_leader_character }
+	log = "FOE_ANTAGONIST_GL [THIS.GetTag] class=industrialist"
+}
+
+# Country scope. One tier up, up to Mythic. The tier is kept for later leaders even if this one is no Great Leader.
+FOE_antagonist_leader_rank_up = {
+	if = {
+		limit = {
+			has_global_flag = FOE_campaign_great_leaders_enabled
+			has_variable = FOE_antagonist_gl_tier
+			check_variable = { FOE_antagonist_gl_tier < 3 }
+		}
+		add_to_variable = { FOE_antagonist_gl_tier = 1 }
+		# Each swap only acts on the class the leader has
+		FOE_nemesis_rank_up = yes
+		FOE_administrator_rank_up = yes
+		FOE_industrialist_rank_up = yes
+		log = "FOE_ANTAGONIST_GL [THIS.GetTag] ranked up to tier [?FOE_antagonist_gl_tier]"
 	}
 }
 

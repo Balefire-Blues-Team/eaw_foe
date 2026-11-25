@@ -12,18 +12,111 @@ FOE_is_antagonist_candidate = {
 	check_variable = { closest_distance_to@ROOT > 0 }
 }
 
-#Ranked Antagonist choice-bnads
-FOE_is_antagonist_in_band = {
+# Can still be picked: in the pool, not picked yet, not bordering an earlier pick, big enough
+FOE_is_antagonist_eligible = {
 	has_variable = FOE_antagonist_rank_pct
 	NOT = { has_country_flag = FOE_antagonist }
 	NOT = { any_neighbor_country = { has_country_flag = FOE_antagonist } }
-	NOT = { check_variable = { FOE_antagonist_rank_pct < FOE_band_low } }
-	NOT = { check_variable = { FOE_antagonist_rank_pct > FOE_band_high } }
 	OR = {
 		check_variable = { num_owned_states > 2 }
 		FOE_has_finished_lore_tree = yes
 	}
-	has_war = no
+	# Sunny Pact starts at war with EYE and is meant to lose it
+	NOT = { tag = SSC }
+}
+
+#Ranked Antagonist choice-bnads
+FOE_is_antagonist_in_band = {
+	FOE_is_antagonist_eligible = yes
+	NOT = { check_variable = { FOE_antagonist_rank_pct < FOE_band_low } }
+	NOT = { check_variable = { FOE_antagonist_rank_pct > FOE_band_high } }
+}
+
+# Historical rivals: ROOT = player, THIS = candidate, temp FOE_ring = ring being picked.
+# In 2 of 3 campaigns that ring is drawn from these instead of the distance band (equal odds).
+FOE_is_historical_rival = {
+	OR = {
+		# Rival
+		AND = {
+			check_variable = { FOE_ring = 1 }
+			OR = {
+				AND = {
+					ROOT = { tag = SHA }
+					OR = { tag = EYE tag = NEV }
+				}
+				AND = {
+					ROOT = { tag = NEV }
+					OR = { tag = SHA tag = FSR tag = EYE }
+				}
+				AND = {
+					ROOT = { tag = EYE }
+					OR = { tag = NEV tag = RWK tag = SHA }
+				}
+				AND = {
+					ROOT = { tag = FSR }
+					OR = { tag = EYE tag = NEV }
+				}
+				AND = {
+					ROOT = { tag = UNI }
+					OR = { tag = SHA tag = EYE }
+				}
+				AND = {
+					ROOT = { tag = RWK }
+					OR = { tag = MRA tag = TEN tag = MSR tag = EYE }
+				}
+				AND = {
+					ROOT = { tag = MRA }
+					OR = { tag = TEN tag = MSR }
+				}
+				AND = {
+					ROOT = { tag = TEN }
+					OR = { tag = MRA tag = MSR }
+				}
+				AND = {
+					ROOT = { tag = MSR }
+					OR = { tag = MRA tag = TEN }
+				}
+				AND = {
+					ROOT = { tag = ERA }
+					tag = NEV
+				}
+				AND = {
+					ROOT = { tag = OAP }
+					OR = { tag = SHA tag = SLV }
+				}
+				AND = {
+					ROOT = { tag = SLV }
+					OR = { tag = NEV tag = OAP }
+				}
+				AND = {
+					ROOT = { tag = SEZ }
+					OR = { tag = LAU tag = SRC tag = BLA }
+				}
+			}
+		}
+		# Archenemy
+		AND = {
+			check_variable = { FOE_ring = 2 }
+			OR = {
+				AND = {
+					ROOT = { tag = FSR }
+					tag = UNI
+				}
+				AND = {
+					ROOT = { tag = MSR }
+					tag = NEV
+				}
+				AND = {
+					ROOT = { tag = NEV }
+					tag = MSR
+				}
+				AND = {
+					ROOT = { tag = SEZ }
+					tag = COM
+				}
+			}
+		}
+	}
 }
 
 #Prefer flavourful countries to be antagonists
