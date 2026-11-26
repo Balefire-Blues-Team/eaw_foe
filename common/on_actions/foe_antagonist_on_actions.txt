@@ -2,14 +2,74 @@ on_actions = {
 	# Antagonist rubber band, expansion, Contact and first strike
 	on_monthly = {
 		effect = {
+			# First, in case the player moved to another country (it may be this Antagonist, which then falls)
 			if = {
 				limit = {
 					has_global_flag = FOE_campaign_antagonists_enabled
 					has_country_flag = FOE_antagonist
 				}
+				FOE_update_antagonist_player = yes
+			}
+			if = {
+				limit = {
+					has_global_flag = FOE_campaign_antagonists_enabled
+					has_country_flag = FOE_antagonist
+				}
+				FOE_keep_antagonist_out_of_player_faction = yes
 				FOE_update_antagonist_rubber_band = yes
-				FOE_update_antagonist_expansion = yes
+				# Before expansion, so an expansion war declared this month can't block the first strike
 				FOE_update_antagonist_confrontation = yes
+				FOE_update_antagonist_expansion = yes
+				FOE_update_antagonist_assessment = yes
+			}
+		}
+	}
+
+	# ROOT is the winner, FROM gets annexed (also fires for civil wars)
+	on_annex = {
+		effect = {
+			if = {
+				limit = {
+					has_global_flag = FOE_campaign_antagonists_enabled
+					FROM = { has_country_flag = FOE_antagonist }
+				}
+				FROM = {
+					set_variable = { FOE_antagonist_killer = ROOT }
+					FOE_antagonist_falls = yes
+				}
+			}
+		}
+	}
+
+	# ROOT is the nation being puppeted, FROM the overlord
+	on_puppet = {
+		effect = {
+			if = {
+				limit = {
+					has_global_flag = FOE_campaign_antagonists_enabled
+					has_country_flag = FOE_antagonist
+				}
+				set_variable = { FOE_antagonist_killer = FROM }
+				FOE_antagonist_falls = yes
+			}
+		}
+	}
+
+	# ROOT is the winner, FROM gets annexed (on_annex fires too)
+	on_civil_war_end = {
+		effect = {
+			if = {
+				limit = {
+					has_global_flag = FOE_campaign_antagonists_enabled
+					is_ai = yes
+					FROM = {
+						OR = {
+							has_country_flag = FOE_antagonist
+							has_variable = FOE_antagonist_fallen_ring
+						}
+					}
+				}
+				FOE_antagonist_civil_war_successor = yes
 			}
 		}
 	}

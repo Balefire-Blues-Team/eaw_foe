@@ -1,0 +1,539 @@
+# Antagonist System tracker. Called as [Root.GetFOE<Ring><Part>] from the player's decisions; each reads its
+# Antagonist through var:global, so a fallen (no longer existing) Antagonist is caught first.
+
+defined_text = {
+	name = GetFOERivalStatus
+	text = {
+		trigger = { has_global_flag = FOE_antagonist_defeated_1 }
+		localization_key = FOE_tracker_status_defeated
+	}
+	text = {
+		trigger = { has_global_flag = FOE_antagonist_fallen_slot_1 }
+		localization_key = FOE_tracker_status_fallen
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { exists = no } }
+		localization_key = FOE_tracker_status_fallen
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_antagonist_status = 4 } } }
+		localization_key = FOE_tracker_status_war
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_antagonist_status = 5 } } }
+		localization_key = FOE_tracker_status_preparing
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_antagonist_status = 3 } } }
+		localization_key = FOE_tracker_status_ready
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_antagonist_status = 2 } } }
+		localization_key = FOE_tracker_status_border
+	}
+	text = {
+		localization_key = FOE_tracker_status_consolidating
+	}
+}
+
+defined_text = {
+	name = GetFOERivalArmy
+	text = {
+		trigger = {
+			OR = {
+				has_global_flag = FOE_antagonist_defeated_1
+				has_global_flag = FOE_antagonist_fallen_slot_1
+			}
+		}
+		localization_key = FOE_tracker_assess_unknown
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { exists = no } }
+		localization_key = FOE_tracker_assess_unknown
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_assess_army = 1 } } }
+		localization_key = FOE_tracker_assess_far_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_assess_army = 2 } } }
+		localization_key = FOE_tracker_assess_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_assess_army = 3 } } }
+		localization_key = FOE_tracker_assess_slightly_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_assess_army = 4 } } }
+		localization_key = FOE_tracker_assess_equal
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_assess_army = 5 } } }
+		localization_key = FOE_tracker_assess_slightly_stronger
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_assess_army = 6 } } }
+		localization_key = FOE_tracker_assess_stronger
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_assess_army = 7 } } }
+		localization_key = FOE_tracker_assess_far_stronger
+	}
+	text = {
+		localization_key = FOE_tracker_assess_unknown
+	}
+}
+
+defined_text = {
+	name = GetFOERivalIndustry
+	text = {
+		trigger = {
+			OR = {
+				has_global_flag = FOE_antagonist_defeated_1
+				has_global_flag = FOE_antagonist_fallen_slot_1
+			}
+		}
+		localization_key = FOE_tracker_assess_unknown
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { exists = no } }
+		localization_key = FOE_tracker_assess_unknown
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_assess_industry = 1 } } }
+		localization_key = FOE_tracker_assess_far_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_assess_industry = 2 } } }
+		localization_key = FOE_tracker_assess_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_assess_industry = 3 } } }
+		localization_key = FOE_tracker_assess_slightly_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_assess_industry = 4 } } }
+		localization_key = FOE_tracker_assess_equal
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_assess_industry = 5 } } }
+		localization_key = FOE_tracker_assess_slightly_stronger
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_assess_industry = 6 } } }
+		localization_key = FOE_tracker_assess_stronger
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_assess_industry = 7 } } }
+		localization_key = FOE_tracker_assess_far_stronger
+	}
+	text = {
+		localization_key = FOE_tracker_assess_unknown
+	}
+}
+
+defined_text = {
+	name = GetFOERivalTechnology
+	text = {
+		trigger = {
+			OR = {
+				has_global_flag = FOE_antagonist_defeated_1
+				has_global_flag = FOE_antagonist_fallen_slot_1
+			}
+		}
+		localization_key = FOE_tracker_assess_unknown
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { exists = no } }
+		localization_key = FOE_tracker_assess_unknown
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_assess_technology = 1 } } }
+		localization_key = FOE_tracker_assess_far_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_assess_technology = 2 } } }
+		localization_key = FOE_tracker_assess_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_assess_technology = 3 } } }
+		localization_key = FOE_tracker_assess_slightly_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_assess_technology = 4 } } }
+		localization_key = FOE_tracker_assess_equal
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_assess_technology = 5 } } }
+		localization_key = FOE_tracker_assess_slightly_stronger
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_assess_technology = 6 } } }
+		localization_key = FOE_tracker_assess_stronger
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_rival = { check_variable = { FOE_assess_technology = 7 } } }
+		localization_key = FOE_tracker_assess_far_stronger
+	}
+	text = {
+		localization_key = FOE_tracker_assess_unknown
+	}
+}
+
+defined_text = {
+	name = GetFOEArchenemyStatus
+	text = {
+		trigger = { has_global_flag = FOE_antagonist_defeated_2 }
+		localization_key = FOE_tracker_status_defeated
+	}
+	text = {
+		trigger = { has_global_flag = FOE_antagonist_fallen_slot_2 }
+		localization_key = FOE_tracker_status_fallen
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { exists = no } }
+		localization_key = FOE_tracker_status_fallen
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_antagonist_status = 4 } } }
+		localization_key = FOE_tracker_status_war
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_antagonist_status = 5 } } }
+		localization_key = FOE_tracker_status_preparing
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_antagonist_status = 3 } } }
+		localization_key = FOE_tracker_status_ready
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_antagonist_status = 2 } } }
+		localization_key = FOE_tracker_status_border
+	}
+	text = {
+		localization_key = FOE_tracker_status_consolidating
+	}
+}
+
+defined_text = {
+	name = GetFOEArchenemyArmy
+	text = {
+		trigger = {
+			OR = {
+				has_global_flag = FOE_antagonist_defeated_2
+				has_global_flag = FOE_antagonist_fallen_slot_2
+			}
+		}
+		localization_key = FOE_tracker_assess_unknown
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { exists = no } }
+		localization_key = FOE_tracker_assess_unknown
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_assess_army = 1 } } }
+		localization_key = FOE_tracker_assess_far_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_assess_army = 2 } } }
+		localization_key = FOE_tracker_assess_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_assess_army = 3 } } }
+		localization_key = FOE_tracker_assess_slightly_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_assess_army = 4 } } }
+		localization_key = FOE_tracker_assess_equal
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_assess_army = 5 } } }
+		localization_key = FOE_tracker_assess_slightly_stronger
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_assess_army = 6 } } }
+		localization_key = FOE_tracker_assess_stronger
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_assess_army = 7 } } }
+		localization_key = FOE_tracker_assess_far_stronger
+	}
+	text = {
+		localization_key = FOE_tracker_assess_unknown
+	}
+}
+
+defined_text = {
+	name = GetFOEArchenemyIndustry
+	text = {
+		trigger = {
+			OR = {
+				has_global_flag = FOE_antagonist_defeated_2
+				has_global_flag = FOE_antagonist_fallen_slot_2
+			}
+		}
+		localization_key = FOE_tracker_assess_unknown
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { exists = no } }
+		localization_key = FOE_tracker_assess_unknown
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_assess_industry = 1 } } }
+		localization_key = FOE_tracker_assess_far_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_assess_industry = 2 } } }
+		localization_key = FOE_tracker_assess_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_assess_industry = 3 } } }
+		localization_key = FOE_tracker_assess_slightly_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_assess_industry = 4 } } }
+		localization_key = FOE_tracker_assess_equal
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_assess_industry = 5 } } }
+		localization_key = FOE_tracker_assess_slightly_stronger
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_assess_industry = 6 } } }
+		localization_key = FOE_tracker_assess_stronger
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_assess_industry = 7 } } }
+		localization_key = FOE_tracker_assess_far_stronger
+	}
+	text = {
+		localization_key = FOE_tracker_assess_unknown
+	}
+}
+
+defined_text = {
+	name = GetFOEArchenemyTechnology
+	text = {
+		trigger = {
+			OR = {
+				has_global_flag = FOE_antagonist_defeated_2
+				has_global_flag = FOE_antagonist_fallen_slot_2
+			}
+		}
+		localization_key = FOE_tracker_assess_unknown
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { exists = no } }
+		localization_key = FOE_tracker_assess_unknown
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_assess_technology = 1 } } }
+		localization_key = FOE_tracker_assess_far_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_assess_technology = 2 } } }
+		localization_key = FOE_tracker_assess_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_assess_technology = 3 } } }
+		localization_key = FOE_tracker_assess_slightly_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_assess_technology = 4 } } }
+		localization_key = FOE_tracker_assess_equal
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_assess_technology = 5 } } }
+		localization_key = FOE_tracker_assess_slightly_stronger
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_assess_technology = 6 } } }
+		localization_key = FOE_tracker_assess_stronger
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_archenemy = { check_variable = { FOE_assess_technology = 7 } } }
+		localization_key = FOE_tracker_assess_far_stronger
+	}
+	text = {
+		localization_key = FOE_tracker_assess_unknown
+	}
+}
+
+defined_text = {
+	name = GetFOEReserveStatus
+	text = {
+		trigger = { has_global_flag = FOE_antagonist_defeated_3 }
+		localization_key = FOE_tracker_status_defeated
+	}
+	text = {
+		trigger = { has_global_flag = FOE_antagonist_fallen_slot_3 }
+		localization_key = FOE_tracker_status_fallen
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { exists = no } }
+		localization_key = FOE_tracker_status_fallen
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_antagonist_status = 4 } } }
+		localization_key = FOE_tracker_status_war
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_antagonist_status = 5 } } }
+		localization_key = FOE_tracker_status_preparing
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_antagonist_status = 3 } } }
+		localization_key = FOE_tracker_status_ready
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_antagonist_status = 2 } } }
+		localization_key = FOE_tracker_status_border
+	}
+	text = {
+		localization_key = FOE_tracker_status_consolidating
+	}
+}
+
+defined_text = {
+	name = GetFOEReserveArmy
+	text = {
+		trigger = {
+			OR = {
+				has_global_flag = FOE_antagonist_defeated_3
+				has_global_flag = FOE_antagonist_fallen_slot_3
+			}
+		}
+		localization_key = FOE_tracker_assess_unknown
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { exists = no } }
+		localization_key = FOE_tracker_assess_unknown
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_assess_army = 1 } } }
+		localization_key = FOE_tracker_assess_far_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_assess_army = 2 } } }
+		localization_key = FOE_tracker_assess_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_assess_army = 3 } } }
+		localization_key = FOE_tracker_assess_slightly_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_assess_army = 4 } } }
+		localization_key = FOE_tracker_assess_equal
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_assess_army = 5 } } }
+		localization_key = FOE_tracker_assess_slightly_stronger
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_assess_army = 6 } } }
+		localization_key = FOE_tracker_assess_stronger
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_assess_army = 7 } } }
+		localization_key = FOE_tracker_assess_far_stronger
+	}
+	text = {
+		localization_key = FOE_tracker_assess_unknown
+	}
+}
+
+defined_text = {
+	name = GetFOEReserveIndustry
+	text = {
+		trigger = {
+			OR = {
+				has_global_flag = FOE_antagonist_defeated_3
+				has_global_flag = FOE_antagonist_fallen_slot_3
+			}
+		}
+		localization_key = FOE_tracker_assess_unknown
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { exists = no } }
+		localization_key = FOE_tracker_assess_unknown
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_assess_industry = 1 } } }
+		localization_key = FOE_tracker_assess_far_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_assess_industry = 2 } } }
+		localization_key = FOE_tracker_assess_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_assess_industry = 3 } } }
+		localization_key = FOE_tracker_assess_slightly_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_assess_industry = 4 } } }
+		localization_key = FOE_tracker_assess_equal
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_assess_industry = 5 } } }
+		localization_key = FOE_tracker_assess_slightly_stronger
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_assess_industry = 6 } } }
+		localization_key = FOE_tracker_assess_stronger
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_assess_industry = 7 } } }
+		localization_key = FOE_tracker_assess_far_stronger
+	}
+	text = {
+		localization_key = FOE_tracker_assess_unknown
+	}
+}
+
+defined_text = {
+	name = GetFOEReserveTechnology
+	text = {
+		trigger = {
+			OR = {
+				has_global_flag = FOE_antagonist_defeated_3
+				has_global_flag = FOE_antagonist_fallen_slot_3
+			}
+		}
+		localization_key = FOE_tracker_assess_unknown
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { exists = no } }
+		localization_key = FOE_tracker_assess_unknown
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_assess_technology = 1 } } }
+		localization_key = FOE_tracker_assess_far_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_assess_technology = 2 } } }
+		localization_key = FOE_tracker_assess_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_assess_technology = 3 } } }
+		localization_key = FOE_tracker_assess_slightly_weaker
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_assess_technology = 4 } } }
+		localization_key = FOE_tracker_assess_equal
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_assess_technology = 5 } } }
+		localization_key = FOE_tracker_assess_slightly_stronger
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_assess_technology = 6 } } }
+		localization_key = FOE_tracker_assess_stronger
+	}
+	text = {
+		trigger = { var:global.FOE_antagonist_reserve = { check_variable = { FOE_assess_technology = 7 } } }
+		localization_key = FOE_tracker_assess_far_stronger
+	}
+	text = {
+		localization_key = FOE_tracker_assess_unknown
+	}
+}

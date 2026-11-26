@@ -23,6 +23,11 @@ FOE_is_antagonist_eligible = {
 	}
 	# Sunny Pact starts at war with EYE and is meant to lose it
 	NOT = { tag = SSC }
+	# Refills: not the nation that killed the last one, and no leader whose subclass hands land away or signs pacts
+	NOT = { has_country_flag = FOE_antagonist_excluded }
+	NOT = { FOE_is_lord_of_the_long_march = yes }
+	NOT = { FOE_is_nemesis = yes }
+	NOT = { FOE_is_consortium_chairman = yes }
 }
 
 #Ranked Antagonist choice-bnads
@@ -146,5 +151,19 @@ FOE_has_finished_lore_tree = {
 		tag = SLV
 		tag = TEN
 		tag = UNI
+	}
+}
+
+# Strike countdown mission: THIS/ROOT = the Antagonist, FROM = the player it targets. Once started the war is coming;
+# only a war that can no longer happen as planned calls it off.
+FOE_antagonist_strike_cancelled = {
+	OR = {
+		NOT = { has_country_flag = FOE_antagonist }
+		is_subject = yes
+		has_war_with = FROM
+		is_in_faction_with = FROM
+		FROM = { NOT = { is_neighbor_of = ROOT } }
+		# The player moved to another country
+		FROM = { NOT = { tag = var:global.FOE_antagonist_player } }
 	}
 }

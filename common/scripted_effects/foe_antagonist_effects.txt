@@ -5,7 +5,22 @@
 # Rings are bands of that rank (0% = bordering): Rival 10-25%, Archenemy 40-60%, Reserve 65-85%.
 FOE_select_antagonists = {
 	set_variable = { global.FOE_antagonist_player = ROOT }
+	FOE_rank_antagonist_candidates = yes
+	set_temp_variable = { FOE_ring = 1 }
+	FOE_set_antagonist_band = yes
+	FOE_pick_antagonist = yes
+	set_temp_variable = { FOE_ring = 2 }
+	FOE_set_antagonist_band = yes
+	FOE_pick_antagonist = yes
+	set_temp_variable = { FOE_ring = 3 }
+	FOE_set_antagonist_band = yes
+	FOE_pick_antagonist = yes
+	FOE_clear_antagonist_ranks = yes
+	country_event = { id = foe_antagonists.1 }
+}
 
+# Player scope (ROOT). Ranks every candidate by distance and weights it. Used at setup and by refills.
+FOE_rank_antagonist_candidates = {
 	set_temp_variable = { FOE_pool_size = 0 }
 	every_country = {
 		limit = { FOE_is_antagonist_candidate = yes }
@@ -44,29 +59,33 @@ FOE_select_antagonists = {
 			log = "FOE_ANTAGONIST_AUDIT [THIS.GetTag] rank_pct=[?FOE_antagonist_rank_pct] weight=[?FOE_antagonist_weight] distance=[?FOE_own_distance] pool=[?FOE_pool_size]"
 		}
 	}
+}
 
-	set_temp_variable = { FOE_ring = 1 }
-	set_temp_variable = { FOE_band_low = 10 }
-	set_temp_variable = { FOE_band_high = 25 }
-	FOE_pick_antagonist = yes
-
-	set_temp_variable = { FOE_ring = 2 }
-	set_temp_variable = { FOE_band_low = 40 }
-	set_temp_variable = { FOE_band_high = 60 }
-	FOE_pick_antagonist = yes
-
-	set_temp_variable = { FOE_ring = 3 }
-	set_temp_variable = { FOE_band_low = 65 }
-	set_temp_variable = { FOE_band_high = 85 }
-	FOE_pick_antagonist = yes
-
+# Clears the ranking left by FOE_rank_antagonist_candidates.
+FOE_clear_antagonist_ranks = {
 	every_country = {
 		limit = { has_variable = FOE_antagonist_rank_pct }
 		clear_variable = FOE_antagonist_rank_pct
 		clear_variable = FOE_antagonist_weight
 	}
+}
 
-	country_event = { id = foe_antagonists.1 }
+# Temp FOE_ring -> temp FOE_band_low / FOE_band_high, that ring's band of distance rank.
+FOE_set_antagonist_band = {
+	if = {
+		limit = { check_variable = { FOE_ring = 1 } }
+		set_temp_variable = { FOE_band_low = 10 }
+		set_temp_variable = { FOE_band_high = 25 }
+	}
+	else_if = {
+		limit = { check_variable = { FOE_ring = 2 } }
+		set_temp_variable = { FOE_band_low = 40 }
+		set_temp_variable = { FOE_band_high = 60 }
+	}
+	else = {
+		set_temp_variable = { FOE_band_low = 65 }
+		set_temp_variable = { FOE_band_high = 85 }
+	}
 }
 
 # Temp FOE_ring
@@ -151,6 +170,7 @@ FOE_make_antagonist = {
 	set_country_flag = FOE_antagonist
 	set_variable = { FOE_antagonist_ring = FOE_ring }
 	FOE_set_antagonist_formable_states = yes
+	FOE_update_antagonist_assessment = yes
 	if = {
 		limit = { check_variable = { FOE_ring = 1 } }
 		set_variable = { global.FOE_antagonist_rival = THIS }
@@ -170,24 +190,7 @@ FOE_make_antagonist = {
 FOE_clear_antagonists = {
 	every_country = {
 		limit = { has_country_flag = FOE_antagonist }
-		clr_country_flag = FOE_antagonist
-		clear_variable = FOE_antagonist_ring
-		clear_array = FOE_antagonist_formable_states
-		clear_variable = FOE_antagonist_stall_months
-		clear_variable = FOE_antagonist_nudge_months
-		clear_variable = FOE_antagonist_wargoal_target
-		clear_variable = FOE_antagonist_new_target
-		set_variable = { FOE_antagonist_industry_step = 0 }
-		set_variable = { FOE_antagonist_research_step = 0 }
-		FOE_set_antagonist_industry_idea = yes
-		FOE_set_antagonist_research_idea = yes
-		clear_variable = FOE_antagonist_industry_step
-		clear_variable = FOE_antagonist_research_step
-		clear_variable = FOE_antagonist_army_step
-		clear_variable = FOE_antagonist_phase
-		clear_variable = FOE_antagonist_contact_months
-		clear_variable = FOE_antagonist_strike_cooldown
-		clear_variable = FOE_antagonist_gl_tier
+		FOE_clear_antagonist_country = yes
 	}
 	every_state = {
 		limit = { has_variable = FOE_antagonist_forts }
@@ -196,6 +199,57 @@ FOE_clear_antagonists = {
 	clear_variable = global.FOE_antagonist_rival
 	clear_variable = global.FOE_antagonist_archenemy
 	clear_variable = global.FOE_antagonist_reserve
+	# Fall phase state
+	clr_global_flag = FOE_antagonist_fall_pending_1
+	clr_global_flag = FOE_antagonist_player_kill_1
+	clr_global_flag = FOE_antagonist_succeeded_1
+	clr_global_flag = FOE_antagonist_defeated_1
+	clr_global_flag = FOE_antagonist_fallen_slot_1
+	clear_variable = global.FOE_antagonist_fallen_1
+	clear_variable = global.FOE_antagonist_killer_1
+	clr_global_flag = FOE_antagonist_fall_pending_2
+	clr_global_flag = FOE_antagonist_player_kill_2
+	clr_global_flag = FOE_antagonist_succeeded_2
+	clr_global_flag = FOE_antagonist_defeated_2
+	clr_global_flag = FOE_antagonist_fallen_slot_2
+	clear_variable = global.FOE_antagonist_fallen_2
+	clear_variable = global.FOE_antagonist_killer_2
+	clr_global_flag = FOE_antagonist_fall_pending_3
+	clr_global_flag = FOE_antagonist_player_kill_3
+	clr_global_flag = FOE_antagonist_succeeded_3
+	clr_global_flag = FOE_antagonist_defeated_3
+	clr_global_flag = FOE_antagonist_fallen_slot_3
+	clear_variable = global.FOE_antagonist_fallen_3
+	clear_variable = global.FOE_antagonist_killer_3
+	clear_variable = global.FOE_antagonist_last_fallen
+	clear_variable = global.FOE_antagonist_last_ring
+}
+
+# Country scope. Removes everything that makes this country an Antagonist (also used when one falls).
+FOE_clear_antagonist_country = {
+	clr_country_flag = FOE_antagonist
+	clr_country_flag = FOE_antagonist_strike_pending
+	clear_variable = FOE_antagonist_ring
+	clear_array = FOE_antagonist_formable_states
+	clear_variable = FOE_antagonist_stall_months
+	clear_variable = FOE_antagonist_nudge_months
+	clear_variable = FOE_antagonist_wargoal_target
+	clear_variable = FOE_antagonist_new_target
+	set_variable = { FOE_antagonist_industry_step = 0 }
+	set_variable = { FOE_antagonist_research_step = 0 }
+	FOE_set_antagonist_industry_idea = yes
+	FOE_set_antagonist_research_idea = yes
+	clear_variable = FOE_antagonist_industry_step
+	clear_variable = FOE_antagonist_research_step
+	clear_variable = FOE_antagonist_army_step
+	clear_variable = FOE_antagonist_phase
+	clear_variable = FOE_antagonist_contact_months
+	clear_variable = FOE_antagonist_strike_cooldown
+	clear_variable = FOE_antagonist_gl_tier
+	clear_variable = FOE_antagonist_status
+	clear_variable = FOE_assess_army
+	clear_variable = FOE_assess_industry
+	clear_variable = FOE_assess_technology
 }
 
 FOE_log_antagonists = {
@@ -216,12 +270,99 @@ FOE_log_antagonists = {
 	}
 }
 
+# Any scope. The player can move to another country mid-game (change_tag_from in lore events: the Commonwealth civil
+# war, Bloody Mane -> EYE, ...). Campaign Setup is single-player only, so the one human country is the player.
+# Runs at the start of the monthly update and of the hidden fall and refill events.
+FOE_update_antagonist_player = {
+	if = {
+		limit = {
+			var:global.FOE_antagonist_player = {
+				OR = {
+					exists = no
+					is_ai = yes
+				}
+			}
+			any_country = { is_ai = no }
+		}
+		set_temp_variable = { FOE_old_player = global.FOE_antagonist_player }
+		random_country = {
+			limit = { is_ai = no }
+			set_variable = { global.FOE_antagonist_player = THIS }
+			log = "FOE_ANTAGONIST the player moved from [?FOE_old_player.GetTag] to [THIS.GetTag]"
+			# Hidden fall and refill events still queued on the old country do nothing there; queue them again here
+			if = {
+				limit = {
+					OR = {
+						has_global_flag = FOE_antagonist_fall_pending_1
+						has_global_flag = FOE_antagonist_fall_pending_2
+						has_global_flag = FOE_antagonist_fall_pending_3
+					}
+				}
+				country_event = { id = foe_antagonists.8 days = 1 }
+			}
+			if = {
+				limit = { has_global_flag = FOE_campaign_antagonists_brutal }
+				if = {
+					limit = { has_global_flag = FOE_antagonist_fallen_slot_1 }
+					country_event = { id = foe_antagonists.10 days = 90 }
+				}
+				if = {
+					limit = { has_global_flag = FOE_antagonist_fallen_slot_2 }
+					country_event = { id = foe_antagonists.11 days = 90 }
+				}
+				if = {
+					limit = { has_global_flag = FOE_antagonist_fallen_slot_3 }
+					country_event = { id = foe_antagonists.12 days = 90 }
+				}
+			}
+			else = {
+				if = {
+					limit = { has_global_flag = FOE_antagonist_fallen_slot_1 }
+					country_event = { id = foe_antagonists.10 days = 180 }
+				}
+				if = {
+					limit = { has_global_flag = FOE_antagonist_fallen_slot_2 }
+					country_event = { id = foe_antagonists.11 days = 180 }
+				}
+				if = {
+					limit = { has_global_flag = FOE_antagonist_fallen_slot_3 }
+					country_event = { id = foe_antagonists.12 days = 180 }
+				}
+			}
+			# The player took over an Antagonist: its slot falls as if the old country had taken it, and is refilled
+			if = {
+				limit = { has_country_flag = FOE_antagonist }
+				set_variable = { FOE_antagonist_killer = FOE_old_player }
+				FOE_antagonist_falls = yes
+			}
+		}
+	}
+}
+
+# Country scope, an Antagonist. Monthly. In the player's faction it could never strike and its system help would go to
+# the player's side, so it is put out of the faction again.
+FOE_keep_antagonist_out_of_player_faction = {
+	if = {
+		limit = { is_in_faction_with = var:global.FOE_antagonist_player }
+		if = {
+			limit = { is_faction_leader = yes }
+			var:global.FOE_antagonist_player = { leave_faction = yes }
+		}
+		else = {
+			leave_faction = yes
+		}
+		log = "FOE_ANTAGONIST [THIS.GetTag] and the player [?global.FOE_antagonist_player.GetTag] no longer share a faction"
+	}
+}
+
 # Determine Countries that the Antagonist should target; Runs Monthly
 FOE_update_antagonist_expansion = {
 	if = {
 		limit = {
 			has_war = no
 			is_subject = no
+			# Paused while a strike countdown runs
+			NOT = { has_country_flag = FOE_antagonist_strike_pending }
 		}
 		set_temp_variable = { FOE_nudge_wait = 2 }
 		set_temp_variable = { FOE_stall_wait = 6 }
@@ -707,9 +848,7 @@ FOE_update_antagonist_confrontation = {
 		every_owned_state = {
 			limit = {
 				check_variable = { FOE_antagonist_forts < FOE_fort_cap }
-				any_neighbor_state = {
-					owner = { tag = var:global.FOE_antagonist_player }
-				}
+				any_neighbor_state = { is_owned_by = var:global.FOE_antagonist_player }
 			}
 			add_building_construction = {
 				type = bunker
@@ -732,6 +871,7 @@ FOE_update_antagonist_confrontation = {
 			NOT = { check_variable = { FOE_antagonist_strike_cooldown > 0 } }
 			has_war = no
 			is_subject = no
+			NOT = { has_country_flag = FOE_antagonist_strike_pending }
 			var:global.FOE_antagonist_player = {
 				is_neighbor_of = ROOT
 				NOT = { is_in_faction_with = ROOT }
@@ -778,8 +918,32 @@ FOE_update_antagonist_confrontation = {
 		}
 		if = {
 			limit = { check_variable = { FOE_strike = 1 } }
-			FOE_antagonist_first_strike = yes
+			FOE_start_antagonist_strike = yes
 		}
+	}
+
+	# Tracker status: 1 Consolidating, 2 On our border, 3 Ready to strike (grace and cooldown over), 4 At war with us,
+	# 5 Preparing to attack us (strike countdown running)
+	set_variable = { FOE_antagonist_status = 1 }
+	if = {
+		limit = { has_war_with = var:global.FOE_antagonist_player }
+		set_variable = { FOE_antagonist_status = 4 }
+	}
+	else_if = {
+		limit = { has_country_flag = FOE_antagonist_strike_pending }
+		set_variable = { FOE_antagonist_status = 5 }
+	}
+	else_if = {
+		limit = {
+			check_variable = { FOE_antagonist_phase > 0 }
+			NOT = { check_variable = { FOE_antagonist_contact_months < FOE_contact_wait } }
+			NOT = { check_variable = { FOE_antagonist_strike_cooldown > 0 } }
+		}
+		set_variable = { FOE_antagonist_status = 3 }
+	}
+	else_if = {
+		limit = { check_variable = { FOE_antagonist_phase > 0 } }
+		set_variable = { FOE_antagonist_status = 2 }
 	}
 
 	if = {
@@ -801,6 +965,25 @@ FOE_antagonist_contact = {
 		country_event = { id = foe_antagonists.4 }
 	}
 	log = "FOE_ANTAGONIST_CONFRONTATION [ROOT.GetTag] Contact: borders the player"
+}
+
+# Country scope (ROOT), an Antagonist whose strike check passed. Starts the strike countdown: a targeted mission on the
+# player that declares the war when it times out, 30 days on Hard / 10 on Brutal (common/decisions/foe_antagonist_decisions.txt).
+FOE_start_antagonist_strike = {
+	set_country_flag = FOE_antagonist_strike_pending
+	var:global.FOE_antagonist_player = {
+		ROOT = {
+			if = {
+				limit = { has_global_flag = FOE_campaign_antagonists_brutal }
+				activate_targeted_decision = { target = PREV decision = FOE_antagonist_strike_mission_brutal }
+			}
+			else = {
+				activate_targeted_decision = { target = PREV decision = FOE_antagonist_strike_mission }
+			}
+		}
+		country_event = { id = foe_antagonists.13 }
+		log = "FOE_ANTAGONIST_CONFRONTATION [ROOT.GetTag] starts its strike countdown on the player [THIS.GetTag]"
+	}
 }
 
 #Declare war on player
@@ -1186,6 +1369,423 @@ FOE_antagonist_leader_rank_up = {
 		FOE_administrator_rank_up = yes
 		FOE_industrialist_rank_up = yes
 		log = "FOE_ANTAGONIST_GL [THIS.GetTag] ranked up to tier [?FOE_antagonist_gl_tier]"
+	}
+}
+
+###########################################################################
+# Player tracker: rough assessment (no exact numbers)
+###########################################################################
+
+# Country scope, an Antagonist. Monthly. Compares its divisions, factories and researched techs with the player's
+# and stores a band 1-7 for each: Far weaker < 50% / Weaker < 75% / Slightly weaker < 90% / Equal up to 110% /
+# Slightly stronger < 133% / Stronger < 200% / Far stronger.
+FOE_update_antagonist_assessment = {
+	var:global.FOE_antagonist_player = {
+		set_temp_variable = { FOE_player_divisions = num_divisions }
+		set_temp_variable = { FOE_player_factories = num_of_factories }
+		set_temp_variable = { FOE_player_techs = num_researched_technologies }
+	}
+
+	set_temp_variable = { FOE_assess_own = num_divisions }
+	set_temp_variable = { FOE_assess_player = FOE_player_divisions }
+	FOE_antagonist_assessment_band = yes
+	set_variable = { FOE_assess_army = FOE_assess_band }
+
+	set_temp_variable = { FOE_assess_own = num_of_factories }
+	set_temp_variable = { FOE_assess_player = FOE_player_factories }
+	FOE_antagonist_assessment_band = yes
+	set_variable = { FOE_assess_industry = FOE_assess_band }
+
+	set_temp_variable = { FOE_assess_own = num_researched_technologies }
+	set_temp_variable = { FOE_assess_player = FOE_player_techs }
+	FOE_antagonist_assessment_band = yes
+	set_variable = { FOE_assess_technology = FOE_assess_band }
+}
+
+# Temp FOE_assess_own / FOE_assess_player -> temp FOE_assess_band 1-7. A player with none counts as Far weaker
+# than any Antagonist with some, and Equal to one with none.
+FOE_antagonist_assessment_band = {
+	set_temp_variable = { FOE_assess_band = 4 }
+	if = {
+		limit = { check_variable = { FOE_assess_player > 0 } }
+		set_temp_variable = { FOE_assess_ratio = FOE_assess_own }
+		divide_temp_variable = { FOE_assess_ratio = FOE_assess_player }
+		if = {
+			limit = { check_variable = { FOE_assess_ratio < 0.5 } }
+			set_temp_variable = { FOE_assess_band = 1 }
+		}
+		else_if = {
+			limit = { check_variable = { FOE_assess_ratio < 0.75 } }
+			set_temp_variable = { FOE_assess_band = 2 }
+		}
+		else_if = {
+			limit = { check_variable = { FOE_assess_ratio < 0.9 } }
+			set_temp_variable = { FOE_assess_band = 3 }
+		}
+		else_if = {
+			limit = { check_variable = { FOE_assess_ratio > 2 } }
+			set_temp_variable = { FOE_assess_band = 7 }
+		}
+		else_if = {
+			limit = { check_variable = { FOE_assess_ratio > 1.33 } }
+			set_temp_variable = { FOE_assess_band = 6 }
+		}
+		else_if = {
+			limit = { check_variable = { FOE_assess_ratio > 1.1 } }
+			set_temp_variable = { FOE_assess_band = 5 }
+		}
+	}
+	else_if = {
+		limit = { check_variable = { FOE_assess_own > 0 } }
+		set_temp_variable = { FOE_assess_band = 7 }
+	}
+}
+
+###########################################################################
+# Fall: an Antagonist is annexed or puppeted. The player's kill leaves the slot empty ("Defeated by us"); any other
+# kill refills the slot after 6 months (Hard) / 3 (Brutal). A civil-war winner takes the slot over instead.
+# Per-ring state: global flags/vars ending in _1 Rival / _2 Archenemy / _3 Distant Threat.
+###########################################################################
+
+# Country scope, the fallen Antagonist, with FOE_antagonist_killer set. From on_annex, on_puppet, on_civil_war_end.
+# The outcome is settled a day later (foe_antagonists.8), so a civil war can claim the slot first.
+FOE_antagonist_falls = {
+	set_variable = { FOE_antagonist_fallen_ring = FOE_antagonist_ring }
+	if = {
+		limit = { has_variable = FOE_antagonist_gl_tier }
+		set_variable = { FOE_antagonist_fallen_gl_tier = FOE_antagonist_gl_tier }
+	}
+	# The player's side: the player, its subjects, its faction, or anyone while we were at war with the player
+	set_temp_variable = { FOE_player_kill = 0 }
+	if = {
+		limit = {
+			OR = {
+				has_war_with = var:global.FOE_antagonist_player
+				check_variable = { FOE_antagonist_status = 4 }
+				var:FOE_antagonist_killer = {
+					OR = {
+						tag = var:global.FOE_antagonist_player
+						is_subject_of = var:global.FOE_antagonist_player
+						is_in_faction_with = var:global.FOE_antagonist_player
+					}
+				}
+			}
+		}
+		set_temp_variable = { FOE_player_kill = 1 }
+	}
+	if = {
+		limit = { check_variable = { FOE_antagonist_ring = 1 } }
+		set_global_flag = FOE_antagonist_fall_pending_1
+		set_variable = { global.FOE_antagonist_fallen_1 = THIS }
+		set_variable = { global.FOE_antagonist_killer_1 = FOE_antagonist_killer }
+		if = {
+			limit = { check_variable = { FOE_player_kill = 1 } }
+			set_global_flag = FOE_antagonist_player_kill_1
+		}
+	}
+	else_if = {
+		limit = { check_variable = { FOE_antagonist_ring = 2 } }
+		set_global_flag = FOE_antagonist_fall_pending_2
+		set_variable = { global.FOE_antagonist_fallen_2 = THIS }
+		set_variable = { global.FOE_antagonist_killer_2 = FOE_antagonist_killer }
+		if = {
+			limit = { check_variable = { FOE_player_kill = 1 } }
+			set_global_flag = FOE_antagonist_player_kill_2
+		}
+	}
+	else_if = {
+		limit = { check_variable = { FOE_antagonist_ring = 3 } }
+		set_global_flag = FOE_antagonist_fall_pending_3
+		set_variable = { global.FOE_antagonist_fallen_3 = THIS }
+		set_variable = { global.FOE_antagonist_killer_3 = FOE_antagonist_killer }
+		if = {
+			limit = { check_variable = { FOE_player_kill = 1 } }
+			set_global_flag = FOE_antagonist_player_kill_3
+		}
+	}
+	log = "FOE_ANTAGONIST_FALL [THIS.GetTag] ring=[?FOE_antagonist_ring] fell to [?FOE_antagonist_killer.GetTag] player_kill=[?FOE_player_kill]"
+	FOE_clear_antagonist_country = yes
+	var:global.FOE_antagonist_player = {
+		country_event = { id = foe_antagonists.8 days = 1 }
+	}
+}
+
+# Country scope, the winner of a civil war (ROOT); FROM = the side that was annexed. If FROM was an Antagonist, the
+# winner takes its slot and keeps its Great Leader tier; no refill.
+FOE_antagonist_civil_war_successor = {
+	if = {
+		limit = { FROM = { has_country_flag = FOE_antagonist } }
+		FROM = {
+			set_variable = { FOE_antagonist_killer = ROOT }
+			FOE_antagonist_falls = yes
+		}
+	}
+	set_temp_variable = { FOE_ring = FROM.FOE_antagonist_fallen_ring }
+	if = {
+		limit = { check_variable = { FOE_ring = 1 } }
+		set_global_flag = FOE_antagonist_succeeded_1
+	}
+	else_if = {
+		limit = { check_variable = { FOE_ring = 2 } }
+		set_global_flag = FOE_antagonist_succeeded_2
+	}
+	else_if = {
+		limit = { check_variable = { FOE_ring = 3 } }
+		set_global_flag = FOE_antagonist_succeeded_3
+	}
+	FOE_make_antagonist = yes
+	if = {
+		limit = { FROM = { has_variable = FOE_antagonist_fallen_gl_tier } }
+		set_variable = { FOE_antagonist_gl_tier = FROM.FOE_antagonist_fallen_gl_tier }
+	}
+	log = "FOE_ANTAGONIST_FALL [THIS.GetTag] won the civil war and takes ring [?FOE_ring]"
+}
+
+# Country scope, a fallen Antagonist, a day after its fall. on_annex and on_civil_war_end, which read these, have fired
+# by then; left set, a later civil war of this country (a puppet, or released again) would claim its old slot.
+FOE_clear_antagonist_fall_record = {
+	clear_variable = FOE_antagonist_fallen_ring
+	clear_variable = FOE_antagonist_fallen_gl_tier
+	clear_variable = FOE_antagonist_killer
+}
+
+# Player scope, a day after a fall (foe_antagonists.8).
+FOE_resolve_antagonist_falls = {
+	set_temp_variable = { FOE_refill_wait = 6 }
+	if = {
+		limit = { has_global_flag = FOE_campaign_antagonists_brutal }
+		set_temp_variable = { FOE_refill_wait = 3 }
+	}
+	if = {
+		limit = { has_global_flag = FOE_antagonist_fall_pending_1 }
+		clr_global_flag = FOE_antagonist_fall_pending_1
+		var:global.FOE_antagonist_fallen_1 = { FOE_clear_antagonist_fall_record = yes }
+		if = {
+			limit = { has_global_flag = FOE_antagonist_succeeded_1 }
+			clr_global_flag = FOE_antagonist_succeeded_1
+			clr_global_flag = FOE_antagonist_player_kill_1
+		}
+		else_if = {
+			limit = { has_global_flag = FOE_antagonist_player_kill_1 }
+			clr_global_flag = FOE_antagonist_player_kill_1
+			set_global_flag = FOE_antagonist_defeated_1
+			log = "FOE_ANTAGONIST_FALL ring=1 defeated by the player, the slot stays empty"
+		}
+		else = {
+			set_global_flag = FOE_antagonist_fallen_slot_1
+			if = {
+				limit = { has_global_flag = FOE_campaign_antagonists_brutal }
+				country_event = { id = foe_antagonists.10 days = 90 }
+			}
+			else = {
+				country_event = { id = foe_antagonists.10 days = 180 }
+			}
+			log = "FOE_ANTAGONIST_FALL ring=1 fell to an AI, refill in [?FOE_refill_wait] months"
+		}
+	}
+	if = {
+		limit = { has_global_flag = FOE_antagonist_fall_pending_2 }
+		clr_global_flag = FOE_antagonist_fall_pending_2
+		var:global.FOE_antagonist_fallen_2 = { FOE_clear_antagonist_fall_record = yes }
+		if = {
+			limit = { has_global_flag = FOE_antagonist_succeeded_2 }
+			clr_global_flag = FOE_antagonist_succeeded_2
+			clr_global_flag = FOE_antagonist_player_kill_2
+		}
+		else_if = {
+			limit = { has_global_flag = FOE_antagonist_player_kill_2 }
+			clr_global_flag = FOE_antagonist_player_kill_2
+			set_global_flag = FOE_antagonist_defeated_2
+			log = "FOE_ANTAGONIST_FALL ring=2 defeated by the player, the slot stays empty"
+		}
+		else = {
+			set_global_flag = FOE_antagonist_fallen_slot_2
+			if = {
+				limit = { has_global_flag = FOE_campaign_antagonists_brutal }
+				country_event = { id = foe_antagonists.11 days = 90 }
+			}
+			else = {
+				country_event = { id = foe_antagonists.11 days = 180 }
+			}
+			log = "FOE_ANTAGONIST_FALL ring=2 fell to an AI, refill in [?FOE_refill_wait] months"
+		}
+	}
+	if = {
+		limit = { has_global_flag = FOE_antagonist_fall_pending_3 }
+		clr_global_flag = FOE_antagonist_fall_pending_3
+		var:global.FOE_antagonist_fallen_3 = { FOE_clear_antagonist_fall_record = yes }
+		if = {
+			limit = { has_global_flag = FOE_antagonist_succeeded_3 }
+			clr_global_flag = FOE_antagonist_succeeded_3
+			clr_global_flag = FOE_antagonist_player_kill_3
+		}
+		else_if = {
+			limit = { has_global_flag = FOE_antagonist_player_kill_3 }
+			clr_global_flag = FOE_antagonist_player_kill_3
+			set_global_flag = FOE_antagonist_defeated_3
+			log = "FOE_ANTAGONIST_FALL ring=3 defeated by the player, the slot stays empty"
+		}
+		else = {
+			set_global_flag = FOE_antagonist_fallen_slot_3
+			if = {
+				limit = { has_global_flag = FOE_campaign_antagonists_brutal }
+				country_event = { id = foe_antagonists.12 days = 90 }
+			}
+			else = {
+				country_event = { id = foe_antagonists.12 days = 180 }
+			}
+			log = "FOE_ANTAGONIST_FALL ring=3 fell to an AI, refill in [?FOE_refill_wait] months"
+		}
+	}
+}
+
+# Player scope (ROOT), temp FOE_ring; from foe_antagonists.10 / .11 / .12. Picks a new Antagonist for that ring the
+# same way as at setup; the nation that killed the last one can't take the slot. No candidate: try again later.
+FOE_refill_antagonist_slot = {
+	if = {
+		limit = {
+			check_variable = { FOE_ring = 1 }
+			has_variable = global.FOE_antagonist_killer_1
+		}
+		var:global.FOE_antagonist_killer_1 = { set_country_flag = FOE_antagonist_excluded }
+	}
+	else_if = {
+		limit = {
+			check_variable = { FOE_ring = 2 }
+			has_variable = global.FOE_antagonist_killer_2
+		}
+		var:global.FOE_antagonist_killer_2 = { set_country_flag = FOE_antagonist_excluded }
+	}
+	else_if = {
+		limit = {
+			check_variable = { FOE_ring = 3 }
+			has_variable = global.FOE_antagonist_killer_3
+		}
+		var:global.FOE_antagonist_killer_3 = { set_country_flag = FOE_antagonist_excluded }
+	}
+	FOE_rank_antagonist_candidates = yes
+	FOE_set_antagonist_band = yes
+	FOE_pick_antagonist = yes
+	FOE_clear_antagonist_ranks = yes
+	every_country = {
+		limit = { has_country_flag = FOE_antagonist_excluded }
+		clr_country_flag = FOE_antagonist_excluded
+	}
+	if = {
+		limit = { check_variable = { FOE_picked = 1 } }
+		set_variable = { global.FOE_antagonist_last_ring = FOE_ring }
+		if = {
+			limit = { check_variable = { FOE_ring = 1 } }
+			clr_global_flag = FOE_antagonist_fallen_slot_1
+			set_variable = { global.FOE_antagonist_last_fallen = global.FOE_antagonist_fallen_1 }
+			var:global.FOE_antagonist_rival = { FOE_set_refill_antagonist_leader = yes }
+		}
+		else_if = {
+			limit = { check_variable = { FOE_ring = 2 } }
+			clr_global_flag = FOE_antagonist_fallen_slot_2
+			set_variable = { global.FOE_antagonist_last_fallen = global.FOE_antagonist_fallen_2 }
+			var:global.FOE_antagonist_archenemy = { FOE_set_refill_antagonist_leader = yes }
+		}
+		else_if = {
+			limit = { check_variable = { FOE_ring = 3 } }
+			clr_global_flag = FOE_antagonist_fallen_slot_3
+			set_variable = { global.FOE_antagonist_last_fallen = global.FOE_antagonist_fallen_3 }
+			var:global.FOE_antagonist_reserve = { FOE_set_refill_antagonist_leader = yes }
+		}
+		country_event = { id = foe_antagonists.9 }
+	}
+	else = {
+		set_temp_variable = { FOE_refill_wait = 6 }
+		if = {
+			limit = { has_global_flag = FOE_campaign_antagonists_brutal }
+			set_temp_variable = { FOE_refill_wait = 3 }
+		}
+		if = {
+			limit = { check_variable = { FOE_ring = 1 } }
+			if = {
+				limit = { has_global_flag = FOE_campaign_antagonists_brutal }
+				country_event = { id = foe_antagonists.10 days = 90 }
+			}
+			else = {
+				country_event = { id = foe_antagonists.10 days = 180 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { FOE_ring = 2 } }
+			if = {
+				limit = { has_global_flag = FOE_campaign_antagonists_brutal }
+				country_event = { id = foe_antagonists.11 days = 90 }
+			}
+			else = {
+				country_event = { id = foe_antagonists.11 days = 180 }
+			}
+		}
+		else_if = {
+			limit = { check_variable = { FOE_ring = 3 } }
+			if = {
+				limit = { has_global_flag = FOE_campaign_antagonists_brutal }
+				country_event = { id = foe_antagonists.12 days = 90 }
+			}
+			else = {
+				country_event = { id = foe_antagonists.12 days = 180 }
+			}
+		}
+		log = "FOE_ANTAGONIST_FALL ring=[?FOE_ring] no replacement found, trying again in [?FOE_refill_wait] months"
+	}
+}
+
+# Country scope, a replacement Antagonist, temp FOE_ring. A Great Leader keeps class and subclass and is raised to the
+# ring's starting tier; a leader who is none gets an Antagonist Great Leader.
+FOE_set_refill_antagonist_leader = {
+	if = {
+		limit = {
+			has_global_flag = FOE_campaign_great_leaders_enabled
+			FOE_great_leader_country_valid = yes
+		}
+		if = {
+			limit = { var:country_leader = { has_character_flag = FOE_great_leader_character } }
+			set_variable = { FOE_antagonist_gl_tier = 1 }
+			if = {
+				limit = {
+					OR = {
+						FOE_has_legendary_or_mythic_conqueror_tier = yes
+						FOE_has_legendary_or_mythic_administrator_tier = yes
+						FOE_has_legendary_or_mythic_industrialist_tier = yes
+					}
+				}
+				set_variable = { FOE_antagonist_gl_tier = 2 }
+			}
+			if = {
+				limit = {
+					OR = {
+						FOE_has_mythic_conqueror_tier = yes
+						FOE_has_mythic_administrator_tier = yes
+						FOE_has_mythic_industrialist_tier = yes
+					}
+				}
+				set_variable = { FOE_antagonist_gl_tier = 3 }
+			}
+			set_temp_variable = { FOE_start_tier = 1 }
+			if = {
+				limit = { check_variable = { FOE_ring = 2 } }
+				set_temp_variable = { FOE_start_tier = 2 }
+			}
+			if = {
+				limit = { has_global_flag = FOE_campaign_antagonists_brutal }
+				add_to_temp_variable = { FOE_start_tier = 1 }
+			}
+			if = {
+				limit = { check_variable = { FOE_antagonist_gl_tier < FOE_start_tier } }
+				FOE_antagonist_leader_rank_up = yes
+			}
+			if = {
+				limit = { check_variable = { FOE_antagonist_gl_tier < FOE_start_tier } }
+				FOE_antagonist_leader_rank_up = yes
+			}
+		}
+		else = {
+			FOE_assign_antagonist_great_leader = yes
+		}
 	}
 }
 

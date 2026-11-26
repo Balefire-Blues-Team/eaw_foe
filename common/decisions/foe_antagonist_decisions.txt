@@ -1,0 +1,114 @@
+###########################################################################
+# Antagonist System: player tracker rows (category FOE_antagonist_tracker)
+###########################################################################
+
+FOE_antagonist_tracker = {
+	# One row per Antagonist; hovering it shows the report. Never takeable.
+	FOE_track_rival = {
+		icon = GFX_decision_border_war
+		visible = {
+			has_variable = global.FOE_antagonist_rival
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_tracker_row_tt
+				always = no
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+
+	# One row per Antagonist; hovering it shows the report. Never takeable.
+	FOE_track_archenemy = {
+		icon = GFX_decision_border_war
+		visible = {
+			has_variable = global.FOE_antagonist_archenemy
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_tracker_row_tt
+				always = no
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+
+	# One row per Antagonist; hovering it shows the report. Never takeable.
+	FOE_track_reserve = {
+		icon = GFX_decision_border_war
+		visible = {
+			has_variable = global.FOE_antagonist_reserve
+		}
+		available = {
+			custom_trigger_tooltip = {
+				tooltip = FOE_tracker_row_tt
+				always = no
+			}
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+}
+
+# An Antagonist's strike countdown on the player (FOE_start_antagonist_strike). war_with_target_on_timeout puts the
+# imminent-war alert on the player's bar and warns their subjects and allies.
+FOE_antagonist_missions = {
+	# Hard
+	FOE_antagonist_strike_mission = {
+		icon = border_war
+		allowed = { always = no } # Activated by FOE_start_antagonist_strike
+		available = {
+			hidden_trigger = { always = no }
+		}
+		days_mission_timeout = 30
+		war_with_target_on_timeout = yes
+		fire_only_once = no
+		is_good = no
+		cancel_trigger = {
+			FOE_antagonist_strike_cancelled = yes
+		}
+		cancel_effect = {
+			clr_country_flag = FOE_antagonist_strike_pending
+			log = "FOE_ANTAGONIST_CONFRONTATION [ROOT.GetTag] calls off its strike on [FROM.GetTag]"
+		}
+		timeout_effect = {
+			clr_country_flag = FOE_antagonist_strike_pending
+			FOE_antagonist_first_strike = yes
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+
+	# Brutal
+	FOE_antagonist_strike_mission_brutal = {
+		icon = border_war
+		allowed = { always = no } # Activated by FOE_start_antagonist_strike
+		available = {
+			hidden_trigger = { always = no }
+		}
+		days_mission_timeout = 10
+		war_with_target_on_timeout = yes
+		fire_only_once = no
+		is_good = no
+		cancel_trigger = {
+			FOE_antagonist_strike_cancelled = yes
+		}
+		cancel_effect = {
+			clr_country_flag = FOE_antagonist_strike_pending
+			log = "FOE_ANTAGONIST_CONFRONTATION [ROOT.GetTag] calls off its strike on [FROM.GetTag]"
+		}
+		timeout_effect = {
+			clr_country_flag = FOE_antagonist_strike_pending
+			FOE_antagonist_first_strike = yes
+		}
+		ai_will_do = {
+			base = 0
+		}
+	}
+}

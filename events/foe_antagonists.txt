@@ -91,7 +91,7 @@ country_event = {
 			country_event = { id = foe_antagonists.6 }
 		}
 	}
-	# Force a first strike from the Rival
+	# Start the Rival's strike countdown
 	option = {
 		name = foe_antagonists.2.j
 		if = {
@@ -99,6 +99,52 @@ country_event = {
 			var:global.FOE_antagonist_rival = {
 				country_event = { id = foe_antagonists.7 }
 			}
+		}
+	}
+	# The Rival is annexed by an AI neighbour (tests an AI kill)
+	option = {
+		name = foe_antagonists.2.k
+		if = {
+			limit = {
+				has_variable = global.FOE_antagonist_rival
+				var:global.FOE_antagonist_rival = { exists = yes }
+			}
+			var:global.FOE_antagonist_rival = {
+				random_neighbor_country = {
+					limit = {
+						is_ai = yes
+						NOT = { has_country_flag = FOE_antagonist }
+					}
+					annex_country = {
+						target = PREV
+						transfer_troops = no
+					}
+				}
+			}
+		}
+	}
+	# Run the refill timers out now
+	option = {
+		name = foe_antagonists.2.l
+		if = {
+			limit = { has_global_flag = FOE_antagonist_fallen_slot_1 }
+			country_event = { id = foe_antagonists.10 }
+		}
+		if = {
+			limit = { has_global_flag = FOE_antagonist_fallen_slot_2 }
+			country_event = { id = foe_antagonists.11 }
+		}
+		if = {
+			limit = { has_global_flag = FOE_antagonist_fallen_slot_3 }
+			country_event = { id = foe_antagonists.12 }
+		}
+	}
+	# End every running strike countdown now: the wars start
+	option = {
+		name = foe_antagonists.2.m
+		every_country = {
+			limit = { has_country_flag = FOE_antagonist_strike_pending }
+			country_event = { id = foe_antagonists.14 }
 		}
 	}
 	option = {
@@ -113,9 +159,12 @@ country_event = {
 	is_triggered_only = yes
 
 	immediate = {
+		FOE_update_antagonist_player = yes
+		FOE_keep_antagonist_out_of_player_faction = yes
 		FOE_update_antagonist_rubber_band = yes
-		FOE_update_antagonist_expansion = yes
 		FOE_update_antagonist_confrontation = yes
+		FOE_update_antagonist_expansion = yes
+		FOE_update_antagonist_assessment = yes
 	}
 }
 
@@ -166,13 +215,157 @@ country_event = {
 	}
 }
 
-# Hidden. Forces a first strike from this Antagonist
+# Hidden. Starts this Antagonist's strike countdown
 country_event = {
 	id = foe_antagonists.7
 	hidden = yes
 	is_triggered_only = yes
 
 	immediate = {
-		FOE_antagonist_first_strike = yes
+		if = {
+			limit = { NOT = { has_country_flag = FOE_antagonist_strike_pending } }
+			FOE_start_antagonist_strike = yes
+		}
+	}
+}
+
+# Hidden. A day after an Antagonist falls: civil-war successor, defeated by the player, or refill timer
+country_event = {
+	id = foe_antagonists.8
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		FOE_update_antagonist_player = yes
+		# A copy queued on a former player country does nothing; the player has its own
+		if = {
+			limit = { tag = var:global.FOE_antagonist_player }
+			FOE_resolve_antagonist_falls = yes
+		}
+	}
+}
+
+# A New Threat: a refilled slot
+country_event = {
+	id = foe_antagonists.9
+	title = foe_antagonists.9.t
+	desc = {
+		text = foe_antagonists.9.d_rival
+		trigger = { check_variable = { global.FOE_antagonist_last_ring = 1 } }
+	}
+	desc = {
+		text = foe_antagonists.9.d_archenemy
+		trigger = { check_variable = { global.FOE_antagonist_last_ring = 2 } }
+	}
+	desc = {
+		text = foe_antagonists.9.d_reserve
+		trigger = { check_variable = { global.FOE_antagonist_last_ring = 3 } }
+	}
+	picture = GFX_report_event_military_planning
+	is_triggered_only = yes
+
+	option = {
+		name = foe_antagonists.9.a
+	}
+}
+# Hidden. Refills the Rival slot after an AI kill (scheduled by FOE_resolve_antagonist_falls)
+country_event = {
+	id = foe_antagonists.10
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		FOE_update_antagonist_player = yes
+		if = {
+			limit = {
+				has_global_flag = FOE_antagonist_fallen_slot_1
+				# A copy queued on a former player country does nothing; the player has its own
+				tag = var:global.FOE_antagonist_player
+			}
+			set_temp_variable = { FOE_ring = 1 }
+			FOE_refill_antagonist_slot = yes
+		}
+	}
+}
+
+# Hidden. Refills the Archenemy slot after an AI kill (scheduled by FOE_resolve_antagonist_falls)
+country_event = {
+	id = foe_antagonists.11
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		FOE_update_antagonist_player = yes
+		if = {
+			limit = {
+				has_global_flag = FOE_antagonist_fallen_slot_2
+				# A copy queued on a former player country does nothing; the player has its own
+				tag = var:global.FOE_antagonist_player
+			}
+			set_temp_variable = { FOE_ring = 2 }
+			FOE_refill_antagonist_slot = yes
+		}
+	}
+}
+
+# Hidden. Refills the Distant Threat slot after an AI kill (scheduled by FOE_resolve_antagonist_falls)
+country_event = {
+	id = foe_antagonists.12
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		FOE_update_antagonist_player = yes
+		if = {
+			limit = {
+				has_global_flag = FOE_antagonist_fallen_slot_3
+				# A copy queued on a former player country does nothing; the player has its own
+				tag = var:global.FOE_antagonist_player
+			}
+			set_temp_variable = { FOE_ring = 3 }
+			FOE_refill_antagonist_slot = yes
+		}
+	}
+}
+
+# The Storm Gathers: an Antagonist has started its strike countdown (FOE_start_antagonist_strike)
+country_event = {
+	id = foe_antagonists.13
+	title = foe_antagonists.13.t
+	desc = {
+		text = foe_antagonists.13.d_hard
+		trigger = { NOT = { has_global_flag = FOE_campaign_antagonists_brutal } }
+	}
+	desc = {
+		text = foe_antagonists.13.d_brutal
+		trigger = { has_global_flag = FOE_campaign_antagonists_brutal }
+	}
+	picture = GFX_report_event_military_planning
+	is_triggered_only = yes
+
+	option = {
+		name = foe_antagonists.13.a
+	}
+}
+
+# Hidden. Debug: ends this Antagonist's strike countdown now and declares the war (FROM = the player)
+country_event = {
+	id = foe_antagonists.14
+	hidden = yes
+	is_triggered_only = yes
+
+	immediate = {
+		if = {
+			limit = { has_country_flag = FOE_antagonist_strike_pending }
+			if = {
+				limit = { has_global_flag = FOE_campaign_antagonists_brutal }
+				remove_targeted_decision = { target = FROM decision = FOE_antagonist_strike_mission_brutal }
+			}
+			else = {
+				remove_targeted_decision = { target = FROM decision = FOE_antagonist_strike_mission }
+			}
+			clr_country_flag = FOE_antagonist_strike_pending
+			FOE_antagonist_first_strike = yes
+		}
 	}
 }
