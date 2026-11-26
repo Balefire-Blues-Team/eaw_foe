@@ -1,11 +1,8 @@
-# Generic robot templates (every nation but FSR and SEZ). Tested 2026-10-26 with SEZ's 1236 techs against SEZ's first-wave
-# enemies (calculator scenarios/sez_robots/run_sez.py, Brainstorming/SEZ_ROBOT_TEMPLATES.md): anti-tank and dog
-# companies beat logistics / maintenance / recon in combat on every robot line (anti-tank pierces LEE's armour).
 robot_support_default_template = {
 
 	blocked_for = {
-		FSR # own templates in templates_FSR.txt
-		SEZ # own templates in templates_SEZ.txt
+		FSR
+		SEZ
 	}
 
 	role = support_robot
@@ -14,6 +11,35 @@ robot_support_default_template = {
 		factor = 2.17
 	}
 
+
+	# Antagonists only
+	support_robot_antagonist = {
+		enable = {
+			has_country_flag = FOE_antagonist
+		}
+
+		reinforce_prio = 1
+		custom_icon = 4
+
+		upgrade_prio = {
+			factor = 100
+		}
+
+		target_template = {
+
+			support = {
+				anti_tank_company = 1
+				dog_company = 1
+				support_robot_def = 1
+				support_robot_off = 1
+				unicorn_company = 1
+			}
+
+			regiments = {
+				light_robot = 10
+			}
+		}
+	}
 
 	support_robot_default = {
 		reinforce_prio = 1
@@ -77,15 +103,14 @@ robot_support_default_template = {
 				medium_robot = 8
 			}
 		}
-		# last stage of the support_robot role: the replace chain only picks targets within one role
 	}
 }
 
 robot_combat_default_template = {
 
 	blocked_for = {
-		FSR # own templates in templates_FSR.txt
-		SEZ # own templates in templates_SEZ.txt
+		FSR
+		SEZ
 	}
 
 	role = combat_robot
@@ -96,6 +121,81 @@ robot_combat_default_template = {
 		modifier = {
 			factor = 7
 				has_tech = robot_protectapony_tech
+		}
+	}
+
+	# Antagonists only
+	combat_robot_antagonist = {
+		enable = {
+			has_country_flag = FOE_antagonist
+		}
+
+		reinforce_prio = 1
+		custom_icon = 4
+
+		upgrade_prio = {
+			factor = 100
+
+			modifier = {
+				factor = 0
+				has_tech = robot_protectapony_tech
+			}
+		}
+
+		can_upgrade_in_field = {
+			has_tech = robot_protectapony_tech
+			has_equipment = { medium_robot_equipment > 199 }
+		}
+
+		target_template = {
+
+			support = {
+				anti_tank_company = 1
+				dog_company = 1
+				logistics_company = 1
+				unicorn_company = 1
+			}
+
+			regiments = {
+				light_robot = 5
+			}
+		}
+
+		replace_at_match = 0.95
+		replace_with = combat_robot_antagonist_medium
+		target_min_match = 0.9
+	}
+
+	combat_robot_antagonist_medium = {
+		enable = {
+			has_country_flag = FOE_antagonist
+		}
+
+		reinforce_prio = 1
+		custom_icon = 4
+
+		upgrade_prio = {
+			factor = 100
+
+			modifier = {
+				factor = 0
+				NOT = { has_tech = robot_protectapony_tech }
+			}
+		}
+
+		target_template = {
+
+			support = {
+				anti_tank_company = 1
+				dog_company = 1
+				support_robot_def = 1
+				support_robot_off = 1
+				unicorn_company = 1
+			}
+
+			regiments = {
+				medium_robot = 8
+			}
 		}
 	}
 
@@ -153,7 +253,6 @@ robot_combat_default_template = {
 			}
 		}
 
-		# no replace_with: last stage, so this field-upgrade check has no effect
 		can_upgrade_in_field = {
 			has_equipment = { heavy_robot_equipment > 199 }
 		}

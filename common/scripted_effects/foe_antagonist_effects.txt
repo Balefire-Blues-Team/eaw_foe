@@ -366,12 +366,12 @@ FOE_update_antagonist_expansion = {
 		}
 		set_temp_variable = { FOE_nudge_wait = 2 }
 		set_temp_variable = { FOE_stall_wait = 6 }
-		set_temp_variable = { FOE_factory_target = 0.7 }
+		set_temp_variable = { FOE_factory_target = 0.9 }
 		if = {
 			limit = { has_global_flag = FOE_campaign_antagonists_brutal }
 			set_temp_variable = { FOE_nudge_wait = 1 }
 			set_temp_variable = { FOE_stall_wait = 3 }
-			set_temp_variable = { FOE_factory_target = 1 }
+			set_temp_variable = { FOE_factory_target = 1.2 }
 		}
 		# The system only pushes an Antagonist that lags behind the player
 		set_temp_variable = { FOE_own_factories = num_of_factories }
@@ -550,12 +550,12 @@ FOE_scan_antagonist_targets = {
 
 # Rubber Band Effects - Let's the Antagonist keep up with a player that is outscaling them
 FOE_update_antagonist_rubber_band = {
-	set_temp_variable = { FOE_share = 0.7 }
-	set_temp_variable = { FOE_research_share = 0.9 }
+	set_temp_variable = { FOE_share = 0.9 }
+	set_temp_variable = { FOE_research_share = 1.1 }
 	if = {
 		limit = { has_global_flag = FOE_campaign_antagonists_brutal }
-		set_temp_variable = { FOE_share = 1 }
-		set_temp_variable = { FOE_research_share = 1 }
+		set_temp_variable = { FOE_share = 1.2 }
+		set_temp_variable = { FOE_research_share = 1.4 }
 	}
 	var:global.FOE_antagonist_player = {
 		set_temp_variable = { FOE_player_factories = num_of_factories }
@@ -587,6 +587,11 @@ FOE_update_antagonist_rubber_band = {
 		multiply_temp_variable = { FOE_army_drip = 50 }
 		add_manpower = FOE_army_drip
 		FOE_give_antagonist_weapons = yes
+		# Army XP, so the AI can afford its target templates: 5 per step
+		for_loop_effect = {
+			end = FOE_antagonist_army_step
+			army_experience = 5
+		}
 	}
 
 	# Research
